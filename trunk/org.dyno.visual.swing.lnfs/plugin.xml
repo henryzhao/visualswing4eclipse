@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.dyno.visual.swing.lnf.lnfAdapter">
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.MetaLookAndFeelAdapter"
+            class="javax.swing.plaf.metal.MetalLookAndFeel">
+      </lookandfeel>
+   </extension>
+</plugin>
