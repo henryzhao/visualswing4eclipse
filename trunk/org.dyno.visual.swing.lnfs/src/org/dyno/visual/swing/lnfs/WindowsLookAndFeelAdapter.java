@@ -44,6 +44,7 @@ import org.dyno.visual.swing.lnfs.windowsxp.ClassicJListValue;
 import org.dyno.visual.swing.lnfs.windowsxp.ClassicJPanelValue;
 import org.dyno.visual.swing.lnfs.windowsxp.ClassicJPasswordFieldValue;
 import org.dyno.visual.swing.lnfs.windowsxp.ClassicJProgressBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJRadioButtonValue;
 import org.dyno.visual.swing.lnfs.windowsxp.ClassicJScrollBarValue;
 import org.dyno.visual.swing.lnfs.windowsxp.ClassicJScrollPaneValue;
 import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSeparatorValue;
@@ -131,7 +132,7 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 		classicValues.put(JButton.class, new ClassicJButtonValue());
 		classicValues.put(JToggleButton.class, new ClassicJToggleButtonValue());
 		classicValues.put(JCheckBox.class, new ClassicJCheckBoxValue());
-		classicValues.put(JRadioButton.class,new XpJRadioButtonValue());
+		classicValues.put(JRadioButton.class, new ClassicJRadioButtonValue());
 		classicValues.put(JComboBox.class, new ClassicJComboBoxValue());
 		classicValues.put(JList.class, new ClassicJListValue());
 		classicValues.put(JTextField.class, new ClassicJTextFieldValue());

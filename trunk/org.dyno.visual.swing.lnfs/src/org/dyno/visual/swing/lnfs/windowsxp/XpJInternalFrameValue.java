@@ -7,7 +7,7 @@ public class XpJInternalFrameValue extends WidgetValue {
 	public XpJInternalFrameValue() {
 		put("defaultCloseOperation", 2);
 		put("title", "");
-		put("visible", true);
+		put("visible", false);
 		put("verifyInputWhenFocusTarget", true);
 		put("focusable", true);
 		put("enabled", true);

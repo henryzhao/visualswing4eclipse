@@ -7,7 +7,7 @@ public class ClassicJInternalFrameValue extends WidgetValue {
 	public ClassicJInternalFrameValue() {
 		put("defaultCloseOperation", 2);
 		put("title", "");
-		put("visible", true);
+		put("visible", false);
 		put("verifyInputWhenFocusTarget", true);
 		put("focusable", true);
 		put("enabled", true);
@@ -15,5 +15,6 @@ public class ClassicJInternalFrameValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("focusCycleRoot", true);
+		put("opaque", true);
 	}
 }

@@ -5,7 +5,7 @@ import org.dyno.visual.swing.lnfs.WidgetValue;
 public class ClassicJSplitPaneValue extends WidgetValue {
 	private static final long serialVersionUID = 1L;
 	public ClassicJSplitPaneValue() {
-		put("dividerLocation", 84);
+		put("dividerLocation", 86);
 		put("dividerSize", 5);
 		put("orientation", 1);
 		put("visible", true);

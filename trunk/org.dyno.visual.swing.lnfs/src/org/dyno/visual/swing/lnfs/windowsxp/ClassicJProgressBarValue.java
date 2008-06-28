@@ -15,5 +15,6 @@ public class ClassicJProgressBarValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("string","0%");
+		put("opaque", true);
 	}
 }
