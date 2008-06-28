@@ -1,7 +1,9 @@
 package org.dyno.visual.swing.widgets;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -16,6 +18,8 @@ import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.Editor;
 import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JInternalFrameAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
@@ -35,6 +39,25 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		return copy;
 	}
 
+	@Override
+	protected String createGetCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.createGetCode(imports));
+		JPanel panel = getContentPane();
+		JPanelAdapter adapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(panel);
+		adapter.setName(getName());
+		adapter.genAddCode(imports, builder);
+		adapter.detachWidget();
+		return builder.toString();
+	}
+
+	@Override
+	public boolean needGenBoundCode() {
+		JPanel panel = getContentPane();
+		LayoutManager layout = panel.getLayout();
+		return layout == null;
+	}
+
 	private JPanel getContentPane() {
 		JInternalFrame jif = (JInternalFrame) getWidget();
 		contentPane = (JPanel) jif.getContentPane();
@@ -44,7 +67,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	private CompositeAdapter getContentAdapter() {
 		if (contentAdapter == null) {
 			contentAdapter = (CompositeAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
-			((JPanelAdapter)contentAdapter).setIntermediate(true);
+			((JPanelAdapter) contentAdapter).setIntermediate(true);
 		}
 		JInternalFrame jif = (JInternalFrame) getWidget();
 		contentPane = (JPanel) jif.getContentPane();
@@ -53,9 +76,23 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	public boolean isEnclosingContainer() {
+		return true;
+	}
+
+	@Override
+	public boolean interceptPoint(Point p, int ad) {
+		JInternalFrame comp = (JInternalFrame) getWidget();
+		return p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad && p.y < comp.getHeight() + ad
+				&& !(p.x >= ad && p.y >= ad + TITLE_HEIGHT && p.x < comp.getWidth() - ad && p.y < comp.getHeight() - ad);
+	}
+	private static int TITLE_HEIGHT = 22;
+	@Override
 	protected JComponent createWidget() {
 		JInternalFrame jif = new JInternalFrame();
 		Dimension size = new Dimension(100, 100);
+		WidgetAdapter contentAdapter = ExtensionRegistry.createWidgetAdapter(JPanel.class);
+		jif.add(contentAdapter.getWidget(), BorderLayout.CENTER);
 		jif.setSize(size);
 		layoutContainer(jif);
 		jif.validate();

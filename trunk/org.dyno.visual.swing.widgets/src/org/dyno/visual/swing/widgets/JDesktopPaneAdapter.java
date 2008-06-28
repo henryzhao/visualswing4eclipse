@@ -18,6 +18,7 @@ import javax.swing.JInternalFrame;
 import org.dyno.visual.swing.plugin.spi.Azimuth;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JDesktopPaneAdapter extends CompositeAdapter {
 	protected static Color RED_COLOR = new Color(255, 164, 0);
@@ -32,6 +33,10 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		super("jDesktopPane" + (VAR_INDEX++));
 	}
 
+	public boolean needGenBoundCode() {
+		return true;
+	}
+
 	@Override
 	protected JComponent createWidget() {
 		JDesktopPane pane = new JDesktopPane();
@@ -43,6 +48,20 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	@Override
 	public boolean allowChildResize() {
 		return true;
+	}
+
+	@Override
+	protected String createGetCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.createGetCode(imports));
+		int count = getChildCount();
+		for (int i = 0; i < count; i++) {
+			JComponent child = getChild(i);
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+			String getMethodName = getGetMethodName(childAdapter.getName());
+			builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
+		}
+		return builder.toString();
 	}
 
 	@Override

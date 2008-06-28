@@ -183,7 +183,7 @@
          		widgetName="JButton"
          		groupId="component"         		
          		icon="/icons/button_16.png">
-		        <property id="defaultCapable" name="defaultCapable"/>
+		        <property id="defaultCapable" name="defaultCapable" gencode="false"/>
           		<property id="border" name="border" gencode="false"/>
          </widget>
          <widget 
@@ -534,7 +534,7 @@
 		        <property id="icon" name="icon"/>
 		        <property id="layer" name="layer"/>
 		        <property id="maximum" name="maximum"/>
-		        <property id="normalBounds" name="normalBounds"/>
+		        <property id="normalBounds" name="normalBounds" gencode="false"/>
 		        <property id="selected" name="selected"/>
 		        <property id="visible" name="visible"/>
          </widget>
