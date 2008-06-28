@@ -17,6 +17,6 @@ public class XpJCheckBoxValue extends WidgetValue {
 		put("iconTextGap", 4);
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
-		put("rolloverEnabled", true);		
+		put("rolloverEnabled", false);		
 	}
 }
