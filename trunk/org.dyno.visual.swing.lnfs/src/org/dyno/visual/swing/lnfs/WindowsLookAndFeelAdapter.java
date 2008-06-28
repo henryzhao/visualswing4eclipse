@@ -32,33 +32,59 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 
-import org.dyno.visual.swing.lnfs.windows.XpJButtonValue;
-import org.dyno.visual.swing.lnfs.windows.XpJCheckBoxValue;
-import org.dyno.visual.swing.lnfs.windows.XpJComboBoxValue;
-import org.dyno.visual.swing.lnfs.windows.XpJDesktopPaneValue;
-import org.dyno.visual.swing.lnfs.windows.XpJEditorPaneValue;
-import org.dyno.visual.swing.lnfs.windows.XpJFormattedTextFieldValue;
-import org.dyno.visual.swing.lnfs.windows.XpJInternalFrameValue;
-import org.dyno.visual.swing.lnfs.windows.XpJLabelValue;
-import org.dyno.visual.swing.lnfs.windows.XpJListValue;
-import org.dyno.visual.swing.lnfs.windows.XpJPanelValue;
-import org.dyno.visual.swing.lnfs.windows.XpJPasswordFieldValue;
-import org.dyno.visual.swing.lnfs.windows.XpJProgressBarValue;
-import org.dyno.visual.swing.lnfs.windows.XpJRadioButtonValue;
-import org.dyno.visual.swing.lnfs.windows.XpJScrollBarValue;
-import org.dyno.visual.swing.lnfs.windows.XpJScrollPaneValue;
-import org.dyno.visual.swing.lnfs.windows.XpJSeparatorValue;
-import org.dyno.visual.swing.lnfs.windows.XpJSliderValue;
-import org.dyno.visual.swing.lnfs.windows.XpJSpinnerValue;
-import org.dyno.visual.swing.lnfs.windows.XpJSplitPaneValue;
-import org.dyno.visual.swing.lnfs.windows.XpJTabbedPaneValue;
-import org.dyno.visual.swing.lnfs.windows.XpJTableValue;
-import org.dyno.visual.swing.lnfs.windows.XpJTextAreaValue;
-import org.dyno.visual.swing.lnfs.windows.XpJTextFieldValue;
-import org.dyno.visual.swing.lnfs.windows.XpJTextPaneValue;
-import org.dyno.visual.swing.lnfs.windows.XpJToggleButtonValue;
-import org.dyno.visual.swing.lnfs.windows.XpJToolBarValue;
-import org.dyno.visual.swing.lnfs.windows.XpJTreeValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJButtonValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJCheckBoxValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJComboBoxValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJDesktopPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJEditorPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJInternalFrameValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJLabelValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJListValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJPanelValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJPasswordFieldValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJProgressBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJScrollBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJScrollPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSeparatorValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSliderValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSpinnerValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSplitPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTabbedPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTableValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTextAreaValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTextPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJToggleButtonValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJToolBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTreeValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJButtonValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJCheckBoxValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJComboBoxValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJDesktopPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJEditorPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJInternalFrameValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJLabelValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJListValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJPanelValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJPasswordFieldValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJProgressBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJRadioButtonValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJScrollBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJScrollPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJSeparatorValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJSliderValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJSpinnerValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJSplitPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJTabbedPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJTableValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJTextAreaValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJTextPaneValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJToggleButtonValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJToolBarValue;
+import org.dyno.visual.swing.lnfs.windowsxp.XpJTreeValue;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 
 public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
@@ -97,9 +123,36 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 		xpValues.put(JSplitPane.class, new XpJSplitPaneValue());
 		xpValues.put(JToolBar.class, new XpJToolBarValue());
 		xpValues.put(JDesktopPane.class, new XpJDesktopPaneValue());
-		xpValues.put(JInternalFrame.class, new XpJInternalFrameValue());
-		
+		xpValues.put(JInternalFrame.class, new XpJInternalFrameValue());		
 		xpValues.put(JScrollPane.class, new XpJScrollPaneValue());
+		
+		classicValues.put(JLabel.class, new ClassicJLabelValue());
+		classicValues.put(JPanel.class, new ClassicJPanelValue());
+		classicValues.put(JButton.class, new ClassicJButtonValue());
+		classicValues.put(JToggleButton.class, new ClassicJToggleButtonValue());
+		classicValues.put(JCheckBox.class, new ClassicJCheckBoxValue());
+		classicValues.put(JRadioButton.class,new XpJRadioButtonValue());
+		classicValues.put(JComboBox.class, new ClassicJComboBoxValue());
+		classicValues.put(JList.class, new ClassicJListValue());
+		classicValues.put(JTextField.class, new ClassicJTextFieldValue());
+		classicValues.put(JTextArea.class, new ClassicJTextAreaValue());
+		classicValues.put(JScrollBar.class, new ClassicJScrollBarValue());
+		classicValues.put(JSlider.class, new ClassicJSliderValue());
+		classicValues.put(JProgressBar.class, new ClassicJProgressBarValue());
+		classicValues.put(JFormattedTextField.class, new ClassicJFormattedTextFieldValue());
+		classicValues.put(JPasswordField.class, new ClassicJPasswordFieldValue());
+		classicValues.put(JSpinner.class, new ClassicJSpinnerValue());
+		classicValues.put(JSeparator.class, new ClassicJSeparatorValue());
+		classicValues.put(JTextPane.class, new ClassicJTextPaneValue());
+		classicValues.put(JEditorPane.class, new ClassicJEditorPaneValue());
+		classicValues.put(JTree.class, new ClassicJTreeValue());
+		classicValues.put(JTable.class, new ClassicJTableValue());
+		classicValues.put(JTabbedPane.class, new ClassicJTabbedPaneValue());
+		classicValues.put(JSplitPane.class, new ClassicJSplitPaneValue());
+		classicValues.put(JToolBar.class, new ClassicJToolBarValue());
+		classicValues.put(JDesktopPane.class, new ClassicJDesktopPaneValue());
+		classicValues.put(JInternalFrame.class, new ClassicJInternalFrameValue());		
+		classicValues.put(JScrollPane.class, new ClassicJScrollPaneValue());
 	}
 
 	private static boolean isXP() {
@@ -112,9 +165,14 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 	@Override
 	public Object getDefaultValue(Class widgetClass, String propertyName) {
 		WidgetValue widgetValue = getWidgetValue(widgetClass);
-		if (widgetValue != null)
+		if (widgetValue != null){
+			try {
+				widgetValue=widgetValue.getClass().newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return widgetValue.get(propertyName);
-		else
+		}else
 			return null;
 	}
 	@SuppressWarnings("unchecked")
