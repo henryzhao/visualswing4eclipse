@@ -5,11 +5,13 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
@@ -31,11 +33,13 @@ import javax.swing.JTree;
 
 import org.dyno.visual.swing.lnfs.meta.MetaJButtonValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJCheckBoxValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJComboBoxValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJDesktopPaneValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJEditorPaneValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJFormattedTextFieldValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJInternalFrameValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJLabelValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJListValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJPanelValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJPasswordFieldValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJProgressBarValue;
@@ -67,6 +71,8 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		put(JToggleButton.class, new MetaJToggleButtonValue());
 		put(JCheckBox.class, new MetaJCheckBoxValue());
 		put(JRadioButton.class, new MetaJRadioButtonValue());
+		put(JComboBox.class, new MetaJComboBoxValue());
+		put(JList.class, new MetaJListValue());
 		put(JTextField.class, new MetaJTextFieldValue());
 		put(JScrollBar.class, new MetaJScrollBarValue());
 		put(JSlider.class, new MetaJSliderValue());
