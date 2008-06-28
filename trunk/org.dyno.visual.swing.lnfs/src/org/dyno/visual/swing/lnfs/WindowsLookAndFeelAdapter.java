@@ -8,16 +8,30 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import org.dyno.visual.swing.lnfs.windows.XpJButtonValue;
 import org.dyno.visual.swing.lnfs.windows.XpJCheckBoxValue;
 import org.dyno.visual.swing.lnfs.windows.XpJComboBoxValue;
 import org.dyno.visual.swing.lnfs.windows.XpJLabelValue;
+import org.dyno.visual.swing.lnfs.windows.XpJListValue;
 import org.dyno.visual.swing.lnfs.windows.XpJPanelValue;
+import org.dyno.visual.swing.lnfs.windows.XpJProgressBarValue;
 import org.dyno.visual.swing.lnfs.windows.XpJRadioButtonValue;
+import org.dyno.visual.swing.lnfs.windows.XpJScrollBarValue;
+import org.dyno.visual.swing.lnfs.windows.XpJScrollPaneValue;
+import org.dyno.visual.swing.lnfs.windows.XpJSliderValue;
+import org.dyno.visual.swing.lnfs.windows.XpJTextAreaValue;
+import org.dyno.visual.swing.lnfs.windows.XpJTextFieldValue;
 import org.dyno.visual.swing.lnfs.windows.XpJToggleButtonValue;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 
@@ -39,6 +53,15 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 		xpValues.put(JCheckBox.class, new XpJCheckBoxValue());
 		xpValues.put(JRadioButton.class,new XpJRadioButtonValue());
 		xpValues.put(JComboBox.class, new XpJComboBoxValue());
+		xpValues.put(JList.class, new XpJListValue());
+		xpValues.put(JTextField.class, new XpJTextFieldValue());
+		xpValues.put(JTextArea.class, new XpJTextAreaValue());
+		xpValues.put(JScrollBar.class, new XpJScrollBarValue());
+		xpValues.put(JSlider.class, new XpJSliderValue());
+		xpValues.put(JProgressBar.class, new XpJProgressBarValue());
+		
+		
+		xpValues.put(JScrollPane.class, new XpJScrollPaneValue());
 	}
 
 	private static boolean isXP() {

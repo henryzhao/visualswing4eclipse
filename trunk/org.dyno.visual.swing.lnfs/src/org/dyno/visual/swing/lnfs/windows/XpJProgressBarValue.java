@@ -2,19 +2,18 @@ package org.dyno.visual.swing.lnfs.windows;
 
 import org.dyno.visual.swing.lnfs.WidgetValue;
 
-public class XpJComboBoxValue extends WidgetValue {
+public class XpJProgressBarValue extends WidgetValue {
 	private static final long serialVersionUID = 1L;
-	public XpJComboBoxValue() {
-		put("maximumRowCount", 8);
-		put("model", null);
+	public XpJProgressBarValue() {
+		put("maximum", 100);
 		put("visible", true);
+		put("borderPainted", true);
 		put("verifyInputWhenFocusTarget", true);
-		put("opaque", true);
 		put("enabled", true);
 		put("focusable", true);
-		put("lightWeightPopupEnabled", true);
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
+		put("string","0%");
 	}
 }
