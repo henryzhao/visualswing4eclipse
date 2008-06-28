@@ -10,6 +10,7 @@
    <extension-point id="org.dyno.visual.swing.widgets.layoutAdapter" name="Layout Adapter" schema="schema/layoutAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.borders.borderAdapter" name="Border Adapter" schema="schema/borderAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.lnf.lnfAdapter" name="LookAndFeel Adapter" schema="schema/lnfAdapter.exsd"/>
+   <extension-point id="org.dyno.visual.swing.listenerAdapter" name="Listener Adapter" schema="schema/listenerAdapter.exsd"/>
    <extension point="org.eclipse.core.runtime.contentTypes">
 	   <content-type id="visualSwing" name="Swing Source" 
 			base-type="org.eclipse.jdt.core.javaSource"
@@ -114,5 +115,52 @@
             class="org.dyno.visual.swing.wizards.VsLayoutContainerInitializer"
             id="VS_LAYOUT">
       </classpathContainerInitializer>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.listenerAdapter">
+      <listener
+            adapter="java.awt.event.MouseAdapter"
+            interface="java.awt.event.MouseListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.MouseMotionAdapter"
+            interface="java.awt.event.MouseMotionListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.FocusAdapter"
+            interface="java.awt.event.FocusListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.ContainerAdapter"
+            interface="java.awt.event.ContainerListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.ComponentAdapter"
+            interface="java.awt.event.ComponentListener">
+      </listener>
+      <listener
+            adapter="java.awt.dnd.DragSourceAdapter"
+            interface="java.awt.dnd.DragSourceListener">
+      </listener>
+      <listener
+            adapter="java.awt.dnd.DropTargetAdapter"
+            interface="java.awt.dnd.DropTargetListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.HierarchyBoundsAdapter"
+            interface="java.awt.event.HierarchyBoundsListener">
+      </listener>
+      <listener
+            adapter="javax.swing.event.InternalFrameAdapter"
+            interface="javax.swing.event.InternalFrameListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.KeyAdapter"
+            interface="java.awt.event.KeyListener">
+      </listener>
+      <listener
+            adapter="java.awt.event.WindowAdapter"
+            interface="java.awt.event.WindowListener">
+      </listener>
    </extension>   
 </plugin>

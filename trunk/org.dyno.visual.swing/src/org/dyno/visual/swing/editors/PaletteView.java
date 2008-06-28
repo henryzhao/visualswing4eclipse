@@ -55,6 +55,7 @@ public class PaletteView extends ViewPart implements SelectionListener {
 		expandItems = new HashMap<String, ExpandableComposite>();
 		parseGroupExtensions(container);
 		parseWidgetExtensions();
+		updateScrolledComposite();
 	}
 
 	public void setFocus() {
@@ -123,9 +124,9 @@ public class PaletteView extends ViewPart implements SelectionListener {
 		ToolBar toolbar = toolbars.get(id);
 		if (toolbar == null) {
 			ExpandableComposite expandItem = new ExpandableComposite(bar, SWT.NONE);
-			expandItem.setText(displayName);			
 			expandItem.setExpanded(true);
 			expandItem.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
+			expandItem.setText(displayName);			
 			expandItem.addExpansionListener(new ExpansionAdapter(){
 				@Override
 				public void expansionStateChanged(ExpansionEvent e) {
