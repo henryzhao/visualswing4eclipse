@@ -537,6 +537,7 @@
 		        <property id="normalBounds" name="normalBounds" gencode="false"/>
 		        <property id="selected" name="selected"/>
 		        <property id="visible" name="visible"/>
+		        <property id="border" name="border" gencode="false"/>
          </widget>
          <!--
          <widget 
