@@ -32,70 +32,70 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJButtonValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJCheckBoxValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJComboBoxValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJDesktopPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJEditorPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJFormattedTextFieldValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJInternalFrameValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJLabelValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJListValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJPanelValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJPasswordFieldValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJProgressBarValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJRadioButtonValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJScrollBarValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJScrollPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSeparatorValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSliderValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSpinnerValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJSplitPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTabbedPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTableValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTextAreaValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTextFieldValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTextPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJToggleButtonValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJToolBarValue;
-import org.dyno.visual.swing.lnfs.windowsxp.ClassicJTreeValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJButtonValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJCheckBoxValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJComboBoxValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJDesktopPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJEditorPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJFormattedTextFieldValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJInternalFrameValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJLabelValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJListValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJPanelValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJPasswordFieldValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJProgressBarValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJRadioButtonValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJScrollBarValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJScrollPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJSeparatorValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJSliderValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJSpinnerValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJSplitPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJTabbedPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJTableValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJTextAreaValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJTextFieldValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJTextPaneValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJToggleButtonValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJToolBarValue;
-import org.dyno.visual.swing.lnfs.windowsxp.XpJTreeValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJButtonValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJCheckBoxValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJComboBoxValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJDesktopPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJEditorPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJInternalFrameValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJLabelValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJListValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJPanelValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJPasswordFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJProgressBarValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJRadioButtonValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJScrollBarValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJScrollPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJSeparatorValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJSliderValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJSpinnerValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJSplitPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTabbedPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTableValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTextAreaValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTextPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJToggleButtonValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJToolBarValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTreeValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJButtonValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJCheckBoxValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJComboBoxValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJDesktopPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJEditorPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJInternalFrameValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJLabelValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJListValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJPanelValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJPasswordFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJProgressBarValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJRadioButtonValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJScrollBarValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJScrollPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJSeparatorValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJSliderValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJSpinnerValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJSplitPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJTabbedPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJTableValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJTextAreaValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJTextPaneValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJToggleButtonValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJToolBarValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJTreeValue;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 
-public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
+public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 	@SuppressWarnings("unchecked")
 	private HashMap<Class, WidgetValue> xpValues;
 	@SuppressWarnings("unchecked")
 	private HashMap<Class, WidgetValue> classicValues;
 
 	@SuppressWarnings("unchecked")
-	public WindowsLookAndFeelAdapter() {
+	public WindowsClassicLookAndFeelAdapter() {
 		xpValues = new HashMap<Class, WidgetValue>();
 		classicValues = new HashMap<Class, WidgetValue>();
 		
@@ -167,6 +167,11 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 	public Object getDefaultValue(Class widgetClass, String propertyName) {
 		WidgetValue widgetValue = getWidgetValue(widgetClass);
 		if (widgetValue != null){
+			try {
+				widgetValue=widgetValue.getClass().newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return widgetValue.get(propertyName);
 		}else
 			return null;

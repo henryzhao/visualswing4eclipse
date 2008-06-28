@@ -11,5 +11,9 @@
             adapter="org.dyno.visual.swing.lnfs.WindowsLookAndFeelAdapter"
             class="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
       </lookandfeel>
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.WindowsClassicLookAndFeelAdapter"
+            class="com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel">
+      </lookandfeel>
    </extension>
 </plugin>
