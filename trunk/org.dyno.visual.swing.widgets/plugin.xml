@@ -216,7 +216,7 @@
 		    	<property id="editable" name="editable"/>
 		    	<property id="maximumRowCount" name="maximumRowCount"/>
 		    	<property id="selectedIndex" name="selectedIndex"/>
-		    	<property id="selectedItem" name="selectedItem"/>
+		    	<property id="selectedItem" name="selectedItem" gencode="false"/>
 		        <property id="model" name="model"/>
 		        <property id="lightWeightPopupEnabled" name="lightWeightPopupEnabled"/>
          </widget>
