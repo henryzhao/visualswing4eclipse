@@ -16,7 +16,12 @@
 					endec = "org.dyno.visual.swing.types.base.ColorWrapper"/>
 		<type class="javax.swing.ListModel" 
 					renderer = "org.dyno.visual.swing.types.renderer.ListItemRenderer"
-					editor = "org.dyno.visual.swing.types.editor.ListItemEditor"/>
+					editor = "org.dyno.visual.swing.types.editor.ListItemEditor"
+					endec = "org.dyno.visual.swing.types.endec.ListModelWrapper"/>					
+		<type class="javax.swing.ComboBoxModel" 
+					renderer = "org.dyno.visual.swing.types.renderer.ListItemRenderer"
+					editor = "org.dyno.visual.swing.types.editor.ListItemEditor"
+					endec = "org.dyno.visual.swing.types.endec.ComboBoxModelWrapper"/>					
 		<type class="java.awt.Font" 
 					renderer = "org.dyno.visual.swing.types.renderer.FontRenderer"
 					editor = "org.dyno.visual.swing.types.editor.FontEditor"
@@ -30,7 +35,8 @@
 		<type class="long"
 					editor = "org.dyno.visual.swing.types.editor.LongEditor"/>
 		<type class="float"
-					editor = "org.dyno.visual.swing.types.editor.FloatEditor"/>
+					editor = "org.dyno.visual.swing.types.editor.FloatEditor"
+					endec = "org.dyno.visual.swing.types.endec.FloatWrapper"/>
 		<type class="java.awt.Dimension"
 					renderer = "org.dyno.visual.swing.types.renderer.DimensionRenderer"
 					editor = "org.dyno.visual.swing.types.editor.DimensionEditor"
