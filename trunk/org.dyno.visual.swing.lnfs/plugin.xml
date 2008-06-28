@@ -7,5 +7,9 @@
             adapter="org.dyno.visual.swing.lnfs.MetaLookAndFeelAdapter"
             class="javax.swing.plaf.metal.MetalLookAndFeel">
       </lookandfeel>
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.WindowsLookAndFeelAdapter"
+            class="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
+      </lookandfeel>
    </extension>
 </plugin>
