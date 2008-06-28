@@ -5,8 +5,10 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDesktopPane;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -29,8 +31,10 @@ import javax.swing.JTree;
 
 import org.dyno.visual.swing.lnfs.meta.MetaJButtonValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJCheckBoxValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJDesktopPaneValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJEditorPaneValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJInternalFrameValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJLabelValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJPanelValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJPasswordFieldValue;
@@ -80,6 +84,8 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		put(JTable.class, new MetaJTableValue());
 		put(JSpinner.class, new MetaJSpinnerValue());
 		put(JToolBar.class, new MetaJToolBarValue());
+		put(JDesktopPane.class, new MetaJDesktopPaneValue());
+		put(JInternalFrame.class, new MetaJInternalFrameValue());
 	}
 
 	@Override
