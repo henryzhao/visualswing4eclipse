@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import org.dyno.visual.swing.designer.Event;
@@ -261,7 +262,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		@Override
 		protected JComponent createSwingComponent() {
 			designer = new VisualDesigner(VisualSwingEditor.this, this);
-			JComponent backgroundPanel = new JComponent(){};
+			JComponent backgroundPanel = new JPanel(){};
 			backgroundPanel.setOpaque(true);
 			backgroundPanel.setLayout(new BorderLayout());
 			backgroundPanel.add(designer, BorderLayout.CENTER);
