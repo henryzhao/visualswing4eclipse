@@ -6,7 +6,13 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public class StringWrapper implements ICodeGen {
 	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
-		return value == null ? "null" : ("\"" + value + "\"");
+		if(value==null)
+			return "null";
+		else{
+			String str=(String)value;
+			str.replaceAll("\\", "\\\\");
+			return "\""+str+"\"";
+		}
 	}
 
 	@Override
