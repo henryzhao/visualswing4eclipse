@@ -12,7 +12,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
+import org.dyno.visual.swing.plugin.spi.TypeAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 /**
@@ -39,12 +41,24 @@ public class TreeModelWrapper implements ICodeGen {
 		return builder.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void genCode(TreeNode node, StringBuilder builder, int depth, ImportRewrite imports) {
 		builder.append("{\n");
 		DefaultMutableTreeNode mtn = (DefaultMutableTreeNode) node;
 		Object object = mtn.getUserObject();
 		String str = imports.addImport("javax.swing.tree.DefaultMutableTreeNode");
-		builder.append(str + " node" + depth + " = new " + str + "(\"" + object + "\");\n");
+		Class type = object.getClass();
+		TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(type);
+		builder.append(str + " node" + depth + " = new " + str + "(");
+		if(adapter!=null&&adapter.getEndec()!=null){
+			String encodedCode = adapter.getEndec().getJavaCode(object, imports);
+			builder.append(encodedCode);
+		}else{
+			builder.append("\"");
+			builder.append(object);
+			builder.append("\"");
+		}
+		builder.append(");\n");
 		if (!node.isLeaf()) {
 			int count = node.getChildCount();
 			for (int i = 0; i < count; i++) {

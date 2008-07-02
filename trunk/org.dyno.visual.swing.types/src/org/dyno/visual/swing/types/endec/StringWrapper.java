@@ -10,7 +10,7 @@ public class StringWrapper implements ICodeGen {
 			return "null";
 		else{
 			String str=(String)value;
-			str.replaceAll("\\", "\\\\");
+			str=str.replaceAll("\\\\", "\\\\\\\\");
 			return "\""+str+"\"";
 		}
 	}
