@@ -33,6 +33,20 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 class DefaultSourceParser implements ISourceParser {
@@ -60,27 +74,38 @@ class DefaultSourceParser implements ISourceParser {
 		return false;
 	}
 
-	private boolean processType(ICompilationUnit unit, IType type) throws JavaModelException {
+	private boolean processType(ICompilationUnit unit, IType type)
+			throws JavaModelException {
 		try {
-			unit.getJavaProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+			unit.getJavaProject().getProject().build(
+					IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			IClasspathEntry[] classpaths = java_project.getResolvedClasspath(true);
+			IClasspathEntry[] classpaths = java_project
+					.getResolvedClasspath(true);
 			ArrayList<URL> paths = new ArrayList<URL>();
 			for (IClasspathEntry path : classpaths) {
 				paths.add(path.getPath().toFile().toURI().toURL());
 			}
-			IPath wsPath = java_project.getProject().getWorkspace().getRoot().getRawLocation();
-			paths.add(wsPath.append(java_project.getOutputLocation()).toFile().toURI().toURL());
+			IPath wsPath = java_project.getProject().getWorkspace().getRoot()
+					.getRawLocation();
+			paths.add(wsPath.append(java_project.getOutputLocation()).toFile()
+					.toURI().toURL());
 			URL[] urls = paths.toArray(new URL[paths.size()]);
-			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
+			Class<?> beanClass = new URLClassLoader(urls, getClass()
+					.getClassLoader()).loadClass(className);
 			if (JComponent.class.isAssignableFrom(beanClass)) {
 				try {
 					setUpLookAndFeel(beanClass);
 					JComponent bean = (JComponent) beanClass.newInstance();
-					WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
-					createWidgetEvent(beanAdapter, beanClass, true);
-					initDesignedWidget(bean, type);
+					WidgetAdapter beanAdapter = ExtensionRegistry
+							.createWidgetAdapter(bean);
+					ASTParser parser = ASTParser.newParser(AST.JLS3);
+					parser.setSource(this.unit);
+					CompilationUnit cunit = (CompilationUnit) parser
+							.createAST(null);
+					createWidgetEvent(type, cunit, beanAdapter, beanClass, true);
+					initDesignedWidget(cunit, bean, type);
 					result = beanAdapter;
 				} catch (Error re) {
 					return false;
@@ -92,6 +117,7 @@ class DefaultSourceParser implements ISourceParser {
 		}
 		return false;
 	}
+
 	@SuppressWarnings("unchecked")
 	private void setUpLookAndFeel(Class beanClass) {
 		try {
@@ -99,14 +125,17 @@ class DefaultSourceParser implements ISourceParser {
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager
+						.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
-				ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnf);
+				ILookAndFeelAdapter adapter = ExtensionRegistry
+						.getLnfAdapter(lnf);
 				if (adapter != null) {
 					try {
-						UIManager.setLookAndFeel(adapter.getLookAndFeelInstance());
+						UIManager.setLookAndFeel(adapter
+								.getLookAndFeelInstance());
 					} catch (Exception e) {
 					}
 				}
@@ -116,7 +145,8 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void initDesignedWidget(JComponent bean, IType itype) {
+	private void initDesignedWidget(CompilationUnit cunit, JComponent bean,
+			IType itype) {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
@@ -127,11 +157,12 @@ class DefaultSourceParser implements ISourceParser {
 				try {
 					JComponent fieldComponent = (JComponent) field.get(bean);
 					if (fieldComponent != null) {
-						WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
+						WidgetAdapter adapter = ExtensionRegistry
+								.createWidgetAdapter(fieldComponent);
 						String widgetName = getNameFromFieldName(fieldName);
 						adapter.setName(widgetName);
 						adapter.setLastName(widgetName);
-						createWidgetEvent(adapter, clazz, false);
+						createWidgetEvent(itype, cunit, adapter, clazz, false);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -141,27 +172,148 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void createWidgetEvent(WidgetAdapter adapter, Class rootClass, boolean root) {
-		EventSetDescriptor[] esds = adapter.getBeanInfo().getEventSetDescriptors();
+	private void createWidgetEvent(IType itype, CompilationUnit cunit,
+			WidgetAdapter adapter, Class rootClass, boolean root) {
+		EventSetDescriptor[] esds = adapter.getBeanInfo()
+				.getEventSetDescriptors();
 		if (esds != null && esds.length > 0) {
 			for (EventSetDescriptor esd : esds) {
-				MethodDescriptor[] mListeners = esd.getListenerMethodDescriptors();
+				MethodDescriptor[] mListeners = esd
+						.getListenerMethodDescriptors();
 				for (MethodDescriptor mListener : mListeners) {
-					try {
-						String mName = (root ? "" : adapter.getName() + "_") + esd.getName() + "_" + mListener.getName();
-						Class[] params = mListener.getMethod().getParameterTypes();
-						Method listMethod = rootClass.getDeclaredMethod(mName, params);
-						if (listMethod != null) {
-							Map<EventSetDescriptor, List<MethodDescriptor>> map = adapter.getEventDescriptor();
-							List<MethodDescriptor> methods = map.get(esd);
-							if (methods == null) {
-								methods = new ArrayList<MethodDescriptor>();
-								map.put(esd, methods);
-							}
-							methods.add(mListener);
+					TypeDeclaration type = (TypeDeclaration) cunit.types().get(
+							0);
+					createEventMethod(adapter, esd, mListener, type, root);
+				}
+			}
+		}
+	}
+
+	private void createEventMethod(WidgetAdapter adapter,
+			EventSetDescriptor esd, MethodDescriptor mListener,
+			TypeDeclaration type, boolean root) {
+		MethodDeclaration[] mds = type.getMethods();
+		for (MethodDeclaration md : mds) {
+			String mdName = md.getName().getFullyQualifiedName();
+			if (root) {
+				if (mdName.equals("initComponent")) {
+					createEventMethodForWidget(adapter, esd, mListener, md,
+							root);
+					break;
+				}
+			} else {
+				String getName = getGetMethodName(adapter.getName());
+				if (mdName.equals(getName)) {
+					createEventMethodForWidget(adapter, esd, mListener, md,
+							root);
+					break;
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createEventMethodForWidget(WidgetAdapter adapter,
+			EventSetDescriptor esd, MethodDescriptor mListener,
+			MethodDeclaration md, boolean root) {
+		Block body = md.getBody();
+		List statements = body.statements();
+		if (!root) {
+			IfStatement ifstatement = (IfStatement) statements.get(0);
+			Statement thenstatement = ifstatement.getThenStatement();
+			if (thenstatement instanceof Block) {
+				statements = ((Block) thenstatement).statements();
+			}
+		}
+		for (Object stmt : statements) {
+			Statement statement = (Statement) stmt;
+			if (statement instanceof ExpressionStatement) {
+				processWidgetCreationStatement(adapter, esd, mListener,
+						statement, root);
+			}
+		}
+	}
+
+	private void processWidgetCreationStatement(WidgetAdapter adapter,
+			EventSetDescriptor esd, MethodDescriptor mListener,
+			Statement statement, boolean root) {
+		ExpressionStatement expressionStatement = (ExpressionStatement) statement;
+		Expression expression = expressionStatement.getExpression();
+		if (expression instanceof MethodInvocation) {
+			MethodInvocation mi = (MethodInvocation) expression;
+			if (root) {
+				createAddMethod(adapter, esd, mListener, mi);
+			} else {
+				Expression optionalExpression = mi.getExpression();
+				if (optionalExpression instanceof SimpleName) {
+					SimpleName simplename = (SimpleName) optionalExpression;
+					String idName = simplename.getFullyQualifiedName();
+					if (idName.equals(adapter.getName()))
+						createAddMethod(adapter, esd, mListener, mi);
+				}
+			}
+		}
+	}
+
+	private void createAddMethod(WidgetAdapter adapter, EventSetDescriptor esd,
+			MethodDescriptor mListener, MethodInvocation mi) {
+		Method addm = esd.getAddListenerMethod();
+		String addmName = addm.getName();
+		String mName = mi.getName().getFullyQualifiedName();
+		if (mName.equals(addmName)) {
+			processAddListenerStatement(adapter, esd, mListener, mi);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void processAddListenerStatement(WidgetAdapter adapter,
+			EventSetDescriptor esd, MethodDescriptor mListener,
+			MethodInvocation mi) {
+		List arguments = mi.arguments();
+		for (Object arg : arguments) {
+			Expression argExpression = (Expression) arg;
+			if (argExpression instanceof ClassInstanceCreation) {
+				ClassInstanceCreation cic = (ClassInstanceCreation) argExpression;
+				AnonymousClassDeclaration acd = cic
+						.getAnonymousClassDeclaration();
+				if (acd != null) {
+					List bodys = acd.bodyDeclarations();
+					for (Object element : bodys) {
+						if (element instanceof MethodDeclaration) {
+							processListenerMethod(adapter, esd, mListener,
+									element);
 						}
-					} catch (NoSuchMethodException nsme) {
 					}
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void processListenerMethod(WidgetAdapter adapter,
+			EventSetDescriptor esd, MethodDescriptor mListener, Object element) {
+		MethodDeclaration methoddec = (MethodDeclaration) element;
+		if (methoddec.getName().getFullyQualifiedName().equals(
+				mListener.getName())) {
+			Map<EventSetDescriptor, Map<MethodDescriptor, String>> map = adapter
+					.getEventDescriptor();
+			Map<MethodDescriptor, String> methods = map.get(esd);
+			if (methods == null) {
+				methods = new HashMap<MethodDescriptor, String>();
+				map.put(esd, methods);
+			}
+			Block mbody = methoddec.getBody();
+			List mstmts = mbody.statements();
+			for (Object mstmt : mstmts) {
+				if (mstmt instanceof ExpressionStatement) {
+					ExpressionStatement es = (ExpressionStatement) mstmt;
+					Expression esExpression = es.getExpression();
+					if (esExpression instanceof MethodInvocation) {
+						MethodInvocation mmi = (MethodInvocation) esExpression;
+						methods.put(mListener, mmi.getName()
+								.getFullyQualifiedName());
+					}
+					break;
 				}
 			}
 		}
@@ -198,7 +350,8 @@ class DefaultSourceParser implements ISourceParser {
 	private boolean isRegisteredWidget(String sig) {
 		if (sig.startsWith("L") || sig.startsWith("Q")) {
 			String className = sig.substring(1, sig.length() - 1);
-			HashMap<String, IConfigurationElement> widgets = ExtensionRegistry.getRegisteredWidgets();
+			HashMap<String, IConfigurationElement> widgets = ExtensionRegistry
+					.getRegisteredWidgets();
 			int dot = className.lastIndexOf('.');
 			if (dot != -1) {
 				return widgets.get(className) != null;
@@ -254,8 +407,11 @@ class DefaultSourceParser implements ISourceParser {
 					if (lnf != null) {
 						className = lnf.getClass().getName();
 					}
-					String newfield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = "
-							+ (className == null ? "null" : "\"" + className + "\"") + ";\n";
+					String newfield = "private static final "
+							+ imports.addImport("java.lang.String")
+							+ " PREFERRED_LOOK_AND_FEEL = "
+							+ (className == null ? "null" : "\"" + className
+									+ "\"") + ";\n";
 					type.createField(newfield, null, false, monitor);
 				}
 				return success;
@@ -288,16 +444,20 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	private String getFieldNameFromGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(method.getElementName());
+		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(
+				method.getElementName());
 	}
 
 	private boolean isGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().isGetMethodName(method.getElementName());
+		return NamespaceManager.getInstance().isGetMethodName(
+				method.getElementName());
 	}
 
-	private void removeComponent(IType type, String fieldName, IProgressMonitor monitor) {
+	private void removeComponent(IType type, String fieldName,
+			IProgressMonitor monitor) {
 		IField field = type.getField(getFieldName(fieldName));
-		IMethod method = type.getMethod(getGetMethodName(fieldName), new String[0]);
+		IMethod method = type.getMethod(getGetMethodName(fieldName),
+				new String[0]);
 		if (field != null && field.exists()) {
 			try {
 				field.delete(true, monitor);
@@ -337,7 +497,8 @@ class DefaultSourceParser implements ISourceParser {
 			int count = containerAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				JComponent child = containerAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				_listNames(childAdapter, list);
 			}
 		}

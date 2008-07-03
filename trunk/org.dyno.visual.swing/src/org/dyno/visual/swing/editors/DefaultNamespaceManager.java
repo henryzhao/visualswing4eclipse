@@ -28,4 +28,9 @@ public class DefaultNamespaceManager extends NamespaceManager {
 	public boolean isGetMethodName(String name) {
 		return name.startsWith(GET);
 	}
+
+	@Override
+	public String getCapitalName(String name) {
+		return Character.toUpperCase(name.charAt(0))+name.substring(1);
+	}
 }

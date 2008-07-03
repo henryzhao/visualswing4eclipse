@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.EventSetDescriptor;
-import java.beans.MethodDescriptor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -319,9 +317,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		case Event.EVENT_SHOW_SOURCE:
 			Object[] p = (Object[]) event.getParameter();
 			WidgetAdapter adapter = (WidgetAdapter) p[0];
-			EventSetDescriptor esd = (EventSetDescriptor) p[1];
-			MethodDescriptor mdesc = (MethodDescriptor) p[2];
-			openSourceEditor(adapter, esd, mdesc);
+			String mname=(String)p[1];
+			String eventTypeSig = (String) p[2];
+			openSourceEditor(adapter, mname, eventTypeSig);
 			break;
 		}
 	}
@@ -401,11 +399,11 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	@Override
-	public void openSourceEditor(WidgetAdapter widget, EventSetDescriptor eventSet, MethodDescriptor method) {
+	public void openSourceEditor(WidgetAdapter widget, String mname, String eventTypeSig) {
 		if (isDirty()) {
 			doSave(null);
 		}
-		super.openSourceEditor(widget, eventSet, method);
+		super.openSourceEditor(widget, mname, eventTypeSig);
 	}
 
 	@Override

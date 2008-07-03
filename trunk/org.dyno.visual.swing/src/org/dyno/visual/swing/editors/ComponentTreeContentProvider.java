@@ -31,7 +31,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			} else if (parentElement instanceof JComponent) {
 				JComponent component = (JComponent) parentElement;
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
-				Map<EventSetDescriptor, List<MethodDescriptor>> events = adapter.getEventDescriptor();
+				Map<EventSetDescriptor, Map<MethodDescriptor, String>> events = adapter.getEventDescriptor();
 				Set<EventSetDescriptor> keys = events.keySet();
 				List<Object> children = new ArrayList<Object>();
 				if (!keys.isEmpty()) {
@@ -40,10 +40,12 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 					for (EventSetDescriptor key : keys) {
 						EventSet set = new EventSet(key.getDisplayName(), ed);
 						eventSets.add(set);
-						List<MethodDescriptor> list = events.get(key);
+						Map<MethodDescriptor, String> map = events.get(key);
+						Set<MethodDescriptor> mKey = map.keySet();
 						List<EventMethod> mlist = new ArrayList<EventMethod>();
-						for (MethodDescriptor m : list) {
-							EventMethod method = new EventMethod((String)m.getDisplayName(), set);
+						for (MethodDescriptor m : mKey) {
+							String displayName=map.get(m);
+							EventMethod method = new EventMethod(m.getDisplayName()+"["+displayName+"]", set);
 							mlist.add(method);
 						}
 						set.setMethods(mlist);
@@ -118,7 +120,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		} else if (element instanceof JComponent) {
 			JComponent child = (JComponent) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-			Map<EventSetDescriptor, List<MethodDescriptor>> events = adapter.getEventDescriptor();
+			Map<EventSetDescriptor, Map<MethodDescriptor, String>> events = adapter.getEventDescriptor();
 			Set<EventSetDescriptor> keys = events.keySet();
 			if (!keys.isEmpty()) {
 				return true;

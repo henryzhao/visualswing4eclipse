@@ -1,7 +1,5 @@
 package org.dyno.visual.swing.editors;
 
-import java.beans.EventSetDescriptor;
-import java.beans.MethodDescriptor;
 import java.io.InputStream;
 
 import org.dyno.visual.swing.contentTypes.VisualSwingContentDescriber;
@@ -17,7 +15,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.swt.widgets.Display;
@@ -167,7 +164,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		}
 	}
 
-	public void openSourceEditor(final WidgetAdapter widget, final EventSetDescriptor eventSet, final MethodDescriptor method) {
+	public void openSourceEditor(final WidgetAdapter widget, final String mName, final String eventTypeSig) {
 		final IEditorInput input = getEditorInput();
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench != null) {
@@ -182,25 +179,13 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 						ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 						action.run(unit);
 						editor.doSave(null);
-						if (widget != null && eventSet != null && method != null) {
+						if (widget != null && eventTypeSig != null&&mName!=null) {
 							String name = file.getName();
 							int dot = name.lastIndexOf('.');
 							if (dot != -1)
 								name = name.substring(0, dot);
 							IType type = unit.getType(name);
-							String mName = (widget.isRoot() ? "" : (widget.getName() + "_")) + eventSet.getName() + "_" + method.getName();
-							Class<?>[] params = method.getMethod().getParameterTypes();
-							String[] parameters = new String[params == null ? 0 : params.length];
-							if (params != null) {
-								for (int i = 0; i < params.length; i++) {
-									String pcname = params[i].getName();
-									dot = pcname.lastIndexOf('.');
-									if (dot != -1)
-										pcname = pcname.substring(dot + 1);
-									parameters[i] = Signature.createTypeSignature(pcname, false);
-								}
-							}
-							IMember member = type.getMethod(mName, parameters);
+							IMember member = type.getMethod(mName, new String[]{eventTypeSig});
 							JavaUI.revealInEditor(editor, (IJavaElement) member);
 						}
 					} catch (PartInitException e) {

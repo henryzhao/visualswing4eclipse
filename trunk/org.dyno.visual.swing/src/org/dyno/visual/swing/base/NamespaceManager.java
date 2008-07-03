@@ -22,4 +22,6 @@ public abstract class NamespaceManager {
 	public abstract boolean isGetMethodName(String name);
 	
 	public abstract String getFieldNameFromGetMethodName(String getMethodName);
+	
+	public abstract String getCapitalName(String name);
 }
