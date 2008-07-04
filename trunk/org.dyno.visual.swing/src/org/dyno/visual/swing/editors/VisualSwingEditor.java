@@ -60,8 +60,11 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartConstants;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -73,7 +76,9 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class VisualSwingEditor extends AbstractDesignerEditor implements Listener, IResourceChangeListener, ActionListener, ISelectionProvider {
+public class VisualSwingEditor extends AbstractDesignerEditor implements
+		Listener, IResourceChangeListener, ActionListener, ISelectionProvider,
+		IPartListener {
 	private EmbeddedSwingComposite embedded;
 	private VisualDesigner designer;
 	private VisualSwingOutline outline;
@@ -92,9 +97,12 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(IEditorSite site, IEditorInput input)
+			throws PartInitException {
 		super.init(site, input);
 		site.setSelectionProvider(this);
+		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService()
+				.addPartListener(this);
 	}
 
 	@Override
@@ -107,7 +115,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		} else if (adapter == IPropertySheetPage.class) {
 			if (sheetPage == null) {
 				sheetPage = new PropertySheetPage();
-				sheetPage.setPropertySourceProvider(new WidgetAdapterContentProvider());
+				sheetPage
+						.setPropertySourceProvider(new WidgetAdapterContentProvider());
 			}
 			return sheetPage;
 		} else
@@ -116,7 +125,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 
 	@Override
 	public boolean isDirty() {
-		return designer != null && (designer.isLnfChanged() || designer.isDirty());
+		return designer != null
+				&& (designer.isLnfChanged() || designer.isDirty());
 	}
 
 	@Override
@@ -160,7 +170,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	public void setFocus() {
-		changeToLnf(getLnfClassname());
 		if (embedded != null) {
 			embedded.setFocus();
 		}
@@ -194,12 +203,14 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 			switchToJavaEditor(getDisplay());
 		} else {
 			parent.setLayout(new FillLayout());
-			scrollPane = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+			scrollPane = new ScrolledComposite(parent, SWT.H_SCROLL
+					| SWT.V_SCROLL);
 			scrollPane.setExpandHorizontal(true);
 			scrollPane.setExpandVertical(true);
 			Composite designerContainer = new Composite(scrollPane, SWT.NONE);
 			scrollPane.setContent(designerContainer);
-			designerContainer.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			designerContainer.setBackground(parent.getDisplay().getSystemColor(
+					SWT.COLOR_WHITE));
 			designerContainer.setLayout(new FillLayout());
 			embedded = new EmbeddedVisualDesigner(designerContainer);
 			embedded.populate();
@@ -207,7 +218,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 				switchToJavaEditor(getDisplay());
 			} else {
 				openRelatedView();
-				ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+				ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+						IResourceChangeEvent.POST_CHANGE);
 				validateContent();
 			}
 		}
@@ -233,7 +245,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory == null)
 			return false;
-		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
+				.getFile());
 		hostProject = unit.getJavaProject();
 		ISourceParser sourceParser = factory.newParser();
 		sourceParser.setSource(unit);
@@ -255,7 +268,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory != null) {
 			try {
-				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
+						.getFile());
 				hostProject = unit.getJavaProject();
 				WorkingCopyOwner owner = new WorkingCopyOwner() {
 				};
@@ -265,7 +279,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 				sourceParser.setLnfChanged(designer.isLnfChanged());
 				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
 				sourceParser.setImportWrite(imports);
-				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
+				WidgetAdapter rootAdapter = WidgetAdapter
+						.getWidgetAdapter(designer.getRoot());
 				sourceParser.setRootAdapter(rootAdapter);
 				boolean success = sourceParser.genCode(monitor);
 				if (success) {
@@ -321,7 +336,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		case Event.EVENT_SELECTION:
 			refreshActionState();
 			if (outline != null && event.getSource() != outline) {
-				outline.selectComponent((List<JComponent>) event.getParameter());
+				outline
+						.selectComponent((List<JComponent>) event
+								.getParameter());
 			}
 			if (designer != null && event.getSource() != designer) {
 				designer.repaint();
@@ -339,7 +356,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 				String mname = (String) p[2];
 				String eventTypeSig = (String) p[3];
 				openSourceEditor(adapter, mname, eventTypeSig);
-			}else{
+			} else {
 				EventSetDescriptor eventSet = (EventSetDescriptor) p[2];
 				MethodDescriptor methodDesc = (MethodDescriptor) p[3];
 				openSourceEditor(adapter, eventSet, methodDesc);
@@ -348,8 +365,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		}
 	}
 
-
-
 	@SuppressWarnings("unchecked")
 	private void setUpLookAndFeel(Class rootClass) {
 		try {
@@ -357,7 +372,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager
+						.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
@@ -368,7 +384,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	public void setLnfClassname(String lnfClassname) {
-		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
+		ILookAndFeelAdapter adapter = ExtensionRegistry
+				.getLnfAdapter(lnfClassname);
 		if (adapter != null) {
 			try {
 				UIManager.setLookAndFeel(adapter.getLookAndFeelInstance());
@@ -398,11 +415,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 
 	private void checkChange(IResourceDelta delta) {
 		IPath deltaPath = delta.getFullPath();
-		IPath path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath();
+		IPath path = ((IFileEditorInput) getEditorInput()).getFile()
+				.getFullPath();
 		if (deltaPath.equals(path)) {
 			delayedRefresh(100);
 		} else {
-			IResourceDelta[] children = delta.getAffectedChildren(IResourceDelta.CHANGED);
+			IResourceDelta[] children = delta
+					.getAffectedChildren(IResourceDelta.CHANGED);
 			if (children != null && children.length > 0) {
 				for (IResourceDelta res : children) {
 					checkChange(res);
@@ -423,15 +442,19 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 			}
 		});
 	}
+
 	@Override
-	public void openSourceEditor(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc) {
+	public void openSourceEditor(WidgetAdapter adapter,
+			EventSetDescriptor eventSet, MethodDescriptor methodDesc) {
 		if (isDirty()) {
 			doSave(null);
 		}
-		super.openSourceEditor(adapter, eventSet, methodDesc);		
+		super.openSourceEditor(adapter, eventSet, methodDesc);
 	}
+
 	@Override
-	public void openSourceEditor(WidgetAdapter widget, String mname, String eventTypeSig) {
+	public void openSourceEditor(WidgetAdapter widget, String mname,
+			String eventTypeSig) {
 		if (isDirty()) {
 			doSave(null);
 		}
@@ -448,7 +471,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(
+			ISelectionChangedListener listener) {
 	}
 
 	@Override
@@ -512,6 +536,32 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	public void openSourceEditor() {
-		openSourceEditor((WidgetAdapter)null, (String)null, (String)null);
+		openSourceEditor((WidgetAdapter) null, (String) null, (String) null);
+	}
+
+	@Override
+	public void partActivated(IWorkbenchPart part) {
+		if (part == this)
+			changeToLnf(getLnfClassname());
+	}
+
+	@Override
+	public void partBroughtToTop(IWorkbenchPart part) {
+		if (part == this)
+			changeToLnf(getLnfClassname());
+	}
+
+	@Override
+	public void partClosed(IWorkbenchPart part) {
+	}
+
+	@Override
+	public void partDeactivated(IWorkbenchPart part) {
+	}
+
+	@Override
+	public void partOpened(IWorkbenchPart part) {
+		if (part == this)
+			changeToLnf(getLnfClassname());
 	}
 }

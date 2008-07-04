@@ -61,6 +61,9 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * 
@@ -117,6 +120,13 @@ class DefaultSourceParser implements ISourceParser {
 			if (JComponent.class.isAssignableFrom(beanClass)) {
 				try {
 					setUpLookAndFeel(beanClass);
+				} catch (Exception e) {
+					Shell parent = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow().getShell();
+					MessageDialog.openError(parent, "Error!", e.getMessage());
+					return false;
+				}
+				try {
 					JComponent bean = (JComponent) beanClass.newInstance();
 					WidgetAdapter beanAdapter = ExtensionRegistry
 							.createWidgetAdapter(bean);
@@ -139,7 +149,7 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setUpLookAndFeel(Class beanClass) {
+	private static String getBeanClassLnf(Class beanClass) {
 		try {
 			Field field = beanClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL");
 			if (field.getType() == String.class) {
@@ -150,18 +160,33 @@ class DefaultSourceParser implements ISourceParser {
 				if (lnf == null) {
 					lnf = className;
 				}
-				ILookAndFeelAdapter adapter = ExtensionRegistry
-						.getLnfAdapter(lnf);
-				if (adapter != null) {
-					try {
-						UIManager.setLookAndFeel(adapter
-								.getLookAndFeelInstance());
-					} catch (Exception e) {
-					}
-				}
+				return lnf;
 			}
 		} catch (Exception e) {
 		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setUpLookAndFeel(Class beanClass) throws Exception {
+		String lnf = getBeanClassLnf(beanClass);
+		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnf);
+		if (adapter != null) {
+			LookAndFeel instance = adapter.getLookAndFeelInstance();
+			if (instance != null) {
+				try {
+					UIManager.setLookAndFeel(instance);
+				} catch (Exception e) {
+				}
+			} else {
+				throw new Exception(
+						lnf
+								+ " specified in this class is not a supported LAF on this java platform!");
+			}
+		} else
+			throw new Exception(
+					lnf
+							+ " specified in this class is not a supported LAF on this java platform!");
 	}
 
 	@SuppressWarnings("unchecked")

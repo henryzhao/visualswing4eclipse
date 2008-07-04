@@ -281,9 +281,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			designBorder = adapter.getDesignBorder();
 			container.setBorder(designBorder);
 			validateContent();
-			Window win = SwingUtilities.getWindowAncestor(this);
-			if (win != null)
-				SwingUtilities.updateComponentTreeUI(win);
+//			Window win = SwingUtilities.getWindowAncestor(this);
+//			if (win != null)
+//				SwingUtilities.updateComponentTreeUI(win);
 			setLnfChanged(false);
 			requestFocus();
 		}

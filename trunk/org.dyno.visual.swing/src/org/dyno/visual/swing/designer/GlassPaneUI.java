@@ -23,16 +23,18 @@ import javax.swing.plaf.ComponentUI;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+
 /**
  * 
  * GlassPaneUI
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
 public class GlassPaneUI extends ComponentUI {
 	static {
-		THUMB_NAIL = new ImageIcon(GlassPaneUI.class.getClassLoader().getResource("icons/resize_thumb.png"));
+		THUMB_NAIL = new ImageIcon(GlassPaneUI.class.getClassLoader()
+				.getResource("icons/resize_thumb.png"));
 	}
 	private VisualDesigner designer;
 
@@ -92,13 +94,18 @@ public class GlassPaneUI extends ComponentUI {
 
 	private static Icon THUMB_NAIL;
 
-	private void paintTranverse(Graphics g, JComponent c, Tranverse trans, int ad) {
+	private void paintTranverse(Graphics g, JComponent c, Tranverse trans,
+			int ad) {
 		JComponent root = designer.getRootWidget();
-		Rectangle rect = new Rectangle(0, 0, root.getWidth(), root.getHeight());
-		rect = SwingUtilities.convertRectangle(root, rect, c);
-		Graphics clipg = g.create(rect.x - ad, rect.y - ad, rect.width + 2 * ad, rect.height + 2 * ad);
-		tranverse(clipg, root, trans, ad);
-		clipg.dispose();
+		if (root != null) {
+			Rectangle rect = new Rectangle(0, 0, root.getWidth(), root
+					.getHeight());
+			rect = SwingUtilities.convertRectangle(root, rect, c);
+			Graphics clipg = g.create(rect.x - ad, rect.y - ad, rect.width + 2
+					* ad, rect.height + 2 * ad);
+			tranverse(clipg, root, trans, ad);
+			clipg.dispose();
+		}
 	}
 
 	private void tranverse(Graphics g, JComponent jc, Tranverse trans, int ad) {
@@ -110,9 +117,11 @@ public class GlassPaneUI extends ComponentUI {
 			int size = parent.getChildCount();
 			for (int i = 0; i < size; i++) {
 				Component child = parent.getChild(i);
-				Rectangle rect = new Rectangle(0, 0, child.getWidth(), child.getHeight());
+				Rectangle rect = new Rectangle(0, 0, child.getWidth(), child
+						.getHeight());
 				rect = SwingUtilities.convertRectangle(child, rect, jc);
-				Graphics clipg = g.create(rect.x, rect.y, rect.width + 2 * ad, rect.height + 2 * ad);
+				Graphics clipg = g.create(rect.x, rect.y, rect.width + 2 * ad,
+						rect.height + 2 * ad);
 				tranverse(clipg, (JComponent) child, trans, ad);
 				clipg.dispose();
 			}
