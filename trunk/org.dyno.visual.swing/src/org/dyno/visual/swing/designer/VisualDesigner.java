@@ -1,10 +1,11 @@
-/*
- * BeanDesigner.java
- *
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.designer;
 
 import java.awt.BorderLayout;
@@ -43,7 +44,13 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
-
+/**
+ * 
+ * VisualDesigner
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class VisualDesigner extends JComponent implements KeyListener {
 	private static final long serialVersionUID = -8003291919574427325L;
 	private Rectangle rootBounds;

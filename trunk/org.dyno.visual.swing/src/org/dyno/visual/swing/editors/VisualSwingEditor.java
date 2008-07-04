@@ -1,9 +1,19 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.EventSetDescriptor;
+import java.beans.MethodDescriptor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,6 +66,13 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+/**
+ * 
+ * VisualSwingEditor
+ * 
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class VisualSwingEditor extends AbstractDesignerEditor implements Listener, IResourceChangeListener, ActionListener, ISelectionProvider {
 	private EmbeddedSwingComposite embedded;
 	private VisualDesigner designer;
@@ -163,8 +180,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 				className = UIManager.getCrossPlatformLookAndFeelClassName();
 				if (!lnfName.equals(className))
 					setLnfClassname(className);
-			} else if (!lnfName.equals(className)){
-				setLnfClassname(className);				
+			} else if (!lnfName.equals(className)) {
+				setLnfClassname(className);
 			}
 		}
 	}
@@ -317,12 +334,21 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		case Event.EVENT_SHOW_SOURCE:
 			Object[] p = (Object[]) event.getParameter();
 			WidgetAdapter adapter = (WidgetAdapter) p[0];
-			String mname=(String)p[1];
-			String eventTypeSig = (String) p[2];
-			openSourceEditor(adapter, mname, eventTypeSig);
+			boolean isMethod = (Boolean) p[1];
+			if (isMethod) {
+				String mname = (String) p[2];
+				String eventTypeSig = (String) p[3];
+				openSourceEditor(adapter, mname, eventTypeSig);
+			}else{
+				EventSetDescriptor eventSet = (EventSetDescriptor) p[2];
+				MethodDescriptor methodDesc = (MethodDescriptor) p[3];
+				openSourceEditor(adapter, eventSet, methodDesc);
+			}
 			break;
 		}
 	}
+
+
 
 	@SuppressWarnings("unchecked")
 	private void setUpLookAndFeel(Class rootClass) {
@@ -397,7 +423,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 			}
 		});
 	}
-
+	@Override
+	public void openSourceEditor(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc) {
+		if (isDirty()) {
+			doSave(null);
+		}
+		super.openSourceEditor(adapter, eventSet, methodDesc);		
+	}
 	@Override
 	public void openSourceEditor(WidgetAdapter widget, String mname, String eventTypeSig) {
 		if (isDirty()) {
@@ -480,6 +512,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	public void openSourceEditor() {
-		openSourceEditor(null, null, null);
+		openSourceEditor((WidgetAdapter)null, (String)null, (String)null);
 	}
 }

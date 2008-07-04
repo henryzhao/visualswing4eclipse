@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.BasicStroke;
@@ -22,7 +30,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
-
+/**
+ * 
+ * LayoutAdapter
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public abstract class LayoutAdapter implements IPropertySourceProvider {
 	public static String DEFAULT_LAYOUT = "java.awt.FlowLayout";
 	public static final String LAYOUT_EXTENSION_POINT = "org.dyno.visual.swing.widgets.layoutAdapter";

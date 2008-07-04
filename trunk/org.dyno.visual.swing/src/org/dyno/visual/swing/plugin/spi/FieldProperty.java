@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
@@ -13,7 +21,13 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
+/**
+ * 
+ * FieldProperty
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class FieldProperty implements IWidgetPropertyDescriptor {
 	private Object lastValue;
 	private Object default_value;
@@ -216,7 +230,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public void resetPropertyValue(Object bean) {
+	public void resetPropertyValue(String lnfClassname, Object bean) {
 	}
 
 	@SuppressWarnings("unchecked")

@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import org.eclipse.core.runtime.CoreException;
@@ -5,7 +13,13 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-
+/**
+ * 
+ * ParserFactory
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public abstract class ParserFactory {
 	private static final String SOURCE_PARSER_FACTORY_EXTENSION = "org.dyno.visual.swing.sourceParserFactory";
 	private static ParserFactory DEFAULT;

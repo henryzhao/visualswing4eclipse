@@ -1,8 +1,22 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.base;
 
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.eclipse.jface.viewers.ILabelProvider;
-
+/**
+ * 
+ * FactoryRenderer
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class FactoryRenderer implements ILabelProviderFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 	private FactoryLabelProvider labelProvider;

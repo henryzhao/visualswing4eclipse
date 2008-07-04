@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -8,7 +16,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
+/**
+ * 
+ * VarNameDialog
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 class VarNameDialog extends Dialog {
 	private String message;
 	private String input;

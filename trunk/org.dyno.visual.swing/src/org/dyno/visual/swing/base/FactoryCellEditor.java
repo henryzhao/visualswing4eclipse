@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.base;
 
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -6,7 +14,13 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
+/**
+ * 
+ * FactoryCellEditor
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class FactoryCellEditor extends ComboBoxCellEditor {
 	private FactoryItem[] items;
 	private Object[] instances;

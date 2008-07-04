@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.layouts;
 
 import java.awt.Component;
@@ -8,7 +16,13 @@ import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.HashMap;
-
+/**
+ * 
+ * GroupLayout
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class GroupLayout implements LayoutManager2, Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -1,11 +1,11 @@
-/*
- * DesignerUI.java
- *
- * Created on August 1, 2007, 12:55 PM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.designer;
 
 import java.awt.Color;
@@ -23,9 +23,11 @@ import javax.swing.plaf.ComponentUI;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-
 /**
  * 
+ * GlassPaneUI
+ *
+ * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
 public class GlassPaneUI extends ComponentUI {

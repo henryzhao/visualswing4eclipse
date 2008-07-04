@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing;
 
 import java.util.HashMap;
@@ -14,9 +22,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-
 /**
- * The activator class controls the plug-in life cycle
+ * 
+ * VisualSwingPlugin
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
  */
 public class VisualSwingPlugin extends AbstractUIPlugin {
 	private static final String DRAGGING_CURSOR_ICON = "/icons/dragging.gif";

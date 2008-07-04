@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
@@ -18,6 +26,13 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+/**
+ * 
+ * WidgetProperty
+ * 
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class WidgetProperty implements IWidgetPropertyDescriptor {
 	private Object lastValue;
 
@@ -32,6 +47,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	private String id;
 	private String displayName;
 	private String[] filters;
+
 	@SuppressWarnings("unchecked")
 	private Class beanClass;
 	private boolean gencode;
@@ -309,7 +325,75 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public void resetPropertyValue(Object bean) {
+	public void resetPropertyValue(String lnfClassname, Object bean) {
+		String name = propertyDescriptor.getName();
+		if (name.equals("preferredSize") && bean instanceof Component) {
+			return;
+		} else if (name.equals("minimumSize") && bean instanceof Component)
+			return;
+		else if (name.equals("maximumSize") && bean instanceof Component)
+			return;
+		Object value = _getPropertyValue(bean);
+		if (value != null && value instanceof UIResource)
+			return;
+		Class<?> propertyType = propertyDescriptor.getPropertyType();
+		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
+		if (adapter == null)
+			return;
+		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
+		if (propertyType == byte.class) {
+			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == char.class) {
+			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == short.class) {
+			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == int.class) {
+			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == long.class) {
+			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == float.class) {
+			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == double.class) {
+			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == void.class) {
+		} else if (propertyType == boolean.class) {
+			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Byte.class) {
+			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Character.class) {
+			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Short.class) {
+			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Integer.class) {
+			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Long.class) {
+			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Float.class) {
+			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Double.class) {
+			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
+			setPropertyValue(bean, dv);
+		} else if (propertyType == Void.class) {
+		} else if (propertyType == Boolean.class) {
+			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
+			setPropertyValue(bean, dv);
+		} else {
+			setPropertyValue(bean, default_value);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -474,7 +558,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				builder.append(propertyDescriptor.getWriteMethod().getName() + "(");
 				if (gen != null) {
 					if (value == null) {
-						builder.append("null");						
+						builder.append("null");
 					} else {
 						builder.append(gen.getJavaCode(value, imports));
 					}

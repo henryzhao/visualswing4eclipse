@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.util.ArrayList;
@@ -14,7 +22,13 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-
+/**
+ * 
+ * ExtensionRegistry
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class ExtensionRegistry {
 	private static final String ADAPTER_EXTENSION_POINT = "org.dyno.visual.swing.widgetAdapter";
 	private static final String CATEGORY_EXTENSION_POINT = "org.dyno.visual.swing.propertyCategory";

@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +33,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
-
+/**
+ * 
+ * NewElementWizard
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public abstract class NewElementWizard extends Wizard implements INewWizard {
 	private IWorkbench fWorkbench;
 	private IStructuredSelection fSelection;

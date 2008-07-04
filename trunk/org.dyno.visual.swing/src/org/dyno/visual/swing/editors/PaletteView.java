@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import java.util.HashMap;
@@ -26,7 +34,13 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
-
+/**
+ * 
+ * PaletteView
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class PaletteView extends ViewPart implements SelectionListener {
 	private static final String ADAPTER_EXTENSION_POINT = "org.dyno.visual.swing.widgetAdapter";
 	private static final String GROUP_EXTENSION_POINT = "org.dyno.visual.swing.widgetGroup";

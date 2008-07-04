@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.util.ArrayList;
@@ -19,7 +27,13 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
-
+/**
+ * 
+ * BorderAdapter
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public abstract class BorderAdapter implements IFactory, IPropertySourceProvider, ICodeGen {
 	public static final String BORDER_EXTENSION_POINT = "org.dyno.visual.swing.borders.borderAdapter";
 	private static List<BorderAdapter> borderAdapters;

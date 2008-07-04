@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.designer;
 
 import java.awt.Component;
@@ -29,7 +37,13 @@ import org.dyno.visual.swing.plugin.spi.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-
+/**
+ * 
+ * GlassTarget
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class GlassTarget extends DropTarget implements MouseInputListener, MouseWheelListener, Azimuth, ChangeListener, FocusListener {
 	private static final long serialVersionUID = 5331246522463111004L;
 	private int state;

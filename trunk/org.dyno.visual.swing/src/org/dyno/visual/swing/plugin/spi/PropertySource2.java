@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.util.HashMap;
@@ -7,7 +15,13 @@ import javax.swing.UIManager;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource2;
-
+/**
+ * 
+ * PropertySource2
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class PropertySource2 implements IPropertySource2 {
 	private Object bean;
 	private IWidgetPropertyDescriptor[] properties;
@@ -71,7 +85,7 @@ public class PropertySource2 implements IPropertySource2 {
 	public void resetPropertyValue(Object id) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
 		if (property != null)
-			property.resetPropertyValue(bean);
+			property.resetPropertyValue(lnfClassname, bean);
 	}
 
 	@Override

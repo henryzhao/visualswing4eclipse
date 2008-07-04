@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.contentTypes;
 
 import java.io.BufferedReader;
@@ -14,7 +22,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.ITextContentDescriber;
-
+/**
+ * 
+ * VisualSwingContentDescriber
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class VisualSwingContentDescriber implements ITextContentDescriber {
 	public static final String CONTENT_TYPE_ID_VS = "org.dyno.visual.swing.visualSwing";
 

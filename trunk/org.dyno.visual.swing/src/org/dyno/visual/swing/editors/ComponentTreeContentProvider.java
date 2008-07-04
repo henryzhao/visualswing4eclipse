@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import java.beans.EventSetDescriptor;
@@ -13,7 +21,13 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-
+/**
+ * 
+ * ComponentTreeContentProvider
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class ComponentTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
@@ -44,9 +58,16 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 						Set<MethodDescriptor> mKey = map.keySet();
 						List<EventMethod> mlist = new ArrayList<EventMethod>();
 						for (MethodDescriptor m : mKey) {
-							String displayName=map.get(m);
-							EventMethod method = new EventMethod(m.getDisplayName()+"["+displayName+"]", set);
-							mlist.add(method);
+							String content=map.get(m);
+							String mName;
+							if(content.startsWith("method[")&&content.endsWith("]")){
+								mName = content.substring("method[".length(), content.length()-1);
+								EventMethod method = new EventMethod(mName, set);
+								mlist.add(method);
+							}else{
+								EventMethod method = new EventMethod(m.getDisplayName(), set);
+								mlist.add(method);
+							}
 						}
 						set.setMethods(mlist);
 					}

@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import java.util.ArrayList;
@@ -34,7 +42,13 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
-
+/**
+ * 
+ * JavaUtil
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 class JavaUtil {
 
 	public static void applyEdit(ICompilationUnit cu, TextEdit edit, boolean save, IProgressMonitor monitor) throws CoreException {

@@ -1,13 +1,11 @@
-/*******************************************************************************
- * Copyright (c) 2007 SAS Institute.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     SAS Institute - initial API and implementation
- *******************************************************************************/
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.swt_awt;
 
 import java.awt.Component;
@@ -18,7 +16,13 @@ import java.awt.Frame;
 import javax.swing.JApplet;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutFocusTraversalPolicy;
-
+/**
+ * 
+ * EmbeddedChildFocusTraversalPolicy
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 class EmbeddedChildFocusTraversalPolicy extends LayoutFocusTraversalPolicy {
 
 	private static final long serialVersionUID = -7708166698501335927L;

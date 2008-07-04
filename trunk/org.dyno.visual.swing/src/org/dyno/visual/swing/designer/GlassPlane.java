@@ -1,8 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.designer;
 
 import java.awt.Cursor;
@@ -18,9 +21,11 @@ import javax.swing.TransferHandler;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-
 /**
  * 
+ * GlassPlane
+ *
+ * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
 public class GlassPlane extends JComponent implements MouseListener {

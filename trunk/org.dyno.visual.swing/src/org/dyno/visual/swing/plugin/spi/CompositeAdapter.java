@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
@@ -10,7 +18,13 @@ import javax.swing.JComponent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
-
+/**
+ * 
+ * CompositeAdapter
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public abstract class CompositeAdapter extends WidgetAdapter {
 	public CompositeAdapter() {
 		super();

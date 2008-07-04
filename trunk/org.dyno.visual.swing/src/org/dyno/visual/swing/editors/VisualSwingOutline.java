@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import java.util.ArrayList;
@@ -30,7 +38,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
-
+/**
+ * 
+ * VisualSwingOutline
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class VisualSwingOutline extends ContentOutlinePage {
 	private ComponentTreeInput input;
 	private VisualDesigner designer;

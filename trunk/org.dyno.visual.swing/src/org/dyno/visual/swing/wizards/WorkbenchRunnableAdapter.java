@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +23,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.operation.IThreadListener;
-
+/**
+ * 
+ * WorkbenchRunnableAdapter
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class WorkbenchRunnableAdapter implements IRunnableWithProgress, IThreadListener {
 
 	private boolean fTransfer = false;
