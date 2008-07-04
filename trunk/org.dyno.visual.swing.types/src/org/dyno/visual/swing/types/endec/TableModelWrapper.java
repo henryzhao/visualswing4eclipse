@@ -1,11 +1,12 @@
-/*
- * RectangleWrapper.java
- *
- * Created on August 14, 2007, 6:01 PM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
+
 package org.dyno.visual.swing.types.endec;
 
 import javax.swing.table.TableModel;

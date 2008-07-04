@@ -1,11 +1,12 @@
-/*
- * ColorCellRenderer.java
- *
- * Created on 2007年8月13日, 下午6:53
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
+
 package org.dyno.visual.swing.types.renderer;
 
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;

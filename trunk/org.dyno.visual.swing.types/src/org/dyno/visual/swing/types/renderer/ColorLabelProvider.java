@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
+
 package org.dyno.visual.swing.types.renderer;
 
 import java.awt.Color;
@@ -20,13 +29,13 @@ public class ColorLabelProvider extends LabelProvider {
 
 	@Override
 	public Image getImage(Object element) {
-		if(element==null)
+		if (element == null)
 			return null;
 		RGB rgb = new RGB(0, 0, 0);
 		if (element != null && element instanceof RGB) {
 			rgb = (RGB) element;
 		}
-		String rgb_id = "rgb"+rgb.hashCode();
+		String rgb_id = "rgb" + rgb.hashCode();
 		Image image = TypePlugin.getDefault().getImageRegistry().get(rgb_id);
 		if (image == null) {
 			ImageData id = createColorImage(rgb);
@@ -40,14 +49,10 @@ public class ColorLabelProvider extends LabelProvider {
 
 		int size = BOX_SIZE;
 
-		int indent = 3;
+		int indent = 1;
 		int extent = DEFAULT_EXTENT;
 
-		if (size > extent) {
-			size = extent;
-		}
-
-		int width = indent + size;
+		int width = indent + size + 2;
 		int height = extent;
 
 		int xoffset = indent;
