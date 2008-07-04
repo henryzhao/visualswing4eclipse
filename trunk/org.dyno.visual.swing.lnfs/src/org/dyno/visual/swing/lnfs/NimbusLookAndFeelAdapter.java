@@ -40,6 +40,8 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.dyno.visual.swing.lnfs.nimbus.JButtonValue;
 import org.dyno.visual.swing.lnfs.nimbus.JCheckBoxValue;
@@ -71,7 +73,8 @@ import org.dyno.visual.swing.lnfs.nimbus.JTreeValue;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 
 @SuppressWarnings("unchecked")
-public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue> implements ILookAndFeelAdapter {
+public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
+		implements ILookAndFeelAdapter {
 	private static final long serialVersionUID = 1L;
 
 	public NimbusLookAndFeelAdapter() {
@@ -114,16 +117,27 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue> implem
 		} else
 			return null;
 	}
+
 	private LookAndFeel metalLnf;
+
 	@Override
 	public LookAndFeel getLookAndFeelInstance() {
-		if(metalLnf==null){
+		if (metalLnf == null) {
 			try {
-				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel").newInstance();
+				LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+				for (LookAndFeelInfo info : infos) {
+					if (info.getClassName().equals(
+							"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")) {
+						metalLnf = (LookAndFeel) Class
+								.forName(
+										"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")
+								.newInstance();
+						return metalLnf;
+					}
+				}
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
-		return metalLnf;
-	}	
+		return null;
+	}
 }
