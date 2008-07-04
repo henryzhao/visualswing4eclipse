@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
+
 package org.dyno.visual.swing.borders;
 
 import java.awt.Insets;
@@ -165,7 +174,7 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public void resetPropertyValue(Object bean) {
+	public void resetPropertyValue(String lnfClassname, Object bean) {
 	}
 
 	@Override

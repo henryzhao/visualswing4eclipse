@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.borders;
 
 import java.awt.Color;
@@ -13,7 +21,13 @@ import org.dyno.visual.swing.plugin.spi.FieldProperty;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
-
+/**
+ * 
+ * BevelBorderAdapter
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
 public class BevelBorderAdapter extends BorderAdapter {
 	@SuppressWarnings("unchecked")
 	@Override
