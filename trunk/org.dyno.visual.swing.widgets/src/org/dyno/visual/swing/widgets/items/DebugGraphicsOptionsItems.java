@@ -1,11 +1,12 @@
-/*
- * DebugGraphicsOptionsWrapper.java
- *
- * Created on 2007-8-27, 15:53:40
- *
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
+
 
 package org.dyno.visual.swing.widgets.items;
 
