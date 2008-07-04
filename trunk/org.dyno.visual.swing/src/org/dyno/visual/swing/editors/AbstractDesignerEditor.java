@@ -59,7 +59,8 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(IEditorSite site, IEditorInput input)
+			throws PartInitException {
 		setSite(site);
 		setInput(input);
 		if (shouldSwitchToJavaEditor() || !isSwingComponent()) {
@@ -91,13 +92,16 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		IEditorInput input = getEditorInput();
 		if (input instanceof IFileEditorInput) {
 			IFileEditorInput file = (IFileEditorInput) input;
-			IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
+			IContentTypeManager contentTypeManager = Platform
+					.getContentTypeManager();
 			InputStream stream = null;
 			try {
 				stream = file.getFile().getContents();
-				IContentType[] contentTypes = contentTypeManager.findContentTypesFor(stream, file.getName());
+				IContentType[] contentTypes = contentTypeManager
+						.findContentTypesFor(stream, file.getName());
 				for (IContentType contentType : contentTypes) {
-					if (contentType.getId().equals(VisualSwingContentDescriber.CONTENT_TYPE_ID_VS)) {
+					if (contentType.getId().equals(
+							VisualSwingContentDescriber.CONTENT_TYPE_ID_VS)) {
 						return true;
 					}
 				}
@@ -121,11 +125,14 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 			public void run() {
 				IWorkbench workbench = PlatformUI.getWorkbench();
 				if (workbench != null) {
-					IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+					IWorkbenchWindow window = workbench
+							.getActiveWorkbenchWindow();
 					if (window != null) {
 						IWorkbenchPage page = window.getActivePage();
 						if (page != null) {
-							page.closeEditor(AbstractDesignerEditor.this, false);
+							page
+									.closeEditor(AbstractDesignerEditor.this,
+											false);
 							try {
 								page.openEditor(input, JAVA_EDITOR_ID);
 								IFileEditorInput file_editor_input = (IFileEditorInput) input;
@@ -168,9 +175,12 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				if (page != null) {
 					IEditorReference[] editorRef = page.getEditorReferences();
 					for (IEditorReference ref : editorRef) {
-						IEditorPart editor = ref.getEditor(true);
-						if (editor instanceof VisualSwingEditor)
-							return;
+						try {
+							IEditorPart editor = ref.getEditor(true);
+							if (editor instanceof VisualSwingEditor)
+								return;
+						} catch (Exception e) {
+						}
 					}
 					for (String viewId : RELATED_VIEW_IDS) {
 						try {
@@ -184,7 +194,8 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		}
 	}
 
-	public void openSourceEditor(final WidgetAdapter adapter, final EventSetDescriptor eventSet, final MethodDescriptor methodDesc) {
+	public void openSourceEditor(final WidgetAdapter adapter,
+			final EventSetDescriptor eventSet, final MethodDescriptor methodDesc) {
 		final IEditorInput input = getEditorInput();
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench != null) {
@@ -193,14 +204,21 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				IWorkbenchPage page = window.getActivePage();
 				if (page != null) {
 					try {
-						IEditorPart editor = page.openEditor(input, JAVA_EDITOR_ID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
-						OrganizeImportsAction action = new OrganizeImportsAction(editor.getEditorSite());
-						IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
-						ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+						IEditorPart editor = page.openEditor(input,
+								JAVA_EDITOR_ID, true, IWorkbenchPage.MATCH_ID
+										| IWorkbenchPage.MATCH_INPUT);
+						OrganizeImportsAction action = new OrganizeImportsAction(
+								editor.getEditorSite());
+						IFileEditorInput file = (IFileEditorInput) editor
+								.getEditorInput();
+						ICompilationUnit unit = JavaCore
+								.createCompilationUnitFrom(file.getFile());
 						action.run(unit);
 						editor.doSave(null);
-						if (adapter != null && eventSet != null && methodDesc != null)
-							searchAndOpen(adapter, eventSet, methodDesc, editor, file, unit);
+						if (adapter != null && eventSet != null
+								&& methodDesc != null)
+							searchAndOpen(adapter, eventSet, methodDesc,
+									editor, file, unit);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -209,7 +227,9 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		}
 	}
 
-	private void searchAndOpen(final WidgetAdapter adapter, final EventSetDescriptor eventSet, final MethodDescriptor methodDesc, IEditorPart editor,
+	private void searchAndOpen(final WidgetAdapter adapter,
+			final EventSetDescriptor eventSet,
+			final MethodDescriptor methodDesc, IEditorPart editor,
 			IFileEditorInput file, ICompilationUnit unit) {
 		try {
 			String name = file.getName();
@@ -225,13 +245,16 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 					IType anonymous = (IType) javaElement;
 					if (isTargetClass(adapter, eventSet, anonymous)) {
 						mName = methodDesc.getName();
-						Class<?>[] pts = methodDesc.getMethod().getParameterTypes();
+						Class<?>[] pts = methodDesc.getMethod()
+								.getParameterTypes();
 						String param = pts[0].getName();
 						dot = param.lastIndexOf('.');
 						if (dot != -1)
 							param = param.substring(dot + 1);
-						String sig = Signature.createTypeSignature(param, false);
-						IMember member = anonymous.getMethod(mName, new String[] { sig });
+						String sig = Signature
+								.createTypeSignature(param, false);
+						IMember member = anonymous.getMethod(mName,
+								new String[] { sig });
 						member.getChildren();
 						JavaUI.revealInEditor(editor, (IJavaElement) member);
 					}
@@ -243,7 +266,8 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean isTargetClass(final WidgetAdapter adapter, final EventSetDescriptor eventSet, IType anonymous) {
+	private boolean isTargetClass(final WidgetAdapter adapter,
+			final EventSetDescriptor eventSet, IType anonymous) {
 		try {
 			Class clazz = eventSet.getListenerType();
 			Class adapterClass = WidgetAdapter.getListenerAdapter(clazz);
@@ -275,7 +299,8 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		return NamespaceManager.getInstance().getGetMethodName(name);
 	}
 
-	public void openSourceEditor(final WidgetAdapter widget, final String mName, final String eventTypeSig) {
+	public void openSourceEditor(final WidgetAdapter widget,
+			final String mName, final String eventTypeSig) {
 		final IEditorInput input = getEditorInput();
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench != null) {
@@ -284,20 +309,29 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				IWorkbenchPage page = window.getActivePage();
 				if (page != null) {
 					try {
-						IEditorPart editor = page.openEditor(input, JAVA_EDITOR_ID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
-						OrganizeImportsAction action = new OrganizeImportsAction(editor.getEditorSite());
-						IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
-						ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+						IEditorPart editor = page.openEditor(input,
+								JAVA_EDITOR_ID, true, IWorkbenchPage.MATCH_ID
+										| IWorkbenchPage.MATCH_INPUT);
+						OrganizeImportsAction action = new OrganizeImportsAction(
+								editor.getEditorSite());
+						IFileEditorInput file = (IFileEditorInput) editor
+								.getEditorInput();
+						ICompilationUnit unit = JavaCore
+								.createCompilationUnitFrom(file.getFile());
 						action.run(unit);
 						editor.doSave(null);
-						if (widget != null && eventTypeSig != null && mName != null) {
+						if (widget != null && eventTypeSig != null
+								&& mName != null) {
 							String name = file.getName();
 							int dot = name.lastIndexOf('.');
 							if (dot != -1)
 								name = name.substring(0, dot);
 							IType type = unit.getType(name);
-							IMember member = type.getMethod(mName, new String[] { eventTypeSig });
-							JavaUI.revealInEditor(editor, (IJavaElement) member);
+							IMember member = type.getMethod(mName,
+									new String[] { eventTypeSig });
+							JavaUI
+									.revealInEditor(editor,
+											(IJavaElement) member);
 						}
 					} catch (PartInitException e) {
 						e.printStackTrace();
@@ -307,7 +341,9 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		}
 	}
 
-	private static final String[] RELATED_VIEW_IDS = { "org.dyno.visual.swing.editors.PaletteView", "org.eclipse.ui.views.PropertySheet",
+	private static final String[] RELATED_VIEW_IDS = {
+			"org.dyno.visual.swing.editors.PaletteView",
+			"org.eclipse.ui.views.PropertySheet",
 			"org.eclipse.ui.views.ContentOutline" };
 	private static final String JAVA_EDITOR_ID = "org.eclipse.jdt.ui.CompilationUnitEditor";
 
