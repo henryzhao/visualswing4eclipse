@@ -138,6 +138,6 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 			} catch (Exception e) {
 			}
 		}
-		return null;
+		return metalLnf;
 	}
 }
