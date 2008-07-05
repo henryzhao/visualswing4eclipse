@@ -140,5 +140,10 @@ public class JToolBarAdapter extends CompositeAdapter {
 			builder.append(getMethodName + "());\n");
 		}
 		return builder.toString();
+	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JToolBar();
 	}	
 }

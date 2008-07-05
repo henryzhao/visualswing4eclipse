@@ -37,4 +37,9 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 		return null;
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JLayeredPane();
+	}
+
 }

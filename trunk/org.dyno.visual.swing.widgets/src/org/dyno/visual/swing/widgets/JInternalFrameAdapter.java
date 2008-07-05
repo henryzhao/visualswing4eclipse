@@ -273,4 +273,9 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		}
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JInternalFrame();
+	}
+
 }

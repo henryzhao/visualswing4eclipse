@@ -19,4 +19,9 @@ public class AbstractButtonAdapter extends WidgetAdapter {
 	protected JComponent createWidget() {
 		return null;
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return null;
+	}
 }

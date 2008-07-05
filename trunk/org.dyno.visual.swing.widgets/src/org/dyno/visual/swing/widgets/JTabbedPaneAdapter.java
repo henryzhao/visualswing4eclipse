@@ -238,4 +238,9 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 		}
 		return builder.toString();
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JTabbedPane();
+	}
 }

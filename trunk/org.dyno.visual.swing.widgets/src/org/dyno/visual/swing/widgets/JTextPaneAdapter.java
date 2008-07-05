@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets;
 
+import javax.swing.JComponent;
 import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
 
@@ -19,6 +20,11 @@ public class JTextPaneAdapter extends J2DTextComponentAdapter {
 
 	@Override
 	protected JTextComponent createTextComponent() {
+		return new JTextPane();
+	}
+
+	@Override
+	protected JComponent newWidget() {
 		return new JTextPane();
 	}
 

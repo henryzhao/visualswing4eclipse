@@ -35,6 +35,16 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		try {
+			return (JComponent)getWidgetClass().newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	private String getVarName() {
 		String className = getWidgetClass().getName();
 		int dot = className.lastIndexOf('.');

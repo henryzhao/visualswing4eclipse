@@ -403,5 +403,10 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 			else
 				return false;
 		}
+	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JSplitPane();
 	}	
 }

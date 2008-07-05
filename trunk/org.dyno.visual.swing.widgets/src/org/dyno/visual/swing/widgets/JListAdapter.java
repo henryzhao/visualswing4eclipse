@@ -100,4 +100,9 @@ public class JListAdapter extends ComplexWidgetAdapter {
 		return new Rectangle(0, 0, w, h);
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JList();
+	}
+
 }

@@ -83,7 +83,6 @@
          		widgetClass="javax.swing.JPanel"
          		widgetName="JPanel"
          		groupId="container"
-         		setborder="true"
          		icon="/icons/panel_16.png">
         		<property id="border" name="border" />
         		<property id="font" name="font"/>
@@ -184,7 +183,6 @@
          		groupId="component"         		
          		icon="/icons/button_16.png">
 		        <property id="defaultCapable" name="defaultCapable" gencode="false"/>
-          		<property id="border" name="border" gencode="false"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JToggleButtonAdapter"
@@ -537,7 +535,7 @@
 		        <property id="normalBounds" name="normalBounds" gencode="false"/>
 		        <property id="selected" name="selected"/>
 		        <property id="visible" name="visible"/>
-		        <property id="border" name="border" gencode="false"/>
+		        <property id="border" name="border"/>
          </widget>
          <!--
          <widget 

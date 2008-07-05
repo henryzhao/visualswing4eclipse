@@ -68,4 +68,9 @@ public class JProgressBarAdapter extends WidgetAdapter {
 		}
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JProgressBar();
+	}
+
 }

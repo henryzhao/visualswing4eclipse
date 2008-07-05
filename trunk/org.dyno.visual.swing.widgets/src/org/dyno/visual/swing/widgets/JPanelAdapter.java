@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 import org.dyno.visual.swing.plugin.spi.Azimuth;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.EditorAction;
-import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
+import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -37,11 +37,6 @@ public class JPanelAdapter extends CompositeAdapter {
 	private boolean intermediate=false;
 	public JPanelAdapter() {
 		super("jPanel" + (VAR_INDEX++));
-	}
-	
-	@Override
-	protected boolean canSetBorder() {
-		return true;
 	}
 
 	@Override
@@ -725,6 +720,11 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	public void setIntermediate(boolean intermediate) {
 		this.intermediate = intermediate;
+	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JPanel();
 	}
 
 }

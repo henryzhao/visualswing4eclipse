@@ -18,4 +18,9 @@ public class ComponentAdapter extends WidgetAdapter {
 	protected JComponent createWidget() {
 		return null;
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return null;
+	}
 }

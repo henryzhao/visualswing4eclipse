@@ -74,4 +74,9 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 		JTable table = (JTable) getWidget();
 		table.setModel((TableModel) value);
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JTable();
+	}
 }

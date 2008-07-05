@@ -258,4 +258,9 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		}
 		return true;
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JDesktopPane();
+	}
 }

@@ -62,4 +62,9 @@ public class JSpinnerAdapter extends WidgetAdapter {
 		return new Rectangle(0, 0, w, h);
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JSpinner();
+	}
+
 }

@@ -122,4 +122,9 @@ public class JComboBoxAdapter extends WidgetAdapter {
 		return 2 * descent + fm.getHeight();
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JComboBox();
+	}
+
 }

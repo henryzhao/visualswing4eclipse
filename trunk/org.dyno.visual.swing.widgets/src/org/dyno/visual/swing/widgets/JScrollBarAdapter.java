@@ -68,4 +68,9 @@ public class JScrollBarAdapter extends WidgetAdapter {
 		}
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return new JScrollBar();
+	}
+
 }

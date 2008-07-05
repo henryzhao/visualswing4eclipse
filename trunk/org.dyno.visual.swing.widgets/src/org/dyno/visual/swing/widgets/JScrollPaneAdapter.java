@@ -195,4 +195,9 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 		}
 		return builder.toString();
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JScrollPane();
+	}
 }

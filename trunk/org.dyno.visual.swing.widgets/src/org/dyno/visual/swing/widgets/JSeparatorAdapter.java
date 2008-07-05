@@ -32,4 +32,9 @@ public class JSeparatorAdapter extends WidgetAdapter {
 		separator.validate();
 		return separator;
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return new JSeparator();
+	}
 }

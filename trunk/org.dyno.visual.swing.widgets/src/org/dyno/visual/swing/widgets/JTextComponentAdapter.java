@@ -20,4 +20,9 @@ public class JTextComponentAdapter extends WidgetAdapter {
 		return null;
 	}
 
+	@Override
+	protected JComponent newWidget() {
+		return null;
+	}
+
 }

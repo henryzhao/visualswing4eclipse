@@ -27,4 +27,9 @@ public class JComponentAdapter extends WidgetAdapter {
 	protected String getNewInstanceCode(ImportRewrite imports) {
 		return null;
 	}
+
+	@Override
+	protected JComponent newWidget() {
+		return null;
+	}
 }
