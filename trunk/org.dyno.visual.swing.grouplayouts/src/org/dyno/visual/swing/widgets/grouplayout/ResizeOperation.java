@@ -282,6 +282,54 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 			return null;
 	}
 
+
+
+	protected List<Quartet> calTAnchor(JComponent todrop, Point this_point, Point last_point) {
+		int azimuth = getAzimuth(this_point, last_point);
+		azimuth = isIncreasing(SwingConstants.VERTICAL, azimuth);
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		int size = containerAdapter.getChildCount();
+		List<Quartet> hAnchor = null;
+		for (int i = 0; i < size; i++) {
+			JComponent child = containerAdapter.getChild(i);
+			List<Quartet> trios = getTAnchor(todrop, child, this_point);
+			if (trios != null) {
+				if (hAnchor == null)
+					hAnchor = trios;
+				else if (compare(trios, hAnchor, azimuth, this_point.y, todrop) < 0)
+					hAnchor = trios;
+			}
+		}
+		List<Quartet> trios = getTConAnchor(todrop, this_point);
+		if (trios != null) {
+			if (hAnchor == null)
+				hAnchor = trios;
+			else if (compare(trios, hAnchor, azimuth, this_point.y, todrop) < 0)
+				hAnchor = trios;
+		}
+		return hAnchor;
+	}
+
+	private List<Quartet> getTConAnchor(JComponent todrop, Point this_point) {
+		Insets insets = container.getInsets();
+		int ty = this_point.y;
+		LayoutStyle style = LayoutStyle.getInstance();
+		int north = style.getContainerGap(todrop, SwingConstants.NORTH, container);
+		int w = container.getWidth();
+		if (Math.abs(ty - insets.top) < THRESHOLD_DISTANCE) {
+			List<Quartet> list = new ArrayList<Quartet>();
+			Quartet trio = new Quartet(insets.top, insets.top, insets.left, w - insets.right, new HorizontalLeadingContainerAnchor(container));
+			list.add(trio);
+			return list;
+		} else if (Math.abs(ty - north - insets.top) < THRESHOLD_DISTANCE) {
+			List<Quartet> list = new ArrayList<Quartet>();
+			Quartet trio = new Quartet(north + insets.top, north + insets.top, insets.left, w - insets.right,
+					new HorizontalLeadingGapContainerAnchor(container));
+			list.add(trio);
+			return list;
+		} else
+			return null;
+	}
 	private List<Quartet> getBAnchor(JComponent todrop, JComponent target, Point this_point) {
 		LayoutStyle style = LayoutStyle.getInstance();
 		int nr = style.getPreferredGap(todrop, target, ComponentPlacement.RELATED, SwingConstants.NORTH, container);
@@ -350,54 +398,6 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		}
 		return null;
 	}
-
-	protected List<Quartet> calTAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
-		azimuth = isIncreasing(SwingConstants.VERTICAL, azimuth);
-		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
-		int size = containerAdapter.getChildCount();
-		List<Quartet> hAnchor = null;
-		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
-			List<Quartet> trios = getTAnchor(todrop, child, this_point);
-			if (trios != null) {
-				if (hAnchor == null)
-					hAnchor = trios;
-				else if (compare(trios, hAnchor, azimuth, this_point.y, todrop) < 0)
-					hAnchor = trios;
-			}
-		}
-		List<Quartet> trios = getTConAnchor(todrop, this_point);
-		if (trios != null) {
-			if (hAnchor == null)
-				hAnchor = trios;
-			else if (compare(trios, hAnchor, azimuth, this_point.y, todrop) < 0)
-				hAnchor = trios;
-		}
-		return hAnchor;
-	}
-
-	private List<Quartet> getTConAnchor(JComponent todrop, Point this_point) {
-		Insets insets = container.getInsets();
-		int ty = this_point.y;
-		LayoutStyle style = LayoutStyle.getInstance();
-		int north = style.getContainerGap(todrop, SwingConstants.NORTH, container);
-		int w = container.getWidth();
-		if (Math.abs(ty - insets.top) < THRESHOLD_DISTANCE) {
-			List<Quartet> list = new ArrayList<Quartet>();
-			Quartet trio = new Quartet(insets.top, insets.top, insets.left, w - insets.right, new HorizontalLeadingContainerAnchor(container));
-			list.add(trio);
-			return list;
-		} else if (Math.abs(ty - north - insets.top) < THRESHOLD_DISTANCE) {
-			List<Quartet> list = new ArrayList<Quartet>();
-			Quartet trio = new Quartet(north + insets.top, north + insets.top, insets.left, w - insets.right,
-					new HorizontalLeadingGapContainerAnchor(container));
-			list.add(trio);
-			return list;
-		} else
-			return null;
-	}
-
 	private List<Quartet> getTAnchor(JComponent todrop, JComponent target, Point this_point) {
 		LayoutStyle style = LayoutStyle.getInstance();
 		int nr = style.getPreferredGap(todrop, target, ComponentPlacement.RELATED, SwingConstants.NORTH, container);
@@ -423,7 +423,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		int dy = this_point.y;
 		tb = ty + tb;
 		sb = dy + sb;
-		int thisx = this_point.x - dropAdapter.getHotspotPoint().x;
+		int thisx = todrop.getX();
 		int thisr = thisx + todrop.getWidth();
 		int targetx = target.getX();
 		int targetr = targetx + target.getWidth();
