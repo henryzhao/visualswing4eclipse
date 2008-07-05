@@ -21,7 +21,6 @@ public class Event extends EventObject {
 
 	public static final int EVENT_SELECTION = 1;
 	public static final int EVENT_SHOW_POPUP = 2;
-	public static final int EVENT_SHOW_SOURCE = 3;
 	private int id;
 	private Object parameter;
 

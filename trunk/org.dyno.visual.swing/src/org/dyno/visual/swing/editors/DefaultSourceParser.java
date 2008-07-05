@@ -9,9 +9,7 @@
 package org.dyno.visual.swing.editors;
 
 import java.beans.EventSetDescriptor;
-import java.beans.MethodDescriptor;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -24,11 +22,10 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.base.NamespaceManager;
-import org.dyno.visual.swing.plugin.spi.CodeSnippet;
+import org.dyno.visual.swing.plugin.spi.AnonymousInnerClassModel;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.EventDelegation;
 import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
-import org.dyno.visual.swing.plugin.spi.IEventMethod;
+import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -46,19 +43,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -134,8 +119,8 @@ class DefaultSourceParser implements ISourceParser {
 					parser.setSource(this.unit);
 					CompilationUnit cunit = (CompilationUnit) parser
 							.createAST(null);
-					createWidgetEvent(type, cunit, beanAdapter, beanClass, true);
-					initDesignedWidget(cunit, bean, type);
+					createWidgetEvent(cunit, beanAdapter);
+					initDesignedWidget(cunit, bean);
 					result = beanAdapter;
 				} catch (Error re) {
 					return false;
@@ -190,8 +175,7 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void initDesignedWidget(CompilationUnit cunit, JComponent bean,
-			IType itype) {
+	private void initDesignedWidget(CompilationUnit cunit, JComponent bean) {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
@@ -207,7 +191,7 @@ class DefaultSourceParser implements ISourceParser {
 						String widgetName = getNameFromFieldName(fieldName);
 						adapter.setName(widgetName);
 						adapter.setLastName(widgetName);
-						createWidgetEvent(itype, cunit, adapter, clazz, false);
+						createWidgetEvent(cunit, adapter);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -216,185 +200,23 @@ class DefaultSourceParser implements ISourceParser {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private void createWidgetEvent(IType itype, CompilationUnit cunit,
-			WidgetAdapter adapter, Class rootClass, boolean root) {
+	private void createWidgetEvent(CompilationUnit cunit, WidgetAdapter adapter) {
 		EventSetDescriptor[] esds = adapter.getBeanInfo()
 				.getEventSetDescriptors();
+		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
 		if (esds != null && esds.length > 0) {
 			for (EventSetDescriptor esd : esds) {
-				MethodDescriptor[] mListeners = esd
-						.getListenerMethodDescriptors();
-				for (MethodDescriptor mListener : mListeners) {
-					TypeDeclaration type = (TypeDeclaration) cunit.types().get(
-							0);
-					createEventMethod(adapter, esd, mListener, type, root);
+				Map<EventSetDescriptor, IEventListenerModel> map = adapter
+						.getEventDescriptor();
+				IEventListenerModel model = map.get(esd);
+				if (model == null) {
+					model = new AnonymousInnerClassModel();
+					if (model.parse(adapter, type, esd))
+						map.put(esd, model);
+				} else {
+					model.parse(adapter, type, esd);
 				}
 			}
-		}
-	}
-
-	private void createEventMethod(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			TypeDeclaration type, boolean root) {
-		MethodDeclaration[] mds = type.getMethods();
-		for (MethodDeclaration md : mds) {
-			String mdName = md.getName().getFullyQualifiedName();
-			if (root) {
-				if (mdName.equals("initComponent")) {
-					createEventMethodForWidget(adapter, esd, mListener, md,
-							root);
-					break;
-				}
-			} else {
-				String getName = getGetMethodName(adapter.getName());
-				if (mdName.equals(getName)) {
-					createEventMethodForWidget(adapter, esd, mListener, md,
-							root);
-					break;
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void createEventMethodForWidget(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			MethodDeclaration md, boolean root) {
-		Block body = md.getBody();
-		List statements = body.statements();
-		if (!root) {
-			IfStatement ifstatement = (IfStatement) statements.get(0);
-			Statement thenstatement = ifstatement.getThenStatement();
-			if (thenstatement instanceof Block) {
-				statements = ((Block) thenstatement).statements();
-			}
-		}
-		for (Object stmt : statements) {
-			Statement statement = (Statement) stmt;
-			if (statement instanceof ExpressionStatement) {
-				processWidgetCreationStatement(adapter, esd, mListener,
-						statement, root);
-			}
-		}
-	}
-
-	private void processWidgetCreationStatement(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			Statement statement, boolean root) {
-		ExpressionStatement expressionStatement = (ExpressionStatement) statement;
-		Expression expression = expressionStatement.getExpression();
-		if (expression instanceof MethodInvocation) {
-			MethodInvocation mi = (MethodInvocation) expression;
-			if (root) {
-				createAddMethod(adapter, esd, mListener, mi);
-			} else {
-				Expression optionalExpression = mi.getExpression();
-				if (optionalExpression instanceof SimpleName) {
-					SimpleName simplename = (SimpleName) optionalExpression;
-					String idName = simplename.getFullyQualifiedName();
-					if (idName.equals(adapter.getName()))
-						createAddMethod(adapter, esd, mListener, mi);
-				}
-			}
-		}
-	}
-
-	private void createAddMethod(WidgetAdapter adapter, EventSetDescriptor esd,
-			MethodDescriptor mListener, MethodInvocation mi) {
-		Method addm = esd.getAddListenerMethod();
-		String addmName = addm.getName();
-		String mName = mi.getName().getFullyQualifiedName();
-		if (mName.equals(addmName)) {
-			processAddListenerStatement(adapter, esd, mListener, mi);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void processAddListenerStatement(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			MethodInvocation mi) {
-		List arguments = mi.arguments();
-		for (Object arg : arguments) {
-			Expression argExpression = (Expression) arg;
-			if (argExpression instanceof ClassInstanceCreation) {
-				ClassInstanceCreation cic = (ClassInstanceCreation) argExpression;
-				AnonymousClassDeclaration acd = cic
-						.getAnonymousClassDeclaration();
-				if (acd != null) {
-					List bodys = acd.bodyDeclarations();
-					for (Object element : bodys) {
-						if (element instanceof MethodDeclaration) {
-							processListenerMethod(adapter, esd, mListener,
-									element);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private IEventMethod getDelegatingContent(WidgetAdapter adapter,
-			EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body) {
-		List statements = body.statements();
-		if (statements.size() == 1) {
-			Object stmt = statements.get(0);
-			if (stmt instanceof ExpressionStatement) {
-				ExpressionStatement es = (ExpressionStatement) stmt;
-				Expression expression = es.getExpression();
-				if (expression instanceof MethodInvocation) {
-					MethodInvocation mi = (MethodInvocation) expression;
-					Expression optional = mi.getExpression();
-					if (optional == null) {
-						return new EventDelegation(adapter, methodDesc, mi
-								.getName().getFullyQualifiedName());
-					} else if (optional instanceof ThisExpression) {
-						ThisExpression thisExpression = (ThisExpression) optional;
-						Name qName = thisExpression.getQualifier();
-						if (qName != null) {
-							return new EventDelegation(adapter, methodDesc, mi
-									.getName().getFullyQualifiedName());
-						} else {
-							return new CodeSnippet(adapter, eventSet,
-									methodDesc, es.toString());
-						}
-					} else {
-						return new CodeSnippet(adapter, eventSet, methodDesc,
-								es.toString());
-					}
-				} else
-					return new CodeSnippet(adapter, eventSet, methodDesc, es
-							.toString());
-			} else
-				return new CodeSnippet(adapter, eventSet, methodDesc, stmt
-						.toString());
-		} else {
-			StringBuilder builder = new StringBuilder();
-			for (Object stmt : statements) {
-				builder.append(stmt.toString());
-			}
-			return new CodeSnippet(adapter, eventSet, methodDesc, builder
-					.toString());
-		}
-	}
-
-	private void processListenerMethod(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener, Object element) {
-		MethodDeclaration methoddec = (MethodDeclaration) element;
-		if (methoddec.getName().getFullyQualifiedName().equals(
-				mListener.getName())) {
-			Map<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>> map = adapter
-					.getEventDescriptor();
-			Map<MethodDescriptor, IEventMethod> methods = map.get(esd);
-			if (methods == null) {
-				methods = new HashMap<MethodDescriptor, IEventMethod>();
-				map.put(esd, methods);
-			}
-			Block mbody = methoddec.getBody();
-			IEventMethod content = getDelegatingContent(adapter, esd,
-					mListener, mbody);
-			methods.put(mListener, content);
 		}
 	}
 

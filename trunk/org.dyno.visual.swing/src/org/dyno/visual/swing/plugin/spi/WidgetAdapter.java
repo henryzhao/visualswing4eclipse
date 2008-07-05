@@ -15,8 +15,6 @@ import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.Introspector;
@@ -41,6 +39,7 @@ import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.designer.GlassPlane;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
+import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.ExtensionRegistry.Category;
 import org.dyno.visual.swing.plugin.spi.ExtensionRegistry.Provider;
 import org.dyno.visual.swing.plugin.spi.ExtensionRegistry.Sorting;
@@ -48,10 +47,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExecutableExtension;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
@@ -62,6 +60,7 @@ import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
+import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -73,6 +72,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.osgi.framework.Bundle;
@@ -87,7 +88,6 @@ import org.osgi.framework.Bundle;
 public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		IPropertySourceProvider {
 	public static final String ADAPTER_PROPERTY = "widget.adapter";
-	public static final String LISTENER_ADAPTER_EXTENSION = "org.dyno.visual.swing.listenerAdapter";
 	public static final int OUTER = 0;
 	public static final int INNER = 1;
 	public static final int LEFT_TOP = 2;
@@ -106,66 +106,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	public static final int ACCESS_PUBLIC = 3;
 
 	private static HashMap<String, String> used_names = new HashMap<String, String>();
-	@SuppressWarnings("unchecked")
-	private static HashMap<Class, Class> listenerAdapters;
 	private static Color SELECTION_COLOR = new Color(255, 164, 0);
-	static {
-		initListenerAdapters();
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void initListenerAdapters() {
-		listenerAdapters = new HashMap<Class, Class>();
-		parseListenerAdapterExtensions();
-		listenerAdapters.put(MouseListener.class, MouseAdapter.class);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Class getListenerAdapter(Class list) {
-		return listenerAdapters.get(list);
-	}
-
-	private static void parseListenerAdapterExtensions() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(LISTENER_ADAPTER_EXTENSION);
-		if (extensionPoint != null) {
-			IExtension[] extensions = extensionPoint.getExtensions();
-			if (extensions != null && extensions.length > 0) {
-				for (int i = 0; i < extensions.length; i++) {
-					parseListenerAdapterExtension(extensions[i]);
-				}
-			}
-		}
-	}
-
-	private static void parseListenerAdapterExtension(IExtension extension) {
-		IConfigurationElement[] configs = extension.getConfigurationElements();
-		if (configs != null && configs.length > 0) {
-			for (int i = 0; i < configs.length; i++) {
-				String name = configs[i].getName();
-				if (name.equals("listener")) {
-					addListenerAdapter(configs[i]);
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private static void addListenerAdapter(IConfigurationElement config) {
-		String interf = config.getAttribute("interface");
-		String adapter = config.getAttribute("adapter");
-		IContributor contrib = config.getContributor();
-		String pluginID = contrib.getName();
-		Bundle bundle = Platform.getBundle(pluginID);
-		try {
-			Class interClass = bundle.loadClass(interf);
-			Class adapterClass = bundle.loadClass(adapter);
-			listenerAdapters.put(interClass, adapterClass);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;
@@ -176,7 +117,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected String widgetName;
 	protected boolean selected;
 	protected HashMap<String, IConfigurationElement> propertyConfigs;
-	protected Map<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>> eventDescriptor;
+	protected Map<EventSetDescriptor, IEventListenerModel> eventDescriptor;
 
 	protected void layoutContainer(Container container) {
 		container.doLayout();
@@ -243,7 +184,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				widget.getHeight() / 2);
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 		this.dirty = true;
-		this.eventDescriptor = new HashMap<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>>();
+		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 	}
 
 	protected WidgetAdapter(String name) {
@@ -253,7 +194,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				widget.getHeight() / 2);
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 		this.dirty = true;
-		this.eventDescriptor = new HashMap<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>>();
+		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 	}
 
 	public void setWidget(JComponent widget) {
@@ -671,7 +612,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	public boolean isRoot() {
 		JComponent me = getWidget();
 		Container container = me.getParent();
-		return container instanceof VisualDesigner;
+		return container == null || container instanceof VisualDesigner;
 	}
 
 	public CompositeAdapter getParentAdapter() {
@@ -845,9 +786,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				"#DELETE_EVENT");
 		fillDelEventAction(delEventMenu);
 		menu.add(delEventMenu);
-			MenuManager borderMenu = new MenuManager("Border", "#BORDER");
-			fillBorderAction(borderMenu);
-			menu.add(borderMenu);
+		MenuManager borderMenu = new MenuManager("Border", "#BORDER");
+		fillBorderAction(borderMenu);
+		menu.add(borderMenu);
 	}
 
 	private void fillLnfAction(MenuManager lnfMenu) {
@@ -913,9 +854,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		for (EventSetDescriptor key : keys) {
 			MenuManager subEventMenu = new MenuManager(key.getName(),
 					"#DELETE_EVENT_" + key);
-			Map<MethodDescriptor, IEventMethod> methods = eventDescriptor
-					.get(key);
-			Set<MethodDescriptor> mSet = methods.keySet();
+			IEventListenerModel model = eventDescriptor.get(key);
+			Iterable<MethodDescriptor> mSet = model.methods();
 			for (MethodDescriptor method : mSet) {
 				subEventMenu.add(new DelEventAction(key, method));
 			}
@@ -956,30 +896,25 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			setId(eventSet.getName() + "_" + methodDesc.getName());
 			this.eventSet = eventSet;
 			this.methodDesc = methodDesc;
-			Map<MethodDescriptor, IEventMethod> map = eventDescriptor
-					.get(eventSet);
-			IEventMethod content = map.get(methodDesc);
-			setText(content.getDisplayName());
+			IEventListenerModel model = eventDescriptor.get(eventSet);
+			String methodName = model.getDisplayName(methodDesc);
+			setText(methodName);
 		}
 
 		public void run() {
-			Map<MethodDescriptor, IEventMethod> map = eventDescriptor
-					.get(eventSet);
-			if (map != null) {
-				if (map.containsKey(methodDesc)) {
-					map.remove(methodDesc);
+			IEventListenerModel model = eventDescriptor.get(eventSet);
+			if (model != null) {
+
+				if (model.hasMethod(methodDesc)) {
+					model.removeMethod(methodDesc);
 				}
-				if (map.isEmpty()) {
+				if (model.isEmpty()) {
 					eventDescriptor.remove(eventSet);
 				}
 				WidgetAdapter.this.changeNotify();
 				WidgetAdapter.this.setDirty(true);
 			}
 		}
-	}
-
-	private String getCapitalName(String name) {
-		return NamespaceManager.getInstance().getCapitalName(name);
 	}
 
 	class AddEventAction extends Action {
@@ -992,40 +927,44 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			this.eventSet = eventSet;
 			this.methodDesc = methodDesc;
 			setId(eventSet.getName() + "_" + methodDesc.getName());
-			Map<MethodDescriptor, IEventMethod> map = eventDescriptor
-					.get(eventSet);
-			if (map != null) {
-				if (map.containsKey(methodDesc)) {
-					IEventMethod content = map.get(methodDesc);
-					setText(content.getDisplayName());
+			IEventListenerModel model = eventDescriptor.get(eventSet);
+			if (model != null) {
+				if (model.hasMethod(methodDesc)) {
+					String displayName = model.getDisplayName(methodDesc);
+					setText(displayName);
 					setChecked(true);
 				}
 			}
 		}
 
 		public void run() {
-			Map<MethodDescriptor, IEventMethod> map = eventDescriptor
-					.get(eventSet);
-			if (map == null) {
-				map = new HashMap<MethodDescriptor, IEventMethod>();
-				eventDescriptor.put(eventSet, map);
+			IEventListenerModel model = eventDescriptor.get(eventSet);
+			if (model == null) {
+				model = new AnonymousInnerClassModel();
+				eventDescriptor.put(eventSet, model);
 			}
-			if (!map.containsKey(methodDesc)) {
-				String methodName;
-				if (isRoot())
-					methodName = eventSet.getName()
-							+ getCapitalName(methodDesc.getName());
-				else
-					methodName = getName() + getCapitalName(eventSet.getName())
-							+ getCapitalName(methodDesc.getName());
-				IEventMethod content = new EventDelegation(WidgetAdapter.this,
-						methodDesc, methodName);
-				map.put(methodDesc, content);
+			if (!model.hasMethod(methodDesc)) {
+				model.addMethod(WidgetAdapter.this, eventSet, methodDesc);
 			}
 			WidgetAdapter.this.setDirty(true);
 			WidgetAdapter.this.changeNotify();
-			IEventMethod content = map.get(methodDesc);
-			content.editCode();
+			VisualDesigner designer = getDesigner();
+			if (designer != null) {
+				VisualSwingEditor editor = designer.getEditor();
+				if (editor != null) {
+					editor.doSave(null);
+					IEditorPart sourceEditor = editor.openSouceEditor();
+					OrganizeImportsAction action = new OrganizeImportsAction(
+							sourceEditor.getEditorSite());
+					IFileEditorInput file = (IFileEditorInput) sourceEditor
+							.getEditorInput();
+					ICompilationUnit unit = JavaCore
+							.createCompilationUnitFrom(file.getFile());
+					action.run(unit);
+					editor.doSave(null);
+					model.editMethod(sourceEditor, methodDesc);
+				}
+			}
 		}
 	}
 
@@ -1091,7 +1030,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	public Object clone() {
 		return ExtensionRegistry.createAdapterFor(cloneWidget());
 	}
+
 	protected abstract JComponent newWidget();
+
 	public JComponent cloneWidget() {
 		JComponent clone = newWidget();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
@@ -1316,24 +1257,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		Set<EventSetDescriptor> keySet = this.eventDescriptor.keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
-				Map<MethodDescriptor, IEventMethod> map = this.eventDescriptor
-						.get(eventSet);
-				Set<MethodDescriptor> mSet = map.keySet();
-				for (MethodDescriptor mdesc : mSet) {
-					if (getLastName() == null || isRoot()
-							|| getName().equals(getLastName())) {
-						IEventMethod content = map.get(mdesc);
-						String code = content.createEventMethod(type, imports);
-						if (code != null) {
-							try {
-								type.createMethod(formatCode(code), null,
-										false, monitor);
-							} catch (JavaModelException e) {
-								success = false;
-							}
-						}
-					}
-				}
+				IEventListenerModel model = this.eventDescriptor.get(eventSet);
+				success = model.createEventMethod(WidgetAdapter.this, type,
+						imports, monitor);
 			}
 		}
 		return success;
@@ -1384,7 +1310,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		StringBuilder builder = new StringBuilder();
 		builder.append(getFieldName(getName()) + " = "
 				+ getNewInstanceCode(imports) + ";\n");
-		createSetCode(imports, builder);
+		builder.append(createSetCode(imports));
 		CompositeAdapter conAdapter = getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = getWidget().getBounds();
@@ -1393,11 +1319,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 					+ bounds.height + ");\n";
 			builder.append(strBounds);
 		}
-		genAddEventCode(imports, builder);
+		builder.append(genAddEventCode(imports));
 		return builder.toString();
 	}
 
-	private void createSetCode(ImportRewrite imports, StringBuilder builder) {
+	private String createSetCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isGencode()
@@ -1407,59 +1334,33 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 					builder.append(setCode);
 			}
 		}
+		return builder.toString();
 	}
 
-	@SuppressWarnings("unchecked")
-	private void genAddEventCode(ImportRewrite imports, StringBuilder builder) {
+	private String genAddEventCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
 		Set<EventSetDescriptor> keySet = this.eventDescriptor.keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
 				if (!isRoot())
 					builder.append(getFieldName(getName()) + ".");
 				Method mAdd = eventSet.getAddListenerMethod();
-				builder.append(mAdd.getName() + "(new ");
-				Class lClass = eventSet.getListenerType();
-				boolean hasAdapter = listenerAdapters.get(lClass) != null;
-				if (hasAdapter)
-					lClass = listenerAdapters.get(lClass);
-				String lName = lClass.getName();
-				String cName = imports.addImport(lName);
-				builder.append(cName + "(){\n");
-				Map<MethodDescriptor, IEventMethod> map = this.eventDescriptor
-						.get(eventSet);
-				Set<MethodDescriptor> mKey = map.keySet();
-				for (MethodDescriptor mdesc : mKey) {
-					Method mEvent = mdesc.getMethod();
-					boolean genOverride = !hasAdapter || map.containsKey(mdesc);
-					if (genOverride) {
-						builder.append("@Override\n");
-						builder.append("public void " + mEvent.getName() + "(");
-						Class[] pTypes = mEvent.getParameterTypes();
-						if (pTypes != null && pTypes.length > 0) {
-							String pcName = pTypes[0].getName();
-							pcName = imports.addImport(pcName);
-							builder.append(pcName);
-							builder.append(" event");
-						}
-						builder.append("){\n");
-					}
-					if (map.containsKey(mdesc)) {
-						IEventMethod content = map.get(mdesc);
-						String code = content.createAddListenerCode();
-						builder.append(code);
-					}
-					if (genOverride)
-						builder.append("}\n");
-				}
-				builder.append("});\n");
+				builder.append(mAdd.getName() + "(");
+				IEventListenerModel model = this.eventDescriptor.get(eventSet);
+				String newcode = model
+						.createListenerInstance(eventSet, imports);
+				builder.append(newcode);
+				builder.append(");\n");
 			}
 		}
+		return builder.toString();
 	}
 
 	protected String createInitCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		createSetCode(imports, builder);
-		genAddEventCode(imports, builder);
+		builder.append(createSetCode(imports));
+		String code = genAddEventCode(imports);
+		builder.append(code);
 		return builder.toString();
 	}
 
@@ -1490,12 +1391,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return "new " + beanName + "()";
 	}
 
-	public Map<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>> getEventDescriptor() {
+	public Map<EventSetDescriptor, IEventListenerModel> getEventDescriptor() {
 		return eventDescriptor;
 	}
 
 	public void setEventDescriptor(
-			Map<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>> eventDescriptor) {
+			Map<EventSetDescriptor, IEventListenerModel> eventDescriptor) {
 		this.eventDescriptor = eventDescriptor;
 	}
 }

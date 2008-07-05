@@ -12,8 +12,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.EventSetDescriptor;
-import java.beans.MethodDescriptor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -173,7 +171,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (embedded != null) {
 			embedded.setFocus();
 		}
-		designer.setFocus();
+		if (designer != null)
+			designer.setFocus();
 		WhiteBoard.setCurrentProject(hostProject);
 		WhiteBoard.setEditorListener(this);
 	}
@@ -317,12 +316,10 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			super(parent, SWT.NONE);
 		}
 
-		@SuppressWarnings("serial")
 		@Override
 		protected JComponent createSwingComponent() {
 			designer = new VisualDesigner(VisualSwingEditor.this, this);
-			JComponent backgroundPanel = new JPanel() {
-			};
+			JComponent backgroundPanel = new JPanel();
 			backgroundPanel.setOpaque(true);
 			backgroundPanel.setLayout(new BorderLayout());
 			backgroundPanel.add(designer, BorderLayout.CENTER);
@@ -351,20 +348,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			break;
 		case Event.EVENT_SHOW_POPUP:
 			designer.showPopup(event);
-			break;
-		case Event.EVENT_SHOW_SOURCE:
-			Object[] p = (Object[]) event.getParameter();
-			WidgetAdapter adapter = (WidgetAdapter) p[0];
-			boolean isMethod = (Boolean) p[1];
-			if (isMethod) {
-				String mname = (String) p[2];
-				String eventTypeSig = (String) p[3];
-				openSourceEditor(adapter, mname, eventTypeSig);
-			} else {
-				EventSetDescriptor eventSet = (EventSetDescriptor) p[2];
-				MethodDescriptor methodDesc = (MethodDescriptor) p[3];
-				openSourceEditor(adapter, eventSet, methodDesc);
-			}
 			break;
 		}
 	}
@@ -446,25 +429,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			}
 		});
 	}
-
-	@Override
-	public void openSourceEditor(WidgetAdapter adapter,
-			EventSetDescriptor eventSet, MethodDescriptor methodDesc) {
-		if (isDirty()) {
-			doSave(null);
-		}
-		super.openSourceEditor(adapter, eventSet, methodDesc);
-	}
-
-	@Override
-	public void openSourceEditor(WidgetAdapter widget, String mname,
-			String eventTypeSig) {
-		if (isDirty()) {
-			doSave(null);
-		}
-		super.openSourceEditor(widget, mname, eventTypeSig);
-	}
-
 	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 	}
@@ -537,10 +501,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				}
 			});
 		}
-	}
-
-	public void openSourceEditor() {
-		openSourceEditor((WidgetAdapter) null, (String) null, (String) null);
 	}
 
 	@Override

@@ -3,20 +3,24 @@ package org.dyno.visual.swing.plugin.spi;
 import java.beans.MethodDescriptor;
 import java.lang.reflect.Method;
 
-import org.dyno.visual.swing.designer.Event;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 public class EventDelegation implements IEventMethod {
-	private WidgetAdapter adapter;
+
 	private MethodDescriptor methodDesc;
 	private String methodName;
 
-	public EventDelegation(WidgetAdapter adapter, MethodDescriptor methodDesc,
-			String methodName) {
-		this.adapter = adapter;
+	public EventDelegation(MethodDescriptor methodDesc, String methodName) {
 		this.methodDesc = methodDesc;
 		this.methodName = methodName;
 	}
@@ -27,16 +31,27 @@ public class EventDelegation implements IEventMethod {
 	}
 
 	@Override
-	public void editCode() {
+	public void editCode(IEditorPart editor) {
 		Class<?>[] pd = methodDesc.getMethod().getParameterTypes();
 		if (pd.length > 0) {
 			String pname = pd[0].getName();
 			int dot = pname.lastIndexOf('.');
 			if (dot != -1)
 				pname = pname.substring(dot + 1);
-			String typeSig = Signature.createTypeSignature(pname, false);
-			WhiteBoard.sendEvent(new Event(this, Event.EVENT_SHOW_SOURCE,
-					new Object[] { adapter, true, methodName, typeSig }));
+			
+			String eventTypeSig = Signature.createTypeSignature(pname, false);
+			
+			IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
+			ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+			String name = file.getName();
+			dot = name.lastIndexOf('.');
+			if (dot != -1)
+				name = name.substring(0, dot);
+			IType type = unit.getType(name);
+			
+			IMember member = type.getMethod(methodName,
+					new String[] { eventTypeSig });
+			JavaUI.revealInEditor(editor, (IJavaElement) member);
 		}
 	}
 
@@ -47,8 +62,8 @@ public class EventDelegation implements IEventMethod {
 		Class[] pTypes = mEvent.getParameterTypes();
 		String pcName = pTypes[0].getName();
 		pcName = imports.addImport(pcName);
-		String[] paras = new String[] { Signature
-				.createTypeSignature(pcName, false) };
+		String[] paras = new String[] { Signature.createTypeSignature(pcName,
+				false) };
 		IMethod eventMethod = type.getMethod(methodName, paras);
 		if (!eventMethod.exists()) {
 			StringBuilder builder = new StringBuilder(0);

@@ -83,6 +83,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
 	}
+	public VisualSwingEditor getEditor(){
+		return editor;
+	}
 	public String getLnfClassname(){
 		return editor.getLnfClassname();
 	}

@@ -32,7 +32,7 @@ public class SourceViewAction extends EditorAction {
 	public void run() {
 		if (editor == null)
 			return;
-		editor.openSourceEditor();
+		editor.openSouceEditor();
 	}
 
 	@Override

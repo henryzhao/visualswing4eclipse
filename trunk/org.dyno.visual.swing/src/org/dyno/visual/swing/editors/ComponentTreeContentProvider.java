@@ -18,7 +18,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.IEventMethod;
+import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -50,8 +50,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				JComponent component = (JComponent) parentElement;
 				WidgetAdapter adapter = WidgetAdapter
 						.getWidgetAdapter(component);
-				Map<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>> events = adapter
-						.getEventDescriptor();
+				Map<EventSetDescriptor, IEventListenerModel> events = adapter.getEventDescriptor();
 				Set<EventSetDescriptor> keys = events.keySet();
 				List<Object> children = new ArrayList<Object>();
 				if (!keys.isEmpty()) {
@@ -60,14 +59,10 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 					for (EventSetDescriptor key : keys) {
 						EventSet set = new EventSet(key.getDisplayName(), ed);
 						eventSets.add(set);
-						Map<MethodDescriptor, IEventMethod> map = events
-								.get(key);
-						Set<MethodDescriptor> mKey = map.keySet();
+						IEventListenerModel model = events.get(key);
 						List<EventMethod> mlist = new ArrayList<EventMethod>();
-						for (MethodDescriptor m : mKey) {
-							IEventMethod content = map.get(m);
-							EventMethod method = new EventMethod(content
-									.getDisplayName(), set);
+						for (MethodDescriptor mthd:model.methods()) {
+							EventMethod method = new EventMethod(model.getDisplayName(mthd), set);
 							mlist.add(method);
 						}
 						set.setMethods(mlist);
@@ -142,7 +137,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		} else if (element instanceof JComponent) {
 			JComponent child = (JComponent) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-			Map<EventSetDescriptor, Map<MethodDescriptor, IEventMethod>> events = adapter
+			Map<EventSetDescriptor, IEventListenerModel> events = adapter
 					.getEventDescriptor();
 			Set<EventSetDescriptor> keys = events.keySet();
 			if (!keys.isEmpty()) {
