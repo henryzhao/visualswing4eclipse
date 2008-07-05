@@ -309,13 +309,9 @@ public final class AwtEnvironment {
 
 	public void requestAwtDialogFocus() {
 		assert dialogListener != null;
-
 		dialogListener.requestFocus();
 	}
-
-	// This method is called by unit tests
 	static void reset() {
 		instance = null;
 	}
-
 }

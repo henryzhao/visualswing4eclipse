@@ -305,6 +305,28 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
 			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
 			return bv != dv;
+		} else if (propertyType == String.class) {
+			if (value == null) {
+				if (default_value == null) {
+					return false;
+				} else {
+					String strDefault = (String) default_value;
+					if (strDefault.trim().length() == 0)
+						return false;
+					else
+						return true;
+				}
+			} else {
+				if (default_value == null) {
+					String strValue = (String) value;
+					if (strValue.trim().length() == 0)
+						return false;
+					else
+						return true;
+				} else {
+					return value.equals(default_value);
+				}
+			}
 		} else {
 			if (value == null && default_value == null)
 				return false;
@@ -524,10 +546,10 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		}
 		try {
 			propertyDescriptor.getWriteMethod().invoke(clone, value);
+			return true;
 		} catch (Exception e) {
 			return false;
 		}
-		return true;
 	}
 
 	@SuppressWarnings("unchecked")

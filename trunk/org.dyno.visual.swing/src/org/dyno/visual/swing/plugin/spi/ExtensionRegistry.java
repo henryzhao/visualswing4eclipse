@@ -431,20 +431,11 @@ public class ExtensionRegistry {
 		try {
 			IConfigurationElement conf = getWidgetConfig(widgetClass);
 			WidgetAdapter adapter = (WidgetAdapter) conf.createExecutableExtension("class");
-			initAdapter(conf, adapter);
 			return adapter;
 		} catch (CoreException e1) {
 			e1.printStackTrace();
 			return null;
 		}
-	}
-
-	private static void initAdapter(IConfigurationElement conf, WidgetAdapter adapter) {
-		String sSetborder = conf.getAttribute("setborder");
-		boolean setborder = false;
-		if (sSetborder != null && sSetborder.equals("true"))
-			setborder = true;
-		adapter.setSetBorder(setborder);
 	}
 
 	public static WidgetAdapter createWidgetAdapter(JComponent widget) {
@@ -457,7 +448,6 @@ public class ExtensionRegistry {
 		try {
 			IConfigurationElement conf = widgets.get(widgetClass);
 			WidgetAdapter adapter = (WidgetAdapter) conf.createExecutableExtension("class");
-			initAdapter(conf, adapter);
 			return adapter;
 		} catch (CoreException e1) {
 			e1.printStackTrace();

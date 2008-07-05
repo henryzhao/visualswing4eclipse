@@ -103,13 +103,6 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="setborder" type="boolean" use="default" value="true">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
       </complexType>
    </element>
 

@@ -845,22 +845,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				"#DELETE_EVENT");
 		fillDelEventAction(delEventMenu);
 		menu.add(delEventMenu);
-		if (canSetBorder()) {
 			MenuManager borderMenu = new MenuManager("Border", "#BORDER");
 			fillBorderAction(borderMenu);
 			menu.add(borderMenu);
-		}
-
-	}
-
-	private boolean setBorder = false;
-
-	void setSetBorder(boolean sb) {
-		setBorder = sb;
-	}
-
-	protected boolean canSetBorder() {
-		return setBorder;
 	}
 
 	private void fillLnfAction(MenuManager lnfMenu) {
@@ -1104,9 +1091,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	public Object clone() {
 		return ExtensionRegistry.createAdapterFor(cloneWidget());
 	}
-
+	protected abstract JComponent newWidget();
 	public JComponent cloneWidget() {
-		JComponent clone = createWidget();
+		JComponent clone = newWidget();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isPropertySet(getLnfClassname(), getWidget())) {

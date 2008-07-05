@@ -40,6 +40,10 @@ public class GlassPlane extends JComponent implements MouseListener {
 		this.focusedComposite = adapter;
 		repaint();
 	}
+	
+	@Override
+	public void requestFocus() {
+	}
 
 	public CompositeAdapter getFocusedComposite() {
 		return focusedComposite;
@@ -47,10 +51,6 @@ public class GlassPlane extends JComponent implements MouseListener {
 
 	boolean editComponent(JComponent hovered) {
 		return target.editComponent(hovered);
-	}
-
-	@Override
-	public void requestFocus() {
 	}
 
 	public GlassPlane(final VisualDesigner designer) {
@@ -138,5 +138,9 @@ public class GlassPlane extends JComponent implements MouseListener {
 		if (e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint());
 		}
+	}
+
+	public void setFocus() {
+		super.requestFocus();
 	}
 }

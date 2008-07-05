@@ -173,6 +173,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (embedded != null) {
 			embedded.setFocus();
 		}
+		designer.setFocus();
 		WhiteBoard.setCurrentProject(hostProject);
 		WhiteBoard.setEditorListener(this);
 	}

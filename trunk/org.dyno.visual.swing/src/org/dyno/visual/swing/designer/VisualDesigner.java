@@ -79,10 +79,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 		container = new JComponent() {
 		};
-		// WidgetAdapter adapter =
-		// ExtensionRegistry.createWidgetAdapter(JPanel.class);
 		add(container);
-		// initRootWidget(adapter);
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
 	}
@@ -280,11 +277,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			designBorder = adapter.getDesignBorder();
 			container.setBorder(designBorder);
 			validateContent();
-//			Window win = SwingUtilities.getWindowAncestor(this);
-//			if (win != null)
-//				SwingUtilities.updateComponentTreeUI(win);
 			setLnfChanged(false);
-			requestFocus();
+			setFocus();
 		}
 	}
 
@@ -575,4 +569,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	private boolean lnfChanged;
+
+	public void setFocus() {
+		glass.setFocus();
+	}
 }
