@@ -34,4 +34,5 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor{
 	void setCategory(String categoryName);
 	@SuppressWarnings("unchecked")
 	void init(IConfigurationElement config, Class beanClass);
+	boolean isEdited(WidgetAdapter adapter);
 }

@@ -435,7 +435,18 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 					JComponent jcomp = (JComponent) bean;
 					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 					adapter.setDirty(true);
+					adapter.getEdited().put(propertyDescriptor.getName(), Boolean.TRUE);
 					if (adapter != null) {
+						if(!adapter.isRoot()){
+							CompositeAdapter parent = adapter.getParentAdapter();
+							JComponent widget = parent.getWidget();
+							widget.doLayout();
+							widget.validate();	
+						}else{
+							JComponent widget = adapter.getWidget();
+							widget.doLayout();
+							widget.validate();
+						}
 						adapter.getDesigner().repaint();
 					}
 				}
@@ -602,5 +613,11 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	@Override
 	public boolean isGencode() {
 		return gencode;
+	}
+
+	@Override
+	public boolean isEdited(WidgetAdapter adapter) {
+		Boolean bool = adapter.getEdited().get(propertyDescriptor.getName());
+		return bool == null?false:bool.booleanValue();
 	}
 }

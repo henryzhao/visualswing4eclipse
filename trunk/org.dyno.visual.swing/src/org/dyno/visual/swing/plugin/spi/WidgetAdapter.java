@@ -118,7 +118,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected boolean selected;
 	protected HashMap<String, IConfigurationElement> propertyConfigs;
 	protected Map<EventSetDescriptor, IEventListenerModel> eventDescriptor;
-
+	protected Map<String, Boolean>edited;
 	protected void layoutContainer(Container container) {
 		container.doLayout();
 		int count = container.getComponentCount();
@@ -185,6 +185,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
+		this.edited = new HashMap<String, Boolean>();
 	}
 
 	protected WidgetAdapter(String name) {
@@ -195,8 +196,11 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
+		this.edited = new HashMap<String, Boolean>();
 	}
-
+	public Map<String, Boolean> getEdited(){
+		return edited;
+	}
 	public void setWidget(JComponent widget) {
 		this.widget = widget;
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
@@ -1327,8 +1331,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isGencode()
-					&& property.isPropertySet(getLnfClassname(), getWidget())) {
+			if (property.isPropertySet(getLnfClassname(), getWidget())
+					&&(property.isGencode()
+							||property.isEdited(this))) {
 				String setCode = property.getSetCode(getWidget(), imports);
 				if (setCode != null)
 					builder.append(setCode);

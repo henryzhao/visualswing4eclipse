@@ -396,4 +396,9 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	@Override
 	public void setCategory(String categoryName) {
 	}
+
+	@Override
+	public boolean isEdited(WidgetAdapter adapter) {
+		return false;
+	}
 }
