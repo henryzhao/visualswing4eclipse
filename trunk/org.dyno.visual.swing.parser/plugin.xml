@@ -3,10 +3,8 @@
 <plugin>
    <extension
          point="org.dyno.visual.swing.sourceParserFactory">
-         <!--
       <factory
-            class="org.dyno.visual.swing.parser.ASTParserFactory">
+            class="org.dyno.visual.swing.parser.DefaultParserFactory">
       </factory>
-      	 -->         
    </extension>
 </plugin>

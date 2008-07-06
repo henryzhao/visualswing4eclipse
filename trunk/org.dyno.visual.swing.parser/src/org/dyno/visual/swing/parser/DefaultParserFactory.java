@@ -6,16 +6,26 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-
 package org.dyno.visual.swing.parser;
 
+import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
-
-public class ASTParserFactory extends ParserFactory {
-
+/**
+ * 
+ * DefaultParserFactory
+ *
+ * @version 1.0.0, 2008-7-3
+ * @author William Chen
+ */
+public class DefaultParserFactory extends ParserFactory {
 	@Override
 	public ISourceParser newParser() {
-		return new ASTBasedParser();
+		return new DefaultSourceParser();
+	}
+
+	@Override
+	public IEventListenerModel newDefaultListenerModel() {
+		return new AnonymousInnerClassModel();
 	}
 }
