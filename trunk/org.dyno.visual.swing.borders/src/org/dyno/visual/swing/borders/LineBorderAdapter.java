@@ -15,8 +15,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.LineBorder;
 
+import org.dyno.visual.swing.base.FieldProperty;
 import org.dyno.visual.swing.plugin.spi.BorderAdapter;
-import org.dyno.visual.swing.plugin.spi.FieldProperty;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
