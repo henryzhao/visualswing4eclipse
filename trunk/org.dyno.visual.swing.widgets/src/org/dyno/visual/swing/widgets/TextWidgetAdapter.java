@@ -20,7 +20,7 @@ import java.beans.PropertyDescriptor;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.LabelEditor;
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -105,7 +105,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 	private LabelEditor editor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
+	public IEditor getEditorAt(int x, int y) {
 		if (editor == null) {
 			editor = new LabelEditor();
 		}

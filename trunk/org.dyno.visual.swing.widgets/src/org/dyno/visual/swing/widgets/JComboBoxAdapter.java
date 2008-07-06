@@ -21,7 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.LabelEditor;
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JComboBoxAdapter extends WidgetAdapter {
@@ -44,7 +44,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	private LabelEditor editor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
+	public IEditor getEditorAt(int x, int y) {
 		if (editor == null) {
 			editor = new LabelEditor();
 		}

@@ -15,7 +15,7 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JSpinnerAdapter extends WidgetAdapter {
@@ -35,14 +35,14 @@ public class JSpinnerAdapter extends WidgetAdapter {
 		return spinner;
 	}
 
-	private Editor editor;
+	private IEditor iEditor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
-		if (editor == null) {
-			editor = new IntegerTextEditor();
+	public IEditor getEditorAt(int x, int y) {
+		if (iEditor == null) {
+			iEditor = new IntegerTextEditor();
 		}
-		return editor;
+		return iEditor;
 	}
 
 	@Override

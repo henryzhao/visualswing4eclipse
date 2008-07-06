@@ -18,9 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 
-public class TableModelEditor implements Editor {
+public class TableModelEditor implements IEditor {
 	private List<ChangeListener> listeners;
 	private TableModelPanel tmPanel;
 	public TableModelEditor(JScrollPane jsp){

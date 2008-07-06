@@ -24,7 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
-import org.dyno.visual.swing.plugin.spi.Azimuth;
+import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;

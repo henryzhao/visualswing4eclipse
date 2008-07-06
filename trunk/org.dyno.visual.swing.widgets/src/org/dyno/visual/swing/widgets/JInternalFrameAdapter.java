@@ -23,10 +23,10 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.Editor;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
@@ -121,7 +121,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	private LabelEditor editor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
+	public IEditor getEditorAt(int x, int y) {
 		if (getCaptionBounds().contains(x, y)) {
 			if (editor == null)
 				editor = new LabelEditor();

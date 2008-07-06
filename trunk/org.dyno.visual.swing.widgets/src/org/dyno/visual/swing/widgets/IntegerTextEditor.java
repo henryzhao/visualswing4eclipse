@@ -19,9 +19,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 
-public class IntegerTextEditor extends JFormattedTextField implements Editor, ActionListener {
+public class IntegerTextEditor extends JFormattedTextField implements IEditor, ActionListener {
 	private static final long serialVersionUID = -4403435758517308113L;
 	private ArrayList<ChangeListener> listeners;
 

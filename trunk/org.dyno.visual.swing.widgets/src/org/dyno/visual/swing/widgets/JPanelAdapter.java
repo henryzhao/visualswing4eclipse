@@ -21,9 +21,9 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.dyno.visual.swing.plugin.spi.Azimuth;
+import org.dyno.visual.swing.base.Azimuth;
+import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.EditorAction;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;

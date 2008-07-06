@@ -14,9 +14,9 @@ import java.awt.TextArea;
 
 import javax.swing.event.ChangeListener;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 
-public class TextAreaEditor extends TextArea implements Editor {
+public class TextAreaEditor extends TextArea implements IEditor {
 	private static final long serialVersionUID = -4403435758517308113L;
 
 	public TextAreaEditor() {

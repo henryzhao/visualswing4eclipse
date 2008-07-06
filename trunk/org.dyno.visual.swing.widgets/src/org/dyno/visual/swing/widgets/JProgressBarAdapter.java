@@ -16,7 +16,7 @@ import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JProgressBarAdapter extends WidgetAdapter {
@@ -36,14 +36,14 @@ public class JProgressBarAdapter extends WidgetAdapter {
 		return bar;
 	}
 
-	private Editor editor;
+	private IEditor iEditor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
-		if (editor == null) {
-			editor = new IntegerTextEditor();
+	public IEditor getEditorAt(int x, int y) {
+		if (iEditor == null) {
+			iEditor = new IntegerTextEditor();
 		}
-		return editor;
+		return iEditor;
 	}
 
 	@Override

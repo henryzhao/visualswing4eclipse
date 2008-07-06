@@ -25,7 +25,7 @@ import javax.swing.JTabbedPane;
 
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
@@ -104,14 +104,14 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	private boolean hovered;
-	private Editor editor;
+	private IEditor iEditor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
-		if (editor == null) {
-			editor = new LabelEditor();
+	public IEditor getEditorAt(int x, int y) {
+		if (iEditor == null) {
+			iEditor = new LabelEditor();
 		}
-		return editor;
+		return iEditor;
 	}
 
 	@Override

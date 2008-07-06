@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.widgets.editors.TableModelEditor;
 
 public class JTableAdapter extends ComplexWidgetAdapter {
@@ -40,7 +40,7 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
+	public IEditor getEditorAt(int x, int y) {
 		CompositeAdapter parent = getParentAdapter();
 		if (parent != null && parent.getWidget() instanceof JScrollPane)
 			return new TableModelEditor((JScrollPane) parent.cloneWidget());

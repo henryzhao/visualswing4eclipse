@@ -20,7 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 
 public class JListAdapter extends ComplexWidgetAdapter {
 	private static int VAR_INDEX = 0;
@@ -44,14 +44,14 @@ public class JListAdapter extends ComplexWidgetAdapter {
 		return jc;
 	}
 
-	private Editor editor;
+	private IEditor iEditor;
 
 	@Override
-	public Editor getEditorAt(int x, int y) {
-		if (editor == null) {
-			editor = new TextAreaEditor();
+	public IEditor getEditorAt(int x, int y) {
+		if (iEditor == null) {
+			iEditor = new TextAreaEditor();
 		}
-		return editor;
+		return iEditor;
 	}
 
 	@Override

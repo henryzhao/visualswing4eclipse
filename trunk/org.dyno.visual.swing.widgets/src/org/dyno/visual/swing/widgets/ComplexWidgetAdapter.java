@@ -14,7 +14,7 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public abstract class ComplexWidgetAdapter extends WidgetAdapter {

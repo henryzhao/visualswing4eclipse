@@ -9,7 +9,7 @@
 
 package org.dyno.visual.swing.widgets.properties;
 
-import org.dyno.visual.swing.plugin.spi.WidgetProperty;
+import org.dyno.visual.swing.base.WidgetProperty;
 
 public class HorizontalTextPositionProperty extends WidgetProperty {
 	@Override

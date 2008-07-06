@@ -18,9 +18,9 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ChangeListener;
 import javax.swing.tree.TreeModel;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 
-public class TreeModelEditor implements Editor {
+public class TreeModelEditor implements IEditor {
 	private List<ChangeListener> listeners;
 	private TreeModelPanel tmPanel;
 	public TreeModelEditor(JScrollPane jsp){
