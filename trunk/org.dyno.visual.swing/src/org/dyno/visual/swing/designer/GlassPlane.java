@@ -21,10 +21,11 @@ import javax.swing.TransferHandler;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+
 /**
  * 
  * GlassPlane
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -40,7 +41,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 		this.focusedComposite = adapter;
 		repaint();
 	}
-	
+
 	@Override
 	public void requestFocus() {
 	}
@@ -141,6 +142,11 @@ public class GlassPlane extends JComponent implements MouseListener {
 	}
 
 	public void setFocus() {
-		super.requestFocus();
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				GlassPlane.super.requestFocus();
+			}
+		});
 	}
 }
