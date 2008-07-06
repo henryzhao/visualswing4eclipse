@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.PropertySource2;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;

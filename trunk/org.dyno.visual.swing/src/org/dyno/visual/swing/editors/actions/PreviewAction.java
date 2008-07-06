@@ -9,7 +9,7 @@
 package org.dyno.visual.swing.editors.actions;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.plugin.spi.EditorAction;
+import org.dyno.visual.swing.base.EditorAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 /**

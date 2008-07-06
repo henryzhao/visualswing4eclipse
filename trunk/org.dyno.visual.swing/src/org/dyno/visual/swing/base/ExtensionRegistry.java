@@ -6,7 +6,7 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.base;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,6 +17,13 @@ import java.util.StringTokenizer;
 
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
+import org.dyno.visual.swing.plugin.spi.ICloner;
+import org.dyno.visual.swing.plugin.spi.ICodeGen;
+import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
+import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;

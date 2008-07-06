@@ -35,14 +35,18 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.PropertySource2;
+import org.dyno.visual.swing.base.WidgetProperty;
+import org.dyno.visual.swing.base.ExtensionRegistry.Category;
+import org.dyno.visual.swing.base.ExtensionRegistry.Provider;
+import org.dyno.visual.swing.base.ExtensionRegistry.Sorting;
 import org.dyno.visual.swing.designer.GlassPlane;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry.Category;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry.Provider;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry.Sorting;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -223,7 +227,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return this.hotspotPoint;
 	}
 
-	public Editor getEditorAt(int x, int y) {
+	public IEditor getEditorAt(int x, int y) {
 		return null;
 	}
 
@@ -402,7 +406,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	protected VisualDesigner getDesigner() {
+	public VisualDesigner getDesigner() {
 		WidgetAdapter a = getRootAdapter();
 		if (a != null) {
 			return (VisualDesigner) a.getWidget().getParent();

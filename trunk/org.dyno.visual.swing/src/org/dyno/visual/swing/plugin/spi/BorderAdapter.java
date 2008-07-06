@@ -16,9 +16,12 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.IFactory;
 import org.dyno.visual.swing.base.ItemEndec;
 import org.dyno.visual.swing.base.ItemProvider;
+import org.dyno.visual.swing.base.PropertySource2;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;

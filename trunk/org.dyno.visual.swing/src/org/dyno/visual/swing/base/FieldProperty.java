@@ -6,7 +6,7 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.base;
 
 import java.awt.Component;
 import java.lang.reflect.Field;
@@ -14,7 +14,10 @@ import java.util.Comparator;
 
 import javax.swing.JComponent;
 
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
+import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;

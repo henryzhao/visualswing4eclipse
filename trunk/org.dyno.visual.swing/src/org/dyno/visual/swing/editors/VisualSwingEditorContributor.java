@@ -8,6 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.editors.actions.BottomAlignAction;
 import org.dyno.visual.swing.editors.actions.CenterAlignAction;
 import org.dyno.visual.swing.editors.actions.CopyAction;
@@ -24,7 +25,6 @@ import org.dyno.visual.swing.editors.actions.SameWidthAction;
 import org.dyno.visual.swing.editors.actions.SelectAllAction;
 import org.dyno.visual.swing.editors.actions.SourceViewAction;
 import org.dyno.visual.swing.editors.actions.TopAlignAction;
-import org.dyno.visual.swing.plugin.spi.EditorAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;

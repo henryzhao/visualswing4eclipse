@@ -29,11 +29,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
+import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.editors.PaletteView;
-import org.dyno.visual.swing.plugin.spi.Azimuth;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.Editor;
-import org.dyno.visual.swing.plugin.spi.WhiteBoard;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -316,11 +316,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 
 	private void startEditComponent(JComponent hovered, Point loc) {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-		Editor editor = adapter.getEditorAt(loc.x, loc.y);
-		if (editor != null) {
-			editor.setFont(adapter.getWidget().getFont());
-			editor.setValue(adapter.getWidgetValue());
-			editor.addChangeListener(this);
+		IEditor iEditor = adapter.getEditorAt(loc.x, loc.y);
+		if (iEditor != null) {
+			iEditor.setFont(adapter.getWidget().getFont());
+			iEditor.setValue(adapter.getWidgetValue());
+			iEditor.addChangeListener(this);
 			Rectangle bounds = adapter.getEditorBounds(loc.x, loc.y);
 			if (adapter.isRoot())
 				bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
@@ -328,7 +328,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 				bounds = SwingUtilities.convertRectangle(((CompositeAdapter) adapter.getParentAdapter()).getWidget(), bounds, designer);
 			else
 				bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
-			Component comp = editor.getComponent();
+			Component comp = iEditor.getComponent();
 			comp.setBounds(bounds);
 			comp.doLayout();
 			glassPlane.add(comp);
@@ -336,22 +336,22 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			glassPlane.validate();
 			glassPlane.repaint();
 			comp.repaint();
-			editor.setFocus();
-			currentEditor = new EditorAdapter(adapter, editor);
+			iEditor.setFocus();
+			currentEditor = new EditorAdapter(adapter, iEditor);
 		}
 	}
 
 	class EditorAdapter {
-		private Editor editor;
+		private IEditor iEditor;
 		private WidgetAdapter adapter;
 
-		public EditorAdapter(WidgetAdapter adapter, Editor editor) {
+		public EditorAdapter(WidgetAdapter adapter, IEditor iEditor) {
 			this.adapter = adapter;
-			this.editor = editor;
+			this.iEditor = iEditor;
 		}
 
-		public Editor getEditor() {
-			return editor;
+		public IEditor getEditor() {
+			return iEditor;
 		}
 
 		public WidgetAdapter getAdapter() {
@@ -366,10 +366,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		if (currentEditor != null) {
 			stoppingEditing = true;
 			WidgetAdapter adapter = currentEditor.getAdapter();
-			Editor editor = currentEditor.getEditor();
+			IEditor iEditor = currentEditor.getEditor();
 			try {
-				editor.validateValue();
-				Object newValue = editor.getValue();
+				iEditor.validateValue();
+				Object newValue = iEditor.getValue();
 				adapter.setWidgetValue(newValue);
 				adapter.setDirty(true);
 				CompositeAdapter container = (CompositeAdapter) adapter.getParentAdapter();
@@ -378,17 +378,17 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 				if (adapter.isSelected()) {
 					designer.publishSelection();
 				}
-				editor.removeChangeListener(this);
-				editor.getComponent().removeFocusListener(this);
-				glassPlane.remove(editor.getComponent());
+				iEditor.removeChangeListener(this);
+				iEditor.getComponent().removeFocusListener(this);
+				glassPlane.remove(iEditor.getComponent());
 				glassPlane.validate();
 				currentEditor = null;
 				return true;
 			} catch (Exception e) {
 				if (silence) {
-					editor.removeChangeListener(this);
-					editor.getComponent().removeFocusListener(this);
-					glassPlane.remove(editor.getComponent());
+					iEditor.removeChangeListener(this);
+					iEditor.getComponent().removeFocusListener(this);
+					glassPlane.remove(iEditor.getComponent());
 					glassPlane.validate();
 					currentEditor = null;
 				} else {					
@@ -400,7 +400,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 							MessageDialog.openError(shell, "Validation Error", message);
 						}
 					});					
-					editor.getComponent().requestFocus();
+					iEditor.getComponent().requestFocus();
 				}
 				return false;
 			} finally {

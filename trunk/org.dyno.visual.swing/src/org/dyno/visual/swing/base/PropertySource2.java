@@ -6,13 +6,14 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.base;
 
 import java.util.HashMap;
 
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource2;
 /**

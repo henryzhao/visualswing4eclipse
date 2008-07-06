@@ -6,10 +6,11 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing;
 
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.IJavaProject;
 /**
  * 

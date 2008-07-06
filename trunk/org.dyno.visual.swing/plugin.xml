@@ -44,7 +44,15 @@
          	</enablement>
        </decorator>
    </extension>	
- 
+    <extension
+         point="org.dyno.visual.swing.valueType"
+         id="org.dyno.visual.swing.basetypes"
+         name="Value Types">
+		<type class="javax.swing.Icon"
+					renderer = "org.dyno.visual.swing.types.IconRenderer"
+					editor = "org.dyno.visual.swing.types.IconEditor"
+					endec = "org.dyno.visual.swing.types.IconWrapper"/>
+   </extension>
    <extension
          point="org.eclipse.ui.views">
       <category

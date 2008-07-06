@@ -26,10 +26,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.EditorAction;
-import org.dyno.visual.swing.plugin.spi.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;

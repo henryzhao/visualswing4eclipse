@@ -12,9 +12,9 @@ import java.awt.LayoutManager;
 
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.base.PropertySource2;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
-import org.dyno.visual.swing.plugin.spi.PropertySource2;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;

@@ -10,7 +10,7 @@
  *******************************************************************************/
 package org.dyno.visual.swing.swt_awt;
 
-import org.dyno.visual.swing.plugin.spi.AwtEnvironment;
+import org.dyno.visual.swing.base.AwtEnvironment;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;

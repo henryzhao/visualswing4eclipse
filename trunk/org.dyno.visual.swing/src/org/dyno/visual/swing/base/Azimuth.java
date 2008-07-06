@@ -6,7 +6,7 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.base;
 /**
  * 
  * Azimuth

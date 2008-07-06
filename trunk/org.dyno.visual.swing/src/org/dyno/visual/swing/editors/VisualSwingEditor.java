@@ -23,15 +23,15 @@ import javax.swing.LookAndFeel;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.designer.VisualDesigner;
-import org.dyno.visual.swing.plugin.spi.EditorAction;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
-import org.dyno.visual.swing.plugin.spi.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.swt_awt.EmbeddedSwingComposite;
 import org.eclipse.core.resources.IResourceChangeEvent;

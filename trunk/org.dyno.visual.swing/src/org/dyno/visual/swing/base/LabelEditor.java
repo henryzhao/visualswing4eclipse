@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.dyno.visual.swing.plugin.spi.Editor;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 /**
  * 
  * LabelEditor
@@ -25,7 +25,7 @@ import org.dyno.visual.swing.plugin.spi.Editor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class LabelEditor extends TextField implements Editor, ActionListener {
+public class LabelEditor extends TextField implements IEditor, ActionListener {
 	private static final long serialVersionUID = -4403435758517308113L;
 	private ArrayList<ChangeListener> listeners;
 

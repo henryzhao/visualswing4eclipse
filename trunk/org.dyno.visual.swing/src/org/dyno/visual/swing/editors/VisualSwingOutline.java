@@ -14,10 +14,10 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
-import org.dyno.visual.swing.plugin.spi.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;

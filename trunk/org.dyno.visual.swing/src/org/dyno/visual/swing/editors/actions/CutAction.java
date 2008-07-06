@@ -8,7 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors.actions;
 
-import org.dyno.visual.swing.plugin.spi.EditorAction;
+import org.dyno.visual.swing.base.EditorAction;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;

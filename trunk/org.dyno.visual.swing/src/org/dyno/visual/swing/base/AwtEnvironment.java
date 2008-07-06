@@ -8,7 +8,7 @@
  * Contributors:
  *     SAS Institute - initial API and implementation
  *******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.base;
 
 import java.awt.EventQueue;
 import java.awt.Frame;

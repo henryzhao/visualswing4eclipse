@@ -14,12 +14,12 @@ import java.awt.Font;
 import javax.swing.event.ChangeListener;
 /**
  * 
- * Editor
+ * IEditor
  *
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public interface Editor {
+public interface IEditor {
 	void validateValue() throws Exception;
 
 	void setFocus();

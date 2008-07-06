@@ -6,9 +6,14 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.base;
 
 import java.util.Comparator;
+
+import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
+import org.dyno.visual.swing.plugin.spi.ICloner;
+import org.dyno.visual.swing.plugin.spi.ICodeGen;
+import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 /**
  * 
  * TypeAdapter

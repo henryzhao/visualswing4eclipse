@@ -11,8 +11,8 @@ package org.dyno.visual.swing.editors;
 import java.util.HashMap;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
-import org.dyno.visual.swing.plugin.spi.WhiteBoard;
+import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
