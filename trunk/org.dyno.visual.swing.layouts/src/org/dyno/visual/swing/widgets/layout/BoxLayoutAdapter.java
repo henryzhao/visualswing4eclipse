@@ -20,8 +20,8 @@ import java.awt.Rectangle;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.base.FieldProperty;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.FieldProperty;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;

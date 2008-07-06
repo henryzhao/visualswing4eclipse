@@ -25,12 +25,12 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.plugin.spi.WidgetProperty;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
