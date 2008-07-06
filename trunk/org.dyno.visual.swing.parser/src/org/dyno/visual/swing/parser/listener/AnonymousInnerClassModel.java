@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.parser;
+package org.dyno.visual.swing.parser.listener;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;

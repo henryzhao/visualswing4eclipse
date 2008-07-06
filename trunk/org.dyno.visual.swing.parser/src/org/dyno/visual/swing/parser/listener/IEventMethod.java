@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.parser;
+package org.dyno.visual.swing.parser.listener;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;

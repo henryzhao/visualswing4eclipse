@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.parser;
+package org.dyno.visual.swing.parser.listener;
 
 import java.beans.MethodDescriptor;
 import java.lang.reflect.Method;

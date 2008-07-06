@@ -22,6 +22,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.parser.listener.AnonymousInnerClassModel;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;

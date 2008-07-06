@@ -8,6 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.parser;
 
+import org.dyno.visual.swing.parser.listener.AnonymousInnerClassModel;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
