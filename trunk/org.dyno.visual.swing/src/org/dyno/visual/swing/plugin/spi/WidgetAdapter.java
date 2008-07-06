@@ -130,7 +130,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	protected String getLastName() {
+	public String getLastName() {
 		return lastName;
 	}
 
@@ -944,7 +944,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		public void run() {
 			IEventListenerModel model = eventDescriptor.get(eventSet);
 			if (model == null) {
-				model = new AnonymousInnerClassModel();
+				model = ParserFactory.getDefaultParserFactory().newDefaultListenerModel();
 				eventDescriptor.put(eventSet, model);
 			}
 			if (!model.hasMethod(methodDesc)) {

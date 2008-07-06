@@ -63,4 +63,6 @@ public abstract class ParserFactory {
 			parseParserExtensions();
 		return DEFAULT;
 	}
+
+	public abstract IEventListenerModel newDefaultListenerModel();
 }

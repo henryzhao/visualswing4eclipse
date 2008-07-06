@@ -104,12 +104,6 @@
       </wizard>      
    </extension>
    <extension
-         point="org.dyno.visual.swing.sourceParserFactory">
-      <factory
-            class="org.dyno.visual.swing.editors.DefaultParserFactory">
-      </factory>
-   </extension>
-   <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
             class="org.dyno.visual.swing.wizards.VsLayoutContainerInitializer"
