@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
@@ -44,6 +45,11 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean isEdited(WidgetAdapter adapter) {
+		return false;
 	}
 
 	private Field getField(String fieldName) {
