@@ -21,13 +21,13 @@ import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.NamespaceManager;
-import org.dyno.visual.swing.parser.listener.AnonymousInnerClassModel;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
+import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -58,9 +58,12 @@ import org.eclipse.ui.PlatformUI;
  * @author William Chen
  */
 class DefaultSourceParser implements ISourceParser {
+	private ParserFactory factory;
 	private ICompilationUnit unit;
 	private ImportRewrite imports;
-
+	public DefaultSourceParser(ParserFactory factory){
+		this.factory = factory;
+	}
 	@Override
 	public WidgetAdapter getResult() {
 		return result;
@@ -210,7 +213,7 @@ class DefaultSourceParser implements ISourceParser {
 						.getEventDescriptor();
 				IEventListenerModel model = map.get(esd);
 				if (model == null) {
-					model = new AnonymousInnerClassModel();
+					model = factory.newDefaultListenerModel();
 					if (model.parse(adapter, type, esd))
 						map.put(esd, model);
 				} else {
