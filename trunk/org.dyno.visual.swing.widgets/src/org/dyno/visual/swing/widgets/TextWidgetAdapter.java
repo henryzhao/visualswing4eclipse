@@ -162,7 +162,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 	@Override
 	public int getHeightByDescent(int descent) {
 		FontMetrics fm = getWidget().getFontMetrics(getButtonFont());
-		return 2 * descent + fm.getHeight();
+		return 2 * (descent + fm.getAscent())- fm.getHeight();
 	}
 
 	@Override
