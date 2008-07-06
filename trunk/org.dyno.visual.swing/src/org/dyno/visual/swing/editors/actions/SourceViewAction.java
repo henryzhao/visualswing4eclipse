@@ -10,11 +10,16 @@ package org.dyno.visual.swing.editors.actions;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IMenuManager;
+
 /**
  * 
  * SourceViewAction
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -25,13 +30,25 @@ public class SourceViewAction extends EditorAction {
 		setId(SOURCE);
 		setText("View Source Code");
 		setToolTipText("View Source Code");
-		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(SOURCE_ACTION_ID));
+		setImageDescriptor(VisualSwingPlugin
+				.getSharedDescriptor(SOURCE_ACTION_ID));
 	}
 
 	@Override
 	public void run() {
 		if (editor == null)
 			return;
+		if (editor.isDirty()) {
+			Job job = new Job("View Source Code"){
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					editor.doSave(monitor);
+					return Status.OK_STATUS;
+				}
+			};
+			job.schedule();
+			try {job.join();} catch (Exception e) {}
+		}
 		editor.openSouceEditor();
 	}
 

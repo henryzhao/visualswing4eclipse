@@ -185,16 +185,18 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		final IEditorInput input = getEditorInput();
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench != null) {
-			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-			if (window != null) {
-				IWorkbenchPage page = window.getActivePage();
-				if (page != null) {
-					try {
-						return page.openEditor(input, JAVA_EDITOR_ID, true,
-								IWorkbenchPage.MATCH_ID
-										| IWorkbenchPage.MATCH_INPUT);
-					} catch (Exception e) {
-						e.printStackTrace();
+			IWorkbenchWindow[] windows = workbench.getWorkbenchWindows();
+			for (IWorkbenchWindow window : windows) {
+				if (window != null) {
+					IWorkbenchPage page = window.getActivePage();
+					if (page != null) {
+						try {
+							return page.openEditor(input, JAVA_EDITOR_ID, true,
+									IWorkbenchPage.MATCH_ID
+											| IWorkbenchPage.MATCH_INPUT);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
