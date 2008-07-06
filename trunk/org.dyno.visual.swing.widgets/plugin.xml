@@ -87,6 +87,8 @@
         		<property id="border" name="border" />
         		<property id="font" name="font"/>
         		<property id="layout" name="layout" gencode="false"/>
+        		<property id="alignmentX" name="alignmentX" gencode="false"/>
+        		<property id="alignmentX" name="alignmentY" gencode="false"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JLabelAdapter"
@@ -183,6 +185,7 @@
          		groupId="component"         		
          		icon="/icons/button_16.png">
 		        <property id="defaultCapable" name="defaultCapable" gencode="false"/>
+		        <property id="border" name="border" gencode="false"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JToggleButtonAdapter"
