@@ -12,9 +12,9 @@ package org.dyno.visual.swing.types.cloner;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICloner;
-import org.dyno.visual.swing.plugin.spi.TypeAdapter;
 
 public class ComboBoxModelCloner implements ICloner {
 

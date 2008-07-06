@@ -45,7 +45,7 @@ public class BorderDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		getShell().setText("Border Editor");
+		getShell().setText("Border IEditor");
 		Composite innerComposite = new Composite(composite, SWT.NONE);
 		innerComposite.setLayoutData(new GridData());
 		GridLayout layout = new GridLayout();

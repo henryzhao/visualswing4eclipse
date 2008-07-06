@@ -51,10 +51,6 @@
 		<type class="javax.swing.border.Border"
 					editor = "org.dyno.visual.swing.types.editor.BorderEditor"
 					renderer = "org.dyno.visual.swing.types.renderer.BorderRenderer"/>
-		<type class="javax.swing.Icon"
-					renderer = "org.dyno.visual.swing.types.renderer.IconRenderer"
-					editor = "org.dyno.visual.swing.types.editor.IconEditor"
-					endec = "org.dyno.visual.swing.types.endec.IconWrapper"/>
 		<type class="java.awt.Insets"
 					renderer = "org.dyno.visual.swing.types.renderer.InsetsRenderer"
 					editor = "org.dyno.visual.swing.types.editor.InsetsEditor"

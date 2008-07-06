@@ -14,8 +14,8 @@ import java.util.List;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
 
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
-import org.dyno.visual.swing.plugin.spi.TypeAdapter;
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.swt.widgets.Composite;
 

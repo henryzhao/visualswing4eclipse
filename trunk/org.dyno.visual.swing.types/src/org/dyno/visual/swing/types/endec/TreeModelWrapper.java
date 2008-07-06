@@ -13,9 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
-import org.dyno.visual.swing.plugin.spi.TypeAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 /**

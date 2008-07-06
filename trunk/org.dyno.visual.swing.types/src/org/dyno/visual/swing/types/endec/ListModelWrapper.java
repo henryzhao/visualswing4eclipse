@@ -10,9 +10,9 @@ package org.dyno.visual.swing.types.endec;
 
 import javax.swing.ListModel;
 
-import org.dyno.visual.swing.plugin.spi.ExtensionRegistry;
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
-import org.dyno.visual.swing.plugin.spi.TypeAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 /**

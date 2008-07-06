@@ -34,7 +34,7 @@ public class ListItemDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		getShell().setText("List Editor");
+		getShell().setText("List IEditor");
 		Composite composite = (Composite) super.createDialogArea(parent);
 		Composite innerComposite = new Composite(composite, SWT.NONE);
 		GridLayout layout = new GridLayout();

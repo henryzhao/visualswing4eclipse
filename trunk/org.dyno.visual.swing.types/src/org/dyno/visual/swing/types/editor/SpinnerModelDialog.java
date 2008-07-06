@@ -43,7 +43,7 @@ public class SpinnerModelDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		getShell().setText("Spinner Model Editor");
+		getShell().setText("Spinner Model IEditor");
 		modelPanes = new HashMap<SpinnerModelType, AccessibleUI>();
 		Composite innerComposite = new Composite(composite, SWT.NONE);
 		innerComposite.setLayoutData(new GridData());
