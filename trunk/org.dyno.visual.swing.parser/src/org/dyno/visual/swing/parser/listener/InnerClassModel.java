@@ -11,8 +11,12 @@ import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -29,7 +33,9 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 
 public class InnerClassModel implements IEventListenerModel {
 	private Map<MethodDescriptor, MethodDescriptor> methods;
@@ -150,6 +156,26 @@ public class InnerClassModel implements IEventListenerModel {
 
 	@Override
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
+		Class<?>[] pd = methodDesc.getMethod().getParameterTypes();
+		if (pd.length > 0) {
+			String pname = pd[0].getName();
+			int dot = pname.lastIndexOf('.');
+			if (dot != -1)
+				pname = pname.substring(dot + 1);
+			
+			String eventTypeSig = Signature.createTypeSignature(pname, false);
+			
+			IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
+			ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+			String name = file.getName();
+			dot = name.lastIndexOf('.');
+			if (dot != -1)
+				name = name.substring(0, dot);
+			IType type = unit.getType(name);
+			IType meType = type.getType(className);			
+			IMember member = meType.getMethod(methodDesc.getName(),new String[] {eventTypeSig });
+			JavaUI.revealInEditor(editor, (IJavaElement) member);
+		}		
 	}
 
 	@Override
