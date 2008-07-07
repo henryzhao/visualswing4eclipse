@@ -11,14 +11,24 @@
    <extension
          point="org.dyno.visual.swing.parser.listenerModel">
       <model
-            class="org.dyno.visual.swing.parser.listener.InnerClassModel"
-            id="org.dyno.visual.swing.parser.model.inner"
-            name="Anonymous Inner Class Listener">
-      </model>
-      <model
             class="org.dyno.visual.swing.parser.listener.AnonymousInnerClassModel"
             id="org.dyno.visual.swing.parser.model.anonymous"
             name="Anonymous Inner Class Listener">
+      </model>
+      <model
+            class="org.dyno.visual.swing.parser.listener.ThisClassModel"
+            id="org.dyno.visual.swing.parser.model.this"
+            name="This Class Listener">
+      </model>
+      <model
+            class="org.dyno.visual.swing.parser.listener.OuterClassModel"
+            id="org.dyno.visual.swing.parser.model.outer"
+            name="Outer Class Listener">
+      </model>
+      <model
+            class="org.dyno.visual.swing.parser.listener.InnerClassModel"
+            id="org.dyno.visual.swing.parser.model.inner"
+            name="Inner Class Listener">
       </model>
    </extension>
 </plugin>

@@ -22,6 +22,7 @@ import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
@@ -37,14 +38,14 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
-public class InnerClassModel implements IEventListenerModel {
+public class OuterClassModel implements IEventListenerModel {
 	private Map<MethodDescriptor, MethodDescriptor> methods;
 	private String className;
 	private EventSetDescriptor eventSet;
 	private WidgetAdapter adapter;
 	private String parameters;
 
-	public InnerClassModel() {
+	public OuterClassModel() {
 		methods = new HashMap<MethodDescriptor, MethodDescriptor>();
 	}
 
@@ -67,13 +68,13 @@ public class InnerClassModel implements IEventListenerModel {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
-		IType meType = type.getType(className);
+		IType meType = type.getCompilationUnit().getType(className);
 		Class listClass = eventSet.getListenerType();		
 		Class adapterClass = AnonymousInnerClassModel.getListenerAdapter(listClass);
 		boolean override = adapterClass!=null;
 		if (!meType.exists()) {
 			StringBuilder builder = new StringBuilder();
-			builder.append("private class " + className);
+			builder.append("class " + className);
 			if (adapterClass == null) {
 				String listClassname = listClass.getName();
 				String cName = imports.addImport(listClassname);
@@ -85,7 +86,7 @@ public class InnerClassModel implements IEventListenerModel {
 			}
 			builder.append("}\n");
 			try {
-				meType = type.createType(builder.toString(), null, false, monitor);
+				meType = type.getCompilationUnit().createType(builder.toString(), null, false, monitor);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				return false;
@@ -163,12 +164,7 @@ public class InnerClassModel implements IEventListenerModel {
 			
 			IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
 			ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
-			String name = file.getName();
-			dot = name.lastIndexOf('.');
-			if (dot != -1)
-				name = name.substring(0, dot);
-			IType type = unit.getType(name);
-			IType meType = type.getType(className);			
+			IType meType = unit.getType(className);
 			IMember member = meType.getMethod(methodDesc.getName(),new String[] {eventTypeSig });
 			JavaUI.revealInEditor(editor, (IJavaElement) member);
 		}		
@@ -313,9 +309,10 @@ public class InnerClassModel implements IEventListenerModel {
 							parameters = builder.toString();
 						} else
 							parameters = null;
-						TypeDeclaration[] innerTypes = type.getTypes();
+						List innerTypes = ((CompilationUnit)type.getParent()).types();
 						if (innerTypes != null) {
-							for (TypeDeclaration innerDec : innerTypes) {
+							for (Object inner : innerTypes) {
+								TypeDeclaration innerDec = (TypeDeclaration)inner;
 								if (innerDec.getName().getFullyQualifiedName().equals(className)) {
 									String mListenerName = mListener.getName();
 									MethodDeclaration[] mds = innerDec.getMethods();

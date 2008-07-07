@@ -19,44 +19,40 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
-public class InnerClassModel implements IEventListenerModel {
+public class ThisClassModel implements IEventListenerModel {
 	private Map<MethodDescriptor, MethodDescriptor> methods;
-	private String className;
 	private EventSetDescriptor eventSet;
 	private WidgetAdapter adapter;
-	private String parameters;
 
-	public InnerClassModel() {
+	public ThisClassModel() {
 		methods = new HashMap<MethodDescriptor, MethodDescriptor>();
 	}
-
 	@Override
 	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		this.adapter = adapter;
 		this.eventSet = eventSet;
-		this.className = (adapter.isRoot() ? "This" : getCapitalName(adapter.getName())) + getCapitalName(eventSet.getName()) + "Listener";
-	}
-
-	private String getCapitalName(String name) {
-		return NamespaceManager.getInstance().getCapitalName(name);
 	}
 
 	@Override
@@ -66,88 +62,85 @@ public class InnerClassModel implements IEventListenerModel {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
-		IType meType = type.getType(className);
-		Class listClass = eventSet.getListenerType();		
-		Class adapterClass = AnonymousInnerClassModel.getListenerAdapter(listClass);
-		boolean override = adapterClass!=null;
-		if (!meType.exists()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append("private class " + className);
-			if (adapterClass == null) {
-				String listClassname = listClass.getName();
-				String cName = imports.addImport(listClassname);
-				builder.append(" implements " + cName + " {\n");
-			} else {
-				String adapterClassname = adapterClass.getName();
-				String cName = imports.addImport(adapterClassname);
-				builder.append(" extends " + cName + " {\n");
-			}
-			builder.append("}\n");
-			try {
-				meType = type.createType(builder.toString(), null, false, monitor);
-			} catch (JavaModelException e) {
-				e.printStackTrace();
-				return false;
+	public boolean createEventMethod(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
+		String[] inters;
+		try {
+			inters = type.getSuperInterfaceNames();
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+			return false;
+		}
+		Class listClass = eventSet.getListenerType();
+		String listClassname = listClass.getName();
+		String cName = imports.addImport(listClassname);
+		boolean hasInter = false;
+		for (String inter : inters) {
+			if (inter.equals(cName)) {
+				hasInter = true;
 			}
 		}
-		MethodDescriptor[] all = eventSet.getListenerMethodDescriptors();
-		for (MethodDescriptor mthd : all) {
-			Method m = mthd.getMethod();
-			Class[] ptypes = m.getParameterTypes();
-			String pcName = ptypes[0].getName();
-			pcName = imports.addImport(pcName);
-			String pcSig = Signature.createTypeSignature(pcName, false);
-			IMethod imthd = meType.getMethod(m.getName(), new String[] { pcSig });
-			if (!imthd.exists()) {
-				if (methods.get(mthd) != null) {
-					StringBuilder builder = new StringBuilder();
-					if (override)
-						builder.append("@Override\n");
-					builder.append(createEventMethodStub(monitor, meType, m, pcName));
-					return createEventMethod(meType, builder.toString(), monitor);
-				} else {
-					if (!override) {
-						return createEventMethod(meType, createEventMethodStub(monitor, meType, m, pcName), monitor);
-					}
-				}
-			} else {
-				if (methods.get(mthd) == null) {
-					if (override) {
-						try {
-							imthd.delete(true, monitor);
-						} catch (JavaModelException e) {
-							e.printStackTrace();
-							return false;
-						}
-					}
-				}
+		if (!hasInter) {
+			addImplInterface(type, cName);
+			Method[] listMethods = eventSet.getListenerMethods();
+			for (Method mthd : listMethods) {
+				addInterfaceMethod(type, imports, monitor, mthd);
 			}
 		}
 		return true;
 	}
 
-	private boolean createEventMethod(IType meType, String code, IProgressMonitor monitor) {
-		try {
-			meType.createMethod(code, null, false, monitor);
-			return true;
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-			return false;
+	private void addInterfaceMethod(IType type, ImportRewrite imports,
+			IProgressMonitor monitor, Method mthd) {
+		String mName = mthd.getName();
+		Class<?>[] pTypes = mthd.getParameterTypes();
+		String eventName = pTypes[0].getName();
+		eventName = imports.addImport(eventName);
+		String eventSig = Signature.createTypeSignature(eventName, false);
+		IMethod imthd = type.getMethod(mName, new String[] { eventSig });
+		if (!imthd.exists()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append("public void " + mName + "(");
+			builder.append(eventName
+					+ " event){\n//TODO Add event code here.\n}\n");
+			String content = builder.toString();
+			try {
+				type.createMethod(content, null, false, monitor);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private String createEventMethodStub(IProgressMonitor monitor, IType meType, Method m, String pcName) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("public void " + m.getName() + "(");
-		builder.append(pcName + " event){\n");
-		builder.append("}\n");
-		return builder.toString();
+	@SuppressWarnings("unchecked")
+	private void addImplInterface(IType type, String cName) {
+		try {
+			ICompilationUnit icunit = type.getCompilationUnit();
+			String source = icunit.getBuffer().getContents();
+			Document document = new Document(source);
+			ASTParser parser = ASTParser.newParser(AST.JLS3);
+			parser.setSource(icunit);
+			CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
+			cunit.recordModifications();
+			AST ast = cunit.getAST();
+			TypeDeclaration typeDec = (TypeDeclaration) cunit.types().get(0);
+			List list = typeDec.superInterfaceTypes();
+			Name name = ast.newName(cName);
+			Type interfaceType = ast.newSimpleType(name);
+			list.add(interfaceType);
+			TextEdit edits = cunit.rewrite(document, icunit.getJavaProject()
+					.getOptions(true));
+			edits.apply(document);
+			String newSource = document.get();
+			icunit.getBuffer().setContents(newSource);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public String createListenerInstance(ImportRewrite imports) {
-		return "new " + className + "(" + (parameters == null ? "" : parameters) + ")";
+		return "this";
 	}
 
 	@Override
@@ -158,25 +151,26 @@ public class InnerClassModel implements IEventListenerModel {
 			int dot = pname.lastIndexOf('.');
 			if (dot != -1)
 				pname = pname.substring(dot + 1);
-			
+
 			String eventTypeSig = Signature.createTypeSignature(pname, false);
-			
+
 			IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
-			ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+			ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
+					.getFile());
 			String name = file.getName();
 			dot = name.lastIndexOf('.');
 			if (dot != -1)
 				name = name.substring(0, dot);
 			IType type = unit.getType(name);
-			IType meType = type.getType(className);			
-			IMember member = meType.getMethod(methodDesc.getName(),new String[] {eventTypeSig });
+			IMember member = type.getMethod(methodDesc.getName(),
+					new String[] { eventTypeSig });
 			JavaUI.revealInEditor(editor, (IJavaElement) member);
-		}		
+		}
 	}
 
 	@Override
 	public String getDisplayName(MethodDescriptor methodDesc) {
-		return className + "." + methodDesc.getDisplayName();
+		return methodDesc.getDisplayName();
 	}
 
 	@Override
@@ -204,7 +198,6 @@ public class InnerClassModel implements IEventListenerModel {
 		}
 		return success;
 	}
-
 	private boolean createEventMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, TypeDeclaration type) {
 		MethodDeclaration[] mds = type.getMethods();
 		boolean success = false;
@@ -226,6 +219,9 @@ public class InnerClassModel implements IEventListenerModel {
 			}
 		}
 		return success;
+	}
+	private String getGetMethodName(String fieldName) {
+		return NamespaceManager.getInstance().getGetMethodName(fieldName);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -250,7 +246,6 @@ public class InnerClassModel implements IEventListenerModel {
 		}
 		return success;
 	}
-
 	private boolean processWidgetCreationStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener,
 			Statement statement) {
 		ExpressionStatement expressionStatement = (ExpressionStatement) statement;
@@ -274,7 +269,6 @@ public class InnerClassModel implements IEventListenerModel {
 		} else
 			return false;
 	}
-
 	private boolean createAddMethod(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		Method addm = esd.getAddListenerMethod();
 		String addmName = addm.getName();
@@ -284,66 +278,23 @@ public class InnerClassModel implements IEventListenerModel {
 		} else
 			return false;
 	}
-
 	@SuppressWarnings("unchecked")
 	private boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener,
 			MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {
 			Expression argExpression = (Expression) arg;
-			if (argExpression instanceof ClassInstanceCreation) {
-				ClassInstanceCreation cic = (ClassInstanceCreation) argExpression;
-				AnonymousClassDeclaration acd = cic.getAnonymousClassDeclaration();
-				if (acd != null) {
-					return false;
-				} else {
-					Type typeName = cic.getType();
-					if (typeName instanceof SimpleType) {
-						SimpleType simpleType = (SimpleType) typeName;
-						className = simpleType.getName().getFullyQualifiedName();
-						List args = cic.arguments();
-						if (args != null && args.size() > 0) {
-							StringBuilder builder = new StringBuilder();
-							for (int i = 0; i < args.size(); i++) {
-								Object para = args.get(i);
-								if (i != 0)
-									builder.append(",");
-								builder.append(para);
-							}
-							parameters = builder.toString();
-						} else
-							parameters = null;
-						TypeDeclaration[] innerTypes = type.getTypes();
-						if (innerTypes != null) {
-							for (TypeDeclaration innerDec : innerTypes) {
-								if (innerDec.getName().getFullyQualifiedName().equals(className)) {
-									String mListenerName = mListener.getName();
-									MethodDeclaration[] mds = innerDec.getMethods();
-									for (MethodDeclaration md : mds) {
-										if (md.getName().getFullyQualifiedName().equals(mListenerName)) {
-											addMethod(mListener);
-											return true;
-										}
-									}
-								}
-							}
-						}
-						return false;
-					} else
-						return false;
-				}
+			if (argExpression instanceof ThisExpression) {
+				addMethod(mListener);
+				return true;
 			} else
 				return false;
 		}
 		return false;
-	}
-
-	private String getGetMethodName(String fieldName) {
-		return NamespaceManager.getInstance().getGetMethodName(fieldName);
-	}
-
+	}	
 	@Override
 	public void removeMethod(MethodDescriptor methodDesc) {
 		methods.remove(methodDesc);
 	}
+
 }
