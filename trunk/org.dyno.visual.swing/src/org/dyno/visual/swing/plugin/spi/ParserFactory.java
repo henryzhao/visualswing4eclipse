@@ -8,6 +8,8 @@
  ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
+import java.beans.EventSetDescriptor;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -64,5 +66,6 @@ public abstract class ParserFactory {
 		return DEFAULT;
 	}
 
-	public abstract IEventListenerModel newDefaultListenerModel();
+	public abstract IEventListenerModel newModel(WidgetAdapter adapter, EventSetDescriptor eventSet);
+	public abstract Iterable<IEventListenerModel> enumerate(WidgetAdapter adapter, EventSetDescriptor eventSet);
 }

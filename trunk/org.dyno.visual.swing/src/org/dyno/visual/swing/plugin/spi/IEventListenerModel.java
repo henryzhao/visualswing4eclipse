@@ -10,14 +10,15 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.ui.IEditorPart;
 
 public interface IEventListenerModel {
+	void init(WidgetAdapter adapter, EventSetDescriptor eventSet);
 	Iterable<MethodDescriptor> methods();
 	String getDisplayName(MethodDescriptor methodDesc);
 	boolean hasMethod(MethodDescriptor methodDesc);
 	void removeMethod(MethodDescriptor methodDesc);
 	boolean isEmpty();
-	void addMethod(WidgetAdapter widgetAdapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc);
+	void addMethod(MethodDescriptor methodDesc);
 	void editMethod(IEditorPart editor, MethodDescriptor methodDesc);
-	boolean createEventMethod(WidgetAdapter adapter, IType type, ImportRewrite imports, IProgressMonitor monitor);
-	String createListenerInstance(EventSetDescriptor eventSet, ImportRewrite imports);
-	boolean parse(WidgetAdapter adapter, TypeDeclaration type,	EventSetDescriptor esd);
+	boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor);
+	String createListenerInstance(ImportRewrite imports);
+	boolean parse(TypeDeclaration type);
 }
