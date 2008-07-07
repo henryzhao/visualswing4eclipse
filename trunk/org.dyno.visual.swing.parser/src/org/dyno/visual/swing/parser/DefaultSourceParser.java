@@ -61,9 +61,11 @@ class DefaultSourceParser implements ISourceParser {
 	private ParserFactory factory;
 	private ICompilationUnit unit;
 	private ImportRewrite imports;
-	public DefaultSourceParser(ParserFactory factory){
+
+	public DefaultSourceParser(ParserFactory factory) {
 		this.factory = factory;
 	}
+
 	@Override
 	public WidgetAdapter getResult() {
 		return result;
@@ -85,43 +87,34 @@ class DefaultSourceParser implements ISourceParser {
 		return false;
 	}
 
-	private boolean processType(ICompilationUnit unit, IType type)
-			throws JavaModelException {
+	private boolean processType(ICompilationUnit unit, IType type) throws JavaModelException {
 		try {
-			unit.getJavaProject().getProject().build(
-					IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+			unit.getJavaProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			IClasspathEntry[] classpaths = java_project
-					.getResolvedClasspath(true);
+			IClasspathEntry[] classpaths = java_project.getResolvedClasspath(true);
 			ArrayList<URL> paths = new ArrayList<URL>();
 			for (IClasspathEntry path : classpaths) {
 				paths.add(path.getPath().toFile().toURI().toURL());
 			}
-			IPath wsPath = java_project.getProject().getWorkspace().getRoot()
-					.getRawLocation();
-			paths.add(wsPath.append(java_project.getOutputLocation()).toFile()
-					.toURI().toURL());
+			IPath wsPath = java_project.getProject().getWorkspace().getRoot().getRawLocation();
+			paths.add(wsPath.append(java_project.getOutputLocation()).toFile().toURI().toURL());
 			URL[] urls = paths.toArray(new URL[paths.size()]);
-			Class<?> beanClass = new URLClassLoader(urls, getClass()
-					.getClassLoader()).loadClass(className);
+			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
 			if (JComponent.class.isAssignableFrom(beanClass)) {
 				try {
 					setUpLookAndFeel(beanClass);
 				} catch (Exception e) {
-					Shell parent = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow().getShell();
+					Shell parent = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 					MessageDialog.openError(parent, "Error!", e.getMessage());
 					return false;
 				}
 				try {
 					JComponent bean = (JComponent) beanClass.newInstance();
-					WidgetAdapter beanAdapter = ExtensionRegistry
-							.createWidgetAdapter(bean);
+					WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
 					parser.setSource(this.unit);
-					CompilationUnit cunit = (CompilationUnit) parser
-							.createAST(null);
+					CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
 					createWidgetEvent(cunit, beanAdapter);
 					initDesignedWidget(cunit, bean);
 					result = beanAdapter;
@@ -143,8 +136,7 @@ class DefaultSourceParser implements ISourceParser {
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager
-						.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
@@ -167,14 +159,10 @@ class DefaultSourceParser implements ISourceParser {
 				} catch (Exception e) {
 				}
 			} else {
-				throw new Exception(
-						lnf
-								+ " specified in this class is not a supported LAF on this java platform!");
+				throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
 			}
 		} else
-			throw new Exception(
-					lnf
-							+ " specified in this class is not a supported LAF on this java platform!");
+			throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -189,8 +177,7 @@ class DefaultSourceParser implements ISourceParser {
 				try {
 					JComponent fieldComponent = (JComponent) field.get(bean);
 					if (fieldComponent != null) {
-						WidgetAdapter adapter = ExtensionRegistry
-								.createWidgetAdapter(fieldComponent);
+						WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
 						String widgetName = getNameFromFieldName(fieldName);
 						adapter.setName(widgetName);
 						adapter.setLastName(widgetName);
@@ -204,20 +191,21 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	private void createWidgetEvent(CompilationUnit cunit, WidgetAdapter adapter) {
-		EventSetDescriptor[] esds = adapter.getBeanInfo()
-				.getEventSetDescriptors();
+		EventSetDescriptor[] esds = adapter.getBeanInfo().getEventSetDescriptors();
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
 		if (esds != null && esds.length > 0) {
 			for (EventSetDescriptor esd : esds) {
-				Map<EventSetDescriptor, IEventListenerModel> map = adapter
-						.getEventDescriptor();
+				Map<EventSetDescriptor, IEventListenerModel> map = adapter.getEventDescriptor();
 				IEventListenerModel model = map.get(esd);
 				if (model == null) {
-					model = factory.newDefaultListenerModel();
-					if (model.parse(adapter, type, esd))
-						map.put(esd, model);
+					for (IEventListenerModel mod : factory.enumerate(adapter, esd)) {
+						if (mod.parse(type)) {
+							map.put(esd, mod);
+							break;
+						}
+					}
 				} else {
-					model.parse(adapter, type, esd);
+					model.parse(type);
 				}
 			}
 		}
@@ -254,8 +242,7 @@ class DefaultSourceParser implements ISourceParser {
 	private boolean isRegisteredWidget(String sig) {
 		if (sig.startsWith("L") || sig.startsWith("Q")) {
 			String className = sig.substring(1, sig.length() - 1);
-			HashMap<String, IConfigurationElement> widgets = ExtensionRegistry
-					.getRegisteredWidgets();
+			HashMap<String, IConfigurationElement> widgets = ExtensionRegistry.getRegisteredWidgets();
 			int dot = className.lastIndexOf('.');
 			if (dot != -1) {
 				return widgets.get(className) != null;
@@ -311,11 +298,8 @@ class DefaultSourceParser implements ISourceParser {
 					if (lnf != null) {
 						className = lnf.getClass().getName();
 					}
-					String newfield = "private static final "
-							+ imports.addImport("java.lang.String")
-							+ " PREFERRED_LOOK_AND_FEEL = "
-							+ (className == null ? "null" : "\"" + className
-									+ "\"") + ";\n";
+					String newfield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = "
+							+ (className == null ? "null" : "\"" + className + "\"") + ";\n";
 					type.createField(newfield, null, false, monitor);
 				}
 				return success;
@@ -348,20 +332,16 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	private String getFieldNameFromGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(
-				method.getElementName());
+		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(method.getElementName());
 	}
 
 	private boolean isGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().isGetMethodName(
-				method.getElementName());
+		return NamespaceManager.getInstance().isGetMethodName(method.getElementName());
 	}
 
-	private void removeComponent(IType type, String fieldName,
-			IProgressMonitor monitor) {
+	private void removeComponent(IType type, String fieldName, IProgressMonitor monitor) {
 		IField field = type.getField(getFieldName(fieldName));
-		IMethod method = type.getMethod(getGetMethodName(fieldName),
-				new String[0]);
+		IMethod method = type.getMethod(getGetMethodName(fieldName), new String[0]);
 		if (field != null && field.exists()) {
 			try {
 				field.delete(true, monitor);
@@ -401,8 +381,7 @@ class DefaultSourceParser implements ISourceParser {
 			int count = containerAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				JComponent child = containerAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				_listNames(childAdapter, list);
 			}
 		}

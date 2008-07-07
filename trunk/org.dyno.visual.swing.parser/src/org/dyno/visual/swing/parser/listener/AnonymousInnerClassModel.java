@@ -58,8 +58,7 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 	}
 
 	private static void parseListenerAdapterExtensions() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(LISTENER_ADAPTER_EXTENSION);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(LISTENER_ADAPTER_EXTENSION);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -131,15 +130,12 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 	}
 
 	@Override
-	public void addMethod(WidgetAdapter adapter, EventSetDescriptor eventSet,
-			MethodDescriptor methodDesc) {
+	public void addMethod(MethodDescriptor methodDesc) {
 		String methodName;
 		if (adapter.isRoot())
-			methodName = eventSet.getName()
-					+ getCapitalName(methodDesc.getName());
+			methodName = eventSet.getName() + getCapitalName(methodDesc.getName());
 		else
-			methodName = adapter.getName() + getCapitalName(eventSet.getName())
-					+ getCapitalName(methodDesc.getName());
+			methodName = adapter.getName() + getCapitalName(eventSet.getName()) + getCapitalName(methodDesc.getName());
 		IEventMethod content = new EventDelegation(methodDesc, methodName);
 		methods.put(methodDesc, content);
 	}
@@ -155,17 +151,14 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 	}
 
 	@Override
-	public boolean createEventMethod(WidgetAdapter adapter, IType type,
-			ImportRewrite imports, IProgressMonitor monitor) {
+	public boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		for (MethodDescriptor mdesc : methods()) {
-			if (adapter.getLastName() == null || adapter.isRoot()
-					|| adapter.getName().equals(adapter.getLastName())) {
+			if (adapter.getLastName() == null || adapter.isRoot() || adapter.getName().equals(adapter.getLastName())) {
 				IEventMethod content = methods.get(mdesc);
 				String code = content.createEventMethod(type, imports);
 				if (code != null) {
 					try {
-						type.createMethod(WidgetAdapter.formatCode(code), null,
-								false, monitor);
+						type.createMethod(WidgetAdapter.formatCode(code), null, false, monitor);
 					} catch (JavaModelException e) {
 						return false;
 					}
@@ -177,8 +170,7 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public String createListenerInstance(EventSetDescriptor eventSet,
-			ImportRewrite imports) {
+	public String createListenerInstance(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("new ");
 		Class lClass = eventSet.getListenerType();
@@ -216,22 +208,18 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void parse(WidgetAdapter adapter, EventSetDescriptor esd,
-			MethodDescriptor mListener, ClassInstanceCreation instanceExpression) {
-		AnonymousClassDeclaration acd = instanceExpression
-				.getAnonymousClassDeclaration();
+	private void parse(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, ClassInstanceCreation instanceExpression) {
+		AnonymousClassDeclaration acd = instanceExpression.getAnonymousClassDeclaration();
 		List bodys = acd.bodyDeclarations();
 		for (Object element : bodys) {
 			if (element instanceof MethodDeclaration) {
-				processListenerMethod(adapter, esd, mListener,
-						(MethodDeclaration) element);
+				processListenerMethod(adapter, esd, mListener, (MethodDeclaration) element);
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private IEventMethod getDelegatingContent(WidgetAdapter adapter,
-			EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body) {
+	private IEventMethod getDelegatingContent(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body) {
 		List statements = body.statements();
 		if (statements.size() == 1) {
 			Object stmt = statements.get(0);
@@ -242,92 +230,75 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 					MethodInvocation mi = (MethodInvocation) expression;
 					Expression optional = mi.getExpression();
 					if (optional == null) {
-						return new EventDelegation(methodDesc, mi.getName()
-								.getFullyQualifiedName());
+						return new EventDelegation(methodDesc, mi.getName().getFullyQualifiedName());
 					} else if (optional instanceof ThisExpression) {
 						ThisExpression thisExpression = (ThisExpression) optional;
 						Name qName = thisExpression.getQualifier();
 						if (qName != null) {
-							return new EventDelegation(methodDesc, mi.getName()
-									.getFullyQualifiedName());
+							return new EventDelegation(methodDesc, mi.getName().getFullyQualifiedName());
 						} else {
-							return new CodeSnippet(adapter, eventSet,
-									methodDesc, es.toString());
+							return new CodeSnippet(adapter, eventSet, methodDesc, es.toString());
 						}
 					} else {
-						return new CodeSnippet(adapter, eventSet, methodDesc,
-								es.toString());
+						return new CodeSnippet(adapter, eventSet, methodDesc, es.toString());
 					}
 				} else
-					return new CodeSnippet(adapter, eventSet, methodDesc, es
-							.toString());
+					return new CodeSnippet(adapter, eventSet, methodDesc, es.toString());
 			} else
-				return new CodeSnippet(adapter, eventSet, methodDesc, stmt
-						.toString());
+				return new CodeSnippet(adapter, eventSet, methodDesc, stmt.toString());
 		} else {
 			StringBuilder builder = new StringBuilder();
 			for (Object stmt : statements) {
 				builder.append(stmt.toString());
 			}
-			return new CodeSnippet(adapter, eventSet, methodDesc, builder
-					.toString());
+			return new CodeSnippet(adapter, eventSet, methodDesc, builder.toString());
 		}
 	}
 
-	private void processListenerMethod(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			MethodDeclaration methoddec) {
-		if (methoddec.getName().getFullyQualifiedName().equals(
-				mListener.getName())) {
+	private void processListenerMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration methoddec) {
+		if (methoddec.getName().getFullyQualifiedName().equals(mListener.getName())) {
 			Block mbody = methoddec.getBody();
-			IEventMethod content = getDelegatingContent(adapter, esd,
-					mListener, mbody);
+			IEventMethod content = getDelegatingContent(adapter, esd, mListener, mbody);
 			methods.put(mListener, content);
 		}
 	}
 
 	@Override
-	public boolean parse(WidgetAdapter adapter, TypeDeclaration type,
-			EventSetDescriptor esd) {
-		MethodDescriptor[] mListeners = esd
-				.getListenerMethodDescriptors();
-		boolean success=false;
+	public boolean parse(TypeDeclaration type) {
+		MethodDescriptor[] mListeners = eventSet.getListenerMethodDescriptors();
+		boolean success = false;
 		for (MethodDescriptor mListener : mListeners) {
-			if(createEventMethod(adapter, esd, mListener, type))
-				success=true;
+			if (createEventMethod(adapter, eventSet, mListener, type))
+				success = true;
 		}
 		return success;
 	}
 
-	private boolean createEventMethod(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			TypeDeclaration type) {
+	private boolean createEventMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, TypeDeclaration type) {
 		MethodDeclaration[] mds = type.getMethods();
-		boolean success=false;
+		boolean success = false;
 		for (MethodDeclaration md : mds) {
 			String mdName = md.getName().getFullyQualifiedName();
 			if (adapter.isRoot()) {
 				if (mdName.equals("initComponent")) {
-					if(createEventMethodForWidget(adapter, esd, mListener, md))
-						success=true;
+					if (createEventMethodForWidget(adapter, esd, mListener, md))
+						success = true;
 					break;
 				}
 			} else {
 				String getName = getGetMethodName(adapter.getName());
 				if (mdName.equals(getName)) {
-					if(createEventMethodForWidget(adapter, esd, mListener, md))
-						success=true;
+					if (createEventMethodForWidget(adapter, esd, mListener, md))
+						success = true;
 					break;
 				}
 			}
 		}
 		return success;
-	}	
+	}
 
 	@SuppressWarnings("unchecked")
-	private boolean createEventMethodForWidget(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			MethodDeclaration md) {
+	private boolean createEventMethodForWidget(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration md) {
 		Block body = md.getBody();
 		List statements = body.statements();
 		if (!adapter.isRoot()) {
@@ -341,17 +312,14 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 		for (Object stmt : statements) {
 			Statement statement = (Statement) stmt;
 			if (statement instanceof ExpressionStatement) {
-				if(processWidgetCreationStatement(adapter, esd, mListener,
-						statement))
-					success=true;
+				if (processWidgetCreationStatement(adapter, esd, mListener, statement))
+					success = true;
 			}
 		}
 		return success;
 	}
 
-	private boolean processWidgetCreationStatement(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			Statement statement) {
+	private boolean processWidgetCreationStatement(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, Statement statement) {
 		ExpressionStatement expressionStatement = (ExpressionStatement) statement;
 		Expression expression = expressionStatement.getExpression();
 		if (expression instanceof MethodInvocation) {
@@ -367,48 +335,51 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 						return createAddMethod(adapter, esd, mListener, mi);
 					else
 						return false;
-				}else
+				} else
 					return false;
 			}
-		}else
+		} else
 			return false;
 	}
 
-	private boolean createAddMethod(WidgetAdapter adapter, EventSetDescriptor esd,
-			MethodDescriptor mListener, MethodInvocation mi) {
+	private boolean createAddMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		Method addm = esd.getAddListenerMethod();
 		String addmName = addm.getName();
 		String mName = mi.getName().getFullyQualifiedName();
 		if (mName.equals(addmName)) {
 			return processAddListenerStatement(adapter, esd, mListener, mi);
-		}else
+		} else
 			return false;
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean processAddListenerStatement(WidgetAdapter adapter,
-			EventSetDescriptor esd, MethodDescriptor mListener,
-			MethodInvocation mi) {
+	private boolean processAddListenerStatement(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {
 			Expression argExpression = (Expression) arg;
 			if (argExpression instanceof ClassInstanceCreation) {
 				ClassInstanceCreation cic = (ClassInstanceCreation) argExpression;
-				AnonymousClassDeclaration acd = cic
-						.getAnonymousClassDeclaration();
+				AnonymousClassDeclaration acd = cic.getAnonymousClassDeclaration();
 				if (acd != null) {
 					parse(adapter, esd, mListener, cic);
 					return true;
-				}else
+				} else
 					return false;
-			}else
+			} else
 				return false;
 		}
 		return false;
 	}
 
-	
 	private String getGetMethodName(String fieldName) {
 		return NamespaceManager.getInstance().getGetMethodName(fieldName);
-	}	
+	}
+
+	@Override
+	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
+		this.adapter = adapter;
+		this.eventSet = eventSet;
+	}
+	private WidgetAdapter adapter;
+	private EventSetDescriptor eventSet;
 }
