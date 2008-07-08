@@ -110,7 +110,10 @@ public class GlassPlane extends JComponent implements MouseListener {
 	}
 
 	WidgetAdapter getHoveredAdapter() {
-		return target.getHoveredApdater();
+		WidgetAdapter adapter = target.getHoveredApdater();
+		if(adapter!=null)
+			return adapter;
+		return designer.getHoveredAdapter();
 	}
 
 	boolean isWidgetEditing() {

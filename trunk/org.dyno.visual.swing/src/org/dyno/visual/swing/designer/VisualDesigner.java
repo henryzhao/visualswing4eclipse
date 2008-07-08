@@ -43,10 +43,11 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
+
 /**
  * 
  * VisualDesigner
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -83,12 +84,15 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
 	}
-	public VisualSwingEditor getEditor(){
+
+	public VisualSwingEditor getEditor() {
 		return editor;
 	}
-	public String getLnfClassname(){
+
+	public String getLnfClassname() {
 		return editor.getLnfClassname();
 	}
+
 	public Shell getShell() {
 		return editor.getEditorSite().getShell();
 	}
@@ -104,10 +108,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public JComponent getRoot() {
 		return root;
 	}
-	public void setLnfClassname(String lnfClassname){
+
+	public void setLnfClassname(String lnfClassname) {
 		editor.setLnfClassname(lnfClassname);
 		setLnfChanged(true);
 	}
+
 	public void selectWidgets(Rectangle selectionRegion) {
 		if (root != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root);
@@ -575,5 +581,23 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void setFocus() {
 		glass.setFocus();
+	}
+
+	public WidgetAdapter getHoveredAdapter() {
+		List<JComponent> selected = new WidgetSelection(root);
+		if(selected.isEmpty())
+			return null;
+		WidgetAdapter parent = null;
+		for(JComponent comp:selected){
+			WidgetAdapter compAdapter = WidgetAdapter.getWidgetAdapter(comp);
+			if(parent==null){
+				if(compAdapter.isRoot())
+					return null;
+				parent=compAdapter.getParentAdapter();
+			}else if(parent!=compAdapter.getParentAdapter()){
+				return null;
+			}
+		}
+		return parent;
 	}
 }

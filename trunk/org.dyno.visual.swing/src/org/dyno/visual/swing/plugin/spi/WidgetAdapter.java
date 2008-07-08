@@ -113,6 +113,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	private static HashMap<String, String> used_names = new HashMap<String, String>();
 	private static Color SELECTION_COLOR = new Color(255, 164, 0);
+	
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;

@@ -5,7 +5,6 @@ import java.beans.MethodDescriptor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.ui.IEditorPart;
 
@@ -20,5 +19,4 @@ public interface IEventListenerModel {
 	void editMethod(IEditorPart editor, MethodDescriptor methodDesc);
 	boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor);
 	String createListenerInstance(ImportRewrite imports);
-	boolean parse(TypeDeclaration type);
 }

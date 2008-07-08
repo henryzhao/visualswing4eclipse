@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 /**
  * 
  * ParserFactory
@@ -67,5 +68,5 @@ public abstract class ParserFactory {
 	}
 
 	public abstract IEventListenerModel newModel(WidgetAdapter adapter, EventSetDescriptor eventSet);
-	public abstract Iterable<IEventListenerModel> enumerate(WidgetAdapter adapter, EventSetDescriptor eventSet);
+	public abstract void parseEventListener(WidgetAdapter adapter, TypeDeclaration type, EventSetDescriptor esd);
 }
