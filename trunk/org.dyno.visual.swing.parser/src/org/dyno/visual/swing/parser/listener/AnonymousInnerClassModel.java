@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dyno.visual.swing.base.NamespaceManager;
-import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -25,19 +24,16 @@ import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.ui.IEditorPart;
 import org.osgi.framework.Bundle;
 
-public class AnonymousInnerClassModel implements IEventListenerModel {
+public class AnonymousInnerClassModel extends AbstractClassModel {
 	@SuppressWarnings("unchecked")
 	private static HashMap<Class, Class> listenerAdapters;
 	public static final String LISTENER_ADAPTER_EXTENSION = "org.dyno.visual.swing.listenerAdapter";
@@ -264,96 +260,8 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 	}
 
 	@Override
-	public boolean parse(TypeDeclaration type) {
-		MethodDescriptor[] mListeners = eventSet.getListenerMethodDescriptors();
-		boolean success = false;
-		for (MethodDescriptor mListener : mListeners) {
-			if (createEventMethod(adapter, eventSet, mListener, type))
-				success = true;
-		}
-		return success;
-	}
-
-	private boolean createEventMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, TypeDeclaration type) {
-		MethodDeclaration[] mds = type.getMethods();
-		boolean success = false;
-		for (MethodDeclaration md : mds) {
-			String mdName = md.getName().getFullyQualifiedName();
-			if (adapter.isRoot()) {
-				if (mdName.equals("initComponent")) {
-					if (createEventMethodForWidget(adapter, esd, mListener, md))
-						success = true;
-					break;
-				}
-			} else {
-				String getName = getGetMethodName(adapter.getName());
-				if (mdName.equals(getName)) {
-					if (createEventMethodForWidget(adapter, esd, mListener, md))
-						success = true;
-					break;
-				}
-			}
-		}
-		return success;
-	}
-
 	@SuppressWarnings("unchecked")
-	private boolean createEventMethodForWidget(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration md) {
-		Block body = md.getBody();
-		List statements = body.statements();
-		if (!adapter.isRoot()) {
-			IfStatement ifstatement = (IfStatement) statements.get(0);
-			Statement thenstatement = ifstatement.getThenStatement();
-			if (thenstatement instanceof Block) {
-				statements = ((Block) thenstatement).statements();
-			}
-		}
-		boolean success = false;
-		for (Object stmt : statements) {
-			Statement statement = (Statement) stmt;
-			if (statement instanceof ExpressionStatement) {
-				if (processWidgetCreationStatement(adapter, esd, mListener, statement))
-					success = true;
-			}
-		}
-		return success;
-	}
-
-	private boolean processWidgetCreationStatement(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, Statement statement) {
-		ExpressionStatement expressionStatement = (ExpressionStatement) statement;
-		Expression expression = expressionStatement.getExpression();
-		if (expression instanceof MethodInvocation) {
-			MethodInvocation mi = (MethodInvocation) expression;
-			if (adapter.isRoot()) {
-				return createAddMethod(adapter, esd, mListener, mi);
-			} else {
-				Expression optionalExpression = mi.getExpression();
-				if (optionalExpression instanceof SimpleName) {
-					SimpleName simplename = (SimpleName) optionalExpression;
-					String idName = simplename.getFullyQualifiedName();
-					if (idName.equals(adapter.getName()))
-						return createAddMethod(adapter, esd, mListener, mi);
-					else
-						return false;
-				} else
-					return false;
-			}
-		} else
-			return false;
-	}
-
-	private boolean createAddMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
-		Method addm = esd.getAddListenerMethod();
-		String addmName = addm.getName();
-		String mName = mi.getName().getFullyQualifiedName();
-		if (mName.equals(addmName)) {
-			return processAddListenerStatement(adapter, esd, mListener, mi);
-		} else
-			return false;
-	}
-
-	@SuppressWarnings("unchecked")
-	private boolean processAddListenerStatement(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
+	protected boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {
 			Expression argExpression = (Expression) arg;
@@ -370,16 +278,4 @@ public class AnonymousInnerClassModel implements IEventListenerModel {
 		}
 		return false;
 	}
-
-	private String getGetMethodName(String fieldName) {
-		return NamespaceManager.getInstance().getGetMethodName(fieldName);
-	}
-
-	@Override
-	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
-		this.adapter = adapter;
-		this.eventSet = eventSet;
-	}
-	private WidgetAdapter adapter;
-	private EventSetDescriptor eventSet;
 }

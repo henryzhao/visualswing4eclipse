@@ -15,7 +15,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
@@ -24,7 +23,6 @@ import javax.swing.UIManager;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
@@ -115,7 +113,7 @@ class DefaultSourceParser implements ISourceParser {
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
 					parser.setSource(this.unit);
 					CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
-					createWidgetEvent(cunit, beanAdapter);
+					parseEventListener(cunit, beanAdapter);
 					initDesignedWidget(cunit, bean);
 					result = beanAdapter;
 				} catch (Error re) {
@@ -128,7 +126,30 @@ class DefaultSourceParser implements ISourceParser {
 		}
 		return false;
 	}
-
+	@SuppressWarnings("unchecked")
+	private void initDesignedWidget(CompilationUnit cunit, JComponent bean) {
+		Class clazz = bean.getClass();
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			Class type = field.getType();
+			String fieldName = field.getName();
+			if (JComponent.class.isAssignableFrom(type)) {
+				field.setAccessible(true);
+				try {
+					JComponent fieldComponent = (JComponent) field.get(bean);
+					if (fieldComponent != null) {
+						WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
+						String widgetName = getNameFromFieldName(fieldName);
+						adapter.setName(widgetName);
+						adapter.setLastName(widgetName);
+						parseEventListener(cunit, adapter);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	@SuppressWarnings("unchecked")
 	private static String getBeanClassLnf(Class beanClass) {
 		try {
@@ -165,48 +186,12 @@ class DefaultSourceParser implements ISourceParser {
 			throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
 	}
 
-	@SuppressWarnings("unchecked")
-	private void initDesignedWidget(CompilationUnit cunit, JComponent bean) {
-		Class clazz = bean.getClass();
-		Field[] fields = clazz.getDeclaredFields();
-		for (Field field : fields) {
-			Class type = field.getType();
-			String fieldName = field.getName();
-			if (JComponent.class.isAssignableFrom(type)) {
-				field.setAccessible(true);
-				try {
-					JComponent fieldComponent = (JComponent) field.get(bean);
-					if (fieldComponent != null) {
-						WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
-						String widgetName = getNameFromFieldName(fieldName);
-						adapter.setName(widgetName);
-						adapter.setLastName(widgetName);
-						createWidgetEvent(cunit, adapter);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	private void createWidgetEvent(CompilationUnit cunit, WidgetAdapter adapter) {
+	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) {
 		EventSetDescriptor[] esds = adapter.getBeanInfo().getEventSetDescriptors();
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
 		if (esds != null && esds.length > 0) {
 			for (EventSetDescriptor esd : esds) {
-				Map<EventSetDescriptor, IEventListenerModel> map = adapter.getEventDescriptor();
-				IEventListenerModel model = map.get(esd);
-				if (model == null) {
-					for (IEventListenerModel mod : factory.enumerate(adapter, esd)) {
-						if (mod.parse(type)) {
-							map.put(esd, mod);
-							break;
-						}
-					}
-				} else {
-					model.parse(type);
-				}
+				factory.parseEventListener(adapter, type, esd);
 			}
 		}
 	}
