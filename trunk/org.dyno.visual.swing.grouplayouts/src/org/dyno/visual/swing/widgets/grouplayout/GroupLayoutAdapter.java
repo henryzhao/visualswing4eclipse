@@ -16,6 +16,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.ArrayList;
@@ -43,8 +44,8 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private static Color BASELINE_COLOR = new Color(143, 171, 196);
-	private static Stroke STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 4, 2 }, 0);
-
+	private static Stroke STROKE1 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 4, 2 }, 0);
+    private static Stroke STROKE2 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1, 1 }, 0);
 	private boolean hovered;
 	private List<Quartet> horizontal_baseline;
 	private List<Quartet> vertical_baseline;
@@ -91,7 +92,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	void setHovered(boolean hovered) {
 		this.hovered = hovered;
 	}
-
+	private static final int BOX = 5;
 	@Override
 	public void paintFocused(Graphics g) {
 	}
@@ -102,7 +103,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			Graphics2D g2d = (Graphics2D) g;
 			Stroke old = g2d.getStroke();
 			g2d.setColor(BASELINE_COLOR);
-			g2d.setStroke(STROKE);
+			g2d.setStroke(STROKE1);
 			if (horizontal_baseline != null) {
 				for (Quartet trio : horizontal_baseline) {
 					g2d.drawLine(trio.start, trio.axis, trio.end, trio.axis);
@@ -115,7 +116,92 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			}
 			g2d.setStroke(old);
 		} else {
-			// TODO Adding achor
+			Graphics2D g2d = (Graphics2D) g;
+			Stroke old = g2d.getStroke();
+			g2d.setColor(BASELINE_COLOR);
+			g2d.setStroke(STROKE2);
+			GroupLayout layout = (GroupLayout) container.getLayout();
+			int width = container.getWidth();
+			int height = container.getHeight();
+			CompositeAdapter adapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+			int count = adapter.getChildCount();
+			for (int i = 0; i < count; i++) {
+				JComponent child = adapter.getChild(i);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				if (childAdapter.isSelected()) {
+					Constraints constraints = layout.getConstraints(child);
+					Alignment horizontal = constraints.getHorizontal();
+					int y = child.getY() + child.getHeight() / 2;
+					int x = 0;
+					if (horizontal instanceof Leading) {
+						x = ((Leading) horizontal).getLeading();
+						g2d.drawLine(0, y, x, y);
+						Polygon polygon = new Polygon();
+						polygon.addPoint(0, y-BOX+1);
+						polygon.addPoint(0, y+BOX);
+						polygon.addPoint(BOX, y);
+						g2d.fillPolygon(polygon);
+					} else if (horizontal instanceof Trailing) {
+						x = width - ((Trailing) horizontal).getTrailing();
+						g2d.drawLine(width, y, x, y);
+						Polygon polygon = new Polygon();
+						polygon.addPoint(width, y-BOX);
+						polygon.addPoint(width, y+BOX-1);
+						polygon.addPoint(width - BOX, y);
+						g2d.fillPolygon(polygon);
+					} else if (horizontal instanceof Bilateral) {
+						x = ((Bilateral) horizontal).getLeading();
+						g2d.drawLine(0, y, x, y);
+						Polygon polygon = new Polygon();
+						polygon.addPoint(0, y-BOX+1);
+						polygon.addPoint(0, y+BOX);
+						polygon.addPoint(BOX, y);
+						g2d.fillPolygon(polygon);
+						x = width - ((Bilateral) horizontal).getTrailing();
+						g2d.drawLine(width, y, x, y);
+						polygon = new Polygon();
+						polygon.addPoint(width, y-BOX);
+						polygon.addPoint(width, y+BOX-1);
+						polygon.addPoint(width - BOX, y);
+						g2d.fillPolygon(polygon);
+					}
+					Alignment vertical = constraints.getVertical();
+					x = child.getX() + child.getWidth() / 2;
+					if (vertical instanceof Leading) {
+						y = ((Leading) vertical).getLeading();
+						g2d.drawLine(x, 0, x, y);
+						Polygon polygon = new Polygon();
+						polygon.addPoint(x-BOX+1, 0);
+						polygon.addPoint(x+BOX, 0);
+						polygon.addPoint(x, BOX);
+						g2d.fillPolygon(polygon);
+					} else if (vertical instanceof Trailing) {
+						y = height - ((Trailing) vertical).getTrailing();
+						g2d.drawLine(x, height, x, y);
+						Polygon polygon = new Polygon();
+						polygon.addPoint(x-BOX, height);
+						polygon.addPoint(x+BOX-1, height);
+						polygon.addPoint(x, height-BOX);
+						g2d.fillPolygon(polygon);
+					} else if (vertical instanceof Bilateral) {
+						y = ((Bilateral) vertical).getLeading();
+						g2d.drawLine(x, 0, x, y);
+						Polygon polygon = new Polygon();
+						polygon.addPoint(x-BOX+1, 0);
+						polygon.addPoint(x+BOX, 0);
+						polygon.addPoint(x, BOX);
+						g2d.fillPolygon(polygon);
+						y = height - ((Bilateral) vertical).getTrailing();
+						g2d.drawLine(x, height, x, y);
+						polygon = new Polygon();
+						polygon.addPoint(x-BOX, height);
+						polygon.addPoint(x+BOX-1, height);
+						polygon.addPoint(x, height-BOX);
+						g2d.fillPolygon(polygon);
+					}
+				}
+			}
+			g2d.setStroke(old);
 		}
 	}
 
@@ -255,12 +341,15 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		int count = container.getComponentCount();
 		HashMap<JComponent, Constraints> comps = new HashMap<JComponent, Constraints>();
 		ArrayList<JComponent> array = new ArrayList<JComponent>();
-		Spring spring = new Spring(10, 10);// TODO should be replaced by
-		// container gap.
+		LayoutStyle style = LayoutStyle.getInstance();
 		for (int i = 0; i < count; i++) {
 			JComponent widget = (JComponent) container.getComponent(i);
+			int gap = style.getContainerGap(widget, SwingConstants.EAST, container);
 			Rectangle bounds = widget.getBounds();
+			Spring spring = new Spring(gap, gap);
 			Leading horizontal = new Leading(bounds.x, bounds.width, spring);
+			gap = style.getContainerGap(widget, SwingConstants.SOUTH, container);
+			spring = new Spring(gap, gap);
 			Leading vertical = new Leading(bounds.y, bounds.height, spring);
 			Constraints constraints = new Constraints(horizontal, vertical);
 			comps.put(widget, constraints);
