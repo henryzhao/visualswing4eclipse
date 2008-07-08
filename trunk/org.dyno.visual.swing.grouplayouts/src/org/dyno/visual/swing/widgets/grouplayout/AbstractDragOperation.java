@@ -69,19 +69,15 @@ abstract class AbstractDragOperation implements IDragOperation {
 		int max_anchor = getMax(anchor);
 		switch (direction) {
 		case 0:
+			if (max_trios <= min_anchor)
+				return -1;
+			if (max_anchor <= min_trios)
+				return 1;
 			return 0;
 		case 1:
-			if (max_trios <= min_anchor)
-				return -1;
-			if (max_anchor <= min_trios)
-				return 1;
-			return 0;
+			return -1;
 		case -1:
-			if (max_trios <= min_anchor)
-				return 1;
-			if (max_anchor <= min_trios)
-				return -1;
-			return 0;
+			return 1;
 		}
 		return 0;
 	}
