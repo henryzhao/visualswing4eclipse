@@ -551,9 +551,11 @@
          -->
    </extension>
    <extension
-         point="org.dyno.visual.swing.widgetGroup">
-         <group id="component" displayName="Component"/>         
-         <group id="container" displayName="Container"/>
+         point="org.dyno.visual.swing.widgetGroup">         
+         <group
+               displayName="Container"
+               id="container"/>
+         <group id="component" displayName="Component"/>
    </extension>     
    <extension
          point="org.dyno.visual.swing.propertyCategory">
