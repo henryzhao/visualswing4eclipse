@@ -82,27 +82,7 @@ import org.osgi.framework.Bundle;
  * @author William Chen
  */
 public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
-		IPropertySourceProvider {
-	public static final String ADAPTER_PROPERTY = "widget.adapter";
-	public static final int OUTER = 0;
-	public static final int INNER = 1;
-	public static final int LEFT_TOP = 2;
-	public static final int TOP = 3;
-	public static final int RIGHT_TOP = 4;
-	public static final int RIGHT = 5;
-	public static final int RIGHT_BOTTOM = 6;
-	public static final int BOTTOM = 7;
-	public static final int LEFT_BOTTOM = 8;
-	public static final int LEFT = 9;
-	public static final int ADHERE_PAD = 6;
-
-	public static final int ACCESS_PRIVATE = 0;
-	public static final int ACCESS_DEFAULT = 1;
-	public static final int ACCESS_PROTECTED = 2;
-	public static final int ACCESS_PUBLIC = 3;
-
-	private static Color SELECTION_COLOR = new Color(255, 164, 0);
-
+		IPropertySourceProvider, IConstants {
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;

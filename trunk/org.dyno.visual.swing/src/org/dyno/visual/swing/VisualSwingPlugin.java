@@ -8,17 +8,12 @@
  ******************************************************************************/
 package org.dyno.visual.swing;
 
-import java.util.HashMap;
-
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -30,17 +25,6 @@ import org.osgi.framework.BundleContext;
  * @author William Chen
  */
 public class VisualSwingPlugin extends AbstractUIPlugin {
-	private static final String DRAGGING_CURSOR_ICON = "/icons/dragging.gif";
-	private Cursor draggingGesture;
-	private HashMap<Integer, Cursor> cursors;
-	private Display display;
-
-	private void initializeCursor() {
-		display = PlatformUI.getWorkbench().getDisplay();
-		draggingGesture = new Cursor(display, VisualSwingPlugin.getSharedImage(DRAGGING_CURSOR_ICON).getImageData(), 0, 0);
-		cursors = new HashMap<Integer, Cursor>();
-	}
-
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.dyno.visual.swing";
 
@@ -55,19 +39,6 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public VisualSwingPlugin() {
-	}
-
-	public Cursor getCursor(int style) {
-		Cursor cursor = cursors.get(style);
-		if (cursor == null) {
-			cursor = new Cursor(display, style);
-			cursors.put(style, cursor);
-		}
-		return cursor;
-	}
-
-	public Cursor getDraggingGesture() {
-		return draggingGesture;
 	}
 
 	public static IWorkbenchPage getActivePage() {
@@ -85,7 +56,6 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		initializeCursor();		
 	}
 
 	/*
@@ -95,14 +65,6 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		if (draggingGesture != null) {
-			draggingGesture.dispose();
-			draggingGesture = null;
-		}
-		for (Cursor cursor : cursors.values()) {
-			cursor.dispose();
-		}
-		cursors = null;
 		super.stop(context);
 	}
 
