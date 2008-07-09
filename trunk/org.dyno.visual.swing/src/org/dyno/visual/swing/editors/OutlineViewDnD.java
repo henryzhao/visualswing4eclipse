@@ -1,3 +1,11 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import java.awt.Container;
@@ -23,7 +31,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-public class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
+class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 	private TreeViewer treeView;
 	private Tree tree;
 	private TreeItem[] treeItems;

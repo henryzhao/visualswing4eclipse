@@ -1,9 +1,17 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
 
-public class JComponentTransfer extends ByteArrayTransfer {
+class JComponentTransfer extends ByteArrayTransfer {
 	private static int JCOMPONENT_TRANSFER_TYPE_ID;
 	static{
 		JCOMPONENT_TRANSFER_TYPE_ID=registerType("JComponent_Transfer");

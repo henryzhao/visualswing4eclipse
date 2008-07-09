@@ -138,7 +138,10 @@ public class PaletteView extends ViewPart implements SelectionListener {
 		ToolBar toolbar = toolbars.get(id);
 		if (toolbar == null) {
 			ExpandableComposite expandItem = new ExpandableComposite(bar, SWT.NONE);
-			expandItem.setExpanded(true);
+			String sExpanded=config.getAttribute("expanded");
+			if(sExpanded==null||sExpanded.trim().length()==0)
+				sExpanded="true";
+			expandItem.setExpanded(sExpanded.equals("true"));
 			expandItem.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
 			expandItem.setText(displayName);			
 			expandItem.addExpansionListener(new ExpansionAdapter(){
