@@ -37,7 +37,12 @@ import javax.swing.border.Border;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.Item;
+import org.dyno.visual.swing.base.ItemProvider;
+import org.dyno.visual.swing.base.ItemProviderCellEditorFactory;
+import org.dyno.visual.swing.base.ItemProviderLabelProviderFactory;
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.PropertyAdapter;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry.Category;
@@ -75,8 +80,13 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
@@ -113,7 +123,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	private static HashMap<String, String> used_names = new HashMap<String, String>();
 	private static Color SELECTION_COLOR = new Color(255, 164, 0);
-	
+
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;
@@ -505,8 +515,177 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	public IPropertySource getPropertySource(Object object) {
 		ArrayList<IWidgetPropertyDescriptor> propdesc = getPropertyDescriptors();
+		if (!isRoot()) {
+			propdesc.add(new BeanNameProperty());
+			propdesc.add(new FieldAccessProperty());
+			propdesc.add(new GetAccessProperty());
+		}
 		IWidgetPropertyDescriptor[] properties = propdesc.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
 		return new PropertySource2(getLnfClassname(), getWidget(), properties);
+	}
+
+	class BeanNameValidator implements ICellEditorValidator {
+		@Override
+		public String isValid(Object value) {
+			String name = (String) value;
+			try {
+				validateName(name);
+				return null;
+			} catch (Exception e) {
+				return e.getMessage();
+			}
+		}
+
+	}
+
+	static class AccessItems implements ItemProvider {
+
+		private static Item[] VALUE_ITEMS = { new Item("private", ACCESS_PRIVATE, null), new Item("package", ACCESS_DEFAULT, null),
+				new Item("protected", ACCESS_PROTECTED, null), new Item("public", ACCESS_PUBLIC, null) };
+
+		public AccessItems() {
+		}
+
+		@Override
+		public Item[] getItems() {
+			return VALUE_ITEMS;
+		}
+	}
+
+	static class AccessEditor extends ItemProviderCellEditorFactory {
+		public AccessEditor() {
+			super(new AccessItems());
+		}
+	}
+
+	static class AccessRenderer extends ItemProviderLabelProviderFactory {
+		public AccessRenderer() {
+			super(new AccessItems());
+		}
+	}
+
+	class GetAccessProperty extends PropertyAdapter {
+		private AccessEditor editorFactory = new AccessEditor();
+		private AccessRenderer rendererFactory = new AccessRenderer();
+
+		@Override
+		public Object getPropertyValue(Object bean) {
+			return WidgetAdapter.this.getAccess;
+		}
+
+		@Override
+		public void setPropertyValue(Object bean, Object value) {
+			WidgetAdapter.this.getAccess = value == null ? ACCESS_PRIVATE : (Integer) value;
+			setDirty(true);
+			changeNotify();
+		}
+
+		@Override
+		public CellEditor createPropertyEditor(Composite parent) {
+			return editorFactory.createPropertyEditor(WidgetAdapter.this, parent);
+		}
+
+		@Override
+		public String getCategory() {
+			return "Code";
+		}
+
+		@Override
+		public String getDisplayName() {
+			return "Access Method Modifier";
+		}
+
+		@Override
+		public Object getId() {
+			return "get_access";
+		}
+
+		@Override
+		public ILabelProvider getLabelProvider() {
+			return rendererFactory.getLabelProvider();
+		}
+	}
+
+	class FieldAccessProperty extends PropertyAdapter {
+		private AccessEditor editorFactory = new AccessEditor();
+		private AccessRenderer rendererFactory = new AccessRenderer();
+
+		@Override
+		public Object getPropertyValue(Object bean) {
+			return WidgetAdapter.this.fieldAccess;
+		}
+
+		@Override
+		public void setPropertyValue(Object bean, Object value) {
+			WidgetAdapter.this.fieldAccess = value == null ? ACCESS_PRIVATE : (Integer) value;
+			setDirty(true);
+			changeNotify();
+		}
+
+		@Override
+		public CellEditor createPropertyEditor(Composite parent) {
+			return editorFactory.createPropertyEditor(WidgetAdapter.this, parent);
+		}
+
+		@Override
+		public String getCategory() {
+			return "Code";
+		}
+
+		@Override
+		public String getDisplayName() {
+			return "Bean Field Modifier";
+		}
+
+		@Override
+		public Object getId() {
+			return "field_access";
+		}
+
+		@Override
+		public ILabelProvider getLabelProvider() {
+			return rendererFactory.getLabelProvider();
+		}
+	}
+
+	class BeanNameProperty extends PropertyAdapter {
+		@Override
+		public Object getPropertyValue(Object bean) {
+			return getName();
+		}
+
+		@Override
+		public void setPropertyValue(Object bean, Object value) {
+			String name = (String) value;
+			setName(name);
+			if (!isRoot()) {
+				getParentAdapter().setDirty(true);
+			}
+			setDirty(true);
+			changeNotify();
+		}
+
+		@Override
+		public CellEditor createPropertyEditor(Composite parent) {
+			TextCellEditor editor = new TextCellEditor(parent);
+			editor.setValidator(new BeanNameValidator());
+			return editor;
+		}
+
+		@Override
+		public String getCategory() {
+			return "Code";
+		}
+
+		@Override
+		public String getDisplayName() {
+			return "Bean Field Name";
+		}
+
+		@Override
+		public Object getId() {
+			return "bean.name";
+		}
 	}
 
 	public String getLnfClassname() {
@@ -1069,28 +1248,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		return clone;
 	}
 
-	public boolean canImport(List<WidgetAdapter> srcAdapters) {
-		for (WidgetAdapter adapter : srcAdapters) {
-			if (!canImport(adapter))
-				return false;
-		}
-		return true;
-	}
-
-	public boolean canImport(WidgetAdapter srcAdapter) {
-		JComponent src = srcAdapter.getComponent();
-		JComponent target = getWidget();
-		if (SwingUtilities.isDescendingFrom(src, target))
-			return true;
-		if (SwingUtilities.isDescendingFrom(target, src))
-			return false;
-		if (this instanceof CompositeAdapter) {
-			if (((CompositeAdapter) this).canAcceptMoreComponent())
-				return true;
-		}
-		return false;
-	}
-
 	public Image getIconImage() {
 		return iconImage;
 	}
@@ -1179,32 +1336,36 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	private boolean createNonRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		IJavaElement sibling = null;
-		if (getLastName() != null && !getLastName().equals(getName())) {
-			IField lastField = type.getField(getFieldName(getLastName()));
+		if (getLastName() != null) {
+			IField lastField;
+			if (!getLastName().equals(getName())) {
+				lastField = type.getField(getFieldName(getLastName()));
+			} else {
+				lastField = type.getField(getFieldName(getName()));
+			}
 			if (lastField != null && lastField.exists()) {
 				try {
-					lastField.rename(getName(), true, monitor);
+					lastField.delete(true, monitor);
 				} catch (Exception e) {
 					success = false;
 				}
 			}
-		} else {
-			IField field = type.getField(getFieldName(getName()));
-			if (field != null && !field.exists()) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(getAccessCode(fieldAccess));
-				builder.append(" ");
-				String fqcn = getWidget().getClass().getName();
-				String beanName = imports.addImport(fqcn);
-				builder.append(beanName);
-				builder.append(" ");
-				builder.append(getFieldName(getName()));
-				builder.append(";\n");
-				try {
-					type.createField(builder.toString(), sibling, false, monitor);
-				} catch (JavaModelException e) {
-					success = false;
-				}
+		}
+		IField field = type.getField(getFieldName(getName()));
+		if (field != null && !field.exists()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(getAccessCode(fieldAccess));
+			builder.append(" ");
+			String fqcn = getWidget().getClass().getName();
+			String beanName = imports.addImport(fqcn);
+			builder.append(beanName);
+			builder.append(" ");
+			builder.append(getFieldName(getName()));
+			builder.append(";\n");
+			try {
+				type.createField(builder.toString(), sibling, false, monitor);
+			} catch (JavaModelException e) {
+				success = false;
 			}
 		}
 		sibling = null;

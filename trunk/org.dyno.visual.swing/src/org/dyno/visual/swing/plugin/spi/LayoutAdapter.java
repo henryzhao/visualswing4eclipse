@@ -262,8 +262,6 @@ public abstract class LayoutAdapter implements IPropertySourceProvider {
 		container.add(widget);
 	}
 
-	public abstract boolean canAcceptMoreComponent();
-
 	public boolean doAlignment(String id) {
 		return false;
 	}

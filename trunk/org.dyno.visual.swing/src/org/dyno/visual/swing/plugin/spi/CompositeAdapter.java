@@ -142,22 +142,6 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public void showChild(JComponent widget) {
 		widget.setVisible(true);
 	}
-
-	public boolean canAcceptMoreComponent() {
-		return false;
-	}
-
-	public boolean canAddBefore(JComponent hovering) {
-		return false;
-	}
-
-	public boolean canAddAfter(JComponent hovering) {
-		return false;
-	}
-
-	public void addNextComponent(Component dragged) {
-	}
-
 	public void addBefore(JComponent hovering, Component dragged) {
 	}
 

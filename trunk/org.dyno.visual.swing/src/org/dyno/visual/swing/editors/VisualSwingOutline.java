@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -23,15 +22,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -64,32 +56,14 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		treeView.setInput(input);
 		treeView.expandToLevel(2);
 		treeView.addSelectionChangedListener(this);
-		Tree tree = (Tree) treeView.getTree();
-		tree.addDragDetectListener(new DragDetectListener() {
-			@Override
-			public void dragDetected(DragDetectEvent e) {
-				_dragDetected(e);
-			}
-		});
-		tree.addMouseMoveListener(new MouseMoveListener() {
-			@Override
-			public void mouseMove(MouseEvent e) {
-				_mouseMove(e);
-			}
-		});
+		Tree tree = (Tree) treeView.getTree();		
 		tree.addMenuDetectListener(new MenuDetectListener() {
 			@Override
 			public void menuDetected(MenuDetectEvent e) {
 				_showMenu(e);
 			}
 		});
-		tree.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseUp(MouseEvent e) {
-				_mouseUp(e);
-			}
-		});
-		tree.setDragDetect(true);
+		new OutlineViewDnD(designer).attach(treeView);
 	}
 
 	private void _showMenu(MenuDetectEvent e) {
@@ -106,115 +80,6 @@ public class VisualSwingOutline extends ContentOutlinePage {
 					}
 				}
 			}
-		}
-	}
-
-	private boolean isDragging;
-
-	private void _mouseUp(MouseEvent e) {
-		if (currentItems != null) {
-			Tree tree = (Tree) getTreeViewer().getTree();
-			if (isDragging) {
-				TreeItem item = tree.getItem(new Point(e.x, e.y));
-				if (permitDropping(item, currentItems)) {
-					Object object = item.getData();
-					WidgetAdapter targetAdapter = WidgetAdapter.getWidgetAdapter((JComponent) object);
-					for (TreeItem treeitem : currentItems) {
-						Object obj = treeitem.getData();
-						if (obj instanceof JComponent) {
-							WidgetAdapter srcAdapter = WidgetAdapter.getWidgetAdapter((JComponent) obj);
-							if (srcAdapter.getParentAdapter() != targetAdapter) {
-								// TODO Add the dragged component.
-							}
-						}
-					}
-				}
-			}
-			tree.setCursor(VisualSwingPlugin.getDefault().getCursor(SWT.CURSOR_ARROW));
-			tree.setSelection(currentItems);
-		}
-		isDragging = false;
-		currentItems = null;
-	}
-
-	private void _mouseMove(MouseEvent e) {
-		if (isDragging) {
-			Tree tree = (Tree) getTreeViewer().getTree();
-			TreeItem item = tree.getItem(new Point(e.x, e.y));
-			if (item != null) {
-				boolean exists = false;
-				for (TreeItem curItem : currentItems) {
-					if (item == curItem) {
-						exists = true;
-						break;
-					}
-				}
-				if (exists) {
-					tree.setSelection(currentItems);
-				} else {
-					TreeItem[] items = new TreeItem[currentItems.length + 1];
-					System.arraycopy(currentItems, 0, items, 0, currentItems.length);
-					items[currentItems.length] = item;
-					tree.setSelection(items);
-				}
-			}
-			if (permitDropping(item, currentItems)) {
-				if (tree.getCursor() != VisualSwingPlugin.getDefault().getDraggingGesture()) {
-					tree.setCursor(VisualSwingPlugin.getDefault().getDraggingGesture());
-				}
-			} else {
-				if (tree.getCursor() != VisualSwingPlugin.getDefault().getCursor(SWT.CURSOR_NO))
-					tree.setCursor(VisualSwingPlugin.getDefault().getCursor(SWT.CURSOR_NO));
-			}
-		}
-	}
-
-	private boolean permitDropping(TreeItem hovered, TreeItem[] items) {
-		if (hovered == null)
-			return false;
-		if (items == null)
-			return false;
-		if (items.length == 0)
-			return false;
-		Object object = hovered.getData();
-		if (object instanceof VisualDesigner)
-			return false;
-		if (object instanceof String)
-			return false;
-		for (TreeItem item : items) {
-			Object obj = item.getData();
-			if (obj instanceof VisualDesigner)
-				return false;
-			if (obj instanceof String)
-				return false;
-			if (!(obj instanceof JComponent))
-				return false;
-			if (obj == object)
-				return false;
-		}
-
-		if (object instanceof JComponent) {
-			WidgetAdapter targetAdapter = WidgetAdapter.getWidgetAdapter((JComponent) object);
-			List<WidgetAdapter> srcAdapters = new ArrayList<WidgetAdapter>();
-			for (TreeItem item : items) {
-				Object obj = item.getData();
-				if (obj instanceof JComponent) {
-					srcAdapters.add(WidgetAdapter.getWidgetAdapter((JComponent) obj));
-				}
-			}
-			return targetAdapter.canImport(srcAdapters);
-		} else
-			return false;
-	}
-
-	private TreeItem[] currentItems;
-
-	private void _dragDetected(DragDetectEvent e) {
-		Tree tree = (Tree) getTreeViewer().getTree();
-		if (tree.getSelection() != null && tree.getSelection().length > 0) {
-			currentItems = tree.getSelection();
-			tree.setCursor(VisualSwingPlugin.getDefault().getDraggingGesture());
-			isDragging = true;
 		}
 	}
 	private Event createEvent(int id, Object param) {
