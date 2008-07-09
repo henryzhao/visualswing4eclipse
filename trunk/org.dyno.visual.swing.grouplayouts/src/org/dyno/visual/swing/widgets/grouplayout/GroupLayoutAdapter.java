@@ -84,6 +84,12 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return last_constraints;
 	}
 
+	@Override
+	public void addChild(JComponent widget) {
+		Constraints cons = new Constraints(new Leading(10, 10, 10),new Leading(10, 10, 10));		
+		container.add(widget, cons);
+	}
+
 	void setBaseline(List<Quartet> hList, List<Quartet> vList) {
 		horizontal_baseline = hList;
 		vertical_baseline = vList;
@@ -364,11 +370,6 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 		container.doLayout();
 		container.validate();
-	}
-
-	@Override
-	public boolean canAcceptMoreComponent() {
-		return true;
 	}
 
 	@Override
