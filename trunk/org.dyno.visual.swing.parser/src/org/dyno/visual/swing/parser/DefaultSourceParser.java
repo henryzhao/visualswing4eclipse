@@ -10,6 +10,8 @@ package org.dyno.visual.swing.parser;
 
 import java.beans.EventSetDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -142,6 +144,31 @@ class DefaultSourceParser implements ISourceParser {
 						String widgetName = getNameFromFieldName(fieldName);
 						adapter.setName(widgetName);
 						adapter.setLastName(widgetName);
+						//set field access
+						int flags = field.getModifiers();
+						if(Modifier.isPrivate(flags)){
+							adapter.setFieldAccess(WidgetAdapter.ACCESS_PRIVATE);
+						}else if(Modifier.isProtected(flags)){
+							adapter.setFieldAccess(WidgetAdapter.ACCESS_PROTECTED);
+						}else if(Modifier.isPublic(flags)){
+							adapter.setFieldAccess(WidgetAdapter.ACCESS_PUBLIC);
+						}else{
+							adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
+						}
+						//set get access
+						String getName = getGetMethodName(fieldName);
+						Method getMethod = clazz.getDeclaredMethod(getName);
+						flags = getMethod.getModifiers();
+						if(Modifier.isPrivate(flags)){
+							adapter.setGetAccess(WidgetAdapter.ACCESS_PRIVATE);
+						}else if(Modifier.isProtected(flags)){
+							adapter.setGetAccess(WidgetAdapter.ACCESS_PROTECTED);
+						}else if(Modifier.isPublic(flags)){
+							adapter.setGetAccess(WidgetAdapter.ACCESS_PUBLIC);
+						}else{
+							adapter.setGetAccess(WidgetAdapter.ACCESS_DEFAULT);
+						}
+						
 						parseEventListener(cunit, adapter);
 					}
 				} catch (Exception e) {
