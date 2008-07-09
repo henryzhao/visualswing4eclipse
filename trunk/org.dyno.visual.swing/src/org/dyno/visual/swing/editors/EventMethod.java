@@ -7,6 +7,14 @@
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
+
+import java.beans.MethodDescriptor;
+
+import javax.swing.JComponent;
+
+import org.dyno.visual.swing.plugin.spi.AddEventAction;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+
 /**
  * 
  * EventMethod
@@ -15,9 +23,11 @@ package org.dyno.visual.swing.editors;
  * @author William Chen
  */
 class EventMethod {
+	private MethodDescriptor methodDesc;
 	private String name;
 	private EventSet parent;
-	public EventMethod(String name, EventSet eSet){
+	public EventMethod(MethodDescriptor methodDesc, String name, EventSet eSet){
+		this.methodDesc = methodDesc;
 		this.name = name;
 		this.parent = eSet;
 	}
@@ -26,5 +36,11 @@ class EventMethod {
 	}
 	public String toString(){
 		return this.name;
+	}
+	public void editCode() {
+		JComponent widget = parent.getParent().getWidget();
+		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
+		AddEventAction action = new AddEventAction(adapter, parent.getEventSet(), methodDesc);
+		action.run();
 	}
 }

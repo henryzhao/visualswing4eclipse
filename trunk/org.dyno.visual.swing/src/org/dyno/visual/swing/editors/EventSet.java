@@ -8,6 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.beans.EventSetDescriptor;
 import java.util.List;
 /**
  * 
@@ -20,7 +21,9 @@ class EventSet {
 	private List<EventMethod> methods;
 	private String name;
 	private EventDesc parent;
-	public EventSet(String name, EventDesc parent){
+	private EventSetDescriptor eventSet;
+	public EventSet(EventSetDescriptor eventSet, String name, EventDesc parent){
+		this.eventSet = eventSet;
 		this.name = name;
 		this.parent = parent;
 	}
@@ -35,5 +38,8 @@ class EventSet {
 	}
 	public void setMethods(List<EventMethod> methods) {
 		this.methods = methods;
+	}
+	public EventSetDescriptor getEventSet(){
+		return eventSet;
 	}
 }

@@ -10,12 +10,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 
-class AddEventAction extends Action {
+public class AddEventAction extends Action {
 	private EventSetDescriptor eventSet;
 	private MethodDescriptor methodDesc;
 	private WidgetAdapter adapter;
-	public AddEventAction(WidgetAdapter adapter, EventSetDescriptor eventSet,
-			MethodDescriptor methodDesc) {		
+	public AddEventAction(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc) {		
 		super(methodDesc.getDisplayName(), SWT.CHECK);
 		this.adapter = adapter;
 		this.eventSet = eventSet;

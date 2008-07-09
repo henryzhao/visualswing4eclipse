@@ -57,12 +57,12 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 					EventDesc ed = new EventDesc(component);
 					List<EventSet> eventSets = new ArrayList<EventSet>();
 					for (EventSetDescriptor key : keys) {
-						EventSet set = new EventSet(key.getDisplayName(), ed);
+						EventSet set = new EventSet(key, key.getDisplayName(), ed);
 						eventSets.add(set);
 						IEventListenerModel model = events.get(key);
 						List<EventMethod> mlist = new ArrayList<EventMethod>();
 						for (MethodDescriptor mthd:model.methods()) {
-							EventMethod method = new EventMethod(model.getDisplayName(mthd), set);
+							EventMethod method = new EventMethod(mthd, model.getDisplayName(mthd), set);
 							mlist.add(method);
 						}
 						set.setMethods(mlist);
