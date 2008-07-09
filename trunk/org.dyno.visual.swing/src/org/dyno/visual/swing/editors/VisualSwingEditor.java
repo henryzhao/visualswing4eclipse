@@ -26,6 +26,7 @@ import javax.swing.UIManager;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.designer.VisualDesigner;

@@ -26,7 +26,7 @@ import org.eclipse.swt.graphics.Image;
  * @author William Chen
  */
 public class ComponentTreeLabelProvider implements ILabelProvider {
-	private static String OTHER_COMPONENT_IMAGE = "/icons/other.png";
+	private static String OTHER_COMPONENT_ICON = "/icons/other.png";
 	private static String WIDGETS_FORM_ROOT = "/icons/root.png";
 	private static String EVENT_DESC_ICON = "/icons/events.png";
 	private static String EVENT_SET_ICON = "/icons/eventset.png";
@@ -50,7 +50,7 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
 			return adapter.getIconImage();
 		} else if (element instanceof String) {
-			return VisualSwingPlugin.getSharedImage(OTHER_COMPONENT_IMAGE);
+			return VisualSwingPlugin.getSharedImage(OTHER_COMPONENT_ICON);
 		} else if (element instanceof EventDesc) {
 			return VisualSwingPlugin.getSharedImage(EVENT_DESC_ICON);
 		} else if (element instanceof EventSet) {

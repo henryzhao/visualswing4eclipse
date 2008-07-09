@@ -28,14 +28,12 @@ public abstract class NamespaceManager {
 		instance = new DefaultNamespaceManager();
 	}
 	public abstract String getNameFromFieldName(String fieldName);
-	
 	public abstract String getFieldName(String name);
-	
 	public abstract String getGetMethodName(String name);
-	
 	public abstract boolean isGetMethodName(String name);
-	
 	public abstract String getFieldNameFromGetMethodName(String getMethodName);
-	
 	public abstract String getCapitalName(String name);
+	public abstract void removeName(String name);
+	public abstract void addName(String name);
+	public abstract boolean hasDeclaredName(String newName);
 }

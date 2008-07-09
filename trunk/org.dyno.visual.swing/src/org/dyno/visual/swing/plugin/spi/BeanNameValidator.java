@@ -1,0 +1,38 @@
+package org.dyno.visual.swing.plugin.spi;
+
+import org.dyno.visual.swing.base.NamespaceManager;
+import org.eclipse.jface.viewers.ICellEditorValidator;
+
+class BeanNameValidator implements ICellEditorValidator {
+	private WidgetAdapter adapter;
+	public BeanNameValidator(WidgetAdapter adapter){
+		this.adapter = adapter;
+	}
+	@Override
+	public String isValid(Object value) {
+		String name = (String) value;
+		try {
+			validateName(name);
+			return null;
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+	}
+
+	private void validateName(String newName) throws Exception {
+		if (newName == null || newName.trim().length() == 0)
+			throw new Exception("Please specify non-empty name!");
+		char ch = newName.charAt(0);
+		if (!Character.isJavaIdentifierStart(ch)) {
+			throw new Exception("Illegal variable name!");
+		}
+		int index = 1;
+		while (index < newName.length()) {
+			ch = newName.charAt(index++);
+			if (!Character.isJavaIdentifierPart(ch))
+				throw new Exception("Illegal variable name!");
+		}
+		if (!newName.equals(adapter.getName()) && NamespaceManager.getInstance().hasDeclaredName(newName))
+			throw new Exception("Already used variable name!");
+	}
+}

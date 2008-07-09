@@ -6,7 +6,7 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.editors;
+package org.dyno.visual.swing.base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +31,14 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jdt.ui.CodeStyleConfiguration;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -49,7 +53,8 @@ import org.eclipse.text.edits.TextEdit;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-class JavaUtil {
+public class JavaUtil {
+	private static CodeFormatter codeFormatter;
 
 	public static void applyEdit(ICompilationUnit cu, TextEdit edit, boolean save, IProgressMonitor monitor) throws CoreException {
 		if (monitor == null) {
@@ -193,5 +198,45 @@ class JavaUtil {
 		parser.setFocalPosition(0);
 		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		return CodeStyleConfiguration.createImportRewrite(cu, true);
+	}	
+
+	@SuppressWarnings("unchecked")
+	private static CodeFormatter getCodeFormatter() {
+		if (codeFormatter == null) {
+			Map options = DefaultCodeFormatterConstants
+					.getEclipseDefaultSettings();
+			options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
+			options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
+					JavaCore.VERSION_1_5);
+			options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
+			options
+					.put(
+							DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS,
+							DefaultCodeFormatterConstants
+									.createAlignmentValue(
+											true,
+											DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
+											DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
+			options.put(DefaultCodeFormatterConstants.FORMATTER_LINE_SPLIT,
+					"160");
+			codeFormatter = ToolFactory.createCodeFormatter(options);
+		}
+		return codeFormatter;
+	}
+
+	public static String formatCode(String source) {
+		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_UNKNOWN,
+				source, 0, source.length(), 0,
+				System.getProperty("line.separator"));
+		if (edit != null) {
+			IDocument document = new Document(source);
+			try {
+				edit.apply(document);
+				return document.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return source;
 	}	
 }
