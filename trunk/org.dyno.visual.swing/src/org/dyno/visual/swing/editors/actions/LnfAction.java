@@ -1,11 +1,12 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.editors.actions;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.Action;
 
-class LnfAction extends Action {
+public class LnfAction extends Action {
 	private LookAndFeelInfo info;
 	private WidgetAdapter adapter;
 	public LnfAction(WidgetAdapter adapter, LookAndFeelInfo info) {

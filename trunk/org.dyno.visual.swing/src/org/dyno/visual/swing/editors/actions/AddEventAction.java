@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.editors.actions;
 
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
+import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
+import org.dyno.visual.swing.plugin.spi.ParserFactory;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;

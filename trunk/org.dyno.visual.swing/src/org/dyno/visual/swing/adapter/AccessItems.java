@@ -1,9 +1,10 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.adapter;
 
 import org.dyno.visual.swing.base.Item;
 import org.dyno.visual.swing.base.ItemProvider;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
-class AccessItems implements ItemProvider {
+public class AccessItems implements ItemProvider {
 
 	private static Item[] VALUE_ITEMS = {
 			new Item("private", WidgetAdapter.ACCESS_PRIVATE, "private"),

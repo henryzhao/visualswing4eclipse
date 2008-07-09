@@ -1,26 +1,29 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.adapter;
 
 import org.dyno.visual.swing.base.PropertyAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
 
-class GetAccessProperty extends PropertyAdapter {
+public class FieldAccessProperty extends PropertyAdapter {
 	private AccessEditor editorFactory = new AccessEditor();
 	private AccessRenderer rendererFactory = new AccessRenderer();
 	private WidgetAdapter adapter;
-	public GetAccessProperty(WidgetAdapter adapter){
+
+	public FieldAccessProperty(WidgetAdapter adapter) {
 		this.adapter = adapter;
 	}
+
 	@Override
 	public Object getPropertyValue(Object bean) {
-		return adapter.getAccess;
+		return adapter.getFieldAccess();
 	}
 
 	@Override
 	public void setPropertyValue(Object bean, Object value) {
-		adapter.getAccess = value == null ? WidgetAdapter.ACCESS_PRIVATE
-				: (Integer) value;
+		adapter.setFieldAccess(value == null ? WidgetAdapter.ACCESS_PRIVATE
+				: (Integer) value);
 		adapter.setDirty(true);
 		adapter.changeNotify();
 	}
@@ -37,12 +40,12 @@ class GetAccessProperty extends PropertyAdapter {
 
 	@Override
 	public String getDisplayName() {
-		return "Access Method Modifier";
+		return "Bean Field Modifier";
 	}
 
 	@Override
 	public Object getId() {
-		return "get_access";
+		return "field_access";
 	}
 
 	@Override

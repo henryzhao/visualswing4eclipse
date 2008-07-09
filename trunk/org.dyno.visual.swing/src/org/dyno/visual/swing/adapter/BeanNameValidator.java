@@ -1,9 +1,10 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.adapter;
 
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
-class BeanNameValidator implements ICellEditorValidator {
+public class BeanNameValidator implements ICellEditorValidator {
 	private WidgetAdapter adapter;
 	public BeanNameValidator(WidgetAdapter adapter){
 		this.adapter = adapter;

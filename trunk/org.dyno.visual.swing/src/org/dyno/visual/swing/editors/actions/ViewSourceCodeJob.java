@@ -1,8 +1,9 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.editors.actions;
 
 import java.beans.MethodDescriptor;
 
 import org.dyno.visual.swing.editors.VisualSwingEditor;
+import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

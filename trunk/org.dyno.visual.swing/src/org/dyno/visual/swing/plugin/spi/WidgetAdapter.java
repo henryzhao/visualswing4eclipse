@@ -36,6 +36,9 @@ import javax.swing.border.Border;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.adapter.BeanNameProperty;
+import org.dyno.visual.swing.adapter.FieldAccessProperty;
+import org.dyno.visual.swing.adapter.GetAccessProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
@@ -47,6 +50,10 @@ import org.dyno.visual.swing.base.ExtensionRegistry.Sorting;
 import org.dyno.visual.swing.designer.GlassPlane;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
+import org.dyno.visual.swing.editors.actions.AddEventAction;
+import org.dyno.visual.swing.editors.actions.DelEventAction;
+import org.dyno.visual.swing.editors.actions.LnfAction;
+import org.dyno.visual.swing.editors.actions.VarChangeAction;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -853,7 +860,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	protected Shell getShell() {
+	public Shell getShell() {
 		return getDesigner().getShell();
 	}
 
@@ -1138,6 +1145,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 
 	public void setFieldAccess(int fieldAccess) {
 		this.fieldAccess = fieldAccess;
+	}
+	public int getFieldAccess() {
+		return fieldAccess;
 	}
 
 	protected String getAccessCode(int access) {

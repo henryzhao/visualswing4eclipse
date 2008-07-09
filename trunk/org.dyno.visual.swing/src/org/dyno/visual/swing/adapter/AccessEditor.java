@@ -1,9 +1,9 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.adapter;
 
 import org.dyno.visual.swing.base.ItemProviderCellEditorFactory;
 
 
-class AccessEditor extends ItemProviderCellEditorFactory {
+public class AccessEditor extends ItemProviderCellEditorFactory {
 	public AccessEditor() {
 		super(new AccessItems());
 	}

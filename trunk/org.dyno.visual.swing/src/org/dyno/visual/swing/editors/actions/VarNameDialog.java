@@ -6,7 +6,7 @@
  *                                                                            * 
  * Use is subject to the terms of GNU Lesser General Public License.          * 
  ******************************************************************************/
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.editors.actions;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;

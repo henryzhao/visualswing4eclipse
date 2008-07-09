@@ -1,11 +1,13 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.editors.actions;
 
+import org.dyno.visual.swing.adapter.BeanNameValidator;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
-class VarChangeAction extends Action {
+public class VarChangeAction extends Action {
 	private WidgetAdapter adapter;
 	private ICellEditorValidator validator;
 

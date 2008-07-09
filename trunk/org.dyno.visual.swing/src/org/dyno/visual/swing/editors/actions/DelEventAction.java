@@ -1,11 +1,13 @@
-package org.dyno.visual.swing.plugin.spi;
+package org.dyno.visual.swing.editors.actions;
 
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 
+import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.Action;
 
-class DelEventAction extends Action {
+public class DelEventAction extends Action {
 	private EventSetDescriptor eventSet;
 	private MethodDescriptor methodDesc;
 	private WidgetAdapter adapter;

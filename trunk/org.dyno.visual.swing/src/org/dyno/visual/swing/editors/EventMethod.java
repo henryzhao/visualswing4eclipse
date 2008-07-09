@@ -12,7 +12,7 @@ import java.beans.MethodDescriptor;
 
 import javax.swing.JComponent;
 
-import org.dyno.visual.swing.plugin.spi.AddEventAction;
+import org.dyno.visual.swing.editors.actions.AddEventAction;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 /**
