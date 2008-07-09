@@ -298,15 +298,6 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 
-	@Override
-	public boolean canAcceptMoreComponent() {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout == null)
-			return true;
-		return getLayoutAdapter().canAcceptMoreComponent();
-	}
-
 	private LayoutAdapter getLayoutAdapter() {
 		if (layoutAdapter == null) {
 			LayoutManager layout = getWidget().getLayout();
