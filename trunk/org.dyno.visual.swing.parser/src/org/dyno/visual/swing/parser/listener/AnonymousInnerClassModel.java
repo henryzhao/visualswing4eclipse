@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -163,7 +164,7 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 				String code = content.createEventMethod(type, imports);
 				if (code != null) {
 					try {
-						type.createMethod(WidgetAdapter.formatCode(code), null, false, monitor);
+						type.createMethod(JavaUtil.formatCode(code), null, false, monitor);
 					} catch (JavaModelException e) {
 						return false;
 					}
