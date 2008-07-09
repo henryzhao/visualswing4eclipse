@@ -199,27 +199,6 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public boolean canAcceptMoreComponent() {
-		BorderLayout layout = (BorderLayout) container.getLayout();
-		Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
-		if (nComp == null)
-			return true;
-		Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
-		if (sComp == null)
-			return true;
-		Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
-		if (eComp == null)
-			return true;
-		Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
-		if (wComp == null)
-			return true;
-		Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
-		if (cComp == null)
-			return true;
-		return false;
-	}
-
-	@Override
 	public boolean cloneLayout(JComponent panel) {
 		panel.setLayout(copyLayout(panel));
 		BorderLayout layout = (BorderLayout) container.getLayout();

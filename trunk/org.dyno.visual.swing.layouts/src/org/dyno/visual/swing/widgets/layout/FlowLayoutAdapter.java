@@ -127,11 +127,6 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 	}
 
 	@Override
-	public boolean canAcceptMoreComponent() {
-		return true;
-	}
-
-	@Override
 	public boolean cloneLayout(JComponent panel) {
 		panel.setLayout(copyLayout(panel));
 		int count = container.getComponentCount();

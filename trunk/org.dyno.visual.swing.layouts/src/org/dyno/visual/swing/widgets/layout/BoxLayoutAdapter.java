@@ -152,10 +152,6 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 	}
 
-	@Override
-	public boolean canAcceptMoreComponent() {
-		return true;
-	}
 
 	@Override
 	public boolean cloneLayout(JComponent panel) {

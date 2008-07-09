@@ -56,11 +56,6 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public boolean canAcceptMoreComponent() {
-		return true;
-	}
-
-	@Override
 	public boolean cloneLayout(JComponent panel) {
 		GridBagLayout layout = (GridBagLayout) container.getLayout();
 		panel.setLayout(copyLayout(panel));

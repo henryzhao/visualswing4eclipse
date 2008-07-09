@@ -94,11 +94,6 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public boolean canAcceptMoreComponent() {
-		return true;
-	}
-
-	@Override
 	public boolean cloneLayout(JComponent panel) {
 		panel.setLayout(copyLayout(panel));
 		int count = container.getComponentCount();
