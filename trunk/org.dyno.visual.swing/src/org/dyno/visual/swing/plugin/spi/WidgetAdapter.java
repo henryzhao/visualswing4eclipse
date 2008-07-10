@@ -54,6 +54,7 @@ import org.dyno.visual.swing.editors.actions.AddEventAction;
 import org.dyno.visual.swing.editors.actions.DelEventAction;
 import org.dyno.visual.swing.editors.actions.LnfAction;
 import org.dyno.visual.swing.editors.actions.VarChangeAction;
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -81,8 +82,7 @@ import org.osgi.framework.Bundle;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
-		IPropertySourceProvider, IConstants {
+public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants {
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;
@@ -106,6 +106,14 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				layoutContainer((Container) child);
 			}
 		}
+	}
+
+	public IUndoContext getUndoContext() {
+		VisualDesigner designer = getDesigner();
+		if (designer != null)
+			return designer.getUndoContext();
+		else
+			return null;
 	}
 
 	public String getLastName() {
@@ -158,8 +166,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 
 	protected WidgetAdapter() {
 		this.widget = createWidget();
-		this.hotspotPoint = new Point(widget.getWidth() / 2,
-				widget.getHeight() / 2);
+		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
@@ -169,8 +176,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected WidgetAdapter(String name) {
 		setName(name);
 		this.widget = createWidget();
-		this.hotspotPoint = new Point(widget.getWidth() / 2,
-				widget.getHeight() / 2);
+		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
 		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
 		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
@@ -285,8 +291,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return widgetName;
 	}
 
-	private Provider getProvider(HashMap<String, Provider> providers,
-			Class<?> class1) {
+	private Provider getProvider(HashMap<String, Provider> providers, Class<?> class1) {
 		String classname = class1.getName();
 		Provider provider = providers.get(classname);
 		if (provider == null && class1 != Component.class) {
@@ -420,8 +425,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	@Override
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		widgetName = config.getAttribute("widgetName");
 		String sIcon = config.getAttribute("icon");
 		if (sIcon != null && sIcon.trim().length() > 0) {
@@ -446,8 +450,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	private HashMap<String, IConfigurationElement> parseProperties(
-			IConfigurationElement config) {
+	private HashMap<String, IConfigurationElement> parseProperties(IConfigurationElement config) {
 		try {
 			@SuppressWarnings("unchecked")
 			Class widgetClass = getWidgetClass(config);
@@ -460,8 +463,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			if (widgetClass != Component.class) {
 				@SuppressWarnings("unchecked")
 				Class superClass = widgetClass.getSuperclass();
-				IConfigurationElement superConfig = ExtensionRegistry
-						.getWidgetConfig(superClass);
+				IConfigurationElement superConfig = ExtensionRegistry.getWidgetConfig(superClass);
 				while (superConfig == null && superClass != Component.class) {
 					superClass = superClass.getSuperclass();
 					superConfig = ExtensionRegistry.getWidgetConfig(superClass);
@@ -485,8 +487,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			propdesc.add(new FieldAccessProperty(this));
 			propdesc.add(new GetAccessProperty(this));
 		}
-		IWidgetPropertyDescriptor[] properties = propdesc
-				.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
+		IWidgetPropertyDescriptor[] properties = propdesc.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
 		return new PropertySource2(getLnfClassname(), getWidget(), properties);
 	}
 
@@ -515,12 +516,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			Provider provider = getProvider(category.getProviders(), beanClass);
 			if (provider != null) {
 				for (String refid : provider.getRefIds()) {
-					IConfigurationElement prop = this.propertyConfigs
-							.get(refid);
+					IConfigurationElement prop = this.propertyConfigs.get(refid);
 					if (prop != null) {
 						references.put(refid, refid);
-						IWidgetPropertyDescriptor property = createProperty(
-								prop, beanClass);
+						IWidgetPropertyDescriptor property = createProperty(prop, beanClass);
 						property.setCategory(category.getName());
 						property.setFilterFlags(category.getFilters());
 						propdesc.add(property);
@@ -536,8 +535,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				IConfigurationElement prop = propertyConfigs.get(refid);
 				if (prop != null) {
 					references.put(refid, refid);
-					IWidgetPropertyDescriptor property = createProperty(prop,
-							beanClass);
+					IWidgetPropertyDescriptor property = createProperty(prop, beanClass);
 					property.setCategory(category.getName());
 					property.setFilterFlags(category.getFilters());
 					propdesc.add(property);
@@ -547,8 +545,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		if (!isRoot()) {
 			CompositeAdapter parent = getParentAdapter();
 			if (parent != null) {
-				IWidgetPropertyDescriptor[] constraints = parent
-						.getConstraintsProperties(getWidget());
+				IWidgetPropertyDescriptor[] constraints = parent.getConstraintsProperties(getWidget());
 				if (constraints != null) {
 					for (IWidgetPropertyDescriptor prop : constraints) {
 						propdesc.add(prop);
@@ -560,14 +557,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	@SuppressWarnings("unchecked")
-	private IWidgetPropertyDescriptor createProperty(
-			IConfigurationElement config, Class beanClass) {
+	private IWidgetPropertyDescriptor createProperty(IConfigurationElement config, Class beanClass) {
 		String sClass = config.getAttribute("class");
 		if (sClass != null && sClass.trim().length() > 0) {
 			IWidgetPropertyDescriptor iwpd;
 			try {
-				iwpd = (IWidgetPropertyDescriptor) config
-						.createExecutableExtension("class");
+				iwpd = (IWidgetPropertyDescriptor) config.createExecutableExtension("class");
 				iwpd.init(config, beanClass);
 				return iwpd;
 			} catch (CoreException e) {
@@ -577,9 +572,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return new WidgetProperty(config, beanClass);
 	}
 
-	private void mergeProperties(
-			HashMap<String, IConfigurationElement> eSources,
-			HashMap<String, IConfigurationElement> eTargets) {
+	private void mergeProperties(HashMap<String, IConfigurationElement> eSources, HashMap<String, IConfigurationElement> eTargets) {
 		for (IConfigurationElement eTarget : eTargets.values()) {
 			String eId = eTarget.getAttribute("id");
 			if (eSources.get(eId) == null) {
@@ -610,8 +603,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		Component parent = me.getParent();
 		while (parent != null) {
 			if (parent instanceof JComponent) {
-				WidgetAdapter adapter = WidgetAdapter
-						.getWidgetAdapter((JComponent) parent);
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter((JComponent) parent);
 				if (adapter != null)
 					return (CompositeAdapter) adapter;
 			}
@@ -742,8 +734,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			else {
 				WidgetAdapter adapter = getParentAdapter();
 				if (adapter.isVisible()) {
-					return ((CompositeAdapter) adapter)
-							.isChildVisible(getWidget());
+					return ((CompositeAdapter) adapter).isChildVisible(getWidget());
 				} else
 					return false;
 			}
@@ -770,8 +761,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		MenuManager eventMenu = new MenuManager("Add/Edit Events", "#EVENT");
 		fillAddEventAction(eventMenu);
 		menu.add(eventMenu);
-		MenuManager delEventMenu = new MenuManager("Delete Events",
-				"#DELETE_EVENT");
+		MenuManager delEventMenu = new MenuManager("Delete Events", "#DELETE_EVENT");
 		fillDelEventAction(delEventMenu);
 		menu.add(delEventMenu);
 		MenuManager borderMenu = new MenuManager("Border", "#BORDER");
@@ -806,8 +796,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected void fillDelEventAction(MenuManager eventMenu) {
 		Set<EventSetDescriptor> keys = eventDescriptor.keySet();
 		for (EventSetDescriptor key : keys) {
-			MenuManager subEventMenu = new MenuManager(key.getName(),
-					"#DELETE_EVENT_" + key);
+			MenuManager subEventMenu = new MenuManager(key.getName(), "#DELETE_EVENT_" + key);
 			IEventListenerModel model = eventDescriptor.get(key);
 			Iterable<MethodDescriptor> mSet = model.methods();
 			for (MethodDescriptor method : mSet) {
@@ -830,8 +819,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected void fillAddEventAction(MenuManager eventMenu) {
 		EventSetDescriptor[] esds = getBeanInfo().getEventSetDescriptors();
 		for (EventSetDescriptor esd : esds) {
-			MenuManager subEventMenu = new MenuManager(esd.getName(),
-					"#ADD_EVENT_" + esd.getName());
+			MenuManager subEventMenu = new MenuManager(esd.getName(), "#ADD_EVENT_" + esd.getName());
 			MethodDescriptor[] eds = esd.getListenerMethodDescriptors();
 			for (MethodDescriptor md : eds) {
 				subEventMenu.add(new AddEventAction(this, esd, md));
@@ -886,7 +874,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return new Rectangle(24, 24, w, h);
 	}
 
-
 	protected IJavaElement getSibling(IType type, IJavaElement element) {
 		try {
 			IJavaElement[] children = type.getChildren();
@@ -910,8 +897,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return null;
 	}
 
-	public boolean genCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	public boolean genCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		if (!dirty)
 			return true;
 		if (isRoot()) {
@@ -921,8 +907,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	private boolean createNonRootCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	private boolean createNonRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		IJavaElement sibling = null;
 		if (getLastName() != null) {
@@ -960,8 +945,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		sibling = null;
 		if (getLastName() != null && !getLastName().equals(getName())) {
 			String lastGetMethodName = getGetMethodName(getLastName());
-			IMethod lastMethod = type.getMethod(lastGetMethodName,
-					new String[0]);
+			IMethod lastMethod = type.getMethod(lastGetMethodName, new String[0]);
 			if (lastMethod != null && lastMethod.exists()) {
 				try {
 					sibling = getSibling(type, lastMethod);
@@ -1002,8 +986,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		try {
 			if (sibling == null)
 				sibling = getInitMethodSibling(type);
-			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false,
-					monitor);
+			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
 		} catch (JavaModelException e) {
 			success = false;
 		}
@@ -1012,8 +995,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return success;
 	}
 
-	private boolean createEventMethod(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	private boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		Set<EventSetDescriptor> keySet = this.eventDescriptor.keySet();
 		if (!keySet.isEmpty()) {
@@ -1025,8 +1007,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return success;
 	}
 
-	private boolean createRootCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	private boolean createRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		String initMethodName = "initComponent";
 		IMethod method = type.getMethod(initMethodName, new String[0]);
@@ -1049,8 +1030,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		builder.append("setSize(" + w + ", " + h + ");\n");
 		builder.append("}\n");
 		try {
-			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false,
-					monitor);
+			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
 		} catch (JavaModelException e) {
 			success = false;
 		}
@@ -1068,15 +1048,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getFieldName(getName()) + " = "
-				+ getNewInstanceCode(imports) + ";\n");
+		builder.append(getFieldName(getName()) + " = " + getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
 		CompositeAdapter conAdapter = getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = getWidget().getBounds();
-			String strBounds = getFieldName(getName()) + ".setBounds("
-					+ bounds.x + ", " + bounds.y + ", " + bounds.width + ", "
-					+ bounds.height + ");\n";
+			String strBounds = getFieldName(getName()) + ".setBounds(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ");\n";
 			builder.append(strBounds);
 		}
 		builder.append(genAddEventCode(imports));
@@ -1087,8 +1064,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(getLnfClassname(), getWidget())
-					&& (property.isGencode() || property.isEdited(this))) {
+			if (property.isPropertySet(getLnfClassname(), getWidget()) && (property.isGencode() || property.isEdited(this))) {
 				String setCode = property.getSetCode(getWidget(), imports);
 				if (setCode != null)
 					builder.append(setCode);
@@ -1126,6 +1102,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	public void setFieldAccess(int fieldAccess) {
 		this.fieldAccess = fieldAccess;
 	}
+
 	public int getFieldAccess() {
 		return fieldAccess;
 	}

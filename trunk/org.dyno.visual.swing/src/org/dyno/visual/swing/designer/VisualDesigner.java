@@ -31,18 +31,23 @@ import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
+import org.eclipse.ui.operations.RedoActionHandler;
+import org.eclipse.ui.operations.UndoActionHandler;
 
 /**
  * 
@@ -62,7 +67,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	private VisualSwingEditor editor;
 	private Composite parent;
-
+	private IUndoContext undoContext;
 	@SuppressWarnings("serial")
 	public VisualDesigner(VisualSwingEditor editor, Composite parent) {
 		this.editor = editor;
@@ -84,7 +89,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
 	}
-
+	public IUndoContext getUndoContext(){
+		return undoContext;
+	}
 	public VisualSwingEditor getEditor() {
 		return editor;
 	}
@@ -170,9 +177,15 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		MenuManager manager = new MenuManager("#EDIT");
 		if (hovered != null)
 			addContextSensitiveMenu(manager, hovered);
+		
+		manager.add(new Separator());
 		IEditorSite site = editor.getEditorSite();
-		IWorkbenchWindow window = site.getWorkbenchWindow();
+		manager.add(undoAction);
+		manager.add(redoAction);
+		manager.add(new Separator());
+		
 		IWorkbenchPage page = site.getPage();
+		IWorkbenchWindow window = site.getWorkbenchWindow();
 		page.getActiveEditor();
 		for (EditorAction action : editor.getActions()) {
 			if (action == null) {
@@ -280,9 +293,16 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			remove(root);
 		if (adapter != null) {
 			root = adapter.getWidget();
+			undoContext = new ObjectUndoContext(root);
+			IEditorSite site = editor.getEditorSite();
+			undoAction = new UndoActionHandler(site, getUndoContext());
+			redoAction = new RedoActionHandler(site, getUndoContext());
+			IActionBars actionBars = site.getActionBars();
+			actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+			actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);		
 			rootBounds = adapter.getDesignBounds();
 			root.setSize(rootBounds.width, rootBounds.height);
-			add(root);
+			add(root);			
 			designBorder = adapter.getDesignBorder();
 			container.setBorder(designBorder);
 			validateContent();
@@ -290,7 +310,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			setFocus();
 		}
 	}
-
+	private UndoActionHandler undoAction;
+	private RedoActionHandler redoAction;
 	public void publishSelection() {
 		WhiteBoard.sendEvent(createEvent(Event.EVENT_SELECTION, new WidgetSelection(root)));
 	}
