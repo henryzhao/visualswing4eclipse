@@ -27,10 +27,19 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.AbstractOperation;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.ui.PlatformUI;
 
 public class JPanelAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
@@ -130,14 +139,47 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	private void doKeyPageDown() {
-		List<JComponent> selection = getSelection();
-		for (JComponent child : selection) {
-			Rectangle bounds = child.getBounds();
-			bounds.y += BLOCK_STEP;
-			child.setBounds(bounds);
+		IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport()
+		.getOperationHistory();
+		IUndoableOperation operation = new PageDownOperation("Page Down");
+		operation.addContext(getUndoContext());
+		try {
+			operationHistory.execute(operation, null, null);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
 		}
 	}
-
+	private class PageDownOperation extends AbstractOperation{
+		public PageDownOperation(String label) {
+			super(label);
+		}
+		@Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+			List<JComponent> selection = getSelection();
+			for (JComponent child : selection) {
+				Rectangle bounds = child.getBounds();
+				bounds.y += BLOCK_STEP;
+				child.setBounds(bounds);
+			}
+			JPanelAdapter.super.repaintDesigner();
+			return Status.OK_STATUS;
+		}
+		@Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+			return execute(monitor, info);
+		}
+		@Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+			List<JComponent> selection = getSelection();
+			for (JComponent child : selection) {
+				Rectangle bounds = child.getBounds();
+				bounds.y -= BLOCK_STEP;
+				child.setBounds(bounds);
+			}
+			JPanelAdapter.super.repaintDesigner();
+			return Status.OK_STATUS;
+		}
+	}
 	private void doKeyPageUp() {
 		List<JComponent> selection = getSelection();
 		for (JComponent child : selection) {
