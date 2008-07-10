@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
 
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -155,7 +156,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-	public void doKeyPressed(KeyEvent e) {
+	public IUndoableOperation doKeyPressed(KeyEvent e) {
+		return null;
 	}
 	public void adjustLayout(JComponent widget) {
 	}

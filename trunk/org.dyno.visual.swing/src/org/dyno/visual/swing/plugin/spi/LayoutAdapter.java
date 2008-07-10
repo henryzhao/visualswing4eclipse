@@ -23,6 +23,7 @@ import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.PropertySource2;
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -266,7 +267,8 @@ public abstract class LayoutAdapter implements IPropertySourceProvider {
 		return false;
 	}
 
-	public void doKeyPressed(KeyEvent e) {
+	public IUndoableOperation doKeyPressed(KeyEvent e) {
+		return null;
 	}
 
 	public abstract boolean cloneLayout(JComponent container);

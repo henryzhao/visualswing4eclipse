@@ -396,7 +396,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 			return null;
 	}
 
-	protected void repaintDesigner() {
+	public void repaintDesigner() {
 		getDesigner().repaint();
 	}
 

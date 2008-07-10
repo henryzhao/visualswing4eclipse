@@ -31,7 +31,10 @@ import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
@@ -43,6 +46,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.actions.RetargetAction;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
@@ -80,7 +84,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 		glass = new GlassPlane(this);
 		add(glass);
-
 		glass.addKeyListener(this);
 
 		container = new JComponent() {
@@ -555,8 +558,17 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				JComponent child = selection.get(0);
 				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				CompositeAdapter parentAdapter = (CompositeAdapter) childAdapter.getParentAdapter();
-				parentAdapter.doKeyPressed(e);
-				repaint();
+				IUndoableOperation operation = parentAdapter.doKeyPressed(e);
+				if (operation != null) {
+					IOperationHistory operationHistory = PlatformUI.getWorkbench()
+							.getOperationSupport().getOperationHistory();
+					operation.addContext(getUndoContext());
+					try {
+						operationHistory.execute(operation, null, null);
+					} catch (ExecutionException ex) {
+						ex.printStackTrace();
+					}
+				}				
 			}
 		}
 	}
