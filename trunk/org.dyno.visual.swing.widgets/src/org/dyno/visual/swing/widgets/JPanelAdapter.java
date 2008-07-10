@@ -27,23 +27,22 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.operations.AbstractOperation;
-import org.eclipse.core.commands.operations.IOperationHistory;
+import org.dyno.visual.swing.widgets.undo.KeyDownOperation;
+import org.dyno.visual.swing.widgets.undo.KeyLeftOperation;
+import org.dyno.visual.swing.widgets.undo.KeyRightOperation;
+import org.dyno.visual.swing.widgets.undo.KeyUpOperation;
+import org.dyno.visual.swing.widgets.undo.PageDownOperation;
+import org.dyno.visual.swing.widgets.undo.PageUpOperation;
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.ui.PlatformUI;
 
 public class JPanelAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
-	private boolean intermediate=false;
+	private boolean intermediate = false;
+
 	public JPanelAdapter() {
 		super("jPanel" + (VAR_INDEX++));
 	}
@@ -69,7 +68,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 		return panel;
 	}
-	
+
 	protected JComponent createWidget() {
 		JPanel jp = new JPanel();
 		jp.setSize(100, 100);
@@ -85,7 +84,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		LayoutManager layout = jp.getLayout();
 		if (layout == null) {
 			if (id.equals(EditorAction.ALIGNMENT_LEFT)) {
-				doLeft();				
+				doLeft();
 			} else if (id.equals(EditorAction.ALIGNMENT_CENTER))
 				doCenter();
 			else if (id.equals(EditorAction.ALIGNMENT_RIGHT))
@@ -109,124 +108,29 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void doKeyPressed(KeyEvent e) {
+	public IUndoableOperation doKeyPressed(KeyEvent e) {
 		JPanel jp = (JPanel) getWidget();
 		LayoutManager layout = jp.getLayout();
 		if (layout == null) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_LEFT:
-				doKeyLeft();
-				break;
+				return new KeyLeftOperation(this);
 			case KeyEvent.VK_RIGHT:
-				doKeyRight();
-				break;
+				return new KeyRightOperation(this);
 			case KeyEvent.VK_UP:
-				doKeyUp();
-				break;
+				return new KeyUpOperation(this);
 			case KeyEvent.VK_DOWN:
-				doKeyDown();
-				break;
+				return new KeyDownOperation(this);
 			case KeyEvent.VK_PAGE_UP:
-				doKeyPageUp();
-				break;
+				return new PageUpOperation(this);
 			case KeyEvent.VK_PAGE_DOWN:
-				doKeyPageDown();
-				break;
+				return new PageDownOperation(this);
 			}
+			return null;
 		} else {
-			getLayoutAdapter().doKeyPressed(e);
+			return getLayoutAdapter().doKeyPressed(e);
 		}
 	}
-
-	private void doKeyPageDown() {
-		IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport()
-		.getOperationHistory();
-		IUndoableOperation operation = new PageDownOperation("Page Down");
-		operation.addContext(getUndoContext());
-		try {
-			operationHistory.execute(operation, null, null);
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-	}
-	private class PageDownOperation extends AbstractOperation{
-		public PageDownOperation(String label) {
-			super(label);
-		}
-		@Override
-		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-			List<JComponent> selection = getSelection();
-			for (JComponent child : selection) {
-				Rectangle bounds = child.getBounds();
-				bounds.y += BLOCK_STEP;
-				child.setBounds(bounds);
-			}
-			JPanelAdapter.super.repaintDesigner();
-			return Status.OK_STATUS;
-		}
-		@Override
-		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-			return execute(monitor, info);
-		}
-		@Override
-		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-			List<JComponent> selection = getSelection();
-			for (JComponent child : selection) {
-				Rectangle bounds = child.getBounds();
-				bounds.y -= BLOCK_STEP;
-				child.setBounds(bounds);
-			}
-			JPanelAdapter.super.repaintDesigner();
-			return Status.OK_STATUS;
-		}
-	}
-	private void doKeyPageUp() {
-		List<JComponent> selection = getSelection();
-		for (JComponent child : selection) {
-			Rectangle bounds = child.getBounds();
-			bounds.y -= BLOCK_STEP;
-			child.setBounds(bounds);
-		}
-	}
-
-	private void doKeyDown() {
-		List<JComponent> selection = getSelection();
-		for (JComponent child : selection) {
-			Rectangle bounds = child.getBounds();
-			bounds.y += UNIT_STEP;
-			child.setBounds(bounds);
-		}
-	}
-
-	private void doKeyUp() {
-		List<JComponent> selection = getSelection();
-		for (JComponent child : selection) {
-			Rectangle bounds = child.getBounds();
-			bounds.y -= UNIT_STEP;
-			child.setBounds(bounds);
-		}
-	}
-
-	private void doKeyRight() {
-		List<JComponent> selection = getSelection();
-		for (JComponent child : selection) {
-			Rectangle bounds = child.getBounds();
-			bounds.x += UNIT_STEP;
-			child.setBounds(bounds);
-		}
-	}
-
-	private void doKeyLeft() {
-		List<JComponent> selection = getSelection();
-		for (JComponent child : selection) {
-			Rectangle bounds = child.getBounds();
-			bounds.x -= UNIT_STEP;
-			child.setBounds(bounds);
-		}
-	}
-
-	private static int UNIT_STEP = 5;
-	private static int BLOCK_STEP = 20;
 
 	private void doSameHeight() {
 		List<JComponent> selection = getSelection();
@@ -374,8 +278,10 @@ public class JPanelAdapter extends CompositeAdapter {
 	private String getLayoutName() {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
-		String layoutName = layout == null ? "null" : layout.getClass().getName();
-		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT.equals(layoutName);
+		String layoutName = layout == null ? "null" : layout.getClass()
+				.getName();
+		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT
+				.equals(layoutName);
 		layoutName = layout == null ? "null" : getLayoutAdapter().getName();
 		return default_layout ? "" : "(" + layoutName + ")";
 	}
@@ -633,7 +539,8 @@ public class JPanelAdapter extends CompositeAdapter {
 			nullLayoutAction.setChecked(true);
 		layoutMenu.add(nullLayoutAction);
 		for (String layoutClass : LayoutAdapter.getLayoutClasses()) {
-			IConfigurationElement config = LayoutAdapter.getLayoutConfig(layoutClass);
+			IConfigurationElement config = LayoutAdapter
+					.getLayoutConfig(layoutClass);
 			SetLayoutAction action = new SetLayoutAction(config);
 			if (layout != null) {
 				String currLayoutClass = layout.getClass().getName();
@@ -695,6 +602,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		else
 			return true;
 	}
+
 	@Override
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
@@ -707,18 +615,23 @@ public class JPanelAdapter extends CompositeAdapter {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
-			builder.append(getFieldName(getName()) + "." + "setLayout(null);\n");
+			builder
+					.append(getFieldName(getName()) + "."
+							+ "setLayout(null);\n");
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				JComponent child = getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
-				builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
+				builder.append(getFieldName(getName()) + "." + "add("
+						+ getMethodName + "());\n");
 			}
 		} else {
 			builder.append(getLayoutAdapter().createCode(imports));
 		}
 	}
+
 	@Override
 	protected String createInitCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
@@ -730,7 +643,8 @@ public class JPanelAdapter extends CompositeAdapter {
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				JComponent child = getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
 				builder.append("add(" + getMethodName + "());\n");
 			}
