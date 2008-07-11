@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Widgets Plug-in
 Bundle-SymbolicName: org.dyno.visual.swing.parser;singleton:=true
-Bundle-Version: 0.9.1.I20080710-1500
+Bundle-Version: 0.9.1.I20080711-1500
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Dynamic Object Organization
 Require-Bundle: org.dyno.visual.swing,
