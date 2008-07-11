@@ -323,16 +323,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		Object[] param = (Object[]) event.getParameter();
 		Point p = (Point) param[0];
 		JComponent hovered = (JComponent) param[1];
-		swt_show_popup(p, hovered);
-	}
-
-	private void swt_show_popup(final Point p, final JComponent hovered) {
-		editor.getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				showPopup(p, hovered);
-			}
-		});
+		showPopup(p, hovered);
 	}
 
 	public void validateContent() {
