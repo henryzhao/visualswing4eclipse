@@ -77,9 +77,16 @@ public class VisualSwingOutline extends ContentOutlinePage {
 	private void _mouseDoubleClicked(MouseEvent e) {
 		Tree tree = (Tree) getTreeViewer().getTree();
 		TreeItem item = tree.getItem(new Point(e.x, e.y));
-		if (item != null && item.getData() instanceof EventMethod) {
-			EventMethod eMethod = (EventMethod) item.getData();
-			eMethod.editCode();
+		if (item != null) {
+			if(item.getExpanded()){
+				getTreeViewer().collapseToLevel(item.getData(), 1);
+			}else{
+				getTreeViewer().expandToLevel(item.getData(), 1);
+			}
+			if (item.getData() instanceof EventMethod) {
+				EventMethod eMethod = (EventMethod) item.getData();
+				eMethod.editCode();
+			}
 		}
 	}
 
@@ -91,9 +98,13 @@ public class VisualSwingOutline extends ContentOutlinePage {
 				TreeItem item = items[0];
 				Object object = item.getData();
 				if (object instanceof JComponent) {
-					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter((JComponent) object);
+					WidgetAdapter adapter = WidgetAdapter
+							.getWidgetAdapter((JComponent) object);
 					if (adapter != null) {
-						WhiteBoard.sendEvent(new Event(this, Event.EVENT_SHOW_POPUP, new Object[] { new java.awt.Point(e.x, e.y), adapter.getWidget() }));
+						WhiteBoard.sendEvent(new Event(this,
+								Event.EVENT_SHOW_POPUP, new Object[] {
+										new java.awt.Point(e.x, e.y),
+										adapter.getWidget() }));
 					}
 				}
 			}
@@ -104,11 +115,13 @@ public class VisualSwingOutline extends ContentOutlinePage {
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		if (event.getSource() == getTreeViewer()) {
-			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+			IStructuredSelection selection = (IStructuredSelection) event
+					.getSelection();
 			designer.clearSelection();
 			for (Object object : selection.toArray()) {
 				if (object != null && object instanceof JComponent) {
-					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter((JComponent) object);
+					WidgetAdapter adapter = WidgetAdapter
+							.getWidgetAdapter((JComponent) object);
 					if (adapter != null) {
 						adapter.setSelected(true);
 					}
@@ -118,10 +131,11 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			super.selectionChanged(event);
 		} else {
 			getTreeViewer().refresh();
-			TreePath[]paths=getTreePath((List<JComponent>)event.getSelection());
+			TreePath[] paths = getTreePath((List<JComponent>) event
+					.getSelection());
 			TreeSelection sel = new TreeSelection(paths);
 			setSelection(sel);
-		}		
+		}
 	}
 
 	private TreePath[] getTreePath(List<JComponent> components) {
