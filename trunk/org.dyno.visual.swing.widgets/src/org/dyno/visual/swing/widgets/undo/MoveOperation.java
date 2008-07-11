@@ -15,17 +15,17 @@ import org.eclipse.core.runtime.Status;
 
 public abstract class MoveOperation extends AbstractOperation {
 	private WidgetAdapter adapter;
-
+	private List<JComponent> selection;
 	public MoveOperation(WidgetAdapter adapter) {
 		super("");
 		setLabel(getName());
 		this.adapter = adapter;
+		this.selection = adapter.getSelection();
 	}
 	protected abstract String getName();
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		List<JComponent> selection = adapter.getSelection();
 		for (JComponent child : selection) {
 			Rectangle bounds = child.getBounds();
 			if (isVertical())
@@ -51,7 +51,6 @@ public abstract class MoveOperation extends AbstractOperation {
 	@Override
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		List<JComponent> selection = adapter.getSelection();
 		for (JComponent child : selection) {
 			Rectangle bounds = child.getBounds();
 			if (isVertical())
