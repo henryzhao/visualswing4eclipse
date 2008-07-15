@@ -10,6 +10,7 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Graphics;
+import java.awt.Point;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -34,9 +35,10 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 			parent = ((JScrollPane) jspa.getWidget());
 			parent.setViewportView(getWidget());
 			parent.addNotify();
-			parent.setSize(getWidget().getSize());
+			parent.setSize(getWidget().getSize());			
 			layoutContainer(parent);
 			parent.validate();
+			jspa.setHotspotPoint(new Point(parent.getWidth() / 2, parent.getHeight() / 2));
 		}
 		return parent;
 	}
