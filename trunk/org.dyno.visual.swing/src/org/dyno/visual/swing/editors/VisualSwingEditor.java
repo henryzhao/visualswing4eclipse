@@ -56,7 +56,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -115,21 +114,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 			return outline;
 		} else if (adapter == IPropertySheetPage.class) {
 			if (sheetPage == null) {
-				sheetPage = new PropertySheetPage(){
-
-					@Override
-					public void createControl(Composite parent) {
-						super.createControl(parent);
-						Tree tree = (Tree) getControl();
-						tree.addListener(SWT.MeasureItem, new org.eclipse.swt.widgets.Listener(){
-							@Override
-							public void handleEvent(org.eclipse.swt.widgets.Event event) {
-								event.height = 18;
-							}
-						});
-					}
-					
-				};
+				sheetPage = new WidgetPropertyPage();
 				sheetPage.setPropertySourceProvider(new WidgetAdapterContentProvider());
 			}
 			return sheetPage;
