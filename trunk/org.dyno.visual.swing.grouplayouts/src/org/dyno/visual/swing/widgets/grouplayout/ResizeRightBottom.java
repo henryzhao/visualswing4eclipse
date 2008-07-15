@@ -43,12 +43,13 @@ class ResizeRightBottom extends ResizeOperation {
 		}
 		if (lp.equals(last_point))
 			return false;
-		pair = calculateMascotLocation(todrop, lp, last_point);
+		pair = calculateMascotLocation(todrop, lp, azimuth);
 		Point np = pair == null ? lp : new Point(pair.vQuart == null ? lp.x : pair.vQuart.masc, pair.hQuart == null ? lp.y : pair.hQuart.masc);
 		Point sp = parent.getMascotLocation();
 		int cw = np.x - sp.x;
 		int ch = np.y - sp.y;
 		todrop.setSize(cw, ch);
+		azimuth = getAzimuth(p, last_point);
 		last_point = p;
 		return true;
 	}
@@ -129,9 +130,9 @@ class ResizeRightBottom extends ResizeOperation {
 		return true;
 	}
 
-	private QuartetPair calculateMascotLocation(JComponent todrop, Point this_point, Point last_point) {
-		List<Quartet> hAnchor = calBAnchor(todrop, this_point, last_point);
-		List<Quartet> vAnchor = calRAnchor(todrop, this_point, last_point);
+	private QuartetPair calculateMascotLocation(JComponent todrop, Point this_point, int azimuth) {
+		List<Quartet> hAnchor = calBAnchor(todrop, this_point, azimuth);
+		List<Quartet> vAnchor = calRAnchor(todrop, this_point, azimuth);
 		if (hAnchor == null) {
 			if (vAnchor == null) {
 				adapter.setBaseline(null, null);

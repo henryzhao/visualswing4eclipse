@@ -55,7 +55,7 @@ class BeanHover extends AbstractDragOperation {
 		Insets insets = container.getInsets();
 		WidgetAdapter dropAdapter = parent.getDropWidget();
 		JComponent drop = dropAdapter.getComponent();
-		QuartetPair pair = calMascotLocation(drop, p, last_point);
+		QuartetPair pair = calMascotLocation(drop, p, azimuth);
 		Point hot = dropAdapter.getHotspotPoint();
 		Spring spring = new Spring(10, 10);// TODO should be replaced by a
 											// container gap.

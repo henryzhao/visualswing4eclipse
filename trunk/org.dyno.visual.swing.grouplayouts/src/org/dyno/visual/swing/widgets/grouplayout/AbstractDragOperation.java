@@ -55,6 +55,7 @@ abstract class AbstractDragOperation implements IDragOperation {
 	protected JComponent container;
 	protected GroupLayout layout;
 	protected Point last_point;
+	protected int azimuth;
 
 	protected AbstractDragOperation(GroupLayoutAdapter adapter, GroupLayout layout, JComponent container) {
 		this.adapter = adapter;
@@ -146,18 +147,18 @@ abstract class AbstractDragOperation implements IDragOperation {
 	protected Point dragComponent(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Point lp = p;
-		QuartetPair pair = calMascotLocation(parent.getDropWidget().getWidget(), lp, last_point);
+		QuartetPair pair = calMascotLocation(parent.getDropWidget().getWidget(), lp, azimuth);
 		Point np = pair == null ? lp : new Point(pair.vQuart == null ? lp.x : pair.vQuart.masc, pair.hQuart == null ? lp.y : pair.hQuart.masc);
+		azimuth = getAzimuth(p, last_point);
 		last_point = lp;
 		Point newp = np;
 		Point oldp = parent.getMascotLocation();
 		parent.setMascotLocation(newp);
 		return oldp;
 	}
-
-	protected QuartetPair calMascotLocation(JComponent todrop, Point this_point, Point last_point) {
-		List<Quartet> hAnchor = calHAnchor(todrop, this_point, last_point);
-		List<Quartet> vAnchor = calVAnchor(todrop, this_point, last_point);
+	protected QuartetPair calMascotLocation(JComponent todrop, Point this_point, int azimuth) {
+		List<Quartet> hAnchor = calHAnchor(todrop, this_point, azimuth);
+		List<Quartet> vAnchor = calVAnchor(todrop, this_point, azimuth);
 		if (hAnchor == null) {
 			if (vAnchor == null) {
 				adapter.setBaseline(null, null);
@@ -181,8 +182,7 @@ abstract class AbstractDragOperation implements IDragOperation {
 		}
 	}
 
-	private List<Quartet> calVAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
+	private List<Quartet> calVAnchor(JComponent todrop, Point this_point, int azimuth) {
 		azimuth = isIncreasing(SwingConstants.HORIZONTAL, azimuth);
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int size = containerAdapter.getChildCount();
@@ -207,8 +207,7 @@ abstract class AbstractDragOperation implements IDragOperation {
 		return vAnchor;
 	}
 
-	private List<Quartet> calHAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
+	private List<Quartet> calHAnchor(JComponent todrop, Point this_point, int azimuth) {
 		azimuth = isIncreasing(SwingConstants.VERTICAL, azimuth);
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int size = containerAdapter.getChildCount();
@@ -544,7 +543,7 @@ abstract class AbstractDragOperation implements IDragOperation {
 
 	protected int getAzimuth(Point this_point, Point last_point) {
 		if (this_point.x == last_point.x) {
-			if (this_point.y < last_point.y)
+			if (this_point.y <= last_point.y)
 				return NORTH;
 			else
 				return SOUTH;

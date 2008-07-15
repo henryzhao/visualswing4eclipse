@@ -56,8 +56,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		super(adapter, layout, container);
 	}
 
-	protected List<Quartet> calLAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
+	protected List<Quartet> calLAnchor(JComponent todrop, Point this_point, int azimuth) {
 		azimuth = isIncreasing(SwingConstants.HORIZONTAL, azimuth);
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int size = containerAdapter.getChildCount();
@@ -234,8 +233,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		return null;
 	}
 
-	protected List<Quartet> calBAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
+	protected List<Quartet> calBAnchor(JComponent todrop, Point this_point, int azimuth) {
 		azimuth = isIncreasing(SwingConstants.VERTICAL, azimuth);
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int size = containerAdapter.getChildCount();
@@ -284,8 +282,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 
 
 
-	protected List<Quartet> calTAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
+	protected List<Quartet> calTAnchor(JComponent todrop, Point this_point, int azimuth) {
 		azimuth = isIncreasing(SwingConstants.VERTICAL, azimuth);
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int size = containerAdapter.getChildCount();
@@ -468,8 +465,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		return null;
 	}
 
-	protected List<Quartet> calRAnchor(JComponent todrop, Point this_point, Point last_point) {
-		int azimuth = getAzimuth(this_point, last_point);
+	protected List<Quartet> calRAnchor(JComponent todrop, Point this_point, int azimuth) {
 		azimuth = isIncreasing(SwingConstants.HORIZONTAL, azimuth);
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int size = containerAdapter.getChildCount();

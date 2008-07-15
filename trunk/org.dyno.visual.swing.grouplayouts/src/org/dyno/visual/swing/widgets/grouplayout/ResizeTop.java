@@ -17,10 +17,10 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.layouts.Alignment;
+import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
-import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Spring;
 import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -43,13 +43,14 @@ class ResizeTop extends ResizeOperation {
 		}
 		if (lp.equals(last_point))
 			return false;
-		pair = calculateMascotLocation(todrop, lp, last_point);
+		pair = calculateMascotLocation(todrop, lp, azimuth);
 		Point np = pair == null ? lp : new Point(lp.x, pair.hQuart.masc);
 		Point sp = parent.getMascotLocation();
 		int y = sp.y + todrop.getHeight();
 		int cw = todrop.getWidth();
 		int ch = y - np.y;
 		todrop.setSize(cw, ch);
+		azimuth = getAzimuth(p, last_point);
 		last_point = lp;
 		np.x = sp.x;
 		parent.setMascotLocation(np);
@@ -108,8 +109,8 @@ class ResizeTop extends ResizeOperation {
 		return true;
 	}
 
-	private QuartetPair calculateMascotLocation(JComponent todrop, Point this_point, Point last_point) {
-		List<Quartet> hAnchor = calTAnchor(todrop, this_point, last_point);
+	private QuartetPair calculateMascotLocation(JComponent todrop, Point this_point, int azimuth) {
+		List<Quartet> hAnchor = calTAnchor(todrop, this_point, azimuth);
 		if (hAnchor == null) {
 			adapter.setBaseline(null, null);
 			return null;
