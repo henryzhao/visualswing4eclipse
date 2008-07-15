@@ -48,7 +48,6 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * 
@@ -72,12 +71,12 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@Override
-	public boolean parse() {
+	public boolean parse(Shell shell) {
 		try {
 			IType[] types = unit.getPrimary().getAllTypes();
 			for (IType type : types) {
 				if (type.isClass() && Flags.isPublic(type.getFlags())) {
-					if (processType(unit.getPrimary(), type))
+					if (processType(unit.getPrimary(), type, shell))
 						return true;
 				}
 			}
@@ -87,7 +86,7 @@ class DefaultSourceParser implements ISourceParser {
 		return false;
 	}
 
-	private boolean processType(ICompilationUnit unit, IType type) throws JavaModelException {
+	private boolean processType(ICompilationUnit unit, IType type, Shell shell) throws JavaModelException {
 		try {
 			unit.getJavaProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
 			IJavaProject java_project = type.getJavaProject();
@@ -105,8 +104,7 @@ class DefaultSourceParser implements ISourceParser {
 				try {
 					setUpLookAndFeel(beanClass);
 				} catch (Exception e) {
-					Shell parent = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-					MessageDialog.openError(parent, "Error!", e.getMessage());
+					MessageDialog.openError(shell, "Error!", e.getMessage());
 					return false;
 				}
 				try {
