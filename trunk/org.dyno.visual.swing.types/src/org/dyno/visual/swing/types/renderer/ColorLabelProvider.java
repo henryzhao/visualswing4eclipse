@@ -21,7 +21,7 @@ import org.eclipse.swt.graphics.RGB;
 
 public class ColorLabelProvider extends LabelProvider {
 	private static int BOX_SIZE = 13;
-	private static final int DEFAULT_EXTENT = 16;
+	private static final int DEFAULT_EXTENT = 18;
 	private static RGB BORDER_RGB = new RGB(28, 81, 128);
 
 	public ColorLabelProvider() {
