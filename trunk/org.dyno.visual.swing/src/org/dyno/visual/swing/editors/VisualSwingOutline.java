@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -69,6 +70,12 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				_mouseDoubleClicked(e);
+			}
+		});
+		tree.addListener(SWT.MeasureItem, new org.eclipse.swt.widgets.Listener(){
+			@Override
+			public void handleEvent(org.eclipse.swt.widgets.Event event) {
+				event.height = 18;
 			}
 		});
 		new OutlineViewDnD(designer).attach(treeView);
