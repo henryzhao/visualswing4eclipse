@@ -252,6 +252,35 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
+	public void addAfter(JComponent hovering, JComponent dragged) {
+		addChild(dragged);
+	}
+
+	@Override
+	public void addBefore(JComponent hovering, JComponent dragged) {
+		addChild(dragged);
+	}
+
+	@Override
+	public void addChild(JComponent widget) {
+		String emptyCons = findEmptyConstraints();
+		container.add(widget, emptyCons);
+	}
+	private String findEmptyConstraints(){
+		BorderLayout layout = (BorderLayout) container.getLayout();
+		if(layout.getLayoutComponent(BorderLayout.CENTER)==null)
+			return BorderLayout.CENTER;
+		if(layout.getLayoutComponent(BorderLayout.NORTH)==null)
+			return BorderLayout.NORTH;
+		if(layout.getLayoutComponent(BorderLayout.SOUTH)==null)
+			return BorderLayout.SOUTH;
+		if(layout.getLayoutComponent(BorderLayout.EAST)==null)
+			return BorderLayout.EAST;
+		if(layout.getLayoutComponent(BorderLayout.WEST)==null)
+			return BorderLayout.WEST;
+		return null;		
+	}
+	@Override
 	protected String getChildConstraints(JComponent child, ImportRewrite imports) {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		String object = (String) layout.getConstraints(child);
