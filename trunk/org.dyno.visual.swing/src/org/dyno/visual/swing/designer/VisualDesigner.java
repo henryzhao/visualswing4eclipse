@@ -28,6 +28,7 @@ import javax.swing.border.Border;
 
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -72,6 +73,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private VisualSwingEditor editor;
 	private Composite parent;
 	private IUndoContext undoContext;
+
 	@SuppressWarnings("serial")
 	public VisualDesigner(VisualSwingEditor editor, Composite parent) {
 		this.editor = editor;
@@ -92,9 +94,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
 	}
-	public IUndoContext getUndoContext(){
+
+	public IUndoContext getUndoContext() {
 		return undoContext;
 	}
+
 	public VisualSwingEditor getEditor() {
 		return editor;
 	}
@@ -180,13 +184,13 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		MenuManager manager = new MenuManager("#EDIT");
 		if (hovered != null)
 			addContextSensitiveMenu(manager, hovered);
-		
+
 		manager.add(new Separator());
 		IEditorSite site = editor.getEditorSite();
 		manager.add(undoAction);
 		manager.add(redoAction);
 		manager.add(new Separator());
-		
+
 		IWorkbenchPage page = site.getPage();
 		IWorkbenchWindow window = site.getWorkbenchWindow();
 		page.getActiveEditor();
@@ -302,10 +306,10 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			redoAction = new RedoActionHandler(site, getUndoContext());
 			IActionBars actionBars = site.getActionBars();
 			actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
-			actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);		
+			actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 			rootBounds = adapter.getDesignBounds();
 			root.setSize(rootBounds.width, rootBounds.height);
-			add(root);			
+			add(root);
 			designBorder = adapter.getDesignBorder();
 			container.setBorder(designBorder);
 			validateContent();
@@ -313,8 +317,10 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			setFocus();
 		}
 	}
+
 	private UndoActionHandler undoAction;
 	private RedoActionHandler redoAction;
+
 	public void publishSelection() {
 		WhiteBoard.sendEvent(createEvent(Event.EVENT_SELECTION, new WidgetSelection(root)));
 	}
@@ -551,15 +557,15 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				CompositeAdapter parentAdapter = (CompositeAdapter) childAdapter.getParentAdapter();
 				IUndoableOperation operation = parentAdapter.doKeyPressed(e);
 				if (operation != null) {
-					IOperationHistory operationHistory = PlatformUI.getWorkbench()
-							.getOperationSupport().getOperationHistory();
+					Shell shell = getShell();
+					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					operation.addContext(getUndoContext());
 					try {
-						operationHistory.execute(operation, null, null);
+						operationHistory.execute(operation, null, new ShellAdaptable(shell));
 					} catch (ExecutionException ex) {
 						ex.printStackTrace();
 					}
-				}				
+				}
 			}
 		}
 	}
@@ -608,17 +614,19 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	public WidgetAdapter getHoveredAdapter() {
+		if (root == null)
+			return null;
 		List<JComponent> selected = new WidgetSelection(root);
-		if(selected.isEmpty())
+		if (selected.isEmpty())
 			return null;
 		WidgetAdapter parent = null;
-		for(JComponent comp:selected){
+		for (JComponent comp : selected) {
 			WidgetAdapter compAdapter = WidgetAdapter.getWidgetAdapter(comp);
-			if(parent==null){
-				if(compAdapter.isRoot())
+			if (parent == null) {
+				if (compAdapter.isRoot())
 					return null;
-				parent=compAdapter.getParentAdapter();
-			}else if(parent!=compAdapter.getParentAdapter()){
+				parent = compAdapter.getParentAdapter();
+			} else if (parent != compAdapter.getParentAdapter()) {
 				return null;
 			}
 		}

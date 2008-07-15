@@ -17,19 +17,22 @@ import java.util.Comparator;
 import javax.swing.JComponent;
 import javax.swing.plaf.UIResource;
 
-import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.undo.SetValueOperation;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 /**
@@ -59,7 +62,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	private boolean gencode;
 
 	@SuppressWarnings("unchecked")
-	public WidgetProperty(String id, String name, Class beanClass, ILabelProviderFactory label, ICellEditorFactory editor) {
+	public WidgetProperty(String id, String name, Class beanClass,
+			ILabelProviderFactory label, ICellEditorFactory editor) {
 		this.beanClass = beanClass;
 		this.id = id;
 		this.propertyName = name;
@@ -125,7 +129,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		if (displayName == null || displayName.trim().length() == 0)
 			displayName = propertyName;
 		String sEditable = config.getAttribute("editable");
-		editable = sEditable == null || sEditable.trim().length() == 0 || sEditable.toLowerCase().equals("true");
+		editable = sEditable == null || sEditable.trim().length() == 0
+				|| sEditable.toLowerCase().equals("true");
 		String sLabel = config.getAttribute("renderer");
 		Class<?> type = propertyDescriptor.getPropertyType();
 		TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
@@ -158,7 +163,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 
 	private void createEditorProviderFactory(IConfigurationElement config) {
 		try {
-			editorFactory = (ICellEditorFactory) config.createExecutableExtension("editor");
+			editorFactory = (ICellEditorFactory) config
+					.createExecutableExtension("editor");
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -166,7 +172,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 
 	private void createLabelProviderFactory(IConfigurationElement config) {
 		try {
-			labelFactory = (ILabelProviderFactory) config.createExecutableExtension("renderer");
+			labelFactory = (ILabelProviderFactory) config
+					.createExecutableExtension("renderer");
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
@@ -239,77 +246,96 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		if (value != null && value instanceof UIResource)
 			return false;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
-		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
+		ILookAndFeelAdapter adapter = ExtensionRegistry
+				.getLnfAdapter(lnfClassname);
 		if (adapter == null)
 			return false;
 		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
 		if (propertyType == byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
-			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value)
+					.byteValue();
 			return bv != dv;
 		} else if (propertyType == char.class) {
 			char bv = value == null ? 0 : ((Character) value).charValue();
-			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value)
+					.charValue();
 			return bv != dv;
 		} else if (propertyType == short.class) {
 			short bv = value == null ? 0 : ((Short) value).shortValue();
-			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value)
+					.shortValue();
 			return bv != dv;
 		} else if (propertyType == int.class) {
 			int bv = value == null ? 0 : ((Integer) value).intValue();
-			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value)
+					.intValue();
 			return bv != dv;
 		} else if (propertyType == long.class) {
 			long bv = value == null ? 0 : ((Long) value).longValue();
-			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value)
+					.longValue();
 			return bv != dv;
 		} else if (propertyType == float.class) {
 			float bv = value == null ? 0 : ((Float) value).floatValue();
-			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value)
+					.floatValue();
 			return bv != dv;
 		} else if (propertyType == double.class) {
 			double bv = value == null ? 0 : ((Double) value).doubleValue();
-			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value)
+					.doubleValue();
 			return bv != dv;
 		} else if (propertyType == void.class) {
 			return false;
 		} else if (propertyType == boolean.class) {
-			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
-			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
+			boolean bv = value == null ? false : ((Boolean) value)
+					.booleanValue();
+			boolean dv = default_value == null ? false
+					: ((Boolean) default_value).booleanValue();
 			return bv != dv;
 		} else if (propertyType == Byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
-			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value)
+					.byteValue();
 			return bv != dv;
 		} else if (propertyType == Character.class) {
 			char bv = value == null ? 0 : ((Character) value).charValue();
-			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value)
+					.charValue();
 			return bv != dv;
 		} else if (propertyType == Short.class) {
 			short bv = value == null ? 0 : ((Short) value).shortValue();
-			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value)
+					.shortValue();
 			return bv != dv;
 		} else if (propertyType == Integer.class) {
 			int bv = value == null ? 0 : ((Integer) value).intValue();
-			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value)
+					.intValue();
 			return bv != dv;
 		} else if (propertyType == Long.class) {
 			long bv = value == null ? 0 : ((Long) value).longValue();
-			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value)
+					.longValue();
 			return bv != dv;
 		} else if (propertyType == Float.class) {
 			float bv = value == null ? 0 : ((Float) value).floatValue();
-			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value)
+					.floatValue();
 			return bv != dv;
 		} else if (propertyType == Double.class) {
 			double bv = value == null ? 0 : ((Double) value).doubleValue();
-			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value)
+					.doubleValue();
 			return bv != dv;
 		} else if (propertyType == Void.class) {
 			return false;
 		} else if (propertyType == Boolean.class) {
-			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
-			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
+			boolean bv = value == null ? false : ((Boolean) value)
+					.booleanValue();
+			boolean dv = default_value == null ? false
+					: ((Boolean) default_value).booleanValue();
 			return bv != dv;
 		} else if (propertyType == String.class) {
 			if (value == null) {
@@ -341,7 +367,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			else if (value != null && default_value == null)
 				return true;
 			else {
-				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(propertyType);
+				TypeAdapter typeAdapter = ExtensionRegistry
+						.getTypeAdapter(propertyType);
 				if (typeAdapter != null) {
 					Comparator comparator = typeAdapter.getComparator();
 					if (comparator != null)
@@ -365,59 +392,76 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		if (value != null && value instanceof UIResource)
 			return;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
-		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
+		ILookAndFeelAdapter adapter = ExtensionRegistry
+				.getLnfAdapter(lnfClassname);
 		if (adapter == null)
 			return;
 		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
 		if (propertyType == byte.class) {
-			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value)
+					.byteValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == char.class) {
-			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value)
+					.charValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == short.class) {
-			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value)
+					.shortValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == int.class) {
-			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value)
+					.intValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == long.class) {
-			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value)
+					.longValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == float.class) {
-			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value)
+					.floatValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == double.class) {
-			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value)
+					.doubleValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == void.class) {
 		} else if (propertyType == boolean.class) {
-			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
+			boolean dv = default_value == null ? false
+					: ((Boolean) default_value).booleanValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Byte.class) {
-			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value)
+					.byteValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Character.class) {
-			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value)
+					.charValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Short.class) {
-			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value)
+					.shortValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Integer.class) {
-			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value)
+					.intValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Long.class) {
-			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value)
+					.longValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Float.class) {
-			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value)
+					.floatValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Double.class) {
-			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value)
+					.doubleValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Void.class) {
 		} else if (propertyType == Boolean.class) {
-			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
+			boolean dv = default_value == null ? false
+					: ((Boolean) default_value).booleanValue();
 			setPropertyValue(bean, dv);
 		} else {
 			setPropertyValue(bean, default_value);
@@ -436,26 +480,19 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 					TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
 					value = ta.getEditor().decodeValue(value);
 				}
-				propertyDescriptor.getWriteMethod().invoke(bean, value);
+				IUndoableOperation operation = new SetValueOperation(bean,
+						propertyDescriptor, value);
+				IOperationHistory operationHistory = PlatformUI.getWorkbench()
+						.getOperationSupport().getOperationHistory();
 				if (bean instanceof JComponent) {
 					JComponent jcomp = (JComponent) bean;
-					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
-					adapter.setDirty(true);
-					adapter.getEdited().put(propertyDescriptor.getName(), Boolean.TRUE);
+					WidgetAdapter adapter = WidgetAdapter
+							.getWidgetAdapter(jcomp);
 					if (adapter != null) {
-						if(!adapter.isRoot()){
-							CompositeAdapter parent = adapter.getParentAdapter();
-							JComponent widget = parent.getWidget();
-							widget.doLayout();
-							widget.validate();	
-						}else{
-							JComponent widget = adapter.getWidget();
-							widget.doLayout();
-							widget.validate();
-						}
-						adapter.getDesigner().repaint();
+						operation.addContext(adapter.getUndoContext());
 					}
 				}
+				operationHistory.execute(operation, null, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -556,7 +593,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			return false;
 		}
 		if (value != null) {
-			TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(value.getClass());
+			TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(value
+					.getClass());
 			if (adapter != null && adapter.getCloner() != null) {
 				value = adapter.getCloner().clone(value);
 			}
@@ -580,7 +618,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				Object value = _getPropertyValue(bean);
 				ICodeGen gen = null;
 				Class typeClass = propertyDescriptor.getPropertyType();
-				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(typeClass);
+				TypeAdapter typeAdapter = ExtensionRegistry
+						.getTypeAdapter(typeClass);
 				if (typeAdapter != null) {
 					gen = typeAdapter.getEndec();
 				}
@@ -594,7 +633,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				if (!adapter.isRoot()) {
 					builder.append(getFieldName(adapter.getName()) + ".");
 				}
-				builder.append(propertyDescriptor.getWriteMethod().getName() + "(");
+				builder.append(propertyDescriptor.getWriteMethod().getName()
+						+ "(");
 				if (gen != null) {
 					if (value == null) {
 						builder.append("null");
@@ -624,6 +664,6 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
 		Boolean bool = adapter.getEdited().get(propertyDescriptor.getName());
-		return bool == null?false:bool.booleanValue();
+		return bool == null ? false : bool.booleanValue();
 	}
 }

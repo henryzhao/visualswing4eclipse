@@ -18,15 +18,14 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.content.IContentTypeManager;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -46,8 +45,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input)
-			throws PartInitException {
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		setSite(site);
 		setInput(input);
 		if (shouldSwitchToJavaEditor() || !isSwingComponent()) {
@@ -72,23 +70,24 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	public Display getDisplay() {
-		return getEditorSite().getShell().getDisplay();
+		return getShell().getDisplay();
+	}
+
+	public Shell getShell() {
+		return getEditorSite().getShell();
 	}
 
 	protected boolean isSwingComponent() {
 		IEditorInput input = getEditorInput();
 		if (input instanceof IFileEditorInput) {
 			IFileEditorInput file = (IFileEditorInput) input;
-			IContentTypeManager contentTypeManager = Platform
-					.getContentTypeManager();
+			IContentTypeManager contentTypeManager = Platform.getContentTypeManager();
 			InputStream stream = null;
 			try {
 				stream = file.getFile().getContents();
-				IContentType[] contentTypes = contentTypeManager
-						.findContentTypesFor(stream, file.getName());
+				IContentType[] contentTypes = contentTypeManager.findContentTypesFor(stream, file.getName());
 				for (IContentType contentType : contentTypes) {
-					if (contentType.getId().equals(
-							VisualSwingContentDescriber.CONTENT_TYPE_ID_VS)) {
+					if (contentType.getId().equals(VisualSwingContentDescriber.CONTENT_TYPE_ID_VS)) {
 						return true;
 					}
 				}
@@ -106,29 +105,21 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	protected void switchToJavaEditor(Display display) {
-		final IEditorInput input = getEditorInput();
-		display.asyncExec(new Runnable() {
+		getDisplay().asyncExec(new Runnable() {
+
 			@Override
 			public void run() {
-				IWorkbench workbench = PlatformUI.getWorkbench();
-				if (workbench != null) {
-					IWorkbenchWindow window = workbench
-							.getActiveWorkbenchWindow();
-					if (window != null) {
-						IWorkbenchPage page = window.getActivePage();
-						if (page != null) {
-							page
-									.closeEditor(AbstractDesignerEditor.this,
-											false);
-							try {
-								page.openEditor(input, JAVA_EDITOR_ID);
-								IFileEditorInput file_editor_input = (IFileEditorInput) input;
-								IFile file = file_editor_input.getFile();
-								IDE.setDefaultEditor(file, JAVA_EDITOR_ID);
-							} catch (PartInitException e) {
-								e.printStackTrace();
-							}
-						}
+				IEditorInput input = getEditorInput();
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				if (page != null) {
+					page.closeEditor(AbstractDesignerEditor.this, false);
+					try {
+						page.openEditor(input, JAVA_EDITOR_ID);
+						IFileEditorInput file_editor_input = (IFileEditorInput) input;
+						IFile file = file_editor_input.getFile();
+						IDE.setDefaultEditor(file, JAVA_EDITOR_ID);
+					} catch (PartInitException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -136,77 +127,53 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	protected void openRelatedView() {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench != null) {
-			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-			if (window != null) {
-				IWorkbenchPage page = window.getActivePage();
-				if (page != null) {
-					for (String viewId : RELATED_VIEW_IDS) {
-						try {
-							page.showView(viewId);
-						} catch (Exception e) {
-						}
-					}
+		IWorkbenchPage page = getEditorSite().getPage();
+		if (page != null) {
+			for (String viewId : RELATED_VIEW_IDS) {
+				try {
+					page.showView(viewId);
+				} catch (Exception e) {
 				}
 			}
 		}
 	}
 
 	protected void closeRelatedView() {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench != null) {
-			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-			if (window != null) {
-				IWorkbenchPage page = window.getActivePage();
-				if (page != null) {
-					IEditorReference[] editorRef = page.getEditorReferences();
-					for (IEditorReference ref : editorRef) {
-						try {
-							IEditorPart editor = ref.getEditor(true);
-							if (editor instanceof VisualSwingEditor)
-								return;
-						} catch (Exception e) {
-						}
-					}
-					for (String viewId : RELATED_VIEW_IDS) {
-						try {
-							IViewPart part = page.findView(viewId);
-							page.hideView(part);
-						} catch (Exception e) {
-						}
-					}
+		IWorkbenchPage page = getEditorSite().getPage();
+		if (page != null) {
+			IEditorReference[] editorRef = page.getEditorReferences();
+			for (IEditorReference ref : editorRef) {
+				try {
+					IEditorPart editor = ref.getEditor(true);
+					if (editor instanceof VisualSwingEditor)
+						return;
+				} catch (Exception e) {
+				}
+			}
+			for (String viewId : RELATED_VIEW_IDS) {
+				try {
+					IViewPart part = page.findView(viewId);
+					page.hideView(part);
+				} catch (Exception e) {
 				}
 			}
 		}
 	}
 
 	public IEditorPart openSouceEditor() {
-		final IEditorInput input = getEditorInput();
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench != null) {
-			IWorkbenchWindow[] windows = workbench.getWorkbenchWindows();
-			for (IWorkbenchWindow window : windows) {
-				if (window != null) {
-					IWorkbenchPage page = window.getActivePage();
-					if (page != null) {
-						try {
-							return page.openEditor(input, JAVA_EDITOR_ID, true,
-									IWorkbenchPage.MATCH_ID
-											| IWorkbenchPage.MATCH_INPUT);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
+		IEditorInput input = getEditorInput();
+		IWorkbenchPage page = getEditorSite().getPage();
+		if (page != null) {
+			try {
+				return page.openEditor(input, JAVA_EDITOR_ID, true, IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
 	}
 
-	private static final String[] RELATED_VIEW_IDS = {
-			"org.dyno.visual.swing.editors.PaletteView",
-			"org.eclipse.ui.views.PropertySheet",
+	private static final String[] RELATED_VIEW_IDS = { "org.dyno.visual.swing.editors.PaletteView", "org.eclipse.ui.views.PropertySheet",
 			"org.eclipse.ui.views.ContentOutline" };
 	private static final String JAVA_EDITOR_ID = "org.eclipse.jdt.ui.CompilationUnitEditor";
 	private static final String NATURE_ID = "org.eclipse.jdt.core.javanature";

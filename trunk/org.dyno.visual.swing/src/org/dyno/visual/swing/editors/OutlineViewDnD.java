@@ -153,6 +153,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 				if (target_adapter instanceof CompositeAdapter)
 					((CompositeAdapter) target_adapter).addChild(component);
 			}
+			target_adapter.getRootAdapter().getWidget().validate();
 		}
 	}
 

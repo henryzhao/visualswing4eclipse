@@ -340,4 +340,10 @@ public abstract class LayoutAdapter implements IPropertySourceProvider {
 	protected IWidgetPropertyDescriptor[] getLayoutProperties(){
 		return new IWidgetPropertyDescriptor[0];
 	}
+
+	public void addAfter(JComponent hovering, JComponent dragged) {
+	}
+
+	public void addBefore(JComponent hovering, JComponent dragged) {
+	}
 }

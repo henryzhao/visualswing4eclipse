@@ -64,7 +64,6 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartConstants;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -101,7 +100,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		site.setSelectionProvider(this);
-		PlatformUI.getWorkbench().getActiveWorkbenchWindow().getPartService().addPartListener(this);
+		site.getWorkbenchWindow().getPartService().addPartListener(this);
 	}
 
 	@Override
@@ -245,7 +244,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		hostProject = unit.getJavaProject();
 		ISourceParser sourceParser = factory.newParser();
 		sourceParser.setSource(unit);
-		boolean success = sourceParser.parse();
+		boolean success = sourceParser.parse(getShell());
 		if (!success)
 			return false;
 		WidgetAdapter rootAdapter = sourceParser.getResult();

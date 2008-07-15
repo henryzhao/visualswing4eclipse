@@ -8,7 +8,6 @@
  ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -143,10 +142,10 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public void showChild(JComponent widget) {
 		widget.setVisible(true);
 	}
-	public void addBefore(JComponent hovering, Component dragged) {
+	public void addBefore(JComponent hovering, JComponent dragged) {
 	}
 
-	public void addAfter(JComponent hovering, Component dragged) {
+	public void addAfter(JComponent hovering, JComponent dragged) {
 	}
 
 	public void addChild(JComponent widget) {
