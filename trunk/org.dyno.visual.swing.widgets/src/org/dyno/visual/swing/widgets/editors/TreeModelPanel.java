@@ -348,8 +348,26 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 	}
 
 	public void setTreeModel(TreeModel v) {
+		Object root=v.getRoot();
+		if(root instanceof DefaultMutableTreeNode){
+			DefaultMutableTreeNode root_copy = copyNode((DefaultMutableTreeNode)root);
+			v=new DefaultTreeModel(root_copy);
+		}
 		tree.setModel(v);
 		expandTreePath(v, tree.getPathForRow(0));
+	}
+
+	private DefaultMutableTreeNode copyNode(DefaultMutableTreeNode root) {
+		DefaultMutableTreeNode root_copy = new DefaultMutableTreeNode(root.getUserObject());
+		if(!root.isLeaf()){
+			int count = root.getChildCount();
+			for(int i=0;i<count;i++){
+				TreeNode childNode = root.getChildAt(i);
+				DefaultMutableTreeNode child_copy = copyNode((DefaultMutableTreeNode)childNode);
+				root_copy.add(child_copy);				
+			}
+		}
+		return root_copy;
 	}
 
 	private void expandTreePath(TreeModel model, TreePath parent) {

@@ -79,6 +79,64 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	public void addAfter(JComponent hovering, JComponent dragged) {
+		JPanel jpanel = (JPanel) getWidget();
+		LayoutManager layout = jpanel.getLayout();
+		if (layout == null) {
+			int hoveringIndex=getComponentIndex(hovering);
+			if(hoveringIndex==-1)
+				jpanel.add(dragged);
+			else if(hoveringIndex==getWidget().getComponentCount()-1){
+				jpanel.add(dragged);
+			}else{
+				jpanel.add(dragged, hoveringIndex+1);
+			}
+		} else {
+			LayoutAdapter layoutAdapter = getLayoutAdapter();
+			layoutAdapter.addAfter(hovering, dragged);
+		}
+	}
+	private int getComponentIndex(Component child){
+		int count = getWidget().getComponentCount();
+		for(int i=0;i<count;i++){
+			Component comp=getWidget().getComponent(i);
+			if(comp==child)
+				return i;
+		}
+		return -1;
+	}
+	@Override
+	public void addBefore(JComponent hovering, JComponent dragged) {
+		JPanel jpanel = (JPanel) getWidget();
+		LayoutManager layout = jpanel.getLayout();
+		if (layout == null) {
+			int hoveringIndex=getComponentIndex(hovering);
+			if(hoveringIndex==-1)
+				jpanel.add(dragged, 0);
+			else if(hoveringIndex==0){
+				jpanel.add(dragged, 0);
+			}else{
+				jpanel.add(dragged, hoveringIndex);
+			}
+		} else {
+			LayoutAdapter layoutAdapter = getLayoutAdapter();
+			layoutAdapter.addBefore(hovering, dragged);
+		}
+	}
+
+	@Override
+	public void addChild(JComponent widget) {
+		JPanel jpanel = (JPanel) getWidget();
+		LayoutManager layout = jpanel.getLayout();
+		if (layout == null) {
+			jpanel.add(widget);
+		} else {
+			LayoutAdapter layoutAdapter = getLayoutAdapter();
+			layoutAdapter.addChild(widget);
+		}
+	}
+
+	@Override
 	public boolean doAlignment(String id) {
 		JPanel jp = (JPanel) getWidget();
 		LayoutManager layout = jp.getLayout();
@@ -508,18 +566,6 @@ public class JPanelAdapter extends CompositeAdapter {
 		} else {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
 			layoutAdapter.showChild(widget);
-		}
-	}
-
-	@Override
-	public void addChild(JComponent widget) {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout == null) {
-			jpanel.add(widget);
-		} else {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.addChild(widget);
 		}
 	}
 
