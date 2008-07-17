@@ -765,4 +765,16 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		builder.append(leading.getSpring().getPreferred());
 		builder.append(")");
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child, (Constraints)constraints);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		GroupLayout layout = (GroupLayout) container.getLayout();
+		Constraints constraints = layout.getConstraints(child);
+		return constraints;
+	}
 }
