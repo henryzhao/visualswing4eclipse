@@ -42,4 +42,16 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 		return new JLayeredPane();
 	}
 
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		JLayeredPane layeredPane = (JLayeredPane)getWidget();
+		layeredPane.setLayer(child, constraints==null?0:((Integer)constraints).intValue());
+		layeredPane.add(child);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return JLayeredPane.getLayer(child);
+	}
+
 }

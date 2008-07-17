@@ -720,4 +720,27 @@ public class JPanelAdapter extends CompositeAdapter {
 		return new JPanel();
 	}
 
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		JPanel panel = (JPanel) getWidget();
+		LayoutManager layout = panel.getLayout();
+		if (layout == null) {
+			child.setBounds((Rectangle)constraints);
+			panel.add(child);
+		} else {
+			getLayoutAdapter().addChildByConstraints(child, constraints);
+		}
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		JPanel panel = (JPanel) getWidget();
+		LayoutManager layout = panel.getLayout();
+		if (layout == null) {
+			return child.getBounds();
+		} else {
+			return getLayoutAdapter().getChildConstraints(child);
+		}
+	}
+
 }

@@ -145,5 +145,15 @@ public class JToolBarAdapter extends CompositeAdapter {
 	@Override
 	protected JComponent newWidget() {
 		return new JToolBar();
+	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		getWidget().add(child);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return null;
 	}	
 }

@@ -200,4 +200,15 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	protected JComponent newWidget() {
 		return new JScrollPane();
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		JScrollPane jsp = (JScrollPane) getWidget();
+		jsp.setViewportView(child);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return null;
+	}
 }

@@ -381,24 +381,26 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		}
 		return builder.toString();
 	}
+
 	public boolean isEnclosingContainer() {
 		return true;
 	}
+
 	@Override
 	public boolean interceptPoint(Point p, int ad) {
 		JSplitPane comp = (JSplitPane) getWidget();
-		if(p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad && p.y < comp.getHeight() + ad
+		if (p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad && p.y < comp.getHeight() + ad
 				&& !(p.x >= ad && p.y >= ad && p.x < comp.getWidth() - ad && p.y < comp.getHeight() - ad))
 			return true;
 		int location = comp.getDividerLocation();
 		int div = comp.getDividerSize();
-		if(comp.getOrientation()==JSplitPane.HORIZONTAL_SPLIT){
-			if(p.x>=location&&p.x<=location+div)
+		if (comp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
+			if (p.x >= location && p.x <= location + div)
 				return true;
 			else
 				return false;
-		}else{
-			if(p.y>=location&&p.y<=location+div)
+		} else {
+			if (p.y >= location && p.y <= location + div)
 				return true;
 			else
 				return false;
@@ -408,5 +410,38 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	@Override
 	protected JComponent newWidget() {
 		return new JSplitPane();
-	}	
+	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		JSplitPane jsp = (JSplitPane) getWidget();
+		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
+			if ("left".equals(constraints))
+				jsp.setLeftComponent(child);
+			else if ("right".equals(constraints))
+				jsp.setRightComponent(child);
+		} else {
+			if ("top".equals(constraints))
+				jsp.setTopComponent(child);
+			else if ("bottom".equals(constraints))
+				jsp.setBottomComponent(child);
+		}
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		JSplitPane jsp = (JSplitPane) getWidget();
+		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
+			if (jsp.getLeftComponent() == child)
+				return "left";
+			else if (jsp.getRightComponent() == child)
+				return "right";
+		} else {
+			if (jsp.getTopComponent() == child)
+				return "top";
+			else if (jsp.getBottomComponent() == child)
+				return "bottom";
+		}
+		return null;
+	}
 }

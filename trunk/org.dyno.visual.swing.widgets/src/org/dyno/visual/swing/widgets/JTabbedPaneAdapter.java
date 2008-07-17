@@ -225,7 +225,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createGetCode(imports));
-		JTabbedPane jtp = (JTabbedPane)getWidget();
+		JTabbedPane jtp = (JTabbedPane) getWidget();
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			JComponent child = getChild(i);
@@ -233,7 +233,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 			String getMethodName = getGetMethodName(childAdapter.getName());
 			builder.append(getFieldName(getName()) + ".addTab(");
 			String title = jtp.getTitleAt(i);
-			builder.append("\""+title+"\", ");
+			builder.append("\"" + title + "\", ");
 			builder.append(getMethodName + "());\n");
 		}
 		return builder.toString();
@@ -242,5 +242,23 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	@Override
 	protected JComponent newWidget() {
 		return new JTabbedPane();
+	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		if (constraints != null) {
+			JTabbedPane jtp = (JTabbedPane) getWidget();
+			jtp.addTab((String) constraints, child);
+		}
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		JTabbedPane jtp = (JTabbedPane) getWidget();
+		int index = jtp.indexOfComponent(child);
+		if (index != -1)
+			return jtp.getTitleAt(index);
+		else
+			return null;
 	}
 }

@@ -17,6 +17,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 
@@ -262,5 +263,23 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	@Override
 	protected JComponent newWidget() {
 		return new JDesktopPane();
+	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		JInternalFrame jif = (JInternalFrame)child;
+		JDesktopPane jtp = (JDesktopPane) getWidget();
+		jif.setBounds((Rectangle)constraints);
+		jtp.add(jif);
+		jif.setVisible(true);
+		clearAllSelected();
+		getDropWidget().setSelected(true);
+		getWidget().validate();
+		jif.toFront();
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {		
+		return child.getBounds();
 	}
 }

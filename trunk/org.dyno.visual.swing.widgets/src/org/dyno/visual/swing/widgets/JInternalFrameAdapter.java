@@ -278,4 +278,14 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		return new JInternalFrame();
 	}
 
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		getContentAdapter().addChildByConstraints(child, constraints);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return getContentAdapter().getChildConstraints(child);
+	}
+
 }
