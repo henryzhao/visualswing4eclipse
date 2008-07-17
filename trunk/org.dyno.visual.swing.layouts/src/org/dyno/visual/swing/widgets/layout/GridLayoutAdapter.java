@@ -162,5 +162,15 @@ public class GridLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", GridLayout.class);
 		return new IWidgetPropertyDescriptor[]{rowsProperty, columnsProperty, hgapProperty, vgapProperty};
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return null;
+	}
 	
 }

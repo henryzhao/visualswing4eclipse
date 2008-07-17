@@ -138,5 +138,16 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", CardLayout.class);
 		return new IWidgetPropertyDescriptor[]{hgapProperty, vgapProperty};
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child, constraints);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter(child);
+		return cAdapter.getName();
+	}
 	
 }

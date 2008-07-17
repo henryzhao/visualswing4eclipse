@@ -79,4 +79,15 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		String layoutName = imports.addImport("java.awt.GridBagLayout");
 		return "new " + layoutName + "()";
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child, constraints);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		GridBagLayout layout = (GridBagLayout) container.getLayout();
+		return layout.getConstraints(child);
+	}
 }

@@ -185,5 +185,16 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 		WidgetProperty alignmentProperty = new WidgetProperty("alignment", "alignment", FlowLayout.class, new FlowLayoutAlignmentRenderer(), new FlowLayoutAlignmentEditor());
 		return new IWidgetPropertyDescriptor[]{alignmentProperty, hgapProperty, vgapProperty, alignOnBaselineProperty};
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child);
+	}
+	
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return null;
+	}
 	
 }

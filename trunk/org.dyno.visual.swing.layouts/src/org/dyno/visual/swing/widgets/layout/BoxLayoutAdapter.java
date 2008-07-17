@@ -203,5 +203,15 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		FieldProperty axisProperty = new FieldProperty("axis", "axis", BoxLayout.class, new BoxLayoutAxisRenderer(), new BoxLayoutAxisEditor());
 		return new IWidgetPropertyDescriptor[]{axisProperty};
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		return null;
+	}
 	
 }

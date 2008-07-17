@@ -305,4 +305,18 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", BorderLayout.class);
 		return new IWidgetPropertyDescriptor[]{hgapProperty, vgapProperty};
 	}
+
+	@Override
+	public void addChildByConstraints(JComponent child, Object constraints) {
+		container.add(child, constraints);
+	}
+
+	@Override
+	public Object getChildConstraints(JComponent child) {
+		BorderLayout layout = (BorderLayout) container.getLayout();
+		String object = (String) layout.getConstraints(child);
+		if (object == null)
+			return BorderLayout.CENTER;
+		return object;
+	}
 }
