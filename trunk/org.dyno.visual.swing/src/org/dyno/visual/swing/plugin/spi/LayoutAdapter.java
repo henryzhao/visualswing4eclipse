@@ -346,4 +346,8 @@ public abstract class LayoutAdapter implements IPropertySourceProvider {
 
 	public void addBefore(JComponent hovering, JComponent dragged) {
 	}
+
+	public abstract void addChildByConstraints(JComponent child, Object constraints);
+
+	public abstract Object getChildConstraints(JComponent child);
 }

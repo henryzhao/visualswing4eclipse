@@ -106,7 +106,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	protected boolean isChildVisible(JComponent child) {
 		return child.isVisible();
 	}
-
+	public abstract Object getChildConstraints(JComponent child);
+	public abstract void addChildByConstraints(JComponent child, Object constraints);
 	@Override
 	public void clearSelection() {
 		super.clearSelection();

@@ -37,6 +37,7 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.SetWidgetValueOperation;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -148,11 +149,33 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 				if (compositeAdapter.drop(compositeAdapter.convertToLocal(p))) {
+					if(lastParent!=null){
+						IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+						JComponent child = WhiteBoard.getSelectedWidget().getComponent();
+						Object new_constraints = compositeAdapter.getChildConstraints(child);
+						IUndoableOperation operation = new MoveResizeOperation(lastParent, compositeAdapter, child, lastConstraints, new_constraints);
+						operation.addContext(designer.getUndoContext());
+						try {
+							operationHistory.execute(operation, null, null);
+						} catch (ExecutionException e) {
+							e.printStackTrace();
+						}
+					}
 					adapter.addNotify();
 					adapter.setDirty(true);
 				}
 			} else {
 				glassPlane.setHotspotPoint(null);
+				if(lastParent!=null){
+					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+					IUndoableOperation operation = new DragDropOperation(lastParent, WhiteBoard.getSelectedWidget().getComponent(), lastConstraints);
+					operation.addContext(designer.getUndoContext());
+					try {
+						operationHistory.execute(operation, null, null);
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			hoveredAdapter = null;
 			WhiteBoard.setSelectedWidget(null);
@@ -160,6 +183,18 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		} else if (currentAdapter != null) {
 			if (((CompositeAdapter) currentAdapter).drop(currentAdapter
 					.convertToLocal(p))) {
+				if(lastParent!=null){
+					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+					JComponent child = WhiteBoard.getSelectedWidget().getComponent();
+					Object new_constraints = ((CompositeAdapter) currentAdapter).getChildConstraints(child);
+					IUndoableOperation operation = new MoveResizeOperation(lastParent, ((CompositeAdapter) currentAdapter), child, lastConstraints, new_constraints);
+					operation.addContext(designer.getUndoContext());
+					try {
+						operationHistory.execute(operation, null, null);
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					}
+				}
 				currentAdapter.changeNotify();
 				currentAdapter.setDirty(true);
 			}
@@ -474,6 +509,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			currentAdapter = null;
 			state = STATE_MOUSE_HOVER;
 		}
+		lastParent = null;
+		lastConstraints = null;
 	}
 
 	public void mouseDragged(MouseEvent e) {
@@ -567,12 +604,15 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				parentAdapter = (CompositeAdapter) currentAdapter
 						.getParentAdapter();
 			}
+			lastConstraints = parentAdapter.getChildConstraints(currentAdapter.getWidget());
+			lastParent = parentAdapter;
 			parentAdapter.removeChild(currentAdapter.getWidget());
 			currentAdapter = parentAdapter;
 			dragging_event = null;
 		}
 	}
-
+	private CompositeAdapter lastParent;
+	private Object lastConstraints;
 	private boolean isDndReady(MouseEvent e) {
 		return e.getPoint().distance(dragging_event.getPoint()) > DND_THRESHOLD;
 	}

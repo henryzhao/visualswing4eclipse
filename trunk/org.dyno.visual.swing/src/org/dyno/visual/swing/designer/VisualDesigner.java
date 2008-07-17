@@ -32,6 +32,7 @@ import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.undo.DeleteOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -465,16 +466,14 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			root.validate();
 			publishSelection();
 		} else if (id.equals(ActionFactory.DELETE.getId())) {
-			for (JComponent child : selection) {
-				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-				CompositeAdapter parentAdapter = (CompositeAdapter) adapter.getParentAdapter();
-				boolean success = parentAdapter.removeChild(child);
-				if (success)
-					parentAdapter.setDirty(true);
+			IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+			IUndoableOperation operation = new DeleteOperation(selection, root);
+			operation.addContext(getUndoContext());
+			try {
+				operationHistory.execute(operation, null, null);
+			} catch (ExecutionException e) {
+				e.printStackTrace();
 			}
-			rootAdapter.doLayout();
-			root.validate();
-			publishSelection();
 		} else if (id.equals(ActionFactory.SELECT_ALL.getId())) {
 			rootAdapter.setSelected(false);
 			rootAdapter.selectChildren();
