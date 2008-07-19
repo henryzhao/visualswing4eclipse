@@ -28,7 +28,9 @@ import javax.swing.JSplitPane;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.actions.JSplitPanePlacementAction;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jface.action.MenuManager;
 
 public class JSplitPaneAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
@@ -36,7 +38,8 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	protected static Color GREEN_COLOR = new Color(164, 255, 0);
 	protected static Stroke STROKE;
 	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
+		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
 	}
 
 	public JSplitPaneAdapter() {
@@ -63,7 +66,11 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		int x = 0, y = 0, w = 0, h = 0;
 		x = insets.left;
 		y = insets.top;
-		w = divideLocation - insets.left;
+		w = divideLocation - x;
+		if(w<10){
+			w = 10;
+			x = divideLocation-w;
+		}
 		h = height - insets.top - insets.bottom;
 		return new Rectangle(x, y, w, h);
 	}
@@ -78,7 +85,11 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		int x = 0, y = 0, w = 0, h = 0;
 		x = divideLocation + dividerSize;
 		y = insets.top;
-		w = width - divideLocation - dividerSize - insets.right;
+		w = width - x - insets.right;
+		if (w < 10) {
+			w = 10;
+			x = width - insets.right - w;
+		}
 		h = height - insets.top - insets.bottom;
 		return new Rectangle(x, y, w, h);
 	}
@@ -91,7 +102,11 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		int x = 0, y = 0, w = 0, h = 0;
 		x = insets.left;
 		y = insets.top;
-		h = divideLocation - insets.top;
+		h = divideLocation - y;
+		if(h<10){
+			h=10;
+			y = divideLocation - h;
+		}		
 		w = width - insets.left - insets.right;
 		return new Rectangle(x, y, w, h);
 	}
@@ -104,9 +119,13 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		int dividerSize = jsp.getDividerSize();
 		Insets insets = jsp.getInsets();
 		int x = 0, y = 0, w = 0, h = 0;
-		x = insets.left + divideLocation + dividerSize;
-		y = insets.top;
-		h = height - divideLocation - dividerSize - insets.bottom;
+		y = insets.top + divideLocation + dividerSize;
+		x = insets.left;
+		h = height - y;
+		if (h < 10) {
+			h = 10;
+			y = height - h;
+		}
 		w = width - insets.left - insets.right;
 		return new Rectangle(x, y, w, h);
 	}
@@ -132,7 +151,8 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 			Graphics2D g2d = (Graphics2D) clipg;
 			g2d.setColor(forbid ? RED_COLOR : GREEN_COLOR);
 			Composite oldComposite = g2d.getComposite();
-			AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
+			AlphaComposite composite = AlphaComposite.getInstance(
+					AlphaComposite.SRC_OVER, 0.5f);
 			g2d.setComposite(composite);
 			g2d.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 			Stroke oldStroke = g2d.getStroke();
@@ -199,6 +219,21 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				forbid = false;
 			}
 		}
+	}
+
+	@Override
+	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+		MenuManager plcMenu = new MenuManager("Component Placement",
+				"#BORDERLAYOUT_CONSTRAINTS");
+		JSplitPane jsp = (JSplitPane) getWidget();
+		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "left", child));
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "right", child));
+		} else {
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "top", child));
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "bottom", child));
+		}
+		menu.add(plcMenu);
 	}
 
 	@Override
@@ -269,7 +304,8 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 			left = (JComponent) jtp.getTopComponent();
 			right = (JComponent) jtp.getBottomComponent();
 		}
-		return (existsAndDesigning(left) ? 1 : 0) + (existsAndDesigning(right) ? 1 : 0);
+		return (existsAndDesigning(left) ? 1 : 0)
+				+ (existsAndDesigning(right) ? 1 : 0);
 	}
 
 	@Override
@@ -343,38 +379,48 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 			Component left = jsp.getLeftComponent();
 			if (left != null) {
 				JComponent leftComponent = (JComponent) left;
-				WidgetAdapter leftAdapter = WidgetAdapter.getWidgetAdapter(leftComponent);
+				WidgetAdapter leftAdapter = WidgetAdapter
+						.getWidgetAdapter(leftComponent);
 				if (leftAdapter != null) {
 					String leftGetName = getGetMethodName(leftAdapter.getName());
-					builder.append(fieldName + ".setLeftComponent(" + leftGetName + "());\n");
+					builder.append(fieldName + ".setLeftComponent("
+							+ leftGetName + "());\n");
 				}
 			}
 			Component right = jsp.getRightComponent();
 			if (right != null) {
 				JComponent rightComponent = (JComponent) right;
-				WidgetAdapter rightAdapter = WidgetAdapter.getWidgetAdapter(rightComponent);
+				WidgetAdapter rightAdapter = WidgetAdapter
+						.getWidgetAdapter(rightComponent);
 				if (rightAdapter != null) {
-					String rightGetName = getGetMethodName(rightAdapter.getName());
-					builder.append(fieldName + ".setRightComponent(" + rightGetName + "());\n");
+					String rightGetName = getGetMethodName(rightAdapter
+							.getName());
+					builder.append(fieldName + ".setRightComponent("
+							+ rightGetName + "());\n");
 				}
 			}
 		} else {
 			Component top = jsp.getTopComponent();
 			if (top != null) {
 				JComponent topComponent = (JComponent) top;
-				WidgetAdapter topAdapter = WidgetAdapter.getWidgetAdapter(topComponent);
+				WidgetAdapter topAdapter = WidgetAdapter
+						.getWidgetAdapter(topComponent);
 				if (topAdapter != null) {
 					String topGetName = getGetMethodName(topAdapter.getName());
-					builder.append(fieldName + ".setTopComponent(" + topGetName + "());\n");
+					builder.append(fieldName + ".setTopComponent(" + topGetName
+							+ "());\n");
 				}
 			}
 			Component bottom = jsp.getBottomComponent();
 			if (bottom != null) {
 				JComponent bottomComponent = (JComponent) bottom;
-				WidgetAdapter bottomAdapter = WidgetAdapter.getWidgetAdapter(bottomComponent);
+				WidgetAdapter bottomAdapter = WidgetAdapter
+						.getWidgetAdapter(bottomComponent);
 				if (bottomAdapter != null) {
-					String bottomGetName = getGetMethodName(bottomAdapter.getName());
-					builder.append(fieldName + ".setBottomComponent(" + bottomGetName + "());\n");
+					String bottomGetName = getGetMethodName(bottomAdapter
+							.getName());
+					builder.append(fieldName + ".setBottomComponent("
+							+ bottomGetName + "());\n");
 				}
 			}
 
@@ -389,8 +435,13 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	@Override
 	public boolean interceptPoint(Point p, int ad) {
 		JSplitPane comp = (JSplitPane) getWidget();
-		if (p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad && p.y < comp.getHeight() + ad
-				&& !(p.x >= ad && p.y >= ad && p.x < comp.getWidth() - ad && p.y < comp.getHeight() - ad))
+		if (p.x >= -ad
+				&& p.y >= -ad
+				&& p.x < comp.getWidth() + ad
+				&& p.y < comp.getHeight() + ad
+				&& !(p.x >= ad && p.y >= ad && p.x < comp.getWidth() - ad && p.y < comp
+						.getHeight()
+						- ad))
 			return true;
 		int location = comp.getDividerLocation();
 		int div = comp.getDividerSize();

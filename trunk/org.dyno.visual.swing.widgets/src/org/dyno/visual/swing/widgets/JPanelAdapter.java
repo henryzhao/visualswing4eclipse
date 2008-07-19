@@ -517,7 +517,15 @@ public class JPanelAdapter extends CompositeAdapter {
 		super.fillContextAction(menu);
 		MenuManager layoutMenu = new MenuManager("Set Layout", "#SET_LAYOUT");
 		fillLayoutAction(layoutMenu);
-		menu.add(layoutMenu);
+		menu.add(layoutMenu);		
+	}
+
+	@Override
+	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+		JPanel jpanel = (JPanel)getWidget();
+		LayoutManager layout = jpanel.getLayout();
+		if(layout!=null)
+			getLayoutAdapter().fillConstraintsAction(menu, child);
 	}
 
 	private void fillLayoutAction(MenuManager layoutMenu) {
