@@ -119,7 +119,13 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	public String getLastName() {
 		return lastName;
 	}
-
+	public List<WidgetAdapter> getSelectedWidgets(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null){
+			return designer.getSelectedWidgets();
+		}else
+			return null;
+	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -372,6 +378,13 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	public void setSelected(boolean b) {
 		selected = b;
+		VisualDesigner designer = getDesigner();
+		if (designer != null) {
+			if (b)
+				designer.addSelectedWidget(this);
+			else
+				designer.removeSelectedWidget(this);
+		}
 	}
 
 	public void changeNotify() {

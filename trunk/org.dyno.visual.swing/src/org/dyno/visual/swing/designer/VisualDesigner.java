@@ -75,13 +75,16 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private Composite parent;
 	private IUndoContext undoContext;
 
+	private List<WidgetAdapter> selected;
+	
 	@SuppressWarnings("serial")
 	public VisualDesigner(VisualSwingEditor editor, Composite parent) {
 		this.editor = editor;
 		this.parent = parent;
 
 		this.clipboard = new ArrayList<WidgetAdapter>();
-
+		this.selected = new ArrayList<WidgetAdapter>();
+		
 		setFocusable(true);
 		setLayout(new DesignerLayout());
 
@@ -142,7 +145,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			}
 		}
 	}
-
+	
 	private boolean _selectWidget(Rectangle sel, WidgetAdapter adapter) {
 		boolean selected = false;
 		Rectangle bounds = adapter.getWidget().getBounds();
@@ -228,9 +231,18 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				adapter.clearSelection();
 			}
 		}
-
+		selected.clear();
 	}
-
+	public void addSelectedWidget(WidgetAdapter adapter){
+		if(!selected.contains(adapter))
+			selected.add(adapter);
+	}
+	public void removeSelectedWidget(WidgetAdapter adapter){
+		selected.remove(adapter);
+	}
+	public List<WidgetAdapter> getSelectedWidgets(){
+		return selected;
+	}
 	public JComponent componentAt(Point p, int offset) {
 		if (root != null) {
 			Point mp = SwingUtilities.convertPoint(this, p, root);
