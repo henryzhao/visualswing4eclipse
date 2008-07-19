@@ -16,7 +16,6 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -27,18 +26,29 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.actions.NullLayoutAction;
+import org.dyno.visual.swing.widgets.actions.SetLayoutAction;
+import org.dyno.visual.swing.widgets.undo.BottomAlignmentOperation;
+import org.dyno.visual.swing.widgets.undo.CenterAlignmentOperation;
 import org.dyno.visual.swing.widgets.undo.KeyDownOperation;
 import org.dyno.visual.swing.widgets.undo.KeyLeftOperation;
 import org.dyno.visual.swing.widgets.undo.KeyRightOperation;
 import org.dyno.visual.swing.widgets.undo.KeyUpOperation;
+import org.dyno.visual.swing.widgets.undo.LeftAlignmentOperation;
+import org.dyno.visual.swing.widgets.undo.MiddleAlignmentOperation;
 import org.dyno.visual.swing.widgets.undo.PageDownOperation;
 import org.dyno.visual.swing.widgets.undo.PageUpOperation;
+import org.dyno.visual.swing.widgets.undo.RightAlignmentOperation;
+import org.dyno.visual.swing.widgets.undo.SameHeightOperation;
+import org.dyno.visual.swing.widgets.undo.SameWidthOperation;
+import org.dyno.visual.swing.widgets.undo.TopAlignmentOperation;
+import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
-
+import org.eclipse.ui.PlatformUI;
 public class JPanelAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
 	private boolean intermediate = false;
@@ -83,39 +93,41 @@ public class JPanelAdapter extends CompositeAdapter {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
-			int hoveringIndex=getComponentIndex(hovering);
-			if(hoveringIndex==-1)
+			int hoveringIndex = getComponentIndex(hovering);
+			if (hoveringIndex == -1)
 				jpanel.add(dragged);
-			else if(hoveringIndex==getWidget().getComponentCount()-1){
+			else if (hoveringIndex == getWidget().getComponentCount() - 1) {
 				jpanel.add(dragged);
-			}else{
-				jpanel.add(dragged, hoveringIndex+1);
+			} else {
+				jpanel.add(dragged, hoveringIndex + 1);
 			}
 		} else {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
 			layoutAdapter.addAfter(hovering, dragged);
 		}
 	}
-	private int getComponentIndex(Component child){
+
+	private int getComponentIndex(Component child) {
 		int count = getWidget().getComponentCount();
-		for(int i=0;i<count;i++){
-			Component comp=getWidget().getComponent(i);
-			if(comp==child)
+		for (int i = 0; i < count; i++) {
+			Component comp = getWidget().getComponent(i);
+			if (comp == child)
 				return i;
 		}
 		return -1;
 	}
+
 	@Override
 	public void addBefore(JComponent hovering, JComponent dragged) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
-			int hoveringIndex=getComponentIndex(hovering);
-			if(hoveringIndex==-1)
+			int hoveringIndex = getComponentIndex(hovering);
+			if (hoveringIndex == -1)
 				jpanel.add(dragged, 0);
-			else if(hoveringIndex==0){
+			else if (hoveringIndex == 0) {
 				jpanel.add(dragged, 0);
-			}else{
+			} else {
 				jpanel.add(dragged, hoveringIndex);
 			}
 		} else {
@@ -141,25 +153,36 @@ public class JPanelAdapter extends CompositeAdapter {
 		JPanel jp = (JPanel) getWidget();
 		LayoutManager layout = jp.getLayout();
 		if (layout == null) {
-			if (id.equals(EditorAction.ALIGNMENT_LEFT)) {
-				doLeft();
-			} else if (id.equals(EditorAction.ALIGNMENT_CENTER))
-				doCenter();
+			IUndoableOperation operation = null;
+			if (id.equals(EditorAction.ALIGNMENT_LEFT))
+				operation = doLeft();
+			else if (id.equals(EditorAction.ALIGNMENT_CENTER))
+				operation = doCenter();
 			else if (id.equals(EditorAction.ALIGNMENT_RIGHT))
-				doRight();
+				operation = doRight();
 			else if (id.equals(EditorAction.ALIGNMENT_TOP))
-				doTop();
+				operation = doTop();
 			else if (id.equals(EditorAction.ALIGNMENT_BOTTOM))
-				doBottom();
+				operation = doBottom();
 			else if (id.equals(EditorAction.ALIGNMENT_MIDDLE))
-				doMiddle();
+				operation = doMiddle();
 			else if (id.equals(EditorAction.SAME_WIDTH))
-				doSameWidth();
+				operation = doSameWidth();
 			else if (id.equals(EditorAction.SAME_HEIGHT))
-				doSameHeight();
-			else
+				operation = doSameHeight();
+			if (operation != null) {
+				operation.addContext(getUndoContext());
+				IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+				try {
+					operationHistory.execute(operation, null, null);
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return false;
+				}
+			} else {
 				return false;
-			return true;
+			}
 		} else {
 			return getLayoutAdapter().doAlignment(id);
 		}
@@ -190,116 +213,36 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 
-	private void doSameHeight() {
-		List<JComponent> selection = getSelection();
-		int y = -1;
-		for (JComponent child : selection) {
-			if (y == -1)
-				y = child.getHeight();
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.height = y;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doSameHeight() {
+		return new SameHeightOperation(getSelectedWidgets());
 	}
 
-	private void doSameWidth() {
-		List<JComponent> selection = getSelection();
-		int x = -1;
-		for (JComponent child : selection) {
-			if (x == -1)
-				x = child.getWidth();
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.width = x;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doSameWidth() {
+		return new SameWidthOperation(getSelectedWidgets());
 	}
 
-	private void doMiddle() {
-		List<JComponent> selection = getSelection();
-		int y = -1;
-		for (JComponent child : selection) {
-			if (y == -1)
-				y = child.getY() + child.getHeight() / 2;
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.y = y - bounds.height / 2;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doMiddle() {
+		return new MiddleAlignmentOperation(getSelectedWidgets());
 	}
 
-	private void doBottom() {
-		List<JComponent> selection = getSelection();
-		int y = -1;
-		for (JComponent child : selection) {
-			if (y == -1)
-				y = child.getY() + child.getHeight();
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.y = y - bounds.height;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doBottom() {
+		return new BottomAlignmentOperation(getSelectedWidgets());
 	}
 
-	private void doTop() {
-		List<JComponent> selection = getSelection();
-		int y = -1;
-		for (JComponent child : selection) {
-			if (y == -1)
-				y = child.getY();
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.y = y;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doTop() {
+		return new TopAlignmentOperation(getSelectedWidgets());
 	}
 
-	private void doRight() {
-		List<JComponent> selection = getSelection();
-		int x = -1;
-		for (JComponent child : selection) {
-			if (x == -1)
-				x = child.getX() + child.getWidth();
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.x = x - bounds.width;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doRight() {
+		return new RightAlignmentOperation(getSelectedWidgets());
 	}
 
-	private void doCenter() {
-		List<JComponent> selection = getSelection();
-		int x = -1;
-		for (JComponent child : selection) {
-			if (x == -1)
-				x = child.getX() + child.getWidth() / 2;
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.x = x - bounds.width / 2;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doCenter() {
+		return new CenterAlignmentOperation(getSelectedWidgets());
 	}
 
-	private void doLeft() {
-		List<JComponent> selection = getSelection();
-		int x = -1;
-		for (JComponent child : selection) {
-			if (x == -1)
-				x = child.getX();
-			else {
-				Rectangle bounds = child.getBounds();
-				bounds.x = x;
-				child.setBounds(bounds);
-			}
-		}
+	private IUndoableOperation doLeft() {
+		return new LeftAlignmentOperation(getSelectedWidgets());
 	}
 
 	private LayoutAdapter getLayoutAdapter() {
@@ -312,7 +255,9 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 		return layoutAdapter;
 	}
-
+	public void setLayoutAdapter(LayoutAdapter layoutAdapter){
+		this.layoutAdapter = layoutAdapter;
+	}
 	private LayoutAdapter layoutAdapter;
 
 	@Override
@@ -336,10 +281,8 @@ public class JPanelAdapter extends CompositeAdapter {
 	private String getLayoutName() {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
-		String layoutName = layout == null ? "null" : layout.getClass()
-				.getName();
-		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT
-				.equals(layoutName);
+		String layoutName = layout == null ? "null" : layout.getClass().getName();
+		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT.equals(layoutName);
 		layoutName = layout == null ? "null" : getLayoutAdapter().getName();
 		return default_layout ? "" : "(" + layoutName + ")";
 	}
@@ -578,16 +521,15 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	private void fillLayoutAction(MenuManager layoutMenu) {
-		Action nullLayoutAction = new NullLayoutAction();
+		Action nullLayoutAction = new NullLayoutAction(this);
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null)
 			nullLayoutAction.setChecked(true);
 		layoutMenu.add(nullLayoutAction);
 		for (String layoutClass : LayoutAdapter.getLayoutClasses()) {
-			IConfigurationElement config = LayoutAdapter
-					.getLayoutConfig(layoutClass);
-			SetLayoutAction action = new SetLayoutAction(config);
+			IConfigurationElement config = LayoutAdapter.getLayoutConfig(layoutClass);
+			SetLayoutAction action = new SetLayoutAction(this, config);
 			if (layout != null) {
 				String currLayoutClass = layout.getClass().getName();
 				if (currLayoutClass.equals(layoutClass)) {
@@ -595,39 +537,6 @@ public class JPanelAdapter extends CompositeAdapter {
 				}
 			}
 			layoutMenu.add(action);
-		}
-	}
-
-	class NullLayoutAction extends Action {
-		public NullLayoutAction() {
-			super("Null Layout", AS_RADIO_BUTTON);
-		}
-
-		public void run() {
-			JPanel jpanel = (JPanel) getWidget();
-			jpanel.setLayout(null);
-			layoutAdapter = null;
-			doLayout();
-			jpanel.validate();
-		}
-	}
-
-	class SetLayoutAction extends Action {
-		private IConfigurationElement config;
-
-		public SetLayoutAction(IConfigurationElement config) {
-			super(config.getAttribute("name"), AS_RADIO_BUTTON);
-			this.config = config;
-		}
-
-		public void run() {
-			JPanel jpanel = (JPanel) getWidget();
-			LayoutAdapter adapter = LayoutAdapter.createLayoutAdapter(config);
-			adapter.initConainerLayout(jpanel);
-			layoutAdapter = null;
-			doLayout();
-			jpanel.validate();
-			changeNotify();
 		}
 	}
 
@@ -661,17 +570,13 @@ public class JPanelAdapter extends CompositeAdapter {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
-			builder
-					.append(getFieldName(getName()) + "."
-							+ "setLayout(null);\n");
+			builder.append(getFieldName(getName()) + "." + "setLayout(null);\n");
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				JComponent child = getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
-				builder.append(getFieldName(getName()) + "." + "add("
-						+ getMethodName + "());\n");
+				builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
 			}
 		} else {
 			builder.append(getLayoutAdapter().createCode(imports));
@@ -689,8 +594,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				JComponent child = getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
 				builder.append("add(" + getMethodName + "());\n");
 			}
@@ -725,7 +629,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
-			child.setBounds((Rectangle)constraints);
+			child.setBounds((Rectangle) constraints);
 			panel.add(child);
 		} else {
 			getLayoutAdapter().addChildByConstraints(child, constraints);
