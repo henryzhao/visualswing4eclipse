@@ -18,6 +18,7 @@ import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jface.action.MenuManager;
 /**
  * 
  * CompositeAdapter
@@ -193,5 +194,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	public boolean isViewContainer() {
 		return false;
+	}
+
+	public void fillConstraintsAction(MenuManager menu, JComponent widget) {
 	}	
 }

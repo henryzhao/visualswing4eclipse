@@ -780,6 +780,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		MenuManager borderMenu = new MenuManager("Border", "#BORDER");
 		fillBorderAction(borderMenu);
 		menu.add(borderMenu);
+		if(!isRoot()){
+			CompositeAdapter parentAdapter = getParentAdapter();
+			if(parentAdapter!=null){
+				parentAdapter.fillConstraintsAction(menu, getWidget());
+			}
+		}
 	}
 
 	private void fillLnfAction(MenuManager lnfMenu) {
