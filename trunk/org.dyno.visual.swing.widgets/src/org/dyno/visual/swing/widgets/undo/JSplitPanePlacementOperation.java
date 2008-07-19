@@ -1,6 +1,5 @@
 package org.dyno.visual.swing.widgets.undo;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JComponent;
