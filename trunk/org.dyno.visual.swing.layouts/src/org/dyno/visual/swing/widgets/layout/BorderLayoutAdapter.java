@@ -31,7 +31,9 @@ import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.layout.actions.BorderLayoutPlacementAction;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jface.action.MenuManager;
 
 public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private boolean forbid;
@@ -41,7 +43,8 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	@Override
 	public void initConainerLayout(Container panel) {
 		JComponent container = (JComponent) panel;
-		CompositeAdapter compositeAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter compositeAdapter = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int count = compositeAdapter.getChildCount();
 		ArrayList<JComponent> arrayList = new ArrayList<JComponent>();
 		for (int i = 0; i < count; i++) {
@@ -73,13 +76,31 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
+	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+		MenuManager plcMenu = new MenuManager("Component Placement",
+				"#BORDERLAYOUT_CONSTRAINTS");
+		plcMenu.add(new BorderLayoutPlacementAction(container,
+				BorderLayout.CENTER, child));
+		plcMenu.add(new BorderLayoutPlacementAction(container,
+				BorderLayout.NORTH, child));
+		plcMenu.add(new BorderLayoutPlacementAction(container,
+				BorderLayout.EAST, child));
+		plcMenu.add(new BorderLayoutPlacementAction(container,
+				BorderLayout.WEST, child));
+		plcMenu.add(new BorderLayoutPlacementAction(container,
+				BorderLayout.SOUTH, child));
+		menu.add(plcMenu);
+	}
+
+	@Override
 	public void paintFocused(Graphics g) {
 		if (placement != null) {
 			Graphics2D g2d = (Graphics2D) g;
 			Stroke oldStroke = g2d.getStroke();
 			g2d.setColor(forbid ? GREEN_COLOR : RED_COLOR);
 			g2d.setStroke(STROKE);
-			g2d.drawRect(placement.x, placement.y, placement.width, placement.height);
+			g2d.drawRect(placement.x, placement.y, placement.width,
+					placement.height);
 			g2d.setStroke(oldStroke);
 		}
 	}
@@ -96,8 +117,10 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
 		WidgetAdapter todrop = parent.getDropWidget();
 		Dimension pref = todrop.getWidget().getPreferredSize();
-		int prefw = pref.width == 0 ? todrop.getWidget().getWidth() : pref.width;
-		int prefh = pref.height == 0 ? todrop.getWidget().getHeight() : pref.height;
+		int prefw = pref.width == 0 ? todrop.getWidget().getWidth()
+				: pref.width;
+		int prefh = pref.height == 0 ? todrop.getWidget().getHeight()
+				: pref.height;
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
 		int north = prefh + insets.top;
@@ -121,7 +144,8 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		if (y < north) {
 			constraints = BorderLayout.NORTH;
 			forbid = (nComp != null);
-			placement = new Rectangle(insets.left, insets.top, width - insets.left - insets.right, north - insets.top);
+			placement = new Rectangle(insets.left, insets.top, width
+					- insets.left - insets.right, north - insets.top);
 		} else if ((y >= north) && (y < (height - south))) {
 			if (x < west) {
 				constraints = BorderLayout.WEST;
@@ -129,15 +153,18 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				int t = nComp != null ? north : insets.top;
 				int l = insets.left;
 				int w = west - insets.left;
-				int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
+				int h = height - (nComp != null ? north : insets.top)
+						- (sComp != null ? south : insets.bottom);
 				placement = new Rectangle(l, t, w, h);
 			} else if ((x >= west) && (x < (width - east))) {
 				constraints = BorderLayout.CENTER;
 				forbid = (cComp != null);
 				int t = nComp != null ? north : insets.top;
 				int l = wComp != null ? west : insets.left;
-				int w = width - (wComp != null ? west : insets.left) - (eComp != null ? east : insets.right);
-				int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
+				int w = width - (wComp != null ? west : insets.left)
+						- (eComp != null ? east : insets.right);
+				int h = height - (nComp != null ? north : insets.top)
+						- (sComp != null ? south : insets.bottom);
 				placement = new Rectangle(l, t, w, h);
 			} else {
 				constraints = BorderLayout.EAST;
@@ -145,13 +172,15 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				int t = nComp != null ? north : insets.top;
 				int l = width - east;
 				int w = east - insets.right;
-				int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
+				int h = height - (nComp != null ? north : insets.top)
+						- (sComp != null ? south : insets.bottom);
 				placement = new Rectangle(l, t, w, h);
 			}
 		} else {
 			constraints = BorderLayout.SOUTH;
 			forbid = (sComp != null);
-			placement = new Rectangle(insets.left, height - south, width - insets.left - insets.right, south - insets.bottom);
+			placement = new Rectangle(insets.left, height - south, width
+					- insets.left - insets.right, south - insets.bottom);
 		}
 		parent.setMascotLocation(p);
 		return true;
@@ -175,7 +204,8 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			Toolkit.getDefaultToolkit().beep();
 			return true;
 		} else {
-			CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+			CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+					.getWidgetAdapter(container);
 			WidgetAdapter todrop = parent.getDropWidget();
 			if (constraints == null)
 				container.add(todrop.getComponent());
@@ -204,27 +234,32 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
 		if (nComp != null) {
-			WidgetAdapter nAdapter = WidgetAdapter.getWidgetAdapter((JComponent) nComp);
+			WidgetAdapter nAdapter = WidgetAdapter
+					.getWidgetAdapter((JComponent) nComp);
 			panel.add(nAdapter.cloneWidget(), BorderLayout.NORTH);
 		}
 		Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
 		if (sComp != null) {
-			WidgetAdapter sAdapter = WidgetAdapter.getWidgetAdapter((JComponent) sComp);
+			WidgetAdapter sAdapter = WidgetAdapter
+					.getWidgetAdapter((JComponent) sComp);
 			panel.add(sAdapter.cloneWidget(), BorderLayout.SOUTH);
 		}
 		Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
 		if (eComp != null) {
-			WidgetAdapter eAdapter = WidgetAdapter.getWidgetAdapter((JComponent) eComp);
+			WidgetAdapter eAdapter = WidgetAdapter
+					.getWidgetAdapter((JComponent) eComp);
 			panel.add(eAdapter.cloneWidget(), BorderLayout.EAST);
 		}
 		Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
 		if (wComp != null) {
-			WidgetAdapter wAdapter = WidgetAdapter.getWidgetAdapter((JComponent) wComp);
+			WidgetAdapter wAdapter = WidgetAdapter
+					.getWidgetAdapter((JComponent) wComp);
 			panel.add(wAdapter.cloneWidget(), BorderLayout.WEST);
 		}
 		Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
 		if (cComp != null) {
-			WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter((JComponent) cComp);
+			WidgetAdapter cAdapter = WidgetAdapter
+					.getWidgetAdapter((JComponent) cComp);
 			panel.add(cAdapter.cloneWidget(), BorderLayout.CENTER);
 		}
 		return true;
@@ -245,9 +280,10 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		int hgap = layout.getHgap();
 		int vgap = layout.getVgap();
 		if (hgap != 0 || vgap != 0) {
-			return "new "+imports.addImport("java.awt.BorderLayout")+"(" + hgap + ", " + vgap + ")";
+			return "new " + imports.addImport("java.awt.BorderLayout") + "("
+					+ hgap + ", " + vgap + ")";
 		} else {
-			return "new "+imports.addImport("java.awt.BorderLayout")+"()";
+			return "new " + imports.addImport("java.awt.BorderLayout") + "()";
 		}
 	}
 
@@ -266,44 +302,48 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		String emptyCons = findEmptyConstraints();
 		container.add(widget, emptyCons);
 	}
-	private String findEmptyConstraints(){
+
+	private String findEmptyConstraints() {
 		BorderLayout layout = (BorderLayout) container.getLayout();
-		if(layout.getLayoutComponent(BorderLayout.CENTER)==null)
+		if (layout.getLayoutComponent(BorderLayout.CENTER) == null)
 			return BorderLayout.CENTER;
-		if(layout.getLayoutComponent(BorderLayout.NORTH)==null)
+		if (layout.getLayoutComponent(BorderLayout.NORTH) == null)
 			return BorderLayout.NORTH;
-		if(layout.getLayoutComponent(BorderLayout.SOUTH)==null)
+		if (layout.getLayoutComponent(BorderLayout.SOUTH) == null)
 			return BorderLayout.SOUTH;
-		if(layout.getLayoutComponent(BorderLayout.EAST)==null)
+		if (layout.getLayoutComponent(BorderLayout.EAST) == null)
 			return BorderLayout.EAST;
-		if(layout.getLayoutComponent(BorderLayout.WEST)==null)
+		if (layout.getLayoutComponent(BorderLayout.WEST) == null)
 			return BorderLayout.WEST;
-		return null;		
+		return null;
 	}
+
 	@Override
 	protected String getChildConstraints(JComponent child, ImportRewrite imports) {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		String object = (String) layout.getConstraints(child);
 		if (object == null)
-			return imports.addImport("java.awt.BorderLayout")+".CENTER";
+			return imports.addImport("java.awt.BorderLayout") + ".CENTER";
 		else if (object.equals(BorderLayout.CENTER))
-			return imports.addImport("java.awt.BorderLayout")+".CENTER";
+			return imports.addImport("java.awt.BorderLayout") + ".CENTER";
 		else if (object.equals(BorderLayout.NORTH))
-			return imports.addImport("java.awt.BorderLayout")+".NORTH";
+			return imports.addImport("java.awt.BorderLayout") + ".NORTH";
 		else if (object.equals(BorderLayout.SOUTH))
-			return imports.addImport("java.awt.BorderLayout")+".SOUTH";
+			return imports.addImport("java.awt.BorderLayout") + ".SOUTH";
 		else if (object.equals(BorderLayout.EAST))
-			return imports.addImport("java.awt.BorderLayout")+".EAST";
+			return imports.addImport("java.awt.BorderLayout") + ".EAST";
 		else if (object.equals(BorderLayout.WEST))
-			return imports.addImport("java.awt.BorderLayout")+".WEST";
+			return imports.addImport("java.awt.BorderLayout") + ".WEST";
 		return null;
 	}
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
-		WidgetProperty hgapProperty = new WidgetProperty("hgap","hgap", BorderLayout.class);
-		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", BorderLayout.class);
-		return new IWidgetPropertyDescriptor[]{hgapProperty, vgapProperty};
+		WidgetProperty hgapProperty = new WidgetProperty("hgap", "hgap",
+				BorderLayout.class);
+		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap",
+				BorderLayout.class);
+		return new IWidgetPropertyDescriptor[] { hgapProperty, vgapProperty };
 	}
 
 	@Override

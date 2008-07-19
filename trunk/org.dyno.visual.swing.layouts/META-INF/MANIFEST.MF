@@ -10,7 +10,8 @@ Require-Bundle: org.dyno.visual.swing.widgets,
  org.eclipse.ui.views,
  org.eclipse.swt,
  org.eclipse.jface,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.ui.workbench;bundle-version="3.4.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Dynamic Object Organization
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
