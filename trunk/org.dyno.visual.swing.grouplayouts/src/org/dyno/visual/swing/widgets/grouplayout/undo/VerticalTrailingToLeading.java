@@ -33,7 +33,7 @@ public class VerticalTrailingToLeading extends AbstractOperation {
 		int t = trailing.getTrailing();
 		int h = child.getHeight();
 		int l = container.getHeight() - t - h;
-		Constraints newconstraints = new Constraints(oldconstraints.getVertical(), new Leading(l, 10, t));
+		Constraints newconstraints = new Constraints(oldconstraints.getHorizontal(), new Leading(l, 10, t));
 		container.remove(child);
 		container.add(child, newconstraints);
 		container.doLayout();

@@ -33,7 +33,7 @@ public class VerticalBilateralToLeading extends AbstractOperation {
 		int l = bilateral.getLeading();
 		int h = child.getHeight();
 		int t = container.getHeight() - l - h;
-		Constraints newconstraints = new Constraints(oldconstraints.getVertical(), new Leading(l, 10, t));
+		Constraints newconstraints = new Constraints(oldconstraints.getHorizontal(), new Leading(l, 10, t));
 		container.remove(child);
 		container.add(child, newconstraints);
 		container.doLayout();

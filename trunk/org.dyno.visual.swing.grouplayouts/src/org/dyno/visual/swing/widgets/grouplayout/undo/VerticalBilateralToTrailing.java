@@ -33,7 +33,7 @@ public class VerticalBilateralToTrailing extends AbstractOperation {
 		int l = bilateral.getLeading();
 		int h = child.getHeight();
 		int t = container.getHeight() - l - h;
-		Constraints newconstraints = new Constraints(oldconstraints.getVertical(), new Trailing(t, 10, l));
+		Constraints newconstraints = new Constraints(oldconstraints.getHorizontal(), new Trailing(t, 10, l));
 		container.remove(child);
 		container.add(child, newconstraints);
 		container.doLayout();
