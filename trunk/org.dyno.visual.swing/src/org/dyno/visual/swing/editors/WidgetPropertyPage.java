@@ -13,7 +13,7 @@ public class WidgetPropertyPage extends PropertySheetPage {
 		tree.addListener(SWT.MeasureItem, new org.eclipse.swt.widgets.Listener(){
 			@Override
 			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-				event.height = 18;
+				event.height = 20;
 			}
 		});
 	}
