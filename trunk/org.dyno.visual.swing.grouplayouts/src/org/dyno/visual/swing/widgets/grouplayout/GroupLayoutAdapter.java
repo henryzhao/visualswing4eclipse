@@ -182,7 +182,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						polygon.addPoint(BOX, y);
 						g2d.fillPolygon(polygon);
 					} else if (horizontal instanceof Trailing) {
-						x = width - ((Trailing) horizontal).getTrailing();
+						x = child.getX()+child.getWidth();
 						g2d.drawLine(width, y, x, y);
 						Polygon polygon = new Polygon();
 						polygon.addPoint(width, y - BOX);
@@ -197,7 +197,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						polygon.addPoint(0, y + BOX);
 						polygon.addPoint(BOX, y);
 						g2d.fillPolygon(polygon);
-						x = width - ((Bilateral) horizontal).getTrailing();
+						x = child.getX()+child.getWidth();
 						g2d.drawLine(width, y, x, y);
 						polygon = new Polygon();
 						polygon.addPoint(width, y - BOX);
@@ -216,7 +216,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						polygon.addPoint(x, BOX);
 						g2d.fillPolygon(polygon);
 					} else if (vertical instanceof Trailing) {
-						y = height - ((Trailing) vertical).getTrailing();
+						y = child.getY()+child.getHeight();
 						g2d.drawLine(x, height, x, y);
 						Polygon polygon = new Polygon();
 						polygon.addPoint(x - BOX, height);
@@ -231,7 +231,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						polygon.addPoint(x + BOX, 0);
 						polygon.addPoint(x, BOX);
 						g2d.fillPolygon(polygon);
-						y = height - ((Bilateral) vertical).getTrailing();
+						y = child.getY()+child.getHeight();
 						g2d.drawLine(x, height, x, y);
 						polygon = new Polygon();
 						polygon.addPoint(x - BOX, height);

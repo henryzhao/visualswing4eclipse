@@ -2,9 +2,9 @@ package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import javax.swing.JComponent;
 
-import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.Leading;
+import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -13,12 +13,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-public class HorizontalLeadingToBilateralOperation extends AbstractOperation {
+public class VerticalTrailingToLeading extends AbstractOperation {
 	private Constraints oldconstraints;
 	private JComponent container;
 	private JComponent child;
 
-	public HorizontalLeadingToBilateralOperation(Constraints constraints,
+	public VerticalTrailingToLeading(Constraints constraints,
 			JComponent container, JComponent child) {
 		super("Set Anchor");
 		this.oldconstraints = constraints;
@@ -29,11 +29,11 @@ public class HorizontalLeadingToBilateralOperation extends AbstractOperation {
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		Leading leading = (Leading) oldconstraints.getHorizontal();
-		int l = leading.getLeading();
-		int w = child.getWidth();
-		int t = container.getWidth() - l - w;
-		Constraints newconstraints = new Constraints(new Bilateral(l, t, w), oldconstraints.getVertical());
+		Trailing trailing = (Trailing) oldconstraints.getVertical();
+		int t = trailing.getTrailing();
+		int h = child.getHeight();
+		int l = container.getHeight() - t - h;
+		Constraints newconstraints = new Constraints(oldconstraints.getVertical(), new Leading(l, 10, t));
 		container.remove(child);
 		container.add(child, newconstraints);
 		container.doLayout();
