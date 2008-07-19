@@ -245,7 +245,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		return new LeftAlignmentOperation(getSelectedWidgets());
 	}
 
-	private LayoutAdapter getLayoutAdapter() {
+	public LayoutAdapter getLayoutAdapter() {
 		if (layoutAdapter == null) {
 			LayoutManager layout = getWidget().getLayout();
 			if (layout != null) {
