@@ -40,12 +40,16 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.ui.PlatformUI;
 
 public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private static Color BASELINE_COLOR = new Color(143, 171, 196);
 	private static Stroke STROKE1 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 4, 2 }, 0);
-    private static Stroke STROKE2 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1, 1 }, 0);
+	private static Stroke STROKE2 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1, 1 }, 0);
 	private boolean hovered;
 	private List<Quartet> horizontal_baseline;
 	private List<Quartet> vertical_baseline;
@@ -86,7 +90,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void addChild(JComponent widget) {
-		Constraints cons = new Constraints(new Leading(10, 10, 10),new Leading(10, 10, 10));		
+		Constraints cons = new Constraints(new Leading(10, 10, 10), new Leading(10, 10, 10));
 		container.add(widget, cons);
 	}
 
@@ -98,7 +102,9 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	void setHovered(boolean hovered) {
 		this.hovered = hovered;
 	}
+
 	private static final int BOX = 5;
+
 	@Override
 	public void paintFocused(Graphics g) {
 	}
@@ -143,31 +149,31 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						x = ((Leading) horizontal).getLeading();
 						g2d.drawLine(0, y, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(0, y-BOX+1);
-						polygon.addPoint(0, y+BOX);
+						polygon.addPoint(0, y - BOX + 1);
+						polygon.addPoint(0, y + BOX);
 						polygon.addPoint(BOX, y);
 						g2d.fillPolygon(polygon);
 					} else if (horizontal instanceof Trailing) {
 						x = width - ((Trailing) horizontal).getTrailing();
 						g2d.drawLine(width, y, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(width, y-BOX);
-						polygon.addPoint(width, y+BOX-1);
+						polygon.addPoint(width, y - BOX);
+						polygon.addPoint(width, y + BOX - 1);
 						polygon.addPoint(width - BOX, y);
 						g2d.fillPolygon(polygon);
 					} else if (horizontal instanceof Bilateral) {
 						x = ((Bilateral) horizontal).getLeading();
 						g2d.drawLine(0, y, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(0, y-BOX+1);
-						polygon.addPoint(0, y+BOX);
+						polygon.addPoint(0, y - BOX + 1);
+						polygon.addPoint(0, y + BOX);
 						polygon.addPoint(BOX, y);
 						g2d.fillPolygon(polygon);
 						x = width - ((Bilateral) horizontal).getTrailing();
 						g2d.drawLine(width, y, x, y);
 						polygon = new Polygon();
-						polygon.addPoint(width, y-BOX);
-						polygon.addPoint(width, y+BOX-1);
+						polygon.addPoint(width, y - BOX);
+						polygon.addPoint(width, y + BOX - 1);
 						polygon.addPoint(width - BOX, y);
 						g2d.fillPolygon(polygon);
 					}
@@ -177,32 +183,32 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						y = ((Leading) vertical).getLeading();
 						g2d.drawLine(x, 0, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(x-BOX+1, 0);
-						polygon.addPoint(x+BOX, 0);
+						polygon.addPoint(x - BOX + 1, 0);
+						polygon.addPoint(x + BOX, 0);
 						polygon.addPoint(x, BOX);
 						g2d.fillPolygon(polygon);
 					} else if (vertical instanceof Trailing) {
 						y = height - ((Trailing) vertical).getTrailing();
 						g2d.drawLine(x, height, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(x-BOX, height);
-						polygon.addPoint(x+BOX-1, height);
-						polygon.addPoint(x, height-BOX);
+						polygon.addPoint(x - BOX, height);
+						polygon.addPoint(x + BOX - 1, height);
+						polygon.addPoint(x, height - BOX);
 						g2d.fillPolygon(polygon);
 					} else if (vertical instanceof Bilateral) {
 						y = ((Bilateral) vertical).getLeading();
 						g2d.drawLine(x, 0, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(x-BOX+1, 0);
-						polygon.addPoint(x+BOX, 0);
+						polygon.addPoint(x - BOX + 1, 0);
+						polygon.addPoint(x + BOX, 0);
 						polygon.addPoint(x, BOX);
 						g2d.fillPolygon(polygon);
 						y = height - ((Bilateral) vertical).getTrailing();
 						g2d.drawLine(x, height, x, y);
 						polygon = new Polygon();
-						polygon.addPoint(x-BOX, height);
-						polygon.addPoint(x+BOX-1, height);
-						polygon.addPoint(x, height-BOX);
+						polygon.addPoint(x - BOX, height);
+						polygon.addPoint(x + BOX - 1, height);
+						polygon.addPoint(x, height - BOX);
 						g2d.fillPolygon(polygon);
 					}
 				}
@@ -691,7 +697,88 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	public boolean doAlignment(String id) {
+		IUndoableOperation operation = null;
+		if (id.equals("same_height")) {
+			operation = getSameHeight();
+		} else if (id.equals("same_width")) {
+			operation = getSameWidth();
+		} else if (id.equals("middle")) {
+			operation = getMiddle();
+		} else if (id.equals("center")) {
+			operation = getCenter();
+		} else if (id.equals("bottom")) {
+			operation = getBottom();
+		} else if (id.equals("left")) {
+			operation = getLeft();
+		} else if (id.equals("right")) {
+			operation = getRight();
+		} else if (id.equals("top")) {
+			operation = getTop();
+		}
+		if (operation != null) {
+			CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+			operation.addContext(parent.getUndoContext());
+			IOperationHistory operationHist = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+			try {
+				operationHist.execute(operation, null, null);
+				return true;
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
 		return false;
+	}
+
+	private IUndoableOperation getTop() {
+		GroupLayout layout = (GroupLayout) container.getLayout();
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		int count = containerAdapter.getChildCount();
+		for (int i = 0; i < count; i++) {
+			JComponent target = containerAdapter.getChild(i);
+			WidgetAdapter targetAdapter = WidgetAdapter.getWidgetAdapter(target);
+			if (targetAdapter.isSelected()) {
+				Constraints constraints = layout.getConstraints(target);
+				Alignment horizontal = constraints.getHorizontal();
+				Alignment vertical = constraints.getVertical();
+			}
+		}
+		return null;
+	}
+
+	private IUndoableOperation getRight() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IUndoableOperation getLeft() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IUndoableOperation getBottom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IUndoableOperation getCenter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IUndoableOperation getMiddle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IUndoableOperation getSameWidth() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private IUndoableOperation getSameHeight() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -768,7 +855,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void addChildByConstraints(JComponent child, Object constraints) {
-		container.add(child, (Constraints)constraints);
+		container.add(child, (Constraints) constraints);
 	}
 
 	@Override

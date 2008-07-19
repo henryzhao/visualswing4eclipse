@@ -6,7 +6,10 @@ Bundle-Version: 0.9.1.I20080711-1500
 Require-Bundle: org.dyno.visual.swing,
  org.dyno.visual.swing.widgets,
  org.eclipse.jdt.core,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ org.eclipse.core.commands;bundle-version="3.4.0",
+ org.eclipse.ui.workbench;bundle-version="3.4.0",
+ org.eclipse.equinox.common;bundle-version="3.4.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Dynamic Object Organization
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
