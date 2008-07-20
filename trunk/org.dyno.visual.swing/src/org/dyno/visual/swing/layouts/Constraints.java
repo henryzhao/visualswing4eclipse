@@ -9,10 +9,11 @@
 package org.dyno.visual.swing.layouts;
 
 import java.io.Serializable;
+
 /**
  * 
  * Constraints
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -32,5 +33,13 @@ public class Constraints implements Serializable {
 
 	public Alignment getVertical() {
 		return vertical;
+	}
+
+	public void setHorizontal(Alignment horizontal) {
+		this.horizontal = horizontal;
+	}
+
+	public void setVertical(Alignment vertical) {
+		this.vertical = vertical;
 	}
 }
