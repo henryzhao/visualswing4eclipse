@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
@@ -45,6 +46,10 @@ import org.dyno.visual.swing.widgets.undo.TopAlignmentOperation;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -84,7 +89,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		jp.setSize(100, 100);
 		ILayoutBean bean = LayoutAdapter.getDefaultLayoutBean();
 		if (bean != null)
-			bean.initConainerLayout(jp);
+			bean.initConainerLayout(jp, null);
 		return jp;
 	}
 
@@ -654,5 +659,21 @@ public class JPanelAdapter extends CompositeAdapter {
 			return getLayoutAdapter().getChildConstraints(child);
 		}
 	}
-
+	
+	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+		IMethod cons = type.getMethod(type.getElementName(), new String[0]);
+		if(!cons.exists()){
+			StringBuilder builder = new StringBuilder();
+			builder.append("public "+type.getElementName()+"(){\n");
+			builder.append("initComponent();\n");
+			builder.append("}\n");
+			try {
+				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}	
 }

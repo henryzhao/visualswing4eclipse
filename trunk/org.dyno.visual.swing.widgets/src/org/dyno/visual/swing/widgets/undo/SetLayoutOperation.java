@@ -49,7 +49,7 @@ public class SetLayoutOperation extends AbstractOperation {
 		}
 		JPanel jpanel = (JPanel) jpaneladapter.getWidget();
 		LayoutAdapter adapter = LayoutAdapter.createLayoutAdapter(config);
-		adapter.initConainerLayout(jpanel);
+		adapter.initConainerLayout(jpanel, monitor);
 		jpaneladapter.setLayoutAdapter(null);
 		jpaneladapter.doLayout();
 		jpanel.validate();
@@ -70,7 +70,7 @@ public class SetLayoutOperation extends AbstractOperation {
 		JPanel jpanel = (JPanel) jpaneladapter.getWidget();
 		jpanel.removeAll();
 		if (oldLayoutAdapter != null)
-			oldLayoutAdapter.initConainerLayout(jpanel);
+			oldLayoutAdapter.initConainerLayout(jpanel, monitor);
 		else
 			jpanel.setLayout(null);
 		for (Pair pair : constraints) {

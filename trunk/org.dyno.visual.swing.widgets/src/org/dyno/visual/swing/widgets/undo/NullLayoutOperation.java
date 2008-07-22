@@ -63,7 +63,7 @@ public class NullLayoutOperation extends AbstractOperation {
 		JPanel jpanel = (JPanel) adapter.getWidget();
 		jpanel.removeAll();
 		if (oldLayoutAdapter != null)
-			oldLayoutAdapter.initConainerLayout(jpanel);
+			oldLayoutAdapter.initConainerLayout(jpanel, monitor);
 		else
 			jpanel.setLayout(null);
 		for (Pair pair : constraints) {
