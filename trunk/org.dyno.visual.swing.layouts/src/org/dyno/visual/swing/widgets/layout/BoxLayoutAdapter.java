@@ -26,13 +26,14 @@ import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private Thumb thumb;
 
 	@Override
-	public void initConainerLayout(Container parent) {
+	public void initConainerLayout(Container parent, IProgressMonitor monitor) {
 		BoxLayout boxLayout = new BoxLayout(parent, BoxLayout.LINE_AXIS);
 		parent.setLayout(boxLayout);
 	}

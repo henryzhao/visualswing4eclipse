@@ -20,12 +20,13 @@ import javax.swing.JComponent;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
-	public void initConainerLayout(Container container) {
+	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		container.setLayout(new GridBagLayout());
 	}
 

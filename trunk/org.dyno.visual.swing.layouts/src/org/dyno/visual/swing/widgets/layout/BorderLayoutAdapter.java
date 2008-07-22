@@ -32,6 +32,7 @@ import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.layout.actions.BorderLayoutPlacementAction;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.MenuManager;
 
@@ -41,7 +42,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private String constraints;
 
 	@Override
-	public void initConainerLayout(Container panel) {
+	public void initConainerLayout(Container panel, IProgressMonitor monitor) {
 		JComponent container = (JComponent) panel;
 		CompositeAdapter compositeAdapter = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);

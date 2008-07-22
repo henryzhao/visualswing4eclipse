@@ -26,6 +26,7 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class FlowLayoutAdapter extends LayoutAdapter {
@@ -122,7 +123,7 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 	}
 
 	@Override
-	public void initConainerLayout(Container container) {
+	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		container.setLayout(new FlowLayout());
 	}
 
