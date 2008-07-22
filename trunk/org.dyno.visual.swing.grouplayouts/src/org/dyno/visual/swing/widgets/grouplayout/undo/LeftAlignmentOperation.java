@@ -19,10 +19,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-public class TopAlignmentOperation extends AlignmentOperation {
+public class LeftAlignmentOperation extends AlignmentOperation {
 
-	public TopAlignmentOperation(JComponent container) {
-		super("Align Top", container);
+	public LeftAlignmentOperation(JComponent container) {
+		super("Align Left", container);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class TopAlignmentOperation extends AlignmentOperation {
 		WidgetAdapter post = widgets.get(0);
 		JComponent postChild = post.getWidget();
 		Constraints postConstraints = layout.getConstraints(postChild);
-		Alignment postAlignment = postConstraints.getVertical();
+		Alignment postAlignment = postConstraints.getHorizontal();
 		compcons = new ArrayList<CompCons>();
 		if (postAlignment instanceof Leading || postAlignment instanceof Bilateral) {
 			int postLead;
@@ -49,24 +49,24 @@ public class TopAlignmentOperation extends AlignmentOperation {
 				cons.component = child;
 				cons.constraints = constraints;
 				compcons.add(cons);
-				Alignment alignment = constraints.getVertical();
+				Alignment alignment = constraints.getHorizontal();
 				if (alignment instanceof Leading) {
 					Leading leading = (Leading) alignment.clone();
 					leading.setLeading(postLead);
-					constraints = new Constraints(constraints.getHorizontal(), leading);
+					constraints = new Constraints(leading, constraints.getVertical());
 				} else if (alignment instanceof Bilateral) {
 					Bilateral bilateral = (Bilateral) alignment.clone();
 					bilateral.setLeading(postLead);
-					constraints = new Constraints(constraints.getHorizontal(), bilateral);
+					constraints = new Constraints(bilateral, constraints.getVertical());
 				} else if (alignment instanceof Trailing) {
 					Bilateral bilateral = new Bilateral(postLead, ((Trailing) alignment).getTrailing(), ((Trailing) alignment).getSize());
-					constraints = new Constraints(constraints.getHorizontal(), bilateral);
+					constraints = new Constraints(bilateral, constraints.getVertical());
 				}
 				layout.setConstraints(child, constraints);
 			}
 		} else if (postAlignment instanceof Trailing) {
 			Trailing postTrailing = (Trailing) postAlignment;
-			int postTrail = postTrailing.getTrailing() + postChild.getHeight();
+			int postTrail = postTrailing.getTrailing() + postChild.getWidth();
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
 				JComponent child = adapter.getWidget();
@@ -75,19 +75,19 @@ public class TopAlignmentOperation extends AlignmentOperation {
 				cons.component = child;
 				cons.constraints = constraints;
 				compcons.add(cons);
-				Alignment alignment = constraints.getVertical();
+				Alignment alignment = constraints.getHorizontal();
 				if (alignment instanceof Leading) {
-					int t = postTrail - child.getHeight();
-					Trailing trailing = new Trailing(t, 10, child.getHeight());
-					constraints = new Constraints(constraints.getHorizontal(), trailing);
+					int t = postTrail - child.getWidth();
+					Trailing trailing = new Trailing(t, 10, child.getWidth());
+					constraints = new Constraints(trailing, constraints.getVertical());
 				} else if (alignment instanceof Bilateral) {
-					int t = postTrail - child.getHeight();
-					Trailing trailing = new Trailing(t, 10, child.getHeight());
-					constraints = new Constraints(constraints.getHorizontal(), trailing);
+					int t = postTrail - child.getWidth();
+					Trailing trailing = new Trailing(t, 10, child.getWidth());
+					constraints = new Constraints(trailing, constraints.getVertical());
 				} else if (alignment instanceof Trailing) {
 					Trailing trailing = (Trailing) alignment.clone();
-					trailing.setTrailing(postTrail - child.getHeight());
-					constraints = new Constraints(constraints.getHorizontal(), trailing);
+					trailing.setTrailing(postTrail - child.getWidth());
+					constraints = new Constraints(trailing, constraints.getVertical());
 				}
 				layout.setConstraints(child, constraints);
 			}

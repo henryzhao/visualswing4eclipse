@@ -29,6 +29,7 @@ import javax.swing.SwingConstants;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.dyno.visual.swing.base.Azimuth;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.layouts.Alignment;
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
@@ -40,10 +41,12 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.undo.LeftAlignmentOperation;
 import org.dyno.visual.swing.widgets.grouplayout.undo.TopAlignmentOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.PlatformUI;
@@ -365,7 +368,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void initConainerLayout(Container container) {
+	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		int count = container.getComponentCount();
 		HashMap<JComponent, Constraints> comps = new HashMap<JComponent, Constraints>();
 		ArrayList<JComponent> array = new ArrayList<JComponent>();
@@ -392,6 +395,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 		container.doLayout();
 		container.validate();
+		JavaUtil.setupLayoutLib(monitor);
 	}
 
 	@Override
@@ -679,8 +683,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	private IUndoableOperation getLeft() {
-		// TODO Auto-generated method stub
-		return null;
+		return new LeftAlignmentOperation(container);
 	}
 
 	private IUndoableOperation getBottom() {
