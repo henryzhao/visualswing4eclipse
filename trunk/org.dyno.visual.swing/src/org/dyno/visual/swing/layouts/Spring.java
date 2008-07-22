@@ -9,10 +9,11 @@
 package org.dyno.visual.swing.layouts;
 
 import java.io.Serializable;
+
 /**
  * 
  * Spring
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -20,13 +21,14 @@ public class Spring implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	private int minimum;
 	private int preferred;
+
 	public Spring(int min, int pref) {
 		minimum = min;
 		preferred = pref;
 	}
 
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 		return new Spring(minimum, preferred);
 	}
 

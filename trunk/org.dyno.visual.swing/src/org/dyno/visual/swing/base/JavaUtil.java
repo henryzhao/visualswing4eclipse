@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
@@ -28,9 +29,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.dom.AST;
@@ -46,10 +50,11 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
+
 /**
  * 
  * JavaUtil
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -191,6 +196,7 @@ public class JavaUtil {
 			return false;
 		return resourceAttributes.isReadOnly();
 	}
+
 	public static ImportRewrite createImportRewrite(ICompilationUnit unit) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setSource(unit);
@@ -198,36 +204,25 @@ public class JavaUtil {
 		parser.setFocalPosition(0);
 		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		return CodeStyleConfiguration.createImportRewrite(cu, true);
-	}	
+	}
 
 	@SuppressWarnings("unchecked")
 	private static CodeFormatter getCodeFormatter() {
 		if (codeFormatter == null) {
-			Map options = DefaultCodeFormatterConstants
-					.getEclipseDefaultSettings();
+			Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();
 			options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
-			options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
-					JavaCore.VERSION_1_5);
+			options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
 			options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
-			options
-					.put(
-							DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS,
-							DefaultCodeFormatterConstants
-									.createAlignmentValue(
-											true,
-											DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
-											DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
-			options.put(DefaultCodeFormatterConstants.FORMATTER_LINE_SPLIT,
-					"160");
+			options.put(DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS, DefaultCodeFormatterConstants.createAlignmentValue(true,
+					DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE, DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
+			options.put(DefaultCodeFormatterConstants.FORMATTER_LINE_SPLIT, "160");
 			codeFormatter = ToolFactory.createCodeFormatter(options);
 		}
 		return codeFormatter;
 	}
 
 	public static String formatCode(String source) {
-		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_UNKNOWN,
-				source, 0, source.length(), 0,
-				System.getProperty("line.separator"));
+		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_UNKNOWN, source, 0, source.length(), 0, System.getProperty("line.separator"));
 		if (edit != null) {
 			IDocument document = new Document(source);
 			try {
@@ -238,5 +233,34 @@ public class JavaUtil {
 			}
 		}
 		return source;
-	}	
+	}
+
+	public static boolean setupLayoutLib(IProgressMonitor monitor) {
+		return setupLayoutLib(WhiteBoard.getCurrentProject(), monitor);
+	}
+
+	public static boolean setupLayoutLib(IJavaProject javaProject, IProgressMonitor monitor) {
+		if (javaProject != null) {
+			try {
+				IClasspathEntry[] classpath = javaProject.getRawClasspath();
+				boolean layout_exists = false;
+				for (IClasspathEntry path : classpath) {
+					String sPath = path.getPath().toString();
+					if (sPath.equals("VS_LAYOUT"))
+						layout_exists = true;
+				}
+				if (!layout_exists) {
+					IClasspathEntry varEntry = JavaCore.newContainerEntry(new Path("VS_LAYOUT"), false);
+					IClasspathEntry[] newClasspath = new IClasspathEntry[classpath.length + 1];
+					System.arraycopy(classpath, 0, newClasspath, 0, classpath.length);
+					newClasspath[classpath.length] = varEntry;
+					javaProject.setRawClasspath(newClasspath, monitor);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}
 }

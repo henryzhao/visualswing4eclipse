@@ -47,4 +47,9 @@ public class Bilateral extends Alignment {
 	public void setTrailing(int trailing) {
 		this.trailing = trailing;
 	}
+	@Override
+	public Object clone() {
+		return new Bilateral(leading, trailing, (Spring) getSpring().clone());
+	}
+	
 }

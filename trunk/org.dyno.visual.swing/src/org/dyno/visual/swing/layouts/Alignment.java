@@ -26,12 +26,6 @@ public abstract class Alignment implements Serializable, Cloneable {
 		this.spring = spring;
 	}
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
-	}
-
 	public Alignment(int min, int pref) {
 		this.spring = new Spring(min, pref);
 	}
@@ -43,4 +37,7 @@ public abstract class Alignment implements Serializable, Cloneable {
 	public void setSpring(Spring spring) {
 		this.spring = spring;
 	}
+
+	@Override
+	public abstract Object clone();
 }

@@ -47,4 +47,10 @@ public class Trailing extends Alignment {
 	public void setTrailing(int trailing) {
 		this.trailing = trailing;
 	}
+	@Override
+	public Object clone(){
+		return new Trailing(trailing, size, (Spring) getSpring().clone());
+	}
+	
+	
 }

@@ -47,4 +47,9 @@ public class Leading extends Alignment {
 	public void setLeading(int leading) {
 		this.leading = leading;
 	}
+	
+	@Override
+	public Object clone() {
+		return new Leading(leading, size, (Spring) getSpring().clone());
+	}	
 }

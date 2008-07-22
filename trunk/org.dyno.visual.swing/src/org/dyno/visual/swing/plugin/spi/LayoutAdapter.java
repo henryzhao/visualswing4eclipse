@@ -40,7 +40,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class LayoutAdapter implements IPropertySourceProvider {
+public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutBean {
 	public static String DEFAULT_LAYOUT = "java.awt.FlowLayout";
 	public static final String LAYOUT_EXTENSION_POINT = "org.dyno.visual.swing.widgets.layoutAdapter";
 
@@ -257,9 +257,6 @@ public abstract class LayoutAdapter implements IPropertySourceProvider {
 	public String getName() {
 		return name;
 	}
-
-	public abstract void initConainerLayout(Container container);
-
 	public void addChild(JComponent widget) {
 		container.add(widget);
 	}

@@ -35,7 +35,9 @@ public class GroupLayout implements LayoutManager2, Serializable {
 	public Constraints getConstraints(Component comp) {
 		return constraints.get(comp);
 	}
-
+	public void setConstraints(Component comp, Constraints constraint){
+		constraints.put(comp, constraint);
+	}
 	@Override
 	public void addLayoutComponent(Component comp, Object con) {
 		assert con != null && con instanceof Constraints;

@@ -29,14 +29,15 @@ public class LnfAction extends Action {
 
 	private void changeLnf() {
 		String lnf = adapter.getLnfClassname();
-		if (lnf != null
-				&& !lnf.getClass().getName().equals(info.getClassName())) {
+		if (lnf==null||!lnf.getClass().getName().equals(info.getClassName())) {
 			try {
 				adapter.setLnfClassname(info.getClassName());
 				SwingUtilities.updateComponentTreeUI(adapter.getDesigner());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}else{
+			
 		}
 	}
 }

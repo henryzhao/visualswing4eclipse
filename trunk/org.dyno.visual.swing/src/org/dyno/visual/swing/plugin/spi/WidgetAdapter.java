@@ -1054,7 +1054,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 			success = false;
 		}
 		success = createEventMethod(type, imports, monitor);
+		success = createConstructor(type, imports, monitor);
 		return success;
+	}
+
+	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+		return true;
 	}
 
 	protected String getGetMethodName(String name) {

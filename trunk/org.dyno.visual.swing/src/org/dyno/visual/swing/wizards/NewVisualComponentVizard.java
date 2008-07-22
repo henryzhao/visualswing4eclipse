@@ -9,13 +9,12 @@
 package org.dyno.visual.swing.wizards;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -74,7 +73,9 @@ public class NewVisualComponentVizard extends NewElementWizard {
 	protected void finishPage(IProgressMonitor monitor) throws InterruptedException, CoreException {
 		fPage.createType(monitor);
 		IResource resource = fPage.getModifiedResource();
-		setLayoutLib(resource, monitor);
+		IProject project = resource.getProject();
+		IJavaProject javaProject = JavaCore.create(project);
+		JavaUtil.setupLayoutLib(javaProject, monitor);
 	}
 
 	public boolean performFinish() {
@@ -90,29 +91,6 @@ public class NewVisualComponentVizard extends NewElementWizard {
 			}
 		}
 		return res;
-	}
-
-	private void setLayoutLib(IResource resource, IProgressMonitor monitor) {
-		try {
-			IProject project = resource.getProject();
-			IJavaProject javaProject = JavaCore.create(project);
-			IClasspathEntry[] classpath = javaProject.getRawClasspath();
-			boolean layout_exists = false;
-			for (IClasspathEntry path : classpath) {
-				String sPath = path.getPath().toString();
-				if (sPath.equals("VS_LAYOUT"))
-					layout_exists = true;
-			}
-			if (!layout_exists) {
-				IClasspathEntry varEntry = JavaCore.newContainerEntry(new Path("VS_LAYOUT"), false);
-				IClasspathEntry[] newClasspath = new IClasspathEntry[classpath.length + 1];
-				System.arraycopy(classpath, 0, newClasspath, 0, classpath.length);
-				newClasspath[classpath.length] = varEntry;
-				javaProject.setRawClasspath(newClasspath, monitor);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public IJavaElement getCreatedElement() {

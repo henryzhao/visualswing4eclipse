@@ -9,6 +9,8 @@
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Container;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * 
  * ILayoutBean
@@ -17,5 +19,5 @@ import java.awt.Container;
  * @author William Chen
  */
 public interface ILayoutBean {
-	void initConainerLayout(Container container);
+	void initConainerLayout(Container container, IProgressMonitor monitor);
 }
