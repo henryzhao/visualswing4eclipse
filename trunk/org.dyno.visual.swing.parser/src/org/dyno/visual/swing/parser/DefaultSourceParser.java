@@ -207,8 +207,7 @@ class DefaultSourceParser implements ISourceParser {
 			} else {
 				throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
 			}
-		} else
-			throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
+		}
 	}
 
 	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) {
