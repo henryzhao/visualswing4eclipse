@@ -190,7 +190,7 @@ class DefaultSourceParser implements ISourceParser {
 			}
 		} catch (Exception e) {
 		}
-		return null;
+		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
 
 	@SuppressWarnings("unchecked")
