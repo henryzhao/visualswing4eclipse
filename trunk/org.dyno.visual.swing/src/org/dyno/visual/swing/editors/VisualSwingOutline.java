@@ -121,7 +121,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		if (event.getSource() == getTreeViewer()) {
+		if (event.getSource() == getTreeViewer()&&!isAdjusting) {
 			IStructuredSelection selection = (IStructuredSelection) event
 					.getSelection();
 			designer.clearSelection();
@@ -136,14 +136,17 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			}
 			designer.repaint();
 			super.selectionChanged(event);
-		} else {
-			getTreeViewer().refresh();
+		} else if(event.getSelection() instanceof List){
+			getTreeViewer().refresh();			
 			TreePath[] paths = getTreePath((List<JComponent>) event
 					.getSelection());
 			TreeSelection sel = new TreeSelection(paths);
+			isAdjusting = true;
 			setSelection(sel);
+			isAdjusting = false;
 		}
 	}
+	private boolean isAdjusting;
 
 	private TreePath[] getTreePath(List<JComponent> components) {
 		List<TreePath> paths = new ArrayList<TreePath>();

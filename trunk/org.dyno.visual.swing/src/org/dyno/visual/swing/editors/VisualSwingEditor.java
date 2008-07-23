@@ -354,6 +354,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 				setLnfClassname(lnf);
 			}
 		} catch (Exception e) {
+			String className = UIManager.getCrossPlatformLookAndFeelClassName();
+			setLnfClassname(className);
 		}
 	}
 
