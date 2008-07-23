@@ -1,7 +1,6 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -29,7 +28,6 @@ public class LeftAlignmentOperation extends AlignmentOperation {
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
-		List<WidgetAdapter> widgets = containerAdapter.getSelectedWidgets();
 		WidgetAdapter post = widgets.get(0);
 		JComponent postChild = post.getWidget();
 		Constraints postConstraints = layout.getConstraints(postChild);

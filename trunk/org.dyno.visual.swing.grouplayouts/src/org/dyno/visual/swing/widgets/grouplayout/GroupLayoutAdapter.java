@@ -41,7 +41,9 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.undo.BottomAlignmentOperation;
 import org.dyno.visual.swing.widgets.grouplayout.undo.LeftAlignmentOperation;
+import org.dyno.visual.swing.widgets.grouplayout.undo.RightAlignmentOperation;
 import org.dyno.visual.swing.widgets.grouplayout.undo.TopAlignmentOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -678,8 +680,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	private IUndoableOperation getRight() {
-		// TODO Auto-generated method stub
-		return null;
+		return new RightAlignmentOperation(container);
 	}
 
 	private IUndoableOperation getLeft() {
@@ -687,8 +688,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	private IUndoableOperation getBottom() {
-		// TODO Auto-generated method stub
-		return null;
+		return new BottomAlignmentOperation(container);
 	}
 
 	private IUndoableOperation getCenter() {

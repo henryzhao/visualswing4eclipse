@@ -1,5 +1,6 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -18,7 +19,7 @@ import org.eclipse.core.runtime.Status;
 public abstract class AlignmentOperation extends AbstractOperation {
 	protected JComponent container;
 	protected List<CompCons> compcons;
-
+	protected List<WidgetAdapter> widgets;
 	protected class CompCons {
 		JComponent component;
 		Constraints constraints;
@@ -27,6 +28,12 @@ public abstract class AlignmentOperation extends AbstractOperation {
 	public AlignmentOperation(String name, JComponent container) {
 		super(name);
 		this.container = container;
+		this.widgets = new ArrayList<WidgetAdapter>();
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		List<WidgetAdapter> selected = containerAdapter.getSelectedWidgets();
+		for(WidgetAdapter widget:selected){
+			widgets.add(widget);
+		}
 	}
 
 	@Override
