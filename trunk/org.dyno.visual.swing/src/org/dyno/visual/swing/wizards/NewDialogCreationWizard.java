@@ -20,4 +20,9 @@ public class NewDialogCreationWizard extends NewVisualComponentVizard {
 	public NewDialogCreationWizard() {
 		super(JDialog.class.getName());
 	}
+
+	@Override
+	protected NewComponentPage createPage() {
+		return new NewDialogPage();
+	}
 }

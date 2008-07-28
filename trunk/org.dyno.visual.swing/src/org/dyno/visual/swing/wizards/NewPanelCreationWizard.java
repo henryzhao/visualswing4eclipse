@@ -20,4 +20,9 @@ public class NewPanelCreationWizard extends NewVisualComponentVizard {
 	public NewPanelCreationWizard() {
 		super(JPanel.class.getName());
 	}
+
+	@Override
+	protected NewComponentPage createPage() {
+		return new NewPanelPage();
+	}
 }

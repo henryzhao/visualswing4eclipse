@@ -99,15 +99,23 @@
             id="org.dyno.visual.swing">
       </category>
       <wizard
-            name="Visual JPanel"
-            icon="icons/panel_16.png"
             category="org.dyno.visual.swing"
-            id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
-         <class class="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
-            <parameter name="javatype" value="true"/>
-         </class>
+            class="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
+            icon="icons/panel_16.png"
+            id="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
+            name="Visual JPanel">
          <description>
-            New Panel
+            New JPanel
+         </description>
+      </wizard>
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewFrameCreationWizard"
+            icon="icons/frame_16.png"
+            id="org.dyno.visual.swing.wizards.NewFrameCreationWizard"
+            name="Visual JFrame">
+         <description>
+            New JFrame
          </description>
       </wizard>      
    </extension>

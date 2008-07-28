@@ -27,7 +27,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class NewVisualComponentVizard extends NewElementWizard {
+public abstract class NewVisualComponentVizard extends NewElementWizard {
 	private static String NEWCLASS_WIZ_ICON = "/icons/newclass_wiz.png";
 	private NewComponentPage fPage;
 	private boolean fOpenEditorOnFinish;
@@ -44,13 +44,13 @@ public class NewVisualComponentVizard extends NewElementWizard {
 	public void addPages() {
 		super.addPages();
 		if (fPage == null) {
-			fPage = new NewComponentPage();
+			fPage = createPage();
 			fPage.setWizard(this);
 			fPage.init(getSelection());
 		}
 		addPage(fPage);
 	}
-
+	protected abstract NewComponentPage createPage();
 	@Override
 	public IDialogSettings getDialogSettings() {
 		IDialogSettings settings = VisualSwingPlugin.getDefault().getDialogSettings();

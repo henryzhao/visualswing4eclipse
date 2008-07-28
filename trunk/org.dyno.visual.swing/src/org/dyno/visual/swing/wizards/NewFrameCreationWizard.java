@@ -20,4 +20,9 @@ public class NewFrameCreationWizard extends NewVisualComponentVizard {
 	public NewFrameCreationWizard() {
 		super(JFrame.class.getName());
 	}
+
+	@Override
+	protected NewComponentPage createPage() {
+		return new NewFramePage();
+	}
 }
