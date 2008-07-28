@@ -11,6 +11,7 @@ package org.dyno.visual.swing.borders;
 
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.borders.action.NullBorderSwitchAction;
 import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;

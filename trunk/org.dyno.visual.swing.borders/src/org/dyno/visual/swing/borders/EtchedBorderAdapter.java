@@ -18,6 +18,7 @@ import javax.swing.border.EtchedBorder;
 import org.dyno.visual.swing.base.FieldProperty;
 import org.dyno.visual.swing.base.ItemProviderCellEditorFactory;
 import org.dyno.visual.swing.base.ItemProviderLabelProviderFactory;
+import org.dyno.visual.swing.borders.action.EtchedBorderSwitchAction;
 import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;

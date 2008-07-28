@@ -15,6 +15,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.border.EmptyBorder;
 
+import org.dyno.visual.swing.borders.action.EmptyBorderSwitchAction;
 import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;

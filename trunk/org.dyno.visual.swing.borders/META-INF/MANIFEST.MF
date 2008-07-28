@@ -7,7 +7,8 @@ Require-Bundle: org.dyno.visual.swing,
  org.eclipse.jface,
  org.eclipse.ui.views,
  org.eclipse.equinox.registry,
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.eclipse.ui.workbench;bundle-version="3.4.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Dynamic Object Organization
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
