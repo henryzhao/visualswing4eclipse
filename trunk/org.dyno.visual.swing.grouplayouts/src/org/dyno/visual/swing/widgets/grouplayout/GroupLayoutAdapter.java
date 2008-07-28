@@ -42,8 +42,12 @@ import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.grouplayout.undo.BottomAlignmentOperation;
+import org.dyno.visual.swing.widgets.grouplayout.undo.CenterAlignmentOperation;
 import org.dyno.visual.swing.widgets.grouplayout.undo.LeftAlignmentOperation;
+import org.dyno.visual.swing.widgets.grouplayout.undo.MiddleAlignmentOperation;
 import org.dyno.visual.swing.widgets.grouplayout.undo.RightAlignmentOperation;
+import org.dyno.visual.swing.widgets.grouplayout.undo.SameHeightOperation;
+import org.dyno.visual.swing.widgets.grouplayout.undo.SameWidthOperation;
 import org.dyno.visual.swing.widgets.grouplayout.undo.TopAlignmentOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -428,7 +432,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			int now_width = widget.getWidth();
 			int pref_width = widget.getPreferredSize().width;
 			int delta_width = pref_width - now_width;
-			if (delta_width != 0) {
+			if (delta_width != 0 && leading.getSize() == Alignment.PREFERRED) {
 				leading.setSize(Alignment.PREFERRED);
 				adjustHorizontalLeadingBy(widget, delta_width);
 				container.doLayout();
@@ -439,7 +443,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			int now_width = widget.getWidth();
 			int pref_width = widget.getPreferredSize().width;
 			int delta_width = pref_width - now_width;
-			if (delta_width != 0) {
+			if (delta_width != 0 && trailing.getSize() == Alignment.PREFERRED) {
 				trailing.setSize(Alignment.PREFERRED);
 				adjustHorizontalTrailingBy(widget, delta_width);
 				container.doLayout();
@@ -453,7 +457,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			int now_height = widget.getHeight();
 			int pref_height = widget.getPreferredSize().height;
 			int delta_height = pref_height - now_height;
-			if (delta_height != 0) {
+			if (delta_height != 0 && leading.getSize() == Alignment.PREFERRED) {
 				leading.setSize(Alignment.PREFERRED);
 				adjustVerticalLeadingBy(widget, delta_height);
 				container.doLayout();
@@ -464,7 +468,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			int now_height = widget.getHeight();
 			int pref_height = widget.getPreferredSize().height;
 			int delta_height = pref_height - now_height;
-			if (delta_height != 0) {
+			if (delta_height != 0 && trailing.getSize() == Alignment.PREFERRED) {
 				trailing.setSize(Alignment.PREFERRED);
 				adjustVerticalTrailingBy(widget, delta_height);
 				container.doLayout();
@@ -692,23 +696,19 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	private IUndoableOperation getCenter() {
-		// TODO Auto-generated method stub
-		return null;
+		return new CenterAlignmentOperation(container);
 	}
 
 	private IUndoableOperation getMiddle() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MiddleAlignmentOperation(container);
 	}
 
 	private IUndoableOperation getSameWidth() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SameWidthOperation(container);
 	}
 
 	private IUndoableOperation getSameHeight() {
-		// TODO Auto-generated method stub
-		return null;
+		return new SameHeightOperation(container);
 	}
 
 	@Override
