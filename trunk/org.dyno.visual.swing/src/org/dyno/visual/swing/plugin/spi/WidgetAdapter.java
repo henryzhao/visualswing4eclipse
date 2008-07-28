@@ -43,6 +43,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.PropertySource2;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry.Category;
 import org.dyno.visual.swing.base.ExtensionRegistry.Provider;
@@ -119,13 +120,15 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	public String getLastName() {
 		return lastName;
 	}
-	public List<WidgetAdapter> getSelectedWidgets(){
+
+	public List<WidgetAdapter> getSelectedWidgets() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null){
+		if (designer != null) {
 			return designer.getSelectedWidgets();
-		}else
+		} else
 			return null;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -410,7 +413,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	}
 
 	public void repaintDesigner() {
-		getDesigner().repaint();
+		if (getDesigner() != null)
+			getDesigner().repaint();
 	}
 
 	protected GlassPlane getGlass() {
@@ -780,9 +784,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		MenuManager borderMenu = new MenuManager("Border", "#BORDER");
 		fillBorderAction(borderMenu);
 		menu.add(borderMenu);
-		if(!isRoot()){
+		if (!isRoot()) {
 			CompositeAdapter parentAdapter = getParentAdapter();
-			if(parentAdapter!=null){
+			if (parentAdapter != null) {
 				parentAdapter.fillConstraintsAction(menu, getWidget());
 			}
 		}
@@ -1152,5 +1156,25 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	public Map<EventSetDescriptor, IEventListenerModel> getEventDescriptor() {
 		return eventDescriptor;
+	}
+
+	@SuppressWarnings("unchecked")
+	public boolean isWidgetValueChanged(Object newValue) {
+		Object lastValue = getWidgetValue();
+		if(lastValue==null){
+			if(newValue==null)
+				return false;
+			else
+				return true;
+		}else{
+			if(newValue==null)
+				return true;
+			else{
+				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(lastValue.getClass());
+				if(typeAdapter!=null&&typeAdapter.getComparator()!=null)
+					return typeAdapter.getComparator().compare(lastValue, newValue)!=0;
+				return !lastValue.equals(newValue);
+			}
+		}
 	}
 }

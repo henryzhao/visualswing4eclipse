@@ -51,8 +51,7 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class GlassTarget extends DropTarget implements MouseInputListener,
-		MouseWheelListener, Azimuth, ChangeListener, FocusListener {
+public class GlassTarget extends DropTarget implements MouseInputListener, MouseWheelListener, Azimuth, ChangeListener, FocusListener {
 	private static final long serialVersionUID = 5331246522463111004L;
 	private int state;
 	private GlassPlane glassPlane;
@@ -103,17 +102,13 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 				if (hoveredAdapter != compositeAdapter) {
-					if (hoveredAdapter != null
-							&& hoveredAdapter.dragExit(hoveredAdapter
-									.convertToLocal(p)))
+					if (hoveredAdapter != null && hoveredAdapter.dragExit(hoveredAdapter.convertToLocal(p)))
 						update = true;
 					hoveredAdapter = compositeAdapter;
-					if (hoveredAdapter.dragEnter(hoveredAdapter
-							.convertToLocal(p)))
+					if (hoveredAdapter.dragEnter(hoveredAdapter.convertToLocal(p)))
 						update = true;
 				} else {
-					if (compositeAdapter.dragOver(hoveredAdapter
-							.convertToLocal(p)))
+					if (compositeAdapter.dragOver(hoveredAdapter.convertToLocal(p)))
 						update = true;
 				}
 			} else {
@@ -126,8 +121,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			}
 		} else if (currentAdapter != null) {
 			hoveredAdapter = currentAdapter;
-			if (((CompositeAdapter) hoveredAdapter).dragOver(hoveredAdapter
-					.convertToLocal(p)))
+			if (((CompositeAdapter) hoveredAdapter).dragOver(hoveredAdapter.convertToLocal(p)))
 				update = true;
 		}
 		if (update)
@@ -149,7 +143,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 				if (compositeAdapter.drop(compositeAdapter.convertToLocal(p))) {
-					if(lastParent!=null){
+					if (lastParent != null) {
 						IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 						JComponent child = WhiteBoard.getSelectedWidget().getComponent();
 						Object new_constraints = compositeAdapter.getChildConstraints(child);
@@ -166,7 +160,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				}
 			} else {
 				glassPlane.setHotspotPoint(null);
-				if(lastParent!=null){
+				if (lastParent != null) {
 					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					IUndoableOperation operation = new DragDropOperation(lastParent, WhiteBoard.getSelectedWidget().getComponent(), lastConstraints);
 					operation.addContext(designer.getUndoContext());
@@ -181,13 +175,13 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			WhiteBoard.setSelectedWidget(null);
 			PaletteView.clearToolSelection();
 		} else if (currentAdapter != null) {
-			if (((CompositeAdapter) currentAdapter).drop(currentAdapter
-					.convertToLocal(p))) {
-				if(lastParent!=null){
+			if (((CompositeAdapter) currentAdapter).drop(currentAdapter.convertToLocal(p))) {
+				if (lastParent != null) {
 					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					JComponent child = WhiteBoard.getSelectedWidget().getComponent();
 					Object new_constraints = ((CompositeAdapter) currentAdapter).getChildConstraints(child);
-					IUndoableOperation operation = new MoveResizeOperation(lastParent, ((CompositeAdapter) currentAdapter), child, lastConstraints, new_constraints);
+					IUndoableOperation operation = new MoveResizeOperation(lastParent, ((CompositeAdapter) currentAdapter), child, lastConstraints,
+							new_constraints);
 					operation.addContext(designer.getUndoContext());
 					try {
 						operationHistory.execute(operation, null, null);
@@ -207,14 +201,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private void mouse_pressed(MouseEvent e) {
 		Point point = e.getPoint();
-		JComponent hovered = designer.componentAt(point,
-				WidgetAdapter.ADHERE_PAD);
+		JComponent hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 		if (hovered != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-			Point hotspot = SwingUtilities.convertPoint(designer, point,
-					hovered);
-			boolean should_continue = adapter.widgetPressed(hotspot.x,
-					hotspot.y);
+			Point hotspot = SwingUtilities.convertPoint(designer, point, hovered);
+			boolean should_continue = adapter.widgetPressed(hotspot.x, hotspot.y);
 			if (!should_continue) {
 				designer.repaint();
 				return;
@@ -258,8 +249,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private void process_bean_move(MouseEvent e) {
 		Point point = e.getPoint();
-		JComponent hovered = designer.componentAt(point,
-				WidgetAdapter.ADHERE_PAD);
+		JComponent hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
 		Point relp = SwingUtilities.convertPoint(designer, point, hovered);
 		adapter.setHotspotPoint(relp);
@@ -270,8 +260,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private void process_bean_resize(MouseEvent e) {
 		Point point = e.getPoint();
-		JComponent hovered = designer.componentAt(point,
-				WidgetAdapter.ADHERE_PAD);
+		JComponent hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
 		dragging_event = e;
 		currentAdapter = adapter;
@@ -307,8 +296,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private void process_root_pressed(MouseEvent e) {
 		Point point = e.getPoint();
-		JComponent hovered = designer.componentAt(point,
-				WidgetAdapter.ADHERE_PAD);
+		JComponent hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
 		Point rel = SwingUtilities.convertPoint(designer, point, hovered);
 		int loc = adapter.getCursorLocation(rel);
@@ -351,11 +339,9 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() > 1 && !isAddingState() && stopEditing()) {
 			Point point = e.getPoint();
-			JComponent hovered = designer.componentAt(point,
-					WidgetAdapter.ADHERE_PAD);
+			JComponent hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 			if (hovered != null) {
-				Point loc = SwingUtilities.convertPoint(designer, point,
-						hovered);
+				Point loc = SwingUtilities.convertPoint(designer, point, hovered);
 				startEditComponent(hovered, loc);
 			}
 		}
@@ -379,16 +365,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			iEditor.addChangeListener(this);
 			Rectangle bounds = adapter.getEditorBounds(loc.x, loc.y);
 			if (adapter.isRoot())
-				bounds = SwingUtilities.convertRectangle(hovered, bounds,
-						designer);
-			else if (((CompositeAdapter) adapter.getParentAdapter())
-					.isEnclosingContainer())
-				bounds = SwingUtilities.convertRectangle(
-						((CompositeAdapter) adapter.getParentAdapter())
-								.getWidget(), bounds, designer);
+				bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
+			else if (((CompositeAdapter) adapter.getParentAdapter()).isEnclosingContainer())
+				bounds = SwingUtilities.convertRectangle(((CompositeAdapter) adapter.getParentAdapter()).getWidget(), bounds, designer);
 			else
-				bounds = SwingUtilities.convertRectangle(hovered, bounds,
-						designer);
+				bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
 			Component comp = iEditor.getComponent();
 			comp.setBounds(bounds);
 			comp.doLayout();
@@ -430,22 +411,20 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			IEditor iEditor = currentEditor.getEditor();
 			try {
 				iEditor.validateValue();
-				Object newValue = iEditor.getValue();				
-				IUndoableOperation operation = new SetWidgetValueOperation(
-						adapter, newValue);
-				Shell shell = designer.getShell();
-				IOperationHistory operationHistory = PlatformUI.getWorkbench()
-						.getOperationSupport().getOperationHistory();
-				operation.addContext(adapter.getUndoContext());
-				operationHistory.execute(operation, null, new ShellAdaptable(
-						shell));				
-				adapter.setDirty(true);
-				CompositeAdapter container = (CompositeAdapter) adapter
-						.getParentAdapter();
-				if (container != null)
-					container.adjustLayout(adapter.getWidget());
-				if (adapter.isSelected()) {
-					designer.publishSelection();
+				Object newValue = iEditor.getValue();
+				if (adapter.isWidgetValueChanged(newValue)) {
+					IUndoableOperation operation = new SetWidgetValueOperation(adapter, newValue);
+					Shell shell = designer.getShell();
+					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+					operation.addContext(adapter.getUndoContext());
+					operationHistory.execute(operation, null, new ShellAdaptable(shell));
+					adapter.setDirty(true);
+					CompositeAdapter container = (CompositeAdapter) adapter.getParentAdapter();
+					if (container != null)
+						container.adjustLayout(adapter.getWidget());
+					if (adapter.isSelected()) {
+						designer.publishSelection();
+					}
 				}
 				iEditor.removeChangeListener(this);
 				iEditor.getComponent().removeFocusListener(this);
@@ -466,8 +445,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					shell.getDisplay().syncExec(new Runnable() {
 						@Override
 						public void run() {
-							MessageDialog.openError(shell, "Validation Error",
-									message);
+							MessageDialog.openError(shell, "Validation Error", message);
 						}
 					});
 					iEditor.getComponent().requestFocus();
@@ -567,16 +545,14 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			glassPlane.setSelectionRegion(rect);
 		} else if (isTobeDnd() && isDndReady(e)) {
 			TransferHandler handler = glassPlane.getTransferHandler();
-			handler.exportAsDrag(glassPlane, dragging_event,
-					TransferHandler.COPY);
+			handler.exportAsDrag(glassPlane, dragging_event, TransferHandler.COPY);
 			WhiteBoard.setSelectedWidget(currentAdapter);
 			if (state == STATE_BEAN_TOBE_HOVER) {
 				setMascotLocation(e.getPoint());
 				state = STATE_BEAN_HOVER;
 			} else {
 				Point zerop = new Point(0, 0);
-				Point locp = SwingUtilities.convertPoint(currentAdapter
-						.getWidget(), zerop, designer);
+				Point locp = SwingUtilities.convertPoint(currentAdapter.getWidget(), zerop, designer);
 				currentAdapter.setHotspotPoint(zerop);
 				setMascotLocation(locp);
 				if (state == STATE_BEAN_TOBE_RESIZED_RIGHT_BOTTOM) {
@@ -597,12 +573,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					state = STATE_BEAN_RESIZE_RIGHT;
 				}
 			}
-			CompositeAdapter parentAdapter = (CompositeAdapter) currentAdapter
-					.getParentAdapter();
+			CompositeAdapter parentAdapter = (CompositeAdapter) currentAdapter.getParentAdapter();
 			if (parentAdapter.isViewContainer()) {
 				currentAdapter = parentAdapter;
-				parentAdapter = (CompositeAdapter) currentAdapter
-						.getParentAdapter();
+				parentAdapter = (CompositeAdapter) currentAdapter.getParentAdapter();
 			}
 			lastConstraints = parentAdapter.getChildConstraints(currentAdapter.getWidget());
 			lastParent = parentAdapter;
@@ -611,8 +585,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			dragging_event = null;
 		}
 	}
+
 	private CompositeAdapter lastParent;
 	private Object lastConstraints;
+
 	private boolean isDndReady(MouseEvent e) {
 		return e.getPoint().distance(dragging_event.getPoint()) > DND_THRESHOLD;
 	}
@@ -689,14 +665,12 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	private void moveOver(Point point) {
-		JComponent hovered = designer.componentAt(point,
-				WidgetAdapter.ADHERE_PAD);
+		JComponent hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 		if (hovered != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
 			if (adapter != null) {
 				if (adapter.isRoot()) {
-					Point rel = SwingUtilities.convertPoint(designer, point,
-							hovered);
+					Point rel = SwingUtilities.convertPoint(designer, point, hovered);
 					int loc = adapter.getCursorLocation(rel);
 					switch (loc) {
 					case WidgetAdapter.RIGHT:
@@ -716,8 +690,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 						break;
 					}
 				} else if (adapter.isSelected()) {
-					Point rel = SwingUtilities.convertPoint(designer, point,
-							hovered);
+					Point rel = SwingUtilities.convertPoint(designer, point, hovered);
 					int loc = adapter.getCursorLocation(rel);
 					switch (loc) {
 					case WidgetAdapter.RIGHT:
