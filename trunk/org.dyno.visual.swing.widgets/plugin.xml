@@ -11,12 +11,13 @@
    		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JPanel.*"/>
    		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JPanel.*"/>
    		<pattern type="javax.swing.JPanel" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JPanel.*"/>
-   		<!--
+   		
    		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.JFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JFrame.*"/>
    		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.JFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
    		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JFrame.*"/>
    		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
    		<pattern type="javax.swing.JFrame" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
+   		<!--
    		
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.JDialog;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.JDialog;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
