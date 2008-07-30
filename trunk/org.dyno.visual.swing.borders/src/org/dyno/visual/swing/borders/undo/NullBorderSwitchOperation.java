@@ -26,6 +26,8 @@ public class NullBorderSwitchOperation extends AbstractOperation {
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		target.setBorder(null);
 		target.repaint();
+		targetAdapter.setDirty(true);
+		targetAdapter.changeNotify();
 		return Status.OK_STATUS;
 	}
 
