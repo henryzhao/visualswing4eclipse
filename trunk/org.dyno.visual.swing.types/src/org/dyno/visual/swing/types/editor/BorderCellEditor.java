@@ -12,6 +12,7 @@ package org.dyno.visual.swing.types.editor;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -21,13 +22,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 public class BorderCellEditor extends DialogCellEditor {
-
+	private JComponent component;
 	public BorderCellEditor(Object bean, Composite parent) {
 		super(parent);
 		if (bean == null) {
 			setValue(bean);
 		} else if (bean instanceof JComponent) {
 			setValue(((JComponent) bean).getBorder());
+			this.component = (JComponent)bean;
 		} else if (bean instanceof Border) {
 			setValue(bean);
 		}
@@ -40,15 +42,27 @@ public class BorderCellEditor extends DialogCellEditor {
 		bDialog.open();
 		if (bDialog.getReturnCode() == Window.OK) {
 			Object value = bDialog.getBorder();
+            if(component!=null){
+            	changeComponentDirtyFlag();
+            }
 			if(value==null){
 				markDirty();
 				setValue(value);
                 fireApplyEditorValue();
                 return null;
-			}else 
-				return value;				
+			}else {
+				return value;
+			}
 		} else
 			return null;
+	}
+
+	private void changeComponentDirtyFlag() {
+		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
+		if(adapter!=null){
+			adapter.setDirty(true);
+			adapter.repaintDesigner();
+		}			
 	}
 
 	protected Button createButton(Composite parent) {
