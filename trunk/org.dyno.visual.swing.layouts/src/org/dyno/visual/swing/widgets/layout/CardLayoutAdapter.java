@@ -10,6 +10,7 @@
 package org.dyno.visual.swing.widgets.layout;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,12 +44,12 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public boolean isWidgetVisible(JComponent child) {
+	public boolean isWidgetVisible(Component child) {
 		return child.isVisible();
 	}
 
 	@Override
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		CardLayout cardLayout = (CardLayout) container.getLayout();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
 		String name = adapter.getName();
@@ -129,7 +130,7 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	protected String getChildConstraints(JComponent child, ImportRewrite imports) {
+	protected String getChildConstraints(Component child, ImportRewrite imports) {
 		return "\""+WidgetAdapter.getWidgetAdapter(child).getName()+"\"";
 	}
 
@@ -141,12 +142,12 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child, constraints);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter(child);
 		return cAdapter.getName();
 	}

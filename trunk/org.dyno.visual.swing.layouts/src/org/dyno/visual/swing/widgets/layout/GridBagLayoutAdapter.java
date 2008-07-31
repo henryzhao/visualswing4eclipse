@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets.layout;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -82,12 +83,12 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child, constraints);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		GridBagLayout layout = (GridBagLayout) container.getLayout();
 		return layout.getConstraints(child);
 	}

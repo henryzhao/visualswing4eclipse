@@ -206,12 +206,12 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		return null;
 	}
 	

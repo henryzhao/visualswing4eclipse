@@ -43,18 +43,18 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void initConainerLayout(Container panel, IProgressMonitor monitor) {
-		JComponent container = (JComponent) panel;
+		Container container = panel;
 		CompositeAdapter compositeAdapter = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int count = compositeAdapter.getChildCount();
-		ArrayList<JComponent> arrayList = new ArrayList<JComponent>();
+		ArrayList<Component> arrayList = new ArrayList<Component>();
 		for (int i = 0; i < count; i++) {
 			arrayList.add(compositeAdapter.getChild(i));
 		}
 		compositeAdapter.removeAllChild();
 		panel.setLayout(new BorderLayout());
 		for (int i = 0; i < count && i < 5; i++) {
-			JComponent comp = arrayList.get(i);
+			Component comp = arrayList.get(i);
 			String constraintsObject = BorderLayout.CENTER;
 			if (i == 0) {
 				constraintsObject = BorderLayout.CENTER;
@@ -77,19 +77,19 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+	public void fillConstraintsAction(MenuManager menu, Component child) {
 		MenuManager plcMenu = new MenuManager("Component Placement",
 				"#BORDERLAYOUT_CONSTRAINTS");
 		plcMenu.add(new BorderLayoutPlacementAction(container,
-				BorderLayout.CENTER, child));
+				BorderLayout.CENTER, (JComponent)child));
 		plcMenu.add(new BorderLayoutPlacementAction(container,
-				BorderLayout.NORTH, child));
+				BorderLayout.NORTH, (JComponent)child));
 		plcMenu.add(new BorderLayoutPlacementAction(container,
-				BorderLayout.EAST, child));
+				BorderLayout.EAST, (JComponent)child));
 		plcMenu.add(new BorderLayoutPlacementAction(container,
-				BorderLayout.WEST, child));
+				BorderLayout.WEST, (JComponent)child));
 		plcMenu.add(new BorderLayoutPlacementAction(container,
-				BorderLayout.SOUTH, child));
+				BorderLayout.SOUTH, (JComponent)child));
 		menu.add(plcMenu);
 	}
 
@@ -212,7 +212,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				container.add(todrop.getComponent());
 			else {
 				if (!constraints.equals(BorderLayout.CENTER)) {
-					JComponent drop = todrop.getComponent();
+					Component drop = todrop.getComponent();
 					Dimension pref = drop.getPreferredSize();
 					if (pref.width == 0 || pref.height == 0)
 						drop.setPreferredSize(drop.getSize());
@@ -289,17 +289,17 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addAfter(JComponent hovering, JComponent dragged) {
+	public void addAfter(Component hovering, Component dragged) {
 		addChild(dragged);
 	}
 
 	@Override
-	public void addBefore(JComponent hovering, JComponent dragged) {
+	public void addBefore(Component hovering, Component dragged) {
 		addChild(dragged);
 	}
 
 	@Override
-	public void addChild(JComponent widget) {
+	public void addChild(Component widget) {
 		String emptyCons = findEmptyConstraints();
 		container.add(widget, emptyCons);
 	}
@@ -320,7 +320,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	protected String getChildConstraints(JComponent child, ImportRewrite imports) {
+	protected String getChildConstraints(Component child, ImportRewrite imports) {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		String object = (String) layout.getConstraints(child);
 		if (object == null)
@@ -348,12 +348,12 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child, constraints);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		String object = (String) layout.getConstraints(child);
 		if (object == null)
