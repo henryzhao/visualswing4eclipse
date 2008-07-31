@@ -9,11 +9,11 @@
 
 package org.dyno.visual.swing.borders;
 
+import java.awt.Component;
 import java.awt.Insets;
 import java.lang.reflect.Field;
 import java.util.StringTokenizer;
 
-import javax.swing.JComponent;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
@@ -152,7 +152,7 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 		}
 	}
 	@Override
-	public boolean cloneProperty(Object bean, JComponent clone) {
+	public boolean cloneProperty(Object bean, Component clone) {
 		return false;
 	}
 

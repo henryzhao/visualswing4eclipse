@@ -22,10 +22,11 @@ import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
+
 /**
  * 
  * BevelBorderAdapter
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -43,22 +44,18 @@ public class BevelBorderAdapter extends BorderAdapter {
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
-		FieldProperty bevelTypeProperty = new FieldProperty("bevelType", "bevelType", BevelBorder.class, new ItemProviderLabelProviderFactory(new BevelBorderTypeItems()), new ItemProviderCellEditorFactory(new BevelBorderTypeItems()));
+		FieldProperty bevelTypeProperty = new FieldProperty("bevelType", "bevelType", BevelBorder.class, new ItemProviderLabelProviderFactory(
+				new BevelBorderTypeItems()), new ItemProviderCellEditorFactory(new BevelBorderTypeItems()));
 		FieldProperty highlightOuterProperty = new FieldProperty("highlightOuter", "highlightOuter", BevelBorder.class);
 		FieldProperty highlightInnerProperty = new FieldProperty("highlightInner", "highlightInner", BevelBorder.class);
 		FieldProperty shadowInnerProperty = new FieldProperty("shadowInner", "shadowInner", BevelBorder.class);
 		FieldProperty shadowOuterProperty = new FieldProperty("shadowOuter", "shadowOuter", BevelBorder.class);
-		return new IWidgetPropertyDescriptor[] {bevelTypeProperty, 
-				highlightOuterProperty, 
-				highlightInnerProperty, 
-				shadowInnerProperty,
-				shadowOuterProperty
-			};
+		return new IWidgetPropertyDescriptor[] { bevelTypeProperty, highlightOuterProperty, highlightInnerProperty, shadowInnerProperty, shadowOuterProperty };
 	}
 
 	@Override
 	public IAction getContextAction(JComponent widget) {
-		return new BevelBorderSwitchAction(widget);
+		return new BevelBorderSwitchAction((JComponent) widget);
 	}
 
 	@Override
@@ -73,17 +70,17 @@ public class BevelBorderAdapter extends BorderAdapter {
 
 	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
-		if(value==null)
+		if (value == null)
 			return "null";
-		String strBf=imports.addImport("javax.swing.BorderFactory");
-		BevelBorder bevelBorder = (BevelBorder)value;
+		String strBf = imports.addImport("javax.swing.BorderFactory");
+		BevelBorder bevelBorder = (BevelBorder) value;
 		int type = bevelBorder.getBevelType();
 		Color highlightInnerColor = bevelBorder.getHighlightInnerColor();
 		Color highlightOuterColor = bevelBorder.getHighlightOuterColor();
 		Color shadowInnerColor = bevelBorder.getShadowInnerColor();
 		Color shadowOuterColor = bevelBorder.getShadowOuterColor();
 		StringBuilder builder = new StringBuilder();
-		builder.append(strBf+".createBevelBorder(");
+		builder.append(strBf + ".createBevelBorder(");
 		builder.append(encodeValue(new BevelBorderTypeItems(), type, imports));
 		builder.append(", ");
 		builder.append(encodeValue(highlightOuterColor, imports));
