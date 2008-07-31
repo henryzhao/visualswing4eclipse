@@ -101,7 +101,7 @@ class DefaultSourceParser implements ISourceParser {
 			paths.add(wsPath.append(java_project.getOutputLocation()).toFile().toURI().toURL());
 			URL[] urls = paths.toArray(new URL[paths.size()]);
 			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
-			if (JComponent.class.isAssignableFrom(beanClass)) {
+			if (Component.class.isAssignableFrom(beanClass)) {
 				try {
 					setUpLookAndFeel(beanClass);
 				} catch (Exception e) {
@@ -109,7 +109,7 @@ class DefaultSourceParser implements ISourceParser {
 					return false;
 				}
 				try {
-					JComponent bean = (JComponent) beanClass.newInstance();
+					Component bean = (Component) beanClass.newInstance();
 					WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
 					parser.setSource(this.unit);
@@ -128,7 +128,7 @@ class DefaultSourceParser implements ISourceParser {
 		return false;
 	}
 	@SuppressWarnings("unchecked")
-	private void initDesignedWidget(CompilationUnit cunit, JComponent bean) {
+	private void initDesignedWidget(CompilationUnit cunit, Component bean) {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
