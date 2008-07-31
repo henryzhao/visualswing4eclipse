@@ -60,6 +60,10 @@ public class JPanelAdapter extends CompositeAdapter {
 	public JPanelAdapter() {
 		super("jPanel" + (VAR_INDEX++));
 	}
+	void setWidgetWithoutAttach(Component widget){
+		this.widget = widget;
+		this.dirty = false;
+	}
 
 	@Override
 	public Component cloneWidget() {
@@ -603,6 +607,10 @@ public class JPanelAdapter extends CompositeAdapter {
 	protected String createInitCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createInitCode(imports));
+		createAddCode(imports, builder);
+		return builder.toString();
+	}
+	void createAddCode(ImportRewrite imports, StringBuilder builder) {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
@@ -616,8 +624,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			}
 		} else {
 			builder.append(getLayoutAdapter().createCode(imports));
-		}
-		return builder.toString();
+		}		
 	}
 
 	@Override

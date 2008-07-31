@@ -541,6 +541,23 @@
 		        <property id="visible" name="visible"/>
 		        <property id="border" name="border"/>
          </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JFrameAdapter"
+               icon="icons/frame_16.png"
+               rootPaneContainer="true"
+               widgetClass="javax.swing.JFrame"
+               widgetName="JFrame">
+               <property id="title" name="title"/>
+               <property
+                     editable="true"
+                     editor="org.dyno.visual.swing.widgets.editors.FrameDefaultCloseOperationEditor"
+                     id="defaultCloseOperation"
+                     name="defaultCloseOperation"
+                     renderer="org.dyno.visual.swing.widgets.renderers.FrameDefaultCloseOperationRenderer">
+               </property>
+               <property id="visible" name="visible" gencode="false"/>
+         </widget>
          <!--
          <widget 
          		class="org.dyno.visual.swing.widgets.JLayeredPaneAdapter"
@@ -822,6 +839,10 @@
 						<reference id="resizable"/>
 						<reference id="title"/>
 						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JFrame">
+						<reference id="title"/>
+						<reference id="defaultCloseOperation"/>
 					</provider>
          		</category>
          		<category id="seldom" name="Expert" filters="org.eclipse.ui.views.properties.expert" default="true"/>
