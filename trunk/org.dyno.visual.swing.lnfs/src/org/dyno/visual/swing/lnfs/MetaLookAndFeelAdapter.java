@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,6 +49,7 @@ import org.dyno.visual.swing.lnfs.meta.MetaJComboBoxValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJDesktopPaneValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJEditorPaneValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJFrameValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJInternalFrameValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJLabelValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJListValue;
@@ -103,6 +105,7 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		put(JToolBar.class, new MetaJToolBarValue());
 		put(JDesktopPane.class, new MetaJDesktopPaneValue());
 		put(JInternalFrame.class, new MetaJInternalFrameValue());
+		put(JFrame.class, new MetaJFrameValue());
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -47,6 +48,7 @@ import org.dyno.visual.swing.lnfs.motif.JComboBoxValue;
 import org.dyno.visual.swing.lnfs.motif.JDesktopPaneValue;
 import org.dyno.visual.swing.lnfs.motif.JEditorPaneValue;
 import org.dyno.visual.swing.lnfs.motif.JFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.motif.JFrameValue;
 import org.dyno.visual.swing.lnfs.motif.JInternalFrameValue;
 import org.dyno.visual.swing.lnfs.motif.JLabelValue;
 import org.dyno.visual.swing.lnfs.motif.JListValue;
@@ -76,6 +78,7 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 
 	public MotifLookAndFeelAdapter() {
 		put(JPanel.class, new JPanelValue());
+		put(JFrame.class, new JFrameValue());
 		put(JButton.class, new JButtonValue());
 		put(JLabel.class, new JLabelValue());
 		put(JToggleButton.class, new JToggleButtonValue());

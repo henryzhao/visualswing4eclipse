@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -48,6 +49,7 @@ import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJComboBoxValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJDesktopPaneValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJEditorPaneValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJFrameValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJInternalFrameValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJLabelValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJListValue;
@@ -75,6 +77,7 @@ import org.dyno.visual.swing.lnfs.windowsclassic.XpJComboBoxValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJDesktopPaneValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJEditorPaneValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJFormattedTextFieldValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJFrameValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJInternalFrameValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJLabelValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJListValue;
@@ -111,6 +114,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		
 		xpValues.put(JLabel.class, new XpJLabelValue());
 		xpValues.put(JPanel.class, new XpJPanelValue());
+		xpValues.put(JFrame.class, new XpJFrameValue());
 		xpValues.put(JButton.class, new XpJButtonValue());
 		xpValues.put(JToggleButton.class, new XpJToggleButtonValue());
 		xpValues.put(JCheckBox.class, new XpJCheckBoxValue());
@@ -139,6 +143,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		
 		classicValues.put(JLabel.class, new ClassicJLabelValue());
 		classicValues.put(JPanel.class, new ClassicJPanelValue());
+		classicValues.put(JFrame.class, new ClassicJFrameValue());
 		classicValues.put(JButton.class, new ClassicJButtonValue());
 		classicValues.put(JToggleButton.class, new ClassicJToggleButtonValue());
 		classicValues.put(JCheckBox.class, new ClassicJCheckBoxValue());
