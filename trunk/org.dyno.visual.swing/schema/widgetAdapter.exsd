@@ -103,6 +103,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="rootPaneContainer" type="boolean" use="default" value="false">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

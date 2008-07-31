@@ -11,6 +11,7 @@ package org.dyno.visual.swing.plugin.spi;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
@@ -214,7 +215,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		attach();
 		this.dirty = false;
 	}
-
+	
 	public void detachWidget() {
 		if (this.widget != null) {
 			attach();
@@ -647,8 +648,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		Component me = getWidget();
 		Component parent = me.getParent();
 		while (parent != null) {
-			if (parent instanceof JComponent) {
-				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter((JComponent) parent);
+			if (parent instanceof Component) {
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(parent);
 				if (adapter != null)
 					return (CompositeAdapter) adapter;
 			}
@@ -713,7 +714,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 			return p;
 	}
 
-	private Point convertToGlobal(Point p) {
+	public Point convertToGlobal(Point p) {
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
 			return SwingUtilities.convertPoint(getWidget(), p, designer);
@@ -1062,7 +1063,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		}
 		return success;
 	}
-
 	private boolean createRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		String initMethodName = "initComponent";
@@ -1081,9 +1081,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		builder.append(initMethodName);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
-		int w = getWidget().getWidth();
-		int h = getWidget().getHeight();
-		builder.append("setSize(" + w + ", " + h + ");\n");
+		createPostInitCode(builder, imports);
 		builder.append("}\n");
 		try {
 			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
@@ -1093,6 +1091,11 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		success = createEventMethod(type, imports, monitor);
 		success = createConstructor(type, imports, monitor);
 		return success;
+	}
+
+	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
+		Dimension size = getWidget().getSize();
+		builder.append("setSize(" + size.width + ", " + size.height + ");\n");
 	}
 
 	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {

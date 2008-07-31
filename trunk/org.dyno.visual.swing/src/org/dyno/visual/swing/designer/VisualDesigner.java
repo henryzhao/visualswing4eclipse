@@ -318,6 +318,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			remove(root);
 		if (adapter != null) {
 			root = adapter.getRootPane();
+			Container parent = root.getParent();
+			if(parent!=null)
+				parent.remove(root);
 			undoContext = new ObjectUndoContext(root);
 			IEditorSite site = editor.getEditorSite();
 			undoAction = new UndoActionHandler(site, getUndoContext());

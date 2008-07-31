@@ -174,6 +174,8 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void paintBaselineAnchorAdapter(Graphics g, WidgetAdapter focused) {
 		Component jpar = focused.getWidget();
+		if(focused.isRoot())
+			jpar = focused.getRootPane();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
@@ -183,6 +185,8 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void paintFocusedAdapter(Graphics g, WidgetAdapter focused) {
 		Component jpar = focused.getWidget();
+		if(focused.isRoot())
+			jpar = focused.getRootPane();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);

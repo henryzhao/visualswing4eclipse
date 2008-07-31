@@ -34,10 +34,11 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.Bundle;
+
 /**
  * 
  * PaletteView
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -58,7 +59,9 @@ public class PaletteView extends ViewPart implements SelectionListener {
 	}
 
 	public void createPartControl(Composite parent) {
-		expandBar = new SharedScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL){};
+		expandBar = new SharedScrolledComposite(parent, SWT.H_SCROLL
+				| SWT.V_SCROLL) {
+		};
 		expandBar.setExpandHorizontal(true);
 		expandBar.setExpandVertical(true);
 		Composite container = new Composite(expandBar, SWT.NONE);
@@ -77,7 +80,8 @@ public class PaletteView extends ViewPart implements SelectionListener {
 	}
 
 	private void parseGroupExtensions(Composite bar) {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(GROUP_EXTENSION_POINT);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
+				.getExtensionPoint(GROUP_EXTENSION_POINT);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -104,7 +108,8 @@ public class PaletteView extends ViewPart implements SelectionListener {
 	}
 
 	private void parseWidgetExtensions() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(ADAPTER_EXTENSION_POINT);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
+				.getExtensionPoint(ADAPTER_EXTENSION_POINT);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -129,7 +134,8 @@ public class PaletteView extends ViewPart implements SelectionListener {
 		}
 	}
 
-	private void addGroup(IConfigurationElement config, Bundle bundle, Composite bar) {
+	private void addGroup(IConfigurationElement config, Bundle bundle,
+			Composite bar) {
 		String id = config.getAttribute("id");
 		String displayName = config.getAttribute("displayName");
 		if (displayName == null || displayName.equals("")) {
@@ -137,34 +143,44 @@ public class PaletteView extends ViewPart implements SelectionListener {
 		}
 		ToolBar toolbar = toolbars.get(id);
 		if (toolbar == null) {
-			ExpandableComposite expandItem = new ExpandableComposite(bar, SWT.NONE);
-			String sExpanded=config.getAttribute("expanded");
-			if(sExpanded==null||sExpanded.trim().length()==0)
-				sExpanded="true";
+			ExpandableComposite expandItem = new ExpandableComposite(bar,
+					SWT.NONE);
+			String sExpanded = config.getAttribute("expanded");
+			if (sExpanded == null || sExpanded.trim().length() == 0)
+				sExpanded = "true";
 			expandItem.setExpanded(sExpanded.equals("true"));
-			expandItem.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
-			expandItem.setText(displayName);			
-			expandItem.addExpansionListener(new ExpansionAdapter(){
+			expandItem.setFont(JFaceResources.getFontRegistry().getBold(
+					JFaceResources.DIALOG_FONT));
+			expandItem.setText(displayName);
+			expandItem.addExpansionListener(new ExpansionAdapter() {
 				@Override
 				public void expansionStateChanged(ExpansionEvent e) {
 					updateScrolledComposite();
 				}
 			});
-			toolbar = new ToolBar(expandItem, SWT.VERTICAL | SWT.RIGHT | SWT.FLAT);
+			toolbar = new ToolBar(expandItem, SWT.VERTICAL | SWT.RIGHT
+					| SWT.FLAT);
 			expandItem.setClient(toolbar);
 			toolbars.put(id, toolbar);
 			expandItems.put(id, expandItem);
 		}
 	}
-	private void updateScrolledComposite(){
+
+	private void updateScrolledComposite() {
 		Composite container = (Composite) expandBar.getContent();
 		container.layout();
 		expandBar.layout();
 		expandBar.reflow(true);
 	}
+
 	private void addWidget(IConfigurationElement config, String pluginId) {
 		String abs = config.getAttribute("abstract");
 		if (abs != null && abs.equals("true"))
+			return;
+		String sRootPaneContainer = config.getAttribute("rootPaneContainer");
+		if (sRootPaneContainer != null
+				&& sRootPaneContainer.trim().length() > 0
+				&& sRootPaneContainer.equals("true"))
 			return;
 		String groupId = config.getAttribute("groupId");
 		if (groupId != null && groupId.trim().length() > 0) {
@@ -215,12 +231,14 @@ public class PaletteView extends ViewPart implements SelectionListener {
 	}
 
 	private void setSelectedItem(ToolItem item) {
-		if (selectedItem != null && selectedItem != item && selectedItem.getSelection()) {
+		if (selectedItem != null && selectedItem != item
+				&& selectedItem.getSelection()) {
 			selectedItem.setSelection(false);
 		}
 		if (item.getSelection()) {
 			String beanClassname = (String) item.getData();
-			WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(beanClassname);
+			WidgetAdapter adapter = ExtensionRegistry
+					.createWidgetAdapter(beanClassname);
 			WhiteBoard.setSelectedWidget(adapter);
 			selectedItem = item;
 		} else {
