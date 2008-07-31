@@ -9,9 +9,9 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
 import javax.swing.JSeparator;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -24,7 +24,7 @@ public class JSeparatorAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JSeparator separator = new JSeparator();
 		Dimension size = new Dimension(100, 10);
 		separator.setSize(size);
@@ -34,7 +34,7 @@ public class JSeparatorAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JSeparator();
 	}
 }

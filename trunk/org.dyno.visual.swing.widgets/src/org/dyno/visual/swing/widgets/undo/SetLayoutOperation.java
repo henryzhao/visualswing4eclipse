@@ -1,9 +1,9 @@
 package org.dyno.visual.swing.widgets.undo;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
@@ -23,7 +23,7 @@ public class SetLayoutOperation extends AbstractOperation {
 	private List<Pair> constraints;
 
 	class Pair {
-		JComponent child;
+		Component child;
 		Object constraints;
 	}
 
@@ -40,7 +40,7 @@ public class SetLayoutOperation extends AbstractOperation {
 			throws ExecutionException {
 		constraints = new ArrayList<Pair>();
 		for (int i = 0; i < jpaneladapter.getChildCount(); i++) {
-			JComponent child = jpaneladapter.getChild(i);
+			Component child = jpaneladapter.getChild(i);
 			Object cons = jpaneladapter.getChildConstraints(child);
 			Pair pair = new Pair();
 			pair.child = child;

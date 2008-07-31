@@ -222,7 +222,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+	public void fillConstraintsAction(MenuManager menu, Component child) {
 		MenuManager plcMenu = new MenuManager("Component Placement",
 				"#BORDERLAYOUT_CONSTRAINTS");
 		JSplitPane jsp = (JSplitPane) getWidget();
@@ -244,7 +244,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				forbid = false;
 			} else {
 				WidgetAdapter adapter = getDropWidget();
-				JComponent child = adapter.getComponent();
+				Component child = adapter.getComponent();
 				JSplitPane jtp = (JSplitPane) getWidget();
 				if (position.equals("left"))
 					jtp.setLeftComponent(child);
@@ -309,7 +309,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public int getIndexOfChild(JComponent child) {
+	public int getIndexOfChild(Component child) {
 		JSplitPane jtp = (JSplitPane) getWidget();
 		JComponent left, right;
 		if (jtp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
@@ -342,14 +342,14 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent cloneWidget() {
+	public Component cloneWidget() {
 		JSplitPane jsp = (JSplitPane) getWidget();
 		JSplitPane copy = (JSplitPane) super.cloneWidget();
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			JComponent child = getChild(i);
 			WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter(child);
-			JComponent cloneChild = cAdapter.cloneWidget();
+			Component cloneChild = cAdapter.cloneWidget();
 			int orientation = jsp.getOrientation();
 			if (orientation == JSplitPane.HORIZONTAL_SPLIT) {
 				if (child == jsp.getLeftComponent()) {
@@ -464,7 +464,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		JSplitPane jsp = (JSplitPane) getWidget();
 		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
 			if ("left".equals(constraints))
@@ -480,7 +480,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		JSplitPane jsp = (JSplitPane) getWidget();
 		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
 			if (jsp.getLeftComponent() == child)

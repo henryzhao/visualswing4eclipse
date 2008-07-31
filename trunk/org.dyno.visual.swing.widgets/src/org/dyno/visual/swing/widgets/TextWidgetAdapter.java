@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -32,11 +33,11 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		setName(getVarName() + (VAR_INDEX++));
 		this.widget = createWidget();
 		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
-		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
+		attach();
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		try {
 			return (JComponent)getWidgetClass().newInstance();
 		} catch (Exception e) {
@@ -71,7 +72,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		}
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JComponent jc = createWidgetByClass();
 		setText(jc, name);
 		Dimension size = jc.getPreferredSize();
@@ -81,7 +82,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		return jc;
 	}
 
-	private String getText(JComponent jc) {
+	private String getText(Component jc) {
 		PropertyDescriptor textProperty = getTextProperty();
 		try {
 			return (String) textProperty.getReadMethod().invoke(jc);
@@ -91,7 +92,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		}
 	}
 
-	private void setText(JComponent jc, String text) {
+	private void setText(Component jc, String text) {
 		PropertyDescriptor textProperty = getTextProperty();
 		try {
 			textProperty.getWriteMethod().invoke(jc, text);
@@ -126,7 +127,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 	public Rectangle getEditorBounds(int x, int y) {
 		int w = getWidget().getWidth();
 		int h = getWidget().getHeight();
-		JComponent widget = getWidget();
+		Component widget = getWidget();
 		FontMetrics fm = widget.getFontMetrics(widget.getFont());
 		int fh = fm.getHeight() + VER_TEXT_PAD;
 		int fw = fm.stringWidth(getText(getWidget())) + HOR_TEXT_PAD;

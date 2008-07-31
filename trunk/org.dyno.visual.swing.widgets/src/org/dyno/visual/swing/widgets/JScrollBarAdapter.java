@@ -10,10 +10,10 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Adjustable;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JScrollBar;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
@@ -27,7 +27,7 @@ public class JScrollBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JScrollBar bar = new JScrollBar();
 		Dimension size = bar.getPreferredSize();
 		bar.setSize(size);
@@ -69,7 +69,7 @@ public class JScrollBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JScrollBar();
 	}
 

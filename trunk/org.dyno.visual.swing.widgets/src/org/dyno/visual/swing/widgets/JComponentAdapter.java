@@ -9,7 +9,7 @@
 
 package org.dyno.visual.swing.widgets;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -19,7 +19,7 @@ public class JComponentAdapter extends WidgetAdapter {
 	protected JComponentAdapter() {
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		return null;
 	}
 
@@ -29,7 +29,7 @@ public class JComponentAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return null;
 	}
 }

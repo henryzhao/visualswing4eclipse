@@ -9,10 +9,10 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JSpinner;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
@@ -26,7 +26,7 @@ public class JSpinnerAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JSpinner spinner = new JSpinner();
 		Dimension size = spinner.getPreferredSize();
 		spinner.setSize(size);
@@ -63,7 +63,7 @@ public class JSpinnerAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JSpinner();
 	}
 

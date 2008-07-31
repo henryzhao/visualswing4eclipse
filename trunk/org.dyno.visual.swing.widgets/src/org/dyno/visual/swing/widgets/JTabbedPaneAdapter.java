@@ -12,6 +12,7 @@ package org.dyno.visual.swing.widgets;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -43,7 +44,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JTabbedPane tab = new JTabbedPane();
 		Dimension size = new Dimension(100, 100);
 		tab.setSize(size);
@@ -93,7 +94,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	@Override
 	public boolean drop(Point p) {
 		WidgetAdapter adapter = getDropWidget();
-		JComponent child = adapter.getComponent();
+		Component child = adapter.getComponent();
 		JTabbedPane jtp = (JTabbedPane) getWidget();
 		jtp.addTab(adapter.getName(), child);
 		jtp.setSelectedComponent(child);
@@ -179,7 +180,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent getChild(int index) {
+	public Component getChild(int index) {
 		JTabbedPane tp = (JTabbedPane) getWidget();
 		return (JComponent) tp.getComponentAt(index);
 	}
@@ -191,19 +192,19 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public int getIndexOfChild(JComponent child) {
+	public int getIndexOfChild(Component child) {
 		JTabbedPane tp = (JTabbedPane) getWidget();
 		return tp.indexOfComponent(child);
 	}
 
 	@Override
-	protected boolean isChildVisible(JComponent child) {
+	protected boolean isChildVisible(Component child) {
 		JTabbedPane tp = (JTabbedPane) getWidget();
 		return child == tp.getSelectedComponent();
 	}
 
 	@Override
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		JTabbedPane tp = (JTabbedPane) getWidget();
 		tp.setSelectedComponent(widget);
 	}
@@ -228,7 +229,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 		JTabbedPane jtp = (JTabbedPane) getWidget();
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			String getMethodName = getGetMethodName(childAdapter.getName());
 			builder.append(getFieldName(getName()) + ".addTab(");
@@ -245,7 +246,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		if (constraints != null) {
 			JTabbedPane jtp = (JTabbedPane) getWidget();
 			jtp.addTab((String) constraints, child);
@@ -253,7 +254,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		JTabbedPane jtp = (JTabbedPane) getWidget();
 		int index = jtp.indexOfComponent(child);
 		if (index != -1)

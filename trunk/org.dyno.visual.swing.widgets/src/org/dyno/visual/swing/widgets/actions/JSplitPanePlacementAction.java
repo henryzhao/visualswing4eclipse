@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.actions;
 
-import javax.swing.JComponent;
+import java.awt.Component;
+
 import javax.swing.JSplitPane;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -14,12 +15,12 @@ import org.eclipse.ui.PlatformUI;
 
 public class JSplitPanePlacementAction extends Action {
 	private JSplitPane container;
-	private JComponent child;
+	private Component child;
 	private JSplitPaneAdapter parent;
 	private String placement;
 
 	public JSplitPanePlacementAction(JSplitPane container,
-			String placement, JComponent child) {
+			String placement, Component child) {
 		super("", AS_RADIO_BUTTON);
 		this.container = container;
 		this.placement = placement;

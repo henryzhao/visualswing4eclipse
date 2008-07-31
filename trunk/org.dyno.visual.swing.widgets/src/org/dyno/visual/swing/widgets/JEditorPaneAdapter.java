@@ -9,7 +9,8 @@
 
 package org.dyno.visual.swing.widgets;
 
-import javax.swing.JComponent;
+import java.awt.Component;
+
 import javax.swing.JEditorPane;
 import javax.swing.text.JTextComponent;
 
@@ -24,7 +25,7 @@ public class JEditorPaneAdapter extends J2DTextComponentAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JEditorPane();
 	}
 

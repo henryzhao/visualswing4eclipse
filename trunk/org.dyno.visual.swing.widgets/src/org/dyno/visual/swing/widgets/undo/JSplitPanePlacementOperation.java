@@ -2,7 +2,6 @@ package org.dyno.visual.swing.widgets.undo;
 
 import java.awt.Component;
 
-import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -16,11 +15,11 @@ import org.eclipse.core.runtime.Status;
 
 public class JSplitPanePlacementOperation extends AbstractOperation {
 	private JSplitPane container;
-	private JComponent child;
+	private Component child;
 	private String newplacement;
 	private String oldplacement;
 	private JSplitPaneAdapter parent;
-	public JSplitPanePlacementOperation(JSplitPane container, JComponent child, String placement) {
+	public JSplitPanePlacementOperation(JSplitPane container, Component child, String placement) {
 		super("Reposite Component");
 		this.container = container;
 		this.child = child;

@@ -9,10 +9,10 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
@@ -28,7 +28,7 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 		super("jTree" + (VAR_INDEX++));
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JTree jtc = new JTree();
 		Dimension size = new Dimension(150, 200);
 		jtc.setSize(size);
@@ -74,7 +74,7 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JTree();
 	}
 }

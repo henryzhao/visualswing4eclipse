@@ -12,6 +12,7 @@ package org.dyno.visual.swing.widgets;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -21,7 +22,6 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 
-import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
@@ -48,7 +48,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JDesktopPane pane = new JDesktopPane();
 		Dimension size = new Dimension(100, 100);
 		pane.setSize(size);
@@ -66,7 +66,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		builder.append(super.createGetCode(imports));
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			String getMethodName = getGetMethodName(childAdapter.getName());
 			builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
@@ -75,7 +75,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent getChild(int index) {
+	public Component getChild(int index) {
 		JDesktopPane jdp = (JDesktopPane) getWidget();
 		JInternalFrame[] frames = jdp.getAllFrames();
 		return frames[index];
@@ -90,7 +90,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public int getIndexOfChild(JComponent child) {
+	public int getIndexOfChild(Component child) {
 		JDesktopPane desktopPane = (JDesktopPane) getWidget();
 		JInternalFrame[] frames = desktopPane.getAllFrames();
 		for (int i = 0; i < frames.length; i++) {
@@ -101,7 +101,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent cloneWidget() {
+	public Component cloneWidget() {
 		JDesktopPane copy = (JDesktopPane) super.cloneWidget();
 		JDesktopPane pane = (JDesktopPane) getWidget();
 		for (JInternalFrame frame : pane.getAllFrames()) {
@@ -119,13 +119,13 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected boolean isChildVisible(JComponent child) {
+	protected boolean isChildVisible(Component child) {
 		int i = getIndexOfChild(child);
 		return i == 0;
 	}
 
 	@Override
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		JInternalFrame jif = (JInternalFrame) widget;
 		jif.toFront();
 	}
@@ -134,7 +134,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragEnter(Point p) {
-		JComponent comp = getDropWidget().getWidget();
+		Component comp = getDropWidget().getWidget();
 		forbid = !(comp instanceof JInternalFrame);
 		return true;
 	}
@@ -261,12 +261,12 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JDesktopPane();
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		JInternalFrame jif = (JInternalFrame)child;
 		JDesktopPane jtp = (JDesktopPane) getWidget();
 		jif.setBounds((Rectangle)constraints);
@@ -279,7 +279,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {		
+	public Object getChildConstraints(Component child) {		
 		return child.getBounds();
 	}
 }

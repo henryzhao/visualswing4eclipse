@@ -9,10 +9,10 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
@@ -25,7 +25,7 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 		super(varName + (VAR_INDEX++));
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JTextComponent jtc = createTextComponent();
 		jtc.setText(name);
 		Dimension size = new Dimension(100, 100);

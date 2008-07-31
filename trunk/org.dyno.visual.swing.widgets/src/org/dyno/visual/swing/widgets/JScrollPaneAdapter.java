@@ -47,11 +47,12 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Rectangle getVisibleRect(JComponent comp) {
-		return comp.getVisibleRect();
+	public Rectangle getVisibleRect(Component comp) {
+		JComponent component = (JComponent)comp;
+		return component.getVisibleRect();
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JScrollPane jp = new JScrollPane();
 		Dimension size = new Dimension(100, 100);
 		jp.setSize(size);
@@ -66,7 +67,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent getChild(int index) {
+	public Component getChild(int index) {
 		JScrollPane jsp = (JScrollPane) getWidget();
 		return (JComponent) jsp.getViewport().getView();
 	}
@@ -79,10 +80,10 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public int getIndexOfChild(JComponent child) {
+	public int getIndexOfChild(Component child) {
 		int size = getChildCount();
 		for (int i = 0; i < size; i++) {
-			JComponent comp = getChild(i);
+			Component comp = getChild(i);
 			if (comp == child)
 				return i;
 		}
@@ -161,18 +162,18 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected boolean isChildVisible(JComponent child) {
+	protected boolean isChildVisible(Component child) {
 		JScrollPane jsp = (JScrollPane) getWidget();
 		return child == jsp.getViewport().getView();
 	}
 
 	@Override
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		widget.setVisible(true);
 	}
 
 	@Override
-	public JComponent cloneWidget() {
+	public Component cloneWidget() {
 		JScrollPane copy = (JScrollPane) super.cloneWidget();
 		JScrollPane jsp = (JScrollPane) getWidget();
 		JComponent child = (JComponent) jsp.getViewport().getView();
@@ -188,7 +189,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createGetCode(imports));
 		if (getChildCount() > 0) {
-			JComponent child = getChild(0);
+			Component child = getChild(0);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			String getMethodName = getGetMethodName(childAdapter.getName());
 			builder.append(getFieldName(getName()) + ".setViewportView(" + getMethodName + "());\n");
@@ -197,18 +198,18 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JScrollPane();
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		JScrollPane jsp = (JScrollPane) getWidget();
 		jsp.setViewportView(child);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		return null;
 	}
 }

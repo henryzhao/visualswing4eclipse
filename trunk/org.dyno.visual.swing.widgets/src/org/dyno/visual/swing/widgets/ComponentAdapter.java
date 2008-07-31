@@ -9,18 +9,18 @@
 
 package org.dyno.visual.swing.widgets;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class ComponentAdapter extends WidgetAdapter {
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		return null;
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return null;
 	}
 }

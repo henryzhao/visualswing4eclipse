@@ -1,10 +1,9 @@
 package org.dyno.visual.swing.widgets.undo;
 
+import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -31,7 +30,7 @@ public class SameHeightOperation extends AbstractOperation {
 		boundheight = new ArrayList<Integer>();
 		for (int i=0;i<selection.size();i++) {
 			WidgetAdapter childAdapter = selection.get(i);				
-			JComponent child = childAdapter.getWidget();
+			Component child = childAdapter.getWidget();
 			if (y == -1){
 				boundheight.add(child.getX());
 				y = child.getHeight();
@@ -54,7 +53,7 @@ public class SameHeightOperation extends AbstractOperation {
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		for (int i=0;i<selection.size();i++) {
 			WidgetAdapter childAdapter = selection.get(i);				
-			JComponent child = childAdapter.getWidget();
+			Component child = childAdapter.getWidget();
 			Rectangle bounds = child.getBounds();
 			bounds.height = boundheight.get(i);
 			child.setBounds(bounds);

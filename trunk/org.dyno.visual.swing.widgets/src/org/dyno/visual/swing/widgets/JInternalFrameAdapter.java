@@ -10,6 +10,7 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
@@ -41,10 +42,10 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent cloneWidget() {
+	public Component cloneWidget() {
 		JInternalFrame copy = (JInternalFrame) super.cloneWidget();
 		CompositeAdapter content = getContentAdapter();
-		copy.setContentPane(content.cloneWidget());
+		copy.setContentPane((JComponent)content.cloneWidget());
 		return copy;
 	}
 
@@ -97,7 +98,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 	private static int TITLE_HEIGHT = 22;
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JInternalFrame jif = new JInternalFrame();
 		Dimension size = new Dimension(100, 100);
 		WidgetAdapter contentAdapter = ExtensionRegistry.createWidgetAdapter(JPanel.class);
@@ -157,7 +158,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent getChild(int index) {
+	public Component getChild(int index) {
 		return getContentAdapter().getChild(index);
 	}
 
@@ -167,7 +168,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public int getIndexOfChild(JComponent child) {
+	public int getIndexOfChild(Component child) {
 		return getContentAdapter().getIndexOfChild(child);
 	}
 
@@ -274,17 +275,17 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JInternalFrame();
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		getContentAdapter().addChildByConstraints(child, constraints);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		return getContentAdapter().getChildConstraints(child);
 	}
 

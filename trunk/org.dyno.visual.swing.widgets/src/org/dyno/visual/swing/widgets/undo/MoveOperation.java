@@ -8,10 +8,9 @@
  ******************************************************************************/
 package org.dyno.visual.swing.widgets.undo;
 
+import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.List;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -23,7 +22,7 @@ import org.eclipse.core.runtime.Status;
 
 public abstract class MoveOperation extends AbstractOperation {
 	private WidgetAdapter adapter;
-	private List<JComponent> selection;
+	private List<Component> selection;
 	public MoveOperation(WidgetAdapter adapter) {
 		super("");
 		setLabel(getName());
@@ -34,7 +33,7 @@ public abstract class MoveOperation extends AbstractOperation {
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		for (JComponent child : selection) {
+		for (Component child : selection) {
 			Rectangle bounds = child.getBounds();
 			if (isVertical())
 				bounds.y += getStepSize();
@@ -59,7 +58,7 @@ public abstract class MoveOperation extends AbstractOperation {
 	@Override
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		for (JComponent child : selection) {
+		for (Component child : selection) {
 			Rectangle bounds = child.getBounds();
 			if (isVertical())
 				bounds.y -= getStepSize();

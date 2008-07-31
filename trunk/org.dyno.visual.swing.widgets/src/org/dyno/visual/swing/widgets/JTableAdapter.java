@@ -9,10 +9,10 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +29,7 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 		super("jTable" + (VAR_INDEX++));
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JTable jtc = new JTable();
 		jtc.setModel(new DefaultTableModel(new Object[][] { { "0x0", "0x1" }, { "1x0", "1x1" } }, new Object[] { "Title 0", "Title 1" }));
 		Dimension size = new Dimension(200, 150);
@@ -76,7 +76,7 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JTable();
 	}
 }

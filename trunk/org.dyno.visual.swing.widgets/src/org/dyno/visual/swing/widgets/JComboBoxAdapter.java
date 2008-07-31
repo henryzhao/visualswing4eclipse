@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -18,7 +19,6 @@ import java.util.StringTokenizer;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.IEditor;
@@ -31,7 +31,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 		super("jComboBox" + (VAR_INDEX++));
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JComboBox jc = new JComboBox();
 		jc.setModel(new DefaultComboBoxModel(new Object[] { "item0", "item1", "item2", "item3" }));
 		Dimension size = jc.getPreferredSize();
@@ -123,7 +123,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JComboBox();
 	}
 

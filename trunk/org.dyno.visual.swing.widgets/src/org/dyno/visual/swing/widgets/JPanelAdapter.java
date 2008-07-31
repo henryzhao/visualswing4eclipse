@@ -17,7 +17,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.dyno.visual.swing.base.Azimuth;
@@ -63,7 +62,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public JComponent cloneWidget() {
+	public Component cloneWidget() {
 		JPanel panel = (JPanel) super.cloneWidget();
 		JPanel jp = (JPanel) getWidget();
 		LayoutManager layout = jp.getLayout();
@@ -71,10 +70,10 @@ public class JPanelAdapter extends CompositeAdapter {
 			panel.setLayout(null);
 			int count = this.getChildCount();
 			for (int i = 0; i < count; i++) {
-				JComponent widget = getChild(i);
+				Component widget = getChild(i);
 				WidgetAdapter child = WidgetAdapter.getWidgetAdapter(widget);
 				Rectangle bounds = widget.getBounds();
-				JComponent copy = child.cloneWidget();
+				Component copy = child.cloneWidget();
 				copy.setBounds(bounds);
 				panel.add(copy);
 			}
@@ -84,7 +83,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		return panel;
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JPanel jp = new JPanel();
 		jp.setSize(100, 100);
 		ILayoutBean bean = LayoutAdapter.getDefaultLayoutBean();
@@ -94,14 +93,14 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void addAfter(JComponent hovering, JComponent dragged) {
+	public void addAfter(Component hovering, Component dragged) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
 			int hoveringIndex = getComponentIndex(hovering);
 			if (hoveringIndex == -1)
 				jpanel.add(dragged);
-			else if (hoveringIndex == getWidget().getComponentCount() - 1) {
+			else if (hoveringIndex == jpanel.getComponentCount() - 1) {
 				jpanel.add(dragged);
 			} else {
 				jpanel.add(dragged, hoveringIndex + 1);
@@ -113,9 +112,10 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	private int getComponentIndex(Component child) {
-		int count = getWidget().getComponentCount();
+		JPanel jpanel = (JPanel) getWidget();
+		int count = jpanel.getComponentCount();
 		for (int i = 0; i < count; i++) {
-			Component comp = getWidget().getComponent(i);
+			Component comp = jpanel.getComponent(i);
 			if (comp == child)
 				return i;
 		}
@@ -123,7 +123,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void addBefore(JComponent hovering, JComponent dragged) {
+	public void addBefore(Component hovering, Component dragged) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
@@ -142,7 +142,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void addChild(JComponent widget) {
+	public void addChild(Component widget) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
@@ -252,10 +252,10 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	public LayoutAdapter getLayoutAdapter() {
 		if (layoutAdapter == null) {
-			LayoutManager layout = getWidget().getLayout();
+			LayoutManager layout = ((JPanel)getWidget()).getLayout();
 			if (layout != null) {
-				layoutAdapter = LayoutAdapter.getLayoutAdapter(getWidget());
-				layoutAdapter.setContainer(getWidget());
+				layoutAdapter = LayoutAdapter.getLayoutAdapter((JPanel)getWidget());
+				layoutAdapter.setContainer((JPanel)getWidget());
 			}
 		}
 		return layoutAdapter;
@@ -266,13 +266,15 @@ public class JPanelAdapter extends CompositeAdapter {
 	private LayoutAdapter layoutAdapter;
 
 	@Override
-	public JComponent getChild(int index) {
-		return (JComponent) getWidget().getComponent(index);
+	public Component getChild(int index) {
+		JPanel jp = (JPanel) getWidget();
+		return (Component) jp.getComponent(index);
 	}
 
 	@Override
 	public int getChildCount() {
-		return getWidget().getComponentCount();
+		JPanel jp = (JPanel) getWidget();
+		return jp.getComponentCount();
 	}
 
 	public String toString() {
@@ -293,10 +295,11 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public int getIndexOfChild(JComponent child) {
+	public int getIndexOfChild(Component child) {
 		int size = getChildCount();
+		JPanel jpanel = (JPanel) getWidget();
 		for (int i = 0; i < size; i++) {
-			Component comp = getWidget().getComponent(i);
+			Component comp = jpanel.getComponent(i);
 			if (comp == child)
 				return i;
 		}
@@ -417,7 +420,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		if (layout == null) {
 			int state = getState();
 			WidgetAdapter adapter = getDropWidget();
-			JComponent child = adapter.getComponent();
+			Component child = adapter.getComponent();
 			Point htsp = adapter.getHotspotPoint();
 			switch (state) {
 			case Azimuth.STATE_BEAN_HOVER:
@@ -446,7 +449,7 @@ public class JPanelAdapter extends CompositeAdapter {
 				adapter.setDirty(true);
 				getWidget().validate();
 				repaintDesigner();
-				layoutAdapter.setContainer(getWidget());
+				layoutAdapter.setContainer(jpanel);
 				return true;
 			} else
 				return false;
@@ -473,19 +476,19 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 
-	public boolean removeChild(JComponent child) {
+	public boolean removeChild(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
-			getWidget().remove(child);
-			getWidget().validate();
+			jpanel.remove(child);
+			jpanel.validate();
 			return true;
 		} else {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
 			boolean success = layoutAdapter.removeChild(child);
 			if (success) {
-				getWidget().validate();
-				layoutAdapter.setContainer(getWidget());
+				jpanel.validate();
+				layoutAdapter.setContainer(jpanel);
 				return true;
 			} else
 				return false;
@@ -493,7 +496,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected boolean isChildVisible(JComponent child) {
+	protected boolean isChildVisible(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
@@ -505,7 +508,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
@@ -526,7 +529,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+	public void fillConstraintsAction(MenuManager menu, Component child) {
 		JPanel jpanel = (JPanel)getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if(layout!=null)
@@ -554,7 +557,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void adjustLayout(JComponent widget) {
+	public void adjustLayout(Component widget) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null)
@@ -586,7 +589,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			builder.append(getFieldName(getName()) + "." + "setLayout(null);\n");
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
-				JComponent child = getChild(i);
+				Component child = getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
 				builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
@@ -606,7 +609,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			builder.append("setLayout(null);\n");
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
-				JComponent child = getChild(i);
+				Component child = getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
 				builder.append("add(" + getMethodName + "());\n");
@@ -633,12 +636,12 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JPanel();
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
@@ -650,7 +653,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {

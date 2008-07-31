@@ -9,10 +9,10 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
@@ -27,7 +27,7 @@ public class JProgressBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JProgressBar bar = new JProgressBar();
 		Dimension size = bar.getPreferredSize();
 		bar.setSize(size);
@@ -69,7 +69,7 @@ public class JProgressBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JProgressBar();
 	}
 

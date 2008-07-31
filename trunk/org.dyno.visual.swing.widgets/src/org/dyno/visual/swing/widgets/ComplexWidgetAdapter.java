@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Point;
 
@@ -29,7 +30,7 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public JComponent getComponent() {
+	public Component getComponent() {
 		if (parent == null) {
 			WidgetAdapter jspa = ExtensionRegistry.createWidgetAdapter(JScrollPane.class);
 			parent = ((JScrollPane) jspa.getWidget());
@@ -47,7 +48,7 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 
 	@Override
 	public void paintMascot(Graphics g) {
-		paintComponent(g, getComponent());
+		paintComponent(g, (JComponent)getComponent());
 	}
 
 }

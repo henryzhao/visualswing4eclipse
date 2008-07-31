@@ -40,7 +40,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JToolBar toolBar = new JToolBar();
 		Dimension size = new Dimension(100, 23);
 		toolBar.setSize(size);
@@ -70,7 +70,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 	@Override
 	public boolean drop(Point p) {
 		JToolBar toolbar = (JToolBar) getWidget();
-		JComponent child = getDropWidget().getWidget();
+		Component child = getDropWidget().getWidget();
 		toolbar.add(child);
 		clearSelection();
 		getDropWidget().setSelected(true);
@@ -90,7 +90,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 			Insets insets = parent.getInsets();
 			int x = insets.left;
 			int y = insets.top;
-			JComponent drop = getDropWidget().getWidget();
+			Component drop = getDropWidget().getWidget();
 			int w = drop.getWidth();
 			int h = drop.getHeight();
 			if (parent.getOrientation() == JToolBar.HORIZONTAL) {
@@ -121,7 +121,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 		JToolBar copy = (JToolBar) super.cloneWidget();
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter(child);
 			copy.add(cAdapter.cloneWidget());
 		}
@@ -133,7 +133,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 		builder.append(super.createGetCode(imports));
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			String getMethodName = getGetMethodName(childAdapter.getName());			
 			builder.append(getFieldName(getName()) + ".add(");
@@ -148,12 +148,13 @@ public class JToolBarAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
-		getWidget().add(child);
+	public void addChildByConstraints(Component child, Object constraints) {
+		JToolBar toolbar = (JToolBar)getWidget();
+		toolbar.add(child);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		return null;
 	}	
 }

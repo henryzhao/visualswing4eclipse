@@ -9,9 +9,9 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -25,7 +25,7 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JLayeredPane jlp = new JLayeredPane();
 		Dimension size = new Dimension(100, 100);
 		jlp.setSize(size);
@@ -38,20 +38,21 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JLayeredPane();
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		JLayeredPane layeredPane = (JLayeredPane)getWidget();
 		layeredPane.setLayer(child, constraints==null?0:((Integer)constraints).intValue());
 		layeredPane.add(child);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
-		return JLayeredPane.getLayer(child);
+	public Object getChildConstraints(Component child) {
+		JLayeredPane layeredPane = (JLayeredPane)getWidget();
+		return layeredPane.getLayer(child);
 	}
 
 }

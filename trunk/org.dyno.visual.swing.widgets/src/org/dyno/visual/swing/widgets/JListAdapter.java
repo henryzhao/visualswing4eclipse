@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
@@ -16,7 +17,6 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
@@ -29,7 +29,7 @@ public class JListAdapter extends ComplexWidgetAdapter {
 		super("jList" + (VAR_INDEX++));
 	}
 
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		JList jc = new JList();
 		DefaultListModel dlm = new DefaultListModel();
 		dlm.addElement("item0");
@@ -101,7 +101,7 @@ public class JListAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	protected JComponent newWidget() {
+	protected Component newWidget() {
 		return new JList();
 	}
 
