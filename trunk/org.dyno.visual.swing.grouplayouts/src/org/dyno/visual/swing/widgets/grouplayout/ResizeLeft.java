@@ -35,7 +35,7 @@ class ResizeLeft extends ResizeOperation {
 	@Override
 	public boolean dragOver(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
-		JComponent todrop = parent.getDropWidget().getWidget();
+		JComponent todrop = (JComponent)parent.getDropWidget().getWidget();
 		Point lp = p;
 		if (last_point == null) {
 			last_point = lp;
@@ -65,7 +65,7 @@ class ResizeLeft extends ResizeOperation {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
 		WidgetAdapter dropAdapter = parent.getDropWidget();
-		JComponent drop = dropAdapter.getComponent();
+		JComponent drop = (JComponent)dropAdapter.getComponent();
 		Point hot = dropAdapter.getHotspotPoint();
 		Alignment vertical = adapter.getLastConstraints().getVertical();
 		Alignment horizontal = adapter.getLastConstraints().getHorizontal();

@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets.grouplayout;
 
+import java.awt.Component;
 import java.awt.Insets;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -147,7 +148,7 @@ abstract class AbstractDragOperation implements IDragOperation {
 	protected Point dragComponent(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Point lp = p;
-		QuartetPair pair = calMascotLocation(parent.getDropWidget().getWidget(), lp, azimuth);
+		QuartetPair pair = calMascotLocation((JComponent)parent.getDropWidget().getWidget(), lp, azimuth);
 		Point np = pair == null ? lp : new Point(pair.vQuart == null ? lp.x : pair.vQuart.masc, pair.hQuart == null ? lp.y : pair.hQuart.masc);
 		azimuth = getAzimuth(p, last_point);
 		last_point = lp;
@@ -188,8 +189,8 @@ abstract class AbstractDragOperation implements IDragOperation {
 		int size = containerAdapter.getChildCount();
 		List<Quartet> vAnchor = null;
 		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
-			List<Quartet> trios = getVAnchor(todrop, child, this_point);
+			Component child = containerAdapter.getChild(i);
+			List<Quartet> trios = getVAnchor(todrop, (JComponent)child, this_point);
 			if (trios != null) {
 				if (vAnchor == null)
 					vAnchor = trios;
@@ -213,8 +214,8 @@ abstract class AbstractDragOperation implements IDragOperation {
 		int size = containerAdapter.getChildCount();
 		List<Quartet> hAnchor = null;
 		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
-			List<Quartet> trios = getHAnchor(todrop, child, this_point);
+			Component child = containerAdapter.getChild(i);
+			List<Quartet> trios = getHAnchor(todrop, (JComponent)child, this_point);
 			if (trios != null) {
 				if (hAnchor == null)
 					hAnchor = trios;

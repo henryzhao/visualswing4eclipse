@@ -1,5 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
+import java.awt.Component;
+
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.layouts.Bilateral;
@@ -16,10 +18,10 @@ import org.eclipse.core.runtime.Status;
 public class VerticalBilateralToTrailing extends AbstractOperation {
 	private Constraints oldconstraints;
 	private JComponent container;
-	private JComponent child;
+	private Component child;
 
 	public VerticalBilateralToTrailing(Constraints constraints,
-			JComponent container, JComponent child) {
+			JComponent container, Component child) {
 		super("Set Anchor");
 		this.oldconstraints = constraints;
 		this.container = container;

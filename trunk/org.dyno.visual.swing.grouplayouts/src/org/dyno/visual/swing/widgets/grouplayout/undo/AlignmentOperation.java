@@ -1,5 +1,6 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public abstract class AlignmentOperation extends AbstractOperation {
 	protected List<CompCons> compcons;
 	protected List<WidgetAdapter> widgets;
 	protected class CompCons {
-		JComponent component;
+		Component component;
 		Constraints constraints;
 	}
 

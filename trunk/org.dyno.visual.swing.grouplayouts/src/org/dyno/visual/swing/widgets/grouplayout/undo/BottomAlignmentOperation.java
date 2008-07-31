@@ -1,5 +1,6 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
+import java.awt.Component;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -29,7 +30,7 @@ public class BottomAlignmentOperation extends AlignmentOperation {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		WidgetAdapter post = widgets.get(0);
-		JComponent postChild = post.getWidget();
+		Component postChild = post.getWidget();
 		Constraints postConstraints = layout.getConstraints(postChild);
 		Alignment postAlignment = postConstraints.getVertical();
 		compcons = new ArrayList<CompCons>();
@@ -41,7 +42,7 @@ public class BottomAlignmentOperation extends AlignmentOperation {
 				postTrail = ((Bilateral) postAlignment).getTrailing();
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
-				JComponent child = adapter.getWidget();
+				Component child = adapter.getWidget();
 				Constraints constraints = layout.getConstraints(child);
 				CompCons cons = new CompCons();
 				cons.component = child;
@@ -67,7 +68,7 @@ public class BottomAlignmentOperation extends AlignmentOperation {
 			int postLead = postLeading.getLeading() + postChild.getHeight();
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
-				JComponent child = adapter.getWidget();
+				Component child = adapter.getWidget();
 				Constraints constraints = layout.getConstraints(child);
 				CompCons cons = new CompCons();
 				cons.component = child;

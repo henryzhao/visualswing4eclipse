@@ -9,6 +9,7 @@
 
 package org.dyno.visual.swing.widgets.grouplayout;
 
+import java.awt.Component;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -34,7 +35,7 @@ class ResizeBottom extends ResizeOperation {
 	@Override
 	public boolean dragOver(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
-		JComponent todrop = parent.getDropWidget().getWidget();
+		Component todrop = parent.getDropWidget().getWidget();
 		Point lp = p;
 		if (last_point == null) {
 			last_point = lp;
@@ -43,7 +44,7 @@ class ResizeBottom extends ResizeOperation {
 		}
 		if (lp.equals(last_point))
 			return false;
-		pair = calculateMascotLocation(todrop, lp, azimuth);
+		pair = calculateMascotLocation((JComponent)todrop, lp, azimuth);
 		Point np = pair == null ? lp : new Point(lp.x, pair.hQuart.masc);
 		Point sp = parent.getMascotLocation();
 		int cw = todrop.getWidth();
@@ -61,7 +62,7 @@ class ResizeBottom extends ResizeOperation {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
 		WidgetAdapter dropAdapter = parent.getDropWidget();
-		JComponent drop = dropAdapter.getComponent();
+		JComponent drop = (JComponent)dropAdapter.getComponent();
 		Point hot = dropAdapter.getHotspotPoint();
 		Alignment vertical = adapter.getLastConstraints().getVertical();
 		Alignment horizontal = adapter.getLastConstraints().getHorizontal();

@@ -1,5 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout;
 
+import java.awt.Component;
+
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.layouts.Alignment;
@@ -31,10 +33,10 @@ class SetAnchorAction extends Action {
 	private JComponent container;
 	private String anchor;
 	private boolean horizontal;
-	private JComponent child;
+	private Component child;
 
 	public SetAnchorAction(JComponent container, boolean horizontal,
-			String anchor, JComponent child) {
+			String anchor, Component child) {
 		super("", AS_RADIO_BUTTON);
 		setId("#ANCHOR_" + (horizontal ? "HORIZONTAL" : "VERTICAL") + "_"
 				+ anchor);

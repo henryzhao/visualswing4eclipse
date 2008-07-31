@@ -11,6 +11,7 @@ package org.dyno.visual.swing.widgets.grouplayout;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -78,7 +79,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private IDragOperation resizeLeftBottom;
 
 	@Override
-	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+	public void fillConstraintsAction(MenuManager menu, Component child) {
 		MenuManager horizontalAnchorMenu = new MenuManager("Horizontal Anchor", "#HORIZONTAL_ANCHOR");
 		horizontalAnchorMenu.add(new SetAnchorAction(container, true, "leading", child));
 		horizontalAnchorMenu.add(new SetAnchorAction(container, true, "bilateral", child));
@@ -114,7 +115,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addChild(JComponent widget) {
+	public void addChild(Component widget) {
 		Constraints cons = new Constraints(new Leading(10, 10, 10), new Leading(10, 10, 10));
 		container.add(widget, cons);
 	}
@@ -163,7 +164,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			CompositeAdapter adapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 			int count = adapter.getChildCount();
 			for (int i = 0; i < count; i++) {
-				JComponent child = adapter.getChild(i);
+				Component child = adapter.getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				if (childAdapter.isSelected()) {
 					Constraints constraints = layout.getConstraints(child);
@@ -364,7 +365,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public boolean removeChild(JComponent child) {
+	public boolean removeChild(Component child) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		last_constraints = layout.getConstraints(child);
 		assert last_constraints != null;
@@ -423,7 +424,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void adjustLayout(JComponent widget) {
+	public void adjustLayout(Component widget) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		Constraints constraints = layout.getConstraints(widget);
 		Alignment horizontal = constraints.getHorizontal();
@@ -477,14 +478,14 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 	}
 
-	private void adjustVerticalTrailingBy(JComponent widget, int delta_height) {
+	private void adjustVerticalTrailingBy(Component widget, int delta_height) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent target = containerAdapter.getChild(i);
+			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isTopRelatedTo(target, widget)) {
+				if (isTopRelatedTo((JComponent)target, (JComponent)widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment vertical = constraints.getHorizontal();
 					if (vertical instanceof Trailing) {
@@ -517,14 +518,14 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return false;
 	}
 
-	private void adjustVerticalLeadingBy(JComponent widget, int delta_height) {
+	private void adjustVerticalLeadingBy(Component widget, int delta_height) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent target = containerAdapter.getChild(i);
+			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isBottomRelatedTo(target, widget)) {
+				if (isBottomRelatedTo((JComponent)target, (JComponent)widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment vertical = constraints.getVertical();
 					if (vertical instanceof Leading) {
@@ -557,14 +558,14 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return false;
 	}
 
-	private void adjustHorizontalTrailingBy(JComponent widget, int delta_width) {
+	private void adjustHorizontalTrailingBy(Component widget, int delta_width) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent target = containerAdapter.getChild(i);
+			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isLeftRelatedTo(target, widget)) {
+				if (isLeftRelatedTo((JComponent)target, (JComponent)widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment horizontal = constraints.getHorizontal();
 					if (horizontal instanceof Trailing) {
@@ -597,14 +598,14 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return false;
 	}
 
-	private void adjustHorizontalLeadingBy(JComponent widget, int delta_width) {
+	private void adjustHorizontalLeadingBy(Component widget, int delta_width) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent target = containerAdapter.getChild(i);
+			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isRightRelatedTo(target, widget)) {
+				if (isRightRelatedTo((JComponent)target, (JComponent)widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment horizontal = constraints.getHorizontal();
 					if (horizontal instanceof Leading) {
@@ -718,7 +719,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	protected String getChildConstraints(JComponent child, ImportRewrite imports) {
+	protected String getChildConstraints(Component child, ImportRewrite imports) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		Constraints constraints = layout.getConstraints(child);
 		StringBuilder builder = new StringBuilder();
@@ -784,12 +785,12 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void addChildByConstraints(JComponent child, Object constraints) {
+	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child, (Constraints) constraints);
 	}
 
 	@Override
-	public Object getChildConstraints(JComponent child) {
+	public Object getChildConstraints(Component child) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		Constraints constraints = layout.getConstraints(child);
 		return constraints;

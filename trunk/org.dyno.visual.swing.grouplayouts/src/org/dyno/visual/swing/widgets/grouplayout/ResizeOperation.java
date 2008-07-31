@@ -62,7 +62,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		int size = containerAdapter.getChildCount();
 		List<Quartet> vAnchor = null;
 		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
+			JComponent child = (JComponent)containerAdapter.getChild(i);
 			List<Quartet> trios = getLAnchor(todrop, child, this_point);
 			if (trios != null) {
 				if (vAnchor == null)
@@ -239,7 +239,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		int size = containerAdapter.getChildCount();
 		List<Quartet> hAnchor = null;
 		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
+			JComponent child = (JComponent)containerAdapter.getChild(i);
 			List<Quartet> trios = getBAnchor(todrop, child, this_point);
 			if (trios != null) {
 				if (hAnchor == null)
@@ -288,7 +288,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		int size = containerAdapter.getChildCount();
 		List<Quartet> hAnchor = null;
 		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
+			JComponent child = (JComponent)containerAdapter.getChild(i);
 			List<Quartet> trios = getTAnchor(todrop, child, this_point);
 			if (trios != null) {
 				if (hAnchor == null)
@@ -471,7 +471,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		int size = containerAdapter.getChildCount();
 		List<Quartet> vAnchor = null;
 		for (int i = 0; i < size; i++) {
-			JComponent child = containerAdapter.getChild(i);
+			JComponent child = (JComponent)containerAdapter.getChild(i);
 			List<Quartet> trios = getRAnchor(todrop, child, this_point);
 			if (trios != null) {
 				if (vAnchor == null)
