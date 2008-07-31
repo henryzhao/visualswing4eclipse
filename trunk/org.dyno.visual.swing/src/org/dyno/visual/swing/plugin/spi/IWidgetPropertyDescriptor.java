@@ -8,7 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -26,7 +26,7 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor{
 	Object getPropertyValue(Object bean);
 	void resetPropertyValue(String lnfClassname, Object bean);
 	void setPropertyValue(Object bean, Object value);
-	boolean cloneProperty(Object bean, JComponent clone);
+	boolean cloneProperty(Object bean, Component clone);
 	String getSetCode(Object widget, ImportRewrite imports);
 	boolean isGencode();
 	void setBean(Object bean);

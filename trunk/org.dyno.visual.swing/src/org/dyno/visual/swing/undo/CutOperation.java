@@ -1,9 +1,8 @@
 package org.dyno.visual.swing.undo;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -26,7 +25,7 @@ public class CutOperation extends AbstractOperation {
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		parents = new ArrayList<CompositeAdapter>();
-		for (JComponent child : selection) {
+		for (Component child : selection) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			CompositeAdapter parentAdapter=adapter.getParentAdapter();
 			boolean success = parentAdapter.removeChild(child);
@@ -45,7 +44,7 @@ public class CutOperation extends AbstractOperation {
 	@Override
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		for(int i=0;i<selection.size();i++){
-			JComponent child = selection.get(i);
+			Component child = selection.get(i);
 			CompositeAdapter parentAdapter = parents.get(i);
 			parentAdapter.addChild(child);
 			parentAdapter.setDirty(true);

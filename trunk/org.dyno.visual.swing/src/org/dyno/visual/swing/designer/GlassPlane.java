@@ -8,6 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.designer;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -50,7 +51,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 		return focusedComposite;
 	}
 
-	boolean editComponent(JComponent hovered) {
+	boolean editComponent(Component hovered) {
 		return target.editComponent(hovered);
 	}
 

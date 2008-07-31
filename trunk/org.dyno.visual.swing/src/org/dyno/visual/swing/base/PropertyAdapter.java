@@ -8,7 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.base;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -22,7 +22,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 public class PropertyAdapter implements IWidgetPropertyDescriptor {
 
 	@Override
-	public boolean cloneProperty(Object bean, JComponent clone) {
+	public boolean cloneProperty(Object bean, Component clone) {
 		return false;
 	}
 

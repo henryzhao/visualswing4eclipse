@@ -1,6 +1,6 @@
 package org.dyno.visual.swing.designer;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -15,9 +15,9 @@ public class MoveResizeOperation extends AbstractOperation {
 	private CompositeAdapter new_parent;
 	private Object old_constraints;
 	private Object new_constraints;
-	private JComponent child;
+	private Component child;
 
-	public MoveResizeOperation(CompositeAdapter old_parent, CompositeAdapter new_parent, JComponent child, Object old_constraints, Object new_constraints) {
+	public MoveResizeOperation(CompositeAdapter old_parent, CompositeAdapter new_parent, Component child, Object old_constraints, Object new_constraints) {
 		super("Reshape Component");
 		this.old_parent = old_parent;
 		this.new_parent = new_parent;

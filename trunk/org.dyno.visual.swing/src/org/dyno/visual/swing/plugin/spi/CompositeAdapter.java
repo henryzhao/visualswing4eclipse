@@ -8,21 +8,22 @@
  ******************************************************************************/
 package org.dyno.visual.swing.plugin.spi;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-
-import javax.swing.JComponent;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.MenuManager;
+
 /**
  * 
  * CompositeAdapter
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -38,7 +39,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public void selectChildren() {
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			childAdapter.setSelected(true);
 			if (childAdapter instanceof CompositeAdapter) {
@@ -46,16 +47,18 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 			}
 		}
 	}
-	public boolean interceptPoint(Point p, int ad){
+
+	public boolean interceptPoint(Point p, int ad) {
 		return false;
 	}
+
 	@Override
 	public boolean isDirty() {
 		if (dirty)
 			return true;
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			if (adapter.isDirty())
 				return true;
@@ -67,15 +70,15 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public void clearDirty() {
 		dirty = false;
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
-			JComponent child = getChild(i);
+		for (int i = 0; i < count; i++) {
+			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			childAdapter.clearDirty();
 		}
 	}
 
 	@Override
-	protected JComponent createWidget() {
+	protected Component createWidget() {
 		return null;
 	}
 
@@ -83,8 +86,11 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-	public JComponent getChild(int index) {
-		return (JComponent) getWidget().getComponent(index);
+	public Component getChild(int index) {
+		if (getWidget() instanceof Container)
+			return ((Container) getWidget()).getComponent(index);
+		else
+			return null;
 	}
 
 	public boolean isIntermediate() {
@@ -92,29 +98,37 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 
 	public int getChildCount() {
-		return getWidget().getComponentCount();
+		if (getWidget() instanceof Container)
+			return ((Container) getWidget()).getComponentCount();
+		else
+			return 0;
 	}
 
-	public int getIndexOfChild(JComponent child) {
-		int count = getWidget().getComponentCount();
-		for (int i = 0; i < count; i++) {
-			if (getWidget().getComponent(i) == child)
-				return i;
+	public int getIndexOfChild(Component child) {
+		if (getWidget() instanceof Container) {
+			int count = getChildCount();
+			for (int i = 0; i < count; i++) {
+				if (((Container) getWidget()).getComponent(i) == child)
+					return i;
+			}
 		}
 		return -1;
 	}
 
-	protected boolean isChildVisible(JComponent child) {
+	protected boolean isChildVisible(Component child) {
 		return child.isVisible();
 	}
-	public abstract Object getChildConstraints(JComponent child);
-	public abstract void addChildByConstraints(JComponent child, Object constraints);
+
+	public abstract Object getChildConstraints(Component child);
+
+	public abstract void addChildByConstraints(Component child, Object constraints);
+
 	@Override
 	public void clearSelection() {
 		super.clearSelection();
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			if (adapter != null)
 				adapter.clearSelection();
@@ -125,14 +139,16 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return true;
 	}
 
-	public boolean removeChild(JComponent child) {
-		getWidget().remove(child);
+	public boolean removeChild(Component child) {
+		if (getWidget() instanceof Container)
+			((Container) getWidget()).remove(child);
 		getWidget().validate();
 		return true;
 	}
 
 	public void removeAllChild() {
-		getWidget().removeAll();
+		if (getWidget() instanceof Container)
+			((Container) getWidget()).removeAll();
 		doLayout();
 		getWidget().validate();
 	}
@@ -141,16 +157,17 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		widget.setVisible(true);
 	}
-	public void addBefore(JComponent hovering, JComponent dragged) {
+
+	public void addBefore(Component hovering, Component dragged) {
 	}
 
-	public void addAfter(JComponent hovering, JComponent dragged) {
+	public void addAfter(Component hovering, Component dragged) {
 	}
 
-	public void addChild(JComponent widget) {
+	public void addChild(Component widget) {
 	}
 
 	public boolean doAlignment(String id) {
@@ -160,7 +177,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public IUndoableOperation doKeyPressed(KeyEvent e) {
 		return null;
 	}
-	public void adjustLayout(JComponent widget) {
+
+	public void adjustLayout(Component widget) {
 	}
 
 	public boolean isSelectionAlignResize(String id) {
@@ -170,11 +188,12 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public boolean needGenBoundCode() {
 		return false;
 	}
+
 	@Override
 	public boolean genCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = getChild(i);
+			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			if (!childAdapter.genCode(type, imports, monitor))
 				return false;
@@ -184,11 +203,11 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return super.genCode(type, imports, monitor);
 	}
 
-	public IWidgetPropertyDescriptor[] getConstraintsProperties(JComponent widget) {
+	public IWidgetPropertyDescriptor[] getConstraintsProperties(Component widget) {
 		return null;
 	}
 
-	public Rectangle getVisibleRect(JComponent comp) {
+	public Rectangle getVisibleRect(Component comp) {
 		return null;
 	}
 
@@ -196,6 +215,6 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-	public void fillConstraintsAction(MenuManager menu, JComponent widget) {
-	}	
+	public void fillConstraintsAction(MenuManager menu, Component widget) {
+	}
 }

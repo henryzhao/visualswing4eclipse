@@ -10,6 +10,7 @@ package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
@@ -154,7 +155,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 		return bean;
 	}
 
-	public static LayoutAdapter getLayoutAdapter(JComponent container) {
+	public static LayoutAdapter getLayoutAdapter(Container container) {
 		LayoutManager layout = container.getLayout();
 		Class<?> layoutClass = layout.getClass();
 		while (layoutClass != null) {
@@ -235,17 +236,17 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 		return false;
 	}
 
-	public boolean removeChild(JComponent child) {
+	public boolean removeChild(Component child) {
 		container.remove(child);
 		container.validate();
 		return true;
 	}
 
-	public boolean isWidgetVisible(JComponent child) {
+	public boolean isWidgetVisible(Component child) {
 		return child.isVisible();
 	}
 
-	public void showChild(JComponent widget) {
+	public void showChild(Component widget) {
 		if (!widget.isVisible())
 			widget.setVisible(true);
 	}
@@ -257,7 +258,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 	public String getName() {
 		return name;
 	}
-	public void addChild(JComponent widget) {
+	public void addChild(Component widget) {
 		container.add(widget);
 	}
 
@@ -271,7 +272,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 
 	public abstract boolean cloneLayout(JComponent container);
 
-	public void adjustLayout(JComponent widget) {
+	public void adjustLayout(Component widget) {
 	}
 
 	public boolean isSelectionAlignResize(String id) {
@@ -293,7 +294,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 		CompositeAdapter conAdapter = (CompositeAdapter) adapter;
 		int count = conAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = conAdapter.getChild(i);
+			Component child = conAdapter.getChild(i);
 			builder.append(getAddChildCode(child, imports));
 		}
 		return builder.toString();
@@ -301,7 +302,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 
 	protected abstract String getNewInstanceCode(ImportRewrite imports);
 
-	protected String getAddChildCode(JComponent child, ImportRewrite imports) {
+	protected String getAddChildCode(Component child, ImportRewrite imports) {
 		String constraints = getChildConstraints(child, imports);
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter conAdapter = WidgetAdapter.getWidgetAdapter(container);
@@ -327,7 +328,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 		return NamespaceManager.getInstance().getFieldName(name);
 	}
 
-	protected String getChildConstraints(JComponent child, ImportRewrite imports) {
+	protected String getChildConstraints(Component child, ImportRewrite imports) {
 		return null;
 	}
 
@@ -339,16 +340,16 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 		return new IWidgetPropertyDescriptor[0];
 	}
 
-	public void addAfter(JComponent hovering, JComponent dragged) {
+	public void addAfter(Component hovering, Component dragged) {
 	}
 
-	public void addBefore(JComponent hovering, JComponent dragged) {
+	public void addBefore(Component hovering, Component dragged) {
 	}
 
-	public abstract void addChildByConstraints(JComponent child, Object constraints);
+	public abstract void addChildByConstraints(Component child, Object constraints);
 
-	public abstract Object getChildConstraints(JComponent child);
+	public abstract Object getChildConstraints(Component child);
 
-	public void fillConstraintsAction(MenuManager menu, JComponent child) {
+	public void fillConstraintsAction(MenuManager menu, Component child) {
 	}
 }

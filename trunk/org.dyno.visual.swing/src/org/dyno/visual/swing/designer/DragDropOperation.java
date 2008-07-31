@@ -1,6 +1,6 @@
 package org.dyno.visual.swing.designer;
 
-import javax.swing.JComponent;
+import java.awt.Component;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -13,9 +13,9 @@ import org.eclipse.core.runtime.Status;
 class DragDropOperation extends AbstractOperation {
 	private CompositeAdapter parent;
 	private Object constraints;
-	private JComponent child;
+	private Component child;
 
-	public DragDropOperation(CompositeAdapter parent, JComponent child, Object constraints) {
+	public DragDropOperation(CompositeAdapter parent, Component child, Object constraints) {
 		super("Delete Component");
 		this.parent = parent;
 		this.constraints = constraints;

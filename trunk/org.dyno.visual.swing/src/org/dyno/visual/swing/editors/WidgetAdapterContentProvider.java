@@ -8,9 +8,8 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.awt.LayoutManager;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.PropertySource2;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
@@ -27,8 +26,8 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  */
 public class WidgetAdapterContentProvider implements IPropertySourceProvider {
 	private static IPropertySourceProvider getProvider(Object object) {
-		if (object instanceof JComponent) {
-			JComponent widget = (JComponent) object;
+		if (object instanceof Component) {
+			Component widget = (Component) object;
 			return WidgetAdapter.getWidgetAdapter(widget);
 		} else if (object instanceof LayoutManager) {
 			LayoutAdapter adapter = LayoutAdapter.createLayoutAdapter(object.getClass());

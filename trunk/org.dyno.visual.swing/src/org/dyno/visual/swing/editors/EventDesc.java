@@ -8,9 +8,8 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.util.List;
-
-import javax.swing.JComponent;
 /**
  * 
  * EventDesc
@@ -20,11 +19,11 @@ import javax.swing.JComponent;
  */
 class EventDesc {
 	private List<EventSet> eventSets;
-	private JComponent widget;
-	public EventDesc(JComponent widget){
+	private Component widget;
+	public EventDesc(Component widget){
 		this.widget = widget;
 	}
-	public JComponent getWidget(){
+	public Component getWidget(){
 		return widget;
 	}
 	public String toString(){

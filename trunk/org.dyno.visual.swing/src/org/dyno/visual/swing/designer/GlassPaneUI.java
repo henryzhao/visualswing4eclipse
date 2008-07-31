@@ -74,7 +74,7 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	class ThumbTranverse implements Tranverse {
-		public void paint(Graphics g, JComponent jc) {
+		public void paint(Graphics g, Component jc) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jc);
 			if (adapter.isSelected() && adapter.isResizable()) {
 				int w = jc.getWidth();
@@ -96,7 +96,7 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void paintTranverse(Graphics g, JComponent c, Tranverse trans,
 			int ad) {
-		JComponent root = designer.getRootWidget();
+		Component root = designer.getRootWidget();
 		if (root != null) {
 			Rectangle rect = new Rectangle(0, 0, root.getWidth(), root
 					.getHeight());
@@ -108,7 +108,7 @@ public class GlassPaneUI extends ComponentUI {
 		}
 	}
 
-	private void tranverse(Graphics g, JComponent jc, Tranverse trans, int ad) {
+	private void tranverse(Graphics g, Component jc, Tranverse trans, int ad) {
 		if (isDesigningWidget(jc))
 			trans.paint(g, jc);
 		WidgetAdapter widget = WidgetAdapter.getWidgetAdapter(jc);
@@ -129,15 +129,11 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	interface Tranverse {
-		void paint(Graphics g, JComponent jc);
+		void paint(Graphics g, Component jc);
 	}
 
 	private boolean isDesigningWidget(Component widget) {
-		if (widget instanceof JComponent) {
-			JComponent jcomp = (JComponent) widget;
-			return WidgetAdapter.getWidgetAdapter(jcomp) != null;
-		} else
-			return false;
+			return WidgetAdapter.getWidgetAdapter(widget) != null;
 	}
 
 	private void paintSelection(Graphics g, JComponent c) {
@@ -145,7 +141,7 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	class SelectionTranverse implements Tranverse {
-		public void paint(Graphics g, JComponent jc) {
+		public void paint(Graphics g, Component jc) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jc);
 			if (adapter.isSelected()) {
 				int w = jc.getWidth();
@@ -177,7 +173,7 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	private void paintBaselineAnchorAdapter(Graphics g, WidgetAdapter focused) {
-		JComponent jpar = focused.getWidget();
+		Component jpar = focused.getWidget();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
@@ -186,7 +182,7 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	private void paintFocusedAdapter(Graphics g, WidgetAdapter focused) {
-		JComponent jpar = focused.getWidget();
+		Component jpar = focused.getWidget();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
@@ -202,7 +198,7 @@ public class GlassPaneUI extends ComponentUI {
 		WidgetAdapter adapter = WhiteBoard.getSelectedWidget();
 		if (adapter == null)
 			return;
-		JComponent comp = adapter.getComponent();
+		Component comp = adapter.getComponent();
 		int w = comp.getWidth();
 		int h = comp.getHeight();
 		Point hs = adapter.getHotspotPoint();

@@ -309,9 +309,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		}
 
 		@Override
-		protected JComponent createSwingComponent() {
+		protected JComponent createSwingComponent() {			
 			designer = new VisualDesigner(VisualSwingEditor.this, this);
-			JComponent backgroundPanel = new JPanel();
+			JPanel backgroundPanel = new JPanel();
 			backgroundPanel.setOpaque(true);
 			backgroundPanel.setLayout(new BorderLayout());
 			backgroundPanel.add(designer, BorderLayout.CENTER);

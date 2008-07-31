@@ -8,9 +8,8 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.util.HashMap;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -45,8 +44,8 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 			return VisualSwingPlugin.getSharedImage(WIDGETS_FORM_ROOT);
 		} else if (element instanceof VisualDesigner) {
 			return VisualSwingPlugin.getSharedImage(WIDGETS_FORM_ROOT);
-		} else if (element instanceof JComponent) {
-			JComponent component = (JComponent) element;
+		} else if (element instanceof Component) {
+			Component component = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
 			return adapter.getIconImage();
 		} else if (element instanceof String) {
@@ -69,8 +68,8 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 			return "root";
 		} else if (element instanceof VisualDesigner) {
 			return "Form";
-		} else if (element instanceof JComponent) {
-			JComponent component = (JComponent) element;
+		} else if (element instanceof Component) {
+			Component component = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
 			return (adapter.isRoot() ? "" : adapter.getName()) + "[" + adapter.getWidgetName() + "]";
 		} else

@@ -8,9 +8,9 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.awt.Container;
 
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -71,9 +71,9 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 	}
 
 	public void dragSetData(DragSourceEvent event) {
-		JComponent[] components = new JComponent[treeItems.length];
+		Component[] components = new Component[treeItems.length];
 		for (int i = 0; i < treeItems.length; i++) {
-			components[i] = (JComponent) treeItems[i].getData();
+			components[i] = (Component) treeItems[i].getData();
 		}
 		event.data = components;
 	}
@@ -84,11 +84,11 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 			Container parent = null;
 			for (TreeItem item : selection) {
 				Object object = item.getData();
-				if (!(object instanceof JComponent)) {
+				if (!(object instanceof Component)) {
 					event.doit = false;
 					return;
 				} else {
-					JComponent comp = (JComponent) object;
+					Component comp = (Component) object;
 					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
 					if (adapter.isRoot()) {
 						event.doit = false;
@@ -126,7 +126,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		}
 	}
 
-	private void moveToSelectedNode(CompositeAdapter parent_adapter, JComponent target_comp, DropTargetEvent event, JComponent[] components) {
+	private void moveToSelectedNode(CompositeAdapter parent_adapter, Component target_comp, DropTargetEvent event, Component[] components) {
 		if (parent_adapter.getWidget() == target_comp) {
 			event.detail = DND.DROP_NONE;
 		} else {
@@ -138,7 +138,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 					return;
 				}
 			}
-			for (JComponent component : components) {
+			for (Component component : components) {
 				if (component == target_comp) {
 					event.detail = DND.DROP_NONE;
 					return;
@@ -148,7 +148,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 					return;
 				}
 			}
-			for (JComponent component : components) {
+			for (Component component : components) {
 				parent_adapter.removeChild(component);
 				if (target_adapter instanceof CompositeAdapter)
 					((CompositeAdapter) target_adapter).addChild(component);
@@ -157,13 +157,13 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		}
 	}
 
-	private void moveBeforeSelectedNode(CompositeAdapter parent_adapter, JComponent target_comp, DropTargetEvent event, JComponent[] components) {
+	private void moveBeforeSelectedNode(CompositeAdapter parent_adapter, Component target_comp, DropTargetEvent event, Component[] components) {
 		if (parent_adapter.getWidget() == target_comp) {
 			event.detail = DND.DROP_NONE;
 		} else {
 			WidgetAdapter target_adapter = WidgetAdapter.getWidgetAdapter(target_comp);
 			CompositeAdapter target_parent = target_adapter.getParentAdapter();
-			for (JComponent component : components) {
+			for (Component component : components) {
 				if (component == target_comp) {
 					event.detail = DND.DROP_NONE;
 					return;
@@ -173,20 +173,20 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 					return;
 				}
 			}
-			for (JComponent component : components) {
+			for (Component component : components) {
 				parent_adapter.removeChild(component);
 				target_parent.addBefore(target_comp, component);
 			}
 		}
 	}
 
-	private void moveAfterSelectedNode(CompositeAdapter parent_adapter, JComponent target_comp, DropTargetEvent event, JComponent[] components) {
+	private void moveAfterSelectedNode(CompositeAdapter parent_adapter, Component target_comp, DropTargetEvent event, Component[] components) {
 		if (parent_adapter.getWidget() == target_comp) {
 			event.detail = DND.DROP_NONE;
 		} else {
 			WidgetAdapter target_adapter = WidgetAdapter.getWidgetAdapter(target_comp);
 			CompositeAdapter target_parent = target_adapter.getParentAdapter();
-			for (JComponent component : components) {
+			for (Component component : components) {
 				if (component == target_comp) {
 					event.detail = DND.DROP_NONE;
 					return;
@@ -196,7 +196,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 					return;
 				}
 			}
-			for (JComponent component : components) {
+			for (Component component : components) {
 				parent_adapter.removeChild(component);
 				target_parent.addAfter(target_comp, component);
 			}
@@ -212,17 +212,17 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		} else {
 			TreeItem target_item = (TreeItem) event.item;
 			Object data = target_item.getData();
-			if (!(data instanceof JComponent)) {
+			if (!(data instanceof Component)) {
 				event.detail = DND.DROP_NONE;
 			} else {
-				JComponent[] components = (JComponent[]) event.data;
+				Component[] components = (Component[]) event.data;
 				if (components.length == 0) {
 					event.detail = DND.DROP_NONE;
 				} else {
-					JComponent first = components[0];
+					Component first = components[0];
 					WidgetAdapter first_adapter = WidgetAdapter.getWidgetAdapter(first);
 					CompositeAdapter parent_adapter = first_adapter.getParentAdapter();
-					JComponent target_comp = (JComponent) data;
+					Component target_comp = (Component) data;
 					if ((event.feedback & DND.FEEDBACK_SELECT) != 0) {
 						moveToSelectedNode(parent_adapter, target_comp, event, components);
 					} else if ((event.feedback & DND.FEEDBACK_INSERT_AFTER) != 0) {

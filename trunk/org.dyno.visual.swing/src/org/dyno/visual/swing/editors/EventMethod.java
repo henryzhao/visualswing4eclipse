@@ -8,9 +8,8 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.beans.MethodDescriptor;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.editors.actions.AddEventAction;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -38,7 +37,7 @@ class EventMethod {
 		return this.name;
 	}
 	public void editCode() {
-		JComponent widget = parent.getParent().getWidget();
+		Component widget = parent.getParent().getWidget();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
 		AddEventAction action = new AddEventAction(adapter, parent.getEventSet(), methodDesc);
 		action.run();

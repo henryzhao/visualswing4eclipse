@@ -8,14 +8,13 @@
  ******************************************************************************/
 package org.dyno.visual.swing.base;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
@@ -51,14 +50,14 @@ public class ExtensionRegistry {
 		return propertySortings.get(CURRENT_SORTING);
 	}
 
-	public static WidgetAdapter createAdapterFor(JComponent comp) {
+	public static WidgetAdapter createAdapterFor(Component comp) {
 		WidgetAdapter adapter = createWidgetAdapter(comp.getClass());
 		adapter.setWidget(comp);
 		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 			int count = compositeAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
-				JComponent child = compositeAdapter.getChild(i);
+				Component child = compositeAdapter.getChild(i);
 				createAdapterFor(child);
 			}
 		}
@@ -445,7 +444,7 @@ public class ExtensionRegistry {
 		}
 	}
 
-	public static WidgetAdapter createWidgetAdapter(JComponent widget) {
+	public static WidgetAdapter createWidgetAdapter(Component widget) {
 		WidgetAdapter adapter = createWidgetAdapter(widget.getClass());
 		adapter.setWidget(widget);
 		return adapter;

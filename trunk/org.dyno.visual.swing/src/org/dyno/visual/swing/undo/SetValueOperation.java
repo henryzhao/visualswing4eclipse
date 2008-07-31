@@ -1,8 +1,7 @@
 package org.dyno.visual.swing.undo;
 
+import java.awt.Component;
 import java.beans.PropertyDescriptor;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -38,18 +37,18 @@ public class SetValueOperation extends AbstractOperation {
 			Object value) throws ExecutionException {
 		try {
 			property.getWriteMethod().invoke(bean, value);
-			if (bean instanceof JComponent) {
-				JComponent jcomp = (JComponent) bean;
+			if (bean instanceof Component) {
+				Component jcomp = (Component) bean;
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 				adapter.setDirty(true);
 				if (adapter != null) {
 					if (!adapter.isRoot()) {
 						CompositeAdapter parent = adapter.getParentAdapter();
-						JComponent widget = parent.getWidget();
+						Component widget = parent.getWidget();
 						widget.doLayout();
 						widget.validate();
 					} else {
-						JComponent widget = adapter.getWidget();
+						Component widget = adapter.getWidget();
 						widget.doLayout();
 						widget.validate();
 					}

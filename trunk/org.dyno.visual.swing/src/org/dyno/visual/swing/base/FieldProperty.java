@@ -12,8 +12,6 @@ import java.awt.Component;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 
-import javax.swing.JComponent;
-
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
@@ -249,8 +247,8 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 					value = ta.getEditor().decodeValue(value);
 				}
 				field.set(bean, value);
-				if (bean instanceof JComponent) {
-					JComponent jcomp = (JComponent) bean;
+				if (bean instanceof Component) {
+					Component jcomp = (Component) bean;
 					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 					if (adapter != null) {
 						adapter.getDesigner().repaint();
@@ -336,7 +334,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public boolean cloneProperty(Object bean, JComponent clone) {
+	public boolean cloneProperty(Object bean, Component clone) {
 		try {
 			Object value = field.get(bean);
 			field.set(clone, value);
@@ -349,8 +347,8 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String getSetCode(Object bean, ImportRewrite imports) {
-		if (bean instanceof JComponent) {
-			JComponent comp = (JComponent) bean;
+		if (bean instanceof Component) {
+			Component comp = (Component) bean;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
 			if (adapter != null) {
 				StringBuilder builder = new StringBuilder();

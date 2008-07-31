@@ -8,14 +8,13 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
@@ -46,8 +45,8 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				if (children != null)
 					children.toArray(values);
 				return values;
-			} else if (parentElement instanceof JComponent) {
-				JComponent component = (JComponent) parentElement;
+			} else if (parentElement instanceof Component) {
+				Component component = (Component) parentElement;
 				WidgetAdapter adapter = WidgetAdapter
 						.getWidgetAdapter(component);
 				Map<EventSetDescriptor, IEventListenerModel> events = adapter.getEventDescriptor();
@@ -104,8 +103,8 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			return root;
 		} else if (element == otherComponents) {
 			return root.getDesigner();
-		} else if (element instanceof JComponent) {
-			JComponent child = (JComponent) element;
+		} else if (element instanceof Component) {
+			Component child = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			if (adapter.isRoot())
 				return root.getDesigner();
@@ -134,8 +133,8 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			return true;
 		} else if (element == root.getDesigner()) {
 			return true;
-		} else if (element instanceof JComponent) {
-			JComponent child = (JComponent) element;
+		} else if (element instanceof Component) {
+			Component child = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			Map<EventSetDescriptor, IEventListenerModel> events = adapter
 					.getEventDescriptor();

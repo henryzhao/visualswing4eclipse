@@ -14,7 +14,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 
-import javax.swing.JComponent;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 
@@ -447,8 +446,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				}
 				IUndoableOperation operation = new SetValueOperation(bean, propertyDescriptor, value);
 				IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
-				if (bean instanceof JComponent) {
-					JComponent jcomp = (JComponent) bean;
+				if (bean instanceof Component) {
+					Component jcomp = (Component) bean;
 					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 					if (adapter != null) {
 						operation.addContext(adapter.getUndoContext());
@@ -547,7 +546,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public boolean cloneProperty(Object bean, JComponent clone) {
+	public boolean cloneProperty(Object bean, Component clone) {
 		Object value = null;
 		try {
 			value = propertyDescriptor.getReadMethod().invoke(bean);
@@ -571,8 +570,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public String getSetCode(Object bean, ImportRewrite imports) {
-		if (bean instanceof JComponent) {
-			JComponent comp = (JComponent) bean;
+		if (bean instanceof Component) {
+			Component comp = (Component) bean;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
 			if (adapter != null) {
 				StringBuilder builder = new StringBuilder();

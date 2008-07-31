@@ -8,10 +8,9 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.designer.Event;
@@ -104,9 +103,9 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			if (items != null && items.length > 0) {
 				TreeItem item = items[0];
 				Object object = item.getData();
-				if (object instanceof JComponent) {
+				if (object instanceof Component) {
 					WidgetAdapter adapter = WidgetAdapter
-							.getWidgetAdapter((JComponent) object);
+							.getWidgetAdapter((Component) object);
 					if (adapter != null) {
 						WhiteBoard.sendEvent(new Event(this,
 								Event.EVENT_SHOW_POPUP, new Object[] {
@@ -126,9 +125,9 @@ public class VisualSwingOutline extends ContentOutlinePage {
 					.getSelection();
 			designer.clearSelection();
 			for (Object object : selection.toArray()) {
-				if (object != null && object instanceof JComponent) {
+				if (object != null && object instanceof Component) {
 					WidgetAdapter adapter = WidgetAdapter
-							.getWidgetAdapter((JComponent) object);
+							.getWidgetAdapter((Component) object);
 					if (adapter != null) {
 						adapter.setSelected(true);
 					}
@@ -138,7 +137,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			super.selectionChanged(event);
 		} else if(event.getSelection() instanceof List){
 			getTreeViewer().refresh();			
-			TreePath[] paths = getTreePath((List<JComponent>) event
+			TreePath[] paths = getTreePath((List<Component>) event
 					.getSelection());
 			TreeSelection sel = new TreeSelection(paths);
 			isAdjusting = true;
@@ -148,16 +147,16 @@ public class VisualSwingOutline extends ContentOutlinePage {
 	}
 	private boolean isAdjusting;
 
-	private TreePath[] getTreePath(List<JComponent> components) {
+	private TreePath[] getTreePath(List<Component> components) {
 		List<TreePath> paths = new ArrayList<TreePath>();
-		for (JComponent component : components) {
+		for (Component component : components) {
 			paths.add(buildTreePath(component));
 		}
 		TreePath[] array = new TreePath[paths.size()];
 		return paths.toArray(array);
 	}
 
-	private TreePath buildTreePath(JComponent component) {
+	private TreePath buildTreePath(Component component) {
 		List<Object> objects = new ArrayList<Object>();
 		objects.add(input);
 		objects.add(designer);
@@ -168,7 +167,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		return treePath;
 	}
 
-	private void addPathObject(List<Object> objects, JComponent component) {
+	private void addPathObject(List<Object> objects, Component component) {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
 		if (adapter.isRoot()) {
 			objects.add(component);

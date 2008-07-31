@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -88,7 +89,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	protected int getAccess;
 	protected int fieldAccess;
 	protected Point hotspotPoint;
-	protected JComponent widget;
+	protected Component widget;
 	protected String lastName;
 	protected String name;
 	protected String widgetName;
@@ -170,23 +171,35 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	}
 
 	public void doLayout() {
-		layoutContainer(getWidget());
+		if (getWidget() instanceof Container)
+			layoutContainer((Container) getWidget());
 	}
 
 	protected WidgetAdapter() {
 		this.widget = createWidget();
 		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
-		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
+		attach();
 		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 		this.edited = new HashMap<String, Boolean>();
+	}
+
+	protected void attach() {
+		if (widget instanceof JComponent) {
+			((JComponent) widget).putClientProperty(ADAPTER_PROPERTY, this);
+		} else if (widget instanceof RootPaneContainer) {
+			Container content = ((RootPaneContainer) widget).getContentPane();
+			if (content instanceof JComponent) {
+				((JComponent) content).putClientProperty(ADAPTER_PROPERTY, this);
+			}
+		}
 	}
 
 	protected WidgetAdapter(String name) {
 		setName(name);
 		this.widget = createWidget();
 		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
-		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
+		attach();
 		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 		this.edited = new HashMap<String, Boolean>();
@@ -196,19 +209,19 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		return edited;
 	}
 
-	public void setWidget(JComponent widget) {
+	public void setWidget(Component widget) {
 		this.widget = widget;
-		this.widget.putClientProperty(ADAPTER_PROPERTY, this);
+		attach();
 		this.dirty = false;
 	}
 
 	public void detachWidget() {
 		if (this.widget != null) {
-			this.widget.putClientProperty(ADAPTER_PROPERTY, null);
+			attach();
 		}
 	}
 
-	protected abstract JComponent createWidget();
+	protected abstract Component createWidget();
 
 	public void setHotspotPoint(Point p) {
 		this.hotspotPoint = p;
@@ -234,7 +247,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	}
 
 	public int getCursorLocation(Point p) {
-		JComponent widget = getWidget();
+		Component widget = getWidget();
 		int w = widget.getWidth();
 		int h = widget.getHeight();
 		int x = p.x;
@@ -289,9 +302,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		if (focused == null)
 			return false;
 		else {
-			LayoutManager layout = focused.getWidget().getLayout();
-			if (layout == null)
-				return true;
+			Component comp = focused.getWidget();
+			if (comp instanceof Container) {
+				LayoutManager layout = ((Container) comp).getLayout();
+				if (layout == null)
+					return true;
+			}
 			return focused.allowChildResize();
 		}
 	}
@@ -313,7 +329,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	}
 
 	public void paintMascot(Graphics g) {
-		paintComponent(g, getWidget());
+		if (getWidget() instanceof JComponent)
+			paintComponent(g, (JComponent) getWidget());
 	}
 
 	protected void paintComponent(Graphics g, JComponent root) {
@@ -340,7 +357,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	}
 
 	private void unsetDB(ArrayList<Component> db, Container container) {
-
 		if (container instanceof JComponent && container.isDoubleBuffered()) {
 			((JComponent) container).setDoubleBuffered(false);
 			db.add(container);
@@ -353,15 +369,19 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		}
 	}
 
-	public JComponent getWidget() {
+	public Component getWidget() {
 		if (widget == null) {
 			widget = createWidget();
-			widget.putClientProperty(ADAPTER_PROPERTY, this);
+			attach();
 		}
 		return widget;
 	}
 
-	public JComponent getComponent() {
+	public Component getRootPane() {
+		return getWidget();
+	}
+
+	public Component getComponent() {
 		return getWidget();
 	}
 
@@ -433,8 +453,16 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		setSelected(false);
 	}
 
-	public static WidgetAdapter getWidgetAdapter(JComponent comp) {
-		return (WidgetAdapter) comp.getClientProperty(ADAPTER_PROPERTY);
+	public static WidgetAdapter getWidgetAdapter(Component comp) {
+		if (comp instanceof JComponent)
+			return (WidgetAdapter) ((JComponent) comp).getClientProperty(ADAPTER_PROPERTY);
+		else if (comp instanceof RootPaneContainer) {
+			Container content = ((RootPaneContainer) comp).getContentPane();
+			if (content instanceof JComponent) {
+				return (WidgetAdapter) ((JComponent) content).getClientProperty(ADAPTER_PROPERTY);
+			}
+		}
+		return null;
 	}
 
 	public Border getDesignBorder() {
@@ -608,7 +636,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	}
 
 	public boolean isRoot() {
-		JComponent me = getWidget();
+		Component me = getWidget();
 		Container container = me.getParent();
 		return container == null || container instanceof VisualDesigner;
 	}
@@ -616,7 +644,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	public CompositeAdapter getParentAdapter() {
 		if (isRoot())
 			return null;
-		JComponent me = getWidget();
+		Component me = getWidget();
 		Component parent = me.getParent();
 		while (parent != null) {
 			if (parent instanceof JComponent) {
@@ -631,9 +659,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	public boolean isMoveable() {
 		CompositeAdapter parentAdapter = (CompositeAdapter) getParentAdapter();
-		LayoutManager layoutMgr = parentAdapter.getWidget().getLayout();
-		if (layoutMgr == null)
-			return true;
+		Component comp = parentAdapter.getWidget();
+		if (comp instanceof Container) {
+			LayoutManager layoutMgr = ((Container) comp).getLayout();
+			if (layoutMgr == null)
+				return true;
+		}
 		return parentAdapter.isChildMoveable();
 	}
 
@@ -811,8 +842,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		List<BorderAdapter> list = BorderAdapter.getBorderList();
 
 		for (BorderAdapter adapter : list) {
-			IAction action = adapter.getContextAction(getWidget());
-			borderMenu.add(action);
+			if (getWidget() instanceof JComponent) {
+				IAction action = adapter.getContextAction((JComponent) getWidget());
+				borderMenu.add(action);
+			}
 		}
 	}
 
@@ -863,10 +896,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		return ExtensionRegistry.createAdapterFor(cloneWidget());
 	}
 
-	protected abstract JComponent newWidget();
+	protected abstract Component newWidget();
 
-	public JComponent cloneWidget() {
-		JComponent clone = newWidget();
+	public Component cloneWidget() {
+		Component clone = newWidget();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isPropertySet(getLnfClassname(), getWidget())) {
@@ -880,7 +913,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		return iconImage;
 	}
 
-	public List<JComponent> getSelection() {
+	public List<Component> getSelection() {
 		return new WidgetSelection(getRootAdapter().getWidget());
 	}
 
@@ -1161,18 +1194,18 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	@SuppressWarnings("unchecked")
 	public boolean isWidgetValueChanged(Object newValue) {
 		Object lastValue = getWidgetValue();
-		if(lastValue==null){
-			if(newValue==null)
+		if (lastValue == null) {
+			if (newValue == null)
 				return false;
 			else
 				return true;
-		}else{
-			if(newValue==null)
+		} else {
+			if (newValue == null)
 				return true;
-			else{
+			else {
 				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(lastValue.getClass());
-				if(typeAdapter!=null&&typeAdapter.getComparator()!=null)
-					return typeAdapter.getComparator().compare(lastValue, newValue)!=0;
+				if (typeAdapter != null && typeAdapter.getComparator() != null)
+					return typeAdapter.getComparator().compare(lastValue, newValue) != 0;
 				return !lastValue.equals(newValue);
 			}
 		}
