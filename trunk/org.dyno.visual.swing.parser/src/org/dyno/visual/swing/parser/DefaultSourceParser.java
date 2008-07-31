@@ -8,6 +8,7 @@
  ******************************************************************************/
 package org.dyno.visual.swing.parser;
 
+import java.awt.Component;
 import java.beans.EventSetDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -389,7 +390,7 @@ class DefaultSourceParser implements ISourceParser {
 			CompositeAdapter containerAdapter = (CompositeAdapter) root;
 			int count = containerAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
-				JComponent child = containerAdapter.getChild(i);
+				Component child = containerAdapter.getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				_listNames(childAdapter, list);
 			}
