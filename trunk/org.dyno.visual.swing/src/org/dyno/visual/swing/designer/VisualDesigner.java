@@ -509,6 +509,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
+			this.invalidate();
+			this.doLayout();
+			this.repaint();
 		} else if (id.equals(ActionFactory.SELECT_ALL.getId())) {
 			rootAdapter.setSelected(false);
 			rootAdapter.selectChildren();
