@@ -15,7 +15,7 @@ public class MetaJInternalFrameValue extends MetaContainerValue {
 	public MetaJInternalFrameValue() {
 		put("defaultCloseOperation", 2);
 		put("title", "");
-		put("visible", false);
+		put("visible", true);
 		put("verifyInputWhenFocusTarget", true);
 		put("opaque", true);
 		put("focusable", true);
