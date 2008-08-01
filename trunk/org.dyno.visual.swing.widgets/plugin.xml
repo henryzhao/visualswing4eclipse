@@ -17,14 +17,13 @@
    		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JFrame.*"/>
    		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
    		<pattern type="javax.swing.JFrame" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
-   		<!--
    		
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.JDialog;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.JDialog;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
-   		
+   		<!--   		
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.JApplet;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.JApplet;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
@@ -558,6 +557,24 @@
                </property>
                <property id="visible" name="visible" gencode="false"/>
          </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JDialogAdapter"
+               icon="icons/dialog_16.png"
+               rootPaneContainer="true"
+               widgetClass="javax.swing.JDialog"
+               widgetName="JDialog">
+               <property id="title" name="title"/>
+               <property
+                     editable="true"
+                     editor="org.dyno.visual.swing.widgets.editors.InternalFrameDefaultCloseOperationEditor"
+                     id="defaultCloseOperation"
+                     name="defaultCloseOperation"
+                     renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer">
+               </property>
+               <property id="visible" name="visible" gencode="false"/>
+         </widget>
+         
          <!--
          <widget 
          		class="org.dyno.visual.swing.widgets.JLayeredPaneAdapter"
@@ -841,6 +858,10 @@
 						<reference id="toolTipText"/>
 					</provider>
 					<provider class="javax.swing.JFrame">
+						<reference id="title"/>
+						<reference id="defaultCloseOperation"/>
+					</provider>
+					<provider class="javax.swing.JDialog">
 						<reference id="title"/>
 						<reference id="defaultCloseOperation"/>
 					</provider>

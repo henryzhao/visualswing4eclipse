@@ -527,9 +527,12 @@ public class JPanelAdapter extends CompositeAdapter {
 	@Override
 	public void fillContextAction(MenuManager menu) {
 		super.fillContextAction(menu);
+		fillSetLayoutAction(menu);		
+	}
+	void fillSetLayoutAction(MenuManager menu) {
 		MenuManager layoutMenu = new MenuManager("Set Layout", "#SET_LAYOUT");
 		fillLayoutAction(layoutMenu);
-		menu.add(layoutMenu);		
+		menu.add(layoutMenu);
 	}
 
 	@Override

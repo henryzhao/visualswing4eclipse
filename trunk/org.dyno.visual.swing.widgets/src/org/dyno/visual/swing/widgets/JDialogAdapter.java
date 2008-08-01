@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -16,7 +16,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.widgets.designborder.FrameBorder;
+import org.dyno.visual.swing.widgets.designborder.DialogBorder;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IMethod;
@@ -25,11 +25,11 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.MenuManager;
 
-public class JFrameAdapter extends CompositeAdapter {
+public class JDialogAdapter extends CompositeAdapter {
 	private JPanelAdapter contentAdapter;
 	private Container rootPane; 
-	public JFrameAdapter() {
-		super("jFrame");
+	public JDialogAdapter() {
+		super("jDialog");
 		createContentAdapter();
 	}
 	
@@ -41,7 +41,7 @@ public class JFrameAdapter extends CompositeAdapter {
 
 	private void createContentAdapter() {
 		contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
-		JFrame me = (JFrame)getWidget();
+		JDialog me = (JDialog)getWidget();
 		rootPane = me.getContentPane();
 		contentAdapter.setWidgetWithoutAttach(rootPane);
 	}
@@ -72,7 +72,7 @@ public class JFrameAdapter extends CompositeAdapter {
 	}
 	@Override
 	protected Component createWidget() {
-		return new JFrame();
+		return new JDialog();
 	}
 	@Override
 	public Object getChildConstraints(Component child) {
@@ -95,7 +95,7 @@ public class JFrameAdapter extends CompositeAdapter {
 	}
 	@Override
 	public Border getDesignBorder() {
-		FrameBorder frameBorder = new FrameBorder((JFrame)getWidget());
+		DialogBorder frameBorder = new DialogBorder((JDialog)getWidget());
 		return frameBorder;
 	}
 	
@@ -112,7 +112,7 @@ public class JFrameAdapter extends CompositeAdapter {
 	}
 	@Override
 	protected Component newWidget() {
-		return new JFrame();
+		return new JDialog();
 	}
 
 	@Override

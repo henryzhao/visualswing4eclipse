@@ -20,7 +20,8 @@ import org.dyno.visual.swing.base.ItemProvider;
  */
 public class InternalFrameDefaultCloseOperationItems implements ItemProvider {
 
-	private Item[] VALUE_ITEMS = { new Item("DO_NOTHING", WindowConstants.DO_NOTHING_ON_CLOSE, "javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE"),
+	private Item[] VALUE_ITEMS = { 
+			new Item("DO_NOTHING", WindowConstants.DO_NOTHING_ON_CLOSE, "javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE"),
 			new Item("HIDE", WindowConstants.HIDE_ON_CLOSE, "javax.swing.WindowConstants.HIDE_ON_CLOSE"),
 			new Item("DISPOSE", WindowConstants.DISPOSE_ON_CLOSE, "javax.swing.WindowConstants.DISPOSE_ON_CLOSE") };
 

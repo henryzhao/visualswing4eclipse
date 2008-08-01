@@ -25,6 +25,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -33,7 +34,7 @@ import javax.swing.border.Border;
  * 
  * @author William Chen
  */
-public class FrameBorder implements Border {
+public class DialogBorder implements Border {
 
 	private static int ICON_PAD = 2;
 	private static int ICON_TEXT_PAD = 4;
@@ -49,8 +50,6 @@ public class FrameBorder implements Border {
 	private static Image RIGHT_BORDER;
 	private static Image TITLE_PANE;
 	private static Image CONTROL_CLOSE;
-	private static Image CONTROL_MIN;
-	private static Image CONTROL_MAX;
 	private static Image JAVA_LOGO;
 	private static Color BEGIN_COLOR;
 	private static Color END_COLOR;
@@ -76,44 +75,38 @@ public class FrameBorder implements Border {
 		}
 		MediaTracker tracker = new MediaTracker(new JFrame());
 		TOP_BORDER = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("top_border" + ext + ".png"));
+				DialogBorder.class.getResource("top_border" + ext + ".png"));
 		tracker.addImage(TOP_BORDER, 0);
 		LEFT_BORDER = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("left_border" + ext + ".png"));
+				DialogBorder.class.getResource("left_border" + ext + ".png"));
 		tracker.addImage(LEFT_BORDER, 1);
 		BOTTOM_BORDER = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("bottom_border" + ext + ".png"));
+				DialogBorder.class.getResource("bottom_border" + ext + ".png"));
 		tracker.addImage(BOTTOM_BORDER, 2);
 		RIGHT_BORDER = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("right_border" + ext + ".png"));
+				DialogBorder.class.getResource("right_border" + ext + ".png"));
 		tracker.addImage(RIGHT_BORDER, 3);
 		TL_CORNER = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("top_left" + ext + ".png"));
+				DialogBorder.class.getResource("top_left" + ext + ".png"));
 		tracker.addImage(TL_CORNER, 4);
 		TOP_RIGHT = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("top_right" + ext + ".png"));
+				DialogBorder.class.getResource("top_right" + ext + ".png"));
 		tracker.addImage(TOP_RIGHT, 5);
 		BOTTOM_LEFT = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("bottom_left" + ext + ".png"));
+				DialogBorder.class.getResource("bottom_left" + ext + ".png"));
 		tracker.addImage(BOTTOM_LEFT, 6);
 		BOTTOM_RIGHT = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("bottom_right" + ext + ".png"));
+				DialogBorder.class.getResource("bottom_right" + ext + ".png"));
 		tracker.addImage(BOTTOM_RIGHT, 7);
 
 		TITLE_PANE = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("title_pane.png"));
+				DialogBorder.class.getResource("title_pane.png"));
 		tracker.addImage(TITLE_PANE, 8);
 		CONTROL_CLOSE = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("control_close" + ext + ".png"));
+				DialogBorder.class.getResource("control_close" + ext + ".png"));
 		tracker.addImage(CONTROL_CLOSE, 10);
-		CONTROL_MIN = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("control_min" + ext + ".png"));
-		tracker.addImage(CONTROL_MIN, 11);
-		CONTROL_MAX = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("control_max" + ext + ".png"));
-		tracker.addImage(CONTROL_MAX, 12);
 		JAVA_LOGO = Toolkit.getDefaultToolkit().getImage(
-				FrameBorder.class.getResource("java_logo.png"));
+				DialogBorder.class.getResource("java_logo.png"));
 		tracker.addImage(JAVA_LOGO, 13);
 		while (!tracker.checkAll()) {
 			try {
@@ -122,10 +115,10 @@ public class FrameBorder implements Border {
 			}
 		}
 	}
-	private JFrame frame;
+	private JDialog dialog;
 
-	public FrameBorder(JFrame frame) {
-		this.frame = frame;
+	public DialogBorder(JDialog frame) {
+		this.dialog = frame;
 	}
 
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
@@ -172,8 +165,8 @@ public class FrameBorder implements Border {
 			g2d.setColor(CONTROL_COLOR);
 			g2d.drawLine(gx, gy + TITLE_HEIGHT - 1, gx + width - 2 * OUTER_PAD,
 					gy + TITLE_HEIGHT - 1);
-		}
-		List<Image>images = frame.getIconImages();
+		}		
+		List<Image>images = dialog.getIconImages();
 		Image icon = null;
 		if(images!=null&&!images.isEmpty())
 			icon = images.get(0);
@@ -190,9 +183,9 @@ public class FrameBorder implements Border {
 			gy = y + OUTER_PAD + (TITLE_HEIGHT - icon.getHeight(c)) / 2;
 			g.drawImage(icon, gx, gy, c);
 		}
-		String title = frame.getTitle();
+		String title = dialog.getTitle();
 		if (title != null && title.trim().length() > 0) {
-			Font font = frame.getFont();
+			Font font = dialog.getFont();
 			if(font==null)
 				font = new Font("Dialog", Font.BOLD, 12);
 			else
@@ -207,20 +200,9 @@ public class FrameBorder implements Border {
 		}
 
 		int w = CONTROL_CLOSE.getWidth(c);
-		// int h = CONTROLS.getHeight(designer);
 		gx = x + width - OUTER_PAD - w - 2;
 		gy = y + OUTER_PAD + 2;
 		g.drawImage(CONTROL_CLOSE, gx, gy, c);
-		w = CONTROL_MAX.getWidth(c);
-		gx = gx - w - 2;
-		g.drawImage(CONTROL_MAX, gx, gy, c);
-		w = CONTROL_MIN.getWidth(c);
-		if (isXP()) {
-			gx = gx - w - 2;
-		} else {
-			gx = gx - w;
-		}
-		g.drawImage(CONTROL_MIN, gx, gy, c);
 	}
 
 	public Insets getBorderInsets(Component c) {
