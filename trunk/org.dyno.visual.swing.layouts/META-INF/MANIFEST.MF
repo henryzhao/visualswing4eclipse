@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Layouts Plug-in
 Bundle-SymbolicName: org.dyno.visual.swing.layouts; singleton:=true
-Bundle-Version: 0.9.2.I20080728-1200
+Bundle-Version: 0.9.3.I20080801-1200
 Require-Bundle: org.dyno.visual.swing.widgets,
  org.dyno.visual.swing,
  org.dyno.visual.swing.types,
