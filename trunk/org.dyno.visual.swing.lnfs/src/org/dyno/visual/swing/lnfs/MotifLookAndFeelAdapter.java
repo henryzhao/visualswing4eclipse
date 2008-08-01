@@ -12,6 +12,7 @@ package org.dyno.visual.swing.lnfs;
 import java.awt.Component;
 import java.util.HashMap;
 
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -43,6 +44,7 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 
+import org.dyno.visual.swing.lnfs.motif.JAppletValue;
 import org.dyno.visual.swing.lnfs.motif.JButtonValue;
 import org.dyno.visual.swing.lnfs.motif.JCheckBoxValue;
 import org.dyno.visual.swing.lnfs.motif.JComboBoxValue;
@@ -80,6 +82,7 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 
 	public MotifLookAndFeelAdapter() {
 		put(JPanel.class, new JPanelValue());
+		put(JApplet.class, new JAppletValue());
 		put(JFrame.class, new JFrameValue());
 		put(JDialog.class, new JDialogValue());
 		put(JButton.class, new JButtonValue());

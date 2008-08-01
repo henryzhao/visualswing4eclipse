@@ -13,6 +13,7 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.util.HashMap;
 
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -44,6 +45,7 @@ import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 
+import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJAppletValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJButtonValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJCheckBoxValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJComboBoxValue;
@@ -73,6 +75,7 @@ import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTextPaneValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJToggleButtonValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJToolBarValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.ClassicJTreeValue;
+import org.dyno.visual.swing.lnfs.windowsclassic.XpJAppletValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJButtonValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJCheckBoxValue;
 import org.dyno.visual.swing.lnfs.windowsclassic.XpJComboBoxValue;
@@ -116,6 +119,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		classicValues = new HashMap<Class, WidgetValue>();
 		
 		xpValues.put(JLabel.class, new XpJLabelValue());
+		xpValues.put(JApplet.class, new XpJAppletValue());
 		xpValues.put(JPanel.class, new XpJPanelValue());
 		xpValues.put(JFrame.class, new XpJFrameValue());
 		xpValues.put(JDialog.class, new XpJDialogValue());
@@ -146,6 +150,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		xpValues.put(JScrollPane.class, new XpJScrollPaneValue());
 		
 		classicValues.put(JLabel.class, new ClassicJLabelValue());
+		classicValues.put(JApplet.class, new ClassicJAppletValue());
 		classicValues.put(JPanel.class, new ClassicJPanelValue());
 		classicValues.put(JFrame.class, new ClassicJFrameValue());
 		classicValues.put(JDialog.class, new ClassicJDialogValue());

@@ -12,6 +12,7 @@ package org.dyno.visual.swing.lnfs;
 import java.awt.Component;
 import java.util.HashMap;
 
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -44,6 +45,7 @@ import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
+import org.dyno.visual.swing.lnfs.meta.MetaJAppletValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJButtonValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJCheckBoxValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJComboBoxValue;
@@ -81,6 +83,7 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 
 	public MetaLookAndFeelAdapter() {
 		put(JPanel.class, new MetaJPanelValue());
+		put(JApplet.class, new MetaJAppletValue());
 		put(JButton.class, new MetaJButtonValue());
 		put(JLabel.class, new MetaJLabelValue());
 		put(JToggleButton.class, new MetaJToggleButtonValue());
