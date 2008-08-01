@@ -56,6 +56,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.PlatformUI;
+
 public class JPanelAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
 	private boolean intermediate = false;
@@ -63,39 +64,51 @@ public class JPanelAdapter extends CompositeAdapter {
 	public JPanelAdapter() {
 		super("jPanel" + (VAR_INDEX++));
 	}
-	void setWidgetWithoutAttach(Component widget){
+
+	void setWidgetWithoutAttach(Component widget) {
 		this.widget = widget;
 		this.dirty = false;
 	}
 
+	public WidgetAdapter getRootAdapter() {
+		if (isInternalFrameContentPane()) {
+			JInternalFrame jif = getTopFrame();
+			return WidgetAdapter.getWidgetAdapter(jif).getRootAdapter();
+		}
+		return super.getRootAdapter();
+	}
+
 	@Override
 	public boolean isRoot() {
-		if(isInternalFrameContentPane()){
+		if (isInternalFrameContentPane()) {
 			JInternalFrame jif = getTopFrame();
 			return WidgetAdapter.getWidgetAdapter(jif).isRoot();
 		}
 		return super.isRoot();
 	}
-	private boolean isInternalFrameContentPane(){
+
+	private boolean isInternalFrameContentPane() {
 		Component comp = widget;
 		comp = comp.getParent();
-		if(comp instanceof JLayeredPane){
+		if (comp instanceof JLayeredPane) {
 			comp = comp.getParent();
-			if(comp instanceof JRootPane){
+			if (comp instanceof JRootPane) {
 				comp = comp.getParent();
-				if(comp instanceof JInternalFrame)
+				if (comp instanceof JInternalFrame)
 					return true;
 			}
 		}
 		return false;
 	}
-	private JInternalFrame getTopFrame(){
+
+	private JInternalFrame getTopFrame() {
 		Component comp = widget;
-		while(!(comp instanceof JInternalFrame || comp == null)){
+		while (!(comp instanceof JInternalFrame || comp == null)) {
 			comp = comp.getParent();
 		}
-		return (JInternalFrame)comp;
+		return (JInternalFrame) comp;
 	}
+
 	@Override
 	public Component cloneWidget() {
 		JPanel panel = (JPanel) super.cloneWidget();
@@ -212,7 +225,8 @@ public class JPanelAdapter extends CompositeAdapter {
 				operation = doSameHeight();
 			if (operation != null) {
 				operation.addContext(getUndoContext());
-				IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+				IOperationHistory operationHistory = PlatformUI.getWorkbench()
+						.getOperationSupport().getOperationHistory();
 				try {
 					operationHistory.execute(operation, null, null);
 					return true;
@@ -287,17 +301,20 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	public LayoutAdapter getLayoutAdapter() {
 		if (layoutAdapter == null) {
-			LayoutManager layout = ((JPanel)getWidget()).getLayout();
+			LayoutManager layout = ((JPanel) getWidget()).getLayout();
 			if (layout != null) {
-				layoutAdapter = LayoutAdapter.getLayoutAdapter((JPanel)getWidget());
-				layoutAdapter.setContainer((JPanel)getWidget());
+				layoutAdapter = LayoutAdapter
+						.getLayoutAdapter((JPanel) getWidget());
+				layoutAdapter.setContainer((JPanel) getWidget());
 			}
 		}
 		return layoutAdapter;
 	}
-	public void setLayoutAdapter(LayoutAdapter layoutAdapter){
+
+	public void setLayoutAdapter(LayoutAdapter layoutAdapter) {
 		this.layoutAdapter = layoutAdapter;
 	}
+
 	private LayoutAdapter layoutAdapter;
 
 	@Override
@@ -323,8 +340,10 @@ public class JPanelAdapter extends CompositeAdapter {
 	private String getLayoutName() {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
-		String layoutName = layout == null ? "null" : layout.getClass().getName();
-		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT.equals(layoutName);
+		String layoutName = layout == null ? "null" : layout.getClass()
+				.getName();
+		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT
+				.equals(layoutName);
 		layoutName = layout == null ? "null" : getLayoutAdapter().getName();
 		return default_layout ? "" : "(" + layoutName + ")";
 	}
@@ -558,8 +577,9 @@ public class JPanelAdapter extends CompositeAdapter {
 	@Override
 	public void fillContextAction(MenuManager menu) {
 		super.fillContextAction(menu);
-		fillSetLayoutAction(menu);		
+		fillSetLayoutAction(menu);
 	}
+
 	void fillSetLayoutAction(MenuManager menu) {
 		MenuManager layoutMenu = new MenuManager("Set Layout", "#SET_LAYOUT");
 		fillLayoutAction(layoutMenu);
@@ -568,9 +588,9 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
-		JPanel jpanel = (JPanel)getWidget();
+		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
-		if(layout!=null)
+		if (layout != null)
 			getLayoutAdapter().fillConstraintsAction(menu, child);
 	}
 
@@ -582,7 +602,8 @@ public class JPanelAdapter extends CompositeAdapter {
 			nullLayoutAction.setChecked(true);
 		layoutMenu.add(nullLayoutAction);
 		for (String layoutClass : LayoutAdapter.getLayoutClasses()) {
-			IConfigurationElement config = LayoutAdapter.getLayoutConfig(layoutClass);
+			IConfigurationElement config = LayoutAdapter
+					.getLayoutConfig(layoutClass);
 			SetLayoutAction action = new SetLayoutAction(this, config);
 			if (layout != null) {
 				String currLayoutClass = layout.getClass().getName();
@@ -624,13 +645,17 @@ public class JPanelAdapter extends CompositeAdapter {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
-			builder.append(getFieldName(getName()) + "." + "setLayout(null);\n");
+			builder
+					.append(getFieldName(getName()) + "."
+							+ "setLayout(null);\n");
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
-				builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
+				builder.append(getFieldName(getName()) + "." + "add("
+						+ getMethodName + "());\n");
 			}
 		} else {
 			builder.append(getLayoutAdapter().createCode(imports));
@@ -644,6 +669,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		createAddCode(imports, builder);
 		return builder.toString();
 	}
+
 	void createAddCode(ImportRewrite imports, StringBuilder builder) {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
@@ -652,13 +678,14 @@ public class JPanelAdapter extends CompositeAdapter {
 			int count = getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				String getMethodName = getGetMethodName(childAdapter.getName());
 				builder.append("add(" + getMethodName + "());\n");
 			}
 		} else {
 			builder.append(getLayoutAdapter().createCode(imports));
-		}		
+		}
 	}
 
 	@Override
@@ -703,21 +730,23 @@ public class JPanelAdapter extends CompositeAdapter {
 			return getLayoutAdapter().getChildConstraints(child);
 		}
 	}
-	
-	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+
+	protected boolean createConstructor(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
 		IMethod cons = type.getMethod(type.getElementName(), new String[0]);
-		if(!cons.exists()){
+		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
-			builder.append("public "+type.getElementName()+"(){\n");
+			builder.append("public " + type.getElementName() + "(){\n");
 			builder.append("initComponent();\n");
 			builder.append("}\n");
 			try {
-				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);
+				type.createMethod(JavaUtil.formatCode(builder.toString()),
+						null, false, null);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				return false;
 			}
 		}
 		return true;
-	}	
+	}
 }
