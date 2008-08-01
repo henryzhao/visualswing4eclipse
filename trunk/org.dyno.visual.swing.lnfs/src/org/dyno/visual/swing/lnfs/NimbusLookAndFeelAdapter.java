@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -44,6 +45,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.dyno.visual.swing.lnfs.nimbus.JDialogValue;
 import org.dyno.visual.swing.lnfs.nimbus.JButtonValue;
 import org.dyno.visual.swing.lnfs.nimbus.JCheckBoxValue;
 import org.dyno.visual.swing.lnfs.nimbus.JComboBoxValue;
@@ -82,6 +84,7 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 	public NimbusLookAndFeelAdapter() {
 		put(JPanel.class, new JPanelValue());
 		put(JFrame.class, new JFrameValue());
+		put(JDialog.class, new JDialogValue());
 		put(JButton.class, new JButtonValue());
 		put(JLabel.class, new JLabelValue());
 		put(JToggleButton.class, new JToggleButtonValue());
