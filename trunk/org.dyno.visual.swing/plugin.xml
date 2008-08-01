@@ -128,6 +128,16 @@
             New JDialog
          </description>
       </wizard>
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
+            icon="icons/applet_16.png"
+            id="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
+            name="Visual JApplet">
+         <description>
+            New JApplet
+         </description>
+      </wizard>
 	</extension>
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
