@@ -50,6 +50,10 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	public Component getRootPane() {
 		return getWidget();
 	}
+	public void doLayout() {
+		CompositeAdapter content = getContentAdapter();
+		content.doLayout();
+	}
 
 	@Override
 	public Component cloneWidget() {

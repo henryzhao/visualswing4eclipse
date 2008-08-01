@@ -45,6 +45,9 @@ public class JFrameAdapter extends CompositeAdapter {
 		rootPane = me.getContentPane();
 		contentAdapter.setWidgetWithoutAttach(rootPane);
 	}
+	public void doLayout() {
+		contentAdapter.doLayout();
+	}
 
 	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
 		Dimension size = rootPane.getSize();

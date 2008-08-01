@@ -155,6 +155,9 @@ public class JDialogAdapter extends CompositeAdapter {
 	public int getChildCount() {
 		return contentAdapter.getChildCount();
 	}
+	public void doLayout() {
+		contentAdapter.doLayout();
+	}
 
 	public String toString() {
 		if (isRoot()) {
