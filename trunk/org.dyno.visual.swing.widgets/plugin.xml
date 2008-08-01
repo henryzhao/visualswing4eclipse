@@ -23,13 +23,12 @@
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
    		<pattern type="javax.swing.JDialog" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
-   		<!--   		
+   		
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.JApplet;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.JApplet;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
-		-->   		
    </extension>
    <extension
          point="org.dyno.visual.swing.widgetAdapter"
@@ -572,6 +571,15 @@
                      name="defaultCloseOperation"
                      renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer">
                </property>
+               <property id="visible" name="visible" gencode="false"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JAppletAdapter"
+               icon="icons/applet_16.png"
+               rootPaneContainer="true"
+               widgetClass="javax.swing.JApplet"
+               widgetName="JApplet">
                <property id="visible" name="visible" gencode="false"/>
          </widget>
          
