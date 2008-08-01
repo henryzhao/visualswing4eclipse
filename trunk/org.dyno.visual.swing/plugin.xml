@@ -118,7 +118,17 @@
             New JFrame
          </description>
       </wizard>      
-   </extension>
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
+            icon="icons/dialog_16.png"
+            id="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
+            name="Visual JDialog">
+         <description>
+            New JDialog
+         </description>
+      </wizard>
+	</extension>
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
