@@ -25,10 +25,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JInternalFrameAdapter extends CompositeAdapter {
@@ -42,13 +47,29 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	public Component getRootPane() {
+		return getWidget();
+	}
+
+	@Override
 	public Component cloneWidget() {
 		JInternalFrame copy = (JInternalFrame) super.cloneWidget();
 		CompositeAdapter content = getContentAdapter();
 		copy.setContentPane((JComponent)content.cloneWidget());
 		return copy;
 	}
-
+	@Override
+	protected String createInitCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.createInitCode(imports));
+		JPanel panel = getContentPane();
+		JPanelAdapter adapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(panel);
+		adapter.setName(getName());
+		adapter.createAddCode(imports, builder);
+		adapter.detachWidget();
+		return builder.toString();
+	}
+	
 	@Override
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
@@ -60,6 +81,23 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		adapter.detachWidget();
 		return builder.toString();
 	}
+	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+		IMethod cons = type.getMethod(type.getElementName(), new String[0]);
+		if(!cons.exists()){
+			StringBuilder builder = new StringBuilder();
+			builder.append("public "+type.getElementName()+"(){\n");
+			builder.append("initComponent();\n");
+			builder.append("}\n");
+			try {
+				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}	
+
 
 	@Override
 	public boolean needGenBoundCode() {

@@ -17,7 +17,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JInternalFrame;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
 import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.EditorAction;
@@ -65,6 +68,34 @@ public class JPanelAdapter extends CompositeAdapter {
 		this.dirty = false;
 	}
 
+	@Override
+	public boolean isRoot() {
+		if(isInternalFrameContentPane()){
+			JInternalFrame jif = getTopFrame();
+			return WidgetAdapter.getWidgetAdapter(jif).isRoot();
+		}
+		return super.isRoot();
+	}
+	private boolean isInternalFrameContentPane(){
+		Component comp = widget;
+		comp = comp.getParent();
+		if(comp instanceof JLayeredPane){
+			comp = comp.getParent();
+			if(comp instanceof JRootPane){
+				comp = comp.getParent();
+				if(comp instanceof JInternalFrame)
+					return true;
+			}
+		}
+		return false;
+	}
+	private JInternalFrame getTopFrame(){
+		Component comp = widget;
+		while(!(comp instanceof JInternalFrame || comp == null)){
+			comp = comp.getParent();
+		}
+		return (JInternalFrame)comp;
+	}
 	@Override
 	public Component cloneWidget() {
 		JPanel panel = (JPanel) super.cloneWidget();

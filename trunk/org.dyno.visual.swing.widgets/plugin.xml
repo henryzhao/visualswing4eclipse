@@ -29,6 +29,13 @@
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
    		<pattern type="javax.swing.JApplet" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
+
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.JInternalFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.JInternalFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JInternalFrame.*"/>
+   		
    </extension>
    <extension
          point="org.dyno.visual.swing.widgetAdapter"
@@ -535,8 +542,8 @@
 		        <property id="layer" name="layer"/>
 		        <property id="maximum" name="maximum"/>
 		        <property id="normalBounds" name="normalBounds" gencode="false"/>
-		        <property id="selected" name="selected"/>
-		        <property id="visible" name="visible"/>
+		        <property id="selected" name="selected" gencode="false"/>
+		        <property id="visible" name="visible" gencode="false"/>
 		        <property id="border" name="border"/>
          </widget>
          <widget
