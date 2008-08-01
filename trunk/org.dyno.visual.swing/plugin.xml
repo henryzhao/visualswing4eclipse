@@ -138,6 +138,16 @@
             New JApplet
          </description>
       </wizard>
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
+            icon="icons/internal_frame_16.png"
+            id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
+            name="Visual InternalFrame">
+         <description>
+            New JInternalFrame
+         </description>
+      </wizard>
 	</extension>
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">

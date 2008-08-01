@@ -320,7 +320,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			root = adapter.getRootPane();
 			Container parent = root.getParent();
 			if(parent!=null)
-				parent.remove(root);
+				parent.remove(root);			
 			undoContext = new ObjectUndoContext(root);
 			IEditorSite site = editor.getEditorSite();
 			undoAction = new UndoActionHandler(site, getUndoContext());
@@ -331,6 +331,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			rootBounds = adapter.getDesignBounds();
 			root.setSize(rootBounds.width, rootBounds.height);
 			add(root);
+			root.setVisible(true);
 			designBorder = adapter.getDesignBorder();
 			container.setBorder(designBorder);
 			validateContent();
