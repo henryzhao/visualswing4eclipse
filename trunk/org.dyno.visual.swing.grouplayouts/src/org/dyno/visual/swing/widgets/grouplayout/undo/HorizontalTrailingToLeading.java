@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.awt.Component;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
 
@@ -34,8 +35,10 @@ public class HorizontalTrailingToLeading extends AbstractOperation {
 		Trailing trailing = (Trailing) oldconstraints.getHorizontal();
 		int t = trailing.getTrailing();
 		int w = child.getWidth();
-		int l = container.getWidth() - t - w;
-		Constraints newconstraints = new Constraints(new Leading(l, 10, t), oldconstraints.getVertical());
+		Insets insets = container.getInsets();
+		int l = container.getWidth() - insets.left - insets.right - t - w;
+		Constraints newconstraints = new Constraints(new Leading(l, 10, t),
+				oldconstraints.getVertical());
 		container.remove(child);
 		container.add(child, newconstraints);
 		container.doLayout();

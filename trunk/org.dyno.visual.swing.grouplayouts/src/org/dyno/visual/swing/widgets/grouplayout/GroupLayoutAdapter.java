@@ -15,6 +15,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -60,8 +61,10 @@ import org.eclipse.ui.PlatformUI;
 
 public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private static Color BASELINE_COLOR = new Color(143, 171, 196);
-	private static Stroke STROKE1 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 4, 2 }, 0);
-	private static Stroke STROKE2 = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 1, 1 }, 0);
+	private static Stroke STROKE1 = new BasicStroke(1, BasicStroke.CAP_BUTT,
+			BasicStroke.JOIN_BEVEL, 0, new float[] { 4, 2 }, 0);
+	private static Stroke STROKE2 = new BasicStroke(1, BasicStroke.CAP_BUTT,
+			BasicStroke.JOIN_BEVEL, 0, new float[] { 1, 1 }, 0);
 	private boolean hovered;
 	private List<Quartet> horizontal_baseline;
 	private List<Quartet> vertical_baseline;
@@ -80,15 +83,23 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
-		MenuManager horizontalAnchorMenu = new MenuManager("Horizontal Anchor", "#HORIZONTAL_ANCHOR");
-		horizontalAnchorMenu.add(new SetAnchorAction(container, true, "leading", child));
-		horizontalAnchorMenu.add(new SetAnchorAction(container, true, "bilateral", child));
-		horizontalAnchorMenu.add(new SetAnchorAction(container, true, "trailing", child));
+		MenuManager horizontalAnchorMenu = new MenuManager("Horizontal Anchor",
+				"#HORIZONTAL_ANCHOR");
+		horizontalAnchorMenu.add(new SetAnchorAction(container, true,
+				"leading", child));
+		horizontalAnchorMenu.add(new SetAnchorAction(container, true,
+				"bilateral", child));
+		horizontalAnchorMenu.add(new SetAnchorAction(container, true,
+				"trailing", child));
 		menu.add(horizontalAnchorMenu);
-		MenuManager verticalAnchorMenu = new MenuManager("Vertical Anchor", "#VERTICAL_ANCHOR");
-		verticalAnchorMenu.add(new SetAnchorAction(container, false, "leading", child));
-		verticalAnchorMenu.add(new SetAnchorAction(container, false, "bilateral", child));
-		verticalAnchorMenu.add(new SetAnchorAction(container, false, "trailing", child));
+		MenuManager verticalAnchorMenu = new MenuManager("Vertical Anchor",
+				"#VERTICAL_ANCHOR");
+		verticalAnchorMenu.add(new SetAnchorAction(container, false, "leading",
+				child));
+		verticalAnchorMenu.add(new SetAnchorAction(container, false,
+				"bilateral", child));
+		verticalAnchorMenu.add(new SetAnchorAction(container, false,
+				"trailing", child));
 		menu.add(verticalAnchorMenu);
 	}
 
@@ -116,7 +127,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void addChild(Component widget) {
-		Constraints cons = new Constraints(new Leading(10, 10, 10), new Leading(10, 10, 10));
+		Constraints cons = new Constraints(new Leading(10, 10, 10),
+				new Leading(10, 10, 10));
 		container.add(widget, cons);
 	}
 
@@ -161,11 +173,14 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			GroupLayout layout = (GroupLayout) container.getLayout();
 			int width = container.getWidth();
 			int height = container.getHeight();
-			CompositeAdapter adapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+			Insets insets = container.getInsets();
+			CompositeAdapter adapter = (CompositeAdapter) WidgetAdapter
+					.getWidgetAdapter(container);
 			int count = adapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = adapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				if (childAdapter.isSelected()) {
 					Constraints constraints = layout.getConstraints(child);
 					Alignment horizontal = constraints.getHorizontal();
@@ -173,68 +188,68 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 					int x = 0;
 					if (horizontal instanceof Leading) {
 						x = ((Leading) horizontal).getLeading();
-						g2d.drawLine(0, y, x, y);
+						g2d.drawLine(insets.left, y, insets.left + x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(0, y - BOX + 1);
-						polygon.addPoint(0, y + BOX);
-						polygon.addPoint(BOX, y);
+						polygon.addPoint(insets.left, y - BOX + 1);
+						polygon.addPoint(insets.left, y + BOX);
+						polygon.addPoint(insets.left + BOX, y);
 						g2d.fillPolygon(polygon);
 					} else if (horizontal instanceof Trailing) {
 						x = child.getX() + child.getWidth();
-						g2d.drawLine(width, y, x, y);
+						g2d.drawLine(width - insets.right, y, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(width, y - BOX);
-						polygon.addPoint(width, y + BOX - 1);
-						polygon.addPoint(width - BOX, y);
+						polygon.addPoint(width - insets.right, y - BOX);
+						polygon.addPoint(width - insets.right, y + BOX - 1);
+						polygon.addPoint(width - BOX - insets.right, y);
 						g2d.fillPolygon(polygon);
 					} else if (horizontal instanceof Bilateral) {
 						x = ((Bilateral) horizontal).getLeading();
-						g2d.drawLine(0, y, x, y);
+						g2d.drawLine(insets.left, y, insets.left + x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(0, y - BOX + 1);
-						polygon.addPoint(0, y + BOX);
-						polygon.addPoint(BOX, y);
+						polygon.addPoint(insets.left, y - BOX + 1);
+						polygon.addPoint(insets.left, y + BOX);
+						polygon.addPoint(insets.left + BOX, y);
 						g2d.fillPolygon(polygon);
 						x = child.getX() + child.getWidth();
-						g2d.drawLine(width, y, x, y);
+						g2d.drawLine(width - insets.right, y, x, y);
 						polygon = new Polygon();
-						polygon.addPoint(width, y - BOX);
-						polygon.addPoint(width, y + BOX - 1);
-						polygon.addPoint(width - BOX, y);
+						polygon.addPoint(width - insets.right, y - BOX);
+						polygon.addPoint(width - insets.right, y + BOX - 1);
+						polygon.addPoint(width - BOX - insets.right, y);
 						g2d.fillPolygon(polygon);
 					}
 					Alignment vertical = constraints.getVertical();
 					x = child.getX() + child.getWidth() / 2;
 					if (vertical instanceof Leading) {
 						y = ((Leading) vertical).getLeading();
-						g2d.drawLine(x, 0, x, y);
+						g2d.drawLine(x, insets.top, x, insets.top + y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(x - BOX + 1, 0);
-						polygon.addPoint(x + BOX, 0);
-						polygon.addPoint(x, BOX);
+						polygon.addPoint(x - BOX + 1, insets.top);
+						polygon.addPoint(x + BOX, insets.top);
+						polygon.addPoint(x, BOX + insets.top);
 						g2d.fillPolygon(polygon);
 					} else if (vertical instanceof Trailing) {
 						y = child.getY() + child.getHeight();
-						g2d.drawLine(x, height, x, y);
+						g2d.drawLine(x, height - insets.bottom, x, y);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(x - BOX, height);
-						polygon.addPoint(x + BOX - 1, height);
-						polygon.addPoint(x, height - BOX);
+						polygon.addPoint(x - BOX, height - insets.bottom);
+						polygon.addPoint(x + BOX - 1, height - insets.bottom);
+						polygon.addPoint(x, height - BOX - insets.bottom);
 						g2d.fillPolygon(polygon);
 					} else if (vertical instanceof Bilateral) {
 						y = ((Bilateral) vertical).getLeading();
-						g2d.drawLine(x, 0, x, y);
+						g2d.drawLine(x, insets.top, x, y+insets.top);
 						Polygon polygon = new Polygon();
-						polygon.addPoint(x - BOX + 1, 0);
-						polygon.addPoint(x + BOX, 0);
-						polygon.addPoint(x, BOX);
+						polygon.addPoint(x - BOX + 1, insets.top);
+						polygon.addPoint(x + BOX, insets.top);
+						polygon.addPoint(x, BOX+insets.top);
 						g2d.fillPolygon(polygon);
 						y = child.getY() + child.getHeight();
-						g2d.drawLine(x, height, x, y);
+						g2d.drawLine(x, height-insets.bottom, x, y);
 						polygon = new Polygon();
-						polygon.addPoint(x - BOX, height);
-						polygon.addPoint(x + BOX - 1, height);
-						polygon.addPoint(x, height - BOX);
+						polygon.addPoint(x - BOX, height-insets.bottom);
+						polygon.addPoint(x + BOX - 1, height-insets.bottom);
+						polygon.addPoint(x, height - BOX-insets.bottom);
 						g2d.fillPolygon(polygon);
 					}
 				}
@@ -246,7 +261,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	@Override
 	public boolean dragEnter(Point p) {
 		hovered = true;
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int state = parent.getState();
 		switch (state) {
 		case Azimuth.STATE_BEAN_HOVER:
@@ -276,7 +292,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	@Override
 	public boolean dragExit(Point p) {
 		hovered = false;
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int state = parent.getState();
 		switch (state) {
 		case Azimuth.STATE_BEAN_HOVER:
@@ -305,7 +322,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public boolean dragOver(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int state = parent.getState();
 		switch (state) {
 		case Azimuth.STATE_BEAN_HOVER:
@@ -333,7 +351,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public boolean drop(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int state = parent.getState();
 		switch (state) {
 		case Azimuth.STATE_BEAN_HOVER:
@@ -382,11 +401,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		LayoutStyle style = LayoutStyle.getInstance();
 		for (int i = 0; i < count; i++) {
 			JComponent widget = (JComponent) container.getComponent(i);
-			int gap = style.getContainerGap(widget, SwingConstants.EAST, container);
+			int gap = style.getContainerGap(widget, SwingConstants.EAST,
+					container);
 			Rectangle bounds = widget.getBounds();
 			Spring spring = new Spring(gap, gap);
 			Leading horizontal = new Leading(bounds.x, bounds.width, spring);
-			gap = style.getContainerGap(widget, SwingConstants.SOUTH, container);
+			gap = style
+					.getContainerGap(widget, SwingConstants.SOUTH, container);
 			spring = new Spring(gap, gap);
 			Leading vertical = new Leading(bounds.y, bounds.height, spring);
 			Constraints constraints = new Constraints(horizontal, vertical);
@@ -480,17 +501,19 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private void adjustVerticalTrailingBy(Component widget, int delta_height) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
-		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isTopRelatedTo((JComponent)target, (JComponent)widget)) {
+				if (isTopRelatedTo((JComponent) target, (JComponent) widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment vertical = constraints.getHorizontal();
 					if (vertical instanceof Trailing) {
 						Trailing leading = (Trailing) vertical;
-						leading.setTrailing(leading.getTrailing() + delta_height);
+						leading.setTrailing(leading.getTrailing()
+								+ delta_height);
 						adjustVerticalTrailingBy(target, delta_height);
 					} else if (vertical instanceof Bilateral) {
 						Bilateral spring = (Bilateral) vertical;
@@ -503,16 +526,20 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private boolean isTopRelatedTo(JComponent target, JComponent widget) {
 		LayoutStyle style = LayoutStyle.getInstance();
-		int nr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.NORTH, container);
-		int wr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.WEST, container);
-		int er = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.EAST, container);
+		int nr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.NORTH, container);
+		int wr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.WEST, container);
+		int er = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.EAST, container);
 		Rectangle tgtb = target.getBounds();
 		Rectangle srcb = widget.getBounds();
 		int tgtr = tgtb.y + tgtb.height;
 		int srcy = srcb.y;
 		if (srcy > tgtr) {
 			int distance = srcy - tgtr;
-			if (distance == nr && tgtb.x + tgtb.width >= srcb.x - wr && tgtb.x <= srcb.x + srcb.width + er)
+			if (distance == nr && tgtb.x + tgtb.width >= srcb.x - wr
+					&& tgtb.x <= srcb.x + srcb.width + er)
 				return true;
 		}
 		return false;
@@ -520,12 +547,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private void adjustVerticalLeadingBy(Component widget, int delta_height) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
-		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isBottomRelatedTo((JComponent)target, (JComponent)widget)) {
+				if (isBottomRelatedTo((JComponent) target, (JComponent) widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment vertical = constraints.getVertical();
 					if (vertical instanceof Leading) {
@@ -543,16 +571,20 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private boolean isBottomRelatedTo(JComponent target, JComponent widget) {
 		LayoutStyle style = LayoutStyle.getInstance();
-		int sr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.SOUTH, container);
-		int wr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.WEST, container);
-		int er = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.EAST, container);
+		int sr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.SOUTH, container);
+		int wr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.WEST, container);
+		int er = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.EAST, container);
 		Rectangle tgtb = target.getBounds();
 		Rectangle srcb = widget.getBounds();
 		int tgty = tgtb.y;
 		int srcr = srcb.y + srcb.height;
 		if (tgty > srcr) {
 			int distance = tgty - srcr;
-			if (distance == sr && tgtb.x + tgtb.width >= srcb.x - wr && tgtb.x <= srcb.x + srcb.width + er)
+			if (distance == sr && tgtb.x + tgtb.width >= srcb.x - wr
+					&& tgtb.x <= srcb.x + srcb.width + er)
 				return true;
 		}
 		return false;
@@ -560,17 +592,20 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private void adjustHorizontalTrailingBy(Component widget, int delta_width) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
-		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isLeftRelatedTo((JComponent)target, (JComponent)widget)) {
+				if (isLeftRelatedTo((JComponent) target, (JComponent) widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment horizontal = constraints.getHorizontal();
 					if (horizontal instanceof Trailing) {
 						Trailing leading = (Trailing) horizontal;
-						leading.setTrailing(leading.getTrailing() + delta_width);
+						leading
+								.setTrailing(leading.getTrailing()
+										+ delta_width);
 						adjustHorizontalTrailingBy(target, delta_width);
 					} else if (horizontal instanceof Bilateral) {
 						Bilateral spring = (Bilateral) horizontal;
@@ -583,16 +618,20 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private boolean isLeftRelatedTo(JComponent target, JComponent widget) {
 		LayoutStyle style = LayoutStyle.getInstance();
-		int wr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.WEST, container);
-		int nr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.NORTH, container);
-		int sr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.SOUTH, container);
+		int wr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.WEST, container);
+		int nr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.NORTH, container);
+		int sr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.SOUTH, container);
 		Rectangle tgtb = target.getBounds();
 		Rectangle srcb = widget.getBounds();
 		int tgtr = tgtb.x + tgtb.width;
 		int srcx = srcb.x;
 		if (srcx > tgtr) {
 			int distance = srcx - tgtr;
-			if (distance == wr && tgtb.y + tgtb.height >= srcb.y - nr && tgtb.y <= srcb.y + srcb.height + sr)
+			if (distance == wr && tgtb.y + tgtb.height >= srcb.y - nr
+					&& tgtb.y <= srcb.y + srcb.height + sr)
 				return true;
 		}
 		return false;
@@ -600,12 +639,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private void adjustHorizontalLeadingBy(Component widget, int delta_width) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
-		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
-				if (isRightRelatedTo((JComponent)target, (JComponent)widget)) {
+				if (isRightRelatedTo((JComponent) target, (JComponent) widget)) {
 					Constraints constraints = layout.getConstraints(target);
 					Alignment horizontal = constraints.getHorizontal();
 					if (horizontal instanceof Leading) {
@@ -623,16 +663,20 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private boolean isRightRelatedTo(JComponent target, JComponent widget) {
 		LayoutStyle style = LayoutStyle.getInstance();
-		int er = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.EAST, container);
-		int nr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.NORTH, container);
-		int sr = style.getPreferredGap(target, widget, ComponentPlacement.RELATED, SwingConstants.SOUTH, container);
+		int er = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.EAST, container);
+		int nr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.NORTH, container);
+		int sr = style.getPreferredGap(target, widget,
+				ComponentPlacement.RELATED, SwingConstants.SOUTH, container);
 		Rectangle tgtb = target.getBounds();
 		Rectangle srcb = widget.getBounds();
 		int tgtx = tgtb.x;
 		int srcr = srcb.x + srcb.width;
 		if (tgtx > srcr) {
 			int distance = tgtx - srcr;
-			if (distance == er && tgtb.y + tgtb.height >= srcb.y - nr && tgtb.y <= srcb.y + srcb.height + sr)
+			if (distance == er && tgtb.y + tgtb.height >= srcb.y - nr
+					&& tgtb.y <= srcb.y + srcb.height + sr)
 				return true;
 		}
 		return false;
@@ -642,7 +686,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	public boolean isSelectionAlignResize(String id) {
 		if (id == null)
 			return false;
-		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		return containerAdapter.getChildCount() > 1;
 	}
 
@@ -666,9 +711,11 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			operation = getTop();
 		}
 		if (operation != null) {
-			CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+			CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+					.getWidgetAdapter(container);
 			operation.addContext(parent.getUndoContext());
-			IOperationHistory operationHist = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+			IOperationHistory operationHist = PlatformUI.getWorkbench()
+					.getOperationSupport().getOperationHistory();
 			try {
 				operationHist.execute(operation, null, null);
 				return true;
@@ -714,7 +761,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	protected String getNewInstanceCode(ImportRewrite imports) {
-		String name = imports.addImport("org.dyno.visual.swing.layouts.GroupLayout");
+		String name = imports
+				.addImport("org.dyno.visual.swing.layouts.GroupLayout");
 		return "new " + name + "()";
 	}
 
@@ -723,7 +771,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		Constraints constraints = layout.getConstraints(child);
 		StringBuilder builder = new StringBuilder();
-		String strConstraints = imports.addImport("org.dyno.visual.swing.layouts.Constraints");
+		String strConstraints = imports
+				.addImport("org.dyno.visual.swing.layouts.Constraints");
 		builder.append("new " + strConstraints + "(");
 		genAlignmentCode(builder, constraints.getHorizontal(), imports);
 		builder.append(", ");
@@ -732,7 +781,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return builder.toString();
 	}
 
-	private void genAlignmentCode(StringBuilder builder, Alignment alignment, ImportRewrite imports) {
+	private void genAlignmentCode(StringBuilder builder, Alignment alignment,
+			ImportRewrite imports) {
 		if (alignment instanceof Leading) {
 			genLeadingCode(builder, (Leading) alignment, imports);
 		} else if (alignment instanceof Trailing) {
@@ -742,8 +792,10 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 	}
 
-	private void genBilateralCode(StringBuilder builder, Bilateral bilateral, ImportRewrite imports) {
-		String strBilateral = imports.addImport("org.dyno.visual.swing.layouts.Bilateral");
+	private void genBilateralCode(StringBuilder builder, Bilateral bilateral,
+			ImportRewrite imports) {
+		String strBilateral = imports
+				.addImport("org.dyno.visual.swing.layouts.Bilateral");
 		builder.append("new " + strBilateral + "(");
 		builder.append(bilateral.getLeading() + ", ");
 		builder.append(bilateral.getTrailing() + ", ");
@@ -756,8 +808,10 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		builder.append(")");
 	}
 
-	private void genTrailingCode(StringBuilder builder, Trailing trailing, ImportRewrite imports) {
-		String strTrailing = imports.addImport("org.dyno.visual.swing.layouts.Trailing");
+	private void genTrailingCode(StringBuilder builder, Trailing trailing,
+			ImportRewrite imports) {
+		String strTrailing = imports
+				.addImport("org.dyno.visual.swing.layouts.Trailing");
 		builder.append("new " + strTrailing + "(");
 		builder.append(trailing.getTrailing() + ", ");
 		int size = trailing.getSize();
@@ -770,8 +824,10 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		builder.append(")");
 	}
 
-	private void genLeadingCode(StringBuilder builder, Leading leading, ImportRewrite imports) {
-		String strLeading = imports.addImport("org.dyno.visual.swing.layouts.Leading");
+	private void genLeadingCode(StringBuilder builder, Leading leading,
+			ImportRewrite imports) {
+		String strLeading = imports
+				.addImport("org.dyno.visual.swing.layouts.Leading");
 		builder.append("new " + strLeading + "(");
 		builder.append(leading.getLeading() + ", ");
 		int size = leading.getSize();

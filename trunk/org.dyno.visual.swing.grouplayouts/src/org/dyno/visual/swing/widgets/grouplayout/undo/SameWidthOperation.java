@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -35,6 +36,8 @@ public class SameWidthOperation extends AlignmentOperation {
 		Constraints postConstraints = layout.getConstraints(postChild);
 		Alignment postAlignment = postConstraints.getHorizontal();
 		compcons = new ArrayList<CompCons>();
+		Insets insets = container.getInsets();
+		int innerWidth = container.getWidth() - insets.left - insets.right;
 		if (postAlignment instanceof Leading) {
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
@@ -52,7 +55,7 @@ public class SameWidthOperation extends AlignmentOperation {
 				} else if (alignment instanceof Bilateral) {
 					Bilateral bilateral = (Bilateral) alignment;
 					int lead = bilateral.getLeading();
-					Leading leading = new Leading(lead, postSize, 10, container.getWidth() - postSize - lead);
+					Leading leading = new Leading(lead, postSize, 10, innerWidth - postSize - lead);
 					constraints = new Constraints(leading, constraints.getVertical());
 				} else if (alignment instanceof Trailing) {
 					Trailing trailing = (Trailing) alignment.clone();
@@ -78,7 +81,7 @@ public class SameWidthOperation extends AlignmentOperation {
 				} else if (alignment instanceof Bilateral) {
 					Bilateral bilateral = (Bilateral) alignment;
 					int trail = bilateral.getTrailing();
-					Trailing leading = new Trailing(trail, postSize, 10, container.getWidth() - postSize - trail);
+					Trailing leading = new Trailing(trail, postSize, 10, innerWidth - postSize - trail);
 					constraints = new Constraints(leading, constraints.getVertical());
 				} else if (alignment instanceof Trailing) {
 					Trailing trailing = (Trailing) alignment.clone();
@@ -101,7 +104,7 @@ public class SameWidthOperation extends AlignmentOperation {
 					Leading leading = (Leading) alignment;
 					Bilateral bilateral = (Bilateral) postAlignment.clone();
 					bilateral.setLeading(leading.getLeading());
-					bilateral.setTrailing(container.getWidth() - leading.getLeading() - child.getWidth());
+					bilateral.setTrailing(innerWidth - leading.getLeading() - child.getWidth());
 					constraints = new Constraints(bilateral, constraints.getVertical());
 				} else if (alignment instanceof Bilateral) {
 					Bilateral leading = (Bilateral) alignment;
@@ -113,7 +116,7 @@ public class SameWidthOperation extends AlignmentOperation {
 					Trailing trailing = (Trailing) alignment;
 					Bilateral bilateral = (Bilateral) postAlignment.clone();
 					bilateral.setTrailing(trailing.getTrailing());
-					bilateral.setLeading(container.getWidth() - trailing.getTrailing() - child.getWidth());
+					bilateral.setLeading(innerWidth - trailing.getTrailing() - child.getWidth());
 					constraints = new Constraints(bilateral, constraints.getVertical());
 				}
 				layout.setConstraints(child, constraints);

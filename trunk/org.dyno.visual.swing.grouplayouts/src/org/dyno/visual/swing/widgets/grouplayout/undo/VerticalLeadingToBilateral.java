@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.awt.Component;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
 
@@ -34,8 +35,10 @@ public class VerticalLeadingToBilateral extends AbstractOperation {
 		Leading leading = (Leading) oldconstraints.getVertical();
 		int l = leading.getLeading();
 		int h = child.getHeight();
-		int t = container.getHeight() - l - h;
-		Constraints newconstraints = new Constraints(oldconstraints.getHorizontal(), new Bilateral(l, t, 10, h));
+		Insets insets = container.getInsets();
+		int t = container.getHeight() - insets.top - insets.bottom - l - h;
+		Constraints newconstraints = new Constraints(oldconstraints
+				.getHorizontal(), new Bilateral(l, t, 10, h));
 		container.remove(child);
 		container.add(child, newconstraints);
 		container.doLayout();

@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.awt.Component;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
 
@@ -34,7 +35,8 @@ public class VerticalBilateralToTrailing extends AbstractOperation {
 		Bilateral bilateral = (Bilateral) oldconstraints.getVertical();
 		int l = bilateral.getLeading();
 		int h = child.getHeight();
-		int t = container.getHeight() - l - h;
+		Insets insets = container.getInsets();
+		int t = container.getHeight() - insets.top - insets.bottom - l - h;
 		Constraints newconstraints = new Constraints(oldconstraints.getHorizontal(), new Trailing(t, 10, l));
 		container.remove(child);
 		container.add(child, newconstraints);

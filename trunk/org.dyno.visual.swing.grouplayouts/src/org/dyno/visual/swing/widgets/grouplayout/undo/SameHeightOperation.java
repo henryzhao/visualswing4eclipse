@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -35,6 +36,8 @@ public class SameHeightOperation extends AlignmentOperation {
 		Constraints postConstraints = layout.getConstraints(postChild);
 		Alignment postAlignment = postConstraints.getVertical();
 		compcons = new ArrayList<CompCons>();
+		Insets insets = container.getInsets();
+		int innerHeight = container.getHeight() - insets.top - insets.bottom;
 		if (postAlignment instanceof Leading) {
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
@@ -52,7 +55,7 @@ public class SameHeightOperation extends AlignmentOperation {
 				} else if (alignment instanceof Bilateral) {
 					Bilateral bilateral = (Bilateral) alignment;
 					int lead = bilateral.getLeading();
-					Leading leading = new Leading(lead, postSize, 10, container.getHeight() - postSize - lead);
+					Leading leading = new Leading(lead, postSize, 10, innerHeight - postSize - lead);
 					constraints = new Constraints(constraints.getHorizontal(), leading);
 				} else if (alignment instanceof Trailing) {
 					Trailing trailing = (Trailing) alignment.clone();
@@ -78,7 +81,7 @@ public class SameHeightOperation extends AlignmentOperation {
 				} else if (alignment instanceof Bilateral) {
 					Bilateral bilateral = (Bilateral) alignment;
 					int trail = bilateral.getTrailing();
-					Trailing leading = new Trailing(trail, postSize, 10, container.getHeight() - postSize - trail);
+					Trailing leading = new Trailing(trail, postSize, 10, innerHeight - postSize - trail);
 					constraints = new Constraints(constraints.getHorizontal(), leading);
 				} else if (alignment instanceof Trailing) {
 					Trailing trailing = (Trailing) alignment.clone();
@@ -101,7 +104,7 @@ public class SameHeightOperation extends AlignmentOperation {
 					Leading leading = (Leading) alignment;
 					Bilateral bilateral = (Bilateral) postAlignment.clone();
 					bilateral.setLeading(leading.getLeading());
-					bilateral.setTrailing(container.getHeight()-leading.getLeading()-child.getHeight());
+					bilateral.setTrailing(innerHeight-leading.getLeading()-child.getHeight());
 					constraints = new Constraints(constraints.getHorizontal(), bilateral);
 				} else if (alignment instanceof Bilateral) {
 					Bilateral leading = (Bilateral) alignment;
@@ -113,7 +116,7 @@ public class SameHeightOperation extends AlignmentOperation {
 					Trailing trailing = (Trailing) alignment;
 					Bilateral bilateral = (Bilateral) postAlignment.clone();
 					bilateral.setTrailing(trailing.getTrailing());
-					bilateral.setLeading(container.getHeight()-trailing.getTrailing()-child.getHeight());
+					bilateral.setLeading(innerHeight-trailing.getTrailing()-child.getHeight());
 					constraints = new Constraints(constraints.getHorizontal(), bilateral);
 				}
 				layout.setConstraints(child, constraints);

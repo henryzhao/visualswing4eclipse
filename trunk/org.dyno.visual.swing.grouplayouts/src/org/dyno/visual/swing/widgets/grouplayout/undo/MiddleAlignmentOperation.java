@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets.grouplayout.undo;
 
 import java.awt.Component;
+import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -34,8 +35,11 @@ public class MiddleAlignmentOperation extends AlignmentOperation {
 		Constraints postConstraints = layout.getConstraints(postChild);
 		Alignment postAlignment = postConstraints.getVertical();
 		compcons = new ArrayList<CompCons>();
+		Insets insets = container.getInsets();
+		int innerHeight = container.getHeight() - insets.top - insets.bottom;
 		if (postAlignment instanceof Leading) {
-			int postCenter = postChild.getY() + postChild.getHeight() / 2;
+			Leading postLeading = (Leading)postAlignment;
+			int postCenter = postLeading.getLeading() + postChild.getHeight() / 2;
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
 				Component child = adapter.getWidget();
@@ -45,13 +49,14 @@ public class MiddleAlignmentOperation extends AlignmentOperation {
 				cons.constraints = constraints;
 				compcons.add(cons);
 				int l = postCenter - child.getHeight() / 2;
-				int t = container.getHeight() - postCenter - child.getHeight() / 2;
+				int t = innerHeight - postCenter - child.getHeight() / 2;
 				Leading leading = new Leading(l, child.getHeight(), 10, t);
 				constraints = new Constraints(constraints.getHorizontal(), leading);
 				layout.setConstraints(child, constraints);
 			}
 		} else if (postAlignment instanceof Bilateral) {
-			int postCenter = postChild.getY() + postChild.getHeight() / 2;
+			Bilateral postBilateral = (Bilateral)postAlignment;
+			int postCenter = postBilateral.getLeading() + postChild.getHeight() / 2;
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
 				Component child = adapter.getWidget();
@@ -61,13 +66,13 @@ public class MiddleAlignmentOperation extends AlignmentOperation {
 				cons.constraints = constraints;
 				compcons.add(cons);
 				int l = postCenter - child.getHeight() / 2;
-				int t = container.getHeight() - postCenter - child.getHeight()/2;
+				int t = innerHeight - postCenter - child.getHeight()/2;
 				Bilateral bilateral = new Bilateral(l, t, 10);
 				constraints = new Constraints(constraints.getHorizontal(), bilateral);
 				layout.setConstraints(child, constraints);
 			}
 		} else if (postAlignment instanceof Trailing) {
-			int postCenter = postChild.getY() + postChild.getHeight()/2;
+			int postCenter = postChild.getY() + postChild.getHeight()/2 - insets.top;
 			for (int i = 1; i < widgets.size(); i++) {
 				WidgetAdapter adapter = widgets.get(i);
 				Component child = adapter.getWidget();
@@ -77,7 +82,7 @@ public class MiddleAlignmentOperation extends AlignmentOperation {
 				cons.constraints = constraints;
 				compcons.add(cons);
 				int l = postCenter - child.getHeight()/2;
-				int t = container.getHeight() - postCenter - child.getHeight()/2;
+				int t = innerHeight - postCenter - child.getHeight()/2;
 				Trailing trailing= new Trailing(t, child.getHeight(), 10, l);
 				constraints = new Constraints(constraints.getHorizontal(), trailing);
 				layout.setConstraints(child, constraints);
