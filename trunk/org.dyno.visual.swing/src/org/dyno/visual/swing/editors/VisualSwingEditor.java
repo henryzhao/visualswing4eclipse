@@ -35,6 +35,7 @@ import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.swt_awt.EmbeddedSwingComposite;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -75,7 +76,9 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class VisualSwingEditor extends AbstractDesignerEditor implements Listener, IResourceChangeListener, ActionListener, ISelectionProvider, IPartListener {
+public class VisualSwingEditor extends AbstractDesignerEditor implements
+		Listener, IResourceChangeListener, ActionListener, ISelectionProvider,
+		IPartListener {
 	private List<ISelectionChangedListener> listeners;
 	private EmbeddedSwingComposite embedded;
 	private VisualDesigner designer;
@@ -97,7 +100,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	@Override
-	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+	public void init(IEditorSite site, IEditorInput input)
+			throws PartInitException {
 		super.init(site, input);
 		site.setSelectionProvider(this);
 		site.getWorkbenchWindow().getPartService().addPartListener(this);
@@ -115,7 +119,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		} else if (adapter == IPropertySheetPage.class) {
 			if (sheetPage == null) {
 				sheetPage = new WidgetPropertyPage();
-				sheetPage.setPropertySourceProvider(new WidgetAdapterContentProvider());
+				sheetPage
+						.setPropertySourceProvider(new WidgetAdapterContentProvider());
 			}
 			return sheetPage;
 		} else
@@ -124,7 +129,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 
 	@Override
 	public boolean isDirty() {
-		return designer != null && (designer.isLnfChanged() || designer.isDirty());
+		return designer != null
+				&& (designer.isLnfChanged() || designer.isDirty());
 	}
 
 	@Override
@@ -198,23 +204,30 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	@Override
 	public void createPartControl(Composite parent) {
 		if (!isSwingComponent()) {
-			switchToJavaEditor(getDisplay());
+			switchToJavaEditor();
 		} else {
 			parent.setLayout(new FillLayout());
-			scrollPane = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+			scrollPane = new ScrolledComposite(parent, SWT.H_SCROLL
+					| SWT.V_SCROLL);
 			scrollPane.setExpandHorizontal(true);
 			scrollPane.setExpandVertical(true);
 			Composite designerContainer = new Composite(scrollPane, SWT.NONE);
 			scrollPane.setContent(designerContainer);
-			designerContainer.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			designerContainer.setBackground(parent.getDisplay().getSystemColor(
+					SWT.COLOR_WHITE));
 			designerContainer.setLayout(new FillLayout());
 			embedded = new EmbeddedVisualDesigner(designerContainer);
 			embedded.populate();
 			if (!createDesignerUI()) {
-				switchToJavaEditor(getDisplay());
+				switchToJavaEditor();
 			} else {
 				openRelatedView();
-				ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
+				ResourcesPlugin.getWorkspace().addResourceChangeListener(
+						this,
+						IResourceChangeEvent.POST_CHANGE
+								| IResourceChangeEvent.POST_BUILD
+								| IResourceChangeEvent.PRE_CLOSE
+								| IResourceChangeEvent.PRE_DELETE);
 				validateContent();
 			}
 		}
@@ -240,7 +253,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory == null)
 			return false;
-		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
+				.getFile());
 		hostProject = unit.getJavaProject();
 		ISourceParser sourceParser = factory.newParser();
 		sourceParser.setSource(unit);
@@ -265,7 +279,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory != null) {
 			try {
-				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
+						.getFile());
 				hostProject = unit.getJavaProject();
 				WorkingCopyOwner owner = new WorkingCopyOwner() {
 				};
@@ -275,7 +290,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 				sourceParser.setLnfChanged(designer.isLnfChanged());
 				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
 				sourceParser.setImportWrite(imports);
-				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
+				WidgetAdapter rootAdapter = WidgetAdapter
+						.getWidgetAdapter(designer.getRoot());
 				sourceParser.setRootAdapter(rootAdapter);
 				boolean success = sourceParser.genCode(monitor);
 				if (success) {
@@ -309,7 +325,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 		}
 
 		@Override
-		protected JComponent createSwingComponent() {			
+		protected JComponent createSwingComponent() {
 			designer = new VisualDesigner(VisualSwingEditor.this, this);
 			JPanel backgroundPanel = new JPanel();
 			backgroundPanel.setOpaque(true);
@@ -347,7 +363,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager
+						.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
@@ -360,7 +377,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	public void setLnfClassname(String lnfClassname) {
-		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
+		ILookAndFeelAdapter adapter = ExtensionRegistry
+				.getLnfAdapter(lnfClassname);
 		if (adapter != null) {
 			try {
 				UIManager.setLookAndFeel(adapter.getLookAndFeelInstance());
@@ -379,25 +397,51 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		switch (event.getType()) {
+		case IResourceChangeEvent.POST_BUILD:
 		case IResourceChangeEvent.POST_CHANGE:
 			if (!isGeneratingCode) {
 				IResourceDelta delta = event.getDelta();
 				checkChange(delta);
 			}
 			break;
+		case IResourceChangeEvent.PRE_CLOSE:
+		case IResourceChangeEvent.PRE_DELETE:
+			if (!isGeneratingCode) {
+				IResource resource=event.getResource();
+				if(hostProject.getProject()==resource){
+					closeRelatedView();
+					closeMe();
+				}
+			}
+			break;
 		}
 	}
 
 	private void checkChange(IResourceDelta delta) {
-		IPath deltaPath = delta.getFullPath();
-		IPath path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath();
-		if (deltaPath.equals(path)) {
-			delayedRefresh(100);
-		} else {
-			IResourceDelta[] children = delta.getAffectedChildren(IResourceDelta.CHANGED);
-			if (children != null && children.length > 0) {
-				for (IResourceDelta res : children) {
-					checkChange(res);
+		switch (delta.getKind()) {
+		case IResourceDelta.REMOVED:
+			IPath deltaPath = delta.getFullPath();
+			IPath path = ((IFileEditorInput) getEditorInput()).getFile()
+					.getFullPath();
+			if (deltaPath.equals(path)) {
+				closeRelatedView();
+				closeMe();
+			}
+			break;
+		default:
+			deltaPath = delta.getFullPath();
+			path = ((IFileEditorInput) getEditorInput()).getFile()
+					.getFullPath();
+			if (deltaPath.equals(path)) {
+				delayedRefresh(100);
+			} else {
+				IResourceDelta[] children = delta
+						.getAffectedChildren(IResourceDelta.CHANGED
+								| IResourceDelta.REMOVED);
+				if (children != null && children.length > 0) {
+					for (IResourceDelta res : children) {
+						checkChange(res);
+					}
 				}
 			}
 		}
@@ -428,7 +472,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements Listene
 	}
 
 	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(
+			ISelectionChangedListener listener) {
 		if (listeners.contains(listener))
 			listeners.remove(listener);
 	}
