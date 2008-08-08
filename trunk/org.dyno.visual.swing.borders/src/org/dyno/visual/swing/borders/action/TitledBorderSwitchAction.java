@@ -11,7 +11,6 @@ package org.dyno.visual.swing.borders.action;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 
 import org.dyno.visual.swing.base.IFactory;
@@ -21,7 +20,7 @@ public class TitledBorderSwitchAction extends BorderSwitchAction {
 		super(w, TitledBorder.class, new IFactory(){
 			@Override
 			public Object newInstance(Object bean) {
-				return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
+				return BorderFactory.createTitledBorder("Border Title");
 			}});
 	}
 }
