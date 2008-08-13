@@ -191,7 +191,7 @@
          		groupId="component"         		
          		icon="/icons/button_16.png">
 		        <property id="defaultCapable" name="defaultCapable" gencode="false"/>
-		        <property id="border" name="border" gencode="false"/>
+		        <property id="border" name="border"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JToggleButtonAdapter"
