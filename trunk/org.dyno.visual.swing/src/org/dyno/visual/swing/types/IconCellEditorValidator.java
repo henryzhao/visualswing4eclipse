@@ -60,7 +60,7 @@ public class IconCellEditorValidator implements ICellEditorValidator {
 						resource = project.findMember(new Path(src));
 						if (resource != null) {
 							String ext = resource.getFileExtension();
-							if (ext.equals("gif") || ext.equals("png") || ext.equals("jpg"))
+							if (ext!=null&&(ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg")))
 								return null;
 							else
 								return "This is not an image file:" + value;
