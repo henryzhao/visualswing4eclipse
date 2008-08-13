@@ -1128,6 +1128,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
+			if(property.getDisplayName().equals("model")){
+				System.out.println("hello");
+				
+			}
 			if (property.isPropertySet(getLnfClassname(), getWidget()) && (property.isGencode() || property.isEdited(this))) {
 				String setCode = property.getSetCode(getWidget(), imports);
 				if (setCode != null)

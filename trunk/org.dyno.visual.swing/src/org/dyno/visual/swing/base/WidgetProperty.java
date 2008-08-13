@@ -621,14 +621,14 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			if (adapter != null) {
 				StringBuilder builder = new StringBuilder();
 				Object value = _getPropertyValue(bean);
-				ICodeGen gen = editorFactory;
-				if (gen == null) {
-					Class typeClass = propertyDescriptor.getPropertyType();
-					TypeAdapter typeAdapter = ExtensionRegistry
-							.getTypeAdapter(typeClass);
-					if (typeAdapter != null) {
-						gen = typeAdapter.getEndec();
-					}
+				Class typeClass = propertyDescriptor.getPropertyType();
+				TypeAdapter typeAdapter = ExtensionRegistry
+						.getTypeAdapter(typeClass);
+				ICodeGen gen;
+				if (typeAdapter != null) {
+					gen = typeAdapter.getEndec();
+				} else {
+					gen = editorFactory;
 				}
 				if (gen != null && value != null) {
 					String initCode = gen.getInitJavaCode(value, imports);
