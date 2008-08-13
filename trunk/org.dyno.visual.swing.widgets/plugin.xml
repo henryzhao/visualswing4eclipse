@@ -190,7 +190,7 @@
          		widgetName="JButton"
          		groupId="component"         		
          		icon="/icons/button_16.png">
-		        <property id="defaultCapable" name="defaultCapable" gencode="false"/>
+		        <property id="defaultCapable" name="defaultCapable"/>
 		        <property id="border" name="border"/>
          </widget>
          <widget 
