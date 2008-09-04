@@ -1,5 +1,5 @@
 #labels Featured,Phase-Design,Phase-Implementation
-= Introduce to SwingDesigner =
+=SwingDesigner for Eclipse =
 
  ==简介:==
 
@@ -109,15 +109,19 @@ http://gml520.javaeye.com/upload/picture/pic/21293/340905b5-2567-3d1a-9b88-784d9
 http://rehte.javaeye.com/upload/picture/pic/16789/7a5fe012-7311-3053-b09b-2798312d597d.png
 
 *这儿是拖拽组件时显示布局提示，和netbeans的界面布局设计类似：*
+
 http://rehte.javaeye.com/upload/picture/pic/16781/e1840351-46d6-3e2f-87e6-6639593dfcaa.png
 
 *这是生成的源代码，可以直接修改源代码，保存后，会自动同步的到设计界面上去：*
+
 http://rehte.javaeye.com/upload/picture/pic/16783/69be9aa8-cee4-3a94-ab1f-877a961d5f6d.png 
 
 *这是一个表格的设计器，你可以直接在界面上拖拽，添加删除编辑表格： *
+
 http://rehte.javaeye.com/upload/picture/pic/16785/5322d0bc-2bdd-3803-aeb6-645bf26ef9fe.png
 
 *这是一个树的设计器，你可以直观的添加删除编辑树的节点：*
+
 http://rehte.javaeye.com/upload/picture/pic/16787/06d76029-433f-34eb-8d20-91a01b75f0b3.png
 
 *多LookAndFeel同时设计的抓图，含有NimbusLookAndFeel
