@@ -95,8 +95,8 @@ Msn : rehte @ hotmail . com
 http://gml520.javaeye.com/upload/picture/pic/21295/a4bc471a-ffd1-3758-9e68-5b8bd7fa7cda.jpg
 
 *2、安装插件以后，在New Class Wizard中可以发现一个Visual Swing Class，选择该项以生成可视化JPanel，目前只支持JPanel，以后可以很容易扩展,会有更多的支持。*
+http://lh3.ggpht.com/guanminglin/SNOYuvXxhnI/AAAAAAAABis/3QCrqd03J_Y/s400/ecx.jpg
 
-http://rehte.javaeye.com/upload/picture/pic/16791/ef7bbe3e-6bed-33b3-98a5-322b180d0aff.png
 
 *初始化界面 *
 
