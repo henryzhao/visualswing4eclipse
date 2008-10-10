@@ -50,7 +50,9 @@ public class GlassPlane extends JComponent implements MouseListener {
 	public CompositeAdapter getFocusedComposite() {
 		return focusedComposite;
 	}
-
+	boolean stopEditing(){
+		return target.stopEditing();
+	}
 	boolean editComponent(Component hovered) {
 		return target.editComponent(hovered);
 	}

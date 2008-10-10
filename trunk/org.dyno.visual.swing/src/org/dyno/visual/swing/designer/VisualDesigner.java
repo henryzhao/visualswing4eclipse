@@ -23,6 +23,13 @@ import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
+import javax.swing.MenuElement;
+import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -70,6 +77,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private Rectangle rootBounds;
 	private GlassPlane glass;
 	private JComponent container;
+	private JComponent popupLayer;
 	private Border designBorder;
 	private Component root;
 	private List<WidgetAdapter> clipboard;
@@ -93,6 +101,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 		glass = new GlassPlane(this);
 		add(glass);
+		popupLayer = new JLayeredPane();
+		add(popupLayer);
 		glass.addKeyListener(this);
 
 		container = new JComponent() {
@@ -100,6 +110,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		add(container);
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
+		putClientProperty("popup.layer", popupLayer);
 	}
 
 	public IUndoContext getUndoContext() {
@@ -252,6 +263,35 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public Component componentAt(Point p, int offset) {
 		if (root != null) {
+			MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
+			if (menu_selection != null && menu_selection.length > 0) {
+				for (int i = menu_selection.length - 1; i >= 0; i--) {
+					if (menu_selection[i] instanceof JPopupMenu){
+						JPopupMenu jpm = (JPopupMenu)menu_selection[i];
+						if(!jpm.isShowing())
+							continue;
+						Rectangle b=jpm.getBounds();						
+						Point jpml=jpm.getLocationOnScreen();						
+						Point vdl = getLocationOnScreen();
+						b.x = jpml.x-vdl.x;
+						b.y = jpml.y-vdl.y;
+						if(b.contains(p)){
+							MenuElement[] sub = jpm.getSubElements();
+							for(MenuElement submenu:sub){
+								if(submenu instanceof JMenuItem){
+									JMenuItem submenuItem = (JMenuItem)submenu;
+									Rectangle sb=submenuItem.getBounds();
+									sb.x+=b.x;
+									sb.y+=b.y;
+									if(sb.contains(p)){
+										return submenuItem;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 			Point mp = SwingUtilities.convertPoint(this, p, root);
 			if (isPointInRoot(mp, offset))
 				return root;
@@ -283,7 +323,19 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			int count = compAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = compAdapter.getChild(i);
-				if (child.isVisible()) {
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				if (child.isVisible() && childAdapter != null && childAdapter.isSelected()) {
+					Point location = SwingUtilities.convertPoint(comp, p, child);
+					Component jcomp = _getComponentAt(child, location, ad);
+					if (jcomp != null)
+						return jcomp;
+				}
+			}
+
+			for (int i = 0; i < count; i++) {
+				Component child = compAdapter.getChild(i);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				if (child.isVisible() && childAdapter != null && !childAdapter.isSelected()) {
 					Point location = SwingUtilities.convertPoint(comp, p, child);
 					Component jcomp = _getComponentAt(child, location, ad);
 					if (jcomp != null)
@@ -319,8 +371,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (adapter != null) {
 			root = adapter.getRootPane();
 			Container parent = root.getParent();
-			if(parent!=null)
-				parent.remove(root);			
+			if (parent != null)
+				parent.remove(root);
 			undoContext = new ObjectUndoContext(root);
 			IEditorSite site = editor.getEditorSite();
 			undoAction = new UndoActionHandler(site, getUndoContext());
@@ -488,7 +540,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			publishSelection();
 		} else if (id.equals(EditorAction.DUPLICATE)) {
 			List<Component> copyedList = new ArrayList<Component>();
-			copyedList.addAll(selection);			
+			copyedList.addAll(selection);
 			IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 			IUndoableOperation operation = new DuplicateOperation(copyedList);
 			operation.addContext(getUndoContext());
@@ -518,10 +570,22 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			publishSelection();
 		} else if (id.equals(EditorAction.PREVIEW)) {
 			Component contentComponent = rootAdapter.cloneWidget();
-			contentComponent.setPreferredSize(rootAdapter.getComponent().getSize());
 			JFrame frame = new JFrame();
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			frame.add(contentComponent, BorderLayout.CENTER);
+			if (contentComponent instanceof JRootPane) {
+				JRootPane jrp = (JRootPane) contentComponent;
+				JMenuBar jmb = jrp.getJMenuBar();
+				if (jmb != null) {
+					frame.setJMenuBar(jmb);
+				}
+				Container contentPane = jrp.getContentPane();
+				Dimension size = rootAdapter.getComponent().getSize();
+				contentPane.setPreferredSize(size);
+				frame.setContentPane(contentPane);
+			} else {
+				contentComponent.setPreferredSize(rootAdapter.getComponent().getSize());
+				frame.add(contentComponent, BorderLayout.CENTER);
+			}
 			frame.pack();
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
@@ -552,6 +616,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			}
 			int w = parent.getWidth();
 			int h = parent.getHeight();
+			popupLayer.setBounds(0, 0, w, h);
 			glass.setBounds(0, 0, w, h);
 		}
 
@@ -564,7 +629,19 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			int h = root == null ? rootBounds.height : root.getHeight();
 			w += 2 * rootBounds.x;
 			h += 2 * rootBounds.y;
-			return new Dimension(w, h);
+			Dimension prefSize = new Dimension(0, 0);
+			int count = popupLayer.getComponentCount();
+			for (int i = 0; i < count; i++) {
+				Component comp = popupLayer.getComponent(i);
+				if (comp.isVisible()) {
+					Rectangle bounds = comp.getBounds();
+					if (bounds.x + bounds.width > prefSize.width)
+						prefSize.width = bounds.x + bounds.width;
+					if (bounds.y + bounds.height > prefSize.height)
+						prefSize.height = bounds.y + bounds.height;
+				}
+			}
+			return new Dimension(prefSize.width > w ? prefSize.width : w, prefSize.height > h ? prefSize.height : h);
 		}
 
 		public void removeLayoutComponent(Component comp) {

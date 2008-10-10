@@ -59,8 +59,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-			if (adapter.isDirty())
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);			
+			if (adapter!=null&&adapter.isDirty())
 				return true;
 		}
 		return false;

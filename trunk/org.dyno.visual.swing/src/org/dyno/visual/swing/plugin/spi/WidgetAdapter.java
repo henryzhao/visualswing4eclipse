@@ -16,6 +16,7 @@ import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.Introspector;
@@ -29,6 +30,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
@@ -110,7 +112,11 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 			}
 		}
 	}
-
+	public void validateContent(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			designer.validateContent();
+	}
 	public IUndoContext getUndoContext() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null)
@@ -189,10 +195,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		if (widget instanceof JComponent) {
 			((JComponent) widget).putClientProperty(ADAPTER_PROPERTY, this);
 		} else if (widget instanceof RootPaneContainer) {
-			Container content = ((RootPaneContainer) widget).getContentPane();
-			if (content instanceof JComponent) {
-				((JComponent) content).putClientProperty(ADAPTER_PROPERTY, this);
-			}
+			JRootPane jrootPane = ((RootPaneContainer) widget).getRootPane();
+			jrootPane.putClientProperty(ADAPTER_PROPERTY, this);
 		}
 	}
 
@@ -215,7 +219,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		attach();
 		this.dirty = false;
 	}
-	
+
 	public void detachWidget() {
 		if (this.widget != null) {
 			attach();
@@ -428,7 +432,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 	public VisualDesigner getDesigner() {
 		WidgetAdapter a = getRootAdapter();
 		if (a != null) {
-			return (VisualDesigner) a.getWidget().getParent();
+			return (VisualDesigner) a.getRootPane().getParent();
 		} else
 			return null;
 	}
@@ -458,7 +462,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		if (comp instanceof JComponent)
 			return (WidgetAdapter) ((JComponent) comp).getClientProperty(ADAPTER_PROPERTY);
 		else if (comp instanceof RootPaneContainer) {
-			Container content = ((RootPaneContainer) comp).getContentPane();
+			Container content = ((RootPaneContainer) comp).getRootPane();
 			if (content instanceof JComponent) {
 				return (WidgetAdapter) ((JComponent) content).getClientProperty(ADAPTER_PROPERTY);
 			}
@@ -660,13 +664,17 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 
 	public boolean isMoveable() {
 		CompositeAdapter parentAdapter = (CompositeAdapter) getParentAdapter();
-		Component comp = parentAdapter.getWidget();
-		if (comp instanceof Container) {
-			LayoutManager layoutMgr = ((Container) comp).getLayout();
-			if (layoutMgr == null)
-				return true;
+		if (parentAdapter != null) {
+			Component comp = parentAdapter.getWidget();
+			if (comp instanceof Container) {
+				LayoutManager layoutMgr = ((Container) comp).getLayout();
+				if (layoutMgr == null)
+					return true;
+			}
+			return parentAdapter.isChildMoveable();
+		} else {
+			return false;
 		}
-		return parentAdapter.isChildMoveable();
 	}
 
 	protected CompositeAdapter getCurrentFocused() {
@@ -771,7 +779,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		return 2 * descent;
 	}
 
-	public boolean widgetPressed(int x, int y) {
+	public boolean widgetPressed(MouseEvent e) {
 		return true;
 	}
 
@@ -1063,6 +1071,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		}
 		return success;
 	}
+
 	private boolean createRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		String initMethodName = "initComponent";
@@ -1128,10 +1137,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable, 
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if(property.getDisplayName().equals("model")){
-				System.out.println("hello");
-				
-			}
 			if (property.isPropertySet(getLnfClassname(), getWidget()) && (property.isGencode() || property.isEdited(this))) {
 				String setCode = property.getSetCode(getWidget(), imports);
 				if (setCode != null)

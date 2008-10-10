@@ -78,6 +78,11 @@
 	           visible="false"
                id="org.dyno.visual.swing.editors.PaletteView">
          </view>
+         <view  ratio="0.5"
+         		relationship="bottom"
+         		relative="org.eclipse.jdt.ui.PackageExplorer"
+         		id="org.eclipse.ui.views.PropertySheet"
+         		visible="false" />
       </perspectiveExtension>
    </extension>
    <extension

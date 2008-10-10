@@ -96,7 +96,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		super();
 		actions = new HashMap<String, EditorAction>();
 		actionList = new ArrayList<EditorAction>();
-		listeners = new ArrayList<ISelectionChangedListener>();
+		listeners = new ArrayList<ISelectionChangedListener>();		
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (designer != null)
 			designer.setFocus();
 		WhiteBoard.setCurrentProject(hostProject);
-		WhiteBoard.setEditorListener(this);
+		WhiteBoard.setEditorListener(this);		
 	}
 
 	public void changeToLnf(String className) {
