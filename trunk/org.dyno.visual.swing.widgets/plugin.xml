@@ -589,7 +589,75 @@
                widgetName="JApplet">
                <property id="visible" name="visible" gencode="false"/>
          </widget>
-         
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JMenuBarAdapter"
+               groupId="menu"
+               icon="icons/menu_bar_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JMenuBar"
+               widgetName="JMenuBar">
+            <property
+                  dislayName="borderPainted"
+                  editable="true"
+                  gencode="true"
+                  id="borderPainted"
+                  name="borderPainted">
+            </property>
+            <property
+                  dislayName="margin"
+                  editable="true"
+                  gencode="true"
+                  id="margin"
+                  name="margin">
+            </property>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JMenuAdapter"
+               groupId="menu"
+               icon="icons/menu_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JMenu"
+               widgetName="JMenu">
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JMenuItemAdapter"
+               groupId="menu"
+               icon="icons/menu_item_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JMenuItem"
+               widgetName="JMenuItem">
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JCheckBoxMenuItemAdapter"
+               groupId="menu"
+               icon="icons/checkbox_menu_item_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JCheckBoxMenuItem"
+               widgetName="JCheckBoxMenuItem">
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JRadioButtonMenuItemAdapter"
+               groupId="menu"
+               icon="icons/radio_button_menu_item_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JRadioButtonMenuItem"
+               widgetName="JRadioButtonMenuItem">
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JPopupMenuAdapter"
+               groupId="menu"
+               icon="icons/popup_menu_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JPopupMenu"
+               widgetName="JPopupMenu">
+         </widget>
+                  
          <!--
          <widget 
          		class="org.dyno.visual.swing.widgets.JLayeredPaneAdapter"
@@ -604,8 +672,16 @@
          point="org.dyno.visual.swing.widgetGroup">         
          <group
                displayName="Container"
-               id="container"/>
-         <group id="component" displayName="Component"/>
+               id="container"
+               expanded="false"/>
+         <group 
+         	   id="component" 
+         	   displayName="Component"/>
+		 <group
+               displayName="Menus"
+               expanded="false"
+               id="menu">
+         </group>
    </extension>     
    <extension
          point="org.dyno.visual.swing.propertyCategory">

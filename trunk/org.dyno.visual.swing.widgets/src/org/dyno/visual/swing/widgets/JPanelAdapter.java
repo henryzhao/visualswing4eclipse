@@ -60,14 +60,33 @@ import org.eclipse.ui.PlatformUI;
 public class JPanelAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
 	private boolean intermediate = false;
+	private WidgetAdapter delegate;
 
 	public JPanelAdapter() {
 		super("jPanel" + (VAR_INDEX++));
 	}
 
+	void setDelegate(WidgetAdapter delegate) {
+		this.delegate = delegate;
+	}
+
 	void setWidgetWithoutAttach(Component widget) {
 		this.widget = widget;
 		this.dirty = false;
+	}
+
+	@Override
+	public Component getRootPane() {
+		if(delegate!=null)
+			return delegate.getRootPane();
+		return super.getRootPane();
+	}
+
+	@Override
+	public WidgetAdapter getDropWidget() {
+		if (delegate != null)
+			return delegate.getDropWidget();
+		return super.getDropWidget();
 	}
 
 	public WidgetAdapter getRootAdapter() {
@@ -83,7 +102,8 @@ public class JPanelAdapter extends CompositeAdapter {
 		if (isInternalFrameContentPane()) {
 			JInternalFrame jif = getTopFrame();
 			return WidgetAdapter.getWidgetAdapter(jif).isRoot();
-		}
+		} else if (delegate != null)
+			return delegate.isRoot();
 		return super.isRoot();
 	}
 

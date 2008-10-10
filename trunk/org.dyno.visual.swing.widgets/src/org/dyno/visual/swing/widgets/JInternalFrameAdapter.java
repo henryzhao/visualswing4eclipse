@@ -17,6 +17,7 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
@@ -155,7 +156,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public boolean widgetPressed(int x, int y) {
+	public boolean widgetPressed(MouseEvent e) {
 		JInternalFrame jif = (JInternalFrame) getWidget();
 		jif.toFront();
 		return true;
