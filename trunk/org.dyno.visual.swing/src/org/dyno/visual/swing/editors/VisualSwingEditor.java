@@ -532,14 +532,29 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 
 	@Override
 	public void partActivated(IWorkbenchPart part) {
-		if (part == this)
-			changeToLnf(getLnfClassname());
+		if (part == this){
+			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
+		}
 	}
-
+	private static final int DELAYED_TIME=100;
+	private class ChangeLnfAction implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			changeToLnf(getLnfClassname());
+			if(designer!=null)
+				designer.clearCapture();
+		}
+	}
+	private void delaySwingExec(int millies, ActionListener action){
+		Timer timer = new Timer(millies, action);
+		timer.setRepeats(false);
+		timer.start();
+	}
 	@Override
 	public void partBroughtToTop(IWorkbenchPart part) {
-		if (part == this)
-			changeToLnf(getLnfClassname());
+		if (part == this){
+			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
+		}
 	}
 
 	@Override
@@ -548,11 +563,16 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 
 	@Override
 	public void partDeactivated(IWorkbenchPart part) {
+		if(part == this){
+			if(designer!=null)
+				designer.capture();
+		}
 	}
 
 	@Override
 	public void partOpened(IWorkbenchPart part) {
-		if (part == this)
-			changeToLnf(getLnfClassname());
+		if (part == this){
+			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
+		}
 	}
 }

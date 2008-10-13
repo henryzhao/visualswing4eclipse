@@ -37,7 +37,8 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
  */
 public class GlassPaneUI extends ComponentUI {
 	static {
-		THUMB_NAIL = new ImageIcon(GlassPaneUI.class.getClassLoader().getResource("icons/resize_thumb.png"));
+		THUMB_NAIL = new ImageIcon(GlassPaneUI.class.getClassLoader()
+				.getResource("icons/resize_thumb.png"));
 	}
 	private VisualDesigner designer;
 
@@ -97,12 +98,15 @@ public class GlassPaneUI extends ComponentUI {
 
 	private static Icon THUMB_NAIL;
 
-	private void paintTranverse(Graphics g, JComponent c, Tranverse trans, int ad) {
+	private void paintTranverse(Graphics g, JComponent c, Tranverse trans,
+			int ad) {
 		Component root = designer.getRootWidget();
 		if (root != null) {
-			Rectangle rect = new Rectangle(0, 0, root.getWidth(), root.getHeight());
+			Rectangle rect = new Rectangle(0, 0, root.getWidth(), root
+					.getHeight());
 			rect = SwingUtilities.convertRectangle(root, rect, c);
-			Graphics clipg = g.create(rect.x - ad, rect.y - ad, rect.width + 2 * ad, rect.height + 2 * ad);
+			Graphics clipg = g.create(rect.x - ad, rect.y - ad, rect.width + 2
+					* ad, rect.height + 2 * ad);
 			tranverse(clipg, root, trans, ad);
 			clipg.dispose();
 			tranverseMenuElement(g, trans, ad);
@@ -111,12 +115,13 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void tranverseMenuElement(Graphics g, Tranverse trans, int ad) {
 		Point vdl = designer.getLocationOnScreen();
-		MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
+		MenuElement[] menu_selection = MenuSelectionManager.defaultManager()
+				.getSelectedPath();
 		if (menu_selection != null && menu_selection.length > 0) {
 			for (int i = menu_selection.length - 1; i >= 0; i--) {
 				if (menu_selection[i] instanceof JPopupMenu) {
 					JPopupMenu jpm = (JPopupMenu) menu_selection[i];
-					if(!jpm.isShowing())
+					if (!jpm.isShowing())
 						continue;
 					MenuElement[] sub = jpm.getSubElements();
 					Rectangle b = jpm.getBounds();
@@ -130,7 +135,8 @@ public class GlassPaneUI extends ComponentUI {
 								Rectangle sb = jmi.getBounds();
 								sb.x += b.x;
 								sb.y += b.y;
-								Graphics clipg = g.create(sb.x - ad, sb.y - ad, sb.width + 2 * ad, sb.height + 2 * ad);
+								Graphics clipg = g.create(sb.x - ad, sb.y - ad,
+										sb.width + 2 * ad, sb.height + 2 * ad);
 								trans.paint(clipg, jmi);
 								clipg.dispose();
 							}
@@ -150,9 +156,11 @@ public class GlassPaneUI extends ComponentUI {
 			int size = parent.getChildCount();
 			for (int i = 0; i < size; i++) {
 				Component child = parent.getChild(i);
-				Rectangle rect = new Rectangle(0, 0, child.getWidth(), child.getHeight());
+				Rectangle rect = new Rectangle(0, 0, child.getWidth(), child
+						.getHeight());
 				rect = SwingUtilities.convertRectangle(child, rect, jc);
-				Graphics clipg = g.create(rect.x, rect.y, rect.width + 2 * ad, rect.height + 2 * ad);
+				Graphics clipg = g.create(rect.x, rect.y, rect.width + 2 * ad,
+						rect.height + 2 * ad);
 				tranverse(clipg, (JComponent) child, trans, ad);
 				clipg.dispose();
 			}
@@ -164,7 +172,8 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	private boolean isDesigningWidget(Component widget) {
-		return WidgetAdapter.getWidgetAdapter(widget) != null;
+		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
+		return adapter != null && adapter.getName() != null;
 	}
 
 	private void paintSelection(Graphics g, JComponent c) {
