@@ -15,11 +15,18 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuItemAdapter extends WidgetAdapter {
+	private static int VAR_INDEX = 0;
+
+	public JMenuItemAdapter() {
+		super("jMenuItem" + (VAR_INDEX++));
+	}
 
 	@Override
 	protected Component createWidget() {
 		JMenuItem jmi = new JMenuItem();
 		jmi.setText("menu item");
+		jmi.setSize(jmi.getPreferredSize());
+		jmi.doLayout();
 		return jmi;
 	}
 
@@ -38,8 +45,10 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	}
 	@Override
 	protected Component newWidget() {
-		return new JMenuItem();
+		JMenuItem jmi = new JMenuItem();
+		return jmi;
 	}
+	
 	private LabelEditor editor;
 
 	@Override

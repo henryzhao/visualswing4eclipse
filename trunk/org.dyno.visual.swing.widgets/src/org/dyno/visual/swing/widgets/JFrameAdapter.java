@@ -1,23 +1,32 @@
 package org.dyno.visual.swing.widgets;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Stroke;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
+import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.designborder.FrameBorder;
@@ -46,7 +55,8 @@ public class JFrameAdapter extends CompositeAdapter {
 	}
 
 	private void createContentAdapter() {
-		contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
+		contentAdapter = (JPanelAdapter) ExtensionRegistry
+				.createWidgetAdapter(JPanel.class);
 		contentAdapter.setDelegate(this);
 		JFrame me = (JFrame) getWidget();
 		rootPane = (JComponent) me.getContentPane();
@@ -58,11 +68,14 @@ public class JFrameAdapter extends CompositeAdapter {
 		contentAdapter.doLayout();
 	}
 
-	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
+	protected void createPostInitCode(StringBuilder builder,
+			ImportRewrite imports) {
 		Dimension size = rootPane.getSize();
 		String cName = imports.addImport("java.awt.Dimension");
-		builder.append("getContentPane().setPreferredSize(new " + cName + "(" + rootPane.getWidth() + ", " + rootPane.getHeight() + "));\n");
-		builder.append("getContentPane().setSize(" + size.width + ", " + size.height + ");\n");
+		builder.append("getContentPane().setPreferredSize(new " + cName + "("
+				+ rootPane.getWidth() + ", " + rootPane.getHeight() + "));\n");
+		builder.append("getContentPane().setSize(" + size.width + ", "
+				+ size.height + ");\n");
 	}
 
 	@Override
@@ -271,7 +284,154 @@ public class JFrameAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragOver(Point p) {
-		return contentAdapter.dragOver(p);
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			setMascotLocation(p);
+			focusStatus = DROPPING_FORBIDDEN;
+			return true;
+		} else if (isDroppingMenuBar()) {
+			setMascotLocation(p);
+			focusStatus = DROPPING_MENUBAR;
+			return true;
+		} else
+			return contentAdapter.dragOver(p);
+	}
+
+	@Override
+	public boolean dragEnter(Point p) {
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			setMascotLocation(p);
+			focusStatus = DROPPING_FORBIDDEN;
+			return true;
+		} else if (isDroppingMenuBar()) {
+			setMascotLocation(p);
+			focusStatus = DROPPING_MENUBAR;
+			return true;
+		} else
+			return contentAdapter.dragEnter(p);
+	}
+
+	private int getJMenuBarHeight() {
+		JFrame jframe = (JFrame) getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		return jmb.getHeight();
+	}
+
+	private int focusStatus;
+	private static final int NOOP = 0;
+	private static final int DROPPING_MENUBAR = 1;
+	private static final int DROPPING_FORBIDDEN = 2;
+
+	private boolean isDroppingForbbiden() {
+		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
+	}
+
+	@Override
+	public boolean dragExit(Point p) {
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			setMascotLocation(p);
+			focusStatus = NOOP;
+			return true;
+		} else if (isDroppingMenuBar()) {
+			setMascotLocation(p);
+			focusStatus = NOOP;
+			return true;
+		} else
+			return contentAdapter.dragExit(p);
+	}
+
+	@Override
+	public boolean drop(Point p) {
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			setMascotLocation(p);
+			focusStatus = NOOP;
+			Toolkit.getDefaultToolkit().beep();
+			return true;
+		} else if (isDroppingMenuBar()) {
+			setMascotLocation(p);
+			WidgetAdapter target = getDropWidget();
+			JMenuBar jmb = (JMenuBar) target.getWidget();
+			JFrame jframe = (JFrame) getWidget();
+			jframe.setJMenuBar(jmb);
+			jframe.validate();
+			doLayout();
+			validateContent();
+			clearAllSelected();
+			target.setSelected(true);
+			target.setDirty(true);
+			addNotify();
+			repaintDesigner();
+			focusStatus = NOOP;
+			return true;
+		} else
+			return contentAdapter.drop(p);
+	}
+
+	private boolean isDroppingMenu() {
+		WidgetAdapter target = getDropWidget();
+		Component drop = target.getWidget();
+		return drop != null
+				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
+	}
+
+	private boolean isDroppingMenuBar() {
+		WidgetAdapter target = getDropWidget();
+		Component drop = target.getWidget();
+		return drop != null && drop instanceof JMenuBar;
+	}
+
+	private boolean hasMenuBar() {
+		JFrame jframe = (JFrame) getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		return jmb != null;
+	}
+
+	@Override
+	public void paintFocused(Graphics clipg) {
+		if (focusStatus == NOOP) {
+			JFrame jframe = (JFrame) getWidget();
+			JMenuBar jmb = jframe.getJMenuBar();
+			if (jmb != null) {
+				Rectangle bounds = rootPane.getBounds();
+				bounds.x = bounds.y = 0;
+				bounds = SwingUtilities.convertRectangle(rootPane, bounds,
+						jrootPane);
+				clipg = clipg.create(bounds.x, bounds.y, bounds.width,
+						bounds.height);
+			}
+			contentAdapter.paintFocused(clipg);
+			if (jmb != null) {
+				clipg.dispose();
+			}
+		} else if (focusStatus == DROPPING_FORBIDDEN) {
+			Rectangle bounds = rootPane.getBounds();
+			Graphics2D g2d = (Graphics2D) clipg;
+			g2d.setStroke(STROKE);
+			g2d.setColor(RED_COLOR);
+			g2d.drawRect(0, 0, bounds.width, 22);
+		} else if (focusStatus == DROPPING_MENUBAR) {
+			Graphics2D g2d = (Graphics2D) clipg;
+			g2d.setStroke(STROKE);
+			g2d.setColor(GREEN_COLOR);
+			Rectangle bounds = rootPane.getBounds();
+			g2d.drawRect(0, 0, bounds.width, 22);
+		}
+	}
+
+	protected static Color RED_COLOR = new Color(255, 164, 0);
+	protected static Color GREEN_COLOR = new Color(164, 255, 0);
+	protected static Stroke STROKE;
+
+	static {
+		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
 	}
 
 	public Point convertToGlobal(Point p) {
@@ -289,39 +449,8 @@ public class JFrameAdapter extends CompositeAdapter {
 		return contentAdapter.convertToLocal(p);
 	}
 
-	@Override
-	public boolean dragEnter(Point p) {
-		return contentAdapter.dragEnter(p);
-	}
-
 	public WidgetAdapter getRootAdapter() {
 		return this;
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		return contentAdapter.dragExit(p);
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		return contentAdapter.drop(p);
-	}
-
-	@Override
-	public void paintFocused(Graphics clipg) {
-		JFrame jframe = (JFrame) getWidget();
-		JMenuBar jmb = jframe.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds, jrootPane);
-			clipg = clipg.create(bounds.x, bounds.y, bounds.width, bounds.height);
-		}
-		contentAdapter.paintFocused(clipg);
-		if (jmb != null) {
-			clipg.dispose();
-		}
 	}
 
 	@Override
@@ -331,8 +460,10 @@ public class JFrameAdapter extends CompositeAdapter {
 		if (jmb != null) {
 			Rectangle bounds = rootPane.getBounds();
 			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds, jrootPane);
-			clipg = clipg.create(bounds.x, bounds.y, bounds.width, bounds.height);
+			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
+					jrootPane);
+			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
+					bounds.height);
 		}
 		contentAdapter.paintBaselineAnchor(clipg);
 		if (jmb != null) {
@@ -345,6 +476,15 @@ public class JFrameAdapter extends CompositeAdapter {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createInitCode(imports));
 		contentAdapter.createAddCode(imports, builder);
+		if(hasMenuBar()){
+			builder.append("setJMenuBar(");
+			JFrame jframe = (JFrame) getWidget();
+			JMenuBar jmb = jframe.getJMenuBar();
+			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
+			String getName=NamespaceManager.getInstance().getGetMethodName(jmbAdapter.getName());
+			builder.append(getName+"()");
+			builder.append(");\n");
+		}
 		return builder.toString();
 	}
 
@@ -389,7 +529,8 @@ public class JFrameAdapter extends CompositeAdapter {
 		return contentAdapter.isSelectionAlignResize(id);
 	}
 
-	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+	protected boolean createConstructor(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
 		IMethod cons = type.getMethod(type.getElementName(), new String[0]);
 		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
@@ -397,7 +538,8 @@ public class JFrameAdapter extends CompositeAdapter {
 			builder.append("initComponent();\n");
 			builder.append("}\n");
 			try {
-				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);
+				type.createMethod(JavaUtil.formatCode(builder.toString()),
+						null, false, null);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				return false;

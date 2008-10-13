@@ -1,11 +1,15 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Point;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JMenuBarAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
@@ -64,8 +68,19 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	}
 	
 	@Override
+	protected String createGetCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.createGetCode(imports));
+		
+		return builder.toString();
+	}
+	@Override
 	protected Component createWidget() {
 		JMenuBar jmb = new JMenuBar();
+		WidgetAdapter menuAdapter = ExtensionRegistry.createWidgetAdapter(JMenu.class);
+		JMenu jmenu=(JMenu)menuAdapter.getWidget();
+		jmenu.setText("File");
+		jmb.add(jmenu);
 		jmb.setSize(100, 25);
 		jmb.doLayout();
 		return jmb;
@@ -79,9 +94,45 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	@Override
 	public void addChildByConstraints(Component child, Object constraints) {
 	}
-
 	@Override
 	public Object getChildConstraints(Component child) {
 		return null;
+	}
+	@Override
+	public boolean dragEnter(Point p) {
+		super.setMascotLocation(p);
+		if(isDroppingMenu()){
+		}else{
+		}
+		return true;
+	}
+	@Override
+	public boolean dragExit(Point p) {
+		super.setMascotLocation(p);
+		if(isDroppingMenu()){
+		}else{
+		}
+		return true;
+	}
+	@Override
+	public boolean dragOver(Point p) {
+		super.setMascotLocation(p);
+		if(isDroppingMenu()){
+		}else{
+		}
+		return true;
+	}
+	@Override
+	public boolean drop(Point p) {
+		super.setMascotLocation(p);
+		if(isDroppingMenu()){
+		}else{
+		}
+		return true;
+	}
+	private boolean isDroppingMenu(){
+		WidgetAdapter target = super.getDropWidget();
+		Component drop = target.getWidget();
+		return drop instanceof JMenu;
 	}
 }

@@ -7,11 +7,17 @@ import javax.swing.JRadioButtonMenuItem;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
+	private static int VAR_INDEX = 0;
+	public JRadioButtonMenuItemAdapter(){
+		super("jRadioButtonMenuItem" + (VAR_INDEX++));
+	}
 
 	@Override
 	protected Component createWidget() {
 		JRadioButtonMenuItem jmi = new JRadioButtonMenuItem();
 		jmi.setText("radio button item");
+		jmi.setSize(jmi.getPreferredSize());
+		jmi.doLayout();
 		return jmi;
 	}
 

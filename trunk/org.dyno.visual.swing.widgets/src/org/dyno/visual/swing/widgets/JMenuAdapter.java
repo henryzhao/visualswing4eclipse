@@ -8,14 +8,21 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuAdapter extends CompositeAdapter {
+	private static int VAR_INDEX = 0;
+
+	public JMenuAdapter() {
+		super("jMenu" + (VAR_INDEX++));
+	}
 
 	@Override
 	public Component cloneWidget() {
@@ -140,7 +147,13 @@ public class JMenuAdapter extends CompositeAdapter {
 	@Override
 	protected Component createWidget() {
 		JMenu menu = new JMenu();
+		WidgetAdapter menuAdapter = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
+		JMenuItem jmenu=(JMenuItem)menuAdapter.getWidget();
+		jmenu.setText("menu item");
+		menu.add(jmenu);
 		menu.setText("menu");
+		menu.setSize(menu.getPreferredSize());
+		menu.doLayout();
 		return menu;
 	}
 

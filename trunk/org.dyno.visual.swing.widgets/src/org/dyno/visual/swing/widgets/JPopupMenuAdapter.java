@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JPopupMenu;
 
@@ -56,6 +57,7 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	@Override
 	protected Component createWidget() {
 		JPopupMenu menu = new JPopupMenu();
+		menu.setSize(new Dimension(72,100));
 		return menu;
 	}
 

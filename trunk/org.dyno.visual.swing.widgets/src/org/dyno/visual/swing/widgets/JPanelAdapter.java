@@ -410,6 +410,11 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	protected WidgetAdapter getDelegateAdapter() {
+		return this.delegate;
+	}
+
+	@Override
 	public boolean dragEnter(Point p) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
