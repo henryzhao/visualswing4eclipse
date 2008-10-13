@@ -24,7 +24,8 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 class BeanHover extends AbstractDragOperation {
-	public BeanHover(GroupLayoutAdapter adapter, GroupLayout layout, JComponent container) {
+	public BeanHover(GroupLayoutAdapter adapter, GroupLayout layout,
+			JComponent container) {
 		super(adapter, layout, container);
 	}
 
@@ -32,18 +33,20 @@ class BeanHover extends AbstractDragOperation {
 	public boolean dragOver(Point p) {
 		if (last_point == null)
 			return dragEnter(p);
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		if (p.equals(last_point))
 			return false;
 		Point oldp = dragComponent(p);
 		Point newp = parent.getMascotLocation();
-		return !oldp.equals(newp);
+		return oldp != null && !oldp.equals(newp);
 	}
 
 	@Override
 	public boolean dragEnter(Point p) {
 		adapter.setHovered(true);
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		parent.setMascotLocation(p);
 		last_point = p;
 		return true;
@@ -51,18 +54,20 @@ class BeanHover extends AbstractDragOperation {
 
 	@Override
 	public boolean drop(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
 		WidgetAdapter dropAdapter = parent.getDropWidget();
-		JComponent drop = (JComponent)dropAdapter.getComponent();
+		JComponent drop = (JComponent) dropAdapter.getComponent();
 		QuartetPair pair = calMascotLocation(drop, p, azimuth);
 		Point hot = dropAdapter.getHotspotPoint();
 		Spring spring = new Spring(10, 10);// TODO should be replaced by a
-											// container gap.
+		// container gap.
 		if (pair == null) {
 			Point np = new Point(p.x - hot.x, p.y - hot.y);
-			Constraints constraints = new Constraints(new Leading(np.x - insets.left, drop.getWidth(), spring), new Leading(np.y - insets.top,
-					drop.getHeight(), spring));
+			Constraints constraints = new Constraints(new Leading(np.x
+					- insets.left, drop.getWidth(), spring), new Leading(np.y
+					- insets.top, drop.getHeight(), spring));
 			container.add(drop, constraints);
 		} else {
 			Alignment horizontal = null;
@@ -73,21 +78,25 @@ class BeanHover extends AbstractDragOperation {
 				int width = drop.getWidth();
 				int height = drop.getHeight();
 				vertical = new Leading(y - insets.top, height, spring);
-				horizontal = pair.vQuart.anchor.createHoveredAxis(drop, new Rectangle(x, y, width, height));
+				horizontal = pair.vQuart.anchor.createHoveredAxis(drop,
+						new Rectangle(x, y, width, height));
 			} else if (pair.hQuart != null && pair.vQuart == null) {
 				int x = p.x - hot.x;
 				int y = pair.hQuart.masc - hot.y;
 				int width = drop.getWidth();
 				int height = drop.getHeight();
 				horizontal = new Leading(x - insets.left, width, spring);
-				vertical = pair.hQuart.anchor.createHoveredAxis(drop, new Rectangle(x, y, width, height));
+				vertical = pair.hQuart.anchor.createHoveredAxis(drop,
+						new Rectangle(x, y, width, height));
 			} else if (pair.hQuart != null && pair.vQuart != null) {
 				int x = pair.vQuart.masc - hot.x;
 				int y = pair.hQuart.masc - hot.y;
 				int width = drop.getWidth();
 				int height = drop.getHeight();
-				vertical = pair.hQuart.anchor.createHoveredAxis(drop, new Rectangle(x, y, width, height));
-				horizontal = pair.vQuart.anchor.createHoveredAxis(drop, new Rectangle(x, y, width, height));
+				vertical = pair.hQuart.anchor.createHoveredAxis(drop,
+						new Rectangle(x, y, width, height));
+				horizontal = pair.vQuart.anchor.createHoveredAxis(drop,
+						new Rectangle(x, y, width, height));
 			}
 			assert vertical != null && horizontal != null;
 			Constraints constraints = new Constraints(horizontal, vertical);
