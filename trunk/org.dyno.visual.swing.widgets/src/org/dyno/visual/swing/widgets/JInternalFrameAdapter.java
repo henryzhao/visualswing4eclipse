@@ -82,7 +82,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		JPanel panel = getContentPane();
 		JPanelAdapter adapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(panel);
 		adapter.setName(getName());
-		adapter.genAddCode(imports, builder);
+		adapter.genAddComponentCode(imports, builder);
 		adapter.detachWidget();
 		return builder.toString();
 	}

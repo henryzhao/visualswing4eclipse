@@ -662,11 +662,11 @@ public class JPanelAdapter extends CompositeAdapter {
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createGetCode(imports));
-		genAddCode(imports, builder);
+		genAddComponentCode(imports, builder);
 		return builder.toString();
 	}
 
-	void genAddCode(ImportRewrite imports, StringBuilder builder) {
+	void genAddComponentCode(ImportRewrite imports, StringBuilder builder) {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {

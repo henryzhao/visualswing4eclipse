@@ -10,7 +10,6 @@ import javax.swing.JMenuBar;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JMenuBarAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
@@ -67,14 +66,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 		origin.remove(child);
 		return true;
 	}
-	
-	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
-		
-		return builder.toString();
-	}
+
 	@Override
 	protected Component createWidget() {
 		JMenuBar jmb = new JMenuBar();
@@ -159,4 +151,5 @@ public class JMenuBarAdapter extends CompositeAdapter {
 		Component drop = target.getWidget();
 		return drop instanceof JMenu;
 	}
+	
 }

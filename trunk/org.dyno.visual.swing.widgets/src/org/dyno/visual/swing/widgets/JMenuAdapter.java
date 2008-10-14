@@ -1,7 +1,6 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -38,12 +37,19 @@ public class JMenuAdapter extends CompositeAdapter {
 		return copy;
 	}
 
+	@Override
+	protected String getWidgetCodeClassName() {
+		return JMenu.class.getName();
+	}
+
 	public boolean isMoveable() {
 		return false;
 	}
+
 	public boolean isResizable() {
 		return false;
 	}
+
 	private LabelEditor editor;
 
 	@Override
@@ -57,15 +63,15 @@ public class JMenuAdapter extends CompositeAdapter {
 	@Override
 	public Object getWidgetValue() {
 		Component me = getWidget();
-		JMenu jmi = (JMenu)me;
+		JMenu jmi = (JMenu) me;
 		return jmi.getText();
 	}
 
 	@Override
 	public void setWidgetValue(Object value) {
 		Component me = getWidget();
-		JMenu jmi = (JMenu)me;
-		jmi.setText(value==null?"":value.toString());
+		JMenu jmi = (JMenu) me;
+		jmi.setText(value == null ? "" : value.toString());
 	}
 
 	@Override
@@ -76,27 +82,22 @@ public class JMenuAdapter extends CompositeAdapter {
 		FontMetrics fm = widget.getFontMetrics(widget.getFont());
 		int fh = fm.getHeight() + VER_TEXT_PAD;
 		Component me = getWidget();
-		JMenu jmi = (JMenu)me;
+		JMenu jmi = (JMenu) me;
 		int fw = fm.stringWidth(jmi.getText()) + HOR_TEXT_PAD;
 		int fx = (w - fw) / 2;
 		int fy = (h - fh) / 2;
 		return new Rectangle(fx, fy, fw, fh);
 	}
+
 	private static final int HOR_TEXT_PAD = 20;
 	private static final int VER_TEXT_PAD = 4;
-
 
 	@Override
 	public boolean widgetPressed(MouseEvent e) {
 		JMenu jmenu = (JMenu) getWidget();
-		Container parent = jmenu.getParent();
-		if (parent instanceof JMenuBar) {
-			jmenu.dispatchEvent(e);
-		} else if (parent instanceof JPopupMenu) {
-			MouseEvent me = new MouseEvent(jmenu, MouseEvent.MOUSE_ENTERED, e.getWhen(), e.getModifiers(), e.getX(), e.getY(), e.getClickCount(), e
-					.isPopupTrigger(), e.getButton());
-			jmenu.dispatchEvent(me);
-		}
+		boolean v = jmenu.isPopupMenuVisible();
+		jmenu.setPopupMenuVisible(!v);
+		jmenu.setSelected(!v);
 		return true;
 	}
 
@@ -146,24 +147,29 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	@Override
 	protected Component createWidget() {
-		JMenu menu = new JMenu(){
+		JMenu menu = new JMenu() {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void setPopupMenuVisible(boolean b) {
-				if(!b){
-					StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-					for(StackTraceElement stack:trace){
-						if(stack.getClassName().indexOf("MouseGrabber")!=-1&&stack.getMethodName().equals("cancelPopupMenu")){
+				if (!b) {
+					StackTraceElement[] trace = Thread.currentThread()
+							.getStackTrace();
+					for (StackTraceElement stack : trace) {
+						if (stack.getClassName().indexOf("MouseGrabber") != -1
+								&& stack.getMethodName().equals(
+										"cancelPopupMenu")) {
 							return;
 						}
 					}
 				}
 				super.setPopupMenuVisible(b);
 			}
-			
+
 		};
-		WidgetAdapter menuAdapter = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
-		JMenuItem jmenu=(JMenuItem)menuAdapter.getWidget();
+		WidgetAdapter menuAdapter = ExtensionRegistry
+				.createWidgetAdapter(JMenuItem.class);
+		JMenuItem jmenu = (JMenuItem) menuAdapter.getWidget();
 		jmenu.setText("menu item");
 		menu.add(jmenu);
 		menu.setText("menu");
