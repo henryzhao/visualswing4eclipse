@@ -217,4 +217,22 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	public void fillConstraintsAction(MenuManager menu, Component widget) {
 	}
+	@Override
+	protected String createGetCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.createGetCode(imports));
+		genAddCode(imports, builder);
+		return builder.toString();
+	}
+
+	void genAddCode(ImportRewrite imports, StringBuilder builder) {
+		int count = getChildCount();
+		for (int i = 0; i < count; i++) {
+			Component child = getChild(i);
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+			String getMethodName = getGetMethodName(childAdapter.getName());
+			builder.append(getFieldName(getName()) + "." + "add("
+					+ getMethodName + "());\n");
+		}
+	}	
 }

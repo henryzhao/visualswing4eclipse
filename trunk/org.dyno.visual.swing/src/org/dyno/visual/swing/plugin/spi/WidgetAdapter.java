@@ -1002,7 +1002,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			return createNonRootCode(type, imports, monitor);
 		}
 	}
-
+	protected String getWidgetCodeClassName(){
+		return getWidget().getClass().getName();
+	}
 	private boolean createNonRootCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
 		boolean success = true;
@@ -1027,7 +1029,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			StringBuilder builder = new StringBuilder();
 			builder.append(getAccessCode(fieldAccess));
 			builder.append(" ");
-			String fqcn = getWidget().getClass().getName();
+			String fqcn = getWidgetCodeClassName();
 			String beanName = imports.addImport(fqcn);
 			builder.append(beanName);
 			builder.append(" ");
@@ -1066,7 +1068,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 		builder.append(getAccessCode(getAccess));
 		builder.append(" ");
-		String fqcn = getWidget().getClass().getName();
+		String fqcn = getWidgetCodeClassName();
 		String beanName = imports.addImport(fqcn);
 		builder.append(beanName);
 		builder.append(" ");
@@ -1235,10 +1237,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return "";
 	}
 
-	@SuppressWarnings("unchecked")
 	protected String getNewInstanceCode(ImportRewrite imports) {
-		Class beanClass = getWidget().getClass();
-		String beanName = imports.addImport(beanClass.getName());
+		String beanName = imports.addImport(getWidgetCodeClassName());
 		return "new " + beanName + "()";
 	}
 
