@@ -96,7 +96,8 @@ public class JMenuItemAdapter extends WidgetAdapter {
 		JMenuItem jmenu = (JMenuItem) getWidget();
 		Container parent = jmenu.getParent();
 		if (parent instanceof JPopupMenu) {
-			jmenu.dispatchEvent(e);
+			boolean selected=jmenu.isSelected();
+			jmenu.setSelected(!selected);
 		}
 		return true;
 	}
