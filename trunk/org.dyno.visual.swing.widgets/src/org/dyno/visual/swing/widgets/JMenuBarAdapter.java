@@ -1,6 +1,7 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Point;
 
 import javax.swing.JMenu;
@@ -100,7 +101,8 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	}
 	@Override
 	public boolean dragEnter(Point p) {
-		super.setMascotLocation(p);
+		setMascotLocation(p);
+		allow_dropping=isDroppingMenu();
 		if(isDroppingMenu()){
 		}else{
 		}
@@ -108,7 +110,8 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	}
 	@Override
 	public boolean dragExit(Point p) {
-		super.setMascotLocation(p);
+		setMascotLocation(p);
+		allow_dropping=isDroppingMenu();
 		if(isDroppingMenu()){
 		}else{
 		}
@@ -116,7 +119,8 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	}
 	@Override
 	public boolean dragOver(Point p) {
-		super.setMascotLocation(p);
+		setMascotLocation(p);
+		allow_dropping=isDroppingMenu();
 		if(isDroppingMenu()){
 		}else{
 		}
@@ -124,11 +128,31 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	}
 	@Override
 	public boolean drop(Point p) {
-		super.setMascotLocation(p);
+		setMascotLocation(p);
+		allow_dropping=isDroppingMenu();
 		if(isDroppingMenu()){
+			WidgetAdapter menuAdapter = getDropWidget();
+			JMenu jmenu=(JMenu)menuAdapter.getWidget();
+			JMenuBar jmb=(JMenuBar)getWidget();
+			jmb.add(jmenu);
+			jmb.validate();
+			jmb.doLayout();
+			clearAllSelected();
+			menuAdapter.setSelected(true);
+			addNotify();
+			repaintDesigner();
 		}else{
 		}
 		return true;
+	}
+	private boolean allow_dropping;
+	@Override
+	public void paintFocused(Graphics clipg) {
+		if(allow_dropping){
+			
+		}else{
+			
+		}
 	}
 	private boolean isDroppingMenu(){
 		WidgetAdapter target = super.getDropWidget();

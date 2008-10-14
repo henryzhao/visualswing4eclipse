@@ -146,7 +146,22 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	@Override
 	protected Component createWidget() {
-		JMenu menu = new JMenu();
+		JMenu menu = new JMenu(){
+
+			@Override
+			public void setPopupMenuVisible(boolean b) {
+				if(!b){
+					StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+					for(StackTraceElement stack:trace){
+						if(stack.getClassName().indexOf("MouseGrabber")!=-1&&stack.getMethodName().equals("cancelPopupMenu")){
+							return;
+						}
+					}
+				}
+				super.setPopupMenuVisible(b);
+			}
+			
+		};
 		WidgetAdapter menuAdapter = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
 		JMenuItem jmenu=(JMenuItem)menuAdapter.getWidget();
 		jmenu.setText("menu item");
