@@ -20,11 +20,11 @@ import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
-import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 
 import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
@@ -115,8 +115,7 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void tranverseMenuElement(Graphics g, Tranverse trans, int ad) {
 		Point vdl = designer.getLocationOnScreen();
-		MenuElement[] menu_selection = MenuSelectionManager.defaultManager()
-				.getSelectedPath();
+		MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
 		if (menu_selection != null && menu_selection.length > 0) {
 			for (int i = menu_selection.length - 1; i >= 0; i--) {
 				if (menu_selection[i] instanceof JPopupMenu) {

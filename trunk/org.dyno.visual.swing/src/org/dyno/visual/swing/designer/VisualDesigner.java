@@ -31,12 +31,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.MenuElement;
-import javax.swing.MenuSelectionManager;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -281,8 +281,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public Component componentAt(Point p, int offset) {
 		if (root != null) {
-			MenuElement[] menu_selection = MenuSelectionManager
-					.defaultManager().getSelectedPath();
+			MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
 			if (menu_selection != null && menu_selection.length > 0) {
 				for (int i = menu_selection.length - 1; i >= 0; i--) {
 					if (menu_selection[i] instanceof JPopupMenu) {
