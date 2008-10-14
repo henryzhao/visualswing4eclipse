@@ -1,17 +1,21 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.Stack;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
+import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -96,8 +100,46 @@ public class JMenuAdapter extends CompositeAdapter {
 	public boolean widgetPressed(MouseEvent e) {
 		JMenu jmenu = (JMenu) getWidget();
 		boolean v = jmenu.isPopupMenuVisible();
-		jmenu.setPopupMenuVisible(!v);
-		jmenu.setSelected(!v);
+		if (v) {
+			Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
+					.getSelectionStack();
+			while (!stack.isEmpty() && stack.peek() != jmenu) {
+				MenuElement me = stack.pop();
+				if (me instanceof JMenu) {
+					JMenu jme = (JMenu) me;
+					jme.setPopupMenuVisible(false);
+					jme.setSelected(false);
+				}
+			}
+			stack.pop();
+			jmenu.setPopupMenuVisible(false);
+			jmenu.setSelected(false);
+		} else {
+			Container thisparent = jmenu.getParent();
+			Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
+					.getSelectionStack();
+			while (!stack.isEmpty()) {
+				MenuElement ele = stack.peek();
+				if (ele instanceof JMenu) {
+					JMenu jme = (JMenu) ele;
+					Container parent = jme.getParent();
+					jme.setPopupMenuVisible(false);
+					jme.setSelected(false);
+					stack.pop();
+					if (parent == thisparent) {
+						break;
+					}
+				} else if (ele == thisparent) {
+					break;
+				} else {
+					stack.pop();
+				}
+			}
+			stack.add(jmenu);
+			stack.add(jmenu.getPopupMenu());
+			jmenu.setPopupMenuVisible(true);
+			jmenu.setSelected(true);
+		}
 		return true;
 	}
 
