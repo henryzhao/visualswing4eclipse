@@ -30,6 +30,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+
 class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusListener {
 
 	private final Frame frame;
@@ -211,7 +213,14 @@ class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusLi
 			Component popup = iter.next();
 			if (popup.isVisible()) {
 				result = true;
-				popup.setVisible(false);
+				if (popup instanceof JPopupMenu) {
+					JPopupMenu jpm = (JPopupMenu) popup;
+					Component parent = jpm.getInvoker();
+					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(parent);
+					if (adapter == null)
+						popup.setVisible(false);
+				} else
+					popup.setVisible(false);
 			}
 		}
 		return result;
