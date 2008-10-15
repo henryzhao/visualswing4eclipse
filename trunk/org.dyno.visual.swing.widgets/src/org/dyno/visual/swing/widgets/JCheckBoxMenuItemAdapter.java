@@ -3,7 +3,9 @@ package org.dyno.visual.swing.widgets;
 import java.awt.Component;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JPopupMenu;
 
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
@@ -20,12 +22,22 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 		jmi.doLayout();
 		return jmi;
 	}
-
+	public boolean isMoveable() {
+		return false;
+	}
+	public boolean isResizable() {
+		return false;
+	}
 	@Override
 	protected Component newWidget() {
 		return new JCheckBoxMenuItem();
 	}
-
+	public CompositeAdapter getParentAdapter() {
+		Component me = getWidget();
+		JPopupMenu jpm = (JPopupMenu) me.getParent();
+		Component parent = jpm.getInvoker();
+		return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+	}
 	@Override
 	public Component cloneWidget() {
 		JCheckBoxMenuItem jmi = (JCheckBoxMenuItem) super.cloneWidget();

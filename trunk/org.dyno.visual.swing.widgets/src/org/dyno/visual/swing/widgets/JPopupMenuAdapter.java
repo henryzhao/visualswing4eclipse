@@ -2,6 +2,7 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 
 import javax.swing.JPopupMenu;
 
@@ -65,4 +66,34 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	protected Component newWidget() {
 		return new JPopupMenu();
 	}
+
+	@Override
+	public boolean dragEnter(Point p) {
+		setMascotLocation(p);
+		return true;
+	}
+
+	@Override
+	public boolean dragExit(Point p) {
+		setMascotLocation(p);
+		return true;
+	}
+	public CompositeAdapter getParentAdapter() {
+		JPopupMenu jpopup=(JPopupMenu)getWidget();
+		Component parent=jpopup.getInvoker();
+		return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+	}
+	@Override
+	public boolean dragOver(Point p) {
+		setMascotLocation(p);
+		return true;
+	}
+
+	@Override
+	public boolean drop(Point p) {
+		setMascotLocation(p);
+		
+		return true;
+	}
+	
 }

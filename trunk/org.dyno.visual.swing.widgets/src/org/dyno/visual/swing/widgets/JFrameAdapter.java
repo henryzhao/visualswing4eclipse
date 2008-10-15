@@ -288,11 +288,11 @@ public class JFrameAdapter extends CompositeAdapter {
 			if (hasMenuBar())
 				p.y += getJMenuBarHeight();
 			setMascotLocation(p);
-			focusStatus = DROPPING_FORBIDDEN;
+			dropStatus = DROPPING_FORBIDDEN;
 			return true;
 		} else if (isDroppingMenuBar()) {
 			setMascotLocation(p);
-			focusStatus = DROPPING_MENUBAR;
+			dropStatus = DROPPING_PERMITTED;
 			return true;
 		} else
 			return contentAdapter.dragOver(p);
@@ -304,11 +304,11 @@ public class JFrameAdapter extends CompositeAdapter {
 			if (hasMenuBar())
 				p.y += getJMenuBarHeight();
 			setMascotLocation(p);
-			focusStatus = DROPPING_FORBIDDEN;
+			dropStatus = DROPPING_FORBIDDEN;
 			return true;
 		} else if (isDroppingMenuBar()) {
 			setMascotLocation(p);
-			focusStatus = DROPPING_MENUBAR;
+			dropStatus = DROPPING_PERMITTED;
 			return true;
 		} else
 			return contentAdapter.dragEnter(p);
@@ -320,9 +320,9 @@ public class JFrameAdapter extends CompositeAdapter {
 		return jmb.getHeight();
 	}
 
-	private int focusStatus;
+	private int dropStatus;
 	private static final int NOOP = 0;
-	private static final int DROPPING_MENUBAR = 1;
+	private static final int DROPPING_PERMITTED = 1;
 	private static final int DROPPING_FORBIDDEN = 2;
 
 	private boolean isDroppingForbbiden() {
@@ -335,11 +335,11 @@ public class JFrameAdapter extends CompositeAdapter {
 			if (hasMenuBar())
 				p.y += getJMenuBarHeight();
 			setMascotLocation(p);
-			focusStatus = NOOP;
+			dropStatus = NOOP;
 			return true;
 		} else if (isDroppingMenuBar()) {
 			setMascotLocation(p);
-			focusStatus = NOOP;
+			dropStatus = NOOP;
 			return true;
 		} else
 			return contentAdapter.dragExit(p);
@@ -351,7 +351,7 @@ public class JFrameAdapter extends CompositeAdapter {
 			if (hasMenuBar())
 				p.y += getJMenuBarHeight();
 			setMascotLocation(p);
-			focusStatus = NOOP;
+			dropStatus = NOOP;
 			Toolkit.getDefaultToolkit().beep();
 			return true;
 		} else if (isDroppingMenuBar()) {
@@ -368,7 +368,7 @@ public class JFrameAdapter extends CompositeAdapter {
 			target.setDirty(true);
 			addNotify();
 			repaintDesigner();
-			focusStatus = NOOP;
+			dropStatus = NOOP;
 			return true;
 		} else
 			return contentAdapter.drop(p);
@@ -395,7 +395,7 @@ public class JFrameAdapter extends CompositeAdapter {
 
 	@Override
 	public void paintFocused(Graphics clipg) {
-		if (focusStatus == NOOP) {
+		if (dropStatus == NOOP) {
 			JFrame jframe = (JFrame) getWidget();
 			JMenuBar jmb = jframe.getJMenuBar();
 			if (jmb != null) {
@@ -410,13 +410,13 @@ public class JFrameAdapter extends CompositeAdapter {
 			if (jmb != null) {
 				clipg.dispose();
 			}
-		} else if (focusStatus == DROPPING_FORBIDDEN) {
+		} else if (dropStatus == DROPPING_FORBIDDEN) {
 			Rectangle bounds = rootPane.getBounds();
 			Graphics2D g2d = (Graphics2D) clipg;
 			g2d.setStroke(STROKE);
 			g2d.setColor(RED_COLOR);
 			g2d.drawRect(0, 0, bounds.width, 22);
-		} else if (focusStatus == DROPPING_MENUBAR) {
+		} else if (dropStatus == DROPPING_PERMITTED) {
 			Graphics2D g2d = (Graphics2D) clipg;
 			g2d.setStroke(STROKE);
 			g2d.setColor(GREEN_COLOR);

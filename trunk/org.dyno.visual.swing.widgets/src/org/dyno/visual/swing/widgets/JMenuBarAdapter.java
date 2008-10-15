@@ -1,8 +1,12 @@
 package org.dyno.visual.swing.widgets;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Stroke;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -13,29 +17,33 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuBarAdapter extends CompositeAdapter {
 	private static int VAR_INDEX = 0;
-	public JMenuBarAdapter(){
+
+	public JMenuBarAdapter() {
 		super("jMenuBar" + (VAR_INDEX++));
 	}
+
 	@Override
 	public Component cloneWidget() {
 		JMenuBar copy = (JMenuBar) super.cloneWidget();
 		JMenuBar origin = (JMenuBar) getWidget();
 		int count = origin.getMenuCount();
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			copy.add(adapter.cloneWidget());
 		}
 		return copy;
 	}
+
 	public boolean isResizable() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isMoveable() {
 		return false;
 	}
+
 	@Override
 	public int getChildCount() {
 		JMenuBar origin = (JMenuBar) getWidget();
@@ -70,8 +78,9 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	@Override
 	protected Component createWidget() {
 		JMenuBar jmb = new JMenuBar();
-		WidgetAdapter menuAdapter = ExtensionRegistry.createWidgetAdapter(JMenu.class);
-		JMenu jmenu=(JMenu)menuAdapter.getWidget();
+		WidgetAdapter menuAdapter = ExtensionRegistry
+				.createWidgetAdapter(JMenu.class);
+		JMenu jmenu = (JMenu) menuAdapter.getWidget();
 		jmenu.setText("File");
 		jmb.add(jmenu);
 		jmb.setSize(100, 25);
@@ -87,45 +96,49 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	@Override
 	public void addChildByConstraints(Component child, Object constraints) {
 	}
+
 	@Override
 	public Object getChildConstraints(Component child) {
 		return null;
 	}
+
 	@Override
 	public boolean dragEnter(Point p) {
 		setMascotLocation(p);
-		allow_dropping=isDroppingMenu();
-		if(isDroppingMenu()){
-		}else{
+		if (isDroppingMenu()) {
+			dropStatus = DROPPING_PERMITTED;
+		} else {
+			dropStatus = DROPPING_FORBIDDEN;
 		}
 		return true;
 	}
+
 	@Override
 	public boolean dragExit(Point p) {
 		setMascotLocation(p);
-		allow_dropping=isDroppingMenu();
-		if(isDroppingMenu()){
-		}else{
-		}
+		dropStatus = NOOP;
 		return true;
 	}
+
 	@Override
 	public boolean dragOver(Point p) {
 		setMascotLocation(p);
-		allow_dropping=isDroppingMenu();
-		if(isDroppingMenu()){
-		}else{
+		if (isDroppingMenu()) {
+			dropStatus = DROPPING_PERMITTED;
+		} else {
+			dropStatus = DROPPING_FORBIDDEN;
 		}
 		return true;
 	}
+
 	@Override
 	public boolean drop(Point p) {
 		setMascotLocation(p);
-		allow_dropping=isDroppingMenu();
-		if(isDroppingMenu()){
+		dropStatus=NOOP;
+		if (isDroppingMenu()) {
 			WidgetAdapter menuAdapter = getDropWidget();
-			JMenu jmenu=(JMenu)menuAdapter.getWidget();
-			JMenuBar jmb=(JMenuBar)getWidget();
+			JMenu jmenu = (JMenu) menuAdapter.getWidget();
+			JMenuBar jmb = (JMenuBar) getWidget();
 			jmb.add(jmenu);
 			jmb.validate();
 			jmb.doLayout();
@@ -133,23 +146,45 @@ public class JMenuBarAdapter extends CompositeAdapter {
 			menuAdapter.setSelected(true);
 			addNotify();
 			repaintDesigner();
-		}else{
+		} else {
 		}
 		return true;
 	}
-	private boolean allow_dropping;
+
+	private int dropStatus;
+	private static final int NOOP = 0;
+	private static final int DROPPING_PERMITTED = 1;
+	private static final int DROPPING_FORBIDDEN = 2;
+
 	@Override
 	public void paintFocused(Graphics clipg) {
-		if(allow_dropping){
-			
-		}else{
-			
+		if (dropStatus == DROPPING_FORBIDDEN) {
+			JMenuBar jmenubar = (JMenuBar) getWidget();
+			Graphics2D g2d = (Graphics2D) clipg;
+			g2d.setStroke(STROKE);
+			g2d.setColor(RED_COLOR);
+			g2d.drawRect(0, 0, jmenubar.getWidth(), jmenubar.getHeight());
+		} else if (dropStatus == DROPPING_PERMITTED) {
+			JMenuBar jmenubar = (JMenuBar) getWidget();
+			Graphics2D g2d = (Graphics2D) clipg;
+			g2d.setStroke(STROKE);
+			g2d.setColor(GREEN_COLOR);
+			g2d.drawRect(0, 0, jmenubar.getWidth(), jmenubar.getHeight());
 		}
 	}
-	private boolean isDroppingMenu(){
+
+	protected static Color RED_COLOR = new Color(255, 164, 0);
+	protected static Color GREEN_COLOR = new Color(164, 255, 0);
+	protected static Stroke STROKE;
+
+	static {
+		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
+	}
+	private boolean isDroppingMenu() {
 		WidgetAdapter target = super.getDropWidget();
 		Component drop = target.getWidget();
 		return drop instanceof JMenu;
 	}
-	
+
 }
