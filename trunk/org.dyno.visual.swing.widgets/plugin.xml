@@ -620,6 +620,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenu"
                widgetName="JMenu">
+               <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -629,6 +630,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenuItem"
                widgetName="JMenuItem">
+               <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -638,6 +640,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JCheckBoxMenuItem"
                widgetName="JCheckBoxMenuItem">
+               <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -647,6 +650,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JRadioButtonMenuItem"
                widgetName="JRadioButtonMenuItem">
+               <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -655,7 +659,8 @@
                icon="icons/popup_menu_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JPopupMenu"
-               widgetName="JPopupMenu">
+               widgetName="JPopupMenu"
+               shown="false">
          </widget>
                   
          <!--
