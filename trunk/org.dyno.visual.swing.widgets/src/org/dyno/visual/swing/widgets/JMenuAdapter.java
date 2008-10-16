@@ -56,7 +56,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	public boolean isMoveable() {
-		return false;
+		return true;
 	}
 
 	public boolean isResizable() {
@@ -241,24 +241,28 @@ public class JMenuAdapter extends CompositeAdapter {
 		bounds.y = 0;
 		return !bounds.contains(p);
 	}
-	private boolean isPopupMenuVisible(){
-		JMenu jmenu=(JMenu)getWidget();
+
+	private boolean isPopupMenuVisible() {
+		JMenu jmenu = (JMenu) getWidget();
 		return jmenu.isPopupMenuVisible();
 	}
+	private boolean inside_popup=false;
 	@Override
 	public boolean dragEnter(Point p) {
-		if (isOutOfBounds(p)&&isPopupMenuVisible()) {
-			JMenu jmenu=(JMenu)getWidget();
-			JPopupMenu popup=jmenu.getPopupMenu();
-			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(popup);
-			if(adapter==null)
-				adapter=ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp=new Point(p);
+		if (isOutOfBounds(p) && isPopupMenuVisible()) {
+			inside_popup=true;
+			JMenu jmenu = (JMenu) getWidget();
+			JPopupMenu popup = jmenu.getPopupMenu();
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
+			if (adapter == null)
+				adapter = ExtensionRegistry.createWidgetAdapter(popup);
+			Point sp = new Point(p);
 			SwingUtilities.convertPointToScreen(sp, jmenu);
 			SwingUtilities.convertPointFromScreen(sp, popup);
 			adapter.dragEnter(sp);
 			return true;
 		} else {
+			inside_popup=false;
 			if (isDroppingPermitted()) {
 				dropStatus = DROPPING_PERMITTED;
 			} else {
@@ -271,18 +275,20 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragExit(Point p) {
-		if (isOutOfBounds(p)&&isPopupMenuVisible()) {
-			JMenu jmenu=(JMenu)getWidget();
-			JPopupMenu popup=jmenu.getPopupMenu();
-			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(popup);
-			if(adapter==null)
-				adapter=ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp=new Point(p);
+		if (isOutOfBounds(p) && isPopupMenuVisible()) {
+			inside_popup=false;
+			JMenu jmenu = (JMenu) getWidget();
+			JPopupMenu popup = jmenu.getPopupMenu();
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
+			if (adapter == null)
+				adapter = ExtensionRegistry.createWidgetAdapter(popup);
+			Point sp = new Point(p);
 			SwingUtilities.convertPointToScreen(sp, jmenu);
 			SwingUtilities.convertPointFromScreen(sp, popup);
 			adapter.dragExit(sp);
 			return true;
 		} else {
+			inside_popup=false;
 			dropStatus = NOOP;
 		}
 		setMascotLocation(p);
@@ -291,18 +297,20 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragOver(Point p) {
-		if (isOutOfBounds(p)&&isPopupMenuVisible()) {
-			JMenu jmenu=(JMenu)getWidget();
-			JPopupMenu popup=jmenu.getPopupMenu();
-			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(popup);
-			if(adapter==null)
-				adapter=ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp=new Point(p);
+		if (isOutOfBounds(p) && isPopupMenuVisible()) {
+			inside_popup=true;
+			JMenu jmenu = (JMenu) getWidget();
+			JPopupMenu popup = jmenu.getPopupMenu();
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
+			if (adapter == null)
+				adapter = ExtensionRegistry.createWidgetAdapter(popup);
+			Point sp = new Point(p);
 			SwingUtilities.convertPointToScreen(sp, jmenu);
 			SwingUtilities.convertPointFromScreen(sp, popup);
 			adapter.dragOver(sp);
 			return true;
 		} else {
+			inside_popup=false;
 			if (isDroppingPermitted()) {
 				dropStatus = DROPPING_PERMITTED;
 			} else {
@@ -315,18 +323,20 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean drop(Point p) {
-		if (isOutOfBounds(p)&&isPopupMenuVisible()) {
-			JMenu jmenu=(JMenu)getWidget();
-			JPopupMenu popup=jmenu.getPopupMenu();
-			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(popup);
-			if(adapter==null)
-				adapter=ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp=new Point(p);
+		if (isOutOfBounds(p) && isPopupMenuVisible()) {
+			inside_popup=false;
+			JMenu jmenu = (JMenu) getWidget();
+			JPopupMenu popup = jmenu.getPopupMenu();
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
+			if (adapter == null)
+				adapter = ExtensionRegistry.createWidgetAdapter(popup);
+			Point sp = new Point(p);
 			SwingUtilities.convertPointToScreen(sp, jmenu);
 			SwingUtilities.convertPointFromScreen(sp, popup);
 			adapter.drop(sp);
 			return true;
 		} else {
+			inside_popup=false;
 			if (isDroppingPermitted()) {
 				JMenu jmenu = (JMenu) getWidget();
 				WidgetAdapter target = getDropWidget();
@@ -356,19 +366,33 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	public boolean needGlobalGraphics() {
+		return inside_popup;
+	}
+
+	@Override
 	public void paintFocused(Graphics clipg) {
-		if (dropStatus == DROPPING_FORBIDDEN) {
+		if (inside_popup) {
 			JMenu jmenu = (JMenu) getWidget();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(RED_COLOR);
-			g2d.drawRect(0, 0, jmenu.getWidth(), jmenu.getHeight());
-		} else if (dropStatus == DROPPING_PERMITTED) {
-			JMenu jmenu = (JMenu) getWidget();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(GREEN_COLOR);
-			g2d.drawRect(0, 0, jmenu.getWidth(), jmenu.getHeight());
+			JPopupMenu popup = jmenu.getPopupMenu();
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
+			if (adapter == null)
+				adapter = ExtensionRegistry.createWidgetAdapter(popup);
+			adapter.paintFocused(clipg);
+		} else {
+			if (dropStatus == DROPPING_FORBIDDEN) {
+				JMenu jmenu = (JMenu) getWidget();
+				Graphics2D g2d = (Graphics2D) clipg;
+				g2d.setStroke(STROKE);
+				g2d.setColor(RED_COLOR);
+				g2d.drawRect(0, 0, jmenu.getWidth(), jmenu.getHeight());
+			} else if (dropStatus == DROPPING_PERMITTED) {
+				JMenu jmenu = (JMenu) getWidget();
+				Graphics2D g2d = (Graphics2D) clipg;
+				g2d.setStroke(STROKE);
+				g2d.setColor(GREEN_COLOR);
+				g2d.drawRect(0, 0, jmenu.getWidth(), jmenu.getHeight());
+			}
 		}
 	}
 

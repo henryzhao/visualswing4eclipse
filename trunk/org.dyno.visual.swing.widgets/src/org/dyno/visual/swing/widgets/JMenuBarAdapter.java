@@ -41,7 +41,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean isMoveable() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -101,18 +101,31 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	public Object getChildConstraints(Component child) {
 		return null;
 	}
-
+	private int insert_x;
 	@Override
 	public boolean dragEnter(Point p) {
 		setMascotLocation(p);
 		if (isDroppingMenu()) {
 			dropStatus = DROPPING_PERMITTED;
+			insert_x=calculateInsert(p);
 		} else {
 			dropStatus = DROPPING_FORBIDDEN;
 		}
 		return true;
 	}
-
+	private int calculateInsert(Point p){
+		JMenuBar jmb=(JMenuBar)getWidget();
+		int count=jmb.getMenuCount();
+		int calx=0;
+		for(int i=0;i<count;i++){
+			JMenu jmu=jmb.getMenu(i);
+			if(p.x>=calx&&p.x<calx+jmu.getWidth()){
+				return calx;
+			}
+			calx+=jmu.getWidth();
+		}
+		return calx;
+	}
 	@Override
 	public boolean dragExit(Point p) {
 		setMascotLocation(p);
@@ -125,6 +138,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 		setMascotLocation(p);
 		if (isDroppingMenu()) {
 			dropStatus = DROPPING_PERMITTED;
+			insert_x=calculateInsert(p);
 		} else {
 			dropStatus = DROPPING_FORBIDDEN;
 		}
@@ -170,6 +184,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 			g2d.setStroke(STROKE);
 			g2d.setColor(GREEN_COLOR);
 			g2d.drawRect(0, 0, jmenubar.getWidth(), jmenubar.getHeight());
+			g2d.drawLine(insert_x, 0, insert_x, jmenubar.getHeight());
 		}
 	}
 

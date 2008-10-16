@@ -1,9 +1,17 @@
 package org.dyno.visual.swing.widgets;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Stroke;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -66,10 +74,30 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	protected Component newWidget() {
 		return new JPopupMenu();
 	}
-
+	private int insert_y;
+	private int insert_index;
+	private int calculateInsert(Point p){
+		JPopupMenu popup=(JPopupMenu)getWidget();
+		JMenu jmenu=(JMenu)popup.getInvoker();
+		int count=jmenu.getMenuComponentCount();
+		int caly=0;
+		for(int i=0;i<count;i++){
+			Component jmu=jmenu.getMenuComponent(i);
+			if(p.y>=caly-jmu.getHeight()/2&&p.y<caly+jmu.getHeight()/2){
+				insert_index=i;
+				insert_y=caly;
+				return caly;
+			}
+			caly+=jmu.getHeight();
+		}
+		insert_index=-1;
+		insert_y=caly;
+		return caly;
+	}
 	@Override
 	public boolean dragEnter(Point p) {
 		setMascotLocation(p);
+		insert_y=calculateInsert(p);
 		return true;
 	}
 
@@ -86,14 +114,52 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	@Override
 	public boolean dragOver(Point p) {
 		setMascotLocation(p);
+		insert_y=calculateInsert(p);
 		return true;
 	}
 
 	@Override
 	public boolean drop(Point p) {
 		setMascotLocation(p);
-		
+		if(insert_index==-1){
+			JPopupMenu popup=(JPopupMenu)getWidget();
+			JMenu jmenu=(JMenu)popup.getInvoker();
+			JMenuAdapter jma=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(jmenu);
+			WidgetAdapter target = getDropWidget();
+			jmenu.add((JMenuItem)target.getWidget());			
+			jma.widgetPressed(null);
+			jma.widgetPressed(null);
+		}else{
+			JPopupMenu popup=(JPopupMenu)getWidget();
+			JMenu jmenu=(JMenu)popup.getInvoker();
+			JMenuAdapter jma=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(jmenu);
+			WidgetAdapter target = getDropWidget();
+			jmenu.add(target.getComponent(), insert_index);
+			jma.widgetPressed(null);
+			jma.widgetPressed(null);
+		}
 		return true;
 	}
-	
+
+	@Override
+	public void paintFocused(Graphics g) {
+		JPopupMenu jpm=(JPopupMenu)getWidget();
+		Rectangle bounds = jpm.getBounds();
+		Point lt=convertToGlobal(new Point(0,0));
+		bounds.x=lt.x;
+		bounds.y=lt.y;
+		Graphics clipg=g.create(bounds.x, bounds.y, bounds.width, bounds.height);
+		Graphics2D g2d = (Graphics2D) clipg;
+		g2d.setStroke(STROKE);
+		g2d.setColor(GREEN_COLOR);
+		g2d.drawLine(0,insert_y, jpm.getWidth(), insert_y);
+		clipg.dispose();
+	}
+	protected static Color GREEN_COLOR = new Color(164, 255, 0);
+	protected static Stroke STROKE;
+
+	static {
+		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
+				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
+	}
 }

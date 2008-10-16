@@ -23,7 +23,7 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 		return jmi;
 	}
 	public boolean isMoveable() {
-		return false;
+		return true;
 	}
 	public boolean isResizable() {
 		return false;

@@ -38,7 +38,7 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	}
 
 	public boolean isMoveable() {
-		return false;
+		return true;
 	}
 	public boolean isResizable() {
 		return false;
