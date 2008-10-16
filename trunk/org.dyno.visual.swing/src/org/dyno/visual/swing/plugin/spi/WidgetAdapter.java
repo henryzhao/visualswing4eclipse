@@ -1267,4 +1267,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			}
 		}
 	}
+
+	public boolean needGlobalGraphics() {
+		return false;
+	}
 }

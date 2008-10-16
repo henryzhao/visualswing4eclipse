@@ -115,7 +115,8 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void tranverseMenuElement(Graphics g, Tranverse trans, int ad) {
 		Point vdl = designer.getLocationOnScreen();
-		MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
+		MenuElement[] menu_selection = MenuSelectionManager.defaultManager()
+				.getSelectedPath();
 		if (menu_selection != null && menu_selection.length > 0) {
 			for (int i = menu_selection.length - 1; i >= 0; i--) {
 				if (menu_selection[i] instanceof JPopupMenu) {
@@ -226,11 +227,17 @@ public class GlassPaneUI extends ComponentUI {
 		Component jpar = focused.getWidget();
 		if (focused.isRoot())
 			jpar = focused.getRootPane();
-		Rectangle local = SwingUtilities.getLocalBounds(jpar);
-		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
-		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		focused.paintFocused(clipg);
-		clipg.dispose();
+		if (focused.needGlobalGraphics()) {
+			focused.paintFocused(g);
+		} else {
+			Rectangle local = SwingUtilities.getLocalBounds(jpar);
+			Rectangle pub = SwingUtilities.convertRectangle(jpar, local,
+					designer);
+			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1,
+					pub.height + 1);
+			focused.paintFocused(clipg);
+			clipg.dispose();
+		}
 	}
 
 	private void paintMascot(Graphics g, JComponent c) {
