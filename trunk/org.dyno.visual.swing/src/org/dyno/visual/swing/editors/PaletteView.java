@@ -182,6 +182,9 @@ public class PaletteView extends ViewPart implements SelectionListener {
 				&& sRootPaneContainer.trim().length() > 0
 				&& sRootPaneContainer.equals("true"))
 			return;
+		String sShown = config.getAttribute("shown");
+		if (sShown != null && sShown.trim().equals("false"))
+			return;
 		String groupId = config.getAttribute("groupId");
 		if (groupId != null && groupId.trim().length() > 0) {
 			ToolBar toolbar = toolbars.get(groupId);

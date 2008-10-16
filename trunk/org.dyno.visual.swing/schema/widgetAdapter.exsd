@@ -110,6 +110,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="shown" type="boolean" use="default" value="true">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
