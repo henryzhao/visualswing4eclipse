@@ -961,6 +961,53 @@
 						<reference id="title"/>
 						<reference id="defaultCloseOperation"/>
 					</provider>
+					<provider class="javax.swing.JMenuBar">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="foreground"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JMenu">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JMenuItem">
+						<reference id="accelerator"/>
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JCheckBoxMenuItem">
+						<reference id="accelerator"/>
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="selected"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JRadioButtonMenuItem">
+						<reference id="accelerator"/>
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="selected"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
          		</category>
          		<category id="seldom" name="Expert" filters="org.eclipse.ui.views.properties.expert" default="true"/>
          </sorting>
