@@ -15,6 +15,7 @@ import java.util.HashMap;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
@@ -24,10 +25,14 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -48,6 +53,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.dyno.visual.swing.lnfs.nimbus.JAppletValue;
 import org.dyno.visual.swing.lnfs.nimbus.JButtonValue;
+import org.dyno.visual.swing.lnfs.nimbus.JCheckBoxMenuItemValue;
 import org.dyno.visual.swing.lnfs.nimbus.JCheckBoxValue;
 import org.dyno.visual.swing.lnfs.nimbus.JComboBoxValue;
 import org.dyno.visual.swing.lnfs.nimbus.JDesktopPaneValue;
@@ -58,9 +64,13 @@ import org.dyno.visual.swing.lnfs.nimbus.JFrameValue;
 import org.dyno.visual.swing.lnfs.nimbus.JInternalFrameValue;
 import org.dyno.visual.swing.lnfs.nimbus.JLabelValue;
 import org.dyno.visual.swing.lnfs.nimbus.JListValue;
+import org.dyno.visual.swing.lnfs.nimbus.JMenuBarValue;
+import org.dyno.visual.swing.lnfs.nimbus.JMenuItemValue;
+import org.dyno.visual.swing.lnfs.nimbus.JMenuValue;
 import org.dyno.visual.swing.lnfs.nimbus.JPanelValue;
 import org.dyno.visual.swing.lnfs.nimbus.JPasswordFieldValue;
 import org.dyno.visual.swing.lnfs.nimbus.JProgressBarValue;
+import org.dyno.visual.swing.lnfs.nimbus.JRadioButtonMenuItemValue;
 import org.dyno.visual.swing.lnfs.nimbus.JRadioButtonValue;
 import org.dyno.visual.swing.lnfs.nimbus.JScrollBarValue;
 import org.dyno.visual.swing.lnfs.nimbus.JScrollPaneValue;
@@ -114,6 +124,11 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 		put(JToolBar.class, new JToolBarValue());
 		put(JDesktopPane.class, new JDesktopPaneValue());
 		put(JInternalFrame.class, new JInternalFrameValue());
+		put(JMenuBar.class, new JMenuBarValue());
+		put(JMenu.class, new JMenuValue());
+		put(JMenuItem.class, new JMenuItemValue());
+		put(JCheckBoxMenuItem.class, new JCheckBoxMenuItemValue());
+		put(JRadioButtonMenuItem.class, new JRadioButtonMenuItemValue());		
 	}
 
 	@Override

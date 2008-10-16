@@ -15,6 +15,7 @@ import java.util.HashMap;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
@@ -24,10 +25,14 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -47,6 +52,7 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import org.dyno.visual.swing.lnfs.meta.MetaJAppletValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJButtonValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJCheckBoxMenuItemValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJCheckBoxValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJComboBoxValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJDesktopPaneValue;
@@ -57,9 +63,13 @@ import org.dyno.visual.swing.lnfs.meta.MetaJFrameValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJInternalFrameValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJLabelValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJListValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJMenuBarValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJMenuItemValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJMenuValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJPanelValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJPasswordFieldValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJProgressBarValue;
+import org.dyno.visual.swing.lnfs.meta.MetaJRadioButtonMenuItemValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJRadioButtonValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJScrollBarValue;
 import org.dyno.visual.swing.lnfs.meta.MetaJScrollPaneValue;
@@ -112,6 +122,11 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		put(JInternalFrame.class, new MetaJInternalFrameValue());
 		put(JFrame.class, new MetaJFrameValue());
 		put(JDialog.class, new MetaJDialogValue());
+		put(JMenuBar.class, new MetaJMenuBarValue());
+		put(JMenu.class, new MetaJMenuValue());
+		put(JMenuItem.class, new MetaJMenuItemValue());
+		put(JCheckBoxMenuItem.class, new MetaJCheckBoxMenuItemValue());
+		put(JRadioButtonMenuItem.class, new MetaJRadioButtonMenuItemValue());
 	}
 
 	@Override

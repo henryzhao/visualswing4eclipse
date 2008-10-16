@@ -15,6 +15,7 @@ import java.util.HashMap;
 import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JDialog;
@@ -24,10 +25,14 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -46,6 +51,7 @@ import javax.swing.LookAndFeel;
 
 import org.dyno.visual.swing.lnfs.motif.JAppletValue;
 import org.dyno.visual.swing.lnfs.motif.JButtonValue;
+import org.dyno.visual.swing.lnfs.motif.JCheckBoxMenuItemValue;
 import org.dyno.visual.swing.lnfs.motif.JCheckBoxValue;
 import org.dyno.visual.swing.lnfs.motif.JComboBoxValue;
 import org.dyno.visual.swing.lnfs.motif.JDesktopPaneValue;
@@ -56,9 +62,13 @@ import org.dyno.visual.swing.lnfs.motif.JFrameValue;
 import org.dyno.visual.swing.lnfs.motif.JInternalFrameValue;
 import org.dyno.visual.swing.lnfs.motif.JLabelValue;
 import org.dyno.visual.swing.lnfs.motif.JListValue;
+import org.dyno.visual.swing.lnfs.motif.JMenuBarValue;
+import org.dyno.visual.swing.lnfs.motif.JMenuItemValue;
+import org.dyno.visual.swing.lnfs.motif.JMenuValue;
 import org.dyno.visual.swing.lnfs.motif.JPanelValue;
 import org.dyno.visual.swing.lnfs.motif.JPasswordFieldValue;
 import org.dyno.visual.swing.lnfs.motif.JProgressBarValue;
+import org.dyno.visual.swing.lnfs.motif.JRadioButtonMenuItemValue;
 import org.dyno.visual.swing.lnfs.motif.JRadioButtonValue;
 import org.dyno.visual.swing.lnfs.motif.JScrollBarValue;
 import org.dyno.visual.swing.lnfs.motif.JScrollPaneValue;
@@ -111,6 +121,11 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 		put(JToolBar.class, new JToolBarValue());
 		put(JDesktopPane.class, new JDesktopPaneValue());
 		put(JInternalFrame.class, new JInternalFrameValue());
+		put(JMenuBar.class, new JMenuBarValue());
+		put(JMenu.class, new JMenuValue());
+		put(JMenuItem.class, new JMenuItemValue());
+		put(JCheckBoxMenuItem.class, new JCheckBoxMenuItemValue());
+		put(JRadioButtonMenuItem.class, new JRadioButtonMenuItemValue());		
 	}
 
 	@Override
