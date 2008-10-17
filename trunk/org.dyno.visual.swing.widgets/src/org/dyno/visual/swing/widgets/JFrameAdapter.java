@@ -381,12 +381,6 @@ public class JFrameAdapter extends CompositeAdapter {
 				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
 	}
 
-	private boolean isDroppingMenuBar() {
-		WidgetAdapter target = getDropWidget();
-		Component drop = target.getWidget();
-		return drop != null && drop instanceof JMenuBar;
-	}
-
 	private boolean hasMenuBar() {
 		JFrame jframe = (JFrame) getWidget();
 		JMenuBar jmb = jframe.getJMenuBar();

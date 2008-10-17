@@ -393,6 +393,8 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragOver(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragOver(p);
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
@@ -416,6 +418,8 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragEnter(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragEnter(p);
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
@@ -427,6 +431,8 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragExit(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragExit(p);
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
@@ -494,6 +500,8 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean drop(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.drop(p);
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {

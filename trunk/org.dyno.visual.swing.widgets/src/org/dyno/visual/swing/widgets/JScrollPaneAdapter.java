@@ -97,6 +97,8 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragOver(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragOver(p);
 		setMascotLocation(p);
 		return true;
 	}
@@ -105,6 +107,8 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragEnter(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragEnter(p);
 		setMascotLocation(p);
 		hovered = true;
 		return true;
@@ -112,6 +116,8 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragExit(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragExit(p);
 		setMascotLocation(p);
 		hovered = false;
 		return true;
@@ -119,6 +125,8 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean drop(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.drop(p);
 		setMascotLocation(p);
 		if (isPermitted()) {
 			JScrollPane jsp = (JScrollPane) getWidget();

@@ -76,24 +76,32 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragEnter(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragEnter(p);
 		hovered = true;
 		return true;
 	}
 
 	@Override
 	public boolean dragExit(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragExit(p);
 		hovered = false;
 		return true;
 	}
 
 	@Override
 	public boolean dragOver(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.dragOver(p);
 		setMascotLocation(p);
 		return true;
 	}
 
 	@Override
 	public boolean drop(Point p) {
+		if(isDroppingMenuItem()||isDroppingMenuBar())
+			return super.drop(p);
 		WidgetAdapter adapter = getDropWidget();
 		Component child = adapter.getComponent();
 		JTabbedPane jtp = (JTabbedPane) getWidget();
