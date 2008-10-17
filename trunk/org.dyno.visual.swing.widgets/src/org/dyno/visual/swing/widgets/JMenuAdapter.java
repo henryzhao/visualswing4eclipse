@@ -73,6 +73,62 @@ public class JMenuAdapter extends CompositeAdapter {
 		return editor;
 	}
 
+	public void addBefore(Component hovering, Component dragged) {
+		JMenu jmenu = (JMenu) getWidget();
+		int index = -1;
+		for (int i = 0; i < jmenu.getMenuComponentCount(); i++) {
+			if (jmenu.getMenuComponent(i) == hovering) {
+				index = i;
+				break;
+			}
+		}
+		if (index != -1) {
+			jmenu.add(dragged, index);
+		} else {
+			jmenu.add(dragged);
+		}
+		if(jmenu.isPopupMenuVisible()){
+			refreshPopup();
+		}
+	}
+	private void refreshPopup(){
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				widgetPressed(null);
+				widgetPressed(null);
+			}});
+	}
+	public void addAfter(Component hovering, Component dragged) {
+		JMenu jmenu = (JMenu) getWidget();
+		int index = -1;
+		for (int i = 0; i < jmenu.getMenuComponentCount(); i++) {
+			if (jmenu.getMenuComponent(i) == hovering) {
+				index = i;
+				break;
+			}
+		}
+		if (index != -1) {
+			if (index == jmenu.getMenuComponentCount() - 1)
+				jmenu.add(dragged);
+			else
+				jmenu.add(dragged, index + 1);
+		} else {
+			jmenu.add(dragged);
+		}
+		if(jmenu.isPopupMenuVisible()){
+			refreshPopup();
+		}
+	}
+
+	public void addChild(Component widget) {
+		JMenu jmenu = (JMenu) getWidget();
+		jmenu.add(widget);
+		if(jmenu.isPopupMenuVisible()){
+			refreshPopup();
+		}
+	}
+
 	@Override
 	public Object getWidgetValue() {
 		Component me = getWidget();
@@ -118,7 +174,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	void showPopup() {
-		JMenu jmenu = (JMenu)getWidget();
+		JMenu jmenu = (JMenu) getWidget();
 		Container thisparent = jmenu.getParent();
 		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
 				.getSelectionStack();
@@ -146,7 +202,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	void hidePopup() {
-		JMenu jmenu = (JMenu)getWidget();
+		JMenu jmenu = (JMenu) getWidget();
 		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
 				.getSelectionStack();
 		while (!stack.isEmpty() && stack.peek() != jmenu) {
@@ -256,11 +312,13 @@ public class JMenuAdapter extends CompositeAdapter {
 		JMenu jmenu = (JMenu) getWidget();
 		return jmenu.isPopupMenuVisible();
 	}
-	private boolean inside_popup=false;
+
+	private boolean inside_popup = false;
+
 	@Override
 	public boolean dragEnter(Point p) {
 		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup=true;
+			inside_popup = true;
 			JMenu jmenu = (JMenu) getWidget();
 			JPopupMenu popup = jmenu.getPopupMenu();
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
@@ -272,7 +330,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			adapter.dragEnter(sp);
 			return true;
 		} else {
-			inside_popup=false;
+			inside_popup = false;
 			if (isDroppingPermitted()) {
 				dropStatus = DROPPING_PERMITTED;
 			} else {
@@ -286,7 +344,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	@Override
 	public boolean dragExit(Point p) {
 		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup=false;
+			inside_popup = false;
 			JMenu jmenu = (JMenu) getWidget();
 			JPopupMenu popup = jmenu.getPopupMenu();
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
@@ -298,7 +356,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			adapter.dragExit(sp);
 			return true;
 		} else {
-			inside_popup=false;
+			inside_popup = false;
 			dropStatus = NOOP;
 		}
 		setMascotLocation(p);
@@ -308,7 +366,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	@Override
 	public boolean dragOver(Point p) {
 		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup=true;
+			inside_popup = true;
 			JMenu jmenu = (JMenu) getWidget();
 			JPopupMenu popup = jmenu.getPopupMenu();
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
@@ -320,7 +378,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			adapter.dragOver(sp);
 			return true;
 		} else {
-			inside_popup=false;
+			inside_popup = false;
 			if (isDroppingPermitted()) {
 				dropStatus = DROPPING_PERMITTED;
 			} else {
@@ -334,7 +392,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	@Override
 	public boolean drop(Point p) {
 		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup=false;
+			inside_popup = false;
 			JMenu jmenu = (JMenu) getWidget();
 			JPopupMenu popup = jmenu.getPopupMenu();
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
@@ -346,7 +404,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			adapter.drop(sp);
 			return true;
 		} else {
-			inside_popup=false;
+			inside_popup = false;
 			if (isDroppingPermitted()) {
 				JMenu jmenu = (JMenu) getWidget();
 				WidgetAdapter target = getDropWidget();
