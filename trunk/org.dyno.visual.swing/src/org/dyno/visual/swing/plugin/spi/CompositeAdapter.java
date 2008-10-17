@@ -14,6 +14,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
@@ -234,5 +237,40 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 			builder.append(getFieldName(getName()) + "." + "add("
 					+ getMethodName + "());\n");
 		}
+	}
+	protected boolean isDroppingMenuItem(){
+		WidgetAdapter target = getDropWidget();
+		Component drop = target.getWidget();
+		return drop instanceof JMenuItem;
+	}
+	protected boolean isDroppingMenuBar(){
+		WidgetAdapter target = getDropWidget();
+		Component drop = target.getWidget();
+		return drop instanceof JMenuBar;
+	}
+	
+	@Override
+	public boolean dragEnter(Point p) {
+		setMascotLocation(p);
+		return true;
+	}
+
+	@Override
+	public boolean dragExit(Point p) {
+		setMascotLocation(p);
+		return true;
+	}
+
+	@Override
+	public boolean dragOver(Point p) {
+		setMascotLocation(p);
+		return true;
+	}
+
+	@Override
+	public boolean drop(Point p) {
+		setMascotLocation(p);
+		return true;
 	}	
+	
 }
