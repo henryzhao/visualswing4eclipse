@@ -3,6 +3,7 @@ package org.dyno.visual.swing.widgets;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -70,8 +71,15 @@ public class JMenuBarAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean removeChild(Component child) {
-		JMenuBar origin = (JMenuBar) getWidget();
+		JMenuAdapter jmenuAdapter=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(child);
+		jmenuAdapter.hidePopup();
+		JMenuBar origin = (JMenuBar) getWidget();		
 		origin.remove(child);
+		origin.doLayout();
+		origin.repaint();
+		Dimension size=child.getPreferredSize();		
+		child.setSize(size);
+		child.doLayout();
 		return true;
 	}
 

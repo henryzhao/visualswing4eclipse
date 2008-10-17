@@ -110,46 +110,56 @@ public class JMenuAdapter extends CompositeAdapter {
 		JMenu jmenu = (JMenu) getWidget();
 		boolean v = jmenu.isPopupMenuVisible();
 		if (v) {
-			Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
-					.getSelectionStack();
-			while (!stack.isEmpty() && stack.peek() != jmenu) {
-				MenuElement me = stack.pop();
-				if (me instanceof JMenu) {
-					JMenu jme = (JMenu) me;
-					jme.setPopupMenuVisible(false);
-					jme.setSelected(false);
-				}
-			}
-			stack.pop();
-			jmenu.setPopupMenuVisible(false);
-			jmenu.setSelected(false);
+			hidePopup();
 		} else {
-			Container thisparent = jmenu.getParent();
-			Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
-					.getSelectionStack();
-			while (!stack.isEmpty()) {
-				MenuElement ele = stack.peek();
-				if (ele instanceof JMenu) {
-					JMenu jme = (JMenu) ele;
-					Container parent = jme.getParent();
-					jme.setPopupMenuVisible(false);
-					jme.setSelected(false);
-					stack.pop();
-					if (parent == thisparent) {
-						break;
-					}
-				} else if (ele == thisparent) {
-					break;
-				} else {
-					stack.pop();
-				}
-			}
-			stack.add(jmenu);
-			stack.add(jmenu.getPopupMenu());
-			jmenu.setPopupMenuVisible(true);
-			jmenu.setSelected(true);
+			showPopup();
 		}
 		return true;
+	}
+
+	void showPopup() {
+		JMenu jmenu = (JMenu)getWidget();
+		Container thisparent = jmenu.getParent();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
+				.getSelectionStack();
+		while (!stack.isEmpty()) {
+			MenuElement ele = stack.peek();
+			if (ele instanceof JMenu) {
+				JMenu jme = (JMenu) ele;
+				Container parent = jme.getParent();
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+				stack.pop();
+				if (parent == thisparent) {
+					break;
+				}
+			} else if (ele == thisparent) {
+				break;
+			} else {
+				stack.pop();
+			}
+		}
+		stack.add(jmenu);
+		stack.add(jmenu.getPopupMenu());
+		jmenu.setPopupMenuVisible(true);
+		jmenu.setSelected(true);
+	}
+
+	void hidePopup() {
+		JMenu jmenu = (JMenu)getWidget();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
+				.getSelectionStack();
+		while (!stack.isEmpty() && stack.peek() != jmenu) {
+			MenuElement me = stack.pop();
+			if (me instanceof JMenu) {
+				JMenu jme = (JMenu) me;
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+			}
+		}
+		stack.pop();
+		jmenu.setPopupMenuVisible(false);
+		jmenu.setSelected(false);
 	}
 
 	public CompositeAdapter getParentAdapter() {
@@ -409,6 +419,14 @@ public class JMenuAdapter extends CompositeAdapter {
 		WidgetAdapter target = getDropWidget();
 		Component drop = target.getWidget();
 		return drop instanceof JMenuItem || drop instanceof JSeparator;
+	}
+
+	@Override
+	public boolean removeChild(Component child) {
+		boolean success = super.removeChild(child);
+		widgetPressed(null);
+		widgetPressed(null);
+		return success;
 	}
 
 	private int dropStatus;
