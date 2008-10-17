@@ -314,11 +314,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		else {
 			Component comp = focused.getWidget();
 			if (comp instanceof Container) {
-				LayoutManager layout = ((Container) comp).getLayout();
-				if (layout == null)
-					return true;
-			}
-			return focused.allowChildResize();
+				return focused.allowChildResize();
+			}else
+				return false;
 		}
 	}
 

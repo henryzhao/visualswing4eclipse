@@ -25,8 +25,10 @@ import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TreeDropTargetEffect;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -55,6 +57,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		source.addDragListener(this);
 
 		DropTarget target = new DropTarget(tree, operations);
+		target.setDropTargetEffect(new MyDropTargetEffect(tree));
 		target.setTransfer(types);
 		target.addDropListener(this);
 	}
@@ -89,7 +92,8 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 					return;
 				} else {
 					Component comp = (Component) object;
-					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
+					WidgetAdapter adapter = WidgetAdapter
+							.getWidgetAdapter(comp);
 					if (adapter.isRoot()) {
 						event.doit = false;
 						return;
@@ -126,11 +130,13 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		}
 	}
 
-	private void moveToSelectedNode(CompositeAdapter parent_adapter, Component target_comp, DropTargetEvent event, Component[] components) {
+	private void moveToSelectedNode(CompositeAdapter parent_adapter,
+			Component target_comp, DropTargetEvent event, Component[] components) {
 		if (parent_adapter.getWidget() == target_comp) {
 			event.detail = DND.DROP_NONE;
 		} else {
-			WidgetAdapter target_adapter = WidgetAdapter.getWidgetAdapter(target_comp);
+			WidgetAdapter target_adapter = WidgetAdapter
+					.getWidgetAdapter(target_comp);
 			CompositeAdapter target_parent = target_adapter.getParentAdapter();
 			if (target_parent == parent_adapter) {
 				if (!(target_adapter instanceof CompositeAdapter)) {
@@ -157,11 +163,13 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		}
 	}
 
-	private void moveBeforeSelectedNode(CompositeAdapter parent_adapter, Component target_comp, DropTargetEvent event, Component[] components) {
+	private void moveBeforeSelectedNode(CompositeAdapter parent_adapter,
+			Component target_comp, DropTargetEvent event, Component[] components) {
 		if (parent_adapter.getWidget() == target_comp) {
 			event.detail = DND.DROP_NONE;
 		} else {
-			WidgetAdapter target_adapter = WidgetAdapter.getWidgetAdapter(target_comp);
+			WidgetAdapter target_adapter = WidgetAdapter
+					.getWidgetAdapter(target_comp);
 			CompositeAdapter target_parent = target_adapter.getParentAdapter();
 			for (Component component : components) {
 				if (component == target_comp) {
@@ -180,11 +188,13 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 		}
 	}
 
-	private void moveAfterSelectedNode(CompositeAdapter parent_adapter, Component target_comp, DropTargetEvent event, Component[] components) {
+	private void moveAfterSelectedNode(CompositeAdapter parent_adapter,
+			Component target_comp, DropTargetEvent event, Component[] components) {
 		if (parent_adapter.getWidget() == target_comp) {
 			event.detail = DND.DROP_NONE;
 		} else {
-			WidgetAdapter target_adapter = WidgetAdapter.getWidgetAdapter(target_comp);
+			WidgetAdapter target_adapter = WidgetAdapter
+					.getWidgetAdapter(target_comp);
 			CompositeAdapter target_parent = target_adapter.getParentAdapter();
 			for (Component component : components) {
 				if (component == target_comp) {
@@ -204,6 +214,7 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 	}
 
 	public void drop(DropTargetEvent event) {
+
 		if (event.data == null) {
 			event.detail = DND.DROP_NONE;
 			return;
@@ -220,20 +231,41 @@ class OutlineViewDnD extends DropTargetAdapter implements DragSourceListener {
 					event.detail = DND.DROP_NONE;
 				} else {
 					Component first = components[0];
-					WidgetAdapter first_adapter = WidgetAdapter.getWidgetAdapter(first);
-					CompositeAdapter parent_adapter = first_adapter.getParentAdapter();
-					Component target_comp = (Component) data;
-					if ((event.feedback & DND.FEEDBACK_SELECT) != 0) {
-						moveToSelectedNode(parent_adapter, target_comp, event, components);
-					} else if ((event.feedback & DND.FEEDBACK_INSERT_AFTER) != 0) {
-						moveBeforeSelectedNode(parent_adapter, target_comp, event, components);
-					} else if ((event.feedback & DND.FEEDBACK_INSERT_BEFORE) != 0) {
-						moveAfterSelectedNode(parent_adapter, target_comp, event, components);
+					WidgetAdapter first_adapter = WidgetAdapter
+							.getWidgetAdapter(first);
+					CompositeAdapter parent_adapter = first_adapter
+							.getParentAdapter();
+					if ((feedback & DND.FEEDBACK_SELECT) != 0) {
+						moveToSelectedNode(parent_adapter, target_comp, event,
+								components);
+					} else if ((feedback & DND.FEEDBACK_INSERT_BEFORE) != 0) {
+						moveBeforeSelectedNode(parent_adapter, target_comp,
+								event, components);
+					} else if ((feedback & DND.FEEDBACK_INSERT_AFTER) != 0) {
+						moveAfterSelectedNode(parent_adapter, target_comp,
+								event, components);
 					} else {
 						event.detail = DND.DROP_NONE;
 					}
 				}
 			}
+		}
+	}
+
+	private int feedback;
+	private Component target_comp;
+
+	private class MyDropTargetEffect extends TreeDropTargetEffect {
+		public MyDropTargetEffect(Tree tree) {
+			super(tree);
+		}
+
+		@Override
+		public void dragOver(DropTargetEvent event) {
+			feedback = event.feedback;
+			if (event.item.getData() instanceof Component)
+				target_comp = (Component) event.item.getData();
+			super.dragOver(event);
 		}
 	}
 }
