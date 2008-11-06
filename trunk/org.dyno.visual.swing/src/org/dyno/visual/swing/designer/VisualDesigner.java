@@ -199,26 +199,23 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		return selected;
 	}
 
-	void trigPopup(final Point p) {
+	void trigPopup(final Point p, final List<Component>hovered) {
 		editor.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				trigPopupAt(p);
+				Point dp = new Point(p);
+				SwingUtilities.convertPointToScreen(dp, glass);
+				showPopup(dp, hovered);
 			}
 		});
 	}
 
-	private void trigPopupAt(Point p) {
-		Component hovered = componentAt(p, 0);
-		Point dp = new Point(p);
-		SwingUtilities.convertPointToScreen(dp, glass);
-		showPopup(dp, hovered);
-	}
 
-	private void showPopup(Point dp, Component hovered) {
+	private void showPopup(Point dp, List<Component> hovered) {
 		MenuManager manager = new MenuManager("#EDIT");
-		if (hovered != null)
-			addContextSensitiveMenu(manager, hovered);
+		if (hovered != null&&!hovered.isEmpty()){
+			addContextSensitiveMenu(manager, hovered.get(0));
+		}
 
 		manager.add(new Separator());
 		IEditorSite site = editor.getEditorSite();
@@ -278,7 +275,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public List<WidgetAdapter> getSelectedWidgets() {
 		return selected;
 	}
-
+	public List<Component> getSelectedComponents(){
+		return new WidgetSelection(root);
+	}
 	public Component componentAt(Point p, int offset) {
 		if (root != null) {
 			MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
@@ -446,10 +445,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				new WidgetSelection(root)));
 	}
 
+	@SuppressWarnings("unchecked")
 	public void showPopup(Event event) {
 		Object[] param = (Object[]) event.getParameter();
 		Point p = (Point) param[0];
-		Component hovered = (Component) param[1];
+		List<Component> hovered = (List<Component>) param[1];
 		showPopup(p, hovered);
 	}
 

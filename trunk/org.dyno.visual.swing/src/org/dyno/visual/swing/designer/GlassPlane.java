@@ -143,7 +143,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.isPopupTrigger()) {
-			designer.trigPopup(e.getPoint());
+			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
 		}
 	}
 

@@ -71,12 +71,13 @@ public class VisualSwingOutline extends ContentOutlinePage {
 				_mouseDoubleClicked(e);
 			}
 		});
-		tree.addListener(SWT.MeasureItem, new org.eclipse.swt.widgets.Listener(){
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-				event.height = 18;
-			}
-		});
+		tree.addListener(SWT.MeasureItem,
+				new org.eclipse.swt.widgets.Listener() {
+					@Override
+					public void handleEvent(org.eclipse.swt.widgets.Event event) {
+						event.height = 18;
+					}
+				});
 		new OutlineViewDnD(designer).attach(treeView);
 	}
 
@@ -84,9 +85,9 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		Tree tree = (Tree) getTreeViewer().getTree();
 		TreeItem item = tree.getItem(new Point(e.x, e.y));
 		if (item != null) {
-			if(item.getExpanded()){
+			if (item.getExpanded()) {
 				getTreeViewer().collapseToLevel(item.getData(), 1);
-			}else{
+			} else {
 				getTreeViewer().expandToLevel(item.getData(), 1);
 			}
 			if (item.getData() instanceof EventMethod) {
@@ -98,29 +99,30 @@ public class VisualSwingOutline extends ContentOutlinePage {
 
 	private void _showMenu(MenuDetectEvent e) {
 		Tree tree = (Tree) getTreeViewer().getTree();
-		if (tree != null) {
-			TreeItem[] items = tree.getSelection();
-			if (items != null && items.length > 0) {
-				TreeItem item = items[0];
-				Object object = item.getData();
-				if (object instanceof Component) {
-					WidgetAdapter adapter = WidgetAdapter
-							.getWidgetAdapter((Component) object);
-					if (adapter != null) {
-						WhiteBoard.sendEvent(new Event(this,
-								Event.EVENT_SHOW_POPUP, new Object[] {
-										new java.awt.Point(e.x, e.y),
-										adapter.getWidget() }));
-					}
+		if (tree == null)
+			return;
+		TreeItem[] items = tree.getSelection();
+		if (items == null || items.length == 0)
+			return;
+		List<Component> selected = new ArrayList<Component>();
+		for (TreeItem item : items) {
+			Object object = item.getData();
+			if (object instanceof Component) {
+				WidgetAdapter adapter = WidgetAdapter
+						.getWidgetAdapter((Component) object);
+				if (adapter != null) {
+					selected.add((Component) object);
 				}
 			}
 		}
+		if(!selected.isEmpty())
+			WhiteBoard.sendEvent(new Event(this, Event.EVENT_SHOW_POPUP, new Object[] { new java.awt.Point(e.x, e.y), selected }));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		if (event.getSource() == getTreeViewer()&&!isAdjusting) {
+		if (event.getSource() == getTreeViewer() && !isAdjusting) {
 			IStructuredSelection selection = (IStructuredSelection) event
 					.getSelection();
 			designer.clearSelection();
@@ -135,8 +137,8 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			}
 			designer.repaint();
 			super.selectionChanged(event);
-		} else if(event.getSelection() instanceof List){
-			getTreeViewer().refresh();			
+		} else if (event.getSelection() instanceof List) {
+			getTreeViewer().refresh();
 			TreePath[] paths = getTreePath((List<Component>) event
 					.getSelection());
 			TreeSelection sel = new TreeSelection(paths);
@@ -145,6 +147,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			isAdjusting = false;
 		}
 	}
+
 	private boolean isAdjusting;
 
 	private TreePath[] getTreePath(List<Component> components) {
