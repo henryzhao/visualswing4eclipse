@@ -11,6 +11,7 @@
    <extension-point id="org.dyno.visual.swing.borders.borderAdapter" name="Border Adapter" schema="schema/borderAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.lnf.lnfAdapter" name="LookAndFeel Adapter" schema="schema/lnfAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.listenerAdapter" name="Listener Adapter" schema="schema/listenerAdapter.exsd"/>
+   <extension-point id="org.dyno.visual.swing.customizedContextMenu" name="customizedContextMenu" schema="schema/customizedContextMenu.exsd"/>
    <extension point="org.eclipse.core.runtime.contentTypes">
 	   <content-type id="visualSwing" name="Swing Source" 
 			base-type="org.eclipse.jdt.core.javaSource"

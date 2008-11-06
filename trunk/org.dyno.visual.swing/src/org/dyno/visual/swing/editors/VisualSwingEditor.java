@@ -503,6 +503,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					if (!this.selection.isEmpty()) {
 						this.selection = selection;
 						fireSelectionChanged();
+					}else{
+						fireSelectionChanged();
 					}
 				} else {
 					if (this.selection.isEmpty()) {

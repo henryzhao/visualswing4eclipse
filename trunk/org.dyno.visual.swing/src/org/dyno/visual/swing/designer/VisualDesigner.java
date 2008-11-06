@@ -222,8 +222,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		List<IContextMenuCustomizer> contexts = ExtensionRegistry.getContextMenus();
 		if (!contexts.isEmpty()) {
 			manager.add(new Separator());
+			WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
 			for(IContextMenuCustomizer customizer:contexts){
-				customizer.fillContextMenu(manager, selected);				
+				customizer.fillContextMenu(manager, rootAdapter, selected);				
 			}
 		}
 		manager.add(new Separator());
