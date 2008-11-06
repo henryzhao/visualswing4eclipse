@@ -98,11 +98,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected String name;
 	protected String widgetName;
 	protected boolean selected;
-	protected HashMap<String, IConfigurationElement> propertyConfigs;
+	protected Map<String, IConfigurationElement> propertyConfigs;
 	protected Map<EventSetDescriptor, IEventListenerModel> eventDescriptor;
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
-
+	protected List<InvisibleAdapter> invisibles=new ArrayList<InvisibleAdapter>();
+	
 	protected void layoutContainer(Container container) {
 		container.doLayout();
 		int count = container.getComponentCount();
@@ -113,7 +114,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			}
 		}
 	}
-
+	public List<InvisibleAdapter> getInvisibles(){
+		return invisibles;
+	}	
 	public void validateContent() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null)

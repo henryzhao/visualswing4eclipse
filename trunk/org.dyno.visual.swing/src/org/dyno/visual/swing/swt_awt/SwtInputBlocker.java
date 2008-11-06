@@ -37,7 +37,7 @@ public class SwtInputBlocker extends Dialog {
 			public void focusGained(FocusEvent e) {
 				// On some platforms (e.g. Linux/GTK), the 0x0 shell still
 				// appears as a dot
-				// on the screen, so make it invisible by moving it below other
+				// on the screen, so make it invisibles by moving it below other
 				// windows. This
 				// is unnecessary under Windows and causes a flash, so only make
 				// the call when necessary.

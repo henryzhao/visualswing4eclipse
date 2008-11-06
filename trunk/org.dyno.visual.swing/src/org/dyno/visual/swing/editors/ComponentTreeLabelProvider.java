@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -56,6 +57,8 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 			return VisualSwingPlugin.getSharedImage(EVENT_SET_ICON);
 		} else if (element instanceof EventMethod) {
 			return VisualSwingPlugin.getSharedImage(EVENT_METHOD_ICON);
+		} else if (element instanceof InvisibleAdapter){
+			return ((InvisibleAdapter)element).getIconImage();
 		}
 		return null;
 	}
@@ -72,7 +75,9 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 			Component component = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
 			return (adapter.isRoot() ? "" : adapter.getName()) + "[" + adapter.getWidgetName() + "]";
-		} else
+		} else if(element instanceof InvisibleAdapter){
+			return ((InvisibleAdapter)element).getName();
+		}else
 			return element.toString();
 	}
 
