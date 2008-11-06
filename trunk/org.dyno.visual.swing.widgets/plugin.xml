@@ -1012,4 +1012,10 @@
          		<category id="seldom" name="Expert" filters="org.eclipse.ui.views.properties.expert" default="true"/>
          </sorting>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.customizedContextMenu">
+      <context
+            class="org.dyno.visual.swing.widgets.ButtonGroupMenuCustomizer">
+      </context>
+   </extension>
 </plugin>

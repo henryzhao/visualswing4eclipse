@@ -12,24 +12,26 @@ package org.dyno.visual.swing.widgets;
 import javax.swing.PopupFactory;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class WidgetPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.dyno.visual.swing.widgets";
 
 	// The shared instance
-	private static Activator plugin;
+	private static WidgetPlugin plugin;
 
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public WidgetPlugin() {
 	}
 
 	/*
@@ -62,7 +64,7 @@ public class Activator extends AbstractUIPlugin {
 	 * 
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static WidgetPlugin getDefault() {
 		return plugin;
 	}
 
@@ -76,5 +78,15 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	public static Image getSharedImage(String path) {
+		ImageRegistry registry = getDefault().getImageRegistry();
+		ImageDescriptor image_descriptor = registry.getDescriptor(path);
+		if (image_descriptor == null) {
+			image_descriptor = getImageDescriptor(path);
+			registry.put(path, image_descriptor);
+		}
+		return registry.get(path);
 	}
 }
