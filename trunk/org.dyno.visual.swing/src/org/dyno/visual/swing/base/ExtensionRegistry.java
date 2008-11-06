@@ -20,6 +20,7 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICloner;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
+import org.dyno.visual.swing.plugin.spi.IContextMenuCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -40,6 +41,7 @@ public class ExtensionRegistry {
 	private static final String CATEGORY_EXTENSION_POINT = "org.dyno.visual.swing.propertyCategory";
 	private static final String TYPE_EXTENSION_POINT = "org.dyno.visual.swing.valueType";
 	private static final String LOOKANDFEEL_EXTENSION_POINT = "org.dyno.visual.swing.lnf.lnfAdapter";
+	private static final String CUSTOMIZED_CONTEXT_MENU_EXTENSION_POINT="org.dyno.visual.swing.customizedContextMenu";
 	private static String CURRENT_SORTING;
 
 	public static void setCurrentSorting(String currentSorting) {
@@ -169,7 +171,10 @@ public class ExtensionRegistry {
 	private static HashMap<String, Sorting> propertySortings;
 	private static HashMap<String, TypeAdapter> typeAdapters;
 	private static HashMap<String, ILookAndFeelAdapter> lnfAdapters;
-
+	private static List<IContextMenuCustomizer> contextMenus;
+	public static List<IContextMenuCustomizer> getContextMenus(){
+		return contextMenus;
+	}
 	public static HashMap<String, IConfigurationElement> getRegisteredWidgets() {
 		return widgets;
 	}
@@ -179,15 +184,18 @@ public class ExtensionRegistry {
 		propertySortings = new HashMap<String, Sorting>();
 		typeAdapters = new HashMap<String, TypeAdapter>();
 		lnfAdapters = new HashMap<String, ILookAndFeelAdapter>();
+		contextMenus = new ArrayList<IContextMenuCustomizer>();
 		parseWidgetExtensions();
 		parseSortingExtensions();
 		parseTypeExtensions();
 		parseLnfExtensions();
+		parseContextMenus();
 	}
 
 	public static ILookAndFeelAdapter getLnfAdapter(String lnfClassname) {
 		return lnfAdapters.get(lnfClassname);
 	}
+
 
 	private static void parseLnfExtensions() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(LOOKANDFEEL_EXTENSION_POINT);
@@ -247,6 +255,17 @@ public class ExtensionRegistry {
 		}
 	}
 
+	private static void parseContextMenus() {
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CUSTOMIZED_CONTEXT_MENU_EXTENSION_POINT);
+		if (extensionPoint != null) {
+			IExtension[] extensions = extensionPoint.getExtensions();
+			if (extensions != null && extensions.length > 0) {
+				for (int i = 0; i < extensions.length; i++) {
+					parseContextExtension(extensions[i]);
+				}
+			}
+		}
+	}
 	private static void parseWidgetExtensions() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(ADAPTER_EXTENSION_POINT);
 		if (extensionPoint != null) {
@@ -282,7 +301,21 @@ public class ExtensionRegistry {
 			}
 		}
 	}
-
+	private static void parseContextExtension(IExtension extension) {
+		IConfigurationElement[] configs = extension.getConfigurationElements();
+		if (configs != null && configs.length > 0) {
+			for (int i = 0; i < configs.length; i++) {
+				String name = configs[i].getName();
+				if (name.equals("context")) {
+					try {
+						contextMenus.add((IContextMenuCustomizer) configs[i].createExecutableExtension("class"));
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 	private static void parseWidgetExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {

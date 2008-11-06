@@ -36,10 +36,12 @@ import javax.swing.border.Border;
 
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IContextMenuCustomizer;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.CutOperation;
 import org.dyno.visual.swing.undo.DeleteOperation;
@@ -199,24 +201,30 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		return selected;
 	}
 
-	void trigPopup(final Point p, final List<Component>hovered) {
+	void trigPopup(final Point p, final List<Component>selected) {
 		editor.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				Point dp = new Point(p);
 				SwingUtilities.convertPointToScreen(dp, glass);
-				showPopup(dp, hovered);
+				showPopup(dp, selected);
 			}
 		});
 	}
 
 
-	private void showPopup(Point dp, List<Component> hovered) {
+	private void showPopup(Point dp, List<Component> selected) {
 		MenuManager manager = new MenuManager("#EDIT");
-		if (hovered != null&&!hovered.isEmpty()){
-			addContextSensitiveMenu(manager, hovered.get(0));
+		if (selected != null&&!selected.isEmpty()){
+			addContextSensitiveMenu(manager, selected.get(0));
 		}
-
+		List<IContextMenuCustomizer> contexts = ExtensionRegistry.getContextMenus();
+		if (!contexts.isEmpty()) {
+			manager.add(new Separator());
+			for(IContextMenuCustomizer customizer:contexts){
+				customizer.fillContextMenu(manager, selected);				
+			}
+		}
 		manager.add(new Separator());
 		IEditorSite site = editor.getEditorSite();
 		manager.add(undoAction);
