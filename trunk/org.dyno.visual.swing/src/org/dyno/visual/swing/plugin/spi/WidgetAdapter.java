@@ -199,12 +199,12 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	protected void attach() {
-		if (widget instanceof JComponent) {
-			((JComponent) widget).putClientProperty(ADAPTER_PROPERTY, this);
-		} else if (widget instanceof RootPaneContainer) {
+		if (widget instanceof RootPaneContainer) {
 			JRootPane jrootPane = ((RootPaneContainer) widget).getRootPane();
 			jrootPane.putClientProperty(ADAPTER_PROPERTY, this);
-		}
+		} else if (widget instanceof JComponent) {
+			((JComponent) widget).putClientProperty(ADAPTER_PROPERTY, this);
+		} 
 	}
 
 	protected WidgetAdapter(String name) {
@@ -466,16 +466,15 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	public static WidgetAdapter getWidgetAdapter(Component comp) {
-		if (comp instanceof JComponent)
-			return (WidgetAdapter) ((JComponent) comp)
-					.getClientProperty(ADAPTER_PROPERTY);
-		else if (comp instanceof RootPaneContainer) {
+		if (comp instanceof RootPaneContainer) {
 			Container content = ((RootPaneContainer) comp).getRootPane();
 			if (content instanceof JComponent) {
 				return (WidgetAdapter) ((JComponent) content)
 						.getClientProperty(ADAPTER_PROPERTY);
 			}
-		}
+		} else if (comp instanceof JComponent)
+			return (WidgetAdapter) ((JComponent) comp)
+					.getClientProperty(ADAPTER_PROPERTY);
 		return null;
 	}
 
