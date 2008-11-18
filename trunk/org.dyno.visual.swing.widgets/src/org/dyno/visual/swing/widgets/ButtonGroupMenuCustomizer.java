@@ -72,6 +72,9 @@ public class ButtonGroupMenuCustomizer implements IContextMenuCustomizer {
 			WidgetAdapter rootAdapter, List<InvisibleAdapter> selected) {
 		if (isAllButtonGroupAdapter(selected)) {
 			menuManager.add(new DeleteButtonGroup(rootAdapter, selected));
+			if(selected.size()==1){
+				
+			}
 		}
 	}
 

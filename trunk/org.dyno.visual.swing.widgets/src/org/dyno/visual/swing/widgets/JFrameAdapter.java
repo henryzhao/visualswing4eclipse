@@ -1,3 +1,12 @@
+/******************************************************************************
+ * Copyright (c) 2008 William Chen.                                           *
+ *                                                                            *
+ * All rights reserved. This program and the accompanying materials are made  *
+ * available under the terms of GNU Lesser General Public License.            *
+ *                                                                            * 
+ * Use is subject to the terms of GNU Lesser General Public License.          * 
+ ******************************************************************************/
+
 package org.dyno.visual.swing.widgets;
 
 import java.awt.BasicStroke;
@@ -42,7 +51,6 @@ public class JFrameAdapter extends CompositeAdapter {
 	private JPanelAdapter contentAdapter;
 	private JComponent rootPane;
 	private JRootPane jrootPane;
-
 	public JFrameAdapter() {
 		super("jFrame");
 		createContentAdapter();
@@ -55,10 +63,10 @@ public class JFrameAdapter extends CompositeAdapter {
 	}
 
 	private void createContentAdapter() {
-		contentAdapter = (JPanelAdapter) ExtensionRegistry
-				.createWidgetAdapter(JPanel.class);
+		contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
 		contentAdapter.setDelegate(this);
 		JFrame me = (JFrame) getWidget();
+		layoutContainer(me);
 		rootPane = (JComponent) me.getContentPane();
 		jrootPane = me.getRootPane();
 		contentAdapter.setWidget(rootPane);
@@ -68,13 +76,9 @@ public class JFrameAdapter extends CompositeAdapter {
 		contentAdapter.doLayout();
 	}
 
-	protected void createPostInitCode(StringBuilder builder,
-			ImportRewrite imports) {
-		Dimension size = rootPane.getSize();
-		String cName = imports.addImport("java.awt.Dimension");
-		builder.append("getContentPane().setPreferredSize(new " + cName + "("
-				+ rootPane.getWidth() + ", " + rootPane.getHeight() + "));\n");
-		builder.append("getContentPane().setSize(" + size.width + ", "
+	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
+		Dimension size = this.jrootPane.getSize();
+		builder.append("setSize(" + size.width + ", "
 				+ size.height + ");\n");
 	}
 
@@ -178,7 +182,7 @@ public class JFrameAdapter extends CompositeAdapter {
 
 	@Override
 	public Rectangle getDesignBounds() {
-		Rectangle bounds = contentAdapter.getWidget().getBounds();
+		Rectangle bounds = this.jrootPane.getBounds();
 		if (bounds.width <= 0)
 			bounds.width = 400;
 		if (bounds.height <= 0)
@@ -523,8 +527,7 @@ public class JFrameAdapter extends CompositeAdapter {
 		return contentAdapter.isSelectionAlignResize(id);
 	}
 
-	protected boolean createConstructor(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		IMethod cons = type.getMethod(type.getElementName(), new String[0]);
 		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
@@ -532,8 +535,7 @@ public class JFrameAdapter extends CompositeAdapter {
 			builder.append("initComponent();\n");
 			builder.append("}\n");
 			try {
-				type.createMethod(JavaUtil.formatCode(builder.toString()),
-						null, false, null);
+				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				return false;
