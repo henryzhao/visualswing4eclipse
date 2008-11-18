@@ -44,7 +44,7 @@ public class VarChangeOperation extends AbstractOperation {
 						adapter.getParentAdapter().setDirty(true);
 					}
 					adapter.setDirty(true);
-					adapter.changeNotify();
+					adapter.changeNotify();					
 					break;
 				}
 			} else

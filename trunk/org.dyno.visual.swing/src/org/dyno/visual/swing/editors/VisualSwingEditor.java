@@ -491,19 +491,23 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			if (selection != null && !selection.isEmpty()) {
 				this.selection = selection;
 				fireSelectionChanged();
+			} else {
+				outline.refreshTree();
 			}
 		} else {
 			if (selection == null) {
 				if (!this.selection.isEmpty()) {
 					this.selection = null;
 					fireSelectionChanged();
+				} else {
+					outline.refreshTree();
 				}
 			} else {
 				if (selection.isEmpty()) {
 					if (!this.selection.isEmpty()) {
 						this.selection = selection;
 						fireSelectionChanged();
-					}else{
+					} else {
 						fireSelectionChanged();
 					}
 				} else {
@@ -513,6 +517,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					} else if (!this.selection.equals(selection)) {
 						this.selection = selection;
 						fireSelectionChanged();
+					} else {
+						outline.refreshTree();
 					}
 				}
 			}

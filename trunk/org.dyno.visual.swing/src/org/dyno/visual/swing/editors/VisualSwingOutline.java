@@ -211,7 +211,9 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			isAdjusting = false;
 		}
 	}
-
+	void refreshTree(){
+		getTreeViewer().refresh();
+	}
 	private boolean isAdjusting;
 
 	private TreePath[] getTreePath(List<Component> components) {
