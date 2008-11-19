@@ -166,7 +166,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public void selectWidgets(Rectangle selectionRegion) {
 		if (root != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root);
-			if (_selectWidget(selectionRegion, adapter)) {
+			Rectangle rootBounds = adapter.getDesignBounds();
+			Rectangle selBounds = new Rectangle(selectionRegion.x-rootBounds.x, selectionRegion.y-rootBounds.y, selectionRegion.width, selectionRegion.height);
+			if (_selectWidget(selBounds, adapter)) {
 				WidgetAdapter rootAdapter = WidgetAdapter
 						.getWidgetAdapter(root);
 				if (rootAdapter != null) {
