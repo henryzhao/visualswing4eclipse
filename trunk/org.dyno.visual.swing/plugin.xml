@@ -106,12 +106,32 @@
       </category>
       <wizard
             category="org.dyno.visual.swing"
-            class="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
-            icon="icons/panel_16.png"
-            id="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
-            name="Visual JPanel">
+            class="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
+            icon="icons/internal_frame_16.png"
+            id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
+            name="Internal Frame">
          <description>
-            New JPanel
+            New JInternalFrame
+         </description>
+      </wizard>      
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
+            icon="icons/applet_16.png"
+            id="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
+            name="Applet">
+         <description>
+            New JApplet
+         </description>
+      </wizard>
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
+            icon="icons/dialog_16.png"
+            id="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
+            name="Dialog">
+         <description>
+            New JDialog
          </description>
       </wizard>
       <wizard
@@ -119,39 +139,19 @@
             class="org.dyno.visual.swing.wizards.NewFrameCreationWizard"
             icon="icons/frame_16.png"
             id="org.dyno.visual.swing.wizards.NewFrameCreationWizard"
-            name="Visual JFrame">
+            name="Frame">
          <description>
             New JFrame
          </description>
       </wizard>      
       <wizard
             category="org.dyno.visual.swing"
-            class="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
-            icon="icons/dialog_16.png"
-            id="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
-            name="Visual JDialog">
+            class="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
+            icon="icons/panel_16.png"
+            id="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
+            name="Panel">
          <description>
-            New JDialog
-         </description>
-      </wizard>
-      <wizard
-            category="org.dyno.visual.swing"
-            class="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
-            icon="icons/applet_16.png"
-            id="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
-            name="Visual JApplet">
-         <description>
-            New JApplet
-         </description>
-      </wizard>
-      <wizard
-            category="org.dyno.visual.swing"
-            class="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
-            icon="icons/internal_frame_16.png"
-            id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
-            name="Visual InternalFrame">
-         <description>
-            New JInternalFrame
+            New JPanel
          </description>
       </wizard>
 	</extension>
@@ -208,5 +208,140 @@
             adapter="java.awt.event.WindowAdapter"
             interface="java.awt.event.WindowListener">
       </listener>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <commonWizard
+            type="new"
+            menuGroupId="org.eclipse.jdt.ui.java"
+            wizardId="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard">
+		     <enablement>
+		        <or>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragment"/>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragmentRoot"/>
+		           <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+		           <adapt type="org.eclipse.core.resources.IProject">
+		              <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+		           </adapt>
+		        </or>
+		     </enablement>
+      </commonWizard>
+      <commonWizard
+            type="new"
+            menuGroupId="org.eclipse.jdt.ui.java"
+            wizardId="org.dyno.visual.swing.wizards.NewAppletCreationWizard">
+		     <enablement>
+		        <or>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragment"/>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragmentRoot"/>
+		           <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+		           <adapt type="org.eclipse.core.resources.IProject">
+		              <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+		           </adapt>
+		        </or>
+		     </enablement>
+      </commonWizard>    
+      <commonWizard
+            type="new"
+            menuGroupId="org.eclipse.jdt.ui.java"
+            wizardId="org.dyno.visual.swing.wizards.NewDialogCreationWizard">
+		     <enablement>
+		        <or>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragment"/>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragmentRoot"/>
+		           <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+		           <adapt type="org.eclipse.core.resources.IProject">
+		              <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+		           </adapt>
+		        </or>
+		     </enablement>
+      </commonWizard>      
+      <commonWizard
+            type="new"
+            menuGroupId="org.eclipse.jdt.ui.java"
+            wizardId="org.dyno.visual.swing.wizards.NewFrameCreationWizard">
+		     <enablement>
+		        <or>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragment"/>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragmentRoot"/>
+		           <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+		           <adapt type="org.eclipse.core.resources.IProject">
+		              <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+		           </adapt>
+		        </or>
+		     </enablement>
+      </commonWizard>
+      <commonWizard
+            type="new"
+            menuGroupId="org.eclipse.jdt.ui.java"
+            wizardId="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
+		     <enablement>
+		        <or>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragment"/>
+		           <instanceof value="org.eclipse.jdt.core.IPackageFragmentRoot"/>
+		           <instanceof value="org.eclipse.jdt.core.ICompilationUnit"/>
+		           <adapt type="org.eclipse.core.resources.IProject">
+		              <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+		           </adapt>
+		        </or>
+		     </enablement>
+      </commonWizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewAppletCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewDialogCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewFrameCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewAppletCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewDialogCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewFrameCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.pde.ui.PDEPerspective">
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewAppletCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewDialogCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewFrameCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
    </extension>   
 </plugin>
