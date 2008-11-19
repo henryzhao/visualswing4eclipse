@@ -123,7 +123,6 @@ public class NewDialogPage extends NewComponentPage {
 		buf.append(cName + " dialog = new " + cName + "();\n");
 		buf.append("dialog.setDefaultCloseOperation(JDialog.EXIT_ON_CLOSE);\n");
 		buf.append("dialog.setTitle(\"" + type.getElementName() + "\");\n");
-		buf.append("dialog.pack();\n");
 		buf.append("dialog.setLocationRelativeTo(null);\n");
 		buf.append("dialog.setVisible(true);\n");
 		buf.append("}\n");
