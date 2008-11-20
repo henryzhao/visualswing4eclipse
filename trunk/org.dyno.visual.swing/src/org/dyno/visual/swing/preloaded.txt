@@ -10,7 +10,11 @@ javax.swing.Scrollable
 javax.swing.text.JTextComponent 
 javax.swing.JTextField 
 javax.swing.JPasswordField 
-javax.swing.JLayeredPane 
+javax.swing.JLayeredPane
+javax.swing.JFrame
+javax.swing.JDialog
+javax.swing.JApplet
+javax.swing.JPanel
 javax.swing.ArrayTable 
 javax.swing.WindowConstants 
 javax.swing.JInternalFrame 
