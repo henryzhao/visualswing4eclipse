@@ -17,8 +17,6 @@ import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;

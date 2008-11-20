@@ -18,7 +18,6 @@ import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class IconWrapper implements ICodeGen {
