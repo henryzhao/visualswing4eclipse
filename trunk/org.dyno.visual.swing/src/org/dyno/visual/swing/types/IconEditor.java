@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -55,13 +56,18 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 				URL location = IconWrapper.getImageIconLocation(imageIcon);
 				if (location != null) {
 					IProject prj = WhiteBoard.getCurrentProject().getProject();
-					String root = prj.getWorkspace().getRoot().getRawLocation().toString();
-					String path = location.getFile().toString();
-					path = path.substring(1);
-					path = path.substring(root.length());
-					Path ipath = new Path(path);
-					IPath rel = ipath.removeFirstSegments(2);
-					return "/" + rel.toString();
+					try {
+						IFile[] files = prj.getWorkspace().getRoot()
+								.findFilesForLocationURI(location.toURI());
+						if (files == null || files.length == 0)
+							return null;
+						return "/"
+								+ files[0].getProjectRelativePath()
+										.removeFirstSegments(1);
+					} catch (Exception e) {
+						e.printStackTrace();
+						return null;
+					}
 				} else
 					return "null";
 			}

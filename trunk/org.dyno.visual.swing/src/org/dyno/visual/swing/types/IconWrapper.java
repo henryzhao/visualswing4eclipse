@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -84,12 +85,18 @@ public class IconWrapper implements ICodeGen {
 				URL location = IconWrapper.getImageIconLocation(imageIcon);
 				if (location != null) {
 					IProject prj = WhiteBoard.getCurrentProject().getProject();
-					String root = prj.getWorkspace().getRoot().getRawLocation().toString();
-					String path = location.getFile().toString();
-					path = path.substring(1);
-					path = path.substring(root.length());
-					Path ipath = new Path(path);
-					rel = "/" + ipath.removeFirstSegments(2);
+					try {
+						IFile[] files = prj.getWorkspace().getRoot()
+								.findFilesForLocationURI(location.toURI());
+						if (files == null || files.length == 0)
+							return null;
+						return "/"
+								+ files[0].getProjectRelativePath()
+										.removeFirstSegments(1);
+					} catch (Exception e) {
+						e.printStackTrace();
+						return null;
+					}
 				} else
 					return null;
 			}
