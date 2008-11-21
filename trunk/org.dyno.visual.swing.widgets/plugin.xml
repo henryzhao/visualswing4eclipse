@@ -1018,4 +1018,10 @@
             class="org.dyno.visual.swing.widgets.ButtonGroupMenuCustomizer">
       </context>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.parser.fieldParser">
+      <parser
+            class="org.dyno.visual.swing.widgets.ButtonGroupFieldParser">
+      </parser>
+   </extension>
 </plugin>

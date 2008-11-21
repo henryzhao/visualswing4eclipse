@@ -7,7 +7,7 @@ import javax.swing.ButtonGroup;
 
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
-import org.dyno.visual.swing.plugin.spi.IAdapter;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IField;
@@ -18,7 +18,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.swt.graphics.Image;
 
-public class ButtonGroupAdapter implements IAdapter {
+public class ButtonGroupAdapter implements InvisibleAdapter {
 	private static final String BUTTON_GROUP_ICON = "/icons/button_group_16.png";
 	private static int VAR_INDEX=0;
 	private static Image iconImage;
@@ -39,8 +39,12 @@ public class ButtonGroupAdapter implements IAdapter {
 	private ButtonGroup group;
 	public ButtonGroupAdapter(){
 		name = "buttonGroup"+(VAR_INDEX++);
-		group = new ButtonGroup();
-		
+		group = new ButtonGroup();		
+	}
+	public ButtonGroupAdapter(String name, ButtonGroup group){
+		this.name = name;
+		this.lastName = name;
+		this.group = group; 
 	}
 	public ButtonGroup getButtonGroup(){
 		return group;
@@ -93,9 +97,8 @@ public class ButtonGroupAdapter implements IAdapter {
 		}
 		sibling = null;
 		if (getLastName() != null && !getLastName().equals(getName())) {
-			String lastGetMethodName = NamespaceManager.getInstance().getGetMethodName(getLastName());
-			IMethod lastMethod = type.getMethod(lastGetMethodName,
-					new String[0]);
+			String lastGetMethodName = "init"+NamespaceManager.getInstance().getCapitalName(getLastName());
+			IMethod lastMethod = type.getMethod(lastGetMethodName, new String[0]);
 			if (lastMethod != null && lastMethod.exists()) {
 				try {
 					sibling = getSibling(type, lastMethod);
