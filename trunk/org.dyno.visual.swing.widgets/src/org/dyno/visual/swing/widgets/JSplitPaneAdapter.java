@@ -390,7 +390,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				WidgetAdapter leftAdapter = WidgetAdapter
 						.getWidgetAdapter(leftComponent);
 				if (leftAdapter != null) {
-					String leftGetName = getGetMethodName(leftAdapter.getName());
+					String leftGetName = leftAdapter.getCreationMethodName();
 					builder.append(fieldName + ".setLeftComponent("
 							+ leftGetName + "());\n");
 				}
@@ -401,8 +401,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				WidgetAdapter rightAdapter = WidgetAdapter
 						.getWidgetAdapter(rightComponent);
 				if (rightAdapter != null) {
-					String rightGetName = getGetMethodName(rightAdapter
-							.getName());
+					String rightGetName = rightAdapter.getCreationMethodName();
 					builder.append(fieldName + ".setRightComponent("
 							+ rightGetName + "());\n");
 				}
@@ -414,7 +413,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				WidgetAdapter topAdapter = WidgetAdapter
 						.getWidgetAdapter(topComponent);
 				if (topAdapter != null) {
-					String topGetName = getGetMethodName(topAdapter.getName());
+					String topGetName = topAdapter.getCreationMethodName();
 					builder.append(fieldName + ".setTopComponent(" + topGetName
 							+ "());\n");
 				}
@@ -425,8 +424,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				WidgetAdapter bottomAdapter = WidgetAdapter
 						.getWidgetAdapter(bottomComponent);
 				if (bottomAdapter != null) {
-					String bottomGetName = getGetMethodName(bottomAdapter
-							.getName());
+					String bottomGetName = bottomAdapter.getCreationMethodName();
 					builder.append(fieldName + ".setBottomComponent("
 							+ bottomGetName + "());\n");
 				}

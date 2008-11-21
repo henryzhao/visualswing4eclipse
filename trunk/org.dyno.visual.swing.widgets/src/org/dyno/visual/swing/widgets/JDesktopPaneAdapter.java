@@ -68,7 +68,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = getGetMethodName(childAdapter.getName());
+			String getMethodName = childAdapter.getCreationMethodName();
 			builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
 		}
 		return builder.toString();

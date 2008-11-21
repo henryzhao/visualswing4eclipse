@@ -199,7 +199,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 		if (getChildCount() > 0) {
 			Component child = getChild(0);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = getGetMethodName(childAdapter.getName());
+			String getMethodName = childAdapter.getCreationMethodName();
 			builder.append(getFieldName(getName()) + ".setViewportView(" + getMethodName + "());\n");
 		}
 		return builder.toString();

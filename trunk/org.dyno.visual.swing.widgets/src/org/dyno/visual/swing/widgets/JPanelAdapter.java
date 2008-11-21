@@ -686,7 +686,7 @@ public class JPanelAdapter extends CompositeAdapter {
 				Component child = getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter
 						.getWidgetAdapter(child);
-				String getMethodName = getGetMethodName(childAdapter.getName());
+				String getMethodName = childAdapter.getCreationMethodName();
 				builder.append(getFieldName(getName()) + "." + "add("
 						+ getMethodName + "());\n");
 			}
@@ -713,7 +713,7 @@ public class JPanelAdapter extends CompositeAdapter {
 				Component child = getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter
 						.getWidgetAdapter(child);
-				String getMethodName = getGetMethodName(childAdapter.getName());
+				String getMethodName = childAdapter.getCreationMethodName();
 				builder.append("add(" + getMethodName + "());\n");
 			}
 		} else {
