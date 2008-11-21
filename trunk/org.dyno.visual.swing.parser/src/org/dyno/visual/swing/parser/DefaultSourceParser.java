@@ -25,15 +25,21 @@ import javax.swing.UIManager;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -58,12 +64,44 @@ import org.eclipse.swt.widgets.Shell;
  * @author William Chen
  */
 class DefaultSourceParser implements ISourceParser {
+	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser";
 	private ParserFactory factory;
 	private ICompilationUnit unit;
 	private ImportRewrite imports;
+	private List<IFieldParser> fieldParsers;
 
 	public DefaultSourceParser(ParserFactory factory) {
 		this.factory = factory;
+		fieldParsers = new ArrayList<IFieldParser>();
+		parseFieldParsers();
+	}
+
+	private void parseFieldParsers() {
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
+		if (extensionPoint != null) {
+			IExtension[] extensions = extensionPoint.getExtensions();
+			if (extensions != null && extensions.length > 0) {
+				for (int i = 0; i < extensions.length; i++) {
+					parseFieldParser(extensions[i]);
+				}
+			}
+		}
+	}
+
+	private void parseFieldParser(IExtension extension) {
+		IConfigurationElement[] configs = extension.getConfigurationElements();
+		if (configs != null && configs.length > 0) {
+			for (int i = 0; i < configs.length; i++) {
+				String name = configs[i].getName();
+				if (name.equals("parser")) {
+					try {
+						fieldParsers.add((IFieldParser)configs[i].createExecutableExtension("class"));
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -132,48 +170,63 @@ class DefaultSourceParser implements ISourceParser {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
-			Class type = field.getType();
-			String fieldName = field.getName();
-			if (JComponent.class.isAssignableFrom(type)) {
+			try {
 				field.setAccessible(true);
-				try {
-					JComponent fieldComponent = (JComponent) field.get(bean);
-					if (fieldComponent != null) {
-						WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
-						String widgetName = getNameFromFieldName(fieldName);
-						adapter.setName(widgetName);
-						adapter.setLastName(widgetName);
-						//set field access
-						int flags = field.getModifiers();
-						if(Modifier.isPrivate(flags)){
-							adapter.setFieldAccess(WidgetAdapter.ACCESS_PRIVATE);
-						}else if(Modifier.isProtected(flags)){
-							adapter.setFieldAccess(WidgetAdapter.ACCESS_PROTECTED);
-						}else if(Modifier.isPublic(flags)){
-							adapter.setFieldAccess(WidgetAdapter.ACCESS_PUBLIC);
-						}else{
-							adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
-						}
-						//set get access
-						String getName = getGetMethodName(fieldName);
-						Method getMethod = clazz.getDeclaredMethod(getName);
-						flags = getMethod.getModifiers();
-						if(Modifier.isPrivate(flags)){
-							adapter.setGetAccess(WidgetAdapter.ACCESS_PRIVATE);
-						}else if(Modifier.isProtected(flags)){
-							adapter.setGetAccess(WidgetAdapter.ACCESS_PROTECTED);
-						}else if(Modifier.isPublic(flags)){
-							adapter.setGetAccess(WidgetAdapter.ACCESS_PUBLIC);
-						}else{
-							adapter.setGetAccess(WidgetAdapter.ACCESS_DEFAULT);
-						}
-						
-						parseEventListener(cunit, adapter);
+				Object fieldValue = field.get(bean);
+				if (fieldValue != null) {
+					if (JComponent.class.isAssignableFrom(field.getType())) {
+						parseField(cunit, bean, field);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
+					for(IFieldParser parser:fieldParsers){
+						parser.parseField(cunit, bean, field);
+					}
 				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void parseField(CompilationUnit cunit, Component bean, Field field) {
+		try {
+			Class clazz = bean.getClass();
+			field.setAccessible(true);
+			Object fieldValue = field.get(bean);
+			String fieldName = field.getName();
+			JComponent fieldComponent = (JComponent) fieldValue;
+			WidgetAdapter adapter = ExtensionRegistry
+					.createWidgetAdapter(fieldComponent);
+			String widgetName = getNameFromFieldName(fieldName);
+			adapter.setName(widgetName);
+			adapter.setLastName(widgetName);
+			// set field access
+			int flags = field.getModifiers();
+			if (Modifier.isPrivate(flags)) {
+				adapter.setFieldAccess(WidgetAdapter.ACCESS_PRIVATE);
+			} else if (Modifier.isProtected(flags)) {
+				adapter.setFieldAccess(WidgetAdapter.ACCESS_PROTECTED);
+			} else if (Modifier.isPublic(flags)) {
+				adapter.setFieldAccess(WidgetAdapter.ACCESS_PUBLIC);
+			} else {
+				adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
+			}
+			// set get access
+			String getName = getGetMethodName(fieldName);
+			Method getMethod = clazz.getDeclaredMethod(getName);
+			flags = getMethod.getModifiers();
+			if (Modifier.isPrivate(flags)) {
+				adapter.setGetAccess(WidgetAdapter.ACCESS_PRIVATE);
+			} else if (Modifier.isProtected(flags)) {
+				adapter.setGetAccess(WidgetAdapter.ACCESS_PROTECTED);
+			} else if (Modifier.isPublic(flags)) {
+				adapter.setGetAccess(WidgetAdapter.ACCESS_PUBLIC);
+			} else {
+				adapter.setGetAccess(WidgetAdapter.ACCESS_DEFAULT);
+			}
+			parseEventListener(cunit, adapter);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	@SuppressWarnings("unchecked")
@@ -237,11 +290,15 @@ class DefaultSourceParser implements ISourceParser {
 			String sig = field.getTypeSignature();
 			if (isRegisteredWidget(sig)) {
 				String fieldName = field.getElementName();
-				String get = getGetMethodName(fieldName);
-				IMethod method = type.getMethod(get, new String[0]);
-				if (method.exists()) {
+				String getMethodName = getGetMethodName(fieldName);
+				IMethod method = type.getMethod(getMethodName, new String[0]);
+				if (method!=null&&method.exists()) {
 					return true;
 				}
+			}
+			for(IFieldParser parser:fieldParsers){
+				if(parser.isDesigningField(type, field))
+					return true;
 			}
 		} catch (JavaModelException e) {
 			e.printStackTrace();
@@ -252,16 +309,19 @@ class DefaultSourceParser implements ISourceParser {
 	private boolean isRegisteredWidget(String sig) {
 		if (sig.startsWith("L") || sig.startsWith("Q")) {
 			String className = sig.substring(1, sig.length() - 1);
-			HashMap<String, IConfigurationElement> widgets = ExtensionRegistry.getRegisteredWidgets();
+			HashMap<String, IConfigurationElement> widgets = ExtensionRegistry
+					.getRegisteredWidgets();
 			int dot = className.lastIndexOf('.');
 			if (dot != -1) {
-				return widgets.get(className) != null;
+				if (widgets.get(className) != null)
+					return true;
 			} else {
-				className = "javax.swing." + className;
-				return widgets.get(className) != null;
+				String cName = "javax.swing." + className;
+				if (widgets.get(cName) != null)
+					return true;
 			}
-		} else
-			return false;
+		}
+		return false;
 	}
 
 	@Override
@@ -273,7 +333,7 @@ class DefaultSourceParser implements ISourceParser {
 				unit_name = unit_name.substring(0, dot);
 			IType type = unit.getType(unit_name);
 			if (type != null) {
-				ArrayList<String> fieldNames = listBeanName(root);
+				ArrayList<String> fieldAdapters = listBeanName(root);
 				boolean success = root.generateCode(type, imports, monitor);
 				IField[] fields = type.getFields();
 				List<String> declared = new ArrayList<String>();
@@ -285,11 +345,11 @@ class DefaultSourceParser implements ISourceParser {
 						}
 					}
 				}
-				for (String fieldName : fieldNames) {
-					declared.remove(fieldName);
+				for (String iadapter : fieldAdapters) {
+					declared.remove(iadapter);
 				}
 				for (String declare : declared) {
-					removeComponent(type, declare, monitor);
+					removeField(type, declare, monitor);
 				}
 				// Remove unused private method
 				IMethod[] methods = type.getMethods();
@@ -349,22 +409,28 @@ class DefaultSourceParser implements ISourceParser {
 		return NamespaceManager.getInstance().isGetMethodName(method.getElementName());
 	}
 
-	private void removeComponent(IType type, String fieldName, IProgressMonitor monitor) {
+	private void removeField(IType type, String fieldName, IProgressMonitor monitor) {
 		IField field = type.getField(getFieldName(fieldName));
-		IMethod method = type.getMethod(getGetMethodName(fieldName), new String[0]);
 		if (field != null && field.exists()) {
 			try {
 				field.delete(true, monitor);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
+				return;
 			}
 		}
+		IMethod method = type.getMethod(getGetMethodName(fieldName), new String[0]);
 		if (method != null && method.exists()) {
 			try {
 				method.delete(true, monitor);
+				return;
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 			}
+		}
+		for(IFieldParser parser:fieldParsers){
+			if(parser.removeField(type, fieldName, monitor))
+				return;
 		}
 	}
 
@@ -385,6 +451,10 @@ class DefaultSourceParser implements ISourceParser {
 	private void _listNames(WidgetAdapter root, ArrayList<String> list) {
 		if (!root.isRoot()) {
 			list.add(root.getName());
+		}else{
+			for(InvisibleAdapter adapter: root.getInvisibles()){
+				list.add(adapter.getName());
+			}
 		}
 		if (root instanceof CompositeAdapter) {
 			CompositeAdapter containerAdapter = (CompositeAdapter) root;
