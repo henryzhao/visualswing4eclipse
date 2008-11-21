@@ -88,7 +88,7 @@ import org.osgi.framework.Bundle;
  * @author William Chen
  */
 public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
-		IPropertySourceProvider, IConstants {
+		IPropertySourceProvider, IConstants, IAdapter {
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;
@@ -102,7 +102,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected Map<EventSetDescriptor, IEventListenerModel> eventDescriptor;
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
-	protected List<InvisibleAdapter> invisibles=new ArrayList<InvisibleAdapter>();
+	protected List<IAdapter> invisibles=new ArrayList<IAdapter>();
 	
 	protected void layoutContainer(Container container) {
 		container.doLayout();
@@ -114,7 +114,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			}
 		}
 	}
-	public List<InvisibleAdapter> getInvisibles(){
+	public List<IAdapter> getInvisibles(){
 		return invisibles;
 	}	
 	public void validateContent() {

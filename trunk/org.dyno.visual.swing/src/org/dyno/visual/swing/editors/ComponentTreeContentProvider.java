@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
-import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -40,7 +40,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				return new Object[] { otherComponents,
 						root.getDesigner().getRoot() };
 			} else if (parentElement == otherComponents) {
-				List<InvisibleAdapter> children = root.getInvisibles();
+				List<IAdapter> children = root.getInvisibles();
 				Object[] values = new Object[children == null ? 0 : children
 						.size()];
 				if (children != null)
@@ -149,7 +149,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				return count > 0;
 			}
 		} else if (element == otherComponents) {
-			List<InvisibleAdapter> invisibles = root.getInvisibles();
+			List<IAdapter> invisibles = root.getInvisibles();
 			return invisibles == null ? false : invisibles.size() > 0;
 		} else if (element instanceof EventDesc) {
 			EventDesc eDesc = (EventDesc) element;

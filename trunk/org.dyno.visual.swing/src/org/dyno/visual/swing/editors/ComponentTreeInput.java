@@ -11,7 +11,7 @@ package org.dyno.visual.swing.editors;
 import java.util.List;
 
 import org.dyno.visual.swing.designer.VisualDesigner;
-import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 /**
  * 
@@ -32,7 +32,7 @@ public class ComponentTreeInput {
 		return root;
 	}
 
-	public List<InvisibleAdapter> getInvisibles() {
+	public List<IAdapter> getInvisibles() {
 		return root.getInvisibles();
 	}
 	public WidgetAdapter getRootAdapter(){
