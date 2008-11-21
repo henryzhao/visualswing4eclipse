@@ -265,11 +265,19 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		setUpLookAndFeel(rootAdapter.getWidget().getClass());
 		if (designer != null) {
 			designer.initRootWidget(rootAdapter);
+			refreshTree();
 			return true;
 		} else
 			return false;
 	}
-
+	private void refreshTree(){
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				outline.refreshTree();
+			}
+		});		
+	}
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		isGeneratingCode = true;

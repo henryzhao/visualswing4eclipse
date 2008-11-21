@@ -42,7 +42,7 @@ import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextMenuCustomizer;
-import org.dyno.visual.swing.plugin.spi.IAdapter;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.CutOperation;
 import org.dyno.visual.swing.undo.DeleteOperation;
@@ -836,7 +836,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		return parent;
 	}
 
-	public List<IAdapter> getInvisibles() {
+	public List<InvisibleAdapter> getInvisibles() {
 		if(root==null)
 		return null;
 		else{

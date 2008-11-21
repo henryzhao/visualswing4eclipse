@@ -102,7 +102,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected Map<EventSetDescriptor, IEventListenerModel> eventDescriptor;
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
-	protected List<IAdapter> invisibles=new ArrayList<IAdapter>();
+	protected List<InvisibleAdapter> invisibles=new ArrayList<InvisibleAdapter>();
 	
 	protected void layoutContainer(Container container) {
 		container.doLayout();
@@ -114,7 +114,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			}
 		}
 	}
-	public List<IAdapter> getInvisibles(){
+	public List<InvisibleAdapter> getInvisibles(){
 		return invisibles;
 	}	
 	public void validateContent() {
@@ -1130,7 +1130,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		builder.append(initMethodName);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
-		for(IAdapter invisible:invisibles){
+		for(InvisibleAdapter invisible:invisibles){
 			builder.append(invisible.getCreationMethodName()+"();\n");
 		}
 		createPostInitCode(builder, imports);
@@ -1141,7 +1141,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		} catch (JavaModelException e) {
 			success = false;
 		}
-		for(IAdapter invisible:invisibles){
+		for(InvisibleAdapter invisible:invisibles){
 			invisible.generateCode(type, imports, monitor);
 		}
 		success = createEventMethod(type, imports, monitor);

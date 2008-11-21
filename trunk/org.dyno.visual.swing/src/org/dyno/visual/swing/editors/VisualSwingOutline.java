@@ -17,7 +17,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.plugin.spi.IContextMenuCustomizer;
-import org.dyno.visual.swing.plugin.spi.IAdapter;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -117,12 +117,12 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		return selected;
 	}
 
-	private List<IAdapter> getSelectedInvisibles(TreeItem[] items) {
-		List<IAdapter> selected = new ArrayList<IAdapter>();
+	private List<InvisibleAdapter> getSelectedInvisibles(TreeItem[] items) {
+		List<InvisibleAdapter> selected = new ArrayList<InvisibleAdapter>();
 		for (TreeItem item : items) {
 			Object object = item.getData();
-			if (object instanceof IAdapter) {
-				selected.add((IAdapter) object);
+			if (object instanceof InvisibleAdapter) {
+				selected.add((InvisibleAdapter) object);
 			}
 		}
 		return selected;
@@ -165,14 +165,13 @@ public class VisualSwingOutline extends ContentOutlinePage {
 				context.fillInvisibleRootMenu(manager, input.getRootAdapter());
 			}
 		}
-		List<IAdapter> invisibles = getSelectedInvisibles(items);
+		List<InvisibleAdapter> invisibles = getSelectedInvisibles(items);
 		if (!invisibles.isEmpty()) {
 			WidgetAdapter rootAdapter = input.getRootAdapter();
 			List<IContextMenuCustomizer> menuCustomizers = ExtensionRegistry
 					.getContextMenus();
 			for (IContextMenuCustomizer context : menuCustomizers) {
-				context.fillInvisibleAdapterMenu(manager, rootAdapter,
-						invisibles);
+				context.fillInvisibleAdapterMenu(manager, rootAdapter, invisibles);
 			}
 		}
 		int size = manager.getSize();
