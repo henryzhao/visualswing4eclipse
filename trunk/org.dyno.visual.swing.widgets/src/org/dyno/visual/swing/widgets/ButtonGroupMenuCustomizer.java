@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 
 import org.dyno.visual.swing.plugin.spi.IContextMenuCustomizer;
-import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
@@ -27,11 +27,11 @@ public class ButtonGroupMenuCustomizer implements IContextMenuCustomizer {
 		if (isAllButton(selected)) {
 			MenuManager subMenu = new MenuManager("Add to button group",
 					"#ADD_TO_BUTTON_GROUP");
-			List<InvisibleAdapter> invisibles = rootAdapter.getInvisibles();
-			for (InvisibleAdapter invisibleAdapter : invisibles) {
-				if (invisibleAdapter instanceof ButtonGroupAdapter) {
+			List<IAdapter> invisibles = rootAdapter.getInvisibles();
+			for (IAdapter iAdapter : invisibles) {
+				if (iAdapter instanceof ButtonGroupAdapter) {
 					subMenu.add(new AddButtonGroupAction(
-							(ButtonGroupAdapter) invisibleAdapter, selected));
+							(ButtonGroupAdapter) iAdapter, selected));
 				}
 			}
 			menuManager.add(subMenu);
@@ -58,8 +58,8 @@ public class ButtonGroupMenuCustomizer implements IContextMenuCustomizer {
 		}
 	}
 
-	private boolean isAllButtonGroupAdapter(List<InvisibleAdapter> selected) {
-		for (InvisibleAdapter adapter : selected) {
+	private boolean isAllButtonGroupAdapter(List<IAdapter> selected) {
+		for (IAdapter adapter : selected) {
 			if (!(adapter instanceof ButtonGroupAdapter)) {
 				return false;
 			}
@@ -69,7 +69,7 @@ public class ButtonGroupMenuCustomizer implements IContextMenuCustomizer {
 
 	@Override
 	public void fillInvisibleAdapterMenu(MenuManager menuManager,
-			WidgetAdapter rootAdapter, List<InvisibleAdapter> selected) {
+			WidgetAdapter rootAdapter, List<IAdapter> selected) {
 		if (isAllButtonGroupAdapter(selected)) {
 			menuManager.add(new DeleteButtonGroup(rootAdapter, selected));
 			if(selected.size()==1){
@@ -101,21 +101,21 @@ public class ButtonGroupMenuCustomizer implements IContextMenuCustomizer {
 
 	class DeleteButtonGroup extends Action {
 		private WidgetAdapter root;
-		private List<InvisibleAdapter> adapters;
+		private List<IAdapter> adapters;
 
 		public DeleteButtonGroup(WidgetAdapter root,
-				List<InvisibleAdapter> adapters) {
+				List<IAdapter> adapters) {
 			super("Delete button group");
 			this.root = root;
-			this.adapters = new ArrayList<InvisibleAdapter>();
-			for(InvisibleAdapter adapter:adapters){
+			this.adapters = new ArrayList<IAdapter>();
+			for(IAdapter adapter:adapters){
 				this.adapters.add(adapter);
 			}
 		}
 
 		@Override
 		public void run() {
-			for (InvisibleAdapter adapter : adapters) {
+			for (IAdapter adapter : adapters) {
 				root.getInvisibles().remove(adapter);
 			}
 			root.changeNotify();
