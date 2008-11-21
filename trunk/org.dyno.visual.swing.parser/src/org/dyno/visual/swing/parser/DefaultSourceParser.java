@@ -274,7 +274,7 @@ class DefaultSourceParser implements ISourceParser {
 			IType type = unit.getType(unit_name);
 			if (type != null) {
 				ArrayList<String> fieldNames = listBeanName(root);
-				boolean success = root.genCode(type, imports, monitor);
+				boolean success = root.generateCode(type, imports, monitor);
 				IField[] fields = type.getFields();
 				List<String> declared = new ArrayList<String>();
 				if (fields != null && fields.length > 0) {
