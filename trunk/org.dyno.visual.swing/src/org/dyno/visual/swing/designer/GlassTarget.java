@@ -483,13 +483,27 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			dragging_event = null;
 			currentAdapter = null;
 			state = STATE_MOUSE_HOVER;
-		} else {
+		} else if(state==STATE_BEAN_TOBE_HOVER) {
+			Point point = e.getPoint();
+			Component hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
+			assert hovered!=null;
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
+			if (!e.isControlDown()){
+				designer.clearSelection();
+			}
+			adapter.setSelected(true);
+			adapter.changeNotify();
+			dragging_event = null;
+			currentAdapter = null;
+			state = STATE_MOUSE_HOVER;
+		}else{
 			dragging_event = null;
 			currentAdapter = null;
 			state = STATE_MOUSE_HOVER;
 		}
 		lastParent = null;
 		lastConstraints = null;
+		designer.repaint();
 	}
 
 	public void mouseDragged(MouseEvent e) {
