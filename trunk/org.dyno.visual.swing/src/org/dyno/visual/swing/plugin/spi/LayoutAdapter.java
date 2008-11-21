@@ -312,16 +312,12 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 		} else {
 			builder.append(getFieldName(conAdapter.getName()) + ".add(");
 		}
-		builder.append(getGetMethodName(childAdapter.getName()) + "()");
+		builder.append(childAdapter.getCreationMethodName()+"()");
 		if (constraints != null) {
 			builder.append(", " + constraints);
 		}
 		builder.append(");\n");
 		return builder.toString();
-	}
-
-	protected String getGetMethodName(String name) {
-		return NamespaceManager.getInstance().getGetMethodName(name);
 	}
 
 	protected String getFieldName(String name) {

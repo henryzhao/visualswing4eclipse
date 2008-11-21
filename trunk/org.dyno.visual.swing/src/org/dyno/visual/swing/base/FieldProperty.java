@@ -251,7 +251,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 					Component jcomp = (Component) bean;
 					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 					if (adapter != null) {
-						adapter.getDesigner().repaint();
+						adapter.repaintDesigner();
 					}
 				}
 			} catch (Exception e) {

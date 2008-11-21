@@ -33,6 +33,7 @@ public class LnfAction extends Action {
 			try {
 				adapter.setLnfClassname(info.getClassName());
 				SwingUtilities.updateComponentTreeUI(adapter.getDesigner());
+				adapter.repaintDesigner();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

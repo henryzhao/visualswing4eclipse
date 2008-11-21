@@ -488,7 +488,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			Component hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 			assert hovered!=null;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-			if (!e.isControlDown()){
+			if (!e.isControlDown()&&!e.isPopupTrigger()){
 				designer.clearSelection();
 			}
 			adapter.setSelected(true);

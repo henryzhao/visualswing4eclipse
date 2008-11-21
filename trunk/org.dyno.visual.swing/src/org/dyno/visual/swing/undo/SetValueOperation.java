@@ -52,7 +52,7 @@ public class SetValueOperation extends AbstractOperation {
 						widget.doLayout();
 						widget.validate();
 					}
-					adapter.getDesigner().repaint();
+					adapter.repaintDesigner();
 				}
 			}
 		} catch (Exception e) {

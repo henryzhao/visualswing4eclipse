@@ -445,8 +445,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	public void repaintDesigner() {
-		if (getDesigner() != null)
+		if (getDesigner() != null){
+			getDesigner().clearCapture();
 			getDesigner().repaint();
+		}
 	}
 
 	protected GlassPlane getGlass() {
@@ -992,7 +994,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return null;
 	}
 
-	public boolean genCode(IType type, ImportRewrite imports,
+	public boolean generateCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
 		if (!dirty)
 			return true;
@@ -1043,7 +1045,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 		sibling = null;
 		if (getLastName() != null && !getLastName().equals(getName())) {
-			String lastGetMethodName = getGetMethodName(getLastName());
+			String lastGetMethodName = NamespaceManager.getInstance().getGetMethodName(getLastName());
 			IMethod lastMethod = type.getMethod(lastGetMethodName,
 					new String[0]);
 			if (lastMethod != null && lastMethod.exists()) {
@@ -1056,7 +1058,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			}
 		}
 		StringBuilder builder = new StringBuilder();
-		String getMethodName = getGetMethodName(getName());
+		String getMethodName = NamespaceManager.getInstance().getGetMethodName(getName());
 		IMethod method = type.getMethod(getMethodName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
@@ -1128,6 +1130,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		builder.append(initMethodName);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
+		for(IAdapter invisible:invisibles){
+			builder.append(invisible.getCreationMethodName()+"();\n");
+		}
 		createPostInitCode(builder, imports);
 		builder.append("}\n");
 		try {
@@ -1135,6 +1140,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 					false, monitor);
 		} catch (JavaModelException e) {
 			success = false;
+		}
+		for(IAdapter invisible:invisibles){
+			invisible.generateCode(type, imports, monitor);
 		}
 		success = createEventMethod(type, imports, monitor);
 		success = createConstructor(type, imports, monitor);
@@ -1152,7 +1160,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		return true;
 	}
 
-	protected String getGetMethodName(String name) {
+	public String getCreationMethodName() {
 		return NamespaceManager.getInstance().getGetMethodName(name);
 	}
 

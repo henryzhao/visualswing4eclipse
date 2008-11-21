@@ -196,17 +196,17 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public boolean genCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+	public boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			if (!childAdapter.genCode(type, imports, monitor))
+			if (!childAdapter.generateCode(type, imports, monitor))
 				return false;
 		}
 		if (!dirty)
 			return true;
-		return super.genCode(type, imports, monitor);
+		return super.generateCode(type, imports, monitor);
 	}
 
 	public IWidgetPropertyDescriptor[] getConstraintsProperties(Component widget) {
@@ -236,7 +236,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = getGetMethodName(childAdapter.getName());
+			String getMethodName = childAdapter.getCreationMethodName();
 			builder.append(getFieldName(getName()) + "." + "add("
 					+ getMethodName + "());\n");
 		}
