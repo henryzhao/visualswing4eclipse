@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: LookAndFeel Plug-in
-Bundle-SymbolicName: org.dyno.visual.swing.lnfs;singleton:=true
-Bundle-Version: 0.9.2.I20080728-1200
-Require-Bundle: org.dyno.visual.swing
-Bundle-ActivationPolicy: lazy
-Bundle-Vendor: Dynamic Object Organization
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
