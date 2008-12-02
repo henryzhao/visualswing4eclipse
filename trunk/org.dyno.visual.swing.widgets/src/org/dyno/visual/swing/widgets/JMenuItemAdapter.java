@@ -14,12 +14,17 @@ import java.awt.FontMetrics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultButtonModel;
+import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuItemAdapter extends WidgetAdapter {
@@ -120,6 +125,29 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	@Override
 	public Class getWidgetClass() {
 		return JMenuItem.class;
+	}
+	@Override
+	public IAdapter getParent() {
+		JMenuItem jb = (JMenuItem) getWidget();		
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		bg.add(jb);
+		for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
+			if (invisible instanceof ButtonGroupAdapter) {
+				if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
+					return invisible;
+			}
+		}
+		return super.getParent();
+	}
+	@Override
+	public void deleteNotify() {
+		JMenuItem jb = (JMenuItem) getWidget();
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		if(bg!=null){
+			bg.remove(jb);
+		}
 	}
 	
 }

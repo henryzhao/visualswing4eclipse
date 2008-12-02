@@ -12,6 +12,8 @@ package org.dyno.visual.swing.widgets;
 import java.awt.Rectangle;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultButtonModel;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton.ToggleButtonModel;
@@ -48,5 +50,13 @@ public class JRadioButtonAdapter extends TextWidgetAdapter {
 		}
 		return super.getParent();
 	}
-	
+	@Override
+	public void deleteNotify() {
+		JRadioButton jb = (JRadioButton) getWidget();
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		if(bg!=null){
+			bg.remove(jb);
+		}
+	}
 }

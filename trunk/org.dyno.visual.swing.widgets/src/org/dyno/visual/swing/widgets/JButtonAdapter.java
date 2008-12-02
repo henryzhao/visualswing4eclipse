@@ -35,4 +35,15 @@ public class JButtonAdapter extends TextWidgetAdapter {
 		}
 		return super.getParent();
 	}
+
+	@Override
+	public void deleteNotify() {
+		JButton jb = (JButton) getWidget();
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		if(bg!=null){
+			bg.remove(jb);
+		}
+	}
+	
 }

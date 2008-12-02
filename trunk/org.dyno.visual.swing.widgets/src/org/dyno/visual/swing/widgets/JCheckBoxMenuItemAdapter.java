@@ -12,13 +12,17 @@ import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultButtonModel;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
@@ -105,6 +109,19 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 		return JCheckBoxMenuItem.class;
 	}
 
-
+	@Override
+	public IAdapter getParent() {
+		JCheckBoxMenuItem jb = (JCheckBoxMenuItem) getWidget();		
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		bg.add(jb);
+		for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
+			if (invisible instanceof ButtonGroupAdapter) {
+				if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
+					return invisible;
+			}
+		}
+		return super.getParent();
+	}
 
 }

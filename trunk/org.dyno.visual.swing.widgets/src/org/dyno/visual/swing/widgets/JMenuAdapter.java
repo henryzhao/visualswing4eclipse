@@ -23,6 +23,8 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Stack;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultButtonModel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -35,7 +37,9 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuAdapter extends CompositeAdapter {
@@ -502,7 +506,29 @@ public class JMenuAdapter extends CompositeAdapter {
 	public Class getWidgetClass() {
 		return JMenu.class;
 	}
-
+	@Override
+	public IAdapter getParent() {
+		JMenu jb = (JMenu) getWidget();		
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		bg.add(jb);
+		for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
+			if (invisible instanceof ButtonGroupAdapter) {
+				if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
+					return invisible;
+			}
+		}
+		return super.getParent();
+	}
+	@Override
+	public void deleteNotify() {
+		JMenu jb = (JMenu) getWidget();
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		if(bg!=null){
+			bg.remove(jb);
+		}
+	}	
 	private int dropStatus;
 	private static final int NOOP = 0;
 	private static final int DROPPING_PERMITTED = 1;

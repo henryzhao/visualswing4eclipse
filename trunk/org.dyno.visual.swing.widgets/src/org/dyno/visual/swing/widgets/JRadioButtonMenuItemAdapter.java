@@ -12,13 +12,18 @@ import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
 
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultButtonModel;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
@@ -105,6 +110,27 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 	public Class getWidgetClass() {
 		return JRadioButtonMenuItem.class;
 	}
-
-
+	@Override
+	public IAdapter getParent() {
+		JRadioButtonMenuItem jb = (JRadioButtonMenuItem) getWidget();		
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		bg.add(jb);
+		for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
+			if (invisible instanceof ButtonGroupAdapter) {
+				if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
+					return invisible;
+			}
+		}
+		return super.getParent();
+	}
+	@Override
+	public void deleteNotify() {
+		JRadioButtonMenuItem jb = (JRadioButtonMenuItem) getWidget();
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		if(bg!=null){
+			bg.remove(jb);
+		}
+	}	
 }

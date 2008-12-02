@@ -10,7 +10,7 @@
 package org.dyno.visual.swing.widgets;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComponent;
+import javax.swing.DefaultButtonModel;
 import javax.swing.JToggleButton;
 import javax.swing.JToggleButton.ToggleButtonModel;
 
@@ -36,4 +36,13 @@ public class JToggleButtonAdapter extends TextWidgetAdapter {
 		}
 		return super.getParent();
 	}
+	@Override
+	public void deleteNotify() {
+		JToggleButton jb = (JToggleButton) getWidget();
+		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
+		ButtonGroup bg = dbm.getGroup();
+		if(bg!=null){
+			bg.remove(jb);
+		}
+	}		
 }

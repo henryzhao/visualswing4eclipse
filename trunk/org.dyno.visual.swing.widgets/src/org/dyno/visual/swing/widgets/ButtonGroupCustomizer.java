@@ -62,14 +62,17 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 	}
 
 	@Override
-	public void fillContextMenu(MenuManager menuManager, WidgetAdapter rootAdapter, List<Component> selected) {
+	public void fillContextMenu(MenuManager menuManager,
+			WidgetAdapter rootAdapter, List<Component> selected) {
 		if (isAllButton(selected)) {
-			MenuManager subMenu = new MenuManager("Add to button group", "#ADD_TO_BUTTON_GROUP");
+			MenuManager subMenu = new MenuManager("Add to button group",
+					"#ADD_TO_BUTTON_GROUP");
 			List<InvisibleAdapter> invisibles = rootAdapter.getInvisibles();
 			boolean hasGroup = false;
 			for (InvisibleAdapter invisibleAdapter : invisibles) {
 				if (invisibleAdapter instanceof ButtonGroupAdapter) {
-					subMenu.add(new AddButtonGroupAction(rootAdapter, (ButtonGroupAdapter) invisibleAdapter, selected));
+					subMenu.add(new AddButtonGroupAction(rootAdapter,
+							(ButtonGroupAdapter) invisibleAdapter, selected));
 					hasGroup = true;
 				}
 			}
@@ -85,7 +88,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private List<Component> selectedButtons;
 		private WidgetAdapter root;
 
-		public AddButtonGroupAction(WidgetAdapter root, ButtonGroupAdapter buttonGroup, List<Component> selected) {
+		public AddButtonGroupAction(WidgetAdapter root,
+				ButtonGroupAdapter buttonGroup, List<Component> selected) {
 			setText(buttonGroup.getName());
 			this.buttonGroup = buttonGroup;
 			this.selectedButtons = selected;
@@ -95,12 +99,24 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		public void run() {
 			if (selectedButtons.isEmpty())
 				return;
+			ButtonGroup group = buttonGroup.getButtonGroup();
 			for (Component comp : selectedButtons) {
-				buttonGroup.getButtonGroup().add((AbstractButton) comp);
+				if (!isInGroup(group, comp))
+					buttonGroup.getButtonGroup().add((AbstractButton) comp);
 			}
 			root.setDirty(true);
 			root.changeNotify();
 		}
+	}
+
+	private boolean isInGroup(ButtonGroup group, Component comp) {
+		Enumeration<AbstractButton> elements = group.getElements();
+		while (elements.hasMoreElements()) {
+			AbstractButton ab = elements.nextElement();
+			if (ab == comp)
+				return true;
+		}
+		return false;
 	}
 
 	private boolean isAllButtonGroupAdapter(List<InvisibleAdapter> selected) {
@@ -121,36 +137,43 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			int count = container.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = container.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				findButtons(childAdapter, buttons);
 			}
 		}
 	}
 
 	@Override
-	public void fillInvisibleAdapterMenu(MenuManager menuManager, WidgetAdapter rootAdapter, List<InvisibleAdapter> selected) {
+	public void fillInvisibleAdapterMenu(MenuManager menuManager,
+			WidgetAdapter rootAdapter, List<InvisibleAdapter> selected) {
 		if (isAllButtonGroupAdapter(selected)) {
 			menuManager.add(new DeleteButtonGroup(rootAdapter, selected));
 			if (selected.size() == 1) {
 				ButtonGroupAdapter bga = (ButtonGroupAdapter) selected.get(0);
-				menuManager.add(new ButtonGroupRenamingAction(rootAdapter, bga));
+				menuManager
+						.add(new ButtonGroupRenamingAction(rootAdapter, bga));
 				ButtonGroup bg = bga.getButtonGroup();
 				List<AbstractButton> allButtons = new ArrayList<AbstractButton>();
 				findButtons(rootAdapter, allButtons);
 				if (bg.getButtonCount() > 0) {
 					Enumeration<AbstractButton> elements = bg.getElements();
-					MenuManager delMenu = new MenuManager("Remove button from this group");
+					MenuManager delMenu = new MenuManager(
+							"Remove button from this group");
 					while (elements.hasMoreElements()) {
 						AbstractButton aButton = elements.nextElement();
-						delMenu.add(new DeleteButtonFromThisGroupAction(rootAdapter, aButton, bg));
+						delMenu.add(new DeleteButtonFromThisGroupAction(
+								rootAdapter, aButton, bg));
 						allButtons.remove(aButton);
 					}
 					menuManager.add(delMenu);
 				}
 				if (!allButtons.isEmpty()) {
-					MenuManager addMenu = new MenuManager("Add button to this group");
+					MenuManager addMenu = new MenuManager(
+							"Add button to this group");
 					for (AbstractButton aButton : allButtons) {
-						addMenu.add(new AddButtonToThisGroupAction(rootAdapter, aButton, bg));
+						addMenu.add(new AddButtonToThisGroupAction(rootAdapter,
+								aButton, bg));
 					}
 					menuManager.add(addMenu);
 				}
@@ -163,7 +186,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private ButtonGroup buttonGroup;
 		private WidgetAdapter rootAdapter;
 
-		public AddButtonToThisGroupAction(WidgetAdapter rootAdapter, AbstractButton button, ButtonGroup bg) {
+		public AddButtonToThisGroupAction(WidgetAdapter rootAdapter,
+				AbstractButton button, ButtonGroup bg) {
 			this.button = button;
 			setText(WidgetAdapter.getWidgetAdapter(button).getName());
 			this.buttonGroup = bg;
@@ -172,9 +196,11 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		@Override
 		public void run() {
-			this.buttonGroup.add(button);
-			this.rootAdapter.setDirty(true);
-			this.rootAdapter.changeNotify();
+			if (!isInGroup(buttonGroup, button)) {
+				this.buttonGroup.add(button);
+				this.rootAdapter.setDirty(true);
+				this.rootAdapter.changeNotify();
+			}
 		}
 	}
 
@@ -183,7 +209,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private ButtonGroup buttonGroup;
 		private WidgetAdapter rootAdapter;
 
-		public DeleteButtonFromThisGroupAction(WidgetAdapter rootAdapter, AbstractButton button, ButtonGroup bg) {
+		public DeleteButtonFromThisGroupAction(WidgetAdapter rootAdapter,
+				AbstractButton button, ButtonGroup bg) {
 			this.button = button;
 			setText(WidgetAdapter.getWidgetAdapter(button).getName());
 			this.buttonGroup = bg;
@@ -192,14 +219,16 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		@Override
 		public void run() {
-			this.buttonGroup.remove(button);
+			if (isInGroup(buttonGroup, button))
+				this.buttonGroup.remove(button);
 			this.rootAdapter.setDirty(true);
 			this.rootAdapter.changeNotify();
 		}
 	}
 
 	@Override
-	public void fillInvisibleRootMenu(MenuManager menuManager, WidgetAdapter rootAdapter) {
+	public void fillInvisibleRootMenu(MenuManager menuManager,
+			WidgetAdapter rootAdapter) {
 		menuManager.add(new AddButtonGroup(rootAdapter));
 	}
 
@@ -247,7 +276,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private WidgetAdapter root;
 		private List<InvisibleAdapter> adapters;
 
-		public DeleteButtonGroup(WidgetAdapter root, List<InvisibleAdapter> adapters) {
+		public DeleteButtonGroup(WidgetAdapter root,
+				List<InvisibleAdapter> adapters) {
 			super("Delete button group");
 			this.root = root;
 			this.adapters = new ArrayList<InvisibleAdapter>();
@@ -260,6 +290,12 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		public void run() {
 			for (InvisibleAdapter adapter : adapters) {
 				root.getInvisibles().remove(adapter);
+				ButtonGroup bg = ((ButtonGroupAdapter)adapter).getButtonGroup();
+				Enumeration<AbstractButton> elements = bg.getElements();
+				while(elements.hasMoreElements()){
+					AbstractButton ab=elements.nextElement();
+					bg.remove(ab);
+				}
 			}
 			root.setDirty(true);
 			root.changeNotify();
@@ -267,9 +303,11 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 	}
 
 	@Override
-	public void fillIAdapterMenu(MenuManager manager, WidgetAdapter rootAdapter, List<IAdapter> iadapters) {
+	public void fillIAdapterMenu(MenuManager manager,
+			WidgetAdapter rootAdapter, List<IAdapter> iadapters) {
 		if (isAllAbstractButtonAdapter(iadapters)) {
-			manager.add(new DeleteButtonFromParentGroup(rootAdapter, iadapters));
+			manager
+					.add(new DeleteButtonFromParentGroup(rootAdapter, iadapters));
 		}
 	}
 
@@ -277,7 +315,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private WidgetAdapter rootAdapter;
 		private List<IAdapter> iadapters;
 
-		public DeleteButtonFromParentGroup(WidgetAdapter rootAdapter, List<IAdapter> iadapters) {
+		public DeleteButtonFromParentGroup(WidgetAdapter rootAdapter,
+				List<IAdapter> iadapters) {
 			super("Remove selection from button group");
 			this.rootAdapter = rootAdapter;
 			this.iadapters = iadapters;
@@ -286,9 +325,13 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		@Override
 		public void run() {
 			for (IAdapter iadapter : iadapters) {
-				ButtonGroupAdapter bga = (ButtonGroupAdapter) iadapter.getParent();
-				AbstractButton aButton = (AbstractButton) ((WidgetAdapter) iadapter).getWidget();
-				bga.getButtonGroup().remove(aButton);
+				ButtonGroupAdapter bga = (ButtonGroupAdapter) iadapter
+						.getParent();
+				AbstractButton aButton = (AbstractButton) ((WidgetAdapter) iadapter)
+						.getWidget();
+				ButtonGroup bg = bga.getButtonGroup();
+				if (isInGroup(bg, aButton))
+					bg.remove(aButton);
 			}
 			rootAdapter.setDirty(true);
 			rootAdapter.changeNotify();
@@ -330,13 +373,16 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			}
 			if (!buttons.isEmpty()) {
 				for (AbstractButton aButton : buttons) {
-					WidgetAdapter bAdapter = WidgetAdapter.getWidgetAdapter(aButton);
+					WidgetAdapter bAdapter = WidgetAdapter
+							.getWidgetAdapter(aButton);
 					Point p = bAdapter.convertToGlobal(new Point(0, 0));
 					Rectangle rect = aButton.getBounds();
 					rect.x = p.x;
 					rect.y = p.y;
 					int ih = BUTTON_GROUP_AWT_ICON_IMAGE.getHeight(DUMMY);
-					g.drawImage(BUTTON_GROUP_AWT_ICON_IMAGE, rect.x + rect.width + 6, rect.y + rect.height / 2 - ih / 2, DUMMY);
+					g.drawImage(BUTTON_GROUP_AWT_ICON_IMAGE, rect.x
+							+ rect.width + 6,
+							rect.y + rect.height / 2 - ih / 2, DUMMY);
 				}
 			}
 		}
