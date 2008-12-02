@@ -27,14 +27,14 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 class ResizeRight extends ResizeOperation {
-	public ResizeRight(GroupLayoutAdapter layout, GroupLayout op, JComponent container) {
-		super(layout, op, container);
+	public ResizeRight(GroupLayoutAdapter layout, WidgetAdapter tracingAdapter, GroupLayout op, JComponent container) {
+		super(layout, tracingAdapter, op, container);
 	}
 
 	@Override
 	public boolean dragOver(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
-		JComponent todrop = (JComponent)parent.getDropWidget().getWidget();
+		JComponent todrop = (JComponent)tracingAdapter.getWidget();
 		Point lp = p;
 		if (last_point == null) {
 			last_point = lp;
@@ -60,7 +60,7 @@ class ResizeRight extends ResizeOperation {
 	public boolean drop(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
-		WidgetAdapter dropAdapter = parent.getDropWidget();
+		WidgetAdapter dropAdapter = tracingAdapter;
 		JComponent drop = (JComponent)dropAdapter.getComponent();
 		Point hot = dropAdapter.getHotspotPoint();
 		Alignment vertical = adapter.getLastConstraints().getVertical();
@@ -109,10 +109,10 @@ class ResizeRight extends ResizeOperation {
 	private QuartetPair calculateMascotLocation(JComponent todrop, Point this_point, int azimuth) {
 		List<Quartet> vAnchor = calRAnchor(todrop, this_point, azimuth);
 		if (vAnchor == null) {
-			adapter.setBaseline(null, null);
+			adapter.addBaseline(null, null);
 			return null;
 		} else {
-			adapter.setBaseline(null, vAnchor);
+			adapter.addBaseline(null, vAnchor);
 			Quartet qtet = calMasc(this_point.x, vAnchor);
 			return new QuartetPair(null, qtet);
 		}

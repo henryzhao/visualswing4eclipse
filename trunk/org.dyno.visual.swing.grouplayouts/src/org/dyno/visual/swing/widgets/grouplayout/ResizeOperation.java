@@ -52,8 +52,8 @@ import org.dyno.visual.swing.widgets.grouplayout.anchor.VerticalTrailingContaine
 import org.dyno.visual.swing.widgets.grouplayout.anchor.VerticalTrailingGapContainerAnchor;
 
 public abstract class ResizeOperation extends AbstractDragOperation {
-	protected ResizeOperation(GroupLayoutAdapter adapter, GroupLayout layout, JComponent container) {
-		super(adapter, layout, container);
+	protected ResizeOperation(GroupLayoutAdapter adapter, WidgetAdapter tracingAdapter, GroupLayout layout, JComponent container) {
+		super(adapter, tracingAdapter, layout, container);
 	}
 
 	protected List<Quartet> calLAnchor(JComponent todrop, Point this_point, int azimuth) {

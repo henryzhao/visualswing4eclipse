@@ -57,11 +57,13 @@ abstract class AbstractDragOperation implements IDragOperation {
 	protected GroupLayout layout;
 	protected Point last_point;
 	protected int azimuth;
+	protected WidgetAdapter tracingAdapter;
 
-	protected AbstractDragOperation(GroupLayoutAdapter adapter, GroupLayout layout, JComponent container) {
+	protected AbstractDragOperation(GroupLayoutAdapter adapter, WidgetAdapter tracingAdapter, GroupLayout layout, JComponent container) {
 		this.adapter = adapter;
 		this.container = container;
 		this.layout = layout;
+		this.tracingAdapter = tracingAdapter;
 	}
 
 	private int compare(List<Quartet> trios, List<Quartet> anchor, int direction) {
@@ -146,15 +148,30 @@ abstract class AbstractDragOperation implements IDragOperation {
 	}
 
 	protected Point dragComponent(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		Point lp = p;
-		QuartetPair pair = calMascotLocation((JComponent)parent.getDropWidget().getWidget(), lp, azimuth);
-		Point np = pair == null ? lp : new Point(pair.vQuart == null ? lp.x : pair.vQuart.masc, pair.hQuart == null ? lp.y : pair.hQuart.masc);
+		QuartetPair pair = calMascotLocation((JComponent) tracingAdapter
+				.getWidget(), lp, azimuth);
 		azimuth = getAzimuth(p, last_point);
 		last_point = lp;
-		Point newp = np;
 		Point oldp = parent.getMascotLocation();
-		parent.setMascotLocation(newp);
+		if (pair != null) {
+			Point pt = parent.getMascotLocation();
+			int x = pt.x;
+			int y = pt.y;
+			if (x == lp.x) {
+				if (pair.vQuart != null) {
+					x = pair.vQuart.masc;
+				}
+			}
+			if (y == lp.y) {
+				if (pair.hQuart != null) {
+					y = pair.hQuart.masc;
+				}
+			}
+			parent.setMascotLocation(new Point(x, y));
+		}
 		return oldp;
 	}
 	protected QuartetPair calMascotLocation(JComponent todrop, Point this_point, int azimuth) {
@@ -162,20 +179,20 @@ abstract class AbstractDragOperation implements IDragOperation {
 		List<Quartet> vAnchor = calVAnchor(todrop, this_point, azimuth);
 		if (hAnchor == null) {
 			if (vAnchor == null) {
-				adapter.setBaseline(null, null);
+				adapter.addBaseline(null, null);
 				return null;
 			} else {
-				adapter.setBaseline(null, vAnchor);
+				adapter.addBaseline(null, vAnchor);
 				Quartet qtet = calMasc(this_point.x, vAnchor);
 				return new QuartetPair(null, qtet);
 			}
 		} else {
 			if (vAnchor == null) {
-				adapter.setBaseline(hAnchor, null);
+				adapter.addBaseline(hAnchor, null);
 				Quartet qtet = calMasc(this_point.y, hAnchor);
 				return new QuartetPair(qtet, null);
 			} else {
-				adapter.setBaseline(hAnchor, vAnchor);
+				adapter.addBaseline(hAnchor, vAnchor);
 				Quartet vqtet = calMasc(this_point.x, vAnchor);
 				Quartet hqtet = calMasc(this_point.y, hAnchor);
 				return new QuartetPair(hqtet, vqtet);

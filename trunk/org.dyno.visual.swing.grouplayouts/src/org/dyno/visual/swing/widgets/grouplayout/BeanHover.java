@@ -24,9 +24,9 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 class BeanHover extends AbstractDragOperation {
-	public BeanHover(GroupLayoutAdapter adapter, GroupLayout layout,
+	public BeanHover(GroupLayoutAdapter adapter, WidgetAdapter tracingAdapter, GroupLayout layout,
 			JComponent container) {
-		super(adapter, layout, container);
+		super(adapter, tracingAdapter, layout, container);
 	}
 
 	@Override
@@ -54,10 +54,8 @@ class BeanHover extends AbstractDragOperation {
 
 	@Override
 	public boolean drop(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
-				.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
-		WidgetAdapter dropAdapter = parent.getDropWidget();
+		WidgetAdapter dropAdapter = tracingAdapter;
 		JComponent drop = (JComponent) dropAdapter.getComponent();
 		QuartetPair pair = calMascotLocation(drop, p, azimuth);
 		Point hot = dropAdapter.getHotspotPoint();

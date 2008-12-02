@@ -71,15 +71,15 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private Constraints last_constraints;
 
-	private IDragOperation beanHover;
-	private IDragOperation resizeLeft;
-	private IDragOperation resizeLeftTop;
-	private IDragOperation resizeTop;
-	private IDragOperation resizeRightTop;
-	private IDragOperation resizeRight;
-	private IDragOperation resizeRightBottom;
-	private IDragOperation resizeBottom;
-	private IDragOperation resizeLeftBottom;
+	private List<IDragOperation> beanHover;
+	private List<IDragOperation> resizeLeft;
+	private List<IDragOperation> resizeLeftTop;
+	private List<IDragOperation> resizeTop;
+	private List<IDragOperation> resizeRightTop;
+	private List<IDragOperation> resizeRight;
+	private List<IDragOperation> resizeRightBottom;
+	private List<IDragOperation> resizeBottom;
+	private List<IDragOperation> resizeLeftBottom;
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
@@ -103,22 +103,34 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		menu.add(verticalAnchorMenu);
 	}
 
-	@Override
-	public void setContainer(JComponent container) {
-		super.setContainer(container);
+	private void initDragOperation(JComponent container) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
-		beanHover = new BeanHover(this, layout, container);
-		resizeRightBottom = new ResizeRightBottom(this, layout, container);
-		resizeLeftTop = new ResizeLeftTop(this, layout, container);
-		resizeLeftBottom = new ResizeLeftBottom(this, layout, container);
-		resizeRightTop = new ResizeRightTop(this, layout, container);
-		resizeLeft = new ResizeLeft(this, layout, container);
-		resizeTop = new ResizeTop(this, layout, container);
-		resizeRight = new ResizeRight(this, layout, container);
-		resizeBottom = new ResizeBottom(this, layout, container);
+		beanHover = new ArrayList<IDragOperation>();
+		resizeRightBottom = new ArrayList<IDragOperation>();
+		resizeLeftTop = new ArrayList<IDragOperation>();
+		resizeLeftBottom = new ArrayList<IDragOperation>();
+		resizeRightTop = new ArrayList<IDragOperation>();
+		resizeLeft = new ArrayList<IDragOperation>();
+		resizeTop = new ArrayList<IDragOperation>();
+		resizeRight = new ArrayList<IDragOperation>();
+		resizeBottom = new ArrayList<IDragOperation>();
+		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
+		for (WidgetAdapter todrop : parent.getDropWidget()) {
+			beanHover.add(new BeanHover(this, todrop, layout, container));
+			resizeRightBottom.add(new ResizeRightBottom(this, todrop, layout,
+					container));
+			resizeLeftTop
+					.add(new ResizeLeftTop(this, todrop, layout, container));
+			resizeLeftBottom.add(new ResizeLeftBottom(this, todrop, layout,
+					container));
+			resizeRightTop.add(new ResizeRightTop(this, todrop, layout,
+					container));
+			resizeLeft.add(new ResizeLeft(this, todrop, layout, container));
+			resizeTop.add(new ResizeTop(this, todrop, layout, container));
+			resizeRight.add(new ResizeRight(this, todrop, layout, container));
+			resizeBottom.add(new ResizeBottom(this, todrop, layout, container));
+		}
 		hovered = false;
-		horizontal_baseline = null;
-		vertical_baseline = null;
 	}
 
 	Constraints getLastConstraints() {
@@ -132,9 +144,15 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		container.add(widget, cons);
 	}
 
-	void setBaseline(List<Quartet> hList, List<Quartet> vList) {
-		horizontal_baseline = hList;
-		vertical_baseline = vList;
+	void addBaseline(List<Quartet> hList, List<Quartet> vList) {
+		if (horizontal_baseline == null)
+			horizontal_baseline = new ArrayList<Quartet>();
+		if (vertical_baseline == null)
+			vertical_baseline = new ArrayList<Quartet>();
+		if (hList != null)
+			horizontal_baseline.addAll(hList);
+		if (vList != null)
+			vertical_baseline.addAll(vList);
 	}
 
 	void setHovered(boolean hovered) {
@@ -238,18 +256,18 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						g2d.fillPolygon(polygon);
 					} else if (vertical instanceof Bilateral) {
 						y = ((Bilateral) vertical).getLeading();
-						g2d.drawLine(x, insets.top, x, y+insets.top);
+						g2d.drawLine(x, insets.top, x, y + insets.top);
 						Polygon polygon = new Polygon();
 						polygon.addPoint(x - BOX + 1, insets.top);
 						polygon.addPoint(x + BOX, insets.top);
-						polygon.addPoint(x, BOX+insets.top);
+						polygon.addPoint(x, BOX + insets.top);
 						g2d.fillPolygon(polygon);
 						y = child.getY() + child.getHeight();
-						g2d.drawLine(x, height-insets.bottom, x, y);
+						g2d.drawLine(x, height - insets.bottom, x, y);
 						polygon = new Polygon();
-						polygon.addPoint(x - BOX, height-insets.bottom);
-						polygon.addPoint(x + BOX - 1, height-insets.bottom);
-						polygon.addPoint(x, height - BOX-insets.bottom);
+						polygon.addPoint(x - BOX, height - insets.bottom);
+						polygon.addPoint(x + BOX - 1, height - insets.bottom);
+						polygon.addPoint(x, height - BOX - insets.bottom);
 						g2d.fillPolygon(polygon);
 					}
 				}
@@ -258,124 +276,121 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 	}
 
+	private List<IDragOperation> getCurrentOperation() {
+		List<IDragOperation> dragOperations = null;
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
+		int state = parent.getState();
+		switch (state) {
+		case Azimuth.STATE_BEAN_HOVER:
+			dragOperations = beanHover;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_LEFT:
+			dragOperations = resizeLeft;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_LEFT_TOP:
+			dragOperations = resizeLeftTop;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_TOP:
+			dragOperations = resizeTop;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_RIGHT_TOP:
+			dragOperations = resizeRightTop;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_RIGHT:
+			dragOperations = resizeRight;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_RIGHT_BOTTOM:
+			dragOperations = resizeRightBottom;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_BOTTOM:
+			dragOperations = resizeBottom;
+			break;
+		case Azimuth.STATE_BEAN_RESIZE_LEFT_BOTTOM:
+			dragOperations = resizeLeftBottom;
+			break;
+		}
+		return dragOperations;
+	}
+
 	@Override
 	public boolean dragEnter(Point p) {
+		initDragOperation(container);
+		horizontal_baseline = null;
+		vertical_baseline = null;
 		hovered = true;
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int state = parent.getState();
-		switch (state) {
-		case Azimuth.STATE_BEAN_HOVER:
-			return beanHover.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT:
-			return resizeLeft.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_TOP:
-			return resizeLeftTop.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_TOP:
-			return resizeTop.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_TOP:
-			return resizeRightTop.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT:
-			return resizeRight.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_BOTTOM:
-			return resizeRightBottom.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_BOTTOM:
-			return resizeBottom.dragEnter(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_BOTTOM:
-			return resizeLeftBottom.dragEnter(p);
-		default:
+		if (state == Azimuth.STATE_BEAN_HOVER)
 			parent.setMascotLocation(p);
-			return true;
+		List<IDragOperation> dragOperations = getCurrentOperation();
+		if (dragOperations != null) {
+			for (IDragOperation operation : dragOperations) {
+				operation.dragEnter(p);
+			}
 		}
+		return true;
 	}
 
 	@Override
 	public boolean dragExit(Point p) {
+		horizontal_baseline = null;
+		vertical_baseline = null;
 		hovered = false;
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int state = parent.getState();
-		switch (state) {
-		case Azimuth.STATE_BEAN_HOVER:
-			return beanHover.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT:
-			return resizeLeft.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_TOP:
-			return resizeLeftTop.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_TOP:
-			return resizeTop.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_TOP:
-			return resizeRightTop.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT:
-			return resizeRight.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_BOTTOM:
-			return resizeRightBottom.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_BOTTOM:
-			return resizeBottom.dragExit(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_BOTTOM:
-			return resizeLeftBottom.dragExit(p);
-		default:
+		if (state == Azimuth.STATE_BEAN_HOVER)
 			parent.setMascotLocation(p);
-			return true;
+		List<IDragOperation> dragOperations = getCurrentOperation();
+		if (dragOperations != null) {
+			for (IDragOperation operation : dragOperations) {
+				operation.dragExit(p);
+			}
 		}
+		return true;
 	}
 
 	@Override
 	public boolean dragOver(Point p) {
+		if (!hovered) {
+			initDragOperation(container);
+			hovered = true;
+		}
+		horizontal_baseline = null;
+		vertical_baseline = null;
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int state = parent.getState();
-		switch (state) {
-		case Azimuth.STATE_BEAN_HOVER:
-			return beanHover.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT:
-			return resizeLeft.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_TOP:
-			return resizeLeftTop.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_TOP:
-			return resizeTop.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_TOP:
-			return resizeRightTop.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT:
-			return resizeRight.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_BOTTOM:
-			return resizeRightBottom.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_BOTTOM:
-			return resizeBottom.dragOver(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_BOTTOM:
-			return resizeLeftBottom.dragOver(p);
-		default:
-			return false;
+		if (state == Azimuth.STATE_BEAN_HOVER)
+			parent.setMascotLocation(p);
+		List<IDragOperation> dragOperations = getCurrentOperation();
+		if (dragOperations != null) {
+			for (IDragOperation operation : dragOperations) {
+				operation.dragOver(p);
+			}
 		}
+		return true;
 	}
 
 	@Override
 	public boolean drop(Point p) {
+		horizontal_baseline = null;
+		vertical_baseline = null;
+		hovered = false;
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int state = parent.getState();
-		switch (state) {
-		case Azimuth.STATE_BEAN_HOVER:
-			hovered = false;
-			return beanHover.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT:
-			return resizeLeft.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_TOP:
-			return resizeLeftTop.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_TOP:
-			return resizeTop.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_TOP:
-			return resizeRightTop.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT:
-			return resizeRight.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_BOTTOM:
-			return resizeRightBottom.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_BOTTOM:
-			return resizeBottom.drop(p);
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_BOTTOM:
-			return resizeLeftBottom.drop(p);
+		if (state == Azimuth.STATE_BEAN_HOVER)
+			parent.setMascotLocation(p);
+		List<IDragOperation> dragOperations = getCurrentOperation();
+		if (dragOperations != null) {
+			for (IDragOperation operation : dragOperations) {
+				operation.drop(p);
+			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
