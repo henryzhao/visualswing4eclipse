@@ -22,7 +22,6 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 
 	public ComplexWidgetAdapter() {
-		super();
 	}
 
 	public ComplexWidgetAdapter(String name) {

@@ -17,7 +17,7 @@ import javax.swing.JPasswordField;
 public class JPasswordFieldAdapter extends TextWidgetAdapter {
 
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JPasswordField.class;
 	}
 

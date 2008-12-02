@@ -10,10 +10,14 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Container;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class ContainerAdapter extends WidgetAdapter {
+
+	public ContainerAdapter() {
+	}
 
 	@Override
 	protected Component createWidget() {
@@ -23,6 +27,11 @@ public class ContainerAdapter extends WidgetAdapter {
 	@Override
 	protected Component newWidget() {
 		return null;
+	}
+
+	@Override
+	public Class getWidgetClass() {
+		return Container.class;
 	}
 
 }

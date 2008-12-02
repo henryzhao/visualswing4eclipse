@@ -22,6 +22,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -196,6 +197,12 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	private boolean forbid;
 
 	private void updatePosition(Point p) {
+		List<WidgetAdapter>dropping=getDropWidget();
+		if(dropping==null||dropping.size()!=1){
+			forbid=true;
+			position=null;
+			return;
+		}
 		JSplitPane jsp = (JSplitPane) getWidget();
 		int orientation = jsp.getOrientation();
 		if (orientation == JSplitPane.HORIZONTAL_SPLIT) {
@@ -209,7 +216,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				forbid = existsAndDesigning(right);
 			} else {
 				position = null;
-				forbid = false;
+				forbid = true;
 			}
 		} else {
 			if (getTopBounds().contains(p)) {
@@ -222,7 +229,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				forbid = existsAndDesigning(bottom);
 			} else {
 				position = null;
-				forbid = false;
+				forbid = true;
 			}
 		}
 	}
@@ -251,7 +258,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				Toolkit.getDefaultToolkit().beep();
 				forbid = false;
 			} else {
-				WidgetAdapter adapter = getDropWidget();
+				WidgetAdapter adapter = getDropWidget().get(0);
 				Component child = adapter.getComponent();
 				JSplitPane jtp = (JSplitPane) getWidget();
 				if (position.equals("left"))
@@ -500,5 +507,9 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				return "bottom";
 		}
 		return null;
+	}
+	@Override
+	public Class getWidgetClass() {
+		return JSplitPane.class;
 	}
 }

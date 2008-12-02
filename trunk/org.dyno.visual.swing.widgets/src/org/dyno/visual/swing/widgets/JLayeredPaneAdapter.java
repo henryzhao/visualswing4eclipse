@@ -55,4 +55,9 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 		return layeredPane.getLayer(child);
 	}
 
+	@Override
+	public Class getWidgetClass() {
+		return JLayeredPane.class;
+	}
+
 }

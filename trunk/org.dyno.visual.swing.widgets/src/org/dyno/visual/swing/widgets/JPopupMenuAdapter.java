@@ -17,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -26,7 +27,8 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JPopupMenuAdapter extends CompositeAdapter {
-
+	public JPopupMenuAdapter(){
+	}
 	@Override
 	public Component cloneWidget() {
 		JPopupMenu copy = (JPopupMenu) super.cloneWidget();
@@ -129,11 +131,14 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	@Override
 	public boolean drop(Point p) {
 		setMascotLocation(p);
+		List<WidgetAdapter> targets = getDropWidget();
+		WidgetAdapter target = targets.get(0);
+		if(targets.size()!=1)
+			return false;
 		if(insert_index==-1){
 			JPopupMenu popup=(JPopupMenu)getWidget();
 			JMenu jmenu=(JMenu)popup.getInvoker();
 			JMenuAdapter jma=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(jmenu);
-			WidgetAdapter target = getDropWidget();
 			jmenu.add((JMenuItem)target.getWidget());			
 			jma.widgetPressed(null);
 			jma.widgetPressed(null);
@@ -141,7 +146,6 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 			JPopupMenu popup=(JPopupMenu)getWidget();
 			JMenu jmenu=(JMenu)popup.getInvoker();
 			JMenuAdapter jma=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(jmenu);
-			WidgetAdapter target = getDropWidget();
 			jmenu.add(target.getComponent(), insert_index);
 			jma.widgetPressed(null);
 			jma.widgetPressed(null);
@@ -170,4 +174,9 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
 				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JPopupMenu.class;
+	}
+	
 }

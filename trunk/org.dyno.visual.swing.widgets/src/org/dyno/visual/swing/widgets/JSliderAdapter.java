@@ -72,5 +72,9 @@ public class JSliderAdapter extends WidgetAdapter {
 	protected Component newWidget() {
 		return new JSlider();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JSlider.class;
+	}
 
 }

@@ -77,4 +77,8 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 	protected Component newWidget() {
 		return new JTree();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JTree.class;
+	}
 }

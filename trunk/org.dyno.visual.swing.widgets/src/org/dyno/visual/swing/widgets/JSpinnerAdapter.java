@@ -66,5 +66,9 @@ public class JSpinnerAdapter extends WidgetAdapter {
 	protected Component newWidget() {
 		return new JSpinner();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JSpinner.class;
+	}
 
 }

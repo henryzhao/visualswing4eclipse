@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 public class JLabelAdapter extends TextWidgetAdapter {
 
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JLabel.class;
 	}
 

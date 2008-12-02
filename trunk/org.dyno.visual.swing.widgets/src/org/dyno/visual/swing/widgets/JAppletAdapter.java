@@ -21,6 +21,7 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JApplet;
 import javax.swing.JComponent;
@@ -352,7 +353,7 @@ public class JAppletAdapter extends CompositeAdapter {
 			return true;
 		} else if (isDroppingMenuBar()) {
 			setMascotLocation(p);
-			WidgetAdapter target = getDropWidget();
+			WidgetAdapter target = getDropWidget().get(0);
 			JMenuBar jmb = (JMenuBar) target.getWidget();
 			JApplet japplet = (JApplet) getWidget();
 			japplet.setJMenuBar(jmb);
@@ -371,8 +372,10 @@ public class JAppletAdapter extends CompositeAdapter {
 	}
 
 	private boolean isDroppingMenu() {
-		WidgetAdapter target = getDropWidget();
-		Component drop = target.getWidget();
+		List<WidgetAdapter> targets = getDropWidget();
+		if(targets.size()!=1)
+			return false;
+		Component drop = targets.get(0).getWidget();
 		return drop != null
 				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
 	}
@@ -534,5 +537,10 @@ public class JAppletAdapter extends CompositeAdapter {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public Class getWidgetClass() {
+		return JApplet.class;
 	}
 }

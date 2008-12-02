@@ -28,4 +28,8 @@ public class JTextAreaAdapter extends J2DTextComponentAdapter {
 	protected Component newWidget() {
 		return new JTextArea();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JTextArea.class;
+	}
 }

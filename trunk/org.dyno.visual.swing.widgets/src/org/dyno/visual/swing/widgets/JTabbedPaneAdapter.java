@@ -102,13 +102,14 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	public boolean drop(Point p) {
 		if(isDroppingMenuItem()||isDroppingMenuBar())
 			return super.drop(p);
-		WidgetAdapter adapter = getDropWidget();
-		Component child = adapter.getComponent();
-		JTabbedPane jtp = (JTabbedPane) getWidget();
-		jtp.addTab(adapter.getName(), child);
-		jtp.setSelectedComponent(child);
+		for (WidgetAdapter adapter : getDropWidget()) {
+			Component child = adapter.getComponent();
+			JTabbedPane jtp = (JTabbedPane) getWidget();
+			jtp.addTab(adapter.getName(), child);
+			jtp.setSelectedComponent(child);
+			adapter.setSelected(true);
+		}
 		clearAllSelected();
-		adapter.setSelected(true);
 		hovered = false;
 		return true;
 	}
@@ -270,5 +271,9 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 			return jtp.getTitleAt(index);
 		else
 			return null;
+	}
+	@Override
+	public Class getWidgetClass() {
+		return JTabbedPane.class;
 	}
 }

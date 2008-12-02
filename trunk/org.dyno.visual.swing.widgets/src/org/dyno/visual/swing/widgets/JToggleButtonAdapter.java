@@ -20,7 +20,7 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 public class JToggleButtonAdapter extends TextWidgetAdapter {
 
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JToggleButton.class;
 	}
 	@Override

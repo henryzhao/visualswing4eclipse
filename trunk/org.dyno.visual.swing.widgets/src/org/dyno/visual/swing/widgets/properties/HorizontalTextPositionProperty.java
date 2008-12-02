@@ -10,10 +10,11 @@
 package org.dyno.visual.swing.widgets.properties;
 
 import org.dyno.visual.swing.base.WidgetProperty;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 public class HorizontalTextPositionProperty extends WidgetProperty {
 	@Override
-	public boolean isPropertySet(String lnfClassname, Object bean) {
+	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
 		return false;
 	}
 

@@ -100,6 +100,10 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 	}
 	private static final int HOR_TEXT_PAD = 20;
 	private static final int VER_TEXT_PAD = 4;
+	@Override
+	public Class getWidgetClass() {
+		return JCheckBoxMenuItem.class;
+	}
 
 
 

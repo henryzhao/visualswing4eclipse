@@ -17,7 +17,7 @@ import javax.swing.JFormattedTextField;
 public class JFormattedTextFieldAdapter extends TextWidgetAdapter {
 
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JFormattedTextField.class;
 	}
 

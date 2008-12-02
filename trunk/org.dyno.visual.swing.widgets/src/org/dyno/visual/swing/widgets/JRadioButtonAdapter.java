@@ -24,7 +24,7 @@ public class JRadioButtonAdapter extends TextWidgetAdapter {
 	private static final int BOX_THUMB = 16;
 
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JRadioButton.class;
 	}
 

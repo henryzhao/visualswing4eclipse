@@ -52,4 +52,9 @@ public class JSeparatorAdapter extends WidgetAdapter {
 	protected Component newWidget() {
 		return new JSeparator();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JSeparator.class;
+	}
+	
 }

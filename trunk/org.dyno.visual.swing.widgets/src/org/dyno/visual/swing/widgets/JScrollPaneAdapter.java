@@ -20,6 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
@@ -130,7 +131,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 		setMascotLocation(p);
 		if (isPermitted()) {
 			JScrollPane jsp = (JScrollPane) getWidget();
-			WidgetAdapter todrop = getDropWidget();
+			WidgetAdapter todrop = getDropWidget().get(0);
 			jsp.setViewportView(todrop.getWidget());
 			getRootAdapter().getWidget().validate();
 			clearAllSelected();
@@ -160,6 +161,9 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	private boolean isPermitted() {
+		List<WidgetAdapter>adapters=getDropWidget();
+		if(adapters.size()!=1)
+			return false;		
 		Component comp = ((JScrollPane) getWidget()).getViewport().getView();
 		return comp == null;
 	}
@@ -220,4 +224,9 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	public Object getChildConstraints(Component child) {
 		return null;
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JScrollPane.class;
+	}
+	
 }

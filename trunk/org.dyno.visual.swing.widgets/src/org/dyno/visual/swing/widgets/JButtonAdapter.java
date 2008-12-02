@@ -12,14 +12,13 @@ package org.dyno.visual.swing.widgets;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 
 public class JButtonAdapter extends TextWidgetAdapter {
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JButton.class;
 	}
 

@@ -14,6 +14,10 @@ import java.awt.Component;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class ComponentAdapter extends WidgetAdapter {
+	
+	public ComponentAdapter() {
+	}
+
 	@Override
 	protected Component createWidget() {
 		return null;
@@ -22,5 +26,10 @@ public class ComponentAdapter extends WidgetAdapter {
 	@Override
 	protected Component newWidget() {
 		return null;
+	}
+
+	@Override
+	public Class getWidgetClass() {
+		return Component.class;
 	}
 }

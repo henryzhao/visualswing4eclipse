@@ -100,9 +100,6 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 			e.printStackTrace();
 		}
 	}
-
-	protected abstract Class<? extends JComponent> getWidgetClass();
-
 	private LabelEditor editor;
 
 	@Override

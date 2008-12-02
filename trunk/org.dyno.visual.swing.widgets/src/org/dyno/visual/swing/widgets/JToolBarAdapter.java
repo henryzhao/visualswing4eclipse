@@ -78,10 +78,12 @@ public class JToolBarAdapter extends CompositeAdapter {
 		if(isDroppingMenuItem()||isDroppingMenuBar())
 			return super.drop(p);
 		JToolBar toolbar = (JToolBar) getWidget();
-		Component child = getDropWidget().getWidget();
-		toolbar.add(child);
+		for (WidgetAdapter wa : getDropWidget()) {
+			Component child = wa.getWidget();
+			toolbar.add(child);
+			wa.setSelected(true);
+		}
 		clearSelection();
-		getDropWidget().setSelected(true);
 		getWidget().validate();
 		hovered = false;
 		return true;
@@ -89,7 +91,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 
 	@Override
 	public void paintFocused(Graphics g) {
-		if (hovered) {
+		if (hovered&&getDropWidget().size()>0) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setStroke(STROKE);
 			g2d.setColor(RED_COLOR);
@@ -98,7 +100,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 			Insets insets = parent.getInsets();
 			int x = insets.left;
 			int y = insets.top;
-			Component drop = getDropWidget().getWidget();
+			Component drop = getDropWidget().get(0).getWidget();
 			int w = drop.getWidth();
 			int h = drop.getHeight();
 			if (parent.getOrientation() == JToolBar.HORIZONTAL) {
@@ -165,4 +167,9 @@ public class JToolBarAdapter extends CompositeAdapter {
 	public Object getChildConstraints(Component child) {
 		return null;
 	}	
+	@Override
+	public Class getWidgetClass() {
+		return JToolBar.class;
+	}
+	
 }

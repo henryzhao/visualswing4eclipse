@@ -28,5 +28,9 @@ public class JTextPaneAdapter extends J2DTextComponentAdapter {
 	protected Component newWidget() {
 		return new JTextPane();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JTextPane.class;
+	}
 
 }

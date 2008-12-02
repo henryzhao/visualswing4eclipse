@@ -104,5 +104,9 @@ public class JListAdapter extends ComplexWidgetAdapter {
 	protected Component newWidget() {
 		return new JList();
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JList.class;
+	}
 
 }

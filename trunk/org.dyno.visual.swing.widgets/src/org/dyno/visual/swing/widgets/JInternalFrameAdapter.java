@@ -332,4 +332,9 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		return getContentAdapter().getChildConstraints(child);
 	}
 
+	@Override
+	public Class getWidgetClass() {
+		return JInternalFrame.class;
+	}
+
 }

@@ -11,9 +11,14 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 
+import javax.swing.text.JTextComponent;
+
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JTextComponentAdapter extends WidgetAdapter {
+
+	public JTextComponentAdapter() {
+	}
 
 	@Override
 	protected Component createWidget() {
@@ -23,6 +28,10 @@ public class JTextComponentAdapter extends WidgetAdapter {
 	@Override
 	protected Component newWidget() {
 		return null;
+	}
+	@Override
+	public Class getWidgetClass() {
+		return JTextComponent.class;
 	}
 
 }

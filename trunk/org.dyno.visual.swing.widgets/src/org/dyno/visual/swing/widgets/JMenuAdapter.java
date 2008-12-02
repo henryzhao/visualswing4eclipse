@@ -20,6 +20,7 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Stack;
 
 import javax.swing.JMenu;
@@ -415,7 +416,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			inside_popup = false;
 			if (isDroppingPermitted()) {
 				JMenu jmenu = (JMenu) getWidget();
-				WidgetAdapter target = getDropWidget();
+				WidgetAdapter target = getDropWidget().get(0);
 				if (target.getWidget() instanceof JMenuItem) {
 					JMenuItem drop = (JMenuItem) target.getWidget();
 					jmenu.add(drop);
@@ -482,7 +483,10 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	private boolean isDroppingPermitted() {
-		WidgetAdapter target = getDropWidget();
+		List<WidgetAdapter>droppings=getDropWidget();
+		if(droppings.size()!=1)
+			return false;
+		WidgetAdapter target = getDropWidget().get(0);
 		Component drop = target.getWidget();
 		return drop instanceof JMenuItem || drop instanceof JSeparator;
 	}
@@ -493,6 +497,10 @@ public class JMenuAdapter extends CompositeAdapter {
 		widgetPressed(null);
 		widgetPressed(null);
 		return success;
+	}
+	@Override
+	public Class getWidgetClass() {
+		return JMenu.class;
 	}
 
 	private int dropStatus;

@@ -134,8 +134,14 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragEnter(Point p) {
-		Component comp = getDropWidget().getWidget();
-		forbid = !(comp instanceof JInternalFrame);
+		for(WidgetAdapter adapter:getDropWidget()){
+			Component comp = adapter.getWidget();
+			if(!(comp instanceof JInternalFrame)){
+				forbid = true;
+				return false;
+			}
+		}
+		forbid = false;
 		return true;
 	}
 
@@ -177,9 +183,12 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	private void resize_widget(Point p) {
+		assert getDropWidget().size()==1;
 		int state = getState();
 		Dimension min = new Dimension(10, 10);
-		Dimension size = getDropWidget().getWidget().getSize();
+		WidgetAdapter toBeResizedAdapter=getDropWidget().get(0);
+		Component toBeResized=toBeResizedAdapter.getWidget();
+		Dimension size = toBeResized.getSize();
 		Point hotspot = getMascotLocation();
 		int w = min.width;
 		int h = min.height;
@@ -228,32 +237,34 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		if (h <= min.height)
 			h = min.height;
 		setMascotLocation(hotspot);
-		getDropWidget().getWidget().setSize(w, h);
-		getDropWidget().doLayout();
+		toBeResized.setSize(w, h);
+		toBeResizedAdapter.doLayout();
 	}
 
 	@Override
 	public boolean drop(Point p) {
 		if (!forbid) {
 			JDesktopPane jtp = (JDesktopPane) getWidget();
-			JInternalFrame jif = (JInternalFrame) getDropWidget().getWidget();
-			Point htsp = getDropWidget().getHotspotPoint();
-			int state = getState();
-			switch (state) {
-			case Azimuth.STATE_BEAN_HOVER:
-				jif.setLocation(p.x - htsp.x, p.y - htsp.y);
-				break;
-			default:
-				Point pt = getMascotLocation();
-				jif.setLocation(pt.x - htsp.x, pt.y - htsp.y);
-				break;
+			for (WidgetAdapter adapter : getDropWidget()) {
+				JInternalFrame jif = (JInternalFrame) adapter.getWidget();
+				Point htsp = adapter.getHotspotPoint();
+				int state = getState();
+				switch (state) {
+				case Azimuth.STATE_BEAN_HOVER:
+					jif.setLocation(p.x - htsp.x, p.y - htsp.y);
+					break;
+				default:
+					Point pt = getMascotLocation();
+					jif.setLocation(pt.x - htsp.x, pt.y - htsp.y);
+					break;
+				}
+				jtp.add(jif);
+				jif.setVisible(true);
+				clearAllSelected();
+				adapter.setSelected(true);
+				jif.toFront();
 			}
-			jtp.add(jif);
-			jif.setVisible(true);
-			clearAllSelected();
-			getDropWidget().setSelected(true);
 			getWidget().validate();
-			jif.toFront();
 		} else {
 			Toolkit.getDefaultToolkit().beep();
 		}
@@ -273,7 +284,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		jtp.add(jif);
 		jif.setVisible(true);
 		clearAllSelected();
-		getDropWidget().setSelected(true);
+		WidgetAdapter.getWidgetAdapter(child).setSelected(true);
 		getWidget().validate();
 		jif.toFront();
 	}
@@ -281,5 +292,10 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	@Override
 	public Object getChildConstraints(Component child) {		
 		return child.getBounds();
+	}
+
+	@Override
+	public Class getWidgetClass() {
+		return JDesktopPane.class;
 	}
 }

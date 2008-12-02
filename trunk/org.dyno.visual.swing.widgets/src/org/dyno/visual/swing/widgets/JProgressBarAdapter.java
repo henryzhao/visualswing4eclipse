@@ -73,4 +73,9 @@ public class JProgressBarAdapter extends WidgetAdapter {
 		return new JProgressBar();
 	}
 
+	@Override
+	public Class getWidgetClass() {
+		return JProgressBar.class;
+	}
+
 }

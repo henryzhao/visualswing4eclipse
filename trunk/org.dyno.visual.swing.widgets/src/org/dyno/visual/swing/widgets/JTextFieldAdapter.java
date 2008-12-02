@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 public class JTextFieldAdapter extends TextWidgetAdapter {
 
 	@Override
-	protected Class<? extends JComponent> getWidgetClass() {
+	public Class getWidgetClass() {
 		return JTextField.class;
 	}
 

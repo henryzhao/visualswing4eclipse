@@ -117,4 +117,9 @@ public class JMenuItemAdapter extends WidgetAdapter {
 		jmi.setText(origin.getText());
 		return jmi;
 	}
+	@Override
+	public Class getWidgetClass() {
+		return JMenuItem.class;
+	}
+	
 }

@@ -11,12 +11,14 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 
+import javax.swing.JComponent;
+
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JComponentAdapter extends WidgetAdapter {
 
-	protected JComponentAdapter() {
+	public JComponentAdapter() {
 	}
 
 	protected Component createWidget() {
@@ -31,5 +33,10 @@ public class JComponentAdapter extends WidgetAdapter {
 	@Override
 	protected Component newWidget() {
 		return null;
+	}
+
+	@Override
+	public Class getWidgetClass() {
+		return JComponent.class;
 	}
 }

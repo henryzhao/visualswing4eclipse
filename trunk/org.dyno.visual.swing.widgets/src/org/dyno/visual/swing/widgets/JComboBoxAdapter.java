@@ -127,4 +127,9 @@ public class JComboBoxAdapter extends WidgetAdapter {
 		return new JComboBox();
 	}
 
+	@Override
+	public Class getWidgetClass() {
+		return JComboBox.class;
+	}
+
 }

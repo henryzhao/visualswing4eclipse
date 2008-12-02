@@ -29,4 +29,9 @@ public class JEditorPaneAdapter extends J2DTextComponentAdapter {
 		return new JEditorPane();
 	}
 
+	@Override
+	public Class getWidgetClass() {
+		return JEditorPane.class;
+	}
+
 }

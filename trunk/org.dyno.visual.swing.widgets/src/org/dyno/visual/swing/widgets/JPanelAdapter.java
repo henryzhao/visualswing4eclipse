@@ -16,6 +16,7 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
@@ -83,7 +84,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public WidgetAdapter getDropWidget() {
+	public List<WidgetAdapter> getDropWidget() {
 		if (delegate != null)
 			return delegate.getDropWidget();
 		return super.getDropWidget();
@@ -445,7 +446,10 @@ public class JPanelAdapter extends CompositeAdapter {
 	private void resize_widget(Point p) {
 		int state = getState();
 		Dimension min = new Dimension(10, 10);
-		Dimension size = getDropWidget().getWidget().getSize();
+		List<WidgetAdapter>dropWidgets=getDropWidget();
+		assert !dropWidgets.isEmpty();
+		Component beResized=dropWidgets.get(0).getComponent();
+		Dimension size = beResized.getSize();
 		Point hotspot = getMascotLocation();
 		int w = min.width;
 		int h = min.height;
@@ -494,8 +498,8 @@ public class JPanelAdapter extends CompositeAdapter {
 		if (h <= min.height)
 			h = min.height;
 		setMascotLocation(hotspot);
-		getDropWidget().getWidget().setSize(w, h);
-		getDropWidget().getWidget().doLayout();
+		beResized.setSize(w, h);
+		beResized.doLayout();
 	}
 
 	@Override
@@ -506,37 +510,41 @@ public class JPanelAdapter extends CompositeAdapter {
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {
 			int state = getState();
-			WidgetAdapter adapter = getDropWidget();
-			Component child = adapter.getComponent();
-			Point htsp = adapter.getHotspotPoint();
-			switch (state) {
-			case Azimuth.STATE_BEAN_HOVER:
-				child.setLocation(p.x - htsp.x, p.y - htsp.y);
-				break;
-			default:
-				Point pt = getMascotLocation();
-				child.setLocation(pt.x - htsp.x, pt.y - htsp.y);
-				break;
-			}
-			jpanel.add(child);
-			doLayout();
 			clearAllSelected();
-			adapter.setSelected(true);
-			adapter.setDirty(true);
+			for (WidgetAdapter adapter : getDropWidget()) {
+				Component child = adapter.getComponent();
+				Point htsp = adapter.getHotspotPoint();
+				switch (state) {
+				case Azimuth.STATE_BEAN_HOVER:
+					child.setLocation(p.x - htsp.x, p.y - htsp.y);
+					break;
+				default:
+					Point pt = getMascotLocation();
+					child.setLocation(pt.x - htsp.x, pt.y - htsp.y);
+					break;
+				}
+				jpanel.add(child);
+				adapter.setSelected(true);
+				adapter.setDirty(true);
+			}
+			doLayout();
 			getWidget().validate();
 			repaintDesigner();
 			return true;
 		} else {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			WidgetAdapter adapter = getDropWidget();
+			WidgetAdapter[]copy=new WidgetAdapter[getDropWidget().size()];
+			getDropWidget().toArray(copy);
 			if (layoutAdapter.drop(p)) {
-				doLayout();
 				clearAllSelected();
-				adapter.setSelected(true);
-				adapter.setDirty(true);
+				for (WidgetAdapter adapter : copy) {
+					adapter.setSelected(true);
+					adapter.setDirty(true);
+				}
+				layoutAdapter.setContainer(jpanel);
+				doLayout();
 				getWidget().validate();
 				repaintDesigner();
-				layoutAdapter.setContainer(jpanel);
 				return true;
 			} else
 				return false;
@@ -781,5 +789,9 @@ public class JPanelAdapter extends CompositeAdapter {
 			}
 		}
 		return true;
+	}
+	@Override
+	public Class getWidgetClass() {
+		return JPanel.class;
 	}
 }

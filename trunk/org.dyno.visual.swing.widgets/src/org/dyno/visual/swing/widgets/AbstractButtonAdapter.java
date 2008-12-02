@@ -11,9 +11,14 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 
+import javax.swing.AbstractButton;
+
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class AbstractButtonAdapter extends WidgetAdapter {
+
+	public AbstractButtonAdapter() {
+	}
 
 	@Override
 	protected Component createWidget() {
@@ -23,5 +28,10 @@ public class AbstractButtonAdapter extends WidgetAdapter {
 	@Override
 	protected Component newWidget() {
 		return null;
+	}
+
+	@Override
+	public Class getWidgetClass() {
+		return AbstractButton.class;
 	}
 }

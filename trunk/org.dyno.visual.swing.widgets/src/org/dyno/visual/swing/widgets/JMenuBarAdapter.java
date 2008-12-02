@@ -16,6 +16,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -166,7 +167,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 		setMascotLocation(p);
 		dropStatus=NOOP;
 		if (isDroppingMenu()) {
-			WidgetAdapter menuAdapter = getDropWidget();
+			WidgetAdapter menuAdapter = getDropWidget().get(0);
 			JMenu jmenu = (JMenu) menuAdapter.getWidget();
 			JMenuBar jmb = (JMenuBar) getWidget();
 			jmb.add(jmenu);
@@ -213,9 +214,15 @@ public class JMenuBarAdapter extends CompositeAdapter {
 				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
 	}
 	private boolean isDroppingMenu() {
-		WidgetAdapter target = super.getDropWidget();
-		Component drop = target.getWidget();
+		List<WidgetAdapter> targets = getDropWidget();
+		if(targets.size()!=1)
+			return false;
+		Component drop = targets.get(0).getWidget();
 		return drop instanceof JMenu;
+	}
+	@Override
+	public Class getWidgetClass() {
+		return JMenuBar.class;
 	}
 
 }
