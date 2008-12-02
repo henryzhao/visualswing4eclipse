@@ -87,14 +87,15 @@ public class GridLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	public boolean drop(Point p) {
 		drag(p);
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
-		WidgetAdapter todrop = parent.getDropWidget();
-		if (index != -1)
-			container.add(todrop.getComponent(), index);
-		else
-			container.add(todrop.getComponent());
-		parent.getRootAdapter().getWidget().validate();
 		parent.clearAllSelected();
-		todrop.setSelected(true);
+		for (WidgetAdapter todrop : parent.getDropWidget()) {
+			if (index != -1)
+				container.add(todrop.getComponent(), index);
+			else
+				container.add(todrop.getComponent());
+			todrop.setSelected(true);
+		}
+		parent.getRootAdapter().getWidget().validate();
 		placement = null;
 		return true;
 	}

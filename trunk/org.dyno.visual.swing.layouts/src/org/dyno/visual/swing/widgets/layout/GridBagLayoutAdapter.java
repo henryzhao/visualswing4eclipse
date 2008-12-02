@@ -49,11 +49,12 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	@Override
 	public boolean drop(Point p) {
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
-		WidgetAdapter todrop = parent.getDropWidget();
-		container.add(todrop.getComponent(), new GridBagConstraints());
-		parent.getRootAdapter().getWidget().validate();
 		parent.clearAllSelected();
-		todrop.setSelected(true);
+		for (WidgetAdapter todrop : parent.getDropWidget()) {
+			container.add(todrop.getComponent(), new GridBagConstraints());
+			todrop.setSelected(true);
+		}
+		parent.getRootAdapter().getWidget().validate();
 		return super.drop(p);
 	}
 

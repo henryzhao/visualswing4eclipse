@@ -107,17 +107,19 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 
 	@Override
 	public boolean drop(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
 		thumb = getClosetThumb(p);
-		WidgetAdapter todrop = parent.getDropWidget();
-		int size = container.getComponentCount();
-		if (thumb.pi == size)
-			container.add(todrop.getComponent());
-		else
-			container.add(todrop.getComponent(), thumb.pi);
-		parent.getRootAdapter().getWidget().validate();
 		parent.clearAllSelected();
-		todrop.setSelected(true);
+		for (WidgetAdapter todrop : parent.getDropWidget()) {
+			int size = container.getComponentCount();
+			if (thumb.pi == size)
+				container.add(todrop.getComponent());
+			else
+				container.add(todrop.getComponent(), thumb.pi);
+			todrop.setSelected(true);
+		}
+		parent.getRootAdapter().getWidget().validate();
 		thumb = null;
 		return true;
 	}

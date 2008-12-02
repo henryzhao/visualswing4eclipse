@@ -9,8 +9,10 @@
 
 package org.dyno.visual.swing.widgets.layout;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Composite;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -22,6 +24,7 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -37,9 +40,9 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.MenuManager;
 
 public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
-	private boolean forbid;
-	private Rectangle placement;
-	private String constraints;
+	private List<Boolean> forbid;
+	private List<Rectangle> placement;
+	private List<String> constraints;
 
 	@Override
 	public void initConainerLayout(Container panel, IProgressMonitor monitor) {
@@ -95,14 +98,25 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void paintFocused(Graphics g) {
-		if (placement != null) {
-			Graphics2D g2d = (Graphics2D) g;
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setColor(forbid ? GREEN_COLOR : RED_COLOR);
-			g2d.setStroke(STROKE);
-			g2d.drawRect(placement.x, placement.y, placement.width,
-					placement.height);
-			g2d.setStroke(oldStroke);
+		if (placement != null && forbid != null) {
+			for (int i = 0; i < placement.size(); i++) {
+				Rectangle place = placement.get(i);
+				boolean fb = forbid.get(i).booleanValue();
+				if (place != null) {
+					Graphics2D g2d = (Graphics2D) g;
+					Composite oldcomp=g2d.getComposite();
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+					g2d.setColor(fb?RED_COLOR:GREEN_COLOR);
+					g2d.fillRect(place.x, place.y, place.width, place.height);
+					Stroke oldStroke = g2d.getStroke();
+					g2d.setColor(fb ? GREEN_COLOR : RED_COLOR);
+					g2d.setStroke(STROKE);
+					g2d.drawRect(place.x, place.y, place.width, place.height);
+					g2d.setStroke(oldStroke);
+					g2d.setComposite(oldcomp);
+
+				}
+			}
 		}
 	}
 
@@ -116,72 +130,78 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		int height = container.getHeight() - 1;
 		Insets insets = container.getInsets();
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
-		WidgetAdapter todrop = parent.getDropWidget();
-		Dimension pref = todrop.getWidget().getPreferredSize();
-		int prefw = pref.width == 0 ? todrop.getWidget().getWidth()
-				: pref.width;
-		int prefh = pref.height == 0 ? todrop.getWidget().getHeight()
-				: pref.height;
-		BorderLayout layout = (BorderLayout) container.getLayout();
-		Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
-		int north = prefh + insets.top;
-		if (nComp != null)
-			north = nComp.getHeight() + insets.top;
-		Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
-		int south = prefh + insets.bottom;
-		if (sComp != null)
-			south = sComp.getHeight() + insets.bottom;
-		Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
-		int east = prefw + insets.right;
-		if (eComp != null)
-			east = eComp.getWidth() + insets.right;
-		Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
-		int west = prefw + insets.left;
-		if (wComp != null)
-			west = wComp.getWidth() + insets.left;
-		Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
-		int x = p.x;
-		int y = p.y;
-		if (y < north) {
-			constraints = BorderLayout.NORTH;
-			forbid = (nComp != null);
-			placement = new Rectangle(insets.left, insets.top, width
-					- insets.left - insets.right, north - insets.top);
-		} else if ((y >= north) && (y < (height - south))) {
-			if (x < west) {
-				constraints = BorderLayout.WEST;
-				forbid = (wComp != null);
-				int t = nComp != null ? north : insets.top;
-				int l = insets.left;
-				int w = west - insets.left;
-				int h = height - (nComp != null ? north : insets.top)
-						- (sComp != null ? south : insets.bottom);
-				placement = new Rectangle(l, t, w, h);
-			} else if ((x >= west) && (x < (width - east))) {
-				constraints = BorderLayout.CENTER;
-				forbid = (cComp != null);
-				int t = nComp != null ? north : insets.top;
-				int l = wComp != null ? west : insets.left;
-				int w = width - (wComp != null ? west : insets.left)
-						- (eComp != null ? east : insets.right);
-				int h = height - (nComp != null ? north : insets.top)
-						- (sComp != null ? south : insets.bottom);
-				placement = new Rectangle(l, t, w, h);
+		forbid = new ArrayList<Boolean>();
+		placement = new ArrayList<Rectangle>();
+		constraints = new ArrayList<String>();
+		Point hsp = parent.getMascotLocation();
+		for (WidgetAdapter todrop : parent.getDropWidget()) {
+			Dimension pref = todrop.getWidget().getPreferredSize();
+			int prefw = pref.width == 0 ? todrop.getWidget().getWidth()
+					: pref.width;
+			int prefh = pref.height == 0 ? todrop.getWidget().getHeight()
+					: pref.height;
+			BorderLayout layout = (BorderLayout) container.getLayout();
+			Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
+			int north = prefh + insets.top;
+			if (nComp != null)
+				north = nComp.getHeight() + insets.top;
+			Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
+			int south = prefh + insets.bottom;
+			if (sComp != null)
+				south = sComp.getHeight() + insets.bottom;
+			Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
+			int east = prefw + insets.right;
+			if (eComp != null)
+				east = eComp.getWidth() + insets.right;
+			Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
+			int west = prefw + insets.left;
+			if (wComp != null)
+				west = wComp.getWidth() + insets.left;
+			Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
+			Point thsp=todrop.getHotspotPoint();
+			int x = hsp.x-thsp.x+todrop.getWidget().getWidth()/2;
+			int y = hsp.y-thsp.y+todrop.getWidget().getHeight()/2;
+			if (y < north) {
+				constraints.add(BorderLayout.NORTH);
+				forbid.add(nComp != null);
+				placement.add(new Rectangle(insets.left, insets.top, width
+						- insets.left - insets.right, north - insets.top));
+			} else if ((y >= north) && (y < (height - south))) {
+				if (x < west) {
+					constraints.add(BorderLayout.WEST);
+					forbid.add(wComp != null);
+					int t = nComp != null ? north : insets.top;
+					int l = insets.left;
+					int w = west - insets.left;
+					int h = height - (nComp != null ? north : insets.top)
+							- (sComp != null ? south : insets.bottom);
+					placement.add(new Rectangle(l, t, w, h));
+				} else if ((x >= west) && (x < (width - east))) {
+					constraints.add(BorderLayout.CENTER);
+					forbid.add(cComp != null);
+					int t = nComp != null ? north : insets.top;
+					int l = wComp != null ? west : insets.left;
+					int w = width - (wComp != null ? west : insets.left)
+							- (eComp != null ? east : insets.right);
+					int h = height - (nComp != null ? north : insets.top)
+							- (sComp != null ? south : insets.bottom);
+					placement.add(new Rectangle(l, t, w, h));
+				} else {
+					constraints.add(BorderLayout.EAST);
+					forbid.add(eComp != null);
+					int t = nComp != null ? north : insets.top;
+					int l = width - east;
+					int w = east - insets.right;
+					int h = height - (nComp != null ? north : insets.top)
+							- (sComp != null ? south : insets.bottom);
+					placement.add(new Rectangle(l, t, w, h));
+				}
 			} else {
-				constraints = BorderLayout.EAST;
-				forbid = (eComp != null);
-				int t = nComp != null ? north : insets.top;
-				int l = width - east;
-				int w = east - insets.right;
-				int h = height - (nComp != null ? north : insets.top)
-						- (sComp != null ? south : insets.bottom);
-				placement = new Rectangle(l, t, w, h);
+				constraints.add(BorderLayout.SOUTH);
+				forbid.add(sComp != null);
+				placement.add(new Rectangle(insets.left, height - south, width
+						- insets.left - insets.right, south - insets.bottom));
 			}
-		} else {
-			constraints = BorderLayout.SOUTH;
-			forbid = (sComp != null);
-			placement = new Rectangle(insets.left, height - south, width
-					- insets.left - insets.right, south - insets.bottom);
 		}
 		parent.setMascotLocation(p);
 		return true;
@@ -191,42 +211,45 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	public boolean dragExit(Point p) {
 		placement = null;
 		constraints = null;
-		forbid = false;
+		forbid = null;
 		return true;
 	}
 
 	@Override
 	public boolean drop(Point p) {
 		drag(p);
-		if (forbid) {
-			placement = null;
-			constraints = null;
-			forbid = false;
-			Toolkit.getDefaultToolkit().beep();
-			return true;
-		} else {
-			CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
-					.getWidgetAdapter(container);
-			WidgetAdapter todrop = parent.getDropWidget();
-			if (constraints == null)
-				container.add(todrop.getComponent());
-			else {
-				if (!constraints.equals(BorderLayout.CENTER)) {
-					Component drop = todrop.getComponent();
-					Dimension pref = drop.getPreferredSize();
-					if (pref.width == 0 || pref.height == 0)
-						drop.setPreferredSize(drop.getSize());
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
+				.getWidgetAdapter(container);
+		parent.clearAllSelected();
+		if (forbid != null) {
+			for (int i = 0; i < forbid.size(); i++) {
+				boolean fb = forbid.get(i).booleanValue();
+				if (fb) {
+					Toolkit.getDefaultToolkit().beep();
+				} else {
+					WidgetAdapter todrop = parent.getDropWidget().get(i);
+					if (constraints == null || constraints.get(i) == null){
+						System.out.println("here");
+						container.add(todrop.getComponent());
+					}else {
+						if (!constraints.get(i).equals(BorderLayout.CENTER)) {
+							Component drop = todrop.getComponent();
+							Dimension pref = drop.getPreferredSize();
+							if (pref.width == 0 || pref.height == 0)
+								drop.setPreferredSize(drop.getSize());
+						}
+						container
+								.add(todrop.getComponent(), constraints.get(i));
+					}
+					todrop.setSelected(true);
 				}
-				container.add(todrop.getComponent(), constraints);
 			}
-			parent.getRootAdapter().getWidget().validate();
-			parent.clearAllSelected();
-			todrop.setSelected(true);
-			placement = null;
-			constraints = null;
-			forbid = false;
-			return true;
 		}
+		parent.getRootAdapter().getWidget().validate();
+		placement = null;
+		constraints = null;
+		forbid = null;
+		return true;
 	}
 
 	@Override

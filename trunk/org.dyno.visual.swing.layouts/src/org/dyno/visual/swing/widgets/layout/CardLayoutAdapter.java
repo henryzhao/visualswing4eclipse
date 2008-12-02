@@ -70,13 +70,14 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	@Override
 	public boolean drop(Point p) {
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
-		WidgetAdapter todrop = parent.getDropWidget();
-		CardLayout layout = (CardLayout) container.getLayout();
-		container.add(todrop.getComponent(), todrop.getName());
-		layout.show(container, todrop.getName());
-		parent.getRootAdapter().getWidget().validate();
 		parent.clearAllSelected();
-		todrop.setSelected(true);
+		CardLayout layout = (CardLayout) container.getLayout();
+		for (WidgetAdapter todrop : parent.getDropWidget()) {
+			container.add(todrop.getComponent(), todrop.getName());
+			layout.show(container, todrop.getName());
+			todrop.setSelected(true);
+		}
+		parent.getRootAdapter().getWidget().validate();
 		hovered = false;
 		return true;
 	}
