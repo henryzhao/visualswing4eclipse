@@ -670,6 +670,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 
 	public boolean isRoot() {
 		Component me = getWidget();
+		if(me==null)
+			return true;
 		Container container = me.getParent();
 		return container == null || container instanceof VisualDesigner;
 	}
