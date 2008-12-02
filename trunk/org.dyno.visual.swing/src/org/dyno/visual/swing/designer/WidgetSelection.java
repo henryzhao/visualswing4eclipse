@@ -34,7 +34,7 @@ public class WidgetSelection extends ArrayList<Component> implements IStructured
 		if (adapter == null)
 			return;
 		if (adapter.isSelected())
-			add(comp);
+			add(adapter.getWidget());
 		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 			int count = compositeAdapter.getChildCount();

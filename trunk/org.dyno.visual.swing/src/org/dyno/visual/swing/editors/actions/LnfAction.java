@@ -23,6 +23,7 @@ public class LnfAction extends Action {
 		this.adapter = adapter;
 		String lnf = adapter.getLnfClassname();
 		setChecked(lnf != null && lnf.equals(info.getClassName()));
+		System.out.println();
 	}
 
 	@Override
