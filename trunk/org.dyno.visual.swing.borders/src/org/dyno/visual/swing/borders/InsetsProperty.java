@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -72,21 +73,24 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public Object getPropertyValue(Object bean) {
-		Border border = (Border) bean;
+	public Object getPropertyValue(IStructuredSelection bean) {
+		assert !bean.isEmpty();
+		Border border = (Border) bean.getFirstElement();
 		return border.getBorderInsets(null);
 	}
 
 	@Override
-	public void setPropertyValue(Object bean, Object value) {
+	public void setPropertyValue(IStructuredSelection bean, Object value) {
+		assert !bean.isEmpty();
 		try {
 			Insets insets = (Insets) value;
 			if (value == null)
 				insets = new Insets(0, 0, 0, 0);
-			top.set(bean, insets.top);
-			left.set(bean, insets.left);
-			bottom.set(bean, insets.bottom);
-			right.set(bean, insets.right);
+			Object b=bean.getFirstElement();
+			top.set(b, insets.top);
+			left.set(b, insets.left);
+			bottom.set(b, insets.bottom);
+			right.set(b, insets.right);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -170,21 +174,21 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public boolean isPropertyResettable(Object bean) {
+	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return false;
 	}
 
 	@Override
-	public boolean isPropertySet(String lnf, Object bean) {
+	public boolean isPropertySet(String lnf, IStructuredSelection bean) {
 		return false;
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname, Object bean) {
+	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
 	}
 
 	@Override
-	public void setBean(Object bean) {
+	public void setBean(IStructuredSelection bean) {
 	}
 
 	@Override
