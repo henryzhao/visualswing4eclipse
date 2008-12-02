@@ -343,5 +343,11 @@
                id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
          </newWizardShortcut>
       </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.contextCustomizer">
+      <context
+            class="org.dyno.visual.swing.plugin.context.SingleAdapterCustomizer">
+      </context>
    </extension>   
 </plugin>

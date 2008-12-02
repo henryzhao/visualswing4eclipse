@@ -262,7 +262,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (!success)
 			return false;
 		WidgetAdapter rootAdapter = sourceParser.getResult();
-		setUpLookAndFeel(rootAdapter.getWidget().getClass());
+		setUpLookAndFeel(rootAdapter.getWidgetClass());
 		if (designer != null) {
 			designer.initRootWidget(rootAdapter);
 			refreshTree();

@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 /**
@@ -329,7 +330,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 	}
 
 	public IPropertySource getPropertySource(Object layout) {		
-		return new PropertySource2(layout, getLayoutProperties());
+		return new PropertySource2(new StructuredSelection(layout), getLayoutProperties());
 	}
 
 	protected IWidgetPropertyDescriptor[] getLayoutProperties(){

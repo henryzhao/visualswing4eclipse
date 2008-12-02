@@ -67,9 +67,11 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	private void paintContextCustomizer(Graphics g, JComponent c) {
-		List<IContextCustomizer> contextCustomizers = ExtensionRegistry.getContextCustomizers();
-		for(IContextCustomizer customizer:contextCustomizers){
-			customizer.paintContext(g, WidgetAdapter.getWidgetAdapter(designer.getRoot()));
+		List<IContextCustomizer> contextCustomizers = ExtensionRegistry
+				.getContextCustomizers();
+		for (IContextCustomizer customizer : contextCustomizers) {
+			customizer.paintContext(g, WidgetAdapter.getWidgetAdapter(designer
+					.getRoot()));
 		}
 	}
 
@@ -85,11 +87,12 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	private void paintSelectionThumb(Graphics g, JComponent c) {
-		paintTranverse(g, c, new ThumbTranverse(), WidgetAdapter.ADHERE_PAD);
+		if (designer.getSelectedComponents().size() == 1)
+			paintTranverse(g, c, new ThumbTranverse(), WidgetAdapter.ADHERE_PAD);
 	}
 
 	class ThumbTranverse implements Tranverse {
-		public void paint(Graphics g, Component jc) {
+		public void paint(Graphics g, Component jc) {			
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jc);
 			if (adapter.isSelected() && adapter.isResizable()) {
 				int w = jc.getWidth();
@@ -256,17 +259,19 @@ public class GlassPaneUI extends ComponentUI {
 		Point e = plane.getHotspotPoint();
 		if (e == null)
 			return;
-		WidgetAdapter adapter = WhiteBoard.getSelectedWidget();
-		if (adapter == null)
+		List<WidgetAdapter> adapters = WhiteBoard.getSelectedWidget();
+		if (adapters == null)
 			return;
-		Component comp = adapter.getComponent();
-		int w = comp.getWidth();
-		int h = comp.getHeight();
-		Point hs = adapter.getHotspotPoint();
-		int x = e.x - hs.x;
-		int y = e.y - hs.y;
-		Graphics clipg = g.create(x - 1, y - 1, w + 2, h + 2);
-		adapter.paintMascot(clipg);
-		clipg.dispose();
+		for (WidgetAdapter adapter : adapters) {
+			Component comp = adapter.getComponent();
+			int w = comp.getWidth();
+			int h = comp.getHeight();
+			Point hs = adapter.getHotspotPoint();
+			int x = e.x - hs.x;
+			int y = e.y - hs.y;
+			Graphics clipg = g.create(x - 1, y - 1, w + 2, h + 2);
+			adapter.paintMascot(clipg);
+			clipg.dispose();
+		}
 	}
 }

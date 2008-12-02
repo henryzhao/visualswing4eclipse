@@ -9,6 +9,7 @@
 package org.dyno.visual.swing.designer;
 
 import java.awt.Component;
+import java.util.List;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -21,17 +22,17 @@ import org.eclipse.core.runtime.Status;
 public class MoveResizeOperation extends AbstractOperation {
 	private CompositeAdapter old_parent;
 	private CompositeAdapter new_parent;
-	private Object old_constraints;
-	private Object new_constraints;
-	private Component child;
+	private List<Object> old_constraints;
+	private List<Object> new_constraints;
+	private List<Component> children;
 
-	public MoveResizeOperation(CompositeAdapter old_parent, CompositeAdapter new_parent, Component child, Object old_constraints, Object new_constraints) {
+	public MoveResizeOperation(CompositeAdapter old_parent, CompositeAdapter new_parent, List<Component> children, List<Object> old_constraints, List<Object> new_constraints) {
 		super("Reshape Component");
 		this.old_parent = old_parent;
 		this.new_parent = new_parent;
 		this.old_constraints = old_constraints;
 		this.new_constraints = new_constraints;
-		this.child = child;
+		this.children = children;
 	}
 
 	@Override
@@ -40,9 +41,13 @@ public class MoveResizeOperation extends AbstractOperation {
 	}
 
 	@Override
-	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {		
-		old_parent.removeChild(child);
-		new_parent.addChildByConstraints(child, new_constraints);
+	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+		for (int i = 0; i < children.size(); i++) {
+			Component child = children.get(i);
+			Object new_constraint = new_constraints.get(i);
+			old_parent.removeChild(child);
+			new_parent.addChildByConstraints(child, new_constraint);
+		}
 		old_parent.getWidget().validate();
 		new_parent.getWidget().validate();
 		new_parent.repaintDesigner();
@@ -52,9 +57,13 @@ public class MoveResizeOperation extends AbstractOperation {
 	}
 
 	@Override
-	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {		
-		new_parent.removeChild(child);
-		old_parent.addChildByConstraints(child, old_constraints);
+	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+		for (int i = 0; i < children.size(); i++) {
+			Component child = children.get(i);
+			Object old_constraint = old_constraints.get(i);
+			new_parent.removeChild(child);
+			old_parent.addChildByConstraints(child, old_constraint);
+		}
 		new_parent.getWidget().validate();
 		old_parent.getWidget().validate();
 		old_parent.repaintDesigner();

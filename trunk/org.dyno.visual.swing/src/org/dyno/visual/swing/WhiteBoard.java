@@ -8,6 +8,8 @@
  ******************************************************************************/
 package org.dyno.visual.swing;
 
+import java.util.List;
+
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -22,13 +24,13 @@ import org.eclipse.jdt.core.IJavaProject;
 public class WhiteBoard {
 	private static IJavaProject project;
 	private static Listener editorListener;
-	private static WidgetAdapter selectedWidget;
+	private static List<WidgetAdapter> selectedWidget;
 
-	public static void setSelectedWidget(WidgetAdapter adapter) {
+	public static void setSelectedWidget(List<WidgetAdapter> adapter) {
 		selectedWidget = adapter;
 	}
 
-	public static WidgetAdapter getSelectedWidget() {
+	public static List<WidgetAdapter> getSelectedWidget() {
 		return selectedWidget;
 	}
 

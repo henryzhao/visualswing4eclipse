@@ -12,6 +12,7 @@ import java.awt.Component;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 /**
  * 
@@ -21,15 +22,15 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @author William Chen
  */
 public interface IWidgetPropertyDescriptor extends IPropertyDescriptor{
-    boolean isPropertyResettable(Object bean);
-    boolean isPropertySet(String lnfClassname, Object bean);
-	Object getPropertyValue(Object bean);
-	void resetPropertyValue(String lnfClassname, Object bean);
-	void setPropertyValue(Object bean, Object value);
+    boolean isPropertyResettable(IStructuredSelection bean);
+    boolean isPropertySet(String lnfClassname, IStructuredSelection bean);
+	Object getPropertyValue(IStructuredSelection bean);
+	void resetPropertyValue(String lnfClassname, IStructuredSelection bean);
+	void setPropertyValue(IStructuredSelection bean, Object value);
 	boolean cloneProperty(Object bean, Component clone);
 	String getSetCode(Object widget, ImportRewrite imports);
 	boolean isGencode();
-	void setBean(Object bean);
+	void setBean(IStructuredSelection bean);
 	void setFilterFlags(String[]filters);
 	void setCategory(String categoryName);
 	@SuppressWarnings("unchecked")

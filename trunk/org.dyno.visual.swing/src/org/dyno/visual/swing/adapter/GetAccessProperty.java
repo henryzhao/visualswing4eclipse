@@ -12,6 +12,7 @@ import org.dyno.visual.swing.base.PropertyAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 
 public class GetAccessProperty extends PropertyAdapter {
@@ -24,12 +25,12 @@ public class GetAccessProperty extends PropertyAdapter {
 	}
 
 	@Override
-	public Object getPropertyValue(Object bean) {
+	public Object getPropertyValue(IStructuredSelection bean) {
 		return adapter.getGetAccess();
 	}
 
 	@Override
-	public void setPropertyValue(Object bean, Object value) {
+	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		adapter.setGetAccess(value == null ? WidgetAdapter.ACCESS_PRIVATE
 				: (Integer) value);
 		adapter.setDirty(true);

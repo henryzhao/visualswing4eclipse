@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
@@ -27,7 +28,7 @@ public class PropertyAdapter implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public Object getPropertyValue(Object bean) {
+	public Object getPropertyValue(IStructuredSelection bean) {
 		return null;
 	}
 
@@ -52,21 +53,21 @@ public class PropertyAdapter implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public boolean isPropertyResettable(Object bean) {
+	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return false;
 	}
 
 	@Override
-	public boolean isPropertySet(String lnfClassname, Object bean) {
+	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
 		return false;
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname, Object bean) {
+	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
 	}
 
 	@Override
-	public void setBean(Object bean) {
+	public void setBean(IStructuredSelection bean) {
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class PropertyAdapter implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public void setPropertyValue(Object bean, Object value) {
+	public void setPropertyValue(IStructuredSelection bean, Object value) {
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -183,19 +184,20 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		this.category = category;
 	}
 
-	private Object bean;
+	private IStructuredSelection bean;
 
-	public void setBean(Object bean) {
+	public void setBean(IStructuredSelection bean) {
 		this.bean = bean;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getPropertyValue(Object bean) {
+	public Object getPropertyValue(IStructuredSelection bean) {
+		assert !bean.isEmpty();
 		Method readMethod = propertyDescriptor.getReadMethod();
 		if (readMethod != null) {
 			try {
-				Object value = readMethod.invoke(bean);
+				Object value = readMethod.invoke(bean.getFirstElement());
 				if (isEditable()) {
 					if (editorFactory != null)
 						value = editorFactory.encodeValue(value);
@@ -228,21 +230,23 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public boolean isPropertyResettable(Object bean) {
+	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return true;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean isPropertySet(String lnfClassname, Object bean) {
+	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
+		assert !bean.isEmpty();
+		Object b= bean.getFirstElement();
 		String name = propertyDescriptor.getName();
-		if (name.equals("preferredSize") && bean instanceof Component) {
-			return ((Component) bean).isPreferredSizeSet();
-		} else if (name.equals("minimumSize") && bean instanceof Component)
-			return ((Component) bean).isMinimumSizeSet();
-		else if (name.equals("maximumSize") && bean instanceof Component)
-			return ((Component) bean).isMaximumSizeSet();
-		Object value = _getPropertyValue(bean);
+		if (name.equals("preferredSize") && b instanceof Component) {
+			return ((Component) b).isPreferredSizeSet();
+		} else if (name.equals("minimumSize") && b instanceof Component)
+			return ((Component) b).isMinimumSizeSet();
+		else if (name.equals("maximumSize") && b instanceof Component)
+			return ((Component) b).isMaximumSizeSet();
+		Object value = _getPropertyValue(b);
 		if (value != null && value instanceof UIResource)
 			return false;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
@@ -385,15 +389,17 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname, Object bean) {
+	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
+		assert !bean.isEmpty();
+		Object b= bean.getFirstElement();
 		String name = propertyDescriptor.getName();
-		if (name.equals("preferredSize") && bean instanceof Component) {
+		if (name.equals("preferredSize") && b instanceof Component) {
 			return;
-		} else if (name.equals("minimumSize") && bean instanceof Component)
+		} else if (name.equals("minimumSize") && b instanceof Component)
 			return;
-		else if (name.equals("maximumSize") && bean instanceof Component)
+		else if (name.equals("maximumSize") && b instanceof Component)
 			return;
-		Object value = _getPropertyValue(bean);
+		Object value = _getPropertyValue(b);
 		if (value != null && value instanceof UIResource)
 			return;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
@@ -475,32 +481,36 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setPropertyValue(Object bean, Object value) {
+	public void setPropertyValue(IStructuredSelection bean, Object value) {
+		assert !bean.isEmpty();
 		if (isEditable()) {
 			try {
-				if (editorFactory != null)
-					value = editorFactory.decodeValue(value);
-				else {
-					Class type = lastValue.getClass();
-					TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
-					value = ta.getEditor().decodeValue(value);
-				}
-				IUndoableOperation operation = new SetValueOperation(bean,
-						propertyDescriptor, value);
-				IOperationHistory operationHistory = PlatformUI.getWorkbench()
-						.getOperationSupport().getOperationHistory();
-				if (bean instanceof Component) {
-					Component jcomp = (Component) bean;
-					WidgetAdapter adapter = WidgetAdapter
-							.getWidgetAdapter(jcomp);
-					if (adapter != null) {
-						operation.addContext(adapter.getUndoContext());
+					if (editorFactory != null)
+						value = editorFactory.decodeValue(value);
+					else {
+						Class type = lastValue.getClass();
+						TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
+						value = ta.getEditor().decodeValue(value);
 					}
+					for (Object b : bean.toArray()) {
+					IUndoableOperation operation = new SetValueOperation(b,
+							propertyDescriptor, value);
+					IOperationHistory operationHistory = PlatformUI
+							.getWorkbench().getOperationSupport()
+							.getOperationHistory();
+					if (b instanceof Component) {
+						Component jcomp = (Component) b;
+						WidgetAdapter adapter = WidgetAdapter
+								.getWidgetAdapter(jcomp);
+						if (adapter != null) {
+							operation.addContext(adapter.getUndoContext());
+						}
+					}
+					operationHistory.execute(operation, null, null);
 				}
-				operationHistory.execute(operation, null, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 	}
 

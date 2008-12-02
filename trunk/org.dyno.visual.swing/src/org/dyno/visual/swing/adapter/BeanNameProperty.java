@@ -11,6 +11,7 @@ package org.dyno.visual.swing.adapter;
 import org.dyno.visual.swing.base.PropertyAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
@@ -20,12 +21,12 @@ public class BeanNameProperty extends PropertyAdapter {
 		this.adapter = adapter;
 	}
 	@Override
-	public Object getPropertyValue(Object bean) {
+	public Object getPropertyValue(IStructuredSelection bean) {
 		return adapter.getName();
 	}
 
 	@Override
-	public void setPropertyValue(Object bean, Object value) {
+	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		String name = (String) value;
 		adapter.setName(name);
 		if (!adapter.isRoot()) {

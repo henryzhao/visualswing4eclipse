@@ -14,6 +14,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource2;
 /**
@@ -24,11 +25,11 @@ import org.eclipse.ui.views.properties.IPropertySource2;
  * @author William Chen
  */
 public class PropertySource2 implements IPropertySource2 {
-	private Object bean;
+	private IStructuredSelection bean;
 	private IWidgetPropertyDescriptor[] properties;
 	private HashMap<Object, IWidgetPropertyDescriptor> propertyMap;
 	private String lnfClassname;
-	public PropertySource2(Object bean, IWidgetPropertyDescriptor[] properties) {
+	public PropertySource2(IStructuredSelection bean, IWidgetPropertyDescriptor[] properties) {
 		this.bean = bean;
 		this.properties = properties;
 		this.propertyMap = new HashMap<Object, IWidgetPropertyDescriptor>();
@@ -43,7 +44,7 @@ public class PropertySource2 implements IPropertySource2 {
 		else
 			lnfClassname = lnf.getClass().getName();
 	}
-	public PropertySource2(String lnfClassname, Object bean, IWidgetPropertyDescriptor[] properties){
+	public PropertySource2(String lnfClassname, IStructuredSelection bean, IWidgetPropertyDescriptor[] properties){
 		this.lnfClassname = lnfClassname;
 		this.bean = bean;
 		this.properties = properties;

@@ -9,6 +9,7 @@
 package org.dyno.visual.swing.designer;
 
 import java.awt.Component;
+import java.util.List;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -20,14 +21,14 @@ import org.eclipse.core.runtime.Status;
 
 class DragDropOperation extends AbstractOperation {
 	private CompositeAdapter parent;
-	private Object constraints;
-	private Component child;
+	private List<Object> constraints;
+	private List<Component> children;
 
-	public DragDropOperation(CompositeAdapter parent, Component child, Object constraints) {
+	public DragDropOperation(CompositeAdapter parent, List<Component> children, List<Object> constraints) {
 		super("Delete Component");
 		this.parent = parent;
 		this.constraints = constraints;
-		this.child = child;
+		this.children = children;
 	}
 
 	@Override
@@ -36,8 +37,10 @@ class DragDropOperation extends AbstractOperation {
 	}
 
 	@Override
-	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {		
-		parent.removeChild(child);
+	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+		for (Component child : children) {
+			parent.removeChild(child);
+		}
 		parent.getWidget().validate();
 		parent.repaintDesigner();
 		parent.setDirty(true);
@@ -46,7 +49,11 @@ class DragDropOperation extends AbstractOperation {
 
 	@Override
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-		parent.addChildByConstraints(child, constraints);
+		for (int i = 0; i < children.size(); i++) {
+			Component child = children.get(i);
+			Object constraint = constraints.get(i);
+			parent.addChildByConstraints(child, constraint);
+		}
 		parent.getWidget().validate();
 		parent.repaintDesigner();
 		parent.setDirty(true);

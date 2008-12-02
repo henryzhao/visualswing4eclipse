@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 /**
@@ -103,7 +104,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 		if (object instanceof Border) {
 			IWidgetPropertyDescriptor[] properties = getBorderProperties();
 			if (properties != null)
-				return new PropertySource2(object, properties);
+				return new PropertySource2(new StructuredSelection(object), properties);
 		}
 		return null;
 	}

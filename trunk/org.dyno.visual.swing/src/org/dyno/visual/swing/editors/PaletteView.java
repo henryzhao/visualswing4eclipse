@@ -8,7 +8,9 @@
  ******************************************************************************/
 package org.dyno.visual.swing.editors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
@@ -242,7 +244,9 @@ public class PaletteView extends ViewPart implements SelectionListener {
 			String beanClassname = (String) item.getData();
 			WidgetAdapter adapter = ExtensionRegistry
 					.createWidgetAdapter(beanClassname);
-			WhiteBoard.setSelectedWidget(adapter);
+			List<WidgetAdapter> list = new ArrayList<WidgetAdapter>();
+			list.add(adapter);
+			WhiteBoard.setSelectedWidget(list);
 			selectedItem = item;
 		} else {
 			WhiteBoard.setSelectedWidget(null);

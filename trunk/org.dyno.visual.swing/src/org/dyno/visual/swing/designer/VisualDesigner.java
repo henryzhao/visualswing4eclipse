@@ -56,6 +56,7 @@ import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
@@ -166,9 +167,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public void selectWidgets(Rectangle selectionRegion) {
 		if (root != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root);
-			Rectangle rootBounds = adapter.getDesignBounds();
-			Rectangle selBounds = new Rectangle(selectionRegion.x-rootBounds.x, selectionRegion.y-rootBounds.y, selectionRegion.width, selectionRegion.height);
-			if (_selectWidget(selBounds, adapter)) {
+			if (_selectWidget(selectionRegion, adapter)) {
 				WidgetAdapter rootAdapter = WidgetAdapter
 						.getWidgetAdapter(root);
 				if (rootAdapter != null) {
@@ -218,9 +217,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	private void showPopup(Point dp, List<Component> selected) {
 		MenuManager manager = new MenuManager("#EDIT");
-		if (selected != null&&!selected.isEmpty()){
-			addContextSensitiveMenu(manager, selected.get(0));
-		}
 		List<IContextCustomizer> contexts = ExtensionRegistry.getContextCustomizers();
 		if (!contexts.isEmpty()) {
 			manager.add(new Separator());
@@ -259,12 +255,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		menu.setVisible(true);
 	}
 
-	private void addContextSensitiveMenu(MenuManager menu, Component hovered) {
-		WidgetAdapter hoveredAdapter = WidgetAdapter.getWidgetAdapter(hovered);
-		hoveredAdapter.fillContextAction(menu);
-		menu.add(new Separator());
-	}
-
 	public void clearSelection() {
 		if (root != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root);
@@ -272,7 +262,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				adapter.clearSelection();
 			}
 		}
-		selected.clear();
+		selected=new ArrayList<WidgetAdapter>();
 	}
 
 	public void addSelectedWidget(WidgetAdapter adapter) {
@@ -454,7 +444,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void publishSelection() {
 		WhiteBoard.sendEvent(createEvent(Event.EVENT_SELECTION,
-				new WidgetSelection(root)));
+				new StructuredSelection(new Object[]{new WidgetSelection(root)})));
 	}
 
 	@SuppressWarnings("unchecked")

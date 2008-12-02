@@ -74,6 +74,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -103,7 +104,8 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
 	protected List<InvisibleAdapter> invisibles=new ArrayList<InvisibleAdapter>();
-	
+	public abstract Class getWidgetClass();
+
 	protected void layoutContainer(Container container) {
 		container.doLayout();
 		int count = container.getComponentCount();
@@ -193,12 +195,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 		return null;
 	}
-	protected WidgetAdapter() {
-		this.widget = createWidget();
-		this.hotspotPoint = new Point(widget.getWidth() / 2,
-				widget.getHeight() / 2);
-		attach();
-		this.dirty = true;
+	protected WidgetAdapter(){
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 		this.edited = new HashMap<String, Boolean>();
 	}
@@ -549,15 +546,19 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	public IPropertySource getPropertySource(Object object) {
-		ArrayList<IWidgetPropertyDescriptor> propdesc = getPropertyDescriptors();
-		if (!isRoot()) {
-			propdesc.add(new BeanNameProperty(this));
-			propdesc.add(new FieldAccessProperty(this));
-			propdesc.add(new GetAccessProperty(this));
+		if (object instanceof WidgetSelection) {
+			WidgetSelection selection = (WidgetSelection) object;
+			ArrayList<IWidgetPropertyDescriptor> propdesc = getPropertyDescriptors();
+			if (!isRoot()&&selection.size()==1) {
+				propdesc.add(new BeanNameProperty(this));
+				propdesc.add(new FieldAccessProperty(this));
+				propdesc.add(new GetAccessProperty(this));
+			}
+			IWidgetPropertyDescriptor[] properties = propdesc
+					.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
+			return new PropertySource2(getLnfClassname(), selection, properties);
 		}
-		IWidgetPropertyDescriptor[] properties = propdesc
-				.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
-		return new PropertySource2(getLnfClassname(), getWidget(), properties);
+		return null;
 	}
 
 	public String getLnfClassname() {
@@ -579,7 +580,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	private ArrayList<IWidgetPropertyDescriptor> getPropertyDescriptors() {
 		Sorting sorting = ExtensionRegistry.getCurrentSorting();
 		HashMap<String, String> references = new HashMap<String, String>();
-		Class beanClass = getWidget().getClass();
+		Class beanClass = getWidgetClass();
 		ArrayList<IWidgetPropertyDescriptor> propdesc = new ArrayList<IWidgetPropertyDescriptor>();
 		for (Category category : sorting.getCategories().values()) {
 			Provider provider = getProvider(category.getProviders(), beanClass);
@@ -736,10 +737,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	public WidgetAdapter getDropWidget() {
-		return WhiteBoard.getSelectedWidget();
+	public List<WidgetAdapter> getDropWidget() {
+		return WhiteBoard.getSelectedWidget()==null?EMPTY_LIST:WhiteBoard.getSelectedWidget();
 	}
-
+	private static List<WidgetAdapter> EMPTY_LIST=new ArrayList<WidgetAdapter>(0);
 	protected Point getGlassHotspot() {
 		GlassPlane glassPlane = getGlass();
 		if (glassPlane != null)
@@ -911,7 +912,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 
 	public BeanInfo getBeanInfo() {
 		try {
-			Class<?> clazz = getWidget().getClass();
+			Class<?> clazz = getWidgetClass();
 			return Introspector.getBeanInfo(clazz);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -950,7 +951,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		Component clone = newWidget();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(getLnfClassname(), getWidget())) {
+			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))) {
 				property.cloneProperty(getWidget(), clone);
 			}
 		}
@@ -1012,7 +1013,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 	protected String getWidgetCodeClassName(){
-		return getWidget().getClass().getName();
+		return getWidgetClass().getName();
 	}
 	private boolean createNonRootCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
@@ -1196,7 +1197,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(getLnfClassname(), getWidget())
+			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))
 					&& (property.isGencode() || property.isEdited(this))) {
 				String setCode = property.getSetCode(getWidget(), imports);
 				if (setCode != null)

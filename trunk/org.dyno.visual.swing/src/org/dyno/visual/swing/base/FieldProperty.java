@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 /**
@@ -38,6 +39,8 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	private Field field;
 	private String id;
 	private String displayName;
+
+	private IStructuredSelection bean;
 
 	@SuppressWarnings("unchecked")
 	public FieldProperty(String id, String name, Class beanClass) {
@@ -88,17 +91,16 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 		}
 	}
 
-	private Object bean;
-
-	public void setBean(Object bean) {
+	public void setBean(IStructuredSelection bean) {
 		this.bean = bean;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getPropertyValue(Object bean) {
+	public Object getPropertyValue(IStructuredSelection bean) {
+		assert !bean.isEmpty();
 		try {
-			Object value = field.get(bean);
+			Object value = field.get(bean.getFirstElement());
 			if (isEditable()) {
 				if (editorFactory != null)
 					value = editorFactory.encodeValue(value);
@@ -127,22 +129,24 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public boolean isPropertyResettable(Object bean) {
+	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return true;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean isPropertySet(String lnfClass, Object bean) {
+	public boolean isPropertySet(String lnfClass, IStructuredSelection bean) {
+		assert !bean.isEmpty();
+		Object b=bean.getFirstElement();
 		String name = field.getName();
-		if (name.equals("preferredSize") && bean instanceof Component) {
-			return ((Component) bean).isPreferredSizeSet();
-		} else if (name.equals("minimumSize") && bean instanceof Component)
-			return ((Component) bean).isMinimumSizeSet();
-		else if (name.equals("maximumSize") && bean instanceof Component)
-			return ((Component) bean).isMaximumSizeSet();
+		if (name.equals("preferredSize") && b instanceof Component) {
+			return ((Component) b).isPreferredSizeSet();
+		} else if (name.equals("minimumSize") && b instanceof Component)
+			return ((Component) b).isMinimumSizeSet();
+		else if (name.equals("maximumSize") && b instanceof Component)
+			return ((Component) b).isMaximumSizeSet();
 		Class<?> propertyType = field.getType();
-		Object value = _getPropertyValue(bean);
+		Object value = _getPropertyValue(b);
 		if (propertyType == byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
 			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
@@ -231,12 +235,13 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname, Object bean) {
+	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void setPropertyValue(Object bean, Object value) {
+	public void setPropertyValue(IStructuredSelection bean, Object value) {
+		assert !bean.isEmpty();
 		if (isEditable()) {
 			try {
 				if (editorFactory != null)
@@ -246,12 +251,15 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 					TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
 					value = ta.getEditor().decodeValue(value);
 				}
-				field.set(bean, value);
-				if (bean instanceof Component) {
-					Component jcomp = (Component) bean;
-					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
-					if (adapter != null) {
-						adapter.repaintDesigner();
+				for (Object b : bean.toArray()) {
+					field.set(b, value);
+					if (b instanceof Component) {
+						Component jcomp = (Component) b;
+						WidgetAdapter adapter = WidgetAdapter
+								.getWidgetAdapter(jcomp);
+						if (adapter != null) {
+							adapter.repaintDesigner();
+						}
 					}
 				}
 			} catch (Exception e) {

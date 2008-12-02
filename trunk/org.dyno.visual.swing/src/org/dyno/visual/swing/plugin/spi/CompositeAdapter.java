@@ -13,6 +13,7 @@ import java.awt.Container;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -32,7 +33,6 @@ import org.eclipse.jface.action.MenuManager;
  */
 public abstract class CompositeAdapter extends WidgetAdapter {
 	public CompositeAdapter() {
-		super();
 	}
 
 	public CompositeAdapter(String name) {
@@ -242,13 +242,17 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		}
 	}
 	protected boolean isDroppingMenuItem(){
-		WidgetAdapter target = getDropWidget();
-		Component drop = target.getWidget();
+		List<WidgetAdapter> target = getDropWidget();
+		if(target.size()!=1)
+			return false;
+		Component drop = target.get(0).getWidget();
 		return drop instanceof JMenuItem;
 	}
 	protected boolean isDroppingMenuBar(){
-		WidgetAdapter target = getDropWidget();
-		Component drop = target.getWidget();
+		List<WidgetAdapter> target = getDropWidget();
+		if(target.size()!=1)
+			return false;
+		Component drop =  target.get(0).getWidget();
 		return drop instanceof JMenuBar;
 	}
 	
