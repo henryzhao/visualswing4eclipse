@@ -176,10 +176,10 @@ public class VisualDesigner extends JComponent implements KeyListener {
 					if (rootAdapter != null) {
 						rootAdapter.setSelected(false);
 					}
-					publishSelection();
-					repaint();
 				}
 			}
+			publishSelection();
+			repaint();
 		}
 	}
 

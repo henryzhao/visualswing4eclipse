@@ -549,14 +549,21 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		if (object instanceof WidgetSelection) {
 			WidgetSelection selection = (WidgetSelection) object;
 			ArrayList<IWidgetPropertyDescriptor> propdesc = getPropertyDescriptors();
-			if (!isRoot()&&selection.size()==1) {
+			if (!isRoot() && selection.size() == 1) {
 				propdesc.add(new BeanNameProperty(this));
 				propdesc.add(new FieldAccessProperty(this));
 				propdesc.add(new GetAccessProperty(this));
 			}
 			IWidgetPropertyDescriptor[] properties = propdesc
 					.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
-			return new PropertySource2(getLnfClassname(), selection, properties);
+			String lnfClassname = null;
+			if (!selection.isEmpty()) {
+				Component comp = (Component) selection.getFirstElement();
+				WidgetAdapter rep = WidgetAdapter.getWidgetAdapter(comp);
+				if (rep != null)
+					lnfClassname = rep.getLnfClassname();
+			}
+			return new PropertySource2(lnfClassname, selection, properties);
 		}
 		return null;
 	}
