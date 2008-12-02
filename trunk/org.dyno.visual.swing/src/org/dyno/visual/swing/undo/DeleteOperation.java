@@ -53,8 +53,10 @@ public class DeleteOperation extends AbstractOperation {
 			boolean success = parentAdapter.removeChild(child);
 			parentAdapter.doLayout();
 			parentAdapter.getWidget().validate();
-			if (success)
+			if (success){
 				parentAdapter.setDirty(true);
+				adapter.deleteNotify();
+			}
 		}
 		rootAdapter.doLayout();
 		root.validate();

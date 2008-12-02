@@ -67,11 +67,17 @@ public class GlassPaneUI extends ComponentUI {
 	}
 
 	private void paintContextCustomizer(Graphics g, JComponent c) {
-		List<IContextCustomizer> contextCustomizers = ExtensionRegistry
-				.getContextCustomizers();
-		for (IContextCustomizer customizer : contextCustomizers) {
-			customizer.paintContext(g, WidgetAdapter.getWidgetAdapter(designer
-					.getRoot()));
+		Component root = designer.getRoot();
+		if (root != null) {
+			WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+			if (rootAdapter != null) {
+				List<IContextCustomizer> contextCustomizers = ExtensionRegistry
+						.getContextCustomizers();
+				for (IContextCustomizer customizer : contextCustomizers) {
+					customizer.paintContext(g, WidgetAdapter
+							.getWidgetAdapter(designer.getRoot()));
+				}
+			}
 		}
 	}
 
