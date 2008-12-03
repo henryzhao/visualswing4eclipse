@@ -101,8 +101,11 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				return;
 			ButtonGroup group = buttonGroup.getButtonGroup();
 			for (Component comp : selectedButtons) {
-				if (!isInGroup(group, comp))
-					buttonGroup.getButtonGroup().add((AbstractButton) comp);
+				if (!isInGroup(group, comp)){
+					AbstractButton aBtn=(AbstractButton)comp;
+					removeButtonFromGroup(aBtn);
+					buttonGroup.getButtonGroup().add(aBtn);
+				}
 			}
 			root.setDirty(true);
 			root.changeNotify();
@@ -197,13 +200,20 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		@Override
 		public void run() {
 			if (!isInGroup(buttonGroup, button)) {
+				removeButtonFromGroup(button);
 				this.buttonGroup.add(button);
 				this.rootAdapter.setDirty(true);
 				this.rootAdapter.changeNotify();
 			}
 		}
 	}
-
+	private void removeButtonFromGroup(AbstractButton button) {
+		WidgetAdapter btnAdapter=WidgetAdapter.getWidgetAdapter(button);
+		IAdapter iadapter=btnAdapter.getParent();
+		if(iadapter!=null&&iadapter instanceof ButtonGroupAdapter){
+			((ButtonGroupAdapter)iadapter).getButtonGroup().remove(button);
+		}
+	}
 	class DeleteButtonFromThisGroupAction extends Action {
 		private AbstractButton button;
 		private ButtonGroup buttonGroup;
@@ -265,7 +275,9 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			if (selectedButtons.isEmpty())
 				return;
 			for (Component comp : selectedButtons) {
-				buttonGroup.getButtonGroup().add((AbstractButton) comp);
+				AbstractButton aBtn=(AbstractButton) comp;
+				removeButtonFromGroup(aBtn);
+				buttonGroup.getButtonGroup().add(aBtn);
 			}
 			root.setDirty(true);
 			root.addNotify();
@@ -317,7 +329,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		public DeleteButtonFromParentGroup(WidgetAdapter rootAdapter,
 				List<IAdapter> iadapters) {
-			super("Remove selection from button group");
+			super("Remove from this group");
 			this.rootAdapter = rootAdapter;
 			this.iadapters = iadapters;
 		}
@@ -325,13 +337,16 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		@Override
 		public void run() {
 			for (IAdapter iadapter : iadapters) {
-				ButtonGroupAdapter bga = (ButtonGroupAdapter) iadapter
-						.getParent();
-				AbstractButton aButton = (AbstractButton) ((WidgetAdapter) iadapter)
-						.getWidget();
-				ButtonGroup bg = bga.getButtonGroup();
-				if (isInGroup(bg, aButton))
-					bg.remove(aButton);
+				WidgetAdapter wa = (WidgetAdapter) iadapter;
+				IAdapter parentAdapter = wa.getParent();
+				if (parentAdapter != null
+						&& parentAdapter instanceof ButtonGroupAdapter) {
+					ButtonGroup bg = ((ButtonGroupAdapter) parentAdapter)
+							.getButtonGroup();
+					AbstractButton aBtn = (AbstractButton) wa.getWidget();
+					if (isInGroup(bg, aBtn))
+						bg.remove(aBtn);
+				}
 			}
 			rootAdapter.setDirty(true);
 			rootAdapter.changeNotify();
@@ -344,6 +359,13 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				Component comp = ((WidgetAdapter) iadapter).getWidget();
 				if (!(comp instanceof AbstractButton))
 					return false;
+				IAdapter parentAdapter=((WidgetAdapter) iadapter).getParent();
+				if(parentAdapter==null)
+					return false;
+				if(!(parentAdapter instanceof ButtonGroupAdapter))
+					return false;
+			}else{
+				return false;
 			}
 		}
 		return true;
