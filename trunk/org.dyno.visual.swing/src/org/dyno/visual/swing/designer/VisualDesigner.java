@@ -166,16 +166,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void selectWidgets(Rectangle selectionRegion) {
 		if (root != null) {
-			CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(root);
-			int count = rootAdapter.getChildCount();
-			Rectangle rect = SwingUtilities.convertRectangle(this, selectionRegion, root);
-			for (int i = 0; i < count; i++) {
-				Component child = rootAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-				if (_selectWidget(rect, childAdapter)) {
-					if (rootAdapter != null) {
-						rootAdapter.setSelected(false);
-					}
+			CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter
+					.getWidgetAdapter(root);
+			if (_selectWidget(selectionRegion, rootAdapter)) {
+				if (rootAdapter != null) {
+					rootAdapter.setSelected(false);
 				}
 			}
 			publishSelection();
@@ -185,21 +180,20 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	private boolean _selectWidget(Rectangle sel, WidgetAdapter adapter) {
 		boolean selected = false;
-		Rectangle bounds = adapter.getWidget().getBounds();
-		if (sel.contains(bounds)) {
+		Component current=adapter.getWidget();
+		Rectangle localBounds=SwingUtilities.getLocalBounds(current);
+		Rectangle globalBounds=SwingUtilities.convertRectangle(current, localBounds, this);
+		if (sel.contains(globalBounds)) {
 			adapter.setSelected(true);
 			selected = true;
 		}
 		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
-			Rectangle newsel = new Rectangle(sel.x - bounds.x,
-					sel.y - bounds.y, sel.width, sel.height);
 			int size = compositeAdapter.getChildCount();
 			for (int i = 0; i < size; i++) {
 				Component child = compositeAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
-				if (childAdapter != null && _selectWidget(newsel, childAdapter)) {
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				if (childAdapter != null && _selectWidget(sel, childAdapter)) {
 					selected = true;
 				}
 			}

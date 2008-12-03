@@ -11,7 +11,14 @@ package org.dyno.visual.swing.lnfs;
 
 import java.util.HashMap;
 
+import org.dyno.visual.swing.plugin.spi.ISystemValue;
+
 public abstract class WidgetValue extends HashMap<String, Object>{
+	protected static class SystemValue implements ISystemValue{
+		private static final long serialVersionUID = 1L;
+	}
+	protected static SystemValue SYSTEM_VALUE=new SystemValue();
+	
 	private static final long serialVersionUID = 1L;
 
 	public Object getDefaultValue(String propertyName){

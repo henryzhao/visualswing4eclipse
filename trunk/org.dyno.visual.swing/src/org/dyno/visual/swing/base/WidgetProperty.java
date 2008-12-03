@@ -21,6 +21,7 @@ import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
+import org.dyno.visual.swing.plugin.spi.ISystemValue;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.SetValueOperation;
@@ -260,6 +261,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		if (adapter == null)
 			return false;
 		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
+		if(default_value instanceof ISystemValue)
+			return true;
 		if (propertyType == byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
 			byte dv = default_value == null ? 0 : ((Byte) default_value)
@@ -635,12 +638,14 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				TypeAdapter typeAdapter = ExtensionRegistry
 						.getTypeAdapter(typeClass);
 				ICodeGen gen;
-				if (typeAdapter != null) {
+				if(editorFactory!=null&&editorFactory instanceof ItemProviderCellEditorFactory){
+					gen=editorFactory;
+				}else if (typeAdapter != null) {
 					gen = typeAdapter.getEndec();
 				} else {
 					gen = editorFactory;
 				}
-				if (gen != null && value != null) {
+				if (gen != null&&value!=null) {
 					String initCode = gen.getInitJavaCode(value, imports);
 					if (initCode != null)
 						builder.append(initCode);

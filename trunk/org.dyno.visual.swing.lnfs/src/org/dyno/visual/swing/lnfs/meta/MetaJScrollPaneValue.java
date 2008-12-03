@@ -25,5 +25,6 @@ public class MetaJScrollPaneValue extends MetaJComponentValue {
 		put("requestFocusEnabled", true);
 		put("wheelScrollingEnabled", true);
 		put("doubleBuffered", false);
+		put("border", SYSTEM_VALUE);
 	}
 }
