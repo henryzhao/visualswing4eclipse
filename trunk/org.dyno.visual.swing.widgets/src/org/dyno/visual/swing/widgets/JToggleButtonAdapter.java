@@ -28,10 +28,12 @@ public class JToggleButtonAdapter extends TextWidgetAdapter {
 		JToggleButton jb=(JToggleButton)getWidget();
 		ToggleButtonModel dbm=(ToggleButtonModel) jb.getModel();
 		ButtonGroup bg=dbm.getGroup();
-		for(InvisibleAdapter invisible:getRootAdapter().getInvisibles()){
-			if(invisible instanceof ButtonGroupAdapter){
-				if(bg==((ButtonGroupAdapter)invisible).getButtonGroup())
-					return invisible;
+		if (bg != null) {
+			for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
+				if (invisible instanceof ButtonGroupAdapter) {
+					if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
+						return invisible;
+				}
 			}
 		}
 		return super.getParent();

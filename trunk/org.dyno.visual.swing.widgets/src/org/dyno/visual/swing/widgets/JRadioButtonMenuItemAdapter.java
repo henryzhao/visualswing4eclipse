@@ -115,11 +115,12 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 		JRadioButtonMenuItem jb = (JRadioButtonMenuItem) getWidget();		
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
 		ButtonGroup bg = dbm.getGroup();
-		bg.add(jb);
-		for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
-			if (invisible instanceof ButtonGroupAdapter) {
-				if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
-					return invisible;
+		if (bg != null) {
+			for (InvisibleAdapter invisible : getRootAdapter().getInvisibles()) {
+				if (invisible instanceof ButtonGroupAdapter) {
+					if (bg == ((ButtonGroupAdapter) invisible).getButtonGroup())
+						return invisible;
+				}
 			}
 		}
 		return super.getParent();

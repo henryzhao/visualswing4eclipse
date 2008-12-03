@@ -11,6 +11,8 @@ package org.dyno.visual.swing.undo;
 import java.awt.Component;
 import java.beans.PropertyDescriptor;
 
+import javax.swing.SwingUtilities;
+
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -40,7 +42,27 @@ public class SetValueOperation extends AbstractOperation {
 		}
 		this.new_value = new_value;
 	}
-
+	@SuppressWarnings("unused")
+	private class SetValueRunnable implements Runnable{
+		private WidgetAdapter adapter;
+		public SetValueRunnable(WidgetAdapter adapter){
+			this.adapter = adapter;
+		}
+		@Override
+		public void run() {
+			if (!adapter.isRoot()) {
+				CompositeAdapter parent = adapter.getParentAdapter();
+				Component widget = parent.getWidget();
+				widget.doLayout();
+				widget.validate();
+			} else {
+				Component widget = adapter.getWidget();
+				widget.doLayout();
+				widget.validate();
+			}
+			adapter.repaintDesigner();
+		}
+	}
 	private IStatus setValue(IProgressMonitor monitor, IAdaptable info,
 			Object value) throws ExecutionException {
 		try {
@@ -50,17 +72,7 @@ public class SetValueOperation extends AbstractOperation {
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 				adapter.setDirty(true);
 				if (adapter != null) {
-					if (!adapter.isRoot()) {
-						CompositeAdapter parent = adapter.getParentAdapter();
-						Component widget = parent.getWidget();
-						widget.doLayout();
-						widget.validate();
-					} else {
-						Component widget = adapter.getWidget();
-						widget.doLayout();
-						widget.validate();
-					}
-					adapter.repaintDesigner();
+					SwingUtilities.invokeLater(new SetValueRunnable(adapter));
 				}
 			}
 		} catch (Exception e) {
