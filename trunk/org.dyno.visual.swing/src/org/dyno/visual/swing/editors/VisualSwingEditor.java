@@ -525,12 +525,11 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					} else if (!this.selection.equals(selection)) {
 						this.selection = selection;
 						fireSelectionChanged();
-					} else {
-						outline.refreshTree();
 					}
 				}
 			}
 		}
+		outline.refreshTree();
 	}
 
 	public void validateContent() {
