@@ -60,11 +60,6 @@ public class NewAppletPage extends NewComponentPage {
 		buf.append("private void initComponent(");
 		buf.append(") {");
 		buf.append(lineDelim);
-		buf.append("setLayout(new ");
-		buf.append(imports
-				.addImport("org.dyno.visual.swing.layouts.GroupLayout"));
-		buf.append("());");
-		buf.append(lineDelim);
 		buf.append("setSize(400,300);");
 		buf.append(lineDelim);
 		buf.append("}");

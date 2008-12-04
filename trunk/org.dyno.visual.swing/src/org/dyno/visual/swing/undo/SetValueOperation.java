@@ -15,10 +15,13 @@ package org.dyno.visual.swing.undo;
 
 import java.awt.Component;
 import java.beans.PropertyDescriptor;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.ISystemValue;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -68,9 +71,27 @@ public class SetValueOperation extends AbstractOperation {
 			adapter.repaintDesigner();
 		}
 	}
+	private static Map<Class, Object> DEFAULT_BEANS= new HashMap<Class, Object>();	
+	private static Object getDefaultValue(Object bean, PropertyDescriptor property){
+		try {
+			Class beanClass = bean.getClass();
+			Object copy = DEFAULT_BEANS.get(beanClass);
+			if (copy == null) {
+				copy = beanClass.newInstance();
+				DEFAULT_BEANS.put(beanClass, copy);
+			}
+			return property.getReadMethod().invoke(copy);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	private IStatus setValue(IProgressMonitor monitor, IAdaptable info,
 			Object value) throws ExecutionException {
 		try {
+			if(value!=null&&value instanceof ISystemValue){
+				value=getDefaultValue(bean, property);
+			}
 			property.getWriteMethod().invoke(bean, value);
 			if (bean instanceof Component) {
 				Component jcomp = (Component) bean;
@@ -87,6 +108,7 @@ public class SetValueOperation extends AbstractOperation {
 					MessageDialog.openError(shell, "Error", "occurs while setting property:"+property.getDisplayName()+"!"+e.getMessage());
 				}
 			}
+			e.printStackTrace();
 			throw new ExecutionException(e.getMessage());
 		}
 		return Status.OK_STATUS;
