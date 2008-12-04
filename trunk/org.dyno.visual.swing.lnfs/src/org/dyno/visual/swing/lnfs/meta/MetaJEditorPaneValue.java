@@ -32,6 +32,7 @@ public class MetaJEditorPaneValue extends MetaJComponentValue {
 		put("doubleBuffered", false);
 		put("contentType", "text/plain");
 		put("focusCycleRoot", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

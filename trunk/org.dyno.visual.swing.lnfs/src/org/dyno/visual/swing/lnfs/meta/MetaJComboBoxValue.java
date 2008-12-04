@@ -29,7 +29,8 @@ public class MetaJComboBoxValue extends WidgetValue {
 		put("lightWeightPopupEnabled", true);
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);
-		put("requestFocusEnabled", true);  		
+		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

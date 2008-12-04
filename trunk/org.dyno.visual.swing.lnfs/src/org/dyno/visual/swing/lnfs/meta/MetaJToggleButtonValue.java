@@ -23,7 +23,7 @@ public class MetaJToggleButtonValue extends MetaAbstractButtonValue {
 		put("doubleBuffered", false);
 		put("alignmentY", 0.5f);
 		put("rolloverEnabled", false);
+		put("border", SYSTEM_VALUE);
 	}
-
 }
 

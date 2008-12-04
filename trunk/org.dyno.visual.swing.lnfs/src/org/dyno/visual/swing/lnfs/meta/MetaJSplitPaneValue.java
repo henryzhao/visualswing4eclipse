@@ -29,7 +29,6 @@ public class MetaJSplitPaneValue extends MetaJComponentValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("doubleBuffered", false);
-		
 		put("dividerLocation", 59);
 		put("dividerSize", 10);
 		put("orientation", JSplitPane.HORIZONTAL_SPLIT);
@@ -37,8 +36,7 @@ public class MetaJSplitPaneValue extends MetaJComponentValue {
 		put("lastDividerLocation", -1);
 		put("alignmentX", 0.0f);
 		put("alignmentY", 0.0f);
-		
-		
+		put("border", SYSTEM_VALUE);
 	}
 }
 

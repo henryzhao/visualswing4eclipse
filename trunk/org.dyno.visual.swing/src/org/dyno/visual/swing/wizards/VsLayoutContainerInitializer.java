@@ -18,6 +18,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -40,10 +41,12 @@ public class VsLayoutContainerInitializer extends ClasspathContainerInitializer 
 
 	public VsLayoutContainerInitializer() {
 		IPath path = Platform.getLocation();
-		path = path.append("layoutext");
+		path = path.append(".metadata");
+		path = path.append(".plugins");
+		path = path.append(VisualSwingPlugin.getPluginID());
 		File folder = path.toFile();
 		if (!folder.exists())
-			folder.mkdirs();
+			folder.mkdirs();		
 		jar = new File(folder, "grouplayout.jar");
 		src = new File(folder, "grouplayout.zip");
 		if (!jar.exists()) {

@@ -20,6 +20,7 @@ public class MetaJPasswordFieldValue extends MetaJTextFieldValue {
 
 	public MetaJPasswordFieldValue() {
 		put("focusLostBehavior", 1);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

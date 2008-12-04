@@ -30,6 +30,7 @@ public class MetaJTextFieldValue extends MetaJComponentValue {
 		put("focusable", true);
 		put("requestFocusEnabled", true);
 		put("doubleBuffered", false);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

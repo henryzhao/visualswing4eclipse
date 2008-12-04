@@ -28,6 +28,7 @@ public class MetaJSpinnerValue extends MetaContainerValue {
 		put("requestFocusEnabled", true);
 		put("opaque", true);
 		put("model", new SpinnerNumberModel());
+		put("border", SYSTEM_VALUE);
 	}
 }
 

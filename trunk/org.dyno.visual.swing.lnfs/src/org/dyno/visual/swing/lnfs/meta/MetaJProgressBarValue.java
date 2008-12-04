@@ -31,6 +31,7 @@ public class MetaJProgressBarValue extends MetaJComponentValue {
 		put("requestFocusEnabled", true);
 		put("string", "0%");
 		put("doubleBuffered", false);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

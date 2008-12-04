@@ -20,6 +20,7 @@ public class MetaJFormattedTextFieldValue extends MetaJTextFieldValue {
 
 	public MetaJFormattedTextFieldValue() {
 		put("focusLostBehavior", 1);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

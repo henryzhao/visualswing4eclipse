@@ -30,6 +30,7 @@ public class MetaJTextAreaValue extends MetaJComponentValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("doubleBuffered", false);
+		put("border", SYSTEM_VALUE);
 	}
 }
 
