@@ -543,7 +543,7 @@
 		        <property id="maximum" name="maximum"/>
 		        <property id="normalBounds" name="normalBounds" gencode="false"/>
 		        <property id="selected" name="selected" gencode="false"/>
-		        <property id="visible" name="visible" gencode="false"/>
+		        <property id="visible" name="visible"/>
 		        <property id="border" name="border"/>
          </widget>
          <widget

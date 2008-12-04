@@ -373,7 +373,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 					else
 						return true;
 				} else {
-					return value.equals(default_value);
+					return !value.equals(default_value);
 				}
 			}
 		} else {

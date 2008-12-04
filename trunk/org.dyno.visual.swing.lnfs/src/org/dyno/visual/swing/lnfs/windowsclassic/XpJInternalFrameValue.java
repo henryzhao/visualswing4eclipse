@@ -20,7 +20,6 @@ public class XpJInternalFrameValue extends WidgetValue {
 	private static final long serialVersionUID = 1L;
 	public XpJInternalFrameValue() {
 		put("defaultCloseOperation", 2);
-		put("title", "");
 		put("visible", false);
 		put("verifyInputWhenFocusTarget", true);
 		put("focusable", true);

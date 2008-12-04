@@ -248,6 +248,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 	protected boolean isDroppingMenuItem(){
 		List<WidgetAdapter> target = getDropWidget();
+		if(target==null)
+			return false;
 		if(target.size()!=1)
 			return false;
 		Component drop = target.get(0).getWidget();
@@ -255,6 +257,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 	protected boolean isDroppingMenuBar(){
 		List<WidgetAdapter> target = getDropWidget();
+		if(target==null)
+			return false;
 		if(target.size()!=1)
 			return false;
 		Component drop =  target.get(0).getWidget();

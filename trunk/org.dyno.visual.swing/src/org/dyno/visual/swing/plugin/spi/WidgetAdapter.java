@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
@@ -95,6 +97,10 @@ import org.osgi.framework.Bundle;
  */
 public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		IPropertySourceProvider, IConstants, IAdapter {
+	private static Icon FORBIDDEN_ICON;
+	static{
+		FORBIDDEN_ICON=new ImageIcon(WidgetAdapter.class.getResource("/icons/forbidden.png"));
+	}
 	protected boolean dirty;
 	protected int getAccess;
 	protected int fieldAccess;
@@ -748,7 +754,10 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			glassPlane.setHotspotPoint(convertToGlobal(p));
 		}
 	}
-
+	protected void paintForbiddenMascot(Graphics g){
+		Point p=getMascotLocation();
+		FORBIDDEN_ICON.paintIcon(getWidget(), g, p.x-16, p.y-16);
+	}
 	public Point getMascotLocation() {
 		GlassPlane glassPlane = getGlass();
 		Point p = glassPlane.getHotspotPoint();
@@ -1203,6 +1212,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		builder.append(getFieldName(getName()) + " = "
 				+ getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
+		System.out.println();
 		CompositeAdapter conAdapter = getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = getWidget().getBounds();
@@ -1218,7 +1228,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	private String createSetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
-		for (IWidgetPropertyDescriptor property : properties) {
+		for (IWidgetPropertyDescriptor property : properties) {			
 			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))
 					&& (property.isGencode() || property.isEdited(this))) {
 				String setCode = property.getSetCode(getWidget(), imports);

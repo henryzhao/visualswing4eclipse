@@ -20,7 +20,6 @@ public class ClassicJInternalFrameValue extends WidgetValue {
 	private static final long serialVersionUID = 1L;
 	public ClassicJInternalFrameValue() {
 		put("defaultCloseOperation", 2);
-		put("title", "");
 		put("visible", false);
 		put("verifyInputWhenFocusTarget", true);
 		put("focusable", true);

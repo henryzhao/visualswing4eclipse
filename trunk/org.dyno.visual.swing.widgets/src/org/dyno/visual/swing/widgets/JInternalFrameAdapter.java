@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -15,6 +14,7 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -26,13 +26,16 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.LabelEditor;
+import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -56,58 +59,93 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	public Component getRootPane() {
 		return getWidget();
 	}
+
 	public void doLayout() {
 		CompositeAdapter content = getContentAdapter();
 		content.doLayout();
 	}
-
+	public boolean removeChild(Component child) {
+		if (child instanceof JMenuBar) {
+			JInternalFrame jframe = (JInternalFrame) getWidget();
+			jframe.setJMenuBar(null);
+			return true;
+		} else
+			return getContentAdapter().removeChild(child);
+	}	
+	@Override
+	public void clearSelection() {
+		setSelected(false);
+		JInternalFrame jframe = (JInternalFrame) getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		if (jmb != null) {
+			WidgetAdapter jmbAdapter = WidgetAdapter.getWidgetAdapter(jmb);
+			jmbAdapter.clearSelection();
+		}
+		getContentAdapter().clearSelection();
+	}
 	@Override
 	public Component cloneWidget() {
 		JInternalFrame copy = (JInternalFrame) super.cloneWidget();
+		JInternalFrame jframe = (JInternalFrame) getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		if (jmb != null) {
+			WidgetAdapter jmbAdapter = WidgetAdapter.getWidgetAdapter(jmb);
+			JMenuBar copyjmb=(JMenuBar) jmbAdapter.cloneWidget();
+			copy.setJMenuBar(copyjmb);
+		}
 		CompositeAdapter content = getContentAdapter();
-		copy.setContentPane((JComponent)content.cloneWidget());
+		copy.setContentPane((JComponent) content.cloneWidget());
 		return copy;
 	}
+
 	@Override
 	protected String createInitCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createInitCode(imports));
-		JPanel panel = getContentPane();
-		JPanelAdapter adapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(panel);
-		adapter.setName(getName());
-		adapter.createAddCode(imports, builder);
-		adapter.detachWidget();
+		((JPanelAdapter)getContentAdapter()).createAddCode(imports, builder);
+		JInternalFrame jframe = (JInternalFrame) getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		if (jmb != null) {
+			builder.append("setJMenuBar(");
+			WidgetAdapter jmbAdapter = WidgetAdapter.getWidgetAdapter(jmb);
+			String getName=NamespaceManager.getInstance().getGetMethodName(jmbAdapter.getName());
+			builder.append(getName+"()");
+			builder.append(");\n");
+		}
 		return builder.toString();
 	}
-	
+
 	@Override
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createGetCode(imports));
 		JPanel panel = getContentPane();
-		JPanelAdapter adapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(panel);
+		JPanelAdapter adapter = (JPanelAdapter) ExtensionRegistry
+				.createWidgetAdapter(panel);
 		adapter.setName(getName());
 		adapter.genAddComponentCode(imports, builder);
 		adapter.detachWidget();
 		return builder.toString();
 	}
-	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+
+	protected boolean createConstructor(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
 		IMethod cons = type.getMethod(type.getElementName(), new String[0]);
-		if(!cons.exists()){
+		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
-			builder.append("public "+type.getElementName()+"(){\n");
+			builder.append("public " + type.getElementName() + "(){\n");
 			builder.append("initComponent();\n");
 			builder.append("}\n");
 			try {
-				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);
+				type.createMethod(JavaUtil.formatCode(builder.toString()),
+						null, false, null);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				return false;
 			}
 		}
 		return true;
-	}	
-
+	}
 
 	@Override
 	public boolean needGenBoundCode() {
@@ -124,7 +162,8 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 
 	private CompositeAdapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = (CompositeAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
+			contentAdapter = (CompositeAdapter) ExtensionRegistry
+					.createWidgetAdapter(JPanel.class);
 			((JPanelAdapter) contentAdapter).setIntermediate(true);
 			JInternalFrame jif = (JInternalFrame) getWidget();
 			contentPane = (JPanel) jif.getContentPane();
@@ -141,15 +180,23 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	@Override
 	public boolean interceptPoint(Point p, int ad) {
 		JInternalFrame comp = (JInternalFrame) getWidget();
-		return p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad && p.y < comp.getHeight() + ad
-				&& !(p.x >= ad && p.y >= ad + TITLE_HEIGHT && p.x < comp.getWidth() - ad && p.y < comp.getHeight() - ad);
+		return p.x >= -ad
+				&& p.y >= -ad
+				&& p.x < comp.getWidth() + ad
+				&& p.y < comp.getHeight() + ad
+				&& !(p.x >= ad && p.y >= ad + TITLE_HEIGHT
+						&& p.x < comp.getWidth() - ad && p.y < comp.getHeight()
+						- ad);
 	}
+
 	private static int TITLE_HEIGHT = 22;
+
 	@Override
 	protected Component createWidget() {
 		JInternalFrame jif = new JInternalFrame();
 		Dimension size = new Dimension(100, 100);
-		WidgetAdapter contentAdapter = ExtensionRegistry.createWidgetAdapter(JPanel.class);
+		WidgetAdapter contentAdapter = ExtensionRegistry
+				.createWidgetAdapter(JPanel.class);
 		jif.add(contentAdapter.getWidget(), BorderLayout.CENTER);
 		jif.setSize(size);
 		layoutContainer(jif);
@@ -207,29 +254,47 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 
 	@Override
 	public Component getChild(int index) {
-		return getContentAdapter().getChild(index);
+		JInternalFrame jif = (JInternalFrame) getWidget();
+		JMenuBar jmb = jif.getJMenuBar();
+		if (jmb == null)
+			return getContentAdapter().getChild(index);
+		else if (index == 0)
+			return jmb;
+		else
+			return getContentAdapter().getChild(index - 1);
 	}
 
 	@Override
 	public int getChildCount() {
-		return getContentAdapter().getChildCount();
+		JInternalFrame jif = (JInternalFrame) getWidget();
+		JMenuBar jmb=jif.getJMenuBar();		
+		int count = getContentAdapter().getChildCount();
+		return jmb==null?count:count+1;
 	}
 
 	@Override
 	public int getIndexOfChild(Component child) {
-		return getContentAdapter().getIndexOfChild(child);
+		JInternalFrame jif = (JInternalFrame) getWidget();
+		JMenuBar jmb = jif.getJMenuBar();
+		if (jmb == null)
+			return getContentAdapter().getIndexOfChild(child);
+		else if (child == jmb)
+			return 0;
+		else
+			return getContentAdapter().getIndexOfChild(child) + 1;
 	}
 
 	private boolean inContent;
 
 	@Override
 	public boolean dragEnter(Point p) {
-		if (isInContentPane(p)) {
+		if (!isDroppingMenuBar() && !isDroppingMenuItem() && isInContentPane(p)) {
 			inContent = true;
 			Point cp = SwingUtilities.convertPoint(getWidget(), p,
 					getContentPane());
 			return getContentAdapter().dragEnter(cp);
 		}
+		setMascotLocation(p);
 		return true;
 	}
 
@@ -252,63 +317,106 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 			Point cp = SwingUtilities.convertPoint(getWidget(), p,
 					getContentPane());
 			return getContentAdapter().dragExit(cp);
-		} else
+		} else{
+			setMascotLocation(p);
 			return true;
-	}
-
-	@Override
-	public boolean dragOver(Point p) {
-		if (isInContentPane(p)) {
-			if (!inContent) {
-				inContent = true;
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragEnter(cp);
-			} else {
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragOver(cp);
-			}
-		} else {
-			if (inContent) {
-				inContent = false;
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragExit(cp);
-			} else {
-				setMascotLocation(p);
-				return true;
-			}
 		}
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
-		if (inContent) {
-			Rectangle rect = getContentBounds();
-			Graphics g = clipg.create(rect.x, rect.y, rect.width, rect.height);
-			getContentAdapter().paintFocused(g);
-			g.dispose();
+	public boolean dragOver(Point p) {
+		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
+			if (isInContentPane(p)) {
+				if (!inContent) {
+					inContent = true;
+					Point cp = SwingUtilities.convertPoint(getWidget(), p,
+							getContentPane());
+					return getContentAdapter().dragEnter(cp);
+				} else {
+					Point cp = SwingUtilities.convertPoint(getWidget(), p,
+							getContentPane());
+					return getContentAdapter().dragOver(cp);
+				}
+			} else {
+				if (inContent) {
+					inContent = false;
+					Point cp = SwingUtilities.convertPoint(getWidget(), p,
+							getContentPane());
+					return getContentAdapter().dragExit(cp);
+				} else {
+					setMascotLocation(p);
+					return true;
+				}
+			}
+		}
+		setMascotLocation(p);
+		return true;
+	}
+
+	@Override
+	public void paintFocused(Graphics g) {
+		 if (isDroppingMenuBar()) {
+			JInternalFrame jif = (JInternalFrame) getWidget();
+			if (jif.getJMenuBar() == null) {
+				Rectangle rect = getContentBounds();
+				Graphics clipg = g.create(rect.x, rect.y, rect.width,
+						rect.height);
+				clipg.setColor(Color.GREEN);
+				int h = getDropWidget().get(0).getWidget().getHeight();
+				clipg.drawRect(0, 0, rect.width, h);
+				clipg.dispose();
+			} 
 		}
 	}
 
 	@Override
 	public void paintBaselineAnchor(Graphics g) {
-		if (inContent) {
-			Rectangle rect = getContentBounds();
-			Graphics clipg = g.create(rect.x, rect.y, rect.width, rect.height);
-			getContentAdapter().paintBaselineAnchor(clipg);
-			clipg.dispose();
+		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
+			if (inContent) {
+				Rectangle rect = getContentBounds();
+				Graphics clipg = g.create(rect.x, rect.y, rect.width,
+						rect.height);
+				getContentAdapter().paintBaselineAnchor(clipg);
+				clipg.dispose();
+			}
+		}else if(isDroppingMenuItem()){
+			paintForbiddenMascot(g);
+		}else if(isDroppingMenuBar()){
+			JInternalFrame jif = (JInternalFrame) getWidget();
+			if (jif.getJMenuBar() != null) {
+				paintForbiddenMascot(g);
+			}
 		}
 	}
 
 	@Override
 	public boolean drop(Point p) {
+		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
 		inContent = false;
-		if (isInContentPane(p)) {
-			Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-			return getContentAdapter().drop(cp);
-		} else {
-			Toolkit.getDefaultToolkit().beep();
-			return true;
+			if (isInContentPane(p)) {
+				Point cp = SwingUtilities.convertPoint(getWidget(), p,
+						getContentPane());
+				return getContentAdapter().drop(cp);
+			} else {
+				Toolkit.getDefaultToolkit().beep();
+				return true;
+			}
+		}else if (isDroppingMenuBar()) {
+			JInternalFrame jif = (JInternalFrame) getWidget();
+			if(jif.getJMenuBar()==null){
+				WidgetAdapter jmenuBarAdapter=getDropWidget().get(0);
+				JMenuBar jmb=(JMenuBar)jmenuBarAdapter.getWidget();
+				jif.setJMenuBar(jmb);
+				clearAllSelected();
+				jmenuBarAdapter.setSelected(true);
+				jmenuBarAdapter.addNotify();
+			}else{
+				Toolkit.getDefaultToolkit().beep();
+				return false;
+			}
 		}
+		setMascotLocation(p);
+		return true;
 	}
 
 	@Override
@@ -318,11 +426,17 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 
 	@Override
 	public void addChildByConstraints(Component child, Object constraints) {
-		getContentAdapter().addChildByConstraints(child, constraints);
+		if(child instanceof JMenuBar){
+			JInternalFrame jif = (JInternalFrame) getWidget();
+			jif.setJMenuBar((JMenuBar)child);
+		}else
+			getContentAdapter().addChildByConstraints(child, constraints);
 	}
 
 	@Override
 	public Object getChildConstraints(Component child) {
+		if (child instanceof JMenuBar)
+			return null;		
 		return getContentAdapter().getChildConstraints(child);
 	}
 
@@ -332,4 +446,3 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 }
-
