@@ -29,6 +29,7 @@ public class MetaJToolBarValue extends MetaContainerValue {
 		put("focusable", true);
 		put("alignmentX", 0.5f);
 		put("requestFocusEnabled", true); 		
+		put("border", SYSTEM_VALUE);
 	}
 }
 

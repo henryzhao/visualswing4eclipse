@@ -28,7 +28,7 @@ public class MetaJRadioButtonValue extends MetaAbstractButtonValue {
 		put("borderPainted", false);
 		put("horizontalAlignment", SwingConstants.LEADING);
 		put("rolloverEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
-
 }
 
