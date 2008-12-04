@@ -126,10 +126,10 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 		if (contentAdapter == null) {
 			contentAdapter = (CompositeAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
 			((JPanelAdapter) contentAdapter).setIntermediate(true);
+			JInternalFrame jif = (JInternalFrame) getWidget();
+			contentPane = (JPanel) jif.getContentPane();
+			contentAdapter.setWidget(contentPane);
 		}
-		JInternalFrame jif = (JInternalFrame) getWidget();
-		contentPane = (JPanel) jif.getContentPane();
-		contentAdapter.setWidget(contentPane);
 		return contentAdapter;
 	}
 
@@ -225,22 +225,12 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	@Override
 	public boolean dragEnter(Point p) {
 		if (isInContentPane(p)) {
-			if (!inContent) {
-				inContent = true;
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragEnter(cp);
-			} else
-				return true;
-		} else {
-			if (inContent) {
-				inContent = false;
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragExit(cp);
-			} else {
-				setMascotLocation(p);
-				return true;
-			}
+			inContent = true;
+			Point cp = SwingUtilities.convertPoint(getWidget(), p,
+					getContentPane());
+			return getContentAdapter().dragEnter(cp);
 		}
+		return true;
 	}
 
 	private boolean isInContentPane(Point p) {
@@ -257,23 +247,13 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 
 	@Override
 	public boolean dragExit(Point p) {
-		if (isInContentPane(p)) {
-			if (inContent) {
-				inContent = false;
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragExit(cp);
-			} else
-				return true;
-		} else {
-			if (inContent) {
-				inContent = false;
-				Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
-				return getContentAdapter().dragExit(cp);
-			} else {
-				setMascotLocation(p);
-				return true;
-			}
-		}
+		if (inContent) {
+			inContent = false;
+			Point cp = SwingUtilities.convertPoint(getWidget(), p,
+					getContentPane());
+			return getContentAdapter().dragExit(cp);
+		} else
+			return true;
 	}
 
 	@Override
@@ -310,13 +290,22 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	public void paintBaselineAnchor(Graphics g) {
+		if (inContent) {
+			Rectangle rect = getContentBounds();
+			Graphics clipg = g.create(rect.x, rect.y, rect.width, rect.height);
+			getContentAdapter().paintBaselineAnchor(clipg);
+			clipg.dispose();
+		}
+	}
+
+	@Override
 	public boolean drop(Point p) {
+		inContent = false;
 		if (isInContentPane(p)) {
-			inContent = false;
 			Point cp = SwingUtilities.convertPoint(getWidget(), p, getContentPane());
 			return getContentAdapter().drop(cp);
 		} else {
-			inContent = false;
 			Toolkit.getDefaultToolkit().beep();
 			return true;
 		}

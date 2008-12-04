@@ -13,16 +13,18 @@
 
 package org.dyno.visual.swing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.IJavaProject;
+
 /**
  * 
  * WhiteBoard
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -31,8 +33,15 @@ public class WhiteBoard {
 	private static Listener editorListener;
 	private static List<WidgetAdapter> selectedWidget;
 
-	public static void setSelectedWidget(List<WidgetAdapter> adapter) {
-		selectedWidget = adapter;
+	public static void setSelectedWidget(List<WidgetAdapter> adapters) {
+		if (adapters == null) {
+			selectedWidget = null;
+		} else {
+			selectedWidget = new ArrayList<WidgetAdapter>();
+			for (WidgetAdapter adapter : adapters) {
+				selectedWidget.add(adapter);
+			}
+		}
 	}
 
 	public static List<WidgetAdapter> getSelectedWidget() {
@@ -56,4 +65,3 @@ public class WhiteBoard {
 			editorListener.onEvent(e);
 	}
 }
-

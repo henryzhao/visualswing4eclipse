@@ -33,7 +33,6 @@ import javax.swing.JInternalFrame;
 import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JDesktopPaneAdapter extends CompositeAdapter {
 	protected static Color RED_COLOR = new Color(255, 164, 0);
@@ -63,20 +62,6 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	@Override
 	public boolean allowChildResize() {
 		return true;
-	}
-
-	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
-		int count = getChildCount();
-		for (int i = 0; i < count; i++) {
-			Component child = getChild(i);
-			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = childAdapter.getCreationMethodName();
-			builder.append(getFieldName(getName()) + "." + "add(" + getMethodName + "());\n");
-		}
-		return builder.toString();
 	}
 
 	@Override
@@ -250,6 +235,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	public boolean drop(Point p) {
 		if (!forbid) {
 			JDesktopPane jtp = (JDesktopPane) getWidget();
+			clearAllSelected();			
 			for (WidgetAdapter adapter : getDropWidget()) {
 				JInternalFrame jif = (JInternalFrame) adapter.getWidget();
 				Point htsp = adapter.getHotspotPoint();
@@ -265,7 +251,6 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 				}
 				jtp.add(jif);
 				jif.setVisible(true);
-				clearAllSelected();
 				adapter.setSelected(true);
 				jif.toFront();
 			}

@@ -83,12 +83,12 @@ public class JToolBarAdapter extends CompositeAdapter {
 		if(isDroppingMenuItem()||isDroppingMenuBar())
 			return super.drop(p);
 		JToolBar toolbar = (JToolBar) getWidget();
+		clearAllSelected();
 		for (WidgetAdapter wa : getDropWidget()) {
 			Component child = wa.getWidget();
 			toolbar.add(child);
 			wa.setSelected(true);
 		}
-		clearSelection();
 		getWidget().validate();
 		hovered = false;
 		return true;

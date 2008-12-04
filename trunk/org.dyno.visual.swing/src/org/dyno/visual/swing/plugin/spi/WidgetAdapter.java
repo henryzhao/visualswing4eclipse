@@ -551,9 +551,9 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	public IPropertySource getPropertySource(Object object) {
+		ArrayList<IWidgetPropertyDescriptor> propdesc = getPropertyDescriptors();
 		if (object instanceof WidgetSelection) {
 			WidgetSelection selection = (WidgetSelection) object;
-			ArrayList<IWidgetPropertyDescriptor> propdesc = getPropertyDescriptors();
 			if (!isRoot() && selection.size() == 1) {
 				propdesc.add(new BeanNameProperty(this));
 				propdesc.add(new FieldAccessProperty(this));
@@ -569,8 +569,16 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 					lnfClassname = rep.getLnfClassname();
 			}
 			return new PropertySource2(lnfClassname, selection, properties);
+		}else{
+			if (!isRoot()) {
+				propdesc.add(new BeanNameProperty(this));
+				propdesc.add(new FieldAccessProperty(this));
+				propdesc.add(new GetAccessProperty(this));
+			}
+			IWidgetPropertyDescriptor[] properties = propdesc
+					.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
+			return new PropertySource2(getLnfClassname(), new StructuredSelection(new Object[]{object}), properties);
 		}
-		return null;
 	}
 
 	public String getLnfClassname() {

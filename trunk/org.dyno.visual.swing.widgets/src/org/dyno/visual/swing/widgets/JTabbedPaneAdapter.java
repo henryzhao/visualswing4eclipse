@@ -107,6 +107,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	public boolean drop(Point p) {
 		if(isDroppingMenuItem()||isDroppingMenuBar())
 			return super.drop(p);
+		clearAllSelected();
 		for (WidgetAdapter adapter : getDropWidget()) {
 			Component child = adapter.getComponent();
 			JTabbedPane jtp = (JTabbedPane) getWidget();
@@ -114,7 +115,6 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 			jtp.setSelectedComponent(child);
 			adapter.setSelected(true);
 		}
-		clearAllSelected();
 		hovered = false;
 		return true;
 	}

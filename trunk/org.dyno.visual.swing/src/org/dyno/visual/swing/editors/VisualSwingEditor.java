@@ -101,7 +101,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		super();
 		actions = new HashMap<String, EditorAction>();
 		actionList = new ArrayList<EditorAction>();
-		listeners = new ArrayList<ISelectionChangedListener>();		
+		listeners = new ArrayList<ISelectionChangedListener>();
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		} else
 			return super.getAdapter(adapter);
 	}
-
+	
 	@Override
 	public boolean isDirty() {
 		return designer != null

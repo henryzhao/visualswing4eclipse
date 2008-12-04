@@ -234,7 +234,6 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				} else {
 					WidgetAdapter todrop = parent.getDropWidget().get(i);
 					if (constraints == null || constraints.get(i) == null){
-						System.out.println("here");
 						container.add(todrop.getComponent());
 					}else {
 						if (!constraints.get(i).equals(BorderLayout.CENTER)) {

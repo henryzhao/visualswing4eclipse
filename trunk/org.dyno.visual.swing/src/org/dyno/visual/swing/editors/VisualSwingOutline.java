@@ -59,6 +59,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		this.designer = designer;
 		this.input = new ComponentTreeInput(designer);
 	}
+	
 
 	@Override
 	public void createControl(Composite parent) {
@@ -234,6 +235,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			isAdjusting = false;
 		}
 	}
+	
 	void refreshTree(){
 		getTreeViewer().refresh();
 	}
