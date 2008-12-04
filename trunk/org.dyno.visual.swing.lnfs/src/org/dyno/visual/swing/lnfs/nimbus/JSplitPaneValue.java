@@ -30,6 +30,7 @@ public class JSplitPaneValue extends WidgetValue {
 		put("focusable", true);
 		put("requestFocusEnabled", true);
 		put("continuousLayout", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

@@ -30,6 +30,7 @@ public class JInternalFrameValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("focusCycleRoot", true);
 		put("opaque", false);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

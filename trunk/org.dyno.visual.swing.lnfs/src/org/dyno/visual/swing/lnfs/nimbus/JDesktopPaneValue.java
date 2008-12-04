@@ -28,6 +28,7 @@ public class JDesktopPaneValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("focusCycleRoot", true);
 		put("opaque", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

@@ -48,6 +48,7 @@ public class JTableValue extends WidgetValue {
 		put("showVerticalLines", false);
 		put("intercellSpacing", new Dimension(0, 0));
 		put("selectionForeground", new Color(255, 255, 255));		
+		put("border", SYSTEM_VALUE);
 	}
 }
 

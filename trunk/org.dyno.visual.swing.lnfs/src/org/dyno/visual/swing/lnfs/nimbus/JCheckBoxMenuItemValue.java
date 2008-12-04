@@ -16,12 +16,7 @@ package org.dyno.visual.swing.lnfs.nimbus;
 import org.dyno.visual.swing.lnfs.WidgetValue;
 
 public class JCheckBoxMenuItemValue extends WidgetValue {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
 	public JCheckBoxMenuItemValue() {
 		put("visible", true);
 		put("verifyInputWhenFocusTarget", true);
@@ -32,7 +27,7 @@ public class JCheckBoxMenuItemValue extends WidgetValue {
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
-
 }
 

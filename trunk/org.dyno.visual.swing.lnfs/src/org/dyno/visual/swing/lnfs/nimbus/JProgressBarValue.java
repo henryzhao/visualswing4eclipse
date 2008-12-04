@@ -30,6 +30,7 @@ public class JProgressBarValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("string","0%");
 		put("opaque", false);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

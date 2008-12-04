@@ -38,6 +38,7 @@ public class JListValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("selectionBackground", new Color(57, 105, 138));
 		put("selectionForeground", new Color(255, 255, 255));		
+		put("border", SYSTEM_VALUE);
 	}
 }
 

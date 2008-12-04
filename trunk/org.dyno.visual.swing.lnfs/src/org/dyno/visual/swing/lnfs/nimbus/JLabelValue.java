@@ -28,6 +28,7 @@ public class JLabelValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("inheritsPopupMenu", true);
 		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

@@ -27,6 +27,7 @@ public class JSpinnerValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("opaque", false);		
+		put("border", SYSTEM_VALUE);
 	}
 }
 

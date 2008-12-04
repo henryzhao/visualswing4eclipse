@@ -33,6 +33,7 @@ public class JCheckBoxValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("rolloverEnabled", true);		
 		put("border", SYSTEM_VALUE);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

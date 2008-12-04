@@ -37,6 +37,7 @@ public class JTreeValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("showsRootHandles", true);
 		put("foreground", new Color(0, 0, 0));
+		put("border", SYSTEM_VALUE);
 	}
 }
 
