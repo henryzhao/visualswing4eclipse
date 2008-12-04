@@ -13,13 +13,8 @@
 
 package org.dyno.visual.swing.lnfs.meta;
 
-import org.dyno.visual.swing.lnfs.WidgetValue;
 
-public class MetaJMenuValue extends WidgetValue {
-
-	/**
-	 * 
-	 */
+public class MetaJMenuValue extends MetaJMenuItemValue {
 	private static final long serialVersionUID = 1L;
 
 	public MetaJMenuValue() {

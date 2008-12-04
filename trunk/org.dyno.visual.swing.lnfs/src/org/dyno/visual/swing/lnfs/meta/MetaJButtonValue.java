@@ -22,7 +22,6 @@ public class MetaJButtonValue extends MetaAbstractButtonValue {
         put("defaultCapable", true);
 		put("doubleBuffered", false);
 		put("alignmentY", 0.5f);
-		put("border", SYSTEM_VALUE);
 	}
 
 }

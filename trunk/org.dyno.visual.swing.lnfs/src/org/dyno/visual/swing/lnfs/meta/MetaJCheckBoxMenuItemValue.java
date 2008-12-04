@@ -13,9 +13,8 @@
 
 package org.dyno.visual.swing.lnfs.meta;
 
-import org.dyno.visual.swing.lnfs.WidgetValue;
 
-public class MetaJCheckBoxMenuItemValue extends WidgetValue {
+public class MetaJCheckBoxMenuItemValue extends MetaJMenuItemValue {
 
 	/**
 	 * 

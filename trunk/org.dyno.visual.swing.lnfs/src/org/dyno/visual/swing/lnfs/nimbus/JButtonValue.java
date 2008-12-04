@@ -32,6 +32,7 @@ public class JButtonValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("rolloverEnabled", true);
 		put("focusPainted", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

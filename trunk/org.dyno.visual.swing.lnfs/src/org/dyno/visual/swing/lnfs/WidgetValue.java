@@ -29,5 +29,7 @@ public abstract class WidgetValue extends HashMap<String, Object>{
 	public Object getDefaultValue(String propertyName){
 		return get(propertyName);
 	}
+	public WidgetValue(){
+	}
 }
 

@@ -14,9 +14,8 @@
 
 package org.dyno.visual.swing.lnfs.meta;
 
-import org.dyno.visual.swing.lnfs.WidgetValue;
 
-public class MetaJComboBoxValue extends WidgetValue {
+public class MetaJComboBoxValue extends MetaJComponentValue {
 	private static final long serialVersionUID = 1L;
 	public MetaJComboBoxValue() {
 		put("maximumRowCount", 8);

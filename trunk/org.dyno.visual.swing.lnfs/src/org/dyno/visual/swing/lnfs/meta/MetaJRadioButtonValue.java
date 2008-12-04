@@ -16,7 +16,7 @@ package org.dyno.visual.swing.lnfs.meta;
 
 import javax.swing.SwingConstants;
 
-public class MetaJRadioButtonValue extends MetaAbstractButtonValue {
+public class MetaJRadioButtonValue extends MetaJToggleButtonValue {
 	private static final long serialVersionUID = 1L;
 
 	public MetaJRadioButtonValue() {
@@ -28,7 +28,6 @@ public class MetaJRadioButtonValue extends MetaAbstractButtonValue {
 		put("borderPainted", false);
 		put("horizontalAlignment", SwingConstants.LEADING);
 		put("rolloverEnabled", true);
-		put("border", SYSTEM_VALUE);
 	}
 }
 

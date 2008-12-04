@@ -41,6 +41,7 @@ public class MetaAbstractButtonValue extends MetaJComponentValue {
 		put("verticalAlignment", SwingConstants.CENTER);
 		put("verticalTextPosition", 0);
 		put("mnemonic", 0);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

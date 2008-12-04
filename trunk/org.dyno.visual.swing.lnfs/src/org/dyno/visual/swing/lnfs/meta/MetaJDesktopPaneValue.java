@@ -14,7 +14,7 @@
 
 package org.dyno.visual.swing.lnfs.meta;
 
-public class MetaJDesktopPaneValue extends MetaContainerValue {
+public class MetaJDesktopPaneValue extends MetaJComponentValue {
 	private static final long serialVersionUID = 1L;
 	public MetaJDesktopPaneValue() {
 		put("focusable", true);
@@ -26,6 +26,7 @@ public class MetaJDesktopPaneValue extends MetaContainerValue {
 		put("requestFocusEnabled", true);
 		put("focusCycleRoot", true);
 		put("opaque", true);
+		put("border", null);
 	}
 }
 

@@ -16,7 +16,7 @@ package org.dyno.visual.swing.lnfs.meta;
 
 import javax.swing.SwingConstants;
 
-public class MetaJCheckBoxValue extends MetaAbstractButtonValue {
+public class MetaJCheckBoxValue extends MetaJToggleButtonValue {
 	private static final long serialVersionUID = 1L;
 
 	public MetaJCheckBoxValue() {
@@ -28,7 +28,6 @@ public class MetaJCheckBoxValue extends MetaAbstractButtonValue {
 		put("borderPainted", false);
 		put("horizontalAlignment", SwingConstants.LEADING);
 		put("rolloverEnabled", true);
-		put("border", SYSTEM_VALUE);
 	}
 }
 

@@ -13,15 +13,9 @@
 
 package org.dyno.visual.swing.lnfs.meta;
 
-import org.dyno.visual.swing.lnfs.WidgetValue;
 
-public class MetaJMenuItemValue extends WidgetValue {
-
-	/**
-	 * 
-	 */
+public class MetaJMenuItemValue extends MetaAbstractButtonValue {
 	private static final long serialVersionUID = 1L;
-
 	public MetaJMenuItemValue() {
 		put("visible", true);
 		put("borderPainted", true);
