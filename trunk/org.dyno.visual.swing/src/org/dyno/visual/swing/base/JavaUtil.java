@@ -128,11 +128,6 @@ public class JavaUtil {
 					throw new CoreException(status);
 				}
 				new RewriteSessionEditProcessor(document, edit, TextEdit.UPDATE_REGIONS).performEdits(); // apply
-				// after
-				// file
-				// is
-				// commitable
-
 				ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
 				bufferManager.getTextFileBuffer(file.getFullPath(), LocationKind.IFILE).commit(monitor, true);
 				return;
@@ -240,25 +235,23 @@ public class JavaUtil {
 		return source;
 	}
 
-	public static boolean setupLayoutLib(IProgressMonitor monitor) {
+	public static boolean setupLayoutLib(IProgressMonitor monitor){
 		return setupLayoutLib(WhiteBoard.getCurrentProject(), monitor);
 	}
-
 	public static boolean setupLayoutLib(IJavaProject javaProject, IProgressMonitor monitor) {
 		if (javaProject != null) {
 			try {
-				IClasspathEntry[] classpath = javaProject.getRawClasspath();
+				IClasspathEntry[] entries = javaProject.getRawClasspath();
 				boolean layout_exists = false;
-				for (IClasspathEntry path : classpath) {
-					String sPath = path.getPath().toString();
-					if (sPath.equals("VS_LAYOUT"))
+				for (IClasspathEntry entry : entries) {
+					if (entry.getPath().equals(VS_LAYOUTEXT))
 						layout_exists = true;
 				}
 				if (!layout_exists) {
-					IClasspathEntry varEntry = JavaCore.newContainerEntry(new Path("VS_LAYOUT"), false);
-					IClasspathEntry[] newClasspath = new IClasspathEntry[classpath.length + 1];
-					System.arraycopy(classpath, 0, newClasspath, 0, classpath.length);
-					newClasspath[classpath.length] = varEntry;
+					IClasspathEntry varEntry = JavaCore.newContainerEntry(VS_LAYOUTEXT, false);
+					IClasspathEntry[] newClasspath = new IClasspathEntry[entries.length + 1];
+					System.arraycopy(entries, 0, newClasspath, 0, entries.length);
+					newClasspath[entries.length] = varEntry;
 					javaProject.setRawClasspath(newClasspath, monitor);
 				}
 			} catch (Exception e) {
@@ -268,5 +261,7 @@ public class JavaUtil {
 		}
 		return true;
 	}
+	public static final IPath VS_LIBRARY=new Path(VisualSwingPlugin.PLUGIN_ID+".VS_LIBRARY");
+	public static final IPath VS_LAYOUTEXT = VS_LIBRARY.append("layoutext");
 }
 

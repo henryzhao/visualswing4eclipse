@@ -27,6 +27,7 @@ import org.dyno.visual.swing.plugin.spi.ICloner;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
+import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.CoreException;
@@ -47,6 +48,7 @@ public class ExtensionRegistry {
 	private static final String TYPE_EXTENSION_POINT = "org.dyno.visual.swing.valueType";
 	private static final String LOOKANDFEEL_EXTENSION_POINT = "org.dyno.visual.swing.lnf.lnfAdapter";
 	private static final String CUSTOMIZED_CONTEXT_MENU_EXTENSION_POINT="org.dyno.visual.swing.contextCustomizer";
+	private static final String LIBRARY_EXTENSION_POINT="org.dyno.visual.swing.libraryExtension";
 	private static String CURRENT_SORTING;
 
 	public static void setCurrentSorting(String currentSorting) {
@@ -177,6 +179,10 @@ public class ExtensionRegistry {
 	private static HashMap<String, TypeAdapter> typeAdapters;
 	private static HashMap<String, ILookAndFeelAdapter> lnfAdapters;
 	private static List<IContextCustomizer> contextCustomizers;
+	private static List<ILibraryExtension> libExtensions;
+	public static List<ILibraryExtension> getLibExtensions(){
+		return libExtensions;
+	}
 	public static List<IContextCustomizer> getContextCustomizers(){
 		return contextCustomizers;
 	}
@@ -190,11 +196,13 @@ public class ExtensionRegistry {
 		typeAdapters = new HashMap<String, TypeAdapter>();
 		lnfAdapters = new HashMap<String, ILookAndFeelAdapter>();
 		contextCustomizers = new ArrayList<IContextCustomizer>();
+		libExtensions= new ArrayList<ILibraryExtension>();
 		parseWidgetExtensions();
 		parseSortingExtensions();
 		parseTypeExtensions();
 		parseLnfExtensions();
 		parseContextMenus();
+		parseLibExtensions();
 	}
 
 	public static ILookAndFeelAdapter getLnfAdapter(String lnfClassname) {
@@ -271,6 +279,20 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
+
+	private static void parseLibExtensions() {
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(LIBRARY_EXTENSION_POINT);
+		if (extensionPoint != null) {
+			IExtension[] extensions = extensionPoint.getExtensions();
+			if (extensions != null && extensions.length > 0) {
+				for (int i = 0; i < extensions.length; i++) {
+					parseLibExtension(extensions[i]);
+				}
+			}
+		}
+	}	
+
 	private static void parseWidgetExtensions() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(ADAPTER_EXTENSION_POINT);
 		if (extensionPoint != null) {
@@ -321,6 +343,22 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+	private static void parseLibExtension(IExtension extension) {
+		IConfigurationElement[] configs = extension.getConfigurationElements();
+		if (configs != null && configs.length > 0) {
+			for (int i = 0; i < configs.length; i++) {
+				String name = configs[i].getName();
+				if (name.equals("library")) {
+					try {
+						libExtensions.add((ILibraryExtension) configs[i].createExecutableExtension("class"));
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
 	private static void parseWidgetExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {

@@ -12,6 +12,7 @@
    <extension-point id="org.dyno.visual.swing.lnf.lnfAdapter" name="LookAndFeel Adapter" schema="schema/lnfAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.listenerAdapter" name="Listener Adapter" schema="schema/listenerAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.contextCustomizer" name="customizedContextMenu" schema="schema/contextCustomizer.exsd"/>
+   <extension-point id="org.dyno.visual.swing.libraryExtension" name="Library Extension" schema="schema/libraryExtension.exsd"/>
    <extension point="org.eclipse.core.runtime.contentTypes">
 	   <content-type id="visualSwing" name="Swing Source" 
 			base-type="org.eclipse.jdt.core.javaSource"
@@ -158,8 +159,8 @@
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
-            class="org.dyno.visual.swing.wizards.VsLayoutContainerInitializer"
-            id="VS_LAYOUT">
+            class="org.dyno.visual.swing.wizards.VisualSwingExtensionLibraryInitializer"
+            id="org.dyno.visual.swing.VS_LIBRARY">
       </classpathContainerInitializer>
    </extension>
    <extension
@@ -349,5 +350,19 @@
       <context
             class="org.dyno.visual.swing.plugin.context.SingleAdapterCustomizer">
       </context>
-   </extension>   
+   </extension>
+	<extension point="org.eclipse.jdt.ui.classpathContainerPage">
+ 		<classpathContainerPage
+   			id="org.dyno.visual.swing.VS_LIBRARY"
+   			name="Visual Swing Extension Library"
+   			class="org.dyno.visual.swing.wizards.NewVisualSwingExtensionLibraryWizard">
+  	</classpathContainerPage>
+ 	</extension>
+ <extension
+       point="org.dyno.visual.swing.libraryExtension">
+    <library
+          class="org.dyno.visual.swing.wizards.LookAndFeelLibrary">
+    </library>
+ </extension>
+      
 </plugin>
