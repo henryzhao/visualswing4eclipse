@@ -31,6 +31,7 @@ public class ClassicJEditorPaneValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("focusCycleRoot", true);
 		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

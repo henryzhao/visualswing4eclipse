@@ -30,6 +30,7 @@ public class XpJProgressBarValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("string","0%");
 		put("opaque", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

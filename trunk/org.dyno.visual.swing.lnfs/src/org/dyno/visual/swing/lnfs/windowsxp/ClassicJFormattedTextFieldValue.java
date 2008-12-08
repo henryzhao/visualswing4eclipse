@@ -31,6 +31,7 @@ public class ClassicJFormattedTextFieldValue extends WidgetValue {
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

@@ -31,6 +31,7 @@ public class XpJRadioButtonValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("rolloverEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

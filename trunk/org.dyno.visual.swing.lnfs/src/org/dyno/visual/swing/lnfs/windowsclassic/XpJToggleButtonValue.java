@@ -31,6 +31,7 @@ public class XpJToggleButtonValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("rolloverEnabled", false);
 		put("opaque", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

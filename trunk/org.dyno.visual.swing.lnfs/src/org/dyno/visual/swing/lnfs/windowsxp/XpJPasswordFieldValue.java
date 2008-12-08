@@ -31,6 +31,7 @@ public class XpJPasswordFieldValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("echoChar", (char)9679);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

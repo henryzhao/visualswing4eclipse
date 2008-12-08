@@ -231,7 +231,8 @@ public class JMenuAdapter extends CompositeAdapter {
 				jme.setSelected(false);
 			}
 		}
-		stack.pop();
+		if (!stack.isEmpty())
+			stack.pop();
 		jmenu.setPopupMenuVisible(false);
 		jmenu.setSelected(false);
 	}

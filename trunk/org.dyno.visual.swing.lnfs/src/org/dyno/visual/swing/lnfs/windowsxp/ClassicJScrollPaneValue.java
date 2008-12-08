@@ -30,6 +30,7 @@ public class ClassicJScrollPaneValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("wheelScrollingEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

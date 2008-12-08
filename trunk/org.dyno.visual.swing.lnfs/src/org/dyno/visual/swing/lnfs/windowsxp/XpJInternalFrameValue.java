@@ -28,6 +28,7 @@ public class XpJInternalFrameValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("focusCycleRoot", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

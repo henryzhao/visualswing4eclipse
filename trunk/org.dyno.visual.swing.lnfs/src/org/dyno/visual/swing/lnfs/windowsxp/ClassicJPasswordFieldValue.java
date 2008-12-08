@@ -31,6 +31,7 @@ public class ClassicJPasswordFieldValue extends WidgetValue {
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
 		put("echoChar", (char)'*');
+		put("border", SYSTEM_VALUE);
 	}
 }
 

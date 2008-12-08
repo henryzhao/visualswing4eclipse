@@ -31,6 +31,7 @@ public class XpJToolBarValue extends WidgetValue {
 		put("focusable", true);
 		put("alignmentX", 0.5f);
 		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

@@ -32,6 +32,7 @@ public class ClassicJButtonValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("rolloverEnabled", false);
 		put("focusPainted", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

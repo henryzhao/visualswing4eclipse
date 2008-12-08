@@ -35,6 +35,7 @@ public class XpJMenuValue extends WidgetValue {
 		put("requestFocusEnabled", true);
 		put("opaque", true);
 		put("rolloverEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

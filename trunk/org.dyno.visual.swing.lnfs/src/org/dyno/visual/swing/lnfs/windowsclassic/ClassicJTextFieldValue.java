@@ -18,6 +18,7 @@ import org.dyno.visual.swing.lnfs.WidgetValue;
 
 public class ClassicJTextFieldValue extends WidgetValue {
 	private static final long serialVersionUID = 1L;
+
 	public ClassicJTextFieldValue() {
 		put("editable", true);
 		put("horizontalAlignment", 10);
@@ -30,6 +31,7 @@ public class ClassicJTextFieldValue extends WidgetValue {
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 
