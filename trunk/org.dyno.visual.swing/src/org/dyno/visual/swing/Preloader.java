@@ -59,7 +59,6 @@ public class Preloader extends Job {
 				}
 			}
 		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
 		} finally {
 			if (br != null) {
 				try {
