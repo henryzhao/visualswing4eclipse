@@ -44,8 +44,9 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			if (parentElement == root) {
 				return new Object[] { root.getDesigner() };
 			} else if (parentElement == root.getDesigner()) {
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root.getDesigner().getRoot());				
 				return new Object[] { otherComponents,
-						root.getDesigner().getRoot() };
+						adapter.getWidget() };
 			} else if (parentElement == otherComponents) {
 				List<InvisibleAdapter> children = root.getInvisibles();
 				Object[] values = new Object[children == null ? 0 : children
