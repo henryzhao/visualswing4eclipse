@@ -18,6 +18,7 @@ import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -85,7 +86,7 @@ public class CodeSnippet implements IEventMethod {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 	}
 
@@ -116,6 +117,7 @@ public class CodeSnippet implements IEventMethod {
 			}
 			return targetClass;
 		} catch (Exception e) {
+			ParserPlugin.getLogger().error(e);
 			return false;
 		}
 	}

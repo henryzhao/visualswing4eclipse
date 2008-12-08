@@ -92,6 +92,7 @@ public abstract class NewElementWizard extends Wizard implements INewWizard {
 				try {
 					finishPage(monitor);
 				} catch (InterruptedException e) {
+					VisualSwingPlugin.getLogger().error(e);
 					throw new OperationCanceledException(e.getMessage());
 				}
 			}
@@ -108,9 +109,11 @@ public abstract class NewElementWizard extends Wizard implements INewWizard {
 				runnable = new WorkbenchRunnableAdapter(op, getSchedulingRule());
 			getContainer().run(canRunForked(), true, runnable);
 		} catch (InvocationTargetException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			handleFinishException(getShell(), e);
 			return false;
 		} catch (InterruptedException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			return false;
 		}
 		return true;

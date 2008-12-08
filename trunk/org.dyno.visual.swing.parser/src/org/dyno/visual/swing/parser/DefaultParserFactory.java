@@ -140,7 +140,7 @@ public class DefaultParserFactory extends ParserFactory {
 			model.init(adapter, eventSet);
 			return model;
 		} catch (CoreException e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 			return null;
 		}
 	}	

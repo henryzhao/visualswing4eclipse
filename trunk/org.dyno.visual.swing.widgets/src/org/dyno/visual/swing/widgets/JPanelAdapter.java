@@ -257,7 +257,7 @@ public class JPanelAdapter extends CompositeAdapter {
 					operationHistory.execute(operation, null, null);
 					return true;
 				} catch (Exception e) {
-					e.printStackTrace();
+					WidgetPlugin.getLogger().error(e);
 					return false;
 				}
 			} else {
@@ -789,7 +789,7 @@ public class JPanelAdapter extends CompositeAdapter {
 				type.createMethod(JavaUtil.formatCode(builder.toString()),
 						null, false, null);
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 				return false;
 			}
 		}

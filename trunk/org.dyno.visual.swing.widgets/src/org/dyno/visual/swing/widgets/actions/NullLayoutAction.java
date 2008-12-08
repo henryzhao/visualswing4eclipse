@@ -16,6 +16,7 @@ package org.dyno.visual.swing.widgets.actions;
 import javax.swing.JPanel;
 
 import org.dyno.visual.swing.widgets.JPanelAdapter;
+import org.dyno.visual.swing.widgets.WidgetPlugin;
 import org.dyno.visual.swing.widgets.undo.NullLayoutOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -41,7 +42,7 @@ public class NullLayoutAction extends Action {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 			}
 		}
 	}

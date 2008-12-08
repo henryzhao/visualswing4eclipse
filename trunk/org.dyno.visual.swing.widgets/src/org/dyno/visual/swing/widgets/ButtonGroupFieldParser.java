@@ -46,7 +46,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 						.getWidgetAdapter(bean);
 				rootAdapter.getInvisibles().add(adapter);
 			} catch (Exception e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 			}
 		}
 	}
@@ -70,7 +70,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 				}
 			}
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 		}
 		return false;
 	}
@@ -83,7 +83,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 				method.delete(true, monitor);
 				return true;
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 			}
 		}
 		return false;

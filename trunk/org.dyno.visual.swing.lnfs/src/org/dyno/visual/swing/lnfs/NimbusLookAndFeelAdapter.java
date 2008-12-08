@@ -165,6 +165,7 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 					}
 				}
 			} catch (Exception e) {
+				LnfPlugin.getLogger().error(e);
 			}
 		}
 		return metalLnf;

@@ -90,8 +90,10 @@ public class WorkbenchRunnableAdapter implements IRunnableWithProgress, IThreadL
 		try {
 			JavaCore.run(fWorkspaceRunnable, fRule, monitor);
 		} catch (OperationCanceledException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			throw new InterruptedException(e.getMessage());
 		} catch (CoreException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			throw new InvocationTargetException(e);
 		}
 	}

@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.swing.SpinnerListModel;
 
+import org.dyno.visual.swing.types.TypePlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -64,6 +65,7 @@ class ListAccessible implements AccessibleUI {
 			String[]items = new String[list.size()];
 			return new SpinnerListModel(list.toArray(items));
 		} catch (IOException e) {
+			TypePlugin.getLogger().error(e);
 			return null;
 		}			
 	}

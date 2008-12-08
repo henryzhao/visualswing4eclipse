@@ -102,7 +102,7 @@ class DefaultSourceParser implements ISourceParser {
 					try {
 						fieldParsers.add((IFieldParser)configs[i].createExecutableExtension("class"));
 					} catch (CoreException e) {
-						e.printStackTrace();
+						ParserPlugin.getLogger().error(e);
 					}
 				}
 			}
@@ -125,7 +125,7 @@ class DefaultSourceParser implements ISourceParser {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 		return false;
 	}
@@ -161,12 +161,13 @@ class DefaultSourceParser implements ISourceParser {
 					initDesignedWidget(cunit, bean);
 					result = beanAdapter;
 				} catch (Error re) {
+					ParserPlugin.getLogger().error(re);					
 					return false;
 				}
 				return true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 		return false;
 	}
@@ -187,7 +188,7 @@ class DefaultSourceParser implements ISourceParser {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				ParserPlugin.getLogger().error(e);
 			}
 		}
 	}
@@ -231,7 +232,7 @@ class DefaultSourceParser implements ISourceParser {
 			}
 			parseEventListener(cunit, adapter);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 	}
 	@SuppressWarnings("unchecked")
@@ -248,6 +249,7 @@ class DefaultSourceParser implements ISourceParser {
 				return lnf;
 			}
 		} catch (Exception e) {
+			ParserPlugin.getLogger().error(e);
 		}
 		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
@@ -262,6 +264,7 @@ class DefaultSourceParser implements ISourceParser {
 				try {
 					UIManager.setLookAndFeel(instance);
 				} catch (Exception e) {
+					ParserPlugin.getLogger().error(e);
 				}
 			} else {
 				throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
@@ -306,7 +309,7 @@ class DefaultSourceParser implements ISourceParser {
 					return true;
 			}
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 		return false;
 	}
@@ -381,7 +384,7 @@ class DefaultSourceParser implements ISourceParser {
 			} else
 				return false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 			return false;
 		}
 	}
@@ -402,6 +405,7 @@ class DefaultSourceParser implements ISourceParser {
 				}
 			}
 		} catch (JavaModelException e) {
+			ParserPlugin.getLogger().error(e);
 		}
 		return false;
 	}
@@ -420,7 +424,7 @@ class DefaultSourceParser implements ISourceParser {
 			try {
 				field.delete(true, monitor);
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				ParserPlugin.getLogger().error(e);
 				return;
 			}
 		}
@@ -430,7 +434,7 @@ class DefaultSourceParser implements ISourceParser {
 				method.delete(true, monitor);
 				return;
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				ParserPlugin.getLogger().error(e);
 			}
 		}
 		for(IFieldParser parser:fieldParsers){

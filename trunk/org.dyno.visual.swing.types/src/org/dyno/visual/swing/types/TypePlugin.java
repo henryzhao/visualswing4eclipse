@@ -14,6 +14,7 @@
 
 package org.dyno.visual.swing.types;
 
+import org.dyno.visual.swing.base.PluginLogger;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -34,13 +35,15 @@ public class TypePlugin extends AbstractUIPlugin {
 	}
 	// The shared instance
 	private static TypePlugin plugin;
-
+	private PluginLogger logger;
 	/**
 	 * The constructor
 	 */
 	public TypePlugin() {
 	}
-
+	public static PluginLogger getLogger(){
+		return plugin.logger;
+	}
 	public static IWorkbenchPage getActivePage() {
 		IWorkbenchWindow window = TypePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
 		if (window == null)
@@ -56,6 +59,7 @@ public class TypePlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		logger = new PluginLogger(this);
 	}
 
 	/*

@@ -78,12 +78,14 @@ public class LayoutExtensionLibrary implements IClasspathContainer {
 				try {
 					bis.close();
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 			if (bos != null) {
 				try {
 					bos.close();
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 		}

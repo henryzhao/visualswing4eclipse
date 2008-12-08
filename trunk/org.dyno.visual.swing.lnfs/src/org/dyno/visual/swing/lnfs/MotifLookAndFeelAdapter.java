@@ -150,7 +150,7 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 			try {
 				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.motif.MotifLookAndFeel").newInstance();
 			} catch (Exception e) {
-				e.printStackTrace();
+				LnfPlugin.getLogger().error(e);
 			}
 		}
 		return metalLnf;

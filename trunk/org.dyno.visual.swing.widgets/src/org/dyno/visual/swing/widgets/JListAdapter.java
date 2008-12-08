@@ -91,7 +91,7 @@ public class JListAdapter extends ComplexWidgetAdapter {
 					}
 					br.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					WidgetPlugin.getLogger().error(e);
 				}
 				((JList) getWidget()).setModel(model);
 			}

@@ -19,6 +19,7 @@ import javax.swing.JSplitPane;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.JSplitPaneAdapter;
+import org.dyno.visual.swing.widgets.WidgetPlugin;
 import org.dyno.visual.swing.widgets.undo.JSplitPanePlacementOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -54,7 +55,7 @@ public class JSplitPanePlacementAction extends Action {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 			}
 		}
 	}

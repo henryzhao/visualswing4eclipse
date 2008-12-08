@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
@@ -104,7 +105,7 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 			Class adapterClass = bundle.loadClass(adapter);
 			listenerAdapters.put(interClass, adapterClass);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 	}
 
@@ -171,6 +172,7 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 					try {
 						type.createMethod(JavaUtil.formatCode(code), null, false, monitor);
 					} catch (JavaModelException e) {
+						ParserPlugin.getLogger().error(e);
 						return false;
 					}
 				}

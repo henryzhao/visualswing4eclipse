@@ -39,7 +39,7 @@ public class ButtonGroupRenamingAction extends Action {
 		try {
 			history.execute(operation, null, null);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 		}
 	}
 }

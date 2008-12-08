@@ -247,7 +247,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 			try {
 				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel").newInstance();
 			} catch (Exception e) {
-				e.printStackTrace();
+				LnfPlugin.getLogger().error(e);
 			}
 		}
 		return metalLnf;

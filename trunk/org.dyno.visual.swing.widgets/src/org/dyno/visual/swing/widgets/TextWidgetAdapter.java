@@ -46,7 +46,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		try {
 			return (JComponent)getWidgetClass().newInstance();
 		} catch (Exception e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -63,7 +63,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		try {
 			return new PropertyDescriptor("text", getWidgetClass());
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -72,7 +72,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		try {
 			return (JComponent) getWidgetClass().newInstance();
 		} catch (Exception e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -92,7 +92,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		try {
 			return (String) textProperty.getReadMethod().invoke(jc);
 		} catch (Exception e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -102,7 +102,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		try {
 			textProperty.getWriteMethod().invoke(jc, text);
 		} catch (Exception e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 		}
 	}
 	private LabelEditor editor;

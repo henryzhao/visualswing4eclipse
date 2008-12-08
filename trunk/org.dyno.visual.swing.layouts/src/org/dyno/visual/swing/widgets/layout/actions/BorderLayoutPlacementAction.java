@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.layout.LayoutPlugin;
 import org.dyno.visual.swing.widgets.layout.undo.BorderLayoutPlacementOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -54,7 +55,7 @@ public class BorderLayoutPlacementAction extends Action {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				LayoutPlugin.getLogger().error(e);
 			}
 		}
 	}

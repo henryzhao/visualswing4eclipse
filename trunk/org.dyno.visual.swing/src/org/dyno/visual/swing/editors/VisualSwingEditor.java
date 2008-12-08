@@ -385,6 +385,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				setLnfClassname(lnf);
 			}
 		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
 			String className = UIManager.getCrossPlatformLookAndFeelClassName();
 			setLnfClassname(className);
 		}
@@ -397,6 +398,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			try {
 				UIManager.setLookAndFeel(adapter.getLookAndFeelInstance());
 			} catch (Exception e) {
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		this.lnfClassname = lnfClassname;

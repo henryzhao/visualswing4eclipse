@@ -90,6 +90,7 @@ public class ButtonGroupAdapter implements InvisibleAdapter {
 				try {
 					lastField.delete(true, monitor);
 				} catch (Exception e) {
+					WidgetPlugin.getLogger().error(e);
 					success = false;
 				}
 			}
@@ -108,6 +109,7 @@ public class ButtonGroupAdapter implements InvisibleAdapter {
 			try {
 				type.createField(builder.toString(), sibling, false, monitor);
 			} catch (JavaModelException e) {
+				WidgetPlugin.getLogger().error(e);
 				success = false;
 			}
 		}
@@ -120,6 +122,7 @@ public class ButtonGroupAdapter implements InvisibleAdapter {
 					sibling = getSibling(type, lastMethod);
 					lastMethod.delete(true, monitor);
 				} catch (Exception e) {
+					WidgetPlugin.getLogger().error(e);
 					success = false;
 				}
 			}
@@ -132,6 +135,7 @@ public class ButtonGroupAdapter implements InvisibleAdapter {
 				sibling = getSibling(type, method);
 				method.delete(false, monitor);
 			} catch (JavaModelException e) {
+				WidgetPlugin.getLogger().error(e);
 				success = false;
 			}
 		}
@@ -154,6 +158,7 @@ public class ButtonGroupAdapter implements InvisibleAdapter {
 			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
 					false, monitor);
 		} catch (JavaModelException e) {
+			WidgetPlugin.getLogger().error(e);
 			success = false;
 		}
 		setLastName(getName());
@@ -179,7 +184,7 @@ public class ButtonGroupAdapter implements InvisibleAdapter {
 				}
 			}
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			WidgetPlugin.getLogger().error(e);
 		}
 		return null;
 	}	

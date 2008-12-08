@@ -18,6 +18,7 @@ import java.awt.LayoutManager;
 import javax.swing.JPanel;
 
 import org.dyno.visual.swing.widgets.JPanelAdapter;
+import org.dyno.visual.swing.widgets.WidgetPlugin;
 import org.dyno.visual.swing.widgets.undo.SetLayoutOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -53,7 +54,7 @@ public class SetLayoutAction extends Action {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 			}
 		}
 	}

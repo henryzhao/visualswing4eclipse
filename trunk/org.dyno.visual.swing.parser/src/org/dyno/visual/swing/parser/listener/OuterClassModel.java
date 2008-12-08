@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -93,7 +94,7 @@ public class OuterClassModel extends AbstractClassModel {
 			try {
 				meType = type.getCompilationUnit().createType(builder.toString(), null, false, monitor);
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				ParserPlugin.getLogger().error(e);
 				return false;
 			}
 		}
@@ -123,7 +124,7 @@ public class OuterClassModel extends AbstractClassModel {
 						try {
 							imthd.delete(true, monitor);
 						} catch (JavaModelException e) {
-							e.printStackTrace();
+							ParserPlugin.getLogger().error(e);
 							return false;
 						}
 					}
@@ -138,7 +139,7 @@ public class OuterClassModel extends AbstractClassModel {
 			meType.createMethod(code, null, false, monitor);
 			return true;
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 			return false;
 		}
 	}

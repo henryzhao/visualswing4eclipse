@@ -144,7 +144,7 @@ class SetAnchorAction extends Action {
 				try {
 					operationHistory.execute(operation, null, null);
 				} catch (ExecutionException e) {
-					e.printStackTrace();
+					GroupLayoutPlugin.getLogger().error(e);
 				}
 			}
 		}

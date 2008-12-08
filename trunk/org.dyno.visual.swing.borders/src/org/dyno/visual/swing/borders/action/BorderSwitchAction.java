@@ -17,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.base.IFactory;
+import org.dyno.visual.swing.borders.BorderPlugin;
 import org.dyno.visual.swing.borders.undo.BorderSwitchOperation;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -63,7 +64,7 @@ public class BorderSwitchAction extends Action {
 				history.execute(operation, null, null);
 				setChecked(true);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				BorderPlugin.getLogger().error(e);
 			}
 		}
 	}

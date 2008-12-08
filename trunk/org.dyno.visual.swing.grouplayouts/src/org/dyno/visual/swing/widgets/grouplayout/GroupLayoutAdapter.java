@@ -740,7 +740,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				operationHist.execute(operation, null, null);
 				return true;
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				GroupLayoutPlugin.getLogger().error(e);
 				return false;
 			}
 		}

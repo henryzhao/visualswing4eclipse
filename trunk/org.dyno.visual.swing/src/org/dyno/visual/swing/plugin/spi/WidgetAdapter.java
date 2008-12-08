@@ -1038,6 +1038,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				try {
 					lastField.delete(true, monitor);
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 					success = false;
 				}
 			}
@@ -1056,6 +1057,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			try {
 				type.createField(builder.toString(), sibling, false, monitor);
 			} catch (JavaModelException e) {
+				VisualSwingPlugin.getLogger().error(e);
 				success = false;
 			}
 		}
@@ -1069,6 +1071,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 					sibling = getSibling(type, lastMethod);
 					lastMethod.delete(true, monitor);
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 					success = false;
 				}
 			}
@@ -1081,6 +1084,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				sibling = getSibling(type, method);
 				method.delete(false, monitor);
 			} catch (JavaModelException e) {
+				VisualSwingPlugin.getLogger().error(e);
 				success = false;
 			}
 		}
@@ -1107,6 +1111,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
 					false, monitor);
 		} catch (JavaModelException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			success = false;
 		}
 		success = createEventMethod(type, imports, monitor);
@@ -1138,6 +1143,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				sibling = getSibling(type, method);
 				method.delete(false, monitor);
 			} catch (JavaModelException e) {
+				VisualSwingPlugin.getLogger().error(e);
 				success = false;
 			}
 		}
@@ -1155,6 +1161,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
 					false, monitor);
 		} catch (JavaModelException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			success = false;
 		}
 		for(InvisibleAdapter invisible:invisibles){

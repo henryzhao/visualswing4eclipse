@@ -26,7 +26,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -140,7 +139,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 				type.createMethod(JavaUtil.formatCode(builder.toString()),
 						null, false, null);
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				WidgetPlugin.getLogger().error(e);
 				return false;
 			}
 		}

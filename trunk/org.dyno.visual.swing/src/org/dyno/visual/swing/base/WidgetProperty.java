@@ -614,6 +614,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		try {
 			value = propertyDescriptor.getReadMethod().invoke(bean);
 		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
 			return false;
 		}
 		if (value != null) {
@@ -627,6 +628,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			propertyDescriptor.getWriteMethod().invoke(clone, value);
 			return true;
 		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
 			return false;
 		}
 	}

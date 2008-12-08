@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -67,7 +68,7 @@ public class ThisClassModel extends AbstractClassModel {
 		try {
 			inters = type.getSuperInterfaceNames();
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 			return false;
 		}
 		Class listClass = eventSet.getListenerType();
@@ -106,7 +107,7 @@ public class ThisClassModel extends AbstractClassModel {
 			try {
 				type.createMethod(content, null, false, monitor);
 			} catch (Exception e) {
-				e.printStackTrace();
+				ParserPlugin.getLogger().error(e);
 			}
 		}
 	}
@@ -133,7 +134,7 @@ public class ThisClassModel extends AbstractClassModel {
 			String newSource = document.get();
 			icunit.getBuffer().setContents(newSource);
 		} catch (Exception e) {
-			e.printStackTrace();
+			ParserPlugin.getLogger().error(e);
 		}
 	}
 

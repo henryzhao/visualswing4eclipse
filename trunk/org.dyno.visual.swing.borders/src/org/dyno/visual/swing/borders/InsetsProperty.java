@@ -49,7 +49,7 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 			right = getField("right");
 			right.setAccessible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			BorderPlugin.getLogger().error(e);
 		}
 	}
 
@@ -97,7 +97,7 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 			bottom.set(b, insets.bottom);
 			right.set(b, insets.right);
 		} catch (Exception e) {
-			e.printStackTrace();
+			BorderPlugin.getLogger().error(e);
 		}
 	}
 
@@ -147,6 +147,7 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 				bottom = Integer.parseInt(sBottom);
 				right = Integer.parseInt(sRight);
 			} catch (NumberFormatException nfe) {
+				BorderPlugin.getLogger().error(nfe);
 			}
 			return new Insets(top, left, bottom, right);
 		}

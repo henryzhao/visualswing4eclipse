@@ -19,6 +19,7 @@ import java.io.StringReader;
 
 import javax.swing.ListModel;
 
+import org.dyno.visual.swing.types.TypePlugin;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -106,7 +107,7 @@ public class ListItemDialog extends Dialog {
 				br.close();
 				model = m;
 			} catch (Exception e) {
-				e.printStackTrace();
+				TypePlugin.getLogger().error(e);
 				model = null;
 			}
 		}

@@ -68,6 +68,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 					return true;
 				}
 			} catch (CoreException e) {
+				VisualSwingPlugin.getLogger().error(e);
 				return true;
 			}
 		} else
@@ -107,6 +108,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 					try {
 						stream.close();
 					} catch (Exception e) {
+						VisualSwingPlugin.getLogger().error(e);
 					}
 			}
 		}
@@ -143,6 +145,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				try {
 					page.showView(viewId);
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 		}
@@ -172,6 +175,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 					if (editor instanceof VisualSwingEditor)
 						return;
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 			for (String viewId : RELATED_VIEW_IDS) {
@@ -179,6 +183,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 					IViewPart part = page.findView(viewId);
 					page.hideView(part);
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 		}

@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LookAndFeel Plug-in
 Bundle-SymbolicName: org.dyno.visual.swing.lnfs;singleton:=true
 Bundle-Version: 0.9.6.I20081202-1500
-Require-Bundle: org.dyno.visual.swing
+Require-Bundle: org.dyno.visual.swing,
+ org.eclipse.core.runtime;bundle-version="3.4.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Dynamic Object Organization
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
