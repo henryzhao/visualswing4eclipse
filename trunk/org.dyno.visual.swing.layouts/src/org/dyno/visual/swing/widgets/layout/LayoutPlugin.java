@@ -31,6 +31,9 @@ public class LayoutPlugin extends Plugin {
 	public LayoutPlugin() {
 	}
 	public static PluginLogger getLogger(){
+		if(plugin==null||plugin.logger==null){
+			return PluginLogger.instance;
+		}
 		return plugin.logger;
 	}
 

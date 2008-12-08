@@ -31,6 +31,9 @@ public class LnfPlugin extends Plugin {
 	public LnfPlugin() {
 	}
 	public static PluginLogger getLogger(){
+		if(plugin==null||plugin.logger==null){
+			return PluginLogger.instance;
+		}
 		return plugin.logger;
 	}
 

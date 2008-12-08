@@ -1,13 +1,21 @@
 package org.dyno.visual.swing.base;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 
 public class PluginLogger {
+	public static PluginLogger instance;
+	static{
+		instance = new PluginLogger();
+	}
 	private Plugin plugin;
 	private String pluginID;
+	private PluginLogger(){
+		this(VisualSwingPlugin.getDefault());
+	}
 	public PluginLogger(Plugin plugin){
 		this.plugin=plugin;
 		pluginID=plugin.getBundle().getSymbolicName();

@@ -95,7 +95,7 @@ public class IconWrapper implements ICodeGen {
 								.findFilesForLocationURI(location.toURI());
 						if (files == null || files.length == 0)
 							return null;
-						return "/"
+						rel = "/"
 								+ files[0].getProjectRelativePath()
 										.removeFirstSegments(1);
 					} catch (Exception e) {

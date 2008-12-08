@@ -31,6 +31,9 @@ public class BorderPlugin extends Plugin {
 	public BorderPlugin() {
 	}
 	public static PluginLogger getLogger(){
+		if(plugin==null||plugin.logger==null){
+			return PluginLogger.instance;
+		}
 		return plugin.logger;
 	}
 

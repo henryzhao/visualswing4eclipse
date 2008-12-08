@@ -47,6 +47,9 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	public VisualSwingPlugin() {
 	}
 	public static PluginLogger getLogger(){
+		if(plugin==null||plugin.logger==null){
+			return PluginLogger.instance;
+		}
 		return plugin.logger;
 	}
 	public static IWorkbenchPage getActivePage() {

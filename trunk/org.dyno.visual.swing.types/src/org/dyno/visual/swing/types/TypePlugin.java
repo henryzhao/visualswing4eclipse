@@ -42,6 +42,9 @@ public class TypePlugin extends AbstractUIPlugin {
 	public TypePlugin() {
 	}
 	public static PluginLogger getLogger(){
+		if(plugin==null||plugin.logger==null){
+			return PluginLogger.instance;
+		}
 		return plugin.logger;
 	}
 	public static IWorkbenchPage getActivePage() {
