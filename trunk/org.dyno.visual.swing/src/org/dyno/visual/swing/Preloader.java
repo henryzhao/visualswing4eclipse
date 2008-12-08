@@ -38,7 +38,6 @@ public class Preloader extends Job {
 			try {
 				Class.forName(classes.get(i));
 			} catch (ClassNotFoundException e) {
-				VisualSwingPlugin.getLogger().error(e);
 			}
 			monitor.worked(1);
 		}
@@ -59,6 +58,7 @@ public class Preloader extends Job {
 				}
 			}
 		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);			
 		} finally {
 			if (br != null) {
 				try {
