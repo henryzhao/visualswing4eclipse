@@ -27,6 +27,7 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.eclipse.core.commands.operations.IUndoableOperation;
@@ -139,7 +140,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 			}
 			layoutAdapters.put(layoutClass, config);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -153,7 +154,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 					try {
 						bean = (ILayoutBean) config.createExecutableExtension("layoutBean");
 					} catch (CoreException e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 				}
 			}
@@ -177,7 +178,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 						layoutAdapter.setName(layoutClass.getName());
 					return layoutAdapter;
 				} catch (CoreException e) {
-					e.printStackTrace();
+					VisualSwingPlugin.getLogger().error(e);
 					return null;
 				}
 			} else
@@ -194,7 +195,7 @@ public abstract class LayoutAdapter implements IPropertySourceProvider, ILayoutB
 				layoutAdapter.setName(layoutName);
 			return layoutAdapter;
 		} catch (CoreException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}

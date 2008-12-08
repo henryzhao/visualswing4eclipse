@@ -22,6 +22,7 @@ import java.awt.Toolkit;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -63,7 +64,7 @@ public class ResourceIcon implements Icon {
 					}
 				}
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 	}

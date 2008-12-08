@@ -15,6 +15,7 @@ package org.dyno.visual.swing.plugin.spi;
 
 import java.beans.EventSetDescriptor;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -60,7 +61,7 @@ public abstract class ParserFactory {
 		try {
 			DEFAULT = (ParserFactory) config.createExecutableExtension("class");
 		} catch (CoreException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 

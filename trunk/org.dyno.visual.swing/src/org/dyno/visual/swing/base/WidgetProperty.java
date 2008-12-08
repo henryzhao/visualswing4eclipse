@@ -22,6 +22,7 @@ import java.util.Comparator;
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
@@ -77,7 +78,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		try {
 			propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		gencode = true;
 		displayName = name;
@@ -98,7 +99,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		try {
 			propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		gencode = true;
 		displayName = name;
@@ -125,7 +126,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 		try {
 			propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
 		} catch (IntrospectionException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		String sGencode = config.getAttribute("gencode");
 		if (sGencode == null || sGencode.trim().length() == 0)
@@ -173,7 +174,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			editorFactory = (ICellEditorFactory) config
 					.createExecutableExtension("editor");
 		} catch (CoreException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -182,7 +183,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			labelFactory = (ILabelProviderFactory) config
 					.createExecutableExtension("renderer");
 		} catch (CoreException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -216,7 +217,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				lastValue = value;
 				return value;
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		lastValue = null;
@@ -229,7 +230,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			try {
 				return readMethod.invoke(bean);
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		return null;
@@ -517,7 +518,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 					operationHistory.execute(operation, null, null);
 				}
 				} catch (Exception e) {
-					e.printStackTrace();
+					VisualSwingPlugin.getLogger().error(e);
 				}
 		}
 	}

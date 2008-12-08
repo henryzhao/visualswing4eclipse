@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICloner;
@@ -240,7 +241,7 @@ public class ExtensionRegistry {
 			ILookAndFeelAdapter adapter = (ILookAndFeelAdapter) config.createExecutableExtension("adapter");
 			lnfAdapters.put(sClass, adapter);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -337,7 +338,7 @@ public class ExtensionRegistry {
 					try {
 						contextCustomizers.add((IContextCustomizer) configs[i].createExecutableExtension("class"));
 					} catch (CoreException e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 				}
 			}
@@ -352,7 +353,7 @@ public class ExtensionRegistry {
 					try {
 						libExtensions.add((ILibraryExtension) configs[i].createExecutableExtension("class"));
 					} catch (CoreException e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 				}
 			}
@@ -481,7 +482,7 @@ public class ExtensionRegistry {
 				adapter.setCloner((ICloner) config.createExecutableExtension("cloner"));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -514,8 +515,8 @@ public class ExtensionRegistry {
 			IConfigurationElement conf = getWidgetConfig(widgetClass);
 			WidgetAdapter adapter = (WidgetAdapter) conf.createExecutableExtension("class");
 			return adapter;
-		} catch (CoreException e1) {
-			e1.printStackTrace();
+		} catch (CoreException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -531,8 +532,8 @@ public class ExtensionRegistry {
 			IConfigurationElement conf = widgets.get(widgetClass);
 			WidgetAdapter adapter = (WidgetAdapter) conf.createExecutableExtension("class");
 			return adapter;
-		} catch (CoreException e1) {
-			e1.printStackTrace();
+		} catch (CoreException e) {
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}

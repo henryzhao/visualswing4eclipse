@@ -16,6 +16,7 @@ package org.dyno.visual.swing.types;
 
 import java.util.StringTokenizer;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -73,7 +74,7 @@ public class IconCellEditorValidator implements ICellEditorValidator {
 					}
 				}
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 				return e.getLocalizedMessage();
 			}
 			return "Cannot find such image file:" + value + "!";

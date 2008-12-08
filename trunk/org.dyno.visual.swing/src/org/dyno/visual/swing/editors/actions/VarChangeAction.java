@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing.editors.actions;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.VarChangeOperation;
 import org.eclipse.core.commands.ExecutionException;
@@ -38,7 +39,7 @@ public class VarChangeAction extends Action {
 		try {
 			history.execute(operation, null, null);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 }

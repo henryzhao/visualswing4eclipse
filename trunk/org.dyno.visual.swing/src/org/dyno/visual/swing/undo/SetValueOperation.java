@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.swing.SwingUtilities;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ISystemValue;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -46,7 +47,7 @@ public class SetValueOperation extends AbstractOperation {
 		try {
 			this.old_value = property.getReadMethod().invoke(bean);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		this.new_value = new_value;
 	}
@@ -82,7 +83,7 @@ public class SetValueOperation extends AbstractOperation {
 			}
 			return property.getReadMethod().invoke(copy);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -108,7 +109,7 @@ public class SetValueOperation extends AbstractOperation {
 					MessageDialog.openError(shell, "Error", "occurs while setting property:"+property.getDisplayName()+"!"+e.getMessage());
 				}
 			}
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			throw new ExecutionException(e.getMessage());
 		}
 		return Status.OK_STATUS;

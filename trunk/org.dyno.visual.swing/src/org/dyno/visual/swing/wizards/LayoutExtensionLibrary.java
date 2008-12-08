@@ -72,7 +72,7 @@ public class LayoutExtensionLibrary implements IClasspathContainer {
 				bos.write(data, 0, length);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		} finally {
 			if (bis != null) {
 				try {

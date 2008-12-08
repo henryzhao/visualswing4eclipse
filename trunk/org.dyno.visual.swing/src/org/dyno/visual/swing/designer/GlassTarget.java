@@ -35,6 +35,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.ShellAdaptable;
@@ -174,7 +175,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 						try {
 							operationHistory.execute(operation, null, null);
 						} catch (ExecutionException e) {
-							e.printStackTrace();
+							VisualSwingPlugin.getLogger().error(e);
 						}
 					}
 					adapter.addNotify();
@@ -196,7 +197,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					try {
 						operationHistory.execute(operation, null, null);
 					} catch (ExecutionException e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 				}
 			}
@@ -225,7 +226,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					try {
 						operationHistory.execute(operation, null, null);
 					} catch (ExecutionException e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 				}
 				adapter.changeNotify();

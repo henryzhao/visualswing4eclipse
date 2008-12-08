@@ -18,6 +18,7 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.eclipse.core.resources.IFile;
@@ -68,7 +69,7 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 								+ files[0].getProjectRelativePath()
 										.removeFirstSegments(1);
 					} catch (Exception e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 						return null;
 					}
 				} else

@@ -16,6 +16,7 @@ package org.dyno.visual.swing.editors.actions;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.eclipse.jface.action.Action;
 
@@ -49,7 +50,7 @@ public class LnfAction extends Action {
 				SwingUtilities.updateComponentTreeUI(designer);
 				designer.repaint();
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}else{
 			

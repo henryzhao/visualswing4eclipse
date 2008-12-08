@@ -15,6 +15,7 @@ package org.dyno.visual.swing.editors;
 
 import java.io.InputStream;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.contentTypes.VisualSwingContentDescriber;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -100,7 +101,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			} finally {
 				if (stream != null)
 					try {
@@ -128,7 +129,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 						IFile file = file_editor_input.getFile();
 						IDE.setDefaultEditor(file, JAVA_EDITOR_ID);
 					} catch (PartInitException e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 				}
 			}
@@ -191,7 +192,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				return page.openEditor(input, JAVA_EDITOR_ID, true,
 						IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		return null;
@@ -204,4 +205,3 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	private static final String JAVA_EDITOR_ID = "org.eclipse.jdt.ui.CompilationUnitEditor";
 	private static final String NATURE_ID = "org.eclipse.jdt.core.javanature";
 }
-

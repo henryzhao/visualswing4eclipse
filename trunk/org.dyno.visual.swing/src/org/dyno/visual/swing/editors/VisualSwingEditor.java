@@ -28,6 +28,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
@@ -314,7 +315,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 						designer.setLnfChanged(false);
 						fireDirty();
 					} catch (Exception e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 					}
 					if (copy.isWorkingCopy()) {
 						copy.commitWorkingCopy(true, monitor);
@@ -326,7 +327,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					designer.clearDirty();
 				}
 			} catch (JavaModelException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		isGeneratingCode = false;

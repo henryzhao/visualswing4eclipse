@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.AwtEnvironment;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -393,7 +394,7 @@ public abstract class EmbeddedSwingComposite extends Composite {
 				}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 

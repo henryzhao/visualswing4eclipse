@@ -82,7 +82,7 @@ public class JavaUtil {
 					new RewriteSessionEditProcessor(document, edit, TextEdit.UPDATE_REGIONS).performEdits();
 				}
 			} catch (BadLocationException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			} finally {
 				releaseDocument(cu, document, new SubProgressMonitor(monitor, 1));
 			}
@@ -229,7 +229,7 @@ public class JavaUtil {
 				edit.apply(document);
 				return document.get();
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		return source;
@@ -255,7 +255,7 @@ public class JavaUtil {
 					javaProject.setRawClasspath(newClasspath, monitor);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 				return false;
 			}
 		}

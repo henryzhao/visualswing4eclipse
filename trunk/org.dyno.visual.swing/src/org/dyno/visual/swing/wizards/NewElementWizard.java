@@ -63,7 +63,7 @@ public abstract class NewElementWizard extends Wizard implements INewWizard {
 						try {
 							IDE.openEditor(activePage, resource, true);
 						} catch (PartInitException e) {
-							e.printStackTrace();
+							VisualSwingPlugin.getLogger().error(e);
 						}
 					}
 				});

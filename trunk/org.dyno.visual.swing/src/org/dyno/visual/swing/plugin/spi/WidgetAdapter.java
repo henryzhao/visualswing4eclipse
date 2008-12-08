@@ -517,7 +517,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			Bundle bundle = Platform.getBundle(pluginId);
 			return bundle.loadClass(widgetClassname);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -549,7 +549,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			}
 			return eProperties;
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -663,7 +663,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				iwpd.init(config, beanClass);
 				return iwpd;
 			} catch (CoreException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		return new WidgetProperty(config, beanClass);
@@ -923,7 +923,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 			Class<?> clazz = getWidgetClass();
 			return Introspector.getBeanInfo(clazz);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		return null;
 	}
@@ -996,7 +996,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				}
 			}
 		} catch (JavaModelException e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		return null;
 	}

@@ -17,6 +17,7 @@ import java.awt.Component;
 import java.lang.reflect.Field;
 import java.util.Comparator;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
@@ -54,7 +55,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 			field = getField(beanClass, name);
 			field.setAccessible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		displayName = name;
 		Class<?> type = field.getType();
@@ -77,7 +78,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 			field = getField(beanClass, name);
 			field.setAccessible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		displayName = name;
 		labelFactory = label;
@@ -118,7 +119,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 			lastValue = value;
 			return value;
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		lastValue = null;
 		return null;
@@ -128,7 +129,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 		try {
 			return field.get(bean);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		return null;
 	}
@@ -268,7 +269,7 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 	}

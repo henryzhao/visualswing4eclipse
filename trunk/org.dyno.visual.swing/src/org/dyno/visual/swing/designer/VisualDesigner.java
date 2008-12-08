@@ -41,6 +41,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
@@ -592,7 +593,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 			rootAdapter.doLayout();
 			root.validate();
@@ -615,7 +616,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 			rootAdapter.doLayout();
 			clipboard.clear();
@@ -631,7 +632,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 			rootAdapter.doLayout();
 			root.validate();
@@ -644,7 +645,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			try {
 				operationHistory.execute(operation, null, null);
 			} catch (ExecutionException e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 			this.invalidate();
 			this.doLayout();
@@ -772,7 +773,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 						operationHistory.execute(operation, null,
 								new ShellAdaptable(shell));
 					} catch (ExecutionException ex) {
-						ex.printStackTrace();
+						VisualSwingPlugin.getLogger().error(ex);
 					}
 				}
 			}

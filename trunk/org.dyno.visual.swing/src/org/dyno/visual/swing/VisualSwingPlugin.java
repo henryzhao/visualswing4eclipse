@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing;
 
+import org.dyno.visual.swing.base.PluginLogger;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -36,7 +37,7 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	public static String getPluginID() {
 		return PLUGIN_ID;
 	}
-
+	private PluginLogger logger;
 	// The shared instance
 	private static VisualSwingPlugin plugin;
 
@@ -45,7 +46,9 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	 */
 	public VisualSwingPlugin() {
 	}
-
+	public static PluginLogger getLogger(){
+		return plugin.logger;
+	}
 	public static IWorkbenchPage getActivePage() {
 		IWorkbenchWindow window = VisualSwingPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow();
 		if (window == null)
@@ -61,6 +64,7 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		logger = new PluginLogger(this);
 		new Preloader().schedule();
 	}
 

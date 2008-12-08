@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.IFactory;
 import org.dyno.visual.swing.base.ItemEndec;
@@ -92,7 +93,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 			if (clazz != null)
 				borderMap.put(clazz, adapter);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 

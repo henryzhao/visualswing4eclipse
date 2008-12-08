@@ -19,6 +19,7 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.eclipse.core.resources.IFile;
@@ -35,7 +36,7 @@ public class IconWrapper implements ICodeGen {
 			LOCATION_FIELD = ImageIcon.class.getDeclaredField("location");
 			LOCATION_FIELD.setAccessible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -43,7 +44,7 @@ public class IconWrapper implements ICodeGen {
 		try {
 			return (String) FILENAME_FIELD.get(icon);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -52,7 +53,7 @@ public class IconWrapper implements ICodeGen {
 		try {
 			FILENAME_FIELD.set(icon, filename);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -60,7 +61,7 @@ public class IconWrapper implements ICodeGen {
 		try {
 			return (URL) LOCATION_FIELD.get(icon);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 			return null;
 		}
 	}
@@ -69,7 +70,7 @@ public class IconWrapper implements ICodeGen {
 		try {
 			LOCATION_FIELD.set(icon, url);
 		} catch (Exception e) {
-			e.printStackTrace();
+			VisualSwingPlugin.getLogger().error(e);
 		}
 	}
 
@@ -98,7 +99,7 @@ public class IconWrapper implements ICodeGen {
 								+ files[0].getProjectRelativePath()
 										.removeFirstSegments(1);
 					} catch (Exception e) {
-						e.printStackTrace();
+						VisualSwingPlugin.getLogger().error(e);
 						return null;
 					}
 				} else
