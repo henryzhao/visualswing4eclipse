@@ -19,6 +19,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Composite;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -51,7 +52,16 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	public boolean isViewContainer() {
 		return true;
 	}
-
+	public boolean removeChild(Component child) {
+		JScrollPane jsp = (JScrollPane)getWidget();
+		Component view=jsp.getViewport().getView();
+		if(child==view){
+			jsp.setViewportView(null);
+			return true;
+		}else{
+			return super.removeChild(child);
+		}
+	}
 	@Override
 	public Rectangle getVisibleRect(Component comp) {
 		JComponent component = (JComponent)comp;

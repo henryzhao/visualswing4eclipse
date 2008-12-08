@@ -30,6 +30,7 @@ public class JMenuBarValue extends WidgetValue {
 		put("alignmentX", 0.5f);
 		put("requestFocusEnabled", true);
 		put("opaque", true);
+		put("border", SYSTEM_VALUE);
 	}
 }
 

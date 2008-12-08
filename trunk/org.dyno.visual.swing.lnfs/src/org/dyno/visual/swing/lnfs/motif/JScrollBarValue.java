@@ -31,6 +31,7 @@ public class JScrollBarValue extends WidgetValue {
 		put("focusable", true);
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);		
+		put("border", SYSTEM_VALUE);
 	}
 }
 
