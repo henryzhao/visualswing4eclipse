@@ -6,5 +6,5 @@ import org.eclipse.jdt.core.IClasspathContainer;
 public interface ILibraryExtension {
 	IClasspathContainer createLibExt(IPath containerPath);
 
-	IPath[] listLibPaths();
+	IClasspathContainer[] listLibPaths();
 }

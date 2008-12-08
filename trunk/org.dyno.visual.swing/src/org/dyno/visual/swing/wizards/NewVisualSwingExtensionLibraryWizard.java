@@ -7,6 +7,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -23,6 +24,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 
 public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
@@ -38,8 +40,8 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 		if(sel==null||sel.isEmpty())
 			return false;
 		if(sel instanceof IStructuredSelection){
-			IPath ip = (IPath) ((IStructuredSelection) sel).getFirstElement();
-			this.toBeEdited = JavaCore.newContainerEntry(ip, false);
+			IClasspathContainer icc = (IClasspathContainer) ((IStructuredSelection) sel).getFirstElement();
+			this.toBeEdited = JavaCore.newContainerEntry(icc.getPath(), false);
 			return true;
 		}else
 			return false;
@@ -67,8 +69,8 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 
 			@Override
 			public String getText(Object element) {
-				if(element!=null&&element instanceof IPath){
-					return ((IPath)element).lastSegment();
+				if(element!=null&&element instanceof IClasspathContainer){
+					return ((IClasspathContainer)element).getDescription();
 				}
 				return super.getText(element);
 			}
@@ -76,8 +78,19 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 		});
 		viewer.setInput(new LibInput());
 		if (toBeEdited != null) {
-			viewer.setSelection(new StructuredSelection(
-					new Object[] { toBeEdited.getPath() }));
+			IPath ipath=toBeEdited.getPath();
+			if(ipath.equals(JavaUtil.VS_LAYOUTEXT)){
+				viewer.setSelection(new StructuredSelection(new Object[]{new LayoutExtensionLibrary()}));
+			}else{
+				List<ILibraryExtension> libExts = ExtensionRegistry.getLibExtensions();
+				for(ILibraryExtension libExt:libExts){
+					IClasspathContainer lib = libExt.createLibExt(ipath);
+					if(lib!=null){
+						viewer.setSelection(new StructuredSelection(new Object[]{lib}));
+						break;
+					}
+				}
+			}
 		}else{
 			setPageComplete(false);
 		}
@@ -98,14 +111,14 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 	private class LibContProv implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(Object inputElement) {
-			List<IPath> paths = new ArrayList<IPath>();
-			paths.add(JavaUtil.VS_LAYOUTEXT);
+			List<IClasspathContainer> paths = new ArrayList<IClasspathContainer>();
+			paths.add(new LayoutExtensionLibrary());
 			List<ILibraryExtension> libExts = ExtensionRegistry
 					.getLibExtensions();
 			for (ILibraryExtension libExt : libExts) {
-				IPath[] libPaths = libExt.listLibPaths();
+				IClasspathContainer[] libPaths = libExt.listLibPaths();
 				if (libPaths != null) {
-					for (IPath libPath : libPaths)
+					for (IClasspathContainer libPath : libPaths)
 						paths.add(libPath);
 				}
 			}

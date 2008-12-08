@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -36,6 +37,9 @@ public class LayoutExtensionLibrary implements IClasspathContainer {
 	private IPath jar_path;
 	private IPath src_path;
 	private IPath containerPath;
+	public LayoutExtensionLibrary(){
+		this(JavaUtil.VS_LAYOUTEXT);
+	}
 	public LayoutExtensionLibrary(IPath containerPath){
 		this.containerPath = containerPath;
 		IPath path = Platform.getLocation();
@@ -100,6 +104,14 @@ public class LayoutExtensionLibrary implements IClasspathContainer {
 
 	public IPath getPath() {
 		return containerPath;
+	}
+	public boolean equals(Object o){
+		if(o==null)
+			return false;
+		if(o instanceof LayoutExtensionLibrary)
+			return true;
+		else
+			return false;
 	}
 }
 

@@ -34,7 +34,7 @@ public class LookAndFeelLibrary implements ILibraryExtension {
 							path = path.append(lnfName);
 							File folder = path.toFile();
 							if (folder.exists()) {
-								return new LnfLib(lnfName);
+								return new LookAndFeelLib(lnfName);
 							}
 						}
 					}
@@ -45,8 +45,7 @@ public class LookAndFeelLibrary implements ILibraryExtension {
 	}
 
 	@Override
-	public IPath[] listLibPaths() {
-		IPath libPath = JavaUtil.VS_LIBRARY.append("lookandfeel");
+	public IClasspathContainer[] listLibPaths() {
 		IPath path = Platform.getLocation();
 		path = path.append(".metadata");
 		path = path.append(".plugins");
@@ -61,11 +60,11 @@ public class LookAndFeelLibrary implements ILibraryExtension {
 				}
 			});
 			if (folders != null && folders.length > 0) {
-				List<IPath> paths = new ArrayList<IPath>();
+				List<IClasspathContainer> paths = new ArrayList<IClasspathContainer>();
 				for (File dir : folders) {
-					paths.add(libPath.append(dir.getName()));
+					paths.add(new LookAndFeelLib(dir.getName()));
 				}
-				IPath[] psArray = new IPath[paths.size()];
+				IClasspathContainer[] psArray = new IClasspathContainer[paths.size()];
 				return paths.toArray(psArray);
 			}
 		}
