@@ -16,17 +16,17 @@ package org.dyno.visual.swing.editors.actions;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.designer.VisualDesigner;
 import org.eclipse.jface.action.Action;
 
 public class LnfAction extends Action {
 	private LookAndFeelInfo info;
-	private WidgetAdapter adapter;
-	public LnfAction(WidgetAdapter adapter, LookAndFeelInfo info) {
+	private VisualDesigner designer;
+	public LnfAction(VisualDesigner designer, LookAndFeelInfo info) {
 		super(info.getName(), AS_RADIO_BUTTON);
 		this.info = info;
-		this.adapter = adapter;
-		String lnf = adapter.getLnfClassname();
+		this.designer = designer;
+		String lnf = designer.getLnfClassname();
 		setChecked(lnf != null && lnf.equals(info.getClassName()));
 		System.out.println();
 	}
@@ -42,12 +42,12 @@ public class LnfAction extends Action {
 	}
 
 	private void changeLnf() {
-		String lnf = adapter.getLnfClassname();
+		String lnf = designer.getLnfClassname();
 		if (lnf==null||!lnf.getClass().getName().equals(info.getClassName())) {
 			try {
-				adapter.setLnfClassname(info.getClassName());
-				SwingUtilities.updateComponentTreeUI(adapter.getDesigner());
-				adapter.repaintDesigner();
+				designer.setLnfClassname(info.getClassName());
+				SwingUtilities.updateComponentTreeUI(designer);
+				designer.repaint();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

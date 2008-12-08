@@ -59,6 +59,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 	}
 
 	private boolean isAllButton(List<Component> selected) {
+		if(selected.isEmpty())
+			return false;
 		for (Component comp : selected) {
 			if (!(comp instanceof AbstractButton))
 				return false;

@@ -37,6 +37,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.WhiteBoard;
@@ -45,6 +47,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
+import org.dyno.visual.swing.editors.actions.LnfAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
@@ -217,9 +220,19 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		});
 	}
 
+	private void fillLnfAction(MenuManager lnfMenu) {
+		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+		for (LookAndFeelInfo info : infos) {
+			IAction lnfAction = new LnfAction(this, info);
+			lnfMenu.add(lnfAction);
+		}
+	}
 
 	private void showPopup(Point dp, List<Component> selected) {
 		MenuManager manager = new MenuManager("#EDIT");
+		MenuManager lnfMenu = new MenuManager("Set Look And Feel", "#LNF");
+		fillLnfAction(lnfMenu);
+		manager.add(lnfMenu);
 		List<IContextCustomizer> contexts = ExtensionRegistry.getContextCustomizers();
 		if (!contexts.isEmpty()) {
 			manager.add(new Separator());

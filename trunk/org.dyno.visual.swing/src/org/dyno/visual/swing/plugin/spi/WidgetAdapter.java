@@ -42,7 +42,6 @@ import javax.swing.LookAndFeel;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
@@ -64,7 +63,6 @@ import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.editors.actions.AddEventAction;
 import org.dyno.visual.swing.editors.actions.DelEventAction;
-import org.dyno.visual.swing.editors.actions.LnfAction;
 import org.dyno.visual.swing.editors.actions.VarChangeAction;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.CoreException;
@@ -569,10 +567,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 					.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
 			String lnfClassname = null;
 			if (!selection.isEmpty()) {
-				Component comp = (Component) selection.getFirstElement();
-				WidgetAdapter rep = WidgetAdapter.getWidgetAdapter(comp);
-				if (rep != null)
-					lnfClassname = rep.getLnfClassname();
+				lnfClassname = getLnfClassname();
 			}
 			return new PropertySource2(lnfClassname, selection, properties);
 		}else{
@@ -587,7 +582,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	public String getLnfClassname() {
+	private String getLnfClassname() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null)
 			return designer.getLnfClassname();
@@ -877,11 +872,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	public void fillContextAction(MenuManager menu) {
 		if (!isRoot())
 			menu.add(new VarChangeAction(this));
-		else {
-			MenuManager lnfMenu = new MenuManager("Set Look And Feel", "#LNF");
-			fillLnfAction(lnfMenu);
-			menu.add(lnfMenu);
-		}
 		MenuManager eventMenu = new MenuManager("Add/Edit Events", "#EVENT");
 		fillAddEventAction(eventMenu);
 		menu.add(eventMenu);
@@ -900,20 +890,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 	}
 
-	private void fillLnfAction(MenuManager lnfMenu) {
-		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-		for (LookAndFeelInfo info : infos) {
-			IAction lnfAction = new LnfAction(this, info);
-			lnfMenu.add(lnfAction);
-		}
-	}
 
-	public void setLnfClassname(String lnfClassname) {
-		VisualDesigner designer = getDesigner();
-		if (designer != null) {
-			designer.setLnfClassname(lnfClassname);
-		}
-	}
 
 	private void fillBorderAction(MenuManager borderMenu) {
 		List<BorderAdapter> list = BorderAdapter.getBorderList();
