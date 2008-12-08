@@ -34,7 +34,7 @@ public class LookAndFeelLib implements IClasspathContainer {
 
 	@Override
 	public String getDescription() {
-		return lnfName+" look and feel library";
+		return lnfName+" Look And Feel";
 	}
 
 	@Override
