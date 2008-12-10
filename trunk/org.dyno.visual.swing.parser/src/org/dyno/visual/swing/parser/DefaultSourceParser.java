@@ -34,6 +34,7 @@ import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -59,6 +60,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 
 /**
@@ -145,8 +147,9 @@ class DefaultSourceParser implements ISourceParser {
 			URL[] urls = paths.toArray(new URL[paths.size()]);
 			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
+				String lnf = getBeanClassLnf(beanClass);
 				try {
-					setUpLookAndFeel(beanClass);
+					setUpLookAndFeel(lnf);
 				} catch (Exception e) {
 					MessageDialog.openError(shell, "Error!", e.getMessage());
 					return false;
@@ -159,6 +162,7 @@ class DefaultSourceParser implements ISourceParser {
 					CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
 					parseEventListener(cunit, beanAdapter);
 					initDesignedWidget(cunit, bean);
+					parsePropertyValue(lnf, cunit, beanAdapter);
 					result = beanAdapter;
 				} catch (Error re) {
 					ParserPlugin.getLogger().error(re);					
@@ -170,6 +174,26 @@ class DefaultSourceParser implements ISourceParser {
 			ParserPlugin.getLogger().error(e);
 		}
 		return false;
+	}
+	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit, WidgetAdapter adapter) {
+		parseWidgetProperty(lnfClassname, cunit, adapter);
+		if(adapter instanceof CompositeAdapter){
+			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
+			int count = compositeAdapter.getChildCount();
+			for(int i=0;i<count;i++){
+				Component child = compositeAdapter.getChild(i);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				parsePropertyValue(lnfClassname, cunit, childAdapter);
+			}
+		}
+	}
+	private void parseWidgetProperty(String lnfClassname, CompilationUnit cunit, WidgetAdapter adapter) {
+		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
+		for (IWidgetPropertyDescriptor property : properties) {
+			if (property.isPropertySet(lnfClassname, new StructuredSelection(adapter.getWidget()))) {
+				//////////////////////////////////////////////////////////////////////////////////////
+			}
+		}
 	}
 	@SuppressWarnings("unchecked")
 	private void initDesignedWidget(CompilationUnit cunit, Component bean) {
@@ -255,8 +279,7 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void setUpLookAndFeel(Class beanClass) throws Exception {
-		String lnf = getBeanClassLnf(beanClass);
+	private void setUpLookAndFeel(String lnf) throws Exception {
 		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnf);
 		if (adapter != null) {
 			LookAndFeel instance = adapter.getLookAndFeelInstance();

@@ -21,6 +21,7 @@ import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
@@ -207,7 +208,6 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		if (event.getSource() == getTreeViewer() && !isAdjusting) {
@@ -225,14 +225,18 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			}
 			designer.repaint();
 			super.selectionChanged(event);
-		} else if (event.getSelection() instanceof List) {
-			getTreeViewer().refresh();
-			TreePath[] paths = getTreePath((List<Component>) event
-					.getSelection());
-			TreeSelection sel = new TreeSelection(paths);
-			isAdjusting = true;
-			setSelection(sel);
-			isAdjusting = false;
+		} else if (event.getSelection() instanceof IStructuredSelection) {
+			IStructuredSelection selection = (IStructuredSelection) event
+					.getSelection();
+			Object element = selection.getFirstElement();
+			if (element instanceof WidgetSelection) {
+				getTreeViewer().refresh();
+				TreePath[] paths = getTreePath((WidgetSelection) element);
+				TreeSelection sel = new TreeSelection(paths);
+				isAdjusting = true;
+				setSelection(sel);
+				isAdjusting = false;
+			}
 		}
 	}
 	

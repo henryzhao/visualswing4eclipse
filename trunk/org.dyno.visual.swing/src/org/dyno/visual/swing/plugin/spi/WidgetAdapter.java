@@ -598,7 +598,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	}
 
 	@SuppressWarnings("unchecked")
-	private ArrayList<IWidgetPropertyDescriptor> getPropertyDescriptors() {
+	public ArrayList<IWidgetPropertyDescriptor> getPropertyDescriptors() {
 		Sorting sorting = ExtensionRegistry.getCurrentSorting();
 		HashMap<String, String> references = new HashMap<String, String>();
 		Class beanClass = getWidgetClass();
@@ -1222,7 +1222,6 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 		}
 		return builder.toString();
 	}
-
 	private String genAddEventCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		Set<EventSetDescriptor> keySet = this.eventDescriptor.keySet();
