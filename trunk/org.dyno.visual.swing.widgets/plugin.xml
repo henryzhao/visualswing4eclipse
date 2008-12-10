@@ -580,7 +580,6 @@
                      renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer">
                </property>
                <property id="visible" name="visible" gencode="false"/>
-               <property id="iconImage" name="iconImage"/>
          </widget>
          <widget
                abstract="false"
@@ -963,7 +962,6 @@
 					<provider class="javax.swing.JDialog">
 						<reference id="title"/>
 						<reference id="defaultCloseOperation"/>
-						<reference id="iconImage"/>
 					</provider>
 					<provider class="javax.swing.JMenuBar">
 						<reference id="background"/>
