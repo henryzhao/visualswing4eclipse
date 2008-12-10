@@ -18,6 +18,7 @@ import java.beans.EventSetDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -40,7 +41,9 @@ import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -55,6 +58,7 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -68,6 +72,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -147,20 +152,10 @@ class DefaultSourceParser implements ISourceParser {
 	private boolean processType(ICompilationUnit unit, IType type, Shell shell)
 			throws JavaModelException {
 		try {
-			unit.getJavaProject().getProject().build(
-					IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			IClasspathEntry[] classpaths = java_project
-					.getResolvedClasspath(true);
 			ArrayList<URL> paths = new ArrayList<URL>();
-			for (IClasspathEntry path : classpaths) {
-				paths.add(path.getPath().toFile().toURI().toURL());
-			}
-			IPath wsPath = java_project.getProject().getWorkspace().getRoot()
-					.getRawLocation();
-			paths.add(wsPath.append(java_project.getOutputLocation()).toFile()
-					.toURI().toURL());
+			addClasspaths(java_project, paths);
 			URL[] urls = paths.toArray(new URL[paths.size()]);
 			Class<?> beanClass = new URLClassLoader(urls, getClass()
 					.getClassLoader()).loadClass(className);
@@ -194,6 +189,41 @@ class DefaultSourceParser implements ISourceParser {
 			ParserPlugin.getLogger().error(e);
 		}
 		return false;
+	}
+
+	private void addClasspaths(IJavaProject java_project, ArrayList<URL> paths)
+			throws MalformedURLException, CoreException {
+		java_project.getProject().build(
+				IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+		IClasspathEntry[] classpaths = java_project.getResolvedClasspath(true);
+		for (IClasspathEntry path : classpaths) {
+			switch (path.getEntryKind()) {
+			case IClasspathEntry.CPE_SOURCE:
+				IPath loc = path.getOutputLocation();
+				if (loc != null)
+					paths.add(loc.toFile().toURI().toURL());
+				break;
+			case IClasspathEntry.CPE_CONTAINER:
+				paths.add(path.getPath().toFile().toURI().toURL());
+				break;
+			case IClasspathEntry.CPE_LIBRARY:
+				paths.add(path.getPath().toFile().toURI().toURL());
+				break;
+			case IClasspathEntry.CPE_PROJECT:
+				IPath ip=path.getPath();
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ip.segment(0));
+				IJavaProject jp= JavaCore.create(prj);
+				addClasspaths(jp, paths);
+				break;
+			case IClasspathEntry.CPE_VARIABLE:
+				paths.add(path.getPath().toFile().toURI().toURL());
+				break;
+			}
+		}
+		IPath wsPath = java_project.getProject().getWorkspace().getRoot()
+				.getRawLocation();
+		paths.add(wsPath.append(java_project.getOutputLocation()).toFile()
+				.toURI().toURL());
 	}
 
 	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit,
@@ -246,12 +276,10 @@ class DefaultSourceParser implements ISourceParser {
 			Statement statement) {
 		if (statement instanceof ExpressionStatement) {
 			ExpressionStatement expressionStatement = (ExpressionStatement) statement;
-			Expression expression = expressionStatement
-					.getExpression();
+			Expression expression = expressionStatement.getExpression();
 			if (expression instanceof MethodInvocation) {
 				MethodInvocation mi = (MethodInvocation) expression;
-				String setMethodName = mi.getName()
-						.getFullyQualifiedName();
+				String setMethodName = mi.getName().getFullyQualifiedName();
 				WidgetProperty wp = (WidgetProperty) property;
 				String writeMethodName = wp.getPropertyDescriptor()
 						.getWriteMethod().getName();
@@ -259,10 +287,8 @@ class DefaultSourceParser implements ISourceParser {
 					List args = mi.arguments();
 					IValueParser vp = property.getValueParser();
 					if (vp != null) {
-						Object oldValue = property
-								.getRawValue(bean);
-						Object newValue = vp.parseValue(oldValue,
-								args);
+						Object oldValue = property.getRawValue(bean);
+						Object newValue = vp.parseValue(oldValue, args);
 						property.setRawValue(bean, newValue);
 					}
 				}
