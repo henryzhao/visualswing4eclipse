@@ -51,7 +51,6 @@ public class SetValueOperation extends AbstractOperation {
 		}
 		this.new_value = new_value;
 	}
-	@SuppressWarnings("unused")
 	private class SetValueRunnable implements Runnable{
 		private WidgetAdapter adapter;
 		public SetValueRunnable(WidgetAdapter adapter){
@@ -72,7 +71,9 @@ public class SetValueOperation extends AbstractOperation {
 			adapter.repaintDesigner();
 		}
 	}
+	@SuppressWarnings("unchecked")
 	private static Map<Class, Object> DEFAULT_BEANS= new HashMap<Class, Object>();	
+	@SuppressWarnings("unchecked")
 	private static Object getDefaultValue(Object bean, PropertyDescriptor property){
 		try {
 			Class beanClass = bean.getClass();

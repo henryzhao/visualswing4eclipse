@@ -78,6 +78,7 @@ public class JScrollBarAdapter extends WidgetAdapter {
 		return new JScrollBar();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JScrollBar.class;
 	}

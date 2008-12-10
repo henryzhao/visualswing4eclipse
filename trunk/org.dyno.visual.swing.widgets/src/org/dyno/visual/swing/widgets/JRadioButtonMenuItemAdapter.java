@@ -19,7 +19,6 @@ import java.awt.Rectangle;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
@@ -112,6 +111,7 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 	private static final int VER_TEXT_PAD = 4;
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JRadioButtonMenuItem.class;
 	}

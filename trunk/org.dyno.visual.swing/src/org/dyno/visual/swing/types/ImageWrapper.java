@@ -15,17 +15,9 @@
 package org.dyno.visual.swing.types;
 
 import java.awt.Toolkit;
-import java.lang.reflect.Field;
-import java.net.URL;
 
-import javax.swing.ImageIcon;
-
-import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ResourceImage;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class ImageWrapper implements ICodeGen {

@@ -31,7 +31,7 @@ public class LightWeightPopup extends ContainerPopup {
 	public void hide() {
 		super.hide();
 
-		Container component = (Container) getComponent();
+		Container component = (Container) getPopupComponent();
 
 		component.removeAll();
 	}
@@ -67,7 +67,7 @@ public class LightWeightPopup extends ContainerPopup {
 		}
 
 		Point p = convertScreenLocationToParent(parent, x, y);
-		Component component = getComponent();
+		Component component = getPopupComponent();
 
 		component.setLocation(p.x, p.y);
 		if (parent instanceof JLayeredPane) {
@@ -89,7 +89,7 @@ public class LightWeightPopup extends ContainerPopup {
 		throw new Error("convertScreenLocationToParent: no window ancestor");
 	}
 
-	Component createComponent(Component owner) {
+	Component newComponent(Component owner) {
 		JComponent component = new JPanel(new BorderLayout(), true);
 
 		component.setOpaque(true);
@@ -103,16 +103,16 @@ public class LightWeightPopup extends ContainerPopup {
 	/**
 	 * Resets the <code>Popup</code> to an initial state.
 	 */
-	void reset(Component owner, Component contents, int ownerX, int ownerY) {
-		super.reset(owner, contents, ownerX, ownerY);
+	void resetPopup(Component owner, Component contents, int ownerX, int ownerY) {
+		super.resetPopup(owner, contents, ownerX, ownerY);
 
-		JComponent component = (JComponent) getComponent();
+		JComponent component = (JComponent) getPopupComponent();
 
 		component.setOpaque(contents.isOpaque());
 		component.setLocation(ownerX, ownerY);
 		component.add(contents, BorderLayout.CENTER);
 		contents.invalidate();
-		pack();
+		packPopup();
 	}
 }
 

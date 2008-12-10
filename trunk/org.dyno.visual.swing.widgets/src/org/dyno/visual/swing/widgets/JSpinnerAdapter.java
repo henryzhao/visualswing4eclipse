@@ -72,6 +72,7 @@ public class JSpinnerAdapter extends WidgetAdapter {
 		return new JSpinner();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSpinner.class;
 	}

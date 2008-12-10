@@ -553,6 +553,7 @@ public class JFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JFrame.class;
 	}

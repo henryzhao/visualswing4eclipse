@@ -25,6 +25,7 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 public class JToggleButtonAdapter extends TextWidgetAdapter {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JToggleButton.class;
 	}

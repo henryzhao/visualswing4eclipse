@@ -226,6 +226,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 		return drop instanceof JMenu;
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JMenuBar.class;
 	}

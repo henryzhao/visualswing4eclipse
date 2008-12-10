@@ -133,6 +133,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JComboBox.class;
 	}

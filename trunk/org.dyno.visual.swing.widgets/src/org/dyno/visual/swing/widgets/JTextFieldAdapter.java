@@ -16,12 +16,12 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Rectangle;
 
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 
 public class JTextFieldAdapter extends TextWidgetAdapter {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextField.class;
 	}

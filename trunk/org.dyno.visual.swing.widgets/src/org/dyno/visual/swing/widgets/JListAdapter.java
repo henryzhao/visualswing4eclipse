@@ -110,6 +110,7 @@ public class JListAdapter extends ComplexWidgetAdapter {
 		return new JList();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JList.class;
 	}

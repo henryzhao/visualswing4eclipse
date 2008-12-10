@@ -36,6 +36,7 @@ public class AbstractButtonAdapter extends WidgetAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return AbstractButton.class;
 	}

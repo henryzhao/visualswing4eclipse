@@ -32,6 +32,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  * @author William Chen
  */
 public class WidgetAdapterContentProvider implements IPropertySourceProvider {
+	@SuppressWarnings("unchecked")
 	private static IPropertySourceProvider getProvider(Object object) {
 		if (object instanceof Component) {
 			Component widget = (Component) object;
@@ -59,6 +60,7 @@ public class WidgetAdapterContentProvider implements IPropertySourceProvider {
 		}
 		return null;
 	}
+	@SuppressWarnings("unchecked")
 	private static Class getCommonSuperClass(Class clazz1, Class clazz2){
 		if(clazz1==Object.class)
 			return clazz1;

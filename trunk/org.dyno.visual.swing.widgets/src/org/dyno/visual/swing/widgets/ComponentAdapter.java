@@ -34,6 +34,7 @@ public class ComponentAdapter extends WidgetAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return Component.class;
 	}

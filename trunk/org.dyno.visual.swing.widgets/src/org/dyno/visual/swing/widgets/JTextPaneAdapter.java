@@ -34,6 +34,7 @@ public class JTextPaneAdapter extends J2DTextComponentAdapter {
 		return new JTextPane();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextPane.class;
 	}

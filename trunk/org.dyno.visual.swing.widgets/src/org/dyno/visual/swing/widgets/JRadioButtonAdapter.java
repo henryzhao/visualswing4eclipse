@@ -18,8 +18,6 @@ import java.awt.Rectangle;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JToggleButton.ToggleButtonModel;
 
@@ -31,6 +29,7 @@ public class JRadioButtonAdapter extends TextWidgetAdapter {
 	private static final int BOX_THUMB = 16;
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JRadioButton.class;
 	}

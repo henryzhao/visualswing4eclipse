@@ -78,6 +78,7 @@ public class JSliderAdapter extends WidgetAdapter {
 		return new JSlider();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSlider.class;
 	}

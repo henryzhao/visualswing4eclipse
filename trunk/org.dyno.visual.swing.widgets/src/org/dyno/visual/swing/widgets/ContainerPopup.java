@@ -49,7 +49,7 @@ public class ContainerPopup extends Popup {
 	int y;
 
 	public void hide() {
-		Component component = getComponent();
+		Component component = getPopupComponent();
 
 		if (component != null) {
 			Container parent = component.getParent();
@@ -64,8 +64,8 @@ public class ContainerPopup extends Popup {
 		owner = null;
 	}
 
-	void pack() {
-		Component component = getComponent();
+	void packPopup() {
+		Component component = getPopupComponent();
 
 		if (component != null) {
 			component.setSize(component.getPreferredSize());
@@ -76,11 +76,11 @@ public class ContainerPopup extends Popup {
 	 * Returns the <code>Component</code> returned from
 	 * <code>createComponent</code> that will hold the <code>Popup</code>.
 	 */
-	Component getComponent() {
+	Component getPopupComponent() {
 		return component;
 	}
 
-	Component createComponent(final Component owner) {
+	Component newComponent(Component owner) {
 		if (GraphicsEnvironment.isHeadless()) {
 			// Generally not useful, bail.
 			return null;
@@ -128,26 +128,27 @@ public class ContainerPopup extends Popup {
 			paint(g);
 		}
 
+		@SuppressWarnings("deprecation")
 		public void show() {
 			this.pack();
 			super.show();
 		}
 	}
 
-	void reset(Component owner, Component contents, int ownerX, int ownerY) {
+	void resetPopup(Component owner, Component contents, int ownerX, int ownerY) {
 		if ((owner instanceof JFrame) || (owner instanceof JDialog) || (owner instanceof JWindow)) {
 			// Force the content to be added to the layered pane, otherwise
 			// we'll get an exception when adding to the RootPaneContainer.
 			owner = ((RootPaneContainer) owner).getLayeredPane();
 		}
-		if (getComponent() == null) {
-			component = createComponent(owner);
+		if (getPopupComponent() == null) {
+			component = newComponent(owner);
 		}
 
-		Component c = getComponent();
+		Component c = getPopupComponent();
 
 		if (c instanceof JWindow) {
-			JWindow component = (JWindow) getComponent();
+			JWindow component = (JWindow) getPopupComponent();
 
 			component.setLocation(ownerX, ownerY);
 			component.getContentPane().add(contents, BorderLayout.CENTER);
@@ -155,7 +156,7 @@ public class ContainerPopup extends Popup {
 			if (component.isVisible()) {
 				// Do not call pack() if window is not visible to
 				// avoid early native peer creation
-				pack();
+				packPopup();
 			}
 		}
 
@@ -165,7 +166,7 @@ public class ContainerPopup extends Popup {
 	}
 
 	boolean overlappedByOwnedWindow() {
-		Component component = getComponent();
+		Component component = getPopupComponent();
 		if (owner != null && component != null) {
 			Window w = SwingUtilities.getWindowAncestor(owner);
 			if (w == null) {
@@ -190,7 +191,7 @@ public class ContainerPopup extends Popup {
 	 * Returns true if the Popup can fit on the screen.
 	 */
 	boolean fitsOnScreen() {
-		Component component = getComponent();
+		Component component = getPopupComponent();
 
 		if (owner != null && component != null) {
 			Container parent;

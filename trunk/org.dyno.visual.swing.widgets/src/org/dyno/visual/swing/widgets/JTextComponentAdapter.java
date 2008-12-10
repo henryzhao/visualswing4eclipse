@@ -35,6 +35,7 @@ public class JTextComponentAdapter extends WidgetAdapter {
 		return null;
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextComponent.class;
 	}

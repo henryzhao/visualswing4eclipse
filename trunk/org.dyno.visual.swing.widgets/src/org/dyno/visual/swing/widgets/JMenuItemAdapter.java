@@ -21,7 +21,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -128,6 +127,7 @@ public class JMenuItemAdapter extends WidgetAdapter {
 		return jmi;
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JMenuItem.class;
 	}

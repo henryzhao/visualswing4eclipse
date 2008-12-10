@@ -61,6 +61,7 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JLayeredPane.class;
 	}

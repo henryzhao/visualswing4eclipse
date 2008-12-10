@@ -285,6 +285,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JDesktopPane.class;
 	}

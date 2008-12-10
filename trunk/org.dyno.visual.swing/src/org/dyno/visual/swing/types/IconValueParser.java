@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 
 public class IconValueParser implements IValueParser {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object parseValue(Object oldValue, List args) {
 		if (oldValue != null && !(oldValue instanceof ResourceIcon)) {

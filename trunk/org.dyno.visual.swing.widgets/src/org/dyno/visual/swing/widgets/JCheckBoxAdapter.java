@@ -29,6 +29,7 @@ public class JCheckBoxAdapter extends TextWidgetAdapter {
 	private static final int BOX_THUMB = 16;
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JCheckBox.class;
 	}

@@ -16,7 +16,6 @@ package org.dyno.visual.swing.base;
 import java.awt.Component;
 import java.lang.reflect.Field;
 import java.util.Comparator;
-import java.util.List;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;

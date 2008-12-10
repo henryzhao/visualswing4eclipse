@@ -509,6 +509,7 @@ public class JMenuAdapter extends CompositeAdapter {
 		return success;
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JMenu.class;
 	}

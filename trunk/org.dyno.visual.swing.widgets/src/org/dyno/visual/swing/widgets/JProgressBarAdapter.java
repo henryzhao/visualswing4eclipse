@@ -79,6 +79,7 @@ public class JProgressBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JProgressBar.class;
 	}

@@ -85,6 +85,7 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 		return new JTable();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTable.class;
 	}

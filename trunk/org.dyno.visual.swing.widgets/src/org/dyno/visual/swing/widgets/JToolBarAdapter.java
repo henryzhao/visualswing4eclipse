@@ -173,6 +173,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 		return null;
 	}	
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JToolBar.class;
 	}

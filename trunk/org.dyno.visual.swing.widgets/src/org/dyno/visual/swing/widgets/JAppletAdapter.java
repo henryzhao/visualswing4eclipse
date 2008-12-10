@@ -545,6 +545,7 @@ public class JAppletAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JApplet.class;
 	}

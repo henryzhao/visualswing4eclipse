@@ -32,7 +32,7 @@ public class VsMenuDesignerPopupFactory extends PopupFactory {
 		}
 		if (contents instanceof JPopupMenu && isVsDesigner(owner)) {
 			LightWeightPopup popup = new LightWeightPopup();
-			popup.reset(owner, contents, x, y);
+			popup.resetPopup(owner, contents, x, y);
 			return popup;
 		} else {
 			return super.getPopup(owner, contents, x, y);

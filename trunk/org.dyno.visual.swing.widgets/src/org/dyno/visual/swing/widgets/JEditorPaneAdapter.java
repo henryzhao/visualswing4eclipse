@@ -35,6 +35,7 @@ public class JEditorPaneAdapter extends J2DTextComponentAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JEditorPane.class;
 	}

@@ -113,6 +113,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
 	protected List<InvisibleAdapter> invisibles=new ArrayList<InvisibleAdapter>();
+	@SuppressWarnings("unchecked")
 	public abstract Class getWidgetClass();
 
 	protected void layoutContainer(Container container) {

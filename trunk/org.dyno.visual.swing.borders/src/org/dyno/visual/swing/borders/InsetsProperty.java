@@ -17,7 +17,6 @@ package org.dyno.visual.swing.borders;
 import java.awt.Component;
 import java.awt.Insets;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.border.Border;

@@ -440,6 +440,7 @@ public class JInternalFrameAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JInternalFrame.class;
 	}

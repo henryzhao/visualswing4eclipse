@@ -180,6 +180,7 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JPopupMenu.class;
 	}

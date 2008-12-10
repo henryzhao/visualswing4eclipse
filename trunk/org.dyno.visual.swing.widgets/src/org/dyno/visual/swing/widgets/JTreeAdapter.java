@@ -83,6 +83,7 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 		return new JTree();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTree.class;
 	}

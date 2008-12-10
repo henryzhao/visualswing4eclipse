@@ -14,12 +14,12 @@
 
 package org.dyno.visual.swing.widgets;
 
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 public class JLabelAdapter extends TextWidgetAdapter {
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JLabel.class;
 	}

@@ -58,6 +58,7 @@ public class JSeparatorAdapter extends WidgetAdapter {
 		return new JSeparator();
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSeparator.class;
 	}

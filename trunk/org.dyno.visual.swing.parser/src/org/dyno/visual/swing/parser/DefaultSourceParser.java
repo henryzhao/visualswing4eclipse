@@ -221,6 +221,7 @@ class DefaultSourceParser implements ISourceParser {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void parseWidgetProperty(String lnfClassname,
 			CompilationUnit cunit, WidgetAdapter adapter) {
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
@@ -234,35 +235,42 @@ class DefaultSourceParser implements ISourceParser {
 				List statements = getBeanPropertyInitStatements(adapter, type);
 				for (Object stmt : statements) {
 					Statement statement = (Statement) stmt;
-					if (statement instanceof ExpressionStatement) {
-						ExpressionStatement expressionStatement = (ExpressionStatement) statement;
-						Expression expression = expressionStatement
-								.getExpression();
-						if (expression instanceof MethodInvocation) {
-							MethodInvocation mi = (MethodInvocation) expression;
-							String setMethodName = mi.getName()
-									.getFullyQualifiedName();
-							WidgetProperty wp = (WidgetProperty) property;
-							String writeMethodName = wp.getPropertyDescriptor()
-									.getWriteMethod().getName();
-							if (setMethodName.equals(writeMethodName)) {
-								List args = mi.arguments();
-								IValueParser vp = property.getValueParser();
-								if (vp != null) {
-									Object oldValue = property
-											.getRawValue(bean);
-									Object newValue = vp.parseValue(oldValue,
-											args);
-									property.setRawValue(bean, newValue);
-								}
-							}
-						}
+					checkSatement(bean, property, statement);
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void checkSatement(Object bean, IWidgetPropertyDescriptor property,
+			Statement statement) {
+		if (statement instanceof ExpressionStatement) {
+			ExpressionStatement expressionStatement = (ExpressionStatement) statement;
+			Expression expression = expressionStatement
+					.getExpression();
+			if (expression instanceof MethodInvocation) {
+				MethodInvocation mi = (MethodInvocation) expression;
+				String setMethodName = mi.getName()
+						.getFullyQualifiedName();
+				WidgetProperty wp = (WidgetProperty) property;
+				String writeMethodName = wp.getPropertyDescriptor()
+						.getWriteMethod().getName();
+				if (setMethodName.equals(writeMethodName)) {
+					List args = mi.arguments();
+					IValueParser vp = property.getValueParser();
+					if (vp != null) {
+						Object oldValue = property
+								.getRawValue(bean);
+						Object newValue = vp.parseValue(oldValue,
+								args);
+						property.setRawValue(bean, newValue);
 					}
 				}
 			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private List getBeanPropertyInitStatements(WidgetAdapter adapter,
 			TypeDeclaration type) {
 		List statements;
@@ -373,7 +381,6 @@ class DefaultSourceParser implements ISourceParser {
 		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void setUpLookAndFeel(String lnf) throws Exception {
 		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnf);
 		if (adapter != null) {

@@ -796,6 +796,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		return true;
 	}
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JPanel.class;
 	}

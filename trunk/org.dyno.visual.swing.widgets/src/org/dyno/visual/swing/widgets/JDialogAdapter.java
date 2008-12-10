@@ -552,6 +552,7 @@ public class JDialogAdapter extends CompositeAdapter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JDialog.class;
 	}
