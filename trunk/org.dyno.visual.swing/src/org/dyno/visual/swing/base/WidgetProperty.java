@@ -92,6 +92,9 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	public WidgetProperty() {
 
 	}
+	public PropertyDescriptor getPropertyDescriptor(){
+		return propertyDescriptor;
+	}
 
 	@SuppressWarnings("unchecked")
 	public WidgetProperty(String id, String name, Class beanClass) {

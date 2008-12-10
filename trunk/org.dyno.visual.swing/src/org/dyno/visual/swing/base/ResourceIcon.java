@@ -12,49 +12,38 @@
  *     William Chen - initial API and implementation.                               *
  ************************************************************************************/
 
-package org.dyno.visual.swing.types;
+package org.dyno.visual.swing.base;
 
-import java.util.StringTokenizer;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.viewers.ICellEditorValidator;
 
-public class IconCellEditorValidator implements ICellEditorValidator {
-	@Override
-	public String isValid(Object value) {
-		if (value == null || value.equals("null"))
-			return null;
-		StringTokenizer tokenizer = new StringTokenizer((String) value, "/");
-		if (!tokenizer.hasMoreTokens()) {
-			return "Incorrect icon format: [/]package_segment1/package_segment2/package_segment3/.../package_segmentn/icon_file_name";
-		}
-		do {
-			String token = tokenizer.nextToken().trim();
-			if (token.length() == 0)
-				return "Incorrect icon format: [/]package_segment1/package_segment2/package_segment3/.../package_segmentn/icon_file_name";
-			char c = token.charAt(0);
-			if (!Character.isJavaIdentifierStart(c)) {
-				return "Incorrect icon format: package segment name should be a identifier!";
-			}
-			int i = 0;
-			while (true) {
-				c = token.charAt(i++);
-				if (!Character.isJavaIdentifierPart(c) && c != '.')
-					return "Incorrect icon format: package segment name should be a identifier!";
-				if (i >= token.length())
-					break;
-			}
-		} while (tokenizer.hasMoreTokens());
+public class ResourceIcon implements Icon {
+	private String path;
+	private Icon icon;
+	public ResourceIcon(Icon icon, String path){
+		this.path = path;
+		this.icon = icon;		
+	}
+	public ResourceIcon(String p) {
+		this.path = p;
 		IJavaProject prj = WhiteBoard.getCurrentProject();
 		IProject project = prj.getProject();
-		IResource resource = project.findMember(new Path((String) value));
+		IResource resource = project.findMember(new Path(p));
 		if (resource == null) {
 			IPackageFragmentRoot[] roots;
 			try {
@@ -62,26 +51,47 @@ public class IconCellEditorValidator implements ICellEditorValidator {
 				for (IPackageFragmentRoot root : roots) {
 					if (!root.isArchive()) {
 						String src = root.getElementName();
-						src = "/" + src + value;
+						src = "/" + src + p;
 						resource = project.findMember(new Path(src));
 						if (resource != null) {
 							String ext = resource.getFileExtension();
-							if (ext!=null&&(ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg")))
-								return null;
-							else
-								return "This is not an image file:" + value;
+							if (ext.equals("gif") || ext.equals("png") || ext.equals("jpg")) {
+								IPath fullPath = project.getWorkspace().getRoot().getRawLocation().append(resource.getFullPath());
+								String fullpath = fullPath.toString();
+								Image image = Toolkit.getDefaultToolkit().getImage(fullpath);
+								icon = new ImageIcon(image);
+							} else {
+								break;
+							}
 						}
 					}
 				}
 			} catch (JavaModelException e) {
 				VisualSwingPlugin.getLogger().error(e);
-				return e.getLocalizedMessage();
 			}
-			return "Cannot find such image file:" + value + "!";
-		} else {
-			System.out.println(resource);
 		}
-		return null;
+	}
+
+	@Override
+	public int getIconHeight() {
+		return icon == null ? 0 : icon.getIconHeight();
+	}
+
+	@Override
+	public int getIconWidth() {
+		return icon == null ? 0 : icon.getIconWidth();
+	}
+
+	@Override
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+		if (icon == null) {
+		} else {
+			icon.paintIcon(c, g, x, y);
+		}
+	}
+
+	public String toString() {
+		return path;
 	}
 }
 

@@ -30,6 +30,7 @@ import javax.swing.UIManager;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
@@ -93,7 +94,8 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	private void parseFieldParsers() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
+				.getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -111,7 +113,8 @@ class DefaultSourceParser implements ISourceParser {
 				String name = configs[i].getName();
 				if (name.equals("parser")) {
 					try {
-						fieldParsers.add((IFieldParser)configs[i].createExecutableExtension("class"));
+						fieldParsers.add((IFieldParser) configs[i]
+								.createExecutableExtension("class"));
 					} catch (CoreException e) {
 						ParserPlugin.getLogger().error(e);
 					}
@@ -141,20 +144,26 @@ class DefaultSourceParser implements ISourceParser {
 		return false;
 	}
 
-	private boolean processType(ICompilationUnit unit, IType type, Shell shell) throws JavaModelException {
+	private boolean processType(ICompilationUnit unit, IType type, Shell shell)
+			throws JavaModelException {
 		try {
-			unit.getJavaProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+			unit.getJavaProject().getProject().build(
+					IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			IClasspathEntry[] classpaths = java_project.getResolvedClasspath(true);
+			IClasspathEntry[] classpaths = java_project
+					.getResolvedClasspath(true);
 			ArrayList<URL> paths = new ArrayList<URL>();
 			for (IClasspathEntry path : classpaths) {
 				paths.add(path.getPath().toFile().toURI().toURL());
 			}
-			IPath wsPath = java_project.getProject().getWorkspace().getRoot().getRawLocation();
-			paths.add(wsPath.append(java_project.getOutputLocation()).toFile().toURI().toURL());
+			IPath wsPath = java_project.getProject().getWorkspace().getRoot()
+					.getRawLocation();
+			paths.add(wsPath.append(java_project.getOutputLocation()).toFile()
+					.toURI().toURL());
 			URL[] urls = paths.toArray(new URL[paths.size()]);
-			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
+			Class<?> beanClass = new URLClassLoader(urls, getClass()
+					.getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
 				try {
@@ -165,16 +174,18 @@ class DefaultSourceParser implements ISourceParser {
 				}
 				try {
 					Component bean = (Component) beanClass.newInstance();
-					WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
+					WidgetAdapter beanAdapter = ExtensionRegistry
+							.createWidgetAdapter(bean);
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
 					parser.setSource(this.unit);
-					CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
+					CompilationUnit cunit = (CompilationUnit) parser
+							.createAST(null);
 					parseEventListener(cunit, beanAdapter);
 					initDesignedWidget(cunit, bean);
 					parsePropertyValue(lnf, cunit, beanAdapter);
 					result = beanAdapter;
 				} catch (Error re) {
-					ParserPlugin.getLogger().error(re);					
+					ParserPlugin.getLogger().error(re);
 					return false;
 				}
 				return true;
@@ -184,47 +195,66 @@ class DefaultSourceParser implements ISourceParser {
 		}
 		return false;
 	}
-	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit, WidgetAdapter adapter) {
+
+	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit,
+			WidgetAdapter adapter) {
 		parseWidgetProperty(lnfClassname, cunit, adapter);
-		if(adapter instanceof CompositeAdapter){
+		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 			int count = compositeAdapter.getChildCount();
-			for(int i=0;i<count;i++){
+			for (int i = 0; i < count; i++) {
 				Component child = compositeAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				parsePropertyValue(lnfClassname, cunit, childAdapter);
 			}
 		}
 	}
-	private MethodDeclaration getMethodDeclaration(TypeDeclaration type, String name){
+
+	private MethodDeclaration getMethodDeclaration(TypeDeclaration type,
+			String name) {
 		MethodDeclaration[] methods = type.getMethods();
-		for(MethodDeclaration method:methods){
-			if(method.getName().getFullyQualifiedName().equals(name))
+		for (MethodDeclaration method : methods) {
+			if (method.getName().getFullyQualifiedName().equals(name))
 				return method;
 		}
 		return null;
 	}
-	private void parseWidgetProperty(String lnfClassname, CompilationUnit cunit, WidgetAdapter adapter) {
+
+	private void parseWidgetProperty(String lnfClassname,
+			CompilationUnit cunit, WidgetAdapter adapter) {
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
-		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
+		ArrayList<IWidgetPropertyDescriptor> properties = adapter
+				.getPropertyDescriptors();
 		Object bean = adapter.getWidget();
 		IStructuredSelection sel = new StructuredSelection(bean);
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(lnfClassname, sel)) {
+			if (property.isPropertySet(lnfClassname, sel)
+					&& property instanceof WidgetProperty) {
 				List statements = getBeanPropertyInitStatements(adapter, type);
 				for (Object stmt : statements) {
 					Statement statement = (Statement) stmt;
 					if (statement instanceof ExpressionStatement) {
 						ExpressionStatement expressionStatement = (ExpressionStatement) statement;
-						Expression expression = expressionStatement.getExpression();
+						Expression expression = expressionStatement
+								.getExpression();
 						if (expression instanceof MethodInvocation) {
 							MethodInvocation mi = (MethodInvocation) expression;
-							List args = mi.arguments();
-							IValueParser vp=property.getValueParser();
-							if(vp!=null){
-								Object oldValue = property.getRawValue(bean);
-								Object newValue = vp.parseValue(oldValue, args);
-								property.setRawValue(bean, newValue);
+							String setMethodName = mi.getName()
+									.getFullyQualifiedName();
+							WidgetProperty wp = (WidgetProperty) property;
+							String writeMethodName = wp.getPropertyDescriptor()
+									.getWriteMethod().getName();
+							if (setMethodName.equals(writeMethodName)) {
+								List args = mi.arguments();
+								IValueParser vp = property.getValueParser();
+								if (vp != null) {
+									Object oldValue = property
+											.getRawValue(bean);
+									Object newValue = vp.parseValue(oldValue,
+											args);
+									property.setRawValue(bean, newValue);
+								}
 							}
 						}
 					}
@@ -232,27 +262,32 @@ class DefaultSourceParser implements ISourceParser {
 			}
 		}
 	}
-	private List getBeanPropertyInitStatements(WidgetAdapter adapter, TypeDeclaration type) {
+
+	private List getBeanPropertyInitStatements(WidgetAdapter adapter,
+			TypeDeclaration type) {
 		List statements;
 		if (adapter.isRoot()) {
 			MethodDeclaration initMethod = getMethodDeclaration(type,
 					"initComponent");
 			Block body = initMethod.getBody();
-			statements = body.statements();					
+			statements = body.statements();
 		} else {
-			String getMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getName()); 
-			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
+			String getMethodName = NamespaceManager.getInstance()
+					.getGetMethodName(adapter.getName());
+			MethodDeclaration getMethod = getMethodDeclaration(type,
+					getMethodName);
 			Block body = getMethod.getBody();
 			statements = body.statements();
-			IfStatement ifs=(IfStatement) statements.get(0);
+			IfStatement ifs = (IfStatement) statements.get(0);
 			Statement thenstmt = ifs.getThenStatement();
-			if(thenstmt instanceof Block){
+			if (thenstmt instanceof Block) {
 				Block block = (Block) thenstmt;
 				statements = block.statements();
 			}
 		}
 		return statements;
 	}
+
 	@SuppressWarnings("unchecked")
 	private void initDesignedWidget(CompilationUnit cunit, Component bean) {
 		Class clazz = bean.getClass();
@@ -265,7 +300,7 @@ class DefaultSourceParser implements ISourceParser {
 					if (JComponent.class.isAssignableFrom(field.getType())) {
 						parseField(cunit, bean, field);
 					}
-					for(IFieldParser parser:fieldParsers){
+					for (IFieldParser parser : fieldParsers) {
 						parser.parseField(cunit, bean, field);
 					}
 				}
@@ -317,6 +352,7 @@ class DefaultSourceParser implements ISourceParser {
 			ParserPlugin.getLogger().error(e);
 		}
 	}
+
 	@SuppressWarnings("unchecked")
 	private static String getBeanClassLnf(Class beanClass) {
 		try {
@@ -324,7 +360,8 @@ class DefaultSourceParser implements ISourceParser {
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager
+						.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
@@ -348,13 +385,16 @@ class DefaultSourceParser implements ISourceParser {
 					ParserPlugin.getLogger().error(e);
 				}
 			} else {
-				throw new Exception(lnf + " specified in this class is not a supported LAF on this java platform!");
+				throw new Exception(
+						lnf
+								+ " specified in this class is not a supported LAF on this java platform!");
 			}
 		}
 	}
 
 	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) {
-		EventSetDescriptor[] esds = adapter.getBeanInfo().getEventSetDescriptors();
+		EventSetDescriptor[] esds = adapter.getBeanInfo()
+				.getEventSetDescriptors();
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
 		if (esds != null && esds.length > 0) {
 			for (EventSetDescriptor esd : esds) {
@@ -381,12 +421,12 @@ class DefaultSourceParser implements ISourceParser {
 				String fieldName = field.getElementName();
 				String getMethodName = getGetMethodName(fieldName);
 				IMethod method = type.getMethod(getMethodName, new String[0]);
-				if (method!=null&&method.exists()) {
+				if (method != null && method.exists()) {
 					return true;
 				}
 			}
-			for(IFieldParser parser:fieldParsers){
-				if(parser.isDesigningField(type, field))
+			for (IFieldParser parser : fieldParsers) {
+				if (parser.isDesigningField(type, field))
 					return true;
 			}
 		} catch (JavaModelException e) {
@@ -457,8 +497,11 @@ class DefaultSourceParser implements ISourceParser {
 					if (lnf != null) {
 						className = lnf.getClass().getName();
 					}
-					String newfield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = "
-							+ (className == null ? "null" : "\"" + className + "\"") + ";\n";
+					String newfield = "private static final "
+							+ imports.addImport("java.lang.String")
+							+ " PREFERRED_LOOK_AND_FEEL = "
+							+ (className == null ? "null" : "\"" + className
+									+ "\"") + ";\n";
 					type.createField(newfield, null, false, monitor);
 				}
 				return success;
@@ -492,14 +535,17 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	private String getFieldNameFromGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(method.getElementName());
+		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(
+				method.getElementName());
 	}
 
 	private boolean isGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().isGetMethodName(method.getElementName());
+		return NamespaceManager.getInstance().isGetMethodName(
+				method.getElementName());
 	}
 
-	private void removeField(IType type, String fieldName, IProgressMonitor monitor) {
+	private void removeField(IType type, String fieldName,
+			IProgressMonitor monitor) {
 		IField field = type.getField(getFieldName(fieldName));
 		if (field != null && field.exists()) {
 			try {
@@ -509,7 +555,8 @@ class DefaultSourceParser implements ISourceParser {
 				return;
 			}
 		}
-		IMethod method = type.getMethod(getGetMethodName(fieldName), new String[0]);
+		IMethod method = type.getMethod(getGetMethodName(fieldName),
+				new String[0]);
 		if (method != null && method.exists()) {
 			try {
 				method.delete(true, monitor);
@@ -518,8 +565,8 @@ class DefaultSourceParser implements ISourceParser {
 				ParserPlugin.getLogger().error(e);
 			}
 		}
-		for(IFieldParser parser:fieldParsers){
-			if(parser.removeField(type, fieldName, monitor))
+		for (IFieldParser parser : fieldParsers) {
+			if (parser.removeField(type, fieldName, monitor))
 				return;
 		}
 	}
@@ -541,8 +588,8 @@ class DefaultSourceParser implements ISourceParser {
 	private void _listNames(WidgetAdapter root, ArrayList<String> list) {
 		if (!root.isRoot()) {
 			list.add(root.getName());
-		}else{
-			for(InvisibleAdapter adapter: root.getInvisibles()){
+		} else {
+			for (InvisibleAdapter adapter : root.getInvisibles()) {
 				list.add(adapter.getName());
 			}
 		}
@@ -551,7 +598,8 @@ class DefaultSourceParser implements ISourceParser {
 			int count = containerAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = containerAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter
+						.getWidgetAdapter(child);
 				_listNames(childAdapter, list);
 			}
 		}
@@ -576,4 +624,3 @@ class DefaultSourceParser implements ISourceParser {
 
 	private boolean lnfChanged;
 }
-

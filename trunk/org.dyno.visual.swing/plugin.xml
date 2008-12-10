@@ -55,6 +55,11 @@
 					editor = "org.dyno.visual.swing.types.IconEditor"
 					endec = "org.dyno.visual.swing.types.IconWrapper"
 					parser = "org.dyno.visual.swing.types.IconValueParser"/>
+		<type class="java.awt.Image"
+					renderer = "org.dyno.visual.swing.types.ImageRenderer"
+					editor = "org.dyno.visual.swing.types.ImageEditor"
+					endec = "org.dyno.visual.swing.types.ImageWrapper"
+					parser = "org.dyno.visual.swing.types.ImageValueParser"/>
    </extension>
    <extension
          point="org.eclipse.ui.views">

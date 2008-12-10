@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.ResourceIcon;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

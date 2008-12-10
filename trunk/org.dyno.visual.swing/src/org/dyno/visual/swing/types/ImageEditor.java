@@ -20,7 +20,7 @@ import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
-import org.dyno.visual.swing.base.ResourceIcon;
+import org.dyno.visual.swing.base.ResourceImage;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -28,7 +28,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
-public class IconEditor extends IconWrapper implements ICellEditorFactory {
+public class ImageEditor extends ImageWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
 	@Override
@@ -45,39 +45,14 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 		if (value.equals("null"))
 			return null;
 		String string = (String) value;
-		return new ResourceIcon(string);
+		return new ResourceImage(string);
 	}
 
 	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
 			return "null";
-		if (value instanceof ImageIcon) {
-			ImageIcon imageIcon = (ImageIcon) value;
-			String filename = IconWrapper.getImageIconFilename(imageIcon);
-			if (filename != null) {
-				return filename;
-			} else {
-				URL location = IconWrapper.getImageIconLocation(imageIcon);
-				if (location != null) {
-					IProject prj = WhiteBoard.getCurrentProject().getProject();
-					try {
-						IFile[] files = prj.getWorkspace().getRoot()
-								.findFilesForLocationURI(location.toURI());
-						if (files == null || files.length == 0)
-							return null;
-						return "/"
-								+ files[0].getProjectRelativePath()
-										.removeFirstSegments(1);
-					} catch (Exception e) {
-						VisualSwingPlugin.getLogger().error(e);
-						return null;
-					}
-				} else
-					return "null";
-			}
-		} else
-			return value.toString();
+		return value.toString();
 	}
 }
 
