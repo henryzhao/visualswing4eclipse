@@ -57,6 +57,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -154,10 +155,10 @@ class DefaultSourceParser implements ISourceParser {
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
 			ArrayList<URL> paths = new ArrayList<URL>();
+			System.out.println();
 			addClasspaths(java_project, paths);
 			URL[] urls = paths.toArray(new URL[paths.size()]);
-			Class<?> beanClass = new URLClassLoader(urls, getClass()
-					.getClassLoader()).loadClass(className);
+			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
 				try {
@@ -196,27 +197,35 @@ class DefaultSourceParser implements ISourceParser {
 				IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
 		IClasspathEntry[] classpaths = java_project.getResolvedClasspath(true);
 		for (IClasspathEntry path : classpaths) {
+			URL url = null;
 			switch (path.getEntryKind()) {
 			case IClasspathEntry.CPE_SOURCE:
-				IPath loc = path.getOutputLocation();
-				if (loc != null)
-					paths.add(loc.toFile().toURI().toURL());
+				url = path.getPath().toFile().toURI().toURL();
 				break;
 			case IClasspathEntry.CPE_CONTAINER:
-				paths.add(path.getPath().toFile().toURI().toURL());
+				url = path.getPath().toFile().toURI().toURL();
 				break;
 			case IClasspathEntry.CPE_LIBRARY:
-				paths.add(path.getPath().toFile().toURI().toURL());
+				switch (path.getContentKind()) {
+				case IPackageFragmentRoot.K_BINARY:
+					IPath ip = ResourcesPlugin.getWorkspace().getRoot().getLocation().append(path.getPath());
+					url = ip.toFile().toURI().toURL();
+					break;
+				}
 				break;
 			case IClasspathEntry.CPE_PROJECT:
-				IPath ip=path.getPath();
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ip.segment(0));
-				IJavaProject jp= JavaCore.create(prj);
+				IPath ip = path.getPath();
+				IProject prj = ResourcesPlugin.getWorkspace().getRoot()
+						.getProject(ip.segment(0));
+				IJavaProject jp = JavaCore.create(prj);
 				addClasspaths(jp, paths);
 				break;
 			case IClasspathEntry.CPE_VARIABLE:
-				paths.add(path.getPath().toFile().toURI().toURL());
+				url = path.getPath().toFile().toURI().toURL();
 				break;
+			}
+			if (url != null && !paths.contains(url)) {
+				paths.add(url);
 			}
 		}
 		IPath wsPath = java_project.getProject().getWorkspace().getRoot()
