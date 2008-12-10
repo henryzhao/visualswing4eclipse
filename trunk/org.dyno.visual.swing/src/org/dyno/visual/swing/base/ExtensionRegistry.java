@@ -30,6 +30,7 @@ import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -480,6 +481,10 @@ public class ExtensionRegistry {
 			sAttribute = config.getAttribute("cloner");
 			if (!isNull(sAttribute)) {
 				adapter.setCloner((ICloner) config.createExecutableExtension("cloner"));
+			}
+			sAttribute = config.getAttribute("parser");
+			if(!isNull(sAttribute)){
+				adapter.setParser((IValueParser)config.createExecutableExtension("parser"));
 			}
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);

@@ -35,7 +35,10 @@ import org.eclipse.jdt.core.JavaModelException;
 public class ResourceIcon implements Icon {
 	private String path;
 	private Icon icon;
-
+	public ResourceIcon(Icon icon, String path){
+		this.path = path;
+		this.icon = icon;		
+	}
 	public ResourceIcon(String p) {
 		this.path = p;
 		IJavaProject prj = WhiteBoard.getCurrentProject();

@@ -41,5 +41,8 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor{
 	@SuppressWarnings("unchecked")
 	void init(IConfigurationElement config, Class beanClass);
 	boolean isEdited(WidgetAdapter adapter);
+	IValueParser getValueParser();
+	Object getRawValue(Object bean);
+	void setRawValue(Object bean, Object newValue);	
 }
 

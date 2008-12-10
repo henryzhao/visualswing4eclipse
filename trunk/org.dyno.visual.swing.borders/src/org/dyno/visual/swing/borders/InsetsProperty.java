@@ -17,10 +17,12 @@ package org.dyno.visual.swing.borders;
 import java.awt.Component;
 import java.awt.Insets;
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -52,7 +54,10 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 			BorderPlugin.getLogger().error(e);
 		}
 	}
-
+	@Override
+	public IValueParser getValueParser() {
+		return null;
+	}	
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
 		return false;
@@ -62,6 +67,13 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 		return getField(getBorderClass(), fieldName);
 	}
 
+	@Override
+	public Object getRawValue(Object bean) {
+		return null;
+	}
+	@Override
+	public void setRawValue(Object bean, Object newValue) {
+	}
 	@SuppressWarnings("unchecked")
 	protected abstract Class getBorderClass();
 

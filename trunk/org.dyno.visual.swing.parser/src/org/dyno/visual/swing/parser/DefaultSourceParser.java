@@ -34,6 +34,7 @@ import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
@@ -56,10 +57,18 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 
@@ -187,13 +196,62 @@ class DefaultSourceParser implements ISourceParser {
 			}
 		}
 	}
+	private MethodDeclaration getMethodDeclaration(TypeDeclaration type, String name){
+		MethodDeclaration[] methods = type.getMethods();
+		for(MethodDeclaration method:methods){
+			if(method.getName().getFullyQualifiedName().equals(name))
+				return method;
+		}
+		return null;
+	}
 	private void parseWidgetProperty(String lnfClassname, CompilationUnit cunit, WidgetAdapter adapter) {
+		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
 		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
+		Object bean = adapter.getWidget();
+		IStructuredSelection sel = new StructuredSelection(bean);
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(lnfClassname, new StructuredSelection(adapter.getWidget()))) {
-				//////////////////////////////////////////////////////////////////////////////////////
+			if (property.isPropertySet(lnfClassname, sel)) {
+				List statements = getBeanPropertyInitStatements(adapter, type);
+				for (Object stmt : statements) {
+					Statement statement = (Statement) stmt;
+					if (statement instanceof ExpressionStatement) {
+						ExpressionStatement expressionStatement = (ExpressionStatement) statement;
+						Expression expression = expressionStatement.getExpression();
+						if (expression instanceof MethodInvocation) {
+							MethodInvocation mi = (MethodInvocation) expression;
+							List args = mi.arguments();
+							IValueParser vp=property.getValueParser();
+							if(vp!=null){
+								Object oldValue = property.getRawValue(bean);
+								Object newValue = vp.parseValue(oldValue, args);
+								property.setRawValue(bean, newValue);
+							}
+						}
+					}
+				}
 			}
 		}
+	}
+	private List getBeanPropertyInitStatements(WidgetAdapter adapter, TypeDeclaration type) {
+		List statements;
+		if (adapter.isRoot()) {
+			MethodDeclaration initMethod = getMethodDeclaration(type,
+					"initComponent");
+			Block body = initMethod.getBody();
+			statements = body.statements();					
+		} else {
+			String getMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getName()); 
+			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
+			Block body = getMethod.getBody();
+			statements = body.statements();
+			IfStatement ifs=(IfStatement) statements.get(0);
+			Statement thenstmt = ifs.getThenStatement();
+			if(thenstmt instanceof Block){
+				Block block = (Block) thenstmt;
+				statements = block.statements();
+			}
+		}
+		return statements;
 	}
 	@SuppressWarnings("unchecked")
 	private void initDesignedWidget(CompilationUnit cunit, Component bean) {

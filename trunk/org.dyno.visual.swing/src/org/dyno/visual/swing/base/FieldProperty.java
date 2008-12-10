@@ -16,10 +16,12 @@ package org.dyno.visual.swing.base;
 import java.awt.Component;
 import java.lang.reflect.Field;
 import java.util.Comparator;
+import java.util.List;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -70,7 +72,6 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 	}
-
 	@SuppressWarnings("unchecked")
 	public FieldProperty(String id, String name, Class beanClass, ILabelProviderFactory label, ICellEditorFactory editor) {
 		this.id = id;
@@ -415,6 +416,20 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
 		return false;
+	}
+
+	@Override
+	public IValueParser getValueParser() {
+		return null;
+	}
+
+	@Override
+	public Object getRawValue(Object bean) {
+		return null;
+	}
+
+	@Override
+	public void setRawValue(Object bean, Object newValue) {
 	}
 }
 

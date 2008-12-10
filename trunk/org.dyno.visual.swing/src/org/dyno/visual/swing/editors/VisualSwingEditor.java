@@ -262,6 +262,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
 				.getFile());
 		hostProject = unit.getJavaProject();
+		WhiteBoard.setCurrentProject(hostProject);
 		ISourceParser sourceParser = factory.newParser();
 		sourceParser.setSource(unit);
 		boolean success = sourceParser.parse(getShell());

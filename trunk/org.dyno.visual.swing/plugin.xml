@@ -53,7 +53,8 @@
 		<type class="javax.swing.Icon"
 					renderer = "org.dyno.visual.swing.types.IconRenderer"
 					editor = "org.dyno.visual.swing.types.IconEditor"
-					endec = "org.dyno.visual.swing.types.IconWrapper"/>
+					endec = "org.dyno.visual.swing.types.IconWrapper"
+					parser = "org.dyno.visual.swing.types.IconValueParser"/>
    </extension>
    <extension
          point="org.eclipse.ui.views">

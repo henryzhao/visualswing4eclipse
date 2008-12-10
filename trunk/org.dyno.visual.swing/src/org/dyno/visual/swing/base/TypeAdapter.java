@@ -19,6 +19,7 @@ import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICloner;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 /**
  * 
  * TypeAdapter
@@ -33,6 +34,14 @@ public class TypeAdapter {
 	private ILabelProviderFactory renderer;
 	private ICellEditorFactory editor;
 	private ICloner cloner;
+	private IValueParser parser;
+	public IValueParser getParser() {
+		return parser;
+	}
+
+	public void setParser(IValueParser parser) {
+		this.parser = parser;
+	}
 
 	public ICodeGen getEndec() {
 		if (endec != null)

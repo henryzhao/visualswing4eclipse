@@ -14,7 +14,9 @@
 package org.dyno.visual.swing.base;
 
 import java.awt.Component;
+import java.util.List;
 
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -130,6 +132,20 @@ public class PropertyAdapter implements IWidgetPropertyDescriptor {
 	@Override
 	public boolean isCompatibleWith(IPropertyDescriptor anotherProperty) {
 		return false;
+	}
+
+	@Override
+	public IValueParser getValueParser() {
+		return null;
+	}
+
+	@Override
+	public Object getRawValue(Object bean) {
+		return null;
+	}
+
+	@Override
+	public void setRawValue(Object bean, Object newValue) {
 	}
 }
 

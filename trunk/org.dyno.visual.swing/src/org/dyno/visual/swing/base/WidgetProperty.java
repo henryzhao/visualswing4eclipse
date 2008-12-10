@@ -28,6 +28,7 @@ import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISystemValue;
+import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.SetValueOperation;
@@ -68,7 +69,8 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	@SuppressWarnings("unchecked")
 	private Class beanClass;
 	private boolean gencode;
-
+	private IValueParser parser;
+	
 	@SuppressWarnings("unchecked")
 	public WidgetProperty(String id, String name, Class beanClass,
 			ILabelProviderFactory label, ICellEditorFactory editor) {
@@ -152,6 +154,16 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			createEditorProviderFactory(config);
 		} else if (ta != null) {
 			editorFactory = ta.getEditor();
+		}
+		String sParser = config.getAttribute("parser");
+		if(sParser!=null&&sParser.trim().length()>0){
+			try {
+				parser = (IValueParser) config.createExecutableExtension("parser");
+			} catch (CoreException e) {
+				VisualSwingPlugin.getLogger().error(e);
+			}
+		}else{
+			parser = ta.getParser();
 		}
 		helpContextId = config.getAttribute("help-context-id");
 		if (helpContextId != null && helpContextId.trim().length() == 0)
@@ -693,6 +705,28 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 	public boolean isEdited(WidgetAdapter adapter) {
 		Boolean bool = adapter.getEdited().get(propertyDescriptor.getName());
 		return bool == null ? false : bool.booleanValue();
+	}
+
+	@Override
+	public IValueParser getValueParser() {
+		return parser;
+	}
+
+	@Override
+	public Object getRawValue(Object bean) {
+		return _getPropertyValue(bean);
+	}
+
+	@Override
+	public void setRawValue(Object bean, Object newValue) {
+		Method writeMethod = propertyDescriptor.getWriteMethod();
+		if(writeMethod!=null){
+			try {
+				writeMethod.invoke(bean, newValue);
+			} catch (Exception e) {
+				VisualSwingPlugin.getLogger().error(e);
+			}
+		}
 	}
 }
 

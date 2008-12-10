@@ -106,6 +106,16 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="parser" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.dyno.visual.swing.plugin.spi.IValueParser"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
