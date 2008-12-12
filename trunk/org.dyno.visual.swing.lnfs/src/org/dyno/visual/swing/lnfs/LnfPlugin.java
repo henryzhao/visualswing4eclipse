@@ -23,12 +23,16 @@ import org.osgi.framework.BundleContext;
  */
 public class LnfPlugin extends Plugin {
 	// The shared instance
+	private static final String PLUGIN_ID="org.dyno.visual.swing.lnfs";
 	private static LnfPlugin plugin;
-	private PluginLogger logger;
+	private PluginLogger logger;	
 	/**
 	 * The constructor
 	 */
 	public LnfPlugin() {
+	}
+	public static String getPluginID(){
+		return PLUGIN_ID;
 	}
 	public static PluginLogger getLogger(){
 		if(plugin==null||plugin.logger==null){
@@ -36,7 +40,9 @@ public class LnfPlugin extends Plugin {
 		}
 		return plugin.logger;
 	}
-
+	public static LnfPlugin getDefault(){
+		return plugin;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 

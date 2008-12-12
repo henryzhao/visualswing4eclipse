@@ -1,13 +1,13 @@
-package org.dyno.visual.swing.wizards;
+package org.dyno.visual.swing.lnfs.lib;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
+import org.dyno.visual.swing.lnfs.LnfPlugin;
 import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -35,7 +35,7 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 						IPath path = Platform.getLocation();
 						path = path.append(".metadata");
 						path = path.append(".plugins");
-						path = path.append(VisualSwingPlugin.getPluginID());
+						path = path.append(LnfPlugin.getPluginID());
 						path = path.append(LOOK_AND_FEEL_LIB_DIR);
 						if (count > 2) {
 							String libDir = containerPath.segment(2);
@@ -62,7 +62,7 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 		IPath path = Platform.getLocation();
 		path = path.append(".metadata");
 		path = path.append(".plugins");
-		path = path.append(VisualSwingPlugin.getPluginID());
+		path = path.append(LnfPlugin.getPluginID());
 		path = path.append(LOOK_AND_FEEL_LIB_DIR);
 		File folder = path.toFile();
 		if (folder.exists()) {

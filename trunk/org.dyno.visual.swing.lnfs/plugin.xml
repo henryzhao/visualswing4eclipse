@@ -24,4 +24,10 @@
             class="com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel">
       </lookandfeel>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.libraryExtension">
+      <library
+            class="org.dyno.visual.swing.lnfs.lib.LookAndFeelLibrary">
+      </library>
+   </extension>
 </plugin>

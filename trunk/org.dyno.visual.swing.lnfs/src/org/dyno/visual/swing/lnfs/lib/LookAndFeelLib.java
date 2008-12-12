@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.wizards;
+package org.dyno.visual.swing.lnfs.lib;
 
 import java.awt.Component;
 import java.beans.IntrospectionException;
@@ -19,10 +19,10 @@ import javax.swing.UIDefaults;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.TypeAdapter;
+import org.dyno.visual.swing.lnfs.LnfPlugin;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISystemValue;
 import org.eclipse.core.runtime.IPath;
@@ -65,7 +65,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		IPath path = Platform.getLocation();
 		path = path.append(".metadata");
 		path = path.append(".plugins");
-		path = path.append(VisualSwingPlugin.getPluginID());
+		path = path.append(LnfPlugin.getPluginID());
 		path = path.append(LookAndFeelLibrary.LOOK_AND_FEEL_LIB_DIR);
 		path = path.append(dir);
 		initLaf(path);
@@ -116,7 +116,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 					}
 				}
 			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
+				LnfPlugin.getLogger().error(e);
 			}
 		} else {
 			throw new IllegalArgumentException("Cannot find laf.xml under:"
@@ -223,7 +223,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 				lnfInstance = (LookAndFeel) lnfClass.newInstance();
 				lnfInstance = new DelegateLookAndFeel(lnfInstance);
 			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
+				LnfPlugin.getLogger().error(e);
 			}
 		}
 		return lnfInstance;
