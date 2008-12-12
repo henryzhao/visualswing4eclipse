@@ -113,6 +113,7 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
 	protected List<InvisibleAdapter> invisibles=new ArrayList<InvisibleAdapter>();
+	protected Map<String, Object> properties=new HashMap<String, Object>();
 	@SuppressWarnings("unchecked")
 	public abstract Class getWidgetClass();
 
@@ -125,6 +126,15 @@ public abstract class WidgetAdapter implements IExecutableExtension, Cloneable,
 				layoutContainer((Container) child);
 			}
 		}
+	}
+	public void setProperty(String key, Object value){
+		if(value==null)
+			properties.remove(key);
+		else
+			properties.put(key, value);
+	}
+	public Object getProperty(String key){
+		return properties.get(key);
 	}
 	public List<InvisibleAdapter> getInvisibles(){
 		return invisibles;

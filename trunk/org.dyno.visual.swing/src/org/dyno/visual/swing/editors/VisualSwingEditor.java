@@ -304,11 +304,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				sourceParser.setSource(copy);
 				sourceParser.setLnfChanged(designer.isLnfChanged());
 				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
-				sourceParser.setImportWrite(imports);
+				sourceParser.setImportWrite(imports);				
 				WidgetAdapter rootAdapter = WidgetAdapter
 						.getWidgetAdapter(designer.getRoot());
+				rootAdapter.setProperty("preferred.lookandfeel", this.getLnfClassname());
 				sourceParser.setRootAdapter(rootAdapter);
 				boolean success = sourceParser.genCode(monitor);
+				rootAdapter.setProperty("preferred.lookandfeel", null);
 				if (success) {
 					try {
 						TextEdit edit = imports.rewriteImports(monitor);

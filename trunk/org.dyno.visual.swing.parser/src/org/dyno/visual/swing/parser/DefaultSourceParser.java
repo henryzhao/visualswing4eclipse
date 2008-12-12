@@ -533,11 +533,7 @@ class DefaultSourceParser implements ISourceParser {
 					if (lnfField.exists()) {
 						lnfField.delete(false, monitor);
 					}
-					LookAndFeel lnf = UIManager.getLookAndFeel();
-					String className = null;
-					if (lnf != null) {
-						className = lnf.getClass().getName();
-					}
+					String className = (String) root.getProperty("preferred.lookandfeel");					
 					String newfield = "private static final "
 							+ imports.addImport("java.lang.String")
 							+ " PREFERRED_LOOK_AND_FEEL = "
