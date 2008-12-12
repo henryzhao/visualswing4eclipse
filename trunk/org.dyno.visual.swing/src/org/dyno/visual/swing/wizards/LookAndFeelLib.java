@@ -24,6 +24,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
+import org.dyno.visual.swing.plugin.spi.ISystemValue;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IClasspathContainer;
@@ -36,6 +37,10 @@ import org.w3c.dom.NodeList;
 public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter {
 	private static final String LAF_FILE = "laf.xml";
 	private static Map<String, LookAndFeelLib> lnfLibs = new HashMap<String, LookAndFeelLib>();
+	private static class SystemValue implements ISystemValue{
+		private static final long serialVersionUID = 1L;
+	}
+	private static SystemValue SYSTEM_VALUE=new SystemValue();
 
 	public static LookAndFeelLib getLnfLib(String dir) {
 		LookAndFeelLib icc = lnfLibs.get(dir);
@@ -143,12 +148,18 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 			Class clazz) throws IntrospectionException {
 		String name = node.getAttribute("name");
 		String value = node.getAttribute("default");
-		PropertyDescriptor pd = new PropertyDescriptor(name, clazz);
-		Class type = pd.getPropertyType();
-		TypeAdapter ta=ExtensionRegistry.getTypeAdapter(type);
-		if(ta!=null&&ta.getEndec()!=null){
-			Object v = ta.getEndec().decode(value);
-			values.put(name, v);
+		if (value != null && value.trim().length() > 0&&!value.equals("null")) {
+			if(value.equals("SYSTEM_VALUE")){
+				values.put(name, SYSTEM_VALUE);
+			} else {
+				PropertyDescriptor pd = new PropertyDescriptor(name, clazz);
+				Class type = pd.getPropertyType();
+				TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
+				if (ta != null && ta.getEndec() != null) {
+					Object v = ta.getEndec().decode(value);
+					values.put(name, v);
+				}
+			}
 		}
 	}
 
