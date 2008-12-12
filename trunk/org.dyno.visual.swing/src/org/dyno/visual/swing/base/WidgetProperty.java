@@ -165,7 +165,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 			} catch (CoreException e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
-		}else{
+		}else if(ta!=null){
 			parser = ta.getParser();
 		}
 		helpContextId = config.getAttribute("help-context-id");
