@@ -79,7 +79,7 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 					ExtensionRegistry.registerLnfAdapter(lib.getClassname(), lib);
 					paths.add(lib);
 				}
-				IClasspathContainer[] lnfLibs = new IClasspathContainer[paths.size()];
+				lnfLibs = new IClasspathContainer[paths.size()];
 				lnfLibs = paths.toArray(lnfLibs);
 			}
 		}		

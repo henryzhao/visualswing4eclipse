@@ -35,14 +35,15 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 
 	@Override
 	public boolean finish() {
-		ISelection sel=viewer.getSelection();
-		if(sel==null||sel.isEmpty())
+		ISelection sel = viewer.getSelection();
+		if (sel == null || sel.isEmpty())
 			return false;
-		if(sel instanceof IStructuredSelection){
-			IClasspathContainer icc = (IClasspathContainer) ((IStructuredSelection) sel).getFirstElement();
+		if (sel instanceof IStructuredSelection) {
+			IClasspathContainer icc = (IClasspathContainer) ((IStructuredSelection) sel)
+					.getFirstElement();
 			this.toBeEdited = JavaCore.newContainerEntry(icc.getPath(), false);
 			return true;
-		}else
+		} else
 			return false;
 	}
 
@@ -64,45 +65,47 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 	public void createControl(Composite parent) {
 		viewer = new ListViewer(parent, SWT.SINGLE | SWT.BORDER);
 		viewer.setContentProvider(new LibContProv());
-		viewer.setLabelProvider(new LabelProvider(){
+		viewer.setLabelProvider(new LabelProvider() {
 
 			@Override
 			public String getText(Object element) {
-				if(element!=null&&element instanceof IClasspathContainer){
-					return ((IClasspathContainer)element).getDescription();
+				if (element != null && element instanceof IClasspathContainer) {
+					return ((IClasspathContainer) element).getDescription();
 				}
 				return super.getText(element);
 			}
-			
+
 		});
 		viewer.setInput(new LibInput());
 		if (toBeEdited != null) {
-			IPath ipath=toBeEdited.getPath();
-			if(ipath.equals(JavaUtil.VS_LAYOUTEXT)){
-				viewer.setSelection(new StructuredSelection(new Object[]{new LayoutExtensionLibrary()}));
-			}else{
-				List<ILibraryExtension> libExts = ExtensionRegistry.getLibExtensions();
-				for(ILibraryExtension libExt:libExts){
+			IPath ipath = toBeEdited.getPath();
+			if (ipath.equals(JavaUtil.VS_LAYOUTEXT)) {
+				viewer.setSelection(new StructuredSelection(
+						new Object[] { new LayoutExtensionLibrary() }));
+			} else {
+				List<ILibraryExtension> libExts = ExtensionRegistry
+						.getLibExtensions();
+				for (ILibraryExtension libExt : libExts) {
 					IClasspathContainer lib = libExt.createLibExt(ipath);
-					if(lib!=null){
-						viewer.setSelection(new StructuredSelection(new Object[]{lib}));
+					if (lib != null) {
+						viewer.setSelection(new StructuredSelection(
+								new Object[] { lib }));
 						break;
 					}
 				}
 			}
-		}else{
+		} else {
 			setPageComplete(false);
 		}
-		viewer.addSelectionChangedListener(new ISelectionChangedListener(){
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				ISelection sel=viewer.getSelection();
-				setPageComplete(sel!=null&&!sel.isEmpty());
-			}});
+				ISelection sel = viewer.getSelection();
+				setPageComplete(sel != null && !sel.isEmpty());
+			}
+		});
 		setControl(viewer.getControl());
 	}
-
-
 
 	private class LibInput {
 	};
