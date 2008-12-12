@@ -26,6 +26,7 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -37,8 +38,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
@@ -51,6 +50,7 @@ import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.editors.actions.LnfAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
+import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.CutOperation;
@@ -222,9 +222,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	private void fillLnfAction(MenuManager lnfMenu) {
-		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-		for (LookAndFeelInfo info : infos) {
-			IAction lnfAction = new LnfAction(this, info);
+		Collection<ILookAndFeelAdapter> lnfAdapters = ExtensionRegistry.getLnfAdapters();
+		for(ILookAndFeelAdapter lnfAdapter:lnfAdapters){
+			String lnfName = lnfAdapter.getName();
+			String lnfClassname = lnfAdapter.getClassname();
+			IAction lnfAction = new LnfAction(this, lnfName, lnfClassname);
 			lnfMenu.add(lnfAction);
 		}
 	}

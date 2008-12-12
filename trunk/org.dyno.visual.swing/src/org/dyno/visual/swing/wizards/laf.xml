@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lookandfeel name="JGoodies Look And Feel" 
+			class="com.jgoodies.lookandfeel.plastic.Plastic3DLookAndFeel">
+			<classpath jar="jgoodies.jar" src="jgoodies.zip"/>
+			<classpath jar="jgoodies2.jar" src="jgoodies2.zip"/>
+			<component class="javax.swing.JLabel">
+				<property name="text" default="null"/>
+				<property name="visible" default="true"/>
+			</component>
+</lookandfeel>

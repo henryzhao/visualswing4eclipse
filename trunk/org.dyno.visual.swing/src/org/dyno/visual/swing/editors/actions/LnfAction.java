@@ -14,22 +14,21 @@
 package org.dyno.visual.swing.editors.actions;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.eclipse.jface.action.Action;
 
 public class LnfAction extends Action {
-	private LookAndFeelInfo info;
+	private String lnfClassname;
 	private VisualDesigner designer;
-	public LnfAction(VisualDesigner designer, LookAndFeelInfo info) {
-		super(info.getName(), AS_RADIO_BUTTON);
-		this.info = info;
+
+	public LnfAction(VisualDesigner designer, String lnfName, String lnfClassname) {
+		super(lnfName, AS_RADIO_BUTTON);
+		this.lnfClassname = lnfClassname;
 		this.designer = designer;
 		String lnf = designer.getLnfClassname();
-		setChecked(lnf != null && lnf.equals(info.getClassName()));
-		System.out.println();
+		setChecked(lnf != null && lnf.equals(lnfClassname));
 	}
 
 	@Override
@@ -44,17 +43,14 @@ public class LnfAction extends Action {
 
 	private void changeLnf() {
 		String lnf = designer.getLnfClassname();
-		if (lnf==null||!lnf.getClass().getName().equals(info.getClassName())) {
+		if (lnf == null || !lnf.getClass().getName().equals(lnfClassname)) {
 			try {
-				designer.setLnfClassname(info.getClassName());
+				designer.setLnfClassname(lnfClassname);
 				SwingUtilities.updateComponentTreeUI(designer);
 				designer.repaint();
 			} catch (Exception e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
-		}else{
-			
-		}
+		} 
 	}
 }
-

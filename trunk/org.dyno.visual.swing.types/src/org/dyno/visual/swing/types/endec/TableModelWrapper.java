@@ -46,7 +46,7 @@ public class TableModelWrapper implements ICodeGen {
 				else {
 					TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(object.getClass());
 					if (adapter != null) {
-						ICodeGen codeGen = adapter.getEndec();
+						ICodeGen codeGen = adapter.getCodegen();
 						if (codeGen != null) {
 							builder.append(codeGen.getJavaCode(object, imports));
 						} else {

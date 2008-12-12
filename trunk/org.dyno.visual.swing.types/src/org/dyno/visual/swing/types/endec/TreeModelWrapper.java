@@ -56,8 +56,8 @@ public class TreeModelWrapper implements ICodeGen {
 		Class type = object.getClass();
 		TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(type);
 		builder.append(str + " node" + depth + " = new " + str + "(");
-		if(adapter!=null&&adapter.getEndec()!=null){
-			String encodedCode = adapter.getEndec().getJavaCode(object, imports);
+		if(adapter!=null&&adapter.getCodegen()!=null){
+			String encodedCode = adapter.getCodegen().getJavaCode(object, imports);
 			builder.append(encodedCode);
 		}else{
 			builder.append("\"");

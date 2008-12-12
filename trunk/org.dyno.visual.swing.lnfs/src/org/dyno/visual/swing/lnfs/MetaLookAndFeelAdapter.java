@@ -152,5 +152,15 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		}
 		return metalLnf;
 	}
+
+	@Override
+	public String getClassname() {
+		return MetalLookAndFeel.class.getName();
+	}
+
+	@Override
+	public String getName() {
+		return "Metal Look And Feel";
+	}
 }
 

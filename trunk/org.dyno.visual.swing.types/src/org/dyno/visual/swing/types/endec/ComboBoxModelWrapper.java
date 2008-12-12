@@ -46,8 +46,8 @@ public class ComboBoxModelWrapper implements ICodeGen {
 				builder.append("null");
 			}else{
 				TypeAdapter adapter=ExtensionRegistry.getTypeAdapter(obj.getClass());
-				if(adapter!=null&&adapter.getEndec()!=null){
-					builder.append(adapter.getEndec().getJavaCode(obj, imports));
+				if(adapter!=null&&adapter.getCodegen()!=null){
+					builder.append(adapter.getCodegen().getJavaCode(obj, imports));
 				}else{
 					builder.append(obj.toString());
 				}				

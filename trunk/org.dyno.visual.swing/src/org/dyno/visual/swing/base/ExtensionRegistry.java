@@ -15,6 +15,7 @@ package org.dyno.visual.swing.base;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICloner;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
+import org.dyno.visual.swing.plugin.spi.IEndec;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
@@ -203,10 +205,15 @@ public class ExtensionRegistry {
 		parseSortingExtensions();
 		parseTypeExtensions();
 		parseLnfExtensions();
-		parseContextMenus();
 		parseLibExtensions();
+		parseContextMenus();
 	}
-
+	public static void registerLnfAdapter(String classname, ILookAndFeelAdapter lnfAdapter){
+		lnfAdapters.put(classname, lnfAdapter);
+	}
+	public static Collection<ILookAndFeelAdapter> getLnfAdapters(){
+		return lnfAdapters.values();
+	}
 	public static ILookAndFeelAdapter getLnfAdapter(String lnfClassname) {
 		return lnfAdapters.get(lnfClassname);
 	}
@@ -462,9 +469,9 @@ public class ExtensionRegistry {
 			typeAdapters.put(typeClassname, adapter);
 		}
 		try {
-			String sAttribute = config.getAttribute("endec");
+			String sAttribute = config.getAttribute("codegen");
 			if (!isNull(sAttribute)) {
-				adapter.setEndec((ICodeGen) config.createExecutableExtension("endec"));
+				adapter.setCodegen((ICodeGen) config.createExecutableExtension("codegen"));
 			}
 			sAttribute = config.getAttribute("comparator");
 			if (!isNull(sAttribute)) {
@@ -485,6 +492,10 @@ public class ExtensionRegistry {
 			sAttribute = config.getAttribute("parser");
 			if(!isNull(sAttribute)){
 				adapter.setParser((IValueParser)config.createExecutableExtension("parser"));
+			}
+			sAttribute = config.getAttribute("endec");
+			if(!isNull(sAttribute)){
+				adapter.setEndec((IEndec)config.createExecutableExtension("endec"));
 			}
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);

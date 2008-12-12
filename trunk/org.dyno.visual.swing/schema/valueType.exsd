@@ -56,13 +56,13 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="endec" type="string">
+         <attribute name="codegen" type="string">
             <annotation>
                <documentation>
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.dyno.visual.swing.plugin.spi.Endec"/>
+                  <meta.attribute kind="java" basedOn=":org.dyno.visual.swing.plugin.spi.ICodeGen"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -113,6 +113,16 @@
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.dyno.visual.swing.plugin.spi.IValueParser"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="endec" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.dyno.visual.swing.plugin.spi.IEndec"/>
                </appinfo>
             </annotation>
          </attribute>

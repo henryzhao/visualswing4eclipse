@@ -369,8 +369,8 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 				Class typeClass = field.getType();
 				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(typeClass);
 				Object value = _getPropertyValue(bean);
-				if (typeAdapter != null && typeAdapter.getEndec() != null) {
-					String initCode = typeAdapter.getEndec().getInitJavaCode(value, imports);
+				if (typeAdapter != null && typeAdapter.getCodegen() != null) {
+					String initCode = typeAdapter.getCodegen().getInitJavaCode(value, imports);
 					if (initCode != null)
 						builder.append(initCode);
 				}
@@ -378,11 +378,11 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 					builder.append(getFieldName(adapter.getName()) + ".");
 				}
 				builder.append(field.getName() + "=");
-				if (typeAdapter != null && typeAdapter.getEndec() != null) {
+				if (typeAdapter != null && typeAdapter.getCodegen() != null) {
 					if (value == null) {
 						builder.append("null");
 					} else {
-						builder.append(typeAdapter.getEndec().getJavaCode(value, imports));
+						builder.append(typeAdapter.getCodegen().getJavaCode(value, imports));
 					}
 				} else {
 					builder.append(value == null ? "null" : value.toString());

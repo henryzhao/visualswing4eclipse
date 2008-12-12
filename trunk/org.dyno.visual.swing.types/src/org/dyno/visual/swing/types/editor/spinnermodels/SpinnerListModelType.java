@@ -53,8 +53,8 @@ public class SpinnerListModelType extends SpinnerModelType {
 					builder.append("\"" + item + "\", ");
 				} else {
 					TypeAdapter type = ExtensionRegistry.getTypeAdapter(item.getClass());
-					if (type != null && type.getEndec() != null) {
-						builder.append(type.getEndec().getJavaCode(item, imports) + ", ");
+					if (type != null && type.getCodegen() != null) {
+						builder.append(type.getCodegen().getJavaCode(item, imports) + ", ");
 					} else
 						builder.append("" + item + ", ");
 				}

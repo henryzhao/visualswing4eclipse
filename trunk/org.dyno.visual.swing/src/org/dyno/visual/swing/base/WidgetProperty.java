@@ -664,7 +664,7 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				if(editorFactory!=null&&editorFactory instanceof ItemProviderCellEditorFactory){
 					gen=editorFactory;
 				}else if (typeAdapter != null) {
-					gen = typeAdapter.getEndec();
+					gen = typeAdapter.getCodegen();
 				} else {
 					gen = editorFactory;
 				}

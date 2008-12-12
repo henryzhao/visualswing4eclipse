@@ -27,5 +27,9 @@ public interface ILookAndFeelAdapter {
 	Object getDefaultValue(Class widgetClass, String propertyName);
 
 	LookAndFeel getLookAndFeelInstance();
+
+	String getName();
+
+	String getClassname();
 }
 

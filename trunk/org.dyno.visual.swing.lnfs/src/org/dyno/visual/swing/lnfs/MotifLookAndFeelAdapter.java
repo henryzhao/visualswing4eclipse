@@ -154,6 +154,16 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 			}
 		}
 		return metalLnf;
+	}
+
+	@Override
+	public String getClassname() {
+		return "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+	}
+
+	@Override
+	public String getName() {
+		return "Motif Look And Feel";
 	}	
 }
 

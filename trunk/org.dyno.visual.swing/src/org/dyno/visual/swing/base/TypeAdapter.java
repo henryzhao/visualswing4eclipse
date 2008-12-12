@@ -18,6 +18,7 @@ import java.util.Comparator;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICloner;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
+import org.dyno.visual.swing.plugin.spi.IEndec;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
 /**
@@ -28,13 +29,22 @@ import org.dyno.visual.swing.plugin.spi.IValueParser;
  * @author William Chen
  */
 public class TypeAdapter {
-	private ICodeGen endec;
+	private ICodeGen codegen;
 	@SuppressWarnings("unchecked")
 	private Comparator comparator;
 	private ILabelProviderFactory renderer;
 	private ICellEditorFactory editor;
 	private ICloner cloner;
 	private IValueParser parser;
+	private IEndec endec;
+	public IEndec getEndec() {
+		return endec;
+	}
+
+	public void setEndec(IEndec endec) {
+		this.endec = endec;
+	}
+
 	public IValueParser getParser() {
 		return parser;
 	}
@@ -43,15 +53,15 @@ public class TypeAdapter {
 		this.parser = parser;
 	}
 
-	public ICodeGen getEndec() {
-		if (endec != null)
-			return endec;
+	public ICodeGen getCodegen() {
+		if (codegen != null)
+			return codegen;
 		else
 			return editor;
 	}
 
-	public void setEndec(ICodeGen endec) {
-		this.endec = endec;
+	public void setCodegen(ICodeGen codegen) {
+		this.codegen = codegen;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -53,8 +53,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.dyno.visual.swing.lnfs.nimbus.JAppletValue;
 import org.dyno.visual.swing.lnfs.nimbus.JButtonValue;
@@ -153,22 +151,25 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 	public LookAndFeel getLookAndFeelInstance() {
 		if (metalLnf == null) {
 			try {
-				LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-				for (LookAndFeelInfo info : infos) {
-					if (info.getClassName().equals(
-							"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")) {
-						metalLnf = (LookAndFeel) Class
-								.forName(
-										"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")
-								.newInstance();
-						return metalLnf;
-					}
-				}
+				metalLnf = (LookAndFeel) Class.forName(
+						"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")
+						.newInstance();
+				return metalLnf;
 			} catch (Exception e) {
 				LnfPlugin.getLogger().error(e);
 			}
 		}
 		return metalLnf;
+	}
+
+	@Override
+	public String getClassname() {
+		return "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+	}
+
+	@Override
+	public String getName() {
+		return "Nimbus Look And Feel";
 	}
 }
 

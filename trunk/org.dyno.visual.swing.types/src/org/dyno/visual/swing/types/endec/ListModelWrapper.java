@@ -51,9 +51,9 @@ public class ListModelWrapper implements ICodeGen {
 			} else {
 				TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(obj
 						.getClass());
-				if (adapter != null && adapter.getEndec() != null) {
+				if (adapter != null && adapter.getCodegen() != null) {
 					builder
-							.append("listModel.addElement("+adapter.getEndec()
+							.append("listModel.addElement("+adapter.getCodegen()
 									.getJavaCode(obj, imports)+");\n");
 				} else {
 					builder.append("listModel.addElement("+obj.toString()+");\n");

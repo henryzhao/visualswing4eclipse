@@ -251,6 +251,16 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 			}
 		}
 		return metalLnf;
+	}
+
+	@Override
+	public String getClassname() {
+		return "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+	}
+
+	@Override
+	public String getName() {
+		return "Windows Look And Feel";
 	}		
 }
 
