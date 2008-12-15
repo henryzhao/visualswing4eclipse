@@ -3,7 +3,7 @@
 <repository name='file:/D:/eclipse3.4.1/workspace/org.dyno.visual.swing.site/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1229329525218'/>
+    <property name='p2.timestamp' value='1229329805355'/>
   </properties>
   <units size='24'>
     <unit id='org.dyno.visual.swing.parser' version='0.9.6.I20081202-1500'>
@@ -616,7 +616,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing,org.eclipse.jdt.core,org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.jface,org.eclipse.ui.workbench,org.eclipse.jdt.ui,org.eclipse.ui.ide,org.eclipse.text&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.parser.listener,org.dyno.visual.swing.parser.spi&#xA;Bundle-SymbolicName: org.dyno.visual.swing.parser;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Widgets Plug-in&#xA;Bundle-Vendor: Dynamic Object Organization&#xA;
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing,org.eclipse.jdt.core,org.eclipse.core.runtime,org.eclipse.core.resources,org.eclipse.jface,org.eclipse.ui.workbench,org.eclipse.jdt.ui,org.eclipse.ui.ide,org.eclipse.text&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.parser.listener,org.dyno.visual.swing.parser.spi&#xA;Bundle-SymbolicName: org.dyno.visual.swing.parser;singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Widgets Plug-in&#xA;Bundle-Vendor: Dynamic Object Organization
           </instruction>
         </instructions>
       </touchpointData>
@@ -652,7 +652,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-Vendor: Dynamic Object Organization&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.dyno.visual.swing.types.TypePlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing,org.eclipse.swt,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.core.resources,org.eclipse.jface,org.eclipse.ui.workbench,org.eclipse.ui.views&#xA;Bundle-Name: Types Plug-in&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing.types;singleton:=true&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.types.base,org.dyno.visual.swing.types.editor,org.dyno.visual.swing.types.renderer&#xA;
+            Bundle-Vendor: Dynamic Object Organization&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.dyno.visual.swing.types.TypePlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing,org.eclipse.swt,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.core.resources,org.eclipse.jface,org.eclipse.ui.workbench,org.eclipse.ui.views&#xA;Bundle-Name: Types Plug-in&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing.types;singleton:=true&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.types.base,org.dyno.visual.swing.types.editor,org.dyno.visual.swing.types.renderer
           </instruction>
         </instructions>
       </touchpointData>
@@ -723,7 +723,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing,org.dyno.visual.swing.widgets,org.eclipse.jdt.core,org.eclipse.ui.views,org.eclipse.core.commands,org.eclipse.ui.workbench,org.eclipse.equinox.common,org.eclipse.jface,org.eclipse.equinox.registry,org.eclipse.core.runtime&#xA;Bundle-Activator: org.dyno.visual.swing.widgets.grouplayout.GroupLayoutPlugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Bundle-SymbolicName: org.dyno.visual.swing.grouplayouts; singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: GroupLayout Plug-in&#xA;Bundle-Vendor: Dynamic Object Organization&#xA;
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing,org.dyno.visual.swing.widgets,org.eclipse.jdt.core,org.eclipse.ui.views,org.eclipse.core.commands,org.eclipse.ui.workbench,org.eclipse.equinox.common,org.eclipse.jface,org.eclipse.equinox.registry,org.eclipse.core.runtime&#xA;Bundle-Activator: org.dyno.visual.swing.widgets.grouplayout.GroupLayoutPlugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Bundle-SymbolicName: org.dyno.visual.swing.grouplayouts; singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: GroupLayout Plug-in&#xA;Bundle-Vendor: Dynamic Object Organization
           </instruction>
         </instructions>
       </touchpointData>
@@ -760,7 +760,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-Vendor: Dynamic Object Organization&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.dyno.visual.swing.widgets.WidgetPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.editors,org.eclipse.ui.ide,org.dyno.visual.swing,org.dyno.visual.swing.types,org.eclipse.jdt.core,org.eclipse.ui.views,org.dyno.visual.swing.parser&#xA;Bundle-Name: Widgets Plug-in&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing.widgets; singleton:=true&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.widgets&#xA;
+            Bundle-Vendor: Dynamic Object Organization&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.dyno.visual.swing.widgets.WidgetPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.editors,org.eclipse.ui.ide,org.dyno.visual.swing,org.dyno.visual.swing.types,org.eclipse.jdt.core,org.eclipse.ui.views,org.dyno.visual.swing.parser&#xA;Bundle-Name: Widgets Plug-in&#xA;Bundle-ActivationPolicy: lazy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing.widgets; singleton:=true&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.widgets
           </instruction>
         </instructions>
       </touchpointData>
@@ -789,7 +789,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: LookAndFeel Plug-in&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Require-Bundle: org.dyno.visual.swing,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui;bundle-version=&quot;3.4.1&quot;&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Bundle-SymbolicName: org.dyno.visual.swing.lnfs;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Dynamic Object Organization&#xA;
+            Bundle-ManifestVersion: 2&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: LookAndFeel Plug-in&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Require-Bundle: org.dyno.visual.swing,org.eclipse.core.runtime,org.eclipse.jdt.core,org.eclipse.ui;bundle-version=&quot;3.4.1&quot;&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Bundle-SymbolicName: org.dyno.visual.swing.lnfs;singleton:=true&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Dynamic Object Organization
           </instruction>
         </instructions>
       </touchpointData>
@@ -823,7 +823,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing.widgets,org.dyno.visual.swing,org.dyno.visual.swing.types,org.eclipse.jdt.core,org.eclipse.ui.views,org.eclipse.swt,org.eclipse.jface,org.eclipse.core.runtime,org.eclipse.ui.workbench&#xA;Bundle-Activator: org.dyno.visual.swing.widgets.layout.LayoutPlugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Bundle-SymbolicName: org.dyno.visual.swing.layouts; singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Layouts Plug-in&#xA;Bundle-Vendor: Dynamic Object Organization&#xA;
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.dyno.visual.swing.widgets,org.dyno.visual.swing,org.dyno.visual.swing.types,org.eclipse.jdt.core,org.eclipse.ui.views,org.eclipse.swt,org.eclipse.jface,org.eclipse.core.runtime,org.eclipse.ui.workbench&#xA;Bundle-Activator: org.dyno.visual.swing.widgets.layout.LayoutPlugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Bundle-SymbolicName: org.dyno.visual.swing.layouts; singleton:=true&#xA;Bundle-ActivationPolicy: lazy&#xA;Bundle-Name: Layouts Plug-in&#xA;Bundle-Vendor: Dynamic Object Organization
           </instruction>
         </instructions>
       </touchpointData>
@@ -862,7 +862,7 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-Vendor: Dynamic Object Organization&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.editors,org.eclipse.ui.ide,org.eclipse.jdt.core,org.eclipse.jdt.ui,org.eclipse.ui.views,org.eclipse.ui.forms,org.eclipse.ui.navigator&#xA;Bundle-Name: Swing Plug-in&#xA;Bundle-ActivationPolicy: lazy;exclude:=&quot;org.dyno.visual.swing.contentTypes&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.base,org.dyno.visual.swing.layouts,org.dyno.visual.swing.plugin.spi&#xA;
+            Bundle-Vendor: Dynamic Object Organization&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.editors,org.eclipse.ui.ide,org.eclipse.jdt.core,org.eclipse.jdt.ui,org.eclipse.ui.views,org.eclipse.ui.forms,org.eclipse.ui.navigator&#xA;Bundle-Name: Swing Plug-in&#xA;Bundle-ActivationPolicy: lazy;exclude:=&quot;org.dyno.visual.swing.contentTypes&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true&#xA;Bundle-Version: 0.9.6.I20081215-1500&#xA;Export-Package: org.dyno.visual.swing.base,org.dyno.visual.swing.layouts,org.dyno.visual.swing.plugin.spi
           </instruction>
         </instructions>
       </touchpointData>
