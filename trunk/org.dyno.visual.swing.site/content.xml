@@ -3,7 +3,7 @@
 <repository name='file:/D:/eclipse3.4.1/workspace/org.dyno.visual.swing.site/ - metadata' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1229326752941'/>
+    <property name='p2.timestamp' value='1229329064864'/>
   </properties>
   <units size='15'>
     <unit id='org.dyno.visual.swing.parser' version='0.9.6.I20081202-1500'>
