@@ -7,14 +7,12 @@ import java.util.List;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.lnfs.LnfPlugin;
 import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IClasspathContainer;
 
 public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtension {
@@ -32,11 +30,7 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 				if (count > 1) {
 					String type = containerPath.segment(1);
 					if (type.equals(LOOK_AND_FEEL_EXT)) {
-						IPath path = Platform.getLocation();
-						path = path.append(".metadata");
-						path = path.append(".plugins");
-						path = path.append(LnfPlugin.getPluginID());
-						path = path.append(LOOK_AND_FEEL_LIB_DIR);
+						IPath path = LookAndFeelLib.getLafLibDir();
 						if (count > 2) {
 							String libDir = containerPath.segment(2);
 							path = path.append(libDir);
@@ -53,17 +47,20 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 	}
 
 	@Override
-	public IClasspathContainer[] listLibPaths() {
+	public IClasspathContainer[] listLibPaths(boolean refresh) {
+		if(refresh){
+			initLafLibs();	
+		}
 		return lnfLibs;
+		
 	}
 	@Override
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) throws CoreException {
-		IPath path = Platform.getLocation();
-		path = path.append(".metadata");
-		path = path.append(".plugins");
-		path = path.append(LnfPlugin.getPluginID());
-		path = path.append(LOOK_AND_FEEL_LIB_DIR);
+		initLafLibs();		
+	}
+	private void initLafLibs() {
+		IPath path = LookAndFeelLib.getLafLibDir();
 		File folder = path.toFile();
 		if (folder.exists()) {
 			File[] folders = folder.listFiles(new FileFilter() {
@@ -82,6 +79,6 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 				lnfLibs = new IClasspathContainer[paths.size()];
 				lnfLibs = paths.toArray(lnfLibs);
 			}
-		}		
+		}
 	}
 }

@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,7 +46,19 @@ public class LafPreference extends PreferencePage implements
 		label.setLayoutData(data);
 		viewer = new ListViewer(main, SWT.SINGLE | SWT.BORDER);
 		viewer.setContentProvider(new LibContProv());
-		viewer.setLabelProvider(new LabelProvider());
+		viewer.setLabelProvider(new LabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+				if (element == null)
+					return "";
+				else if (element instanceof IClasspathContainer) {
+					return ((IClasspathContainer) element).getDescription();
+				} else
+					return super.getText(element);
+			}
+
+		});
 		viewer.setInput(new LibInput());
 		data = new GridData();
 		data.grabExcessHorizontalSpace = true;
@@ -70,12 +83,13 @@ public class LafPreference extends PreferencePage implements
 
 		btnAdd = new Button(right, SWT.PUSH);
 		btnAdd.setText("  Add ...  ");
-		btnAdd.addSelectionListener(new SelectionAdapter(){
+		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				btnAddSelected();
-			}});
-		
+			}
+		});
+
 		btnEdit = new Button(right, SWT.PUSH);
 		btnEdit.setText("  Edit ...  ");
 
@@ -83,22 +97,28 @@ public class LafPreference extends PreferencePage implements
 		btnDel.setText("  Delete   ");
 
 		updateButtonState();
-		
+
 		return main;
 	}
-	private void btnAddSelected(){
+
+	private void btnAddSelected() {
 		Shell parent = btnAdd.getShell();
 		AddLafDialog dialog = new AddLafDialog(parent);
-		dialog.open();
+		if(dialog.open()==Window.OK){
+			viewer.refresh();
+		}
 	}
+
 	private void updateButtonState() {
 		ISelection sel = viewer.getSelection();
-		boolean empty=sel==null||sel.isEmpty();
-		btnAdd.setEnabled(true);
+		boolean empty = sel == null || sel.isEmpty();
 		btnEdit.setEnabled(!empty);
 		btnDel.setEnabled(!empty);
 	}
-	private class LibInput{};
+
+	private class LibInput {
+	};
+
 	private class LibContProv implements IStructuredContentProvider {
 		@Override
 		public Object[] getElements(Object inputElement) {
@@ -106,7 +126,7 @@ public class LafPreference extends PreferencePage implements
 			List<ILibraryExtension> libExts = ExtensionRegistry
 					.getLibExtensions();
 			for (ILibraryExtension libExt : libExts) {
-				IClasspathContainer[] libPaths = libExt.listLibPaths();
+				IClasspathContainer[] libPaths = libExt.listLibPaths(true);
 				if (libPaths != null) {
 					for (IClasspathContainer libPath : libPaths)
 						paths.add(libPath);

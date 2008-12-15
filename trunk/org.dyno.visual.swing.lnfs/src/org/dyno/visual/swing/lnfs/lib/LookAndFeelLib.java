@@ -62,15 +62,18 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 	private LookAndFeelLib(String dir) {
 		this.libPath = JavaUtil.VS_LIBRARY.append(
 				LookAndFeelLibrary.LOOK_AND_FEEL_EXT).append(dir);
+		IPath path = getLafLibDir();
+		path = path.append(dir);
+		initLaf(path);
+	}
+	public static IPath getLafLibDir(){
 		IPath path = Platform.getLocation();
 		path = path.append(".metadata");
 		path = path.append(".plugins");
 		path = path.append(LnfPlugin.getPluginID());
 		path = path.append(LookAndFeelLibrary.LOOK_AND_FEEL_LIB_DIR);
-		path = path.append(dir);
-		initLaf(path);
+		return path;
 	}
-
 	private void initLaf(IPath path) {
 		IPath laf_path = path.append(LAF_FILE);
 		File laf_file = laf_path.toFile();
