@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Swing Plug-in
 Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true
-Bundle-Version: 0.9.6.I20081202-1500
+Bundle-Version: 0.9.6.I20081215-1500
 Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin
 Bundle-Vendor: Dynamic Object Organization
 Require-Bundle: org.eclipse.ui,
