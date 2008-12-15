@@ -3,7 +3,7 @@
 <repository name='Visual Swing Designer for Eclipse' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1229329805355'/>
+    <property name='p2.timestamp' value='1229332149309'/>
   </properties>
   <units size='24'>
     <unit id='org.dyno.visual.swing.parser' version='0.9.6.I20081202-1500'>
