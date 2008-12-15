@@ -30,4 +30,12 @@
             class="org.dyno.visual.swing.lnfs.lib.LookAndFeelLibrary">
       </library>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.dyno.visual.swing.lnfs.preference.LafPreference"
+            id="org.dyno.visual.swing.lnfs.lafPreference"
+            name="Swing Look And Feel">
+      </page>
+   </extension>
 </plugin>

@@ -59,7 +59,7 @@ public class DialogBorder implements Border {
 	private static Color BEGIN_COLOR;
 	private static Color END_COLOR;
 	private static Color CONTROL_COLOR;
-
+	private static boolean isxp;
 	private static boolean isXP() {
 		Boolean xp = (Boolean) Toolkit.getDefaultToolkit().getDesktopProperty(
 				"win.xpstyle.themeActive");
@@ -67,17 +67,21 @@ public class DialogBorder implements Border {
 	}
 
 	static {
-		boolean isXP = isXP();
+		initialize();
+	}
+
+	private static void initialize() {
+		isxp = isXP();
 		String ext = "";
-		if (isXP) {
+		if (isxp) {
 			TITLE_HEIGHT = 27;
 		} else {
 			TITLE_HEIGHT = 19;
 			ext = "_";
-			BEGIN_COLOR = new Color(10, 36, 106);
-			END_COLOR = new Color(166, 202, 240);
-			CONTROL_COLOR = new Color(212, 208, 200);
 		}
+		BEGIN_COLOR = new Color(10, 36, 106);
+		END_COLOR = new Color(166, 202, 240);
+		CONTROL_COLOR = new Color(212, 208, 200);
 		MediaTracker tracker = new MediaTracker(new JFrame());
 		TOP_BORDER = Toolkit.getDefaultToolkit().getImage(
 				DialogBorder.class.getResource("top_border" + ext + ".png"));
@@ -128,6 +132,8 @@ public class DialogBorder implements Border {
 
 	public void paintBorder(Component c, Graphics g, int x, int y, int width,
 			int height) {
+		if(isxp!=isXP())
+			initialize();
 		int gx = x + OUTER_PAD;
 		int gy = y;
 		g.drawImage(TOP_BORDER, gx, gy, width - 2 * OUTER_PAD, OUTER_PAD, c);
@@ -211,6 +217,8 @@ public class DialogBorder implements Border {
 	}
 
 	public Insets getBorderInsets(Component c) {
+		if(isxp!=isXP())
+			initialize();
 		return new Insets(OUTER_PAD + TITLE_HEIGHT, OUTER_PAD, OUTER_PAD,
 				OUTER_PAD);
 	}
