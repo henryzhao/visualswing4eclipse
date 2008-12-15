@@ -38,7 +38,7 @@ public class JarSrcDialog extends Dialog {
 		Label lblJar = new Label(main, SWT.NONE);
 		lblJar.setText("Archive [Required]:");
 		GridData data = new GridData();
-		data.widthHint = 200;
+		data.widthHint = 180;
 		txtJar = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtJar.setLayoutData(data);
 		txtJar.addModifyListener(new ModifyListener(){
@@ -57,7 +57,7 @@ public class JarSrcDialog extends Dialog {
 		Label lblSrc = new Label(main, SWT.NONE);
 		lblSrc.setText("Source [Optional]:");
 		data = new GridData();
-		data.widthHint = 200;
+		data.widthHint = 180;
 		txtSrc = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtSrc.setLayoutData(data);
 		txtSrc.addModifyListener(new ModifyListener(){
