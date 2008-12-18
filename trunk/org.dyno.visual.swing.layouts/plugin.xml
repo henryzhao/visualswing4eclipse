@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.dyno.visual.swing.widgets.layoutAdapter">
+      <layout
+            class="org.dyno.visual.swing.widgets.layout.FlowLayoutAdapter"
+            layoutClass="java.awt.FlowLayout" 
+            name="FlowLayout"
+            />
+      <layout
+            class="org.dyno.visual.swing.widgets.layout.BorderLayoutAdapter"
+            layoutClass="java.awt.BorderLayout" 
+            layoutBean="org.dyno.visual.swing.widgets.layout.BorderLayoutAdapter"
+            name="BorderLayout"
+            />
+      <layout
+            class="org.dyno.visual.swing.widgets.layout.GridLayoutAdapter"
+            layoutClass="java.awt.GridLayout" 
+            layoutBean="org.dyno.visual.swing.widgets.layout.GridLayoutAdapter"
+            name="GridLayout"
+            />
+      <layout
+            class="org.dyno.visual.swing.widgets.layout.BoxLayoutAdapter"
+            layoutClass="javax.swing.BoxLayout" 
+            layoutBean="org.dyno.visual.swing.widgets.layout.BoxLayoutAdapter"
+            name="BoxLayout"
+            />
+      <layout
+            class="org.dyno.visual.swing.widgets.layout.CardLayoutAdapter"
+            layoutClass="java.awt.CardLayout" 
+            layoutBean="org.dyno.visual.swing.widgets.layout.CardLayoutAdapter"
+            name="CardLayout"
+            />
+      <layout
+            class="org.dyno.visual.swing.widgets.layout.GridBagLayoutAdapter"
+            layoutClass="java.awt.GridBagLayout" 
+            layoutBean="org.dyno.visual.swing.widgets.layout.GridBagLayoutAdapter"
+            name="GridBagLayout"
+            />
+   </extension>
+</plugin>
