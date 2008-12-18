@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Widgets Plug-in
+Bundle-SymbolicName: org.dyno.visual.swing.widgets; singleton:=true
+Bundle-Version: 0.9.6.I20081202-1500
+Bundle-Activator: org.dyno.visual.swing.widgets.WidgetPlugin
+Require-Bundle: org.dyno.visual.swing,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.core.resources,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.views
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: Dynamic Object Organization
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
