@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.dyno.visual.swing.lnf.lnfAdapter">
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.MetaLookAndFeelAdapter"
+            class="javax.swing.plaf.metal.MetalLookAndFeel">
+      </lookandfeel>
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.WindowsLookAndFeelAdapter"
+            class="com.sun.java.swing.plaf.windows.WindowsLookAndFeel">
+      </lookandfeel>
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.WindowsClassicLookAndFeelAdapter"
+            class="com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel">
+      </lookandfeel>
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.MotifLookAndFeelAdapter"
+            class="com.sun.java.swing.plaf.motif.MotifLookAndFeel">
+      </lookandfeel>
+      <lookandfeel
+            adapter="org.dyno.visual.swing.lnfs.NimbusLookAndFeelAdapter"
+            class="com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel">
+      </lookandfeel>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.libraryExtension">
+      <library
+            class="org.dyno.visual.swing.lnfs.lib.LookAndFeelLibrary">
+      </library>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.dyno.visual.swing.lnfs.preference.LafPreference"
+            id="org.dyno.visual.swing.lnfs.lafPreference"
+            name="Swing Look And Feel">
+      </page>
+   </extension>
+</plugin>
