@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.dyno.visual.swing.feature_1.0.0.jar" id="org.dyno.visual.swing.feature" version="1.0.0">
+      <category name="Visual Swing Designer for Eclipse"/>
+   </feature>
+   <category-def name="Visual Swing Designer for Eclipse" label="Visual Swing Designer for Eclipse"/>
+</site>
