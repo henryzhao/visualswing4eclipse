@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   
+   <extension
+         point="org.dyno.visual.swing.valueType"
+         id="org.dyno.visual.swing.types"
+         name="Value Types">
+		<type
+        class="boolean"
+        editor="org.dyno.visual.swing.types.editor.BooleanEditor"
+        endec="org.dyno.visual.swing.types.endec.BooleanEndec"
+        renderer="org.dyno.visual.swing.types.renderer.BooleanRenderer"/>
+		<type
+        class="java.awt.Color"
+        codegen="org.dyno.visual.swing.types.base.ColorWrapper"
+        comparator="org.dyno.visual.swing.types.comparator.ColorComparator"
+        editor="org.dyno.visual.swing.types.editor.ColorEditor"
+        endec="org.dyno.visual.swing.types.endec.ColorEndec"
+        renderer="org.dyno.visual.swing.types.renderer.ColorRenderer"/>
+		<type class="javax.swing.ListModel" 
+					renderer = "org.dyno.visual.swing.types.renderer.ListItemRenderer"
+					editor = "org.dyno.visual.swing.types.editor.ListItemEditor"
+					codegen = "org.dyno.visual.swing.types.endec.ListModelWrapper"/>					
+		<type class="javax.swing.ComboBoxModel" 
+					renderer = "org.dyno.visual.swing.types.renderer.ListItemRenderer"
+					editor = "org.dyno.visual.swing.types.editor.ListItemEditor"
+					codegen = "org.dyno.visual.swing.types.endec.ComboBoxModelWrapper"
+					cloner = "org.dyno.visual.swing.types.cloner.ComboBoxModelCloner"/>					
+		<type
+        class="java.awt.Font"
+        codegen="org.dyno.visual.swing.types.base.FontWrapper"
+        comparator="org.dyno.visual.swing.types.comparator.FontComparator"
+        editor="org.dyno.visual.swing.types.editor.FontEditor"
+        endec="org.dyno.visual.swing.types.endec.FontEndec"
+        renderer="org.dyno.visual.swing.types.renderer.FontRenderer"/>
+		<type
+        class="int"
+        editor="org.dyno.visual.swing.types.editor.IntegerEditor"
+        endec="org.dyno.visual.swing.types.endec.IntegerEndec"/>
+		<type
+        class="char"
+        editor="org.dyno.visual.swing.types.editor.CharEditor"
+        endec="org.dyno.visual.swing.types.endec.CharEndec"
+        renderer="org.dyno.visual.swing.types.renderer.CharRenderer"/>
+		<type
+        class="long"
+        editor="org.dyno.visual.swing.types.editor.LongEditor"
+        endec="org.dyno.visual.swing.types.endec.LongEndec"/>
+		<type
+        class="float"
+        codegen="org.dyno.visual.swing.types.endec.FloatWrapper"
+        editor="org.dyno.visual.swing.types.editor.FloatEditor"
+        endec="org.dyno.visual.swing.types.endec.FloatEndec"/>
+		<type
+        class="java.awt.Dimension"
+        codegen="org.dyno.visual.swing.types.endec.DimensionWrapper"
+        editor="org.dyno.visual.swing.types.editor.DimensionEditor"
+        endec="org.dyno.visual.swing.types.endec.DimensionEndec"
+        renderer="org.dyno.visual.swing.types.renderer.DimensionRenderer"/>
+		<type
+        class="java.lang.String"
+        codegen="org.dyno.visual.swing.types.endec.StringWrapper"
+        editor="org.dyno.visual.swing.types.editor.StringEditor"
+        endec="org.dyno.visual.swing.types.endec.StringEndec"/>
+		<type class="java.awt.LayoutManager"
+					renderer = "org.dyno.visual.swing.types.renderer.LayoutRenderer"
+					editor = "org.dyno.visual.swing.types.editor.LayoutEditor"/>
+		<type class="javax.swing.border.Border"
+					editor = "org.dyno.visual.swing.types.editor.BorderEditor"
+					renderer = "org.dyno.visual.swing.types.renderer.BorderRenderer"/>
+		<type
+        class="java.awt.Insets"
+        codegen="org.dyno.visual.swing.types.endec.InsetsWrapper"
+        comparator="org.dyno.visual.swing.types.comparator.InsetsComparator"
+        editor="org.dyno.visual.swing.types.editor.InsetsEditor"
+        endec="org.dyno.visual.swing.types.endec.InsetsEndec"
+        renderer="org.dyno.visual.swing.types.renderer.InsetsRenderer"/>
+		<type class="javax.swing.SpinnerModel"
+					renderer = "org.dyno.visual.swing.types.renderer.SpinnerModelRenderer"
+					editor = "org.dyno.visual.swing.types.editor.SpinnerModelEditor"
+					codegen = "org.dyno.visual.swing.types.endec.SpinnerModelWrapper"
+					comparator = "org.dyno.visual.swing.types.comparator.SpinnerModelComparator"
+					cloner = "org.dyno.visual.swing.types.cloner.SpinnerModelCloner"/>
+		<type
+        class="java.awt.Rectangle"
+        codegen="org.dyno.visual.swing.types.endec.RectangleWrapper"
+        editor="org.dyno.visual.swing.types.editor.RectangleEditor"
+        endec="org.dyno.visual.swing.types.endec.RectangleEndec"
+        renderer="org.dyno.visual.swing.types.renderer.RectangleRenderer"/>
+		<type class="javax.swing.table.TableModel"
+					renderer = "org.dyno.visual.swing.types.renderer.ClassRenderer"
+					codegen = "org.dyno.visual.swing.types.endec.TableModelWrapper"
+					cloner = "org.dyno.visual.swing.types.cloner.TableModelCloner"/>
+		<type class="javax.swing.tree.TreeModel"
+					renderer = "org.dyno.visual.swing.types.renderer.ClassRenderer"
+					codegen = "org.dyno.visual.swing.types.endec.TreeModelWrapper"/>
+		<type class="java.util.Date"
+					codegen = "org.dyno.visual.swing.types.endec.DateWrapper"/>
+  <type
+        class="java.lang.Boolean"
+        editor="org.dyno.visual.swing.types.editor.BooleanEditor"
+        endec="org.dyno.visual.swing.types.endec.BooleanEndec"
+        renderer="org.dyno.visual.swing.types.renderer.BooleanRenderer">
+  </type>
+  <type
+        class="java.lang.Integer"
+        editor="org.dyno.visual.swing.types.editor.IntegerEditor"
+        endec="org.dyno.visual.swing.types.endec.IntegerEndec">
+  </type>
+  <type
+        class="java.lang.Character"
+        editor="org.dyno.visual.swing.types.editor.CharEditor"
+        endec="org.dyno.visual.swing.types.endec.CharEndec"
+        renderer="org.dyno.visual.swing.types.renderer.CharRenderer">
+  </type>
+  <type
+        class="java.lang.Long"
+        editor="org.dyno.visual.swing.types.editor.LongEditor"
+        endec="org.dyno.visual.swing.types.endec.LongEndec">
+  </type>
+  <type
+        class="java.lang.Float"
+        codegen="org.dyno.visual.swing.types.endec.FloatWrapper"
+        editor="org.dyno.visual.swing.types.editor.FloatEditor"
+        endec="org.dyno.visual.swing.types.endec.FloatEndec">
+  </type>
+  <type
+        class="double"
+        endec="org.dyno.visual.swing.types.endec.DoubleEndec">
+  </type>
+  <type
+        class="java.lang.Double"
+        endec="org.dyno.visual.swing.types.endec.DoubleEndec">
+  </type>
+   </extension>
+</plugin>
