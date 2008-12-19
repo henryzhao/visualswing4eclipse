@@ -26,10 +26,15 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.ui.refactoring.RenameSupport;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
-public class WidgetParser implements IParser, IConstants, IAdapterContext{
-	protected WidgetAdapter adapter;	
+public class WidgetParser implements IParser, IConstants, IAdapterContext {
+	protected WidgetAdapter adapter;
+
 	protected IJavaElement getSibling(IType type, IJavaElement element) {
 		try {
 			IJavaElement[] children = type.getChildren();
@@ -53,7 +58,8 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 		return null;
 	}
 
-	public boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+	public boolean generateCode(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
 		if (!adapter.isDirty())
 			return true;
 		if (adapter.isRoot()) {
@@ -62,65 +68,56 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 			return createNonRootCode(type, imports, monitor);
 		}
 	}
-	private boolean createNonRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+
+	private boolean createNonRootCode(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
 		boolean success = true;
-		IJavaElement sibling = null;
-		if (adapter.getLastName() != null) {
-			IField lastField;
-			if (!adapter.getLastName().equals(adapter.getName())) {
-				lastField = type.getField(getFieldName(adapter.getLastName()));
-			} else {
-				lastField = type.getField(getFieldName(adapter.getName()));
-			}
-			if (lastField != null && lastField.exists()) {
-				try {
-					lastField.delete(true, monitor);
-				} catch (Exception e) {
-					ParserPlugin.getLogger().error(e);
-					success = false;
-				}
-			}
-		}
-		IField field = type.getField(getFieldName(adapter.getName()));
-		if (field != null && !field.exists()) {
-			StringBuilder builder = new StringBuilder();
-			builder.append(getAccessCode(adapter.getFieldAccess()));
-			builder.append(" ");
-			String fqcn = adapter.getWidgetCodeClassName();
-			String beanName = imports.addImport(fqcn);
-			builder.append(beanName);
-			builder.append(" ");
-			builder.append(getFieldName(adapter.getName()));
-			builder.append(";\n");
+		String lastName = adapter.getLastName();
+		String name = adapter.getName();
+		if (lastName != null && !lastName.equals(name)) {
+			IField lastField = type.getField(getFieldName(lastName));
 			try {
-				type.createField(builder.toString(), sibling, false, monitor);
-			} catch (JavaModelException e) {
+				int flags = RenameSupport.UPDATE_GETTER_METHOD
+						| RenameSupport.UPDATE_REFERENCES
+						| RenameSupport.UPDATE_SETTER_METHOD;
+				RenameSupport rs = RenameSupport.create(lastField, name, flags);
+				if (rs.preCheck().isOK()) {
+					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					Shell parent = window.getShell();
+					rs.perform(parent, window);
+				}
+			} catch (Exception e) {
 				ParserPlugin.getLogger().error(e);
-				success = false;
 			}
-		}
-		sibling = null;
-		if (adapter.getLastName() != null && !adapter.getLastName().equals(adapter.getName())) {
-			String lastGetMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getLastName());
-			IMethod lastMethod = type.getMethod(lastGetMethodName,
-					new String[0]);
-			if (lastMethod != null && lastMethod.exists()) {
+		} else if (lastName==null){
+			IField field = type.getField(getFieldName(name));
+			if (field != null && !field.exists()) {
+				StringBuilder builder = new StringBuilder();
+				builder.append(getAccessCode(adapter.getFieldAccess()));
+				builder.append(" ");
+				String fqcn = adapter.getWidgetCodeClassName();
+				String beanName = imports.addImport(fqcn);
+				builder.append(beanName);
+				builder.append(" ");
+				builder.append(getFieldName(adapter.getName()));
+				builder.append(";\n");
 				try {
-					sibling = getSibling(type, lastMethod);
-					lastMethod.delete(true, monitor);
-				} catch (Exception e) {
+					type.createField(builder.toString(), null, false, monitor);
+				} catch (JavaModelException e) {
 					ParserPlugin.getLogger().error(e);
 					success = false;
 				}
+
 			}
 		}
+		IJavaElement sibling = null;
 		StringBuilder builder = new StringBuilder();
-		String getMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getName());
+		String getMethodName = NamespaceManager.getInstance().getGetMethodName(name);
 		IMethod method = type.getMethod(getMethodName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
 				sibling = getSibling(type, method);
-				method.delete(false, monitor);
+				method.delete(false, monitor);				
 			} catch (JavaModelException e) {
 				ParserPlugin.getLogger().error(e);
 				success = false;
@@ -146,8 +143,7 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 		try {
 			if (sibling == null)
 				sibling = getInitMethodSibling(type);
-			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
-					false, monitor);
+			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
 		} catch (JavaModelException e) {
 			ParserPlugin.getLogger().error(e);
 			success = false;
@@ -163,7 +159,8 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 		Set<EventSetDescriptor> keySet = adapter.getEventDescriptor().keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
-				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+				IEventListenerModel model = adapter.getEventDescriptor().get(
+						eventSet);
 				success = model.createEventMethod(type, imports, monitor);
 			}
 		}
@@ -190,8 +187,8 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 		builder.append(initMethodName);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
-		for(InvisibleAdapter invisible:adapter.getInvisibles()){
-			builder.append(invisible.getCreationMethodName()+"();\n");
+		for (InvisibleAdapter invisible : adapter.getInvisibles()) {
+			builder.append(invisible.getCreationMethodName() + "();\n");
 		}
 		createPostInitCode(builder, imports);
 		builder.append("}\n");
@@ -202,9 +199,9 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 			ParserPlugin.getLogger().error(e);
 			success = false;
 		}
-		for(InvisibleAdapter invisible:adapter.getInvisibles()){
+		for (InvisibleAdapter invisible : adapter.getInvisibles()) {
 			IParser parser = (IParser) invisible.getAdapter(IParser.class);
-			if(parser!=null)
+			if (parser != null)
 				parser.generateCode(type, imports, monitor);
 		}
 		success = createEventMethod(type, imports, monitor);
@@ -212,7 +209,8 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 		return success;
 	}
 
-	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
+	protected void createPostInitCode(StringBuilder builder,
+			ImportRewrite imports) {
 		Dimension size = adapter.getWidget().getSize();
 		builder.append("setSize(" + size.width + ", " + size.height + ");\n");
 	}
@@ -246,17 +244,21 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 
 	private String createSetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
-		for (IWidgetPropertyDescriptor property : properties) {			
-			if (property.isPropertySet(adapter.getLnfClassname(), new StructuredSelection(adapter.getWidget()))
+		ArrayList<IWidgetPropertyDescriptor> properties = adapter
+				.getPropertyDescriptors();
+		for (IWidgetPropertyDescriptor property : properties) {
+			if (property.isPropertySet(adapter.getLnfClassname(),
+					new StructuredSelection(adapter.getWidget()))
 					&& (property.isGencode() || property.isEdited(adapter))) {
-				String setCode = property.getSetCode(adapter.getWidget(), imports);
+				String setCode = property.getSetCode(adapter.getWidget(),
+						imports);
 				if (setCode != null)
 					builder.append(setCode);
 			}
 		}
 		return builder.toString();
 	}
+
 	private String genAddEventCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		Set<EventSetDescriptor> keySet = adapter.getEventDescriptor().keySet();
@@ -266,7 +268,8 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 					builder.append(getFieldName(adapter.getName()) + ".");
 				Method mAdd = eventSet.getAddListenerMethod();
 				builder.append(mAdd.getName() + "(");
-				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+				IEventListenerModel model = adapter.getEventDescriptor().get(
+						eventSet);
 				String newcode = model.createListenerInstance(imports);
 				builder.append(newcode);
 				builder.append(");\n");
@@ -287,7 +290,6 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext{
 		String beanName = imports.addImport(adapter.getWidgetCodeClassName());
 		return "new " + beanName + "()";
 	}
-
 
 	protected String getAccessCode(int access) {
 		switch (access) {
