@@ -32,7 +32,6 @@ import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
-import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -53,7 +52,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.WorkingCopyOwner;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -63,7 +61,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -259,19 +256,16 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory == null)
 			return false;
-		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
-				.getFile());
+		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 		hostProject = unit.getJavaProject();
 		WhiteBoard.setCurrentProject(hostProject);
 		ISourceParser sourceParser = factory.newParser();
-		sourceParser.setSource(unit);
-		boolean success = sourceParser.parse(getShell());
-		if (!success)
+		WidgetAdapter adapter = sourceParser.parse(unit);
+		if (adapter==null)
 			return false;
-		WidgetAdapter rootAdapter = sourceParser.getResult();
-		setUpLookAndFeel(rootAdapter.getWidget().getClass());
+		setUpLookAndFeel(adapter.getWidget().getClass());
 		if (designer != null) {
-			designer.initRootWidget(rootAdapter);
+			designer.initRootWidget(adapter);
 			refreshTree();
 			return true;
 		} else
@@ -301,20 +295,12 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				};
 				ICompilationUnit copy = unit.getWorkingCopy(owner, monitor);
 				ISourceParser sourceParser = factory.newParser();
-				sourceParser.setSource(copy);
-				sourceParser.setLnfChanged(designer.isLnfChanged());
-				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
-				sourceParser.setImportWrite(imports);				
-				WidgetAdapter rootAdapter = WidgetAdapter
-						.getWidgetAdapter(designer.getRoot());
+				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
 				rootAdapter.setProperty("preferred.lookandfeel", this.getLnfClassname());
-				sourceParser.setRootAdapter(rootAdapter);
-				boolean success = sourceParser.genCode(monitor);
+				boolean success = sourceParser.generate(copy, rootAdapter, monitor);
 				rootAdapter.setProperty("preferred.lookandfeel", null);
 				if (success) {
 					try {
-						TextEdit edit = imports.rewriteImports(monitor);
-						JavaUtil.applyEdit(copy, edit, true, monitor);
 						designer.setLnfChanged(false);
 						fireDirty();
 					} catch (Exception e) {

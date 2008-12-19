@@ -476,6 +476,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void validateContent() {
 		editor.validateContent();
+		repaint();
 	}
 
 	public void changeFocused() {

@@ -30,6 +30,7 @@ import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
@@ -78,6 +79,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.text.edits.TextEdit;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * 
@@ -89,19 +92,16 @@ import org.eclipse.swt.widgets.Shell;
 class DefaultSourceParser implements ISourceParser {
 	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser";
 	private ParserFactory factory;
-	private ICompilationUnit unit;
-	private ImportRewrite imports;
 	private List<IFieldParser> fieldParsers;
 
-	public DefaultSourceParser(ParserFactory factory) {
+	DefaultSourceParser(ParserFactory factory) {
 		this.factory = factory;
 		fieldParsers = new ArrayList<IFieldParser>();
 		parseFieldParsers();
 	}
 
 	private void parseFieldParsers() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -119,8 +119,7 @@ class DefaultSourceParser implements ISourceParser {
 				String name = configs[i].getName();
 				if (name.equals("parser")) {
 					try {
-						fieldParsers.add((IFieldParser) configs[i]
-								.createExecutableExtension("class"));
+						fieldParsers.add((IFieldParser) configs[i].createExecutableExtension("class"));
 					} catch (CoreException e) {
 						ParserPlugin.getLogger().error(e);
 					}
@@ -130,66 +129,62 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@Override
-	public WidgetAdapter getResult() {
-		return result;
-	}
-
-	@Override
-	public boolean parse(Shell shell) {
+	public WidgetAdapter parse(ICompilationUnit unit) {
 		try {
 			IType[] types = unit.getPrimary().getAllTypes();
 			for (IType type : types) {
 				if (type.isClass() && Flags.isPublic(type.getFlags())) {
-					if (processType(unit.getPrimary(), type, shell))
-						return true;
+					WidgetAdapter result = processType(unit.getPrimary(), type);
+					if (result != null)
+						return result;
 				}
 			}
 		} catch (Exception e) {
 			ParserPlugin.getLogger().error(e);
 		}
-		return false;
+		return null;
 	}
 
-	private boolean processType(ICompilationUnit unit, IType type, Shell shell)
+	private WidgetAdapter processType(ICompilationUnit unit, IType type)
 			throws JavaModelException {
 		try {
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
 			ArrayList<URL> paths = new ArrayList<URL>();
-			System.out.println();
 			addClasspaths(java_project, paths);
 			URL[] urls = paths.toArray(new URL[paths.size()]);
-			Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
+			Class<?> beanClass = new URLClassLoader(urls, getClass()
+					.getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
 				try {
 					setUpLookAndFeel(lnf);
 				} catch (Exception e) {
+					Shell shell = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow().getShell();
 					MessageDialog.openError(shell, "Error!", e.getMessage());
-					return false;
+					return null;
 				}
 				try {
 					Component bean = (Component) beanClass.newInstance();
 					WidgetAdapter beanAdapter = ExtensionRegistry
 							.createWidgetAdapter(bean);
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
-					parser.setSource(this.unit);
+					parser.setSource(unit);
 					CompilationUnit cunit = (CompilationUnit) parser
 							.createAST(null);
 					parseEventListener(cunit, beanAdapter);
 					initDesignedWidget(cunit, bean);
 					parsePropertyValue(lnf, cunit, beanAdapter);
-					result = beanAdapter;
+					return beanAdapter;
 				} catch (Error re) {
 					ParserPlugin.getLogger().error(re);
-					return false;
 				}
-				return true;
 			}
 		} catch (Exception e) {
 			ParserPlugin.getLogger().error(e);
 		}
-		return false;
+		return null;
 	}
 
 	private void addClasspaths(IJavaProject java_project, ArrayList<URL> paths)
@@ -209,7 +204,8 @@ class DefaultSourceParser implements ISourceParser {
 			case IClasspathEntry.CPE_LIBRARY:
 				switch (path.getContentKind()) {
 				case IPackageFragmentRoot.K_BINARY:
-					IPath ip = ResourcesPlugin.getWorkspace().getRoot().getLocation().append(path.getPath());
+					IPath ip = ResourcesPlugin.getWorkspace().getRoot()
+							.getLocation().append(path.getPath());
 					url = ip.toFile().toURI().toURL();
 					break;
 				}
@@ -366,7 +362,6 @@ class DefaultSourceParser implements ISourceParser {
 			String widgetName = getNameFromFieldName(fieldName);
 			adapter.setName(widgetName);
 			adapter.setLastName(widgetName);
-			// set field access
 			int flags = field.getModifiers();
 			if (Modifier.isPrivate(flags)) {
 				adapter.setFieldAccess(WidgetAdapter.ACCESS_PRIVATE);
@@ -377,7 +372,6 @@ class DefaultSourceParser implements ISourceParser {
 			} else {
 				adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
 			}
-			// set get access
 			String getName = getGetMethodName(fieldName);
 			Method getMethod = clazz.getDeclaredMethod(getName);
 			flags = getMethod.getModifiers();
@@ -449,13 +443,6 @@ class DefaultSourceParser implements ISourceParser {
 		return NamespaceManager.getInstance().getNameFromFieldName(fieldName);
 	}
 
-	@Override
-	public void setSource(ICompilationUnit source) {
-		this.unit = source;
-	}
-
-	private WidgetAdapter result;
-
 	private boolean isDesigningField(IType type, IField field) {
 		try {
 			String sig = field.getTypeSignature();
@@ -496,8 +483,9 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@Override
-	public boolean genCode(IProgressMonitor monitor) {
+	public boolean generate(ICompilationUnit unit, WidgetAdapter root, IProgressMonitor monitor) {
 		try {
+			ImportRewrite imports = JavaUtil.createImportRewrite(unit);
 			String unit_name = unit.getElementName();
 			int dot = unit_name.lastIndexOf('.');
 			if (dot != -1)
@@ -506,7 +494,7 @@ class DefaultSourceParser implements ISourceParser {
 			if (type != null) {
 				ArrayList<String> fieldAdapters = listBeanName(root);
 				IParser parser = (IParser) root.getAdapter(IParser.class);
-				if(parser==null)
+				if (parser == null)
 					return false;
 				boolean success = parser.generateCode(type, imports, monitor);
 				IField[] fields = type.getFields();
@@ -525,25 +513,26 @@ class DefaultSourceParser implements ISourceParser {
 				for (String declare : declared) {
 					removeField(type, declare, monitor);
 				}
-				// Remove unused private method
 				IMethod[] methods = type.getMethods();
 				for (IMethod method : methods) {
 					if (isUnusedPrivateMethod(type, method)) {
 						method.delete(false, monitor);
 					}
 				}
-				if (lnfChanged) {
-					IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL");
-					if (lnfField.exists()) {
-						lnfField.delete(false, monitor);
-					}
-					String className = (String) root.getProperty("preferred.lookandfeel");					
-					String newfield = "private static final "
-							+ imports.addImport("java.lang.String")
-							+ " PREFERRED_LOOK_AND_FEEL = "
-							+ (className == null ? "null" : "\"" + className
-									+ "\"") + ";\n";
-					type.createField(newfield, null, false, monitor);
+				IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL");
+				if (lnfField.exists()) {
+					lnfField.delete(false, monitor);
+				}
+				String className = (String) root.getProperty("preferred.lookandfeel");
+				String newfield = "private static final "
+						+ imports.addImport("java.lang.String")
+						+ " PREFERRED_LOOK_AND_FEEL = "
+						+ (className == null ? "null" : "\"" + className + "\"")
+						+ ";\n";
+				type.createField(newfield, null, false, monitor);
+				if (success) {
+					TextEdit edit = imports.rewriteImports(monitor);
+					JavaUtil.applyEdit(unit, edit, true, monitor);
 				}
 				return success;
 			} else
@@ -645,23 +634,4 @@ class DefaultSourceParser implements ISourceParser {
 			}
 		}
 	}
-
-	@Override
-	public void setRootAdapter(WidgetAdapter root) {
-		this.root = root;
-	}
-
-	private WidgetAdapter root;
-
-	@Override
-	public void setImportWrite(ImportRewrite imports) {
-		this.imports = imports;
-	}
-
-	@Override
-	public void setLnfChanged(boolean b) {
-		lnfChanged = b;
-	}
-
-	private boolean lnfChanged;
 }
