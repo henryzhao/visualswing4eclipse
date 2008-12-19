@@ -15,8 +15,6 @@ package org.dyno.visual.swing.plugin.spi;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
-import org.eclipse.swt.widgets.Shell;
 /**
  * 
  * ISourceParser
@@ -25,18 +23,7 @@ import org.eclipse.swt.widgets.Shell;
  * @author William Chen
  */
 public interface ISourceParser {
-	void setSource(ICompilationUnit source);
-	
-	void setImportWrite(ImportRewrite imports);
-	
-	boolean parse(Shell shell);
-
-	WidgetAdapter getResult();
-
-	void setRootAdapter(WidgetAdapter root);
-	
-	void setLnfChanged(boolean b);
-	
-	boolean genCode(IProgressMonitor monitor);
+	WidgetAdapter parse(ICompilationUnit unit);
+	boolean generate(ICompilationUnit unit,WidgetAdapter root,IProgressMonitor monitor);
 }
 
