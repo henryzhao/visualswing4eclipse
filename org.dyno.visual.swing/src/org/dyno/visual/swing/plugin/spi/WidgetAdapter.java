@@ -83,8 +83,8 @@ import org.osgi.framework.Bundle;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class WidgetAdapter extends AdaptableAdapter implements IExecutableExtension, Cloneable,
-		IPropertySourceProvider, IConstants {
+public abstract class WidgetAdapter extends AdaptableAdapter implements
+		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants {
 	private static Icon FORBIDDEN_ICON;
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class
@@ -284,7 +284,6 @@ public abstract class WidgetAdapter extends AdaptableAdapter implements IExecuta
 		return NamespaceManager.getInstance().getGetMethodName(getName());
 	}
 
-
 	public int getCursorLocation(Point p) {
 		Component widget = getWidget();
 		int w = widget.getWidth();
@@ -410,7 +409,8 @@ public abstract class WidgetAdapter extends AdaptableAdapter implements IExecuta
 	public Component getWidget() {
 		if (widget == null) {
 			widget = createWidget();
-			attach();
+			if (widget != null)
+				attach();
 		}
 		return widget;
 	}
@@ -463,11 +463,16 @@ public abstract class WidgetAdapter extends AdaptableAdapter implements IExecuta
 	}
 
 	public VisualDesigner getDesigner() {
-		WidgetAdapter a = getRootAdapter();
-		if (a != null) {
-			return (VisualDesigner) a.getRootPane().getParent();
-		} else
+		Component w=getRootPane();
+		if(w==null)
 			return null;
+		Component parent = w;
+		while(parent!=null&&!(parent instanceof VisualDesigner)){
+			parent=parent.getParent();
+		}
+		if(parent==null)
+			return null;
+		return (VisualDesigner) parent;
 	}
 
 	public void repaintDesigner() {
@@ -702,6 +707,9 @@ public abstract class WidgetAdapter extends AdaptableAdapter implements IExecuta
 	}
 
 	public WidgetAdapter getRootAdapter() {
+		Component w=getRootPane();
+		if(w==null)
+			return null;
 		if (isRoot())
 			return this;
 		WidgetAdapter parent = getParentAdapter();
@@ -711,9 +719,9 @@ public abstract class WidgetAdapter extends AdaptableAdapter implements IExecuta
 	}
 
 	public boolean isRoot() {
-		Component me = getWidget();
+		Component me = getRootPane();
 		if (me == null)
-			return true;
+			return false;
 		Container container = me.getParent();
 		return container == null || container instanceof VisualDesigner;
 	}
@@ -725,7 +733,9 @@ public abstract class WidgetAdapter extends AdaptableAdapter implements IExecuta
 	public CompositeAdapter getParentAdapter() {
 		if (isRoot())
 			return null;
-		Component me = getWidget();
+		Component me = getRootPane();
+		if(me==null)
+			return null;
 		Component parent = me.getParent();
 		while (parent != null) {
 			if (parent instanceof Component) {
