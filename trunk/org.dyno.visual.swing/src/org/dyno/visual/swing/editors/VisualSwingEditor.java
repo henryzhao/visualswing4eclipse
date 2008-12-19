@@ -51,7 +51,6 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.WorkingCopyOwner;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -132,7 +131,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	
 	@Override
 	public boolean isDirty() {
-		return designer != null
+		return !isGeneratingCode && designer != null
 				&& (designer.isLnfChanged() || designer.isDirty());
 	}
 
@@ -290,12 +289,10 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			try {
 				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 				hostProject = unit.getJavaProject();
-				WorkingCopyOwner owner = new WorkingCopyOwner() {};
-				ICompilationUnit copy = unit.getWorkingCopy(owner, monitor);
 				ISourceParser sourceParser = factory.newParser();
 				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
 				rootAdapter.setProperty("preferred.lookandfeel", this.getLnfClassname());
-				boolean success = sourceParser.generate(copy, rootAdapter, monitor);
+				boolean success = sourceParser.generate(unit, rootAdapter, monitor);
 				rootAdapter.setProperty("preferred.lookandfeel", null);
 				if (success) {
 					try {
@@ -303,10 +300,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 						fireDirty();
 					} catch (Exception e) {
 						VisualSwingPlugin.getLogger().error(e);
-					}
-					if (copy.isWorkingCopy()) {
-						copy.commitWorkingCopy(true, monitor);
-						copy.discardWorkingCopy();
 					}
 					if (unit.isWorkingCopy()) {
 						unit.commitWorkingCopy(true, monitor);
