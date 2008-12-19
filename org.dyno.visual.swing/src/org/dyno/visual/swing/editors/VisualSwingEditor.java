@@ -288,11 +288,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory != null) {
 			try {
-				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
-						.getFile());
+				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 				hostProject = unit.getJavaProject();
-				WorkingCopyOwner owner = new WorkingCopyOwner() {
-				};
+				WorkingCopyOwner owner = new WorkingCopyOwner() {};
 				ICompilationUnit copy = unit.getWorkingCopy(owner, monitor);
 				ISourceParser sourceParser = factory.newParser();
 				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());

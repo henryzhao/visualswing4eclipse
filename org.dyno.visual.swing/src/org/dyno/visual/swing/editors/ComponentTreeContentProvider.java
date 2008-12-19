@@ -44,9 +44,18 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			if (parentElement == root) {
 				return new Object[] { root.getDesigner() };
 			} else if (parentElement == root.getDesigner()) {
-				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root.getDesigner().getRoot());				
-				return new Object[] { otherComponents,
-						adapter.getWidget() };
+				Component rootComp = root.getDesigner().getRoot();
+				if (rootComp != null) {
+					WidgetAdapter adapter = WidgetAdapter
+							.getWidgetAdapter(rootComp);
+					if (adapter != null)
+						return new Object[] { otherComponents,
+								adapter.getWidget() };
+					else
+						return new Object[] { otherComponents };
+				} else {
+					return new Object[] { otherComponents };
+				}
 			} else if (parentElement == otherComponents) {
 				List<InvisibleAdapter> children = root.getInvisibles();
 				Object[] values = new Object[children == null ? 0 : children
@@ -58,19 +67,22 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				Component component = (Component) parentElement;
 				WidgetAdapter adapter = WidgetAdapter
 						.getWidgetAdapter(component);
-				Map<EventSetDescriptor, IEventListenerModel> events = adapter.getEventDescriptor();
+				Map<EventSetDescriptor, IEventListenerModel> events = adapter
+						.getEventDescriptor();
 				Set<EventSetDescriptor> keys = events.keySet();
 				List<Object> children = new ArrayList<Object>();
 				if (!keys.isEmpty()) {
 					EventDesc ed = new EventDesc(component);
 					List<EventSet> eventSets = new ArrayList<EventSet>();
 					for (EventSetDescriptor key : keys) {
-						EventSet set = new EventSet(key, key.getDisplayName(), ed);
+						EventSet set = new EventSet(key, key.getDisplayName(),
+								ed);
 						eventSets.add(set);
 						IEventListenerModel model = events.get(key);
 						List<EventMethod> mlist = new ArrayList<EventMethod>();
-						for (MethodDescriptor mthd:model.methods()) {
-							EventMethod method = new EventMethod(mthd, model.getDisplayName(mthd), set);
+						for (MethodDescriptor mthd : model.methods()) {
+							EventMethod method = new EventMethod(mthd, model
+									.getDisplayName(mthd), set);
 							mlist.add(method);
 						}
 						set.setMethods(mlist);
@@ -99,9 +111,10 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				List<EventMethod> list = set.getMethods();
 				Object[] children = new Object[list.size()];
 				return list.toArray(children);
-			} else if(parentElement instanceof InvisibleAdapter){
-				List children = ((InvisibleAdapter)parentElement).getElements();
-				if(children!=null)
+			} else if (parentElement instanceof InvisibleAdapter) {
+				List children = ((InvisibleAdapter) parentElement)
+						.getElements();
+				if (children != null)
 					return children.toArray();
 			}
 		}
@@ -136,10 +149,10 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		} else if (element instanceof EventMethod) {
 			EventMethod m = (EventMethod) element;
 			return m.getParent();
-		} else if(element instanceof InvisibleAdapter){
+		} else if (element instanceof InvisibleAdapter) {
 			return otherComponents;
-		} else if(element instanceof IAdapter){
-			return ((IAdapter)element).getParent();
+		} else if (element instanceof IAdapter) {
+			return ((IAdapter) element).getParent();
 		}
 		return null;
 	}
@@ -174,10 +187,10 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		} else if (element instanceof EventSet) {
 			EventSet eSet = (EventSet) element;
 			return eSet.getMethods().size() > 0;
-		} else if(element instanceof InvisibleAdapter){
-			List list=((InvisibleAdapter)element).getElements();
-			return list!=null&&!list.isEmpty();
-		} 
+		} else if (element instanceof InvisibleAdapter) {
+			List list = ((InvisibleAdapter) element).getElements();
+			return list != null && !list.isEmpty();
+		}
 		return false;
 	}
 
@@ -200,4 +213,3 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 	private ComponentTreeInput root;
 	private String otherComponents = "Other Components";
 }
-
