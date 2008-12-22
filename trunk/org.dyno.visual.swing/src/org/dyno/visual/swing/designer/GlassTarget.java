@@ -95,7 +95,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private WidgetAdapter hoveredAdapter;
 
-	WidgetAdapter getHoveredApdater() {
+	WidgetAdapter getFocusedAdapter() {
 		return hoveredAdapter;
 	}
 
@@ -304,7 +304,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	private void process_bean_resize(MouseEvent e) {
-		if(designer.getSelectedComponents().size()!=1)
+		if (designer.getSelectedComponents().size() != 1)
 			return;
 		Point point = e.getPoint();
 		Component hovered = designer.componentAt(point,
@@ -566,6 +566,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;
 		}
+		hoveredAdapter = null;
 		lastParent = null;
 		lastConstraints = null;
 		designer.repaint();
@@ -678,7 +679,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				lastParent = parentAdapter;
 				dragging_event = null;
 			}
-		}else{
+		} else {
 			state = STATE_BEAN_HOVER;
 		}
 	}
@@ -689,7 +690,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	private boolean isDndReady(MouseEvent e) {
 		return e.getPoint().distance(dragging_event.getPoint()) > DND_THRESHOLD;
 	}
-	private boolean isSameParent(){
+
+	private boolean isSameParent() {
 		if (currentAdapters != null) {
 			WidgetAdapter parent = null;
 			for (WidgetAdapter adapter : currentAdapters) {
@@ -705,6 +707,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		}
 		return true;
 	}
+
 	private boolean isTobeDnd() {
 		if (state == STATE_BEAN_TOBE_HOVER) {
 			return true;
@@ -803,7 +806,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 						glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
 						break;
 					}
-				} else if (adapter.isSelected()&&designer.getSelectedComponents().size()==1) {
+				} else if (adapter.isSelected()
+						&& designer.getSelectedComponents().size() == 1) {
 					Point rel = SwingUtilities.convertPoint(designer, point,
 							hovered);
 					int loc = adapter.getCursorLocation(rel);
@@ -890,4 +894,3 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		}
 	}
 }
-

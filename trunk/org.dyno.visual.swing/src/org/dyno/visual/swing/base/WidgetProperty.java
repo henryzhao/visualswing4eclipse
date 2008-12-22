@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
@@ -51,7 +52,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class WidgetProperty implements IWidgetPropertyDescriptor {
+public class WidgetProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 	private Object lastValue;
 
 	private String category;
@@ -730,6 +731,12 @@ public class WidgetProperty implements IWidgetPropertyDescriptor {
 				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class getObjectClass() {
+		return propertyDescriptor.getPropertyType();
 	}
 }
 

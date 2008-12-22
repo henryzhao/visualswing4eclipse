@@ -15,6 +15,7 @@ package org.dyno.visual.swing.base;
 
 import java.awt.Component;
 
+import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -26,7 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-public class PropertyAdapter implements IWidgetPropertyDescriptor {
+public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 
 	@Override
 	public boolean cloneProperty(Object bean, Component clone) {
@@ -145,6 +146,12 @@ public class PropertyAdapter implements IWidgetPropertyDescriptor {
 
 	@Override
 	public void setRawValue(Object bean, Object newValue) {
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class getObjectClass() {
+		return null;
 	}
 }
 

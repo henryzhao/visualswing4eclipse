@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="org.dyno.visual.swing.parser.listenerModel" name="Event Listener Model" schema="schema/listenerModel.exsd"/>
    <extension-point id="org.dyno.visual.swing.parser.fieldParser" name="Component Field Parser" schema="schema/fieldParser.exsd"/>
+   <extension-point id="org.dyno.visual.swing.listenerAdapter" name="Listener Adapter" schema="schema/listenerAdapter.exsd"/>
    <extension
          point="org.dyno.visual.swing.sourceParserFactory">
       <factory

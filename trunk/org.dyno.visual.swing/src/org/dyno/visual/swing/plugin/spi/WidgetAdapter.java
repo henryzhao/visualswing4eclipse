@@ -83,8 +83,8 @@ import org.osgi.framework.Bundle;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class WidgetAdapter extends AdaptableAdapter implements
-		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants {
+public abstract class WidgetAdapter extends AbstractAdaptable implements
+		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants, IAdapter {
 	private static Icon FORBIDDEN_ICON;
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class

@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.util.Comparator;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
@@ -37,7 +38,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class FieldProperty implements IWidgetPropertyDescriptor {
+public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 	private Object lastValue;
 	private Object default_value;
 
@@ -429,6 +430,12 @@ public class FieldProperty implements IWidgetPropertyDescriptor {
 
 	@Override
 	public void setRawValue(Object bean, Object newValue) {
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class getObjectClass() {
+		return null;
 	}
 }
 

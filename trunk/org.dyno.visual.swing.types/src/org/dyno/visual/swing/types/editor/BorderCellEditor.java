@@ -14,6 +14,8 @@
 
 package org.dyno.visual.swing.types.editor;
 
+import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 
@@ -28,6 +30,7 @@ import org.eclipse.swt.widgets.Label;
 
 public class BorderCellEditor extends DialogCellEditor {
 	private JComponent component;
+	@SuppressWarnings("unchecked")
 	public BorderCellEditor(Object bean, Composite parent) {
 		super(parent);
 		if (bean == null) {
@@ -37,6 +40,17 @@ public class BorderCellEditor extends DialogCellEditor {
 			this.component = (JComponent)bean;
 		} else if (bean instanceof Border) {
 			setValue(bean);
+		} else if(bean instanceof List){
+			List beans=(List)bean;
+			if(!beans.isEmpty()){
+				bean=beans.get(0);
+				if(bean instanceof JComponent){
+					setValue(((JComponent) bean).getBorder());
+					this.component = (JComponent)bean;
+				} else if (bean instanceof Border) {
+					setValue(bean);
+				}
+			}
 		}
 	}
 

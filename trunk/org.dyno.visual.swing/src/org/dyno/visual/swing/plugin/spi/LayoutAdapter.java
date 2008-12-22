@@ -47,7 +47,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class LayoutAdapter extends AdaptableAdapter implements IPropertySourceProvider, ILayoutBean {
+public abstract class LayoutAdapter extends AbstractAdaptable implements IPropertySourceProvider, ILayoutBean, IAdapter {
 	public static String DEFAULT_LAYOUT = "java.awt.FlowLayout";
 	public static final String LAYOUT_EXTENSION_POINT = "org.dyno.visual.swing.widgets.layoutAdapter";
 

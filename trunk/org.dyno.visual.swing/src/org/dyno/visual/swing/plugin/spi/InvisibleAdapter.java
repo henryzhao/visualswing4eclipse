@@ -19,7 +19,7 @@ import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.eclipse.core.runtime.IConfigurationElement;
 
-public abstract class InvisibleAdapter extends AdaptableAdapter {
+public abstract class InvisibleAdapter extends AbstractAdaptable implements IAdapter {
 	protected String name;
 	protected String lastName;
 

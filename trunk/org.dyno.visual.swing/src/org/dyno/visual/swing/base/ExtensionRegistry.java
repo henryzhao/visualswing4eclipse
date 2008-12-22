@@ -430,6 +430,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void addInvisibleAdapter(IConfigurationElement config) {
 		String type = config.getAttribute("type");
 		invisibles.put(type, config); 
@@ -578,13 +579,17 @@ public class ExtensionRegistry {
 		String widgetClassname = config.getAttribute("widgetClass");
 		widgets.put(widgetClassname, config);
 	}
-	private static void addInterface(String interfaceClassname, IConfigurationElement configurationElement) {
+	private static void addInterface(String interfaceClassname, IConfigurationElement config) {
 		Map<String, IConfigurationElement> interfaceEntry=adapters.get(interfaceClassname);
 		if(interfaceEntry==null){
 			interfaceEntry = new HashMap<String, IConfigurationElement>();
 			adapters.put(interfaceClassname, interfaceEntry);
 		}
-		IConfigurationElement[] configs = configurationElement.getChildren();
+		String defaultImplClassname = config.getAttribute("implementation");
+		if(defaultImplClassname!=null&&defaultImplClassname.trim().length()>0){
+			interfaceEntry.put("default", config);
+		}
+		IConfigurationElement[] configs = config.getChildren();
 		if (configs != null && configs.length > 0) {
 			for (int i = 0; i < configs.length; i++) {
 				String name = configs[i].getName();

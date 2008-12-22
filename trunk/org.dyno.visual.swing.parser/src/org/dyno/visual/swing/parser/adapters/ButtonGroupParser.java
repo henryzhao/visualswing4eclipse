@@ -8,10 +8,10 @@ import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
-import org.dyno.visual.swing.plugin.spi.IAdapter;
-import org.dyno.visual.swing.plugin.spi.IAdapterContext;
+import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
-public class ButtonGroupParser implements IParser, IAdapterContext {
+public class ButtonGroupParser implements IParser, IAdaptableContext {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean generateCode(IType type, ImportRewrite imports,
@@ -139,8 +139,8 @@ public class ButtonGroupParser implements IParser, IAdapterContext {
 	}
 
 	@Override
-	public void setAdapter(IAdapter adapter) {
-		this.adapter = (InvisibleAdapter) adapter;
+	public void setAdaptable(IAdaptable adaptable) {
+		this.adapter = (InvisibleAdapter) adaptable;
 	}
 	private InvisibleAdapter adapter;
 }

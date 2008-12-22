@@ -21,7 +21,5 @@ public interface IAdapter extends IAdaptable{
 	String getName();
 	String getCreationMethodName();
 	IAdapter getParent();
-	@SuppressWarnings("unchecked")
-	Class getObjectClass();
 }
 
