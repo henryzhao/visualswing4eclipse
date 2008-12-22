@@ -33,6 +33,7 @@ public class XpJButtonValue extends WidgetValue {
 		put("rolloverEnabled", false);
 		put("focusPainted", true);
 		put("border", SYSTEM_VALUE);
+		put("defaultCapable", true);
 	}
 }
 

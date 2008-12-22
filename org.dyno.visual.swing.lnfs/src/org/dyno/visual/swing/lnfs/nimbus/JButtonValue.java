@@ -33,6 +33,7 @@ public class JButtonValue extends WidgetValue {
 		put("rolloverEnabled", true);
 		put("focusPainted", true);
 		put("border", SYSTEM_VALUE);
+		put("defaultCapable", true);
 	}
 }
 

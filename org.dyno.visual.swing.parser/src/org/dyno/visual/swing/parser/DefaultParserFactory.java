@@ -47,19 +47,16 @@ public class DefaultParserFactory extends ParserFactory {
 		listenerModels = new HashMap<String, IConfigurationElement>();
 		parseListenerModels();
 	}
+	
 	@Override
 	public ISourceParser newParser() {
 		return new DefaultSourceParser(this);
-	}
-	public void setCurrentListenerID(String id) {
-		currentListenerID = id;
 	}
 	@Override
 	public IEventListenerModel newModel(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		return newModel(currentListenerID, adapter, eventSet);
 	}
-	@Override
-	public void parseEventListener(WidgetAdapter adapter, TypeDeclaration type, EventSetDescriptor esd) {
+	void parseEventListener(WidgetAdapter adapter, TypeDeclaration type, EventSetDescriptor esd) {
 		Map<EventSetDescriptor, IEventListenerModel> map = adapter.getEventDescriptor();
 		IEventListenerModel model = map.get(esd);
 		if (model == null) {

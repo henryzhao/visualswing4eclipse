@@ -52,7 +52,6 @@ public class GlassPaneUI extends ComponentUI {
 
 	/** Creates a new instance of DesignerUI */
 	public GlassPaneUI() {
-
 	}
 
 	public void installUI(JComponent c) {
@@ -256,10 +255,8 @@ public class GlassPaneUI extends ComponentUI {
 			focused.paintFocused(g);
 		} else {
 			Rectangle local = SwingUtilities.getLocalBounds(jpar);
-			Rectangle pub = SwingUtilities.convertRectangle(jpar, local,
-					designer);
-			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1,
-					pub.height + 1);
+			Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
+			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
 			focused.paintFocused(clipg);
 			clipg.dispose();
 		}

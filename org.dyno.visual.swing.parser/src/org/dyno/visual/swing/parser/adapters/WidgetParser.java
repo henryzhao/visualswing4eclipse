@@ -12,13 +12,13 @@ import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.IAdapter;
-import org.dyno.visual.swing.plugin.spi.IAdapterContext;
+import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-public class WidgetParser implements IParser, IConstants, IAdapterContext {
+public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	protected WidgetAdapter adapter;
 
 	protected IJavaElement getSibling(IType type, IJavaElement element) {
@@ -80,7 +80,7 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext {
 				int flags = RenameSupport.UPDATE_GETTER_METHOD
 						| RenameSupport.UPDATE_REFERENCES
 						| RenameSupport.UPDATE_SETTER_METHOD;
-				RenameSupport rs = RenameSupport.create(lastField, name, flags);
+				RenameSupport rs = RenameSupport.create(lastField, name, flags);				
 				if (rs.preCheck().isOK()) {
 					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 					Shell parent = window.getShell();
@@ -304,8 +304,8 @@ public class WidgetParser implements IParser, IConstants, IAdapterContext {
 	}
 
 	@Override
-	public void setAdapter(IAdapter adapter) {
-		this.adapter = (WidgetAdapter) adapter;
+	public void setAdaptable(IAdaptable adaptable) {
+		this.adapter = (WidgetAdapter) adaptable;
 	}
 
 }

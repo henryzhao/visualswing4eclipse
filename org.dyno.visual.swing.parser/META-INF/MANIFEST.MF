@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Widgets Plug-in
+Bundle-Name: Parser  Plug-in
 Bundle-SymbolicName: org.dyno.visual.swing.parser;singleton:=true
 Bundle-Version: 0.9.6.I20081219-1200
 Bundle-ActivationPolicy: lazy
@@ -17,3 +17,4 @@ Require-Bundle: org.dyno.visual.swing,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.dyno.visual.swing.parser.listener,
  org.dyno.visual.swing.parser.spi
+Bundle-Activator: org.dyno.visual.swing.parser.ParserPlugin

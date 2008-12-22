@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.dyno.visual.swing" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="org.dyno.visual.swing.parser" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.dyno.visual.swing" id="org.dyno.visual.swing.adapters" name="Adaptable Adapter"/>
+         <meta.schema plugin="org.dyno.visual.swing.parser" id="org.dyno.visual.swing.listenerAdapter" name="Listener Adapter"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="interface" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="listener" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,12 +47,9 @@
       </complexType>
    </element>
 
-   <element name="interface">
+   <element name="listener">
       <complexType>
-         <sequence>
-            <element ref="adapter" minOccurs="0" maxOccurs="unbounded"/>
-         </sequence>
-         <attribute name="class" type="string">
+         <attribute name="interface" type="string" use="required">
             <annotation>
                <documentation>
                   
@@ -62,32 +59,7 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="implementation" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-      </complexType>
-   </element>
-
-   <element name="adapter">
-      <complexType>
-         <attribute name="class" type="string">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java"/>
-               </appinfo>
-            </annotation>
-         </attribute>
-         <attribute name="implementation" type="string">
+         <attribute name="adapter" type="string" use="required">
             <annotation>
                <documentation>
                   

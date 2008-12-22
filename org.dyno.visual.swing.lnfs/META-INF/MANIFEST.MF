@@ -10,3 +10,4 @@ Require-Bundle: org.dyno.visual.swing,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Dynamic Object Organization
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Activator: org.dyno.visual.swing.lnfs.LnfPlugin

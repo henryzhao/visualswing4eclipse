@@ -21,6 +21,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -33,7 +34,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-abstract class InsetsProperty implements IWidgetPropertyDescriptor {
+abstract class InsetsProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 	private Field top;
 	private Field left;
 	private Field bottom;
@@ -53,6 +54,13 @@ abstract class InsetsProperty implements IWidgetPropertyDescriptor {
 			BorderPlugin.getLogger().error(e);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class getObjectClass() {
+		return null;
+	}
+
 	@Override
 	public IValueParser getValueParser() {
 		return null;

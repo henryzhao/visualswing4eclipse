@@ -15,6 +15,7 @@ package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,7 +27,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public interface IWidgetPropertyDescriptor extends IPropertyDescriptor{
+public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptable{
     boolean isPropertyResettable(IStructuredSelection bean);
     boolean isPropertySet(String lnfClassname, IStructuredSelection bean);
 	Object getPropertyValue(IStructuredSelection bean);

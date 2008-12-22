@@ -14,6 +14,7 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -565,6 +566,8 @@ public class JPanelAdapter extends CompositeAdapter {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
 			layoutAdapter.paintFocused(clipg);
 		}
+		clipg.setColor(Color.lightGray);
+		clipg.drawRect(0, 0, jpanel.getWidth() -1 , jpanel.getHeight() - 1);
 	}
 
 	@Override

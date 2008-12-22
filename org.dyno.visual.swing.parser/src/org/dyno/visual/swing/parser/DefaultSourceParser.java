@@ -41,7 +41,6 @@ import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
-import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -91,17 +90,18 @@ import org.eclipse.ui.PlatformUI;
  */
 class DefaultSourceParser implements ISourceParser {
 	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser";
-	private ParserFactory factory;
+	private DefaultParserFactory factory;
 	private List<IFieldParser> fieldParsers;
 
-	DefaultSourceParser(ParserFactory factory) {
+	DefaultSourceParser(DefaultParserFactory factory) {
 		this.factory = factory;
 		fieldParsers = new ArrayList<IFieldParser>();
 		parseFieldParsers();
 	}
 
 	private void parseFieldParsers() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
+				.getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -119,7 +119,8 @@ class DefaultSourceParser implements ISourceParser {
 				String name = configs[i].getName();
 				if (name.equals("parser")) {
 					try {
-						fieldParsers.add((IFieldParser) configs[i].createExecutableExtension("class"));
+						fieldParsers.add((IFieldParser) configs[i]
+								.createExecutableExtension("class"));
 					} catch (CoreException e) {
 						ParserPlugin.getLogger().error(e);
 					}
@@ -338,9 +339,10 @@ class DefaultSourceParser implements ISourceParser {
 				if (fieldValue != null) {
 					if (JComponent.class.isAssignableFrom(field.getType())) {
 						parseField(cunit, bean, field);
-					}
-					for (IFieldParser parser : fieldParsers) {
-						parser.parseField(cunit, bean, field);
+					} else {
+						for (IFieldParser parser : fieldParsers) {
+							parser.parseField(cunit, bean, field);
+						}
 					}
 				}
 			} catch (Exception e) {
@@ -483,7 +485,8 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@Override
-	public boolean generate(ICompilationUnit unit, WidgetAdapter root, IProgressMonitor monitor) {
+	public boolean generate(ICompilationUnit unit, WidgetAdapter root,
+			IProgressMonitor monitor) {
 		try {
 			ImportRewrite imports = JavaUtil.createImportRewrite(unit);
 			String unit_name = unit.getElementName();
@@ -523,7 +526,8 @@ class DefaultSourceParser implements ISourceParser {
 				if (lnfField.exists()) {
 					lnfField.delete(false, monitor);
 				}
-				String className = (String) root.getProperty("preferred.lookandfeel");
+				String className = (String) root
+						.getProperty("preferred.lookandfeel");
 				String newfield = "private static final "
 						+ imports.addImport("java.lang.String")
 						+ " PREFERRED_LOOK_AND_FEEL = "
@@ -594,10 +598,11 @@ class DefaultSourceParser implements ISourceParser {
 			} catch (JavaModelException e) {
 				ParserPlugin.getLogger().error(e);
 			}
-		}
-		for (IFieldParser parser : fieldParsers) {
-			if (parser.removeField(type, fieldName, monitor))
-				return;
+		} else {
+			for (IFieldParser parser : fieldParsers) {
+				if (parser.removeField(type, fieldName, monitor))
+					return;
+			}
 		}
 	}
 

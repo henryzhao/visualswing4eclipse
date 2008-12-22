@@ -5,13 +5,13 @@ import java.awt.Component;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.parser.spi.ILayoutParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.IAdapter;
-import org.dyno.visual.swing.plugin.spi.IAdapterContext;
+import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
-public abstract class LayoutParser implements ILayoutParser, IAdapterContext{
+public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 	@Override
 	public String createCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
@@ -33,8 +33,8 @@ public abstract class LayoutParser implements ILayoutParser, IAdapterContext{
 
 	protected LayoutAdapter layoutAdapter;
 	@Override
-	public void setAdapter(IAdapter adapter) {
-		this.layoutAdapter = (LayoutAdapter)adapter;
+	public void setAdaptable(IAdaptable adaptable) {
+		this.layoutAdapter = (LayoutAdapter)adaptable;
 	}
 
 
