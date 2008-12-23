@@ -22,10 +22,10 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.layouts.Alignment;
+import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.layouts.Leading;
-import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Spring;
 import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
