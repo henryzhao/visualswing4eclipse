@@ -28,6 +28,10 @@ public class MetaJMenuItemValue extends MetaAbstractButtonValue {
 		put("alignmentX", 0.5f);
 		put("alignmentY", 0.5f);
 		put("requestFocusEnabled", true);
+		put("doubleBuffered", false);
+		put("focusPainted",false);
+		put("focusable", false);
+		put("rolloverEnabled", false);		
 	}
 
 }
