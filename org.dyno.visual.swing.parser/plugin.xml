@@ -101,6 +101,10 @@
                class="javax.swing.ButtonGroup"
                implementation="org.dyno.visual.swing.parser.adapters.ButtonGroupParser">
          </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.parser.adapters.CompositeParser">
+         </adapter>
       </interface>
       <interface
             class="org.dyno.visual.swing.parser.spi.ILayoutParser">
