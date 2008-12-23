@@ -51,6 +51,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -301,6 +302,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					} catch (Exception e) {
 						VisualSwingPlugin.getLogger().error(e);
 					}
+					OrganizeImportsAction action = new OrganizeImportsAction(getEditorSite());
+					action.run(unit);
 					if (unit.isWorkingCopy()) {
 						unit.commitWorkingCopy(true, monitor);
 					}
