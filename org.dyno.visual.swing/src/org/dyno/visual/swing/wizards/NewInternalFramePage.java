@@ -90,6 +90,12 @@ public class NewInternalFramePage extends NewComponentPage {
 		StringBuffer buf;
 		buf = new StringBuffer();
 		String cName = imports.addImport("java.lang.String");
+		buf.append("/**\n");
+		buf.append("* Main entry of the class.\n");
+		buf.append("* Note: This class is only created so that you can easily preview the result at runtime.\n"); 
+		buf.append("* It is not expected to be managed by the designer.\n");
+		buf.append("* You can modify it as you like.\n");
+		buf.append("*/\n");		
 		buf.append("public static void main(" + cName + "[] args){\n");
 		buf.append("installLnF();\n");
 		cName = imports.addImport("javax.swing.SwingUtilities");

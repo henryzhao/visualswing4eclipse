@@ -562,7 +562,7 @@
                      renderer="org.dyno.visual.swing.widgets.renderers.FrameDefaultCloseOperationRenderer">
                </property>
                <property id="visible" name="visible" gencode="false"/>
-               <property id="iconImages" name="iconImages"/>
+               <property id="iconImage" name="iconImage"/>
          </widget>
          <widget
                abstract="false"
