@@ -82,6 +82,12 @@ public class NewFramePage extends NewComponentPage {
 		StringBuffer buf;
 		buf = new StringBuffer();
 		String cName = imports.addImport("java.lang.String");
+		buf.append("/**\n");
+		buf.append("* Main entry of the class.\n");
+		buf.append("* Note: This class is only created so that you can easily preview the result at runtime.\n"); 
+		buf.append("* It is not expected to be managed by the designer.\n");
+		buf.append("* You can modify it as you like.\n");
+		buf.append("*/\n");		
 		buf.append("public static void main(" + cName + "[] args){\n");
 		buf.append("installLnF();\n");
 		cName = imports.addImport("javax.swing.SwingUtilities");
@@ -90,7 +96,6 @@ public class NewFramePage extends NewComponentPage {
 		buf.append("public void run(){\n");
 		cName = type.getTypeQualifiedName('.');
 		buf.append(cName + " frame = new " + cName + "();\n");
-		buf.append("frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n");
 		buf.append("frame.setTitle(\"" + type.getElementName() + "\");\n");
 		buf.append("frame.setLocationRelativeTo(null);\n");
 		buf.append("frame.setVisible(true);\n");
