@@ -293,9 +293,9 @@ class DefaultSourceParser implements ISourceParser {
 					List args = mi.arguments();
 					IValueParser vp = property.getValueParser();
 					if (vp != null) {
-						Object oldValue = property.getRawValue(bean);
+						Object oldValue = property.getFieldValue(bean);
 						Object newValue = vp.parseValue(oldValue, args);
-						property.setRawValue(bean, newValue);
+						property.setFieldValue(bean, newValue);
 					}
 				}
 			}

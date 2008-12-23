@@ -43,7 +43,7 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptab
 	void init(IConfigurationElement config, Class beanClass);
 	boolean isEdited(WidgetAdapter adapter);
 	IValueParser getValueParser();
-	Object getRawValue(Object bean);
-	void setRawValue(Object bean, Object newValue);	
+	void setFieldValue(Object bean, Object newValue);
+	Object getFieldValue(Object bean);
 }
 
