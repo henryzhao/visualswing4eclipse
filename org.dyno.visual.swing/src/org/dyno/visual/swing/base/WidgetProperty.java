@@ -16,6 +16,7 @@ package org.dyno.visual.swing.base;
 import java.awt.Component;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Comparator;
 
@@ -52,26 +53,27 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class WidgetProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
-	private Object lastValue;
+public class WidgetProperty extends AbstractAdaptable implements
+		IWidgetPropertyDescriptor {
+	protected Object lastValue;
 
-	private String category;
-	private ICellEditorFactory editorFactory;
-	private ILabelProviderFactory labelFactory;
-	private boolean editable;
-	private PropertyDescriptor propertyDescriptor;
-	private String helpContextId;
-	private String description;
-	private String propertyName;
-	private String id;
-	private String displayName;
-	private String[] filters;
+	protected String category;
+	protected ICellEditorFactory editorFactory;
+	protected ILabelProviderFactory labelFactory;
+	protected boolean editable;
+	protected PropertyDescriptor propertyDescriptor;
+	protected String helpContextId;
+	protected String description;
+	protected String propertyName;
+	protected String id;
+	protected String displayName;
+	protected String[] filters;
 
 	@SuppressWarnings("unchecked")
-	private Class beanClass;
-	private boolean gencode;
-	private IValueParser parser;
-	
+	protected Class beanClass;
+	protected boolean gencode;
+	protected IValueParser parser;
+
 	@SuppressWarnings("unchecked")
 	public WidgetProperty(String id, String name, Class beanClass,
 			ILabelProviderFactory label, ICellEditorFactory editor) {
@@ -93,7 +95,8 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 	public WidgetProperty() {
 
 	}
-	public PropertyDescriptor getPropertyDescriptor(){
+
+	public PropertyDescriptor getPropertyDescriptor() {
 		return propertyDescriptor;
 	}
 
@@ -129,10 +132,13 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 		this.beanClass = beanClass;
 		id = config.getAttribute("id");
 		propertyName = config.getAttribute("name");
-		try {
-			propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
-		} catch (IntrospectionException e) {
-			VisualSwingPlugin.getLogger().error(e);
+		if (propertyDescriptor == null) {
+			try {
+				propertyDescriptor = new PropertyDescriptor(propertyName,
+						beanClass);
+			} catch (IntrospectionException e) {
+				VisualSwingPlugin.getLogger().error(e);
+			}
 		}
 		String sGencode = config.getAttribute("gencode");
 		if (sGencode == null || sGencode.trim().length() == 0)
@@ -160,13 +166,14 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 			editorFactory = ta.getEditor();
 		}
 		String sParser = config.getAttribute("parser");
-		if(sParser!=null&&sParser.trim().length()>0){
+		if (sParser != null && sParser.trim().length() > 0) {
 			try {
-				parser = (IValueParser) config.createExecutableExtension("parser");
+				parser = (IValueParser) config
+						.createExecutableExtension("parser");
 			} catch (CoreException e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
-		}else if(ta!=null){
+		} else if (ta != null) {
 			parser = ta.getParser();
 		}
 		helpContextId = config.getAttribute("help-context-id");
@@ -217,40 +224,37 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 	@Override
 	public Object getPropertyValue(IStructuredSelection bean) {
 		assert !bean.isEmpty();
-		Method readMethod = propertyDescriptor.getReadMethod();
-		if (readMethod != null) {
-			try {
-				Object value = readMethod.invoke(bean.getFirstElement());
-				if (isEditable()) {
-					if (editorFactory != null)
-						value = editorFactory.encodeValue(value);
-					else {
-						Class type = lastValue.getClass();
-						TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
-						value = ta.getEditor().decodeValue(value);
-					}
+		try {
+			Object value = getFieldValue(bean.getFirstElement());
+			if (isEditable()) {
+				if (editorFactory != null)
+					value = editorFactory.encodeValue(value);
+				else {
+					Class type = lastValue.getClass();
+					TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
+					value = ta.getEditor().decodeValue(value);
 				}
-				lastValue = value;
-				return value;
-			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
 			}
+			lastValue = value;
+			return value;
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		lastValue = null;
 		return null;
 	}
 
-	private Object _getPropertyValue(Object bean) {
-		Method readMethod = propertyDescriptor.getReadMethod();
-		if (readMethod != null) {
-			try {
-				return readMethod.invoke(bean);
-			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
-			}
-		}
-		return null;
-	}
+	// private Object _getPropertyValue(Object bean) {
+	// Method readMethod = propertyDescriptor.getReadMethod();
+	// if (readMethod != null) {
+	// try {
+	// return readMethod.invoke(bean);
+	// } catch (Exception e) {
+	// VisualSwingPlugin.getLogger().error(e);
+	// }
+	// }
+	// return null;
+	// }
 
 	@Override
 	public boolean isPropertyResettable(IStructuredSelection bean) {
@@ -261,15 +265,14 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 	@Override
 	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
 		assert !bean.isEmpty();
-		Object b= bean.getFirstElement();
-		String name = propertyDescriptor.getName();
-		if (name.equals("preferredSize") && b instanceof Component) {
+		Object b = bean.getFirstElement();
+		if (propertyName.equals("preferredSize") && b instanceof Component) {
 			return ((Component) b).isPreferredSizeSet();
-		} else if (name.equals("minimumSize") && b instanceof Component)
+		} else if (propertyName.equals("minimumSize") && b instanceof Component)
 			return ((Component) b).isMinimumSizeSet();
-		else if (name.equals("maximumSize") && b instanceof Component)
+		else if (propertyName.equals("maximumSize") && b instanceof Component)
 			return ((Component) b).isMaximumSizeSet();
-		Object value = _getPropertyValue(b);
+		Object value = getFieldValue(b);
 		if (value != null && value instanceof UIResource)
 			return false;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
@@ -283,7 +286,7 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 		if (adapter == null)
 			return false;
 		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
-		if(default_value instanceof ISystemValue)
+		if (default_value instanceof ISystemValue)
 			return true;
 		if (propertyType == byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
@@ -414,17 +417,17 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
+	public void resetPropertyValue(String lnfClassname,
+			IStructuredSelection bean) {
 		assert !bean.isEmpty();
-		Object b= bean.getFirstElement();
-		String name = propertyDescriptor.getName();
-		if (name.equals("preferredSize") && b instanceof Component) {
+		Object b = bean.getFirstElement();
+		if (propertyName.equals("preferredSize") && b instanceof Component) {
 			return;
-		} else if (name.equals("minimumSize") && b instanceof Component)
+		} else if (propertyName.equals("minimumSize") && b instanceof Component)
 			return;
-		else if (name.equals("maximumSize") && b instanceof Component)
+		else if (propertyName.equals("maximumSize") && b instanceof Component)
 			return;
-		Object value = _getPropertyValue(b);
+		Object value = getFieldValue(b);
 		if (value != null && value instanceof UIResource)
 			return;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
@@ -510,16 +513,15 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 		assert !bean.isEmpty();
 		if (isEditable()) {
 			try {
-					if (editorFactory != null)
-						value = editorFactory.decodeValue(value);
-					else {
-						Class type = lastValue.getClass();
-						TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
-						value = ta.getEditor().decodeValue(value);
-					}
-					for (Object b : bean.toArray()) {
-					IUndoableOperation operation = new SetValueOperation(b,
-							propertyDescriptor, value);
+				if (editorFactory != null)
+					value = editorFactory.decodeValue(value);
+				else {
+					Class type = lastValue.getClass();
+					TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
+					value = ta.getEditor().decodeValue(value);
+				}
+				for (Object b : bean.toArray()) {
+					IUndoableOperation operation = new SetValueOperation(b, this, value);
 					IOperationHistory operationHistory = PlatformUI
 							.getWorkbench().getOperationSupport()
 							.getOperationHistory();
@@ -533,9 +535,9 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 					}
 					operationHistory.execute(operation, null, null);
 				}
-				} catch (Exception e) {
-					VisualSwingPlugin.getLogger().error(e);
-				}
+			} catch (Exception e) {
+				VisualSwingPlugin.getLogger().error(e);
+			}
 		}
 	}
 
@@ -626,13 +628,7 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 
 	@Override
 	public boolean cloneProperty(Object bean, Component clone) {
-		Object value = null;
-		try {
-			value = propertyDescriptor.getReadMethod().invoke(bean);
-		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
-			return false;
-		}
+		Object value = getFieldValue(bean);
 		if (value != null) {
 			TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(value
 					.getClass());
@@ -640,13 +636,8 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 				value = adapter.getCloner().clone(value);
 			}
 		}
-		try {
-			propertyDescriptor.getWriteMethod().invoke(clone, value);
-			return true;
-		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
-			return false;
-		}
+		setFieldValue(clone, value);
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -657,19 +648,20 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
 			if (adapter != null) {
 				StringBuilder builder = new StringBuilder();
-				Object value = _getPropertyValue(bean);
+				Object value = getFieldValue(bean);
 				Class typeClass = propertyDescriptor.getPropertyType();
 				TypeAdapter typeAdapter = ExtensionRegistry
 						.getTypeAdapter(typeClass);
 				ICodeGen gen;
-				if(editorFactory!=null&&editorFactory instanceof ItemProviderCellEditorFactory){
-					gen=editorFactory;
-				}else if (typeAdapter != null) {
+				if (editorFactory != null
+						&& editorFactory instanceof ItemProviderCellEditorFactory) {
+					gen = editorFactory;
+				} else if (typeAdapter != null) {
 					gen = typeAdapter.getCodegen();
 				} else {
 					gen = editorFactory;
 				}
-				if (gen != null&&value!=null) {
+				if (gen != null && value != null) {
 					String initCode = gen.getInitJavaCode(value, imports);
 					if (initCode != null)
 						builder.append(initCode);
@@ -707,7 +699,7 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
-		Boolean bool = adapter.getEdited().get(propertyDescriptor.getName());
+		Boolean bool = adapter.getEdited().get(propertyName);
 		return bool == null ? false : bool.booleanValue();
 	}
 
@@ -716,20 +708,39 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 		return parser;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object getRawValue(Object bean) {
-		return _getPropertyValue(bean);
+	public void setFieldValue(Object bean, Object newValue) {
+		try {
+			Method writeMethod = propertyDescriptor.getWriteMethod();
+			if (writeMethod != null) {
+				writeMethod.invoke(bean, newValue);
+			} else {
+				Class clazz = bean.getClass();
+				Field field = clazz.getField(propertyName);
+				field.setAccessible(true);
+				field.set(bean, newValue);
+			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void setRawValue(Object bean, Object newValue) {
-		Method writeMethod = propertyDescriptor.getWriteMethod();
-		if(writeMethod!=null){
-			try {
-				writeMethod.invoke(bean, newValue);
-			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
+	public Object getFieldValue(Object bean) {
+		try {
+			if (propertyDescriptor.getReadMethod() != null) {
+				return propertyDescriptor.getReadMethod().invoke(bean);
+			} else {
+				Class clazz = bean.getClass();
+				Field field = clazz.getField(propertyName);
+				field.setAccessible(true);
+				return field.get(bean);
 			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+			return null;
 		}
 	}
 
@@ -739,4 +750,3 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 		return propertyDescriptor.getPropertyType();
 	}
 }
-

@@ -35,6 +35,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import org.dyno.visual.swing.base.ResourceImage;
+
 /**
  * 
  * @author William Chen
@@ -189,6 +191,9 @@ public class DialogBorder implements Border {
 		}
 		if (icon == null)
 			icon = JAVA_LOGO;
+		if(icon!=null && icon instanceof ResourceImage){
+			icon=((ResourceImage)icon).getDelegateImage();
+		}		
 		if (icon != null) {
 			gx = x + OUTER_PAD + ICON_PAD;
 			gy = y + OUTER_PAD + (TITLE_HEIGHT - icon.getHeight(c)) / 2;

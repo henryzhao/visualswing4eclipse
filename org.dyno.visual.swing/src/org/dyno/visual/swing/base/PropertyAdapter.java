@@ -140,12 +140,12 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 	}
 
 	@Override
-	public Object getRawValue(Object bean) {
+	public Object getFieldValue(Object bean) {
 		return null;
 	}
 
 	@Override
-	public void setRawValue(Object bean, Object newValue) {
+	public void setFieldValue(Object bean, Object newValue) {
 	}
 
 	@SuppressWarnings("unchecked")

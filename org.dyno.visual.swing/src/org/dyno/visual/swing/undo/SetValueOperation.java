@@ -14,7 +14,6 @@
 package org.dyno.visual.swing.undo;
 
 import java.awt.Component;
-import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +22,7 @@ import javax.swing.SwingUtilities;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ISystemValue;
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -37,15 +37,15 @@ public class SetValueOperation extends AbstractOperation {
 	private Object bean;
 	private Object old_value;
 	private Object new_value;
-	private PropertyDescriptor property;
+	private IWidgetPropertyDescriptor property;
 
-	public SetValueOperation(Object bean, PropertyDescriptor property,
+	public SetValueOperation(Object bean, IWidgetPropertyDescriptor property,
 			Object new_value) {
 		super("changing " + property.getDisplayName());
 		this.bean = bean;
 		this.property = property;
 		try {
-			this.old_value = property.getReadMethod().invoke(bean);
+			this.old_value = property.getFieldValue(bean);
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);
 		}
@@ -74,7 +74,7 @@ public class SetValueOperation extends AbstractOperation {
 	@SuppressWarnings("unchecked")
 	private static Map<Class, Object> DEFAULT_BEANS= new HashMap<Class, Object>();	
 	@SuppressWarnings("unchecked")
-	private static Object getDefaultValue(Object bean, PropertyDescriptor property){
+	private static Object getDefaultValue(Object bean, IWidgetPropertyDescriptor property){
 		try {
 			Class beanClass = bean.getClass();
 			Object copy = DEFAULT_BEANS.get(beanClass);
@@ -82,7 +82,7 @@ public class SetValueOperation extends AbstractOperation {
 				copy = beanClass.newInstance();
 				DEFAULT_BEANS.put(beanClass, copy);
 			}
-			return property.getReadMethod().invoke(copy);
+			return property.getFieldValue(copy);
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);
 			return null;
@@ -94,7 +94,7 @@ public class SetValueOperation extends AbstractOperation {
 			if(value!=null&&value instanceof ISystemValue){
 				value=getDefaultValue(bean, property);
 			}
-			property.getWriteMethod().invoke(bean, value);
+			property.setFieldValue(bean, value);
 			if (bean instanceof Component) {
 				Component jcomp = (Component) bean;
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
