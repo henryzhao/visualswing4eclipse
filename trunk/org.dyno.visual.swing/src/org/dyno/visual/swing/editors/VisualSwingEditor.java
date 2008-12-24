@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.editors;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,6 +41,7 @@ import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.swt_awt.EmbeddedSwingComposite;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -50,8 +52,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -282,36 +282,32 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		isGeneratingCode = true;
-		IFileEditorInput file = (IFileEditorInput) getEditorInput();
-		setPartName(file.getName());
-		setTitleToolTip(file.getToolTipText());
-		ParserFactory factory = ParserFactory.getDefaultParserFactory();
-		if (factory != null) {
-			try {
-				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
+		try {
+			IFileEditorInput file = (IFileEditorInput) getEditorInput();
+			setPartName(file.getName());
+			setTitleToolTip(file.getToolTipText());
+			ParserFactory factory = ParserFactory.getDefaultParserFactory();
+			if (factory != null) {
+				IFile ifile = file.getFile();
+				ICompilationUnit unit = JavaCore.createCompilationUnitFrom(ifile);
 				hostProject = unit.getJavaProject();
 				ISourceParser sourceParser = factory.newParser();
-				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
-				rootAdapter.setProperty("preferred.lookandfeel", this.getLnfClassname());
-				boolean success = sourceParser.generate(unit, rootAdapter, monitor);
-				rootAdapter.setProperty("preferred.lookandfeel", null);
-				if (success) {
-					try {
+				Component root = designer.getRoot();
+				if (root != null) {
+					WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+					String lnfCN = getLnfClassname();
+					rootAdapter.setProperty("preferred.lookandfeel",lnfCN);
+					boolean success = sourceParser.generate(unit, rootAdapter, monitor);
+					rootAdapter.setProperty("preferred.lookandfeel", null);
+					if (success) {
 						designer.setLnfChanged(false);
 						fireDirty();
-					} catch (Exception e) {
-						VisualSwingPlugin.getLogger().error(e);
+						designer.clearDirty();
 					}
-					OrganizeImportsAction action = new OrganizeImportsAction(getEditorSite());
-					action.run(unit);
-					if (unit.isWorkingCopy()) {
-						unit.commitWorkingCopy(true, monitor);
-					}
-					designer.clearDirty();
 				}
-			} catch (JavaModelException e) {
-				VisualSwingPlugin.getLogger().error(e);
 			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
 		}
 		isGeneratingCode = false;
 	}

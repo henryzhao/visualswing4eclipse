@@ -74,11 +74,17 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -483,16 +489,19 @@ class DefaultSourceParser implements ISourceParser {
 		}
 		return false;
 	}
-
+	private IType getUnitMainType(ICompilationUnit unit){
+		String unit_name = unit.getElementName();
+		int dot = unit_name.lastIndexOf('.');
+		if (dot != -1)
+			unit_name = unit_name.substring(0, dot);
+		IType type = unit.getType(unit_name);
+		return type;
+	}
 	@Override
 	public boolean generate(ICompilationUnit unit, WidgetAdapter root,
 			IProgressMonitor monitor) {
 		try {
-			String unit_name = unit.getElementName();
-			int dot = unit_name.lastIndexOf('.');
-			if (dot != -1)
-				unit_name = unit_name.substring(0, dot);
-			IType type = unit.getType(unit_name);
+			IType type = getUnitMainType(unit);
 			if(!renameFields(type, monitor, root))
 				return false;
 			if (unit.isWorkingCopy()) {
@@ -502,11 +511,13 @@ class DefaultSourceParser implements ISourceParser {
 			if (parser == null)
 				return false;
 			ICompilationUnit copy = unit.getWorkingCopy(monitor);
-			type = copy.getType(unit_name);
+			type = getUnitMainType(copy);
 			if (type != null) {
 				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
 				ArrayList<String> fieldAdapters = listBeanName(root);
 				boolean success = parser.generateCode(type, imports, monitor);
+				if(!success)
+					return false;
 				IField[] fields = type.getFields();
 				List<String> declared = new ArrayList<String>();
 				if (fields != null && fields.length > 0) {
@@ -548,6 +559,15 @@ class DefaultSourceParser implements ISourceParser {
 				if(copy.isWorkingCopy()){
 					copy.commitWorkingCopy(true, monitor);
 					copy.discardWorkingCopy();
+				}				
+				IWorkbenchPartSite site = getEditorSite();
+				if (site != null) {
+					OrganizeImportsAction action = new OrganizeImportsAction(site);
+					action.run(unit);
+				}
+				if(unit.isWorkingCopy()){
+					unit.commitWorkingCopy(true, monitor);
+					unit.discardWorkingCopy();
 				}
 				return success;
 			} else
@@ -557,7 +577,21 @@ class DefaultSourceParser implements ISourceParser {
 			return false;
 		}
 	}
-
+	private IWorkbenchPartSite getEditorSite(){
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		if(workbench!=null){
+			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+			if(window!=null){
+				IWorkbenchPage page = window.getActivePage();
+				if(page!=null){
+					IEditorPart editor = page.getActiveEditor();
+					if(editor!=null)
+						return editor.getSite();
+				}
+			}
+		}
+		return null;
+	}
 	private boolean renameFields(IType type,
 			IProgressMonitor monitor, WidgetAdapter root) {
 		try {
