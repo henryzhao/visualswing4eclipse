@@ -53,6 +53,8 @@ import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.swt_awt.GTKAWTBridgePopupFix;
+import org.dyno.visual.swing.swt_awt.Platform;
 import org.dyno.visual.swing.undo.CutOperation;
 import org.dyno.visual.swing.undo.DeleteOperation;
 import org.dyno.visual.swing.undo.DuplicateOperation;
@@ -269,9 +271,18 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				manager.add(action);
 			}
 		}
-		Menu menu = manager.createContextMenu(parent);
+		final Menu menu = manager.createContextMenu(parent);
 		menu.setLocation(dp.x, dp.y);
-		menu.setVisible(true);
+		if(Platform.isGtk()){
+			Runnable r = new Runnable() {
+				public void run() {
+					GTKAWTBridgePopupFix.showMenu(menu);
+				}
+			};
+			parent.getShell().getDisplay().asyncExec(r);
+		} else {
+			menu.setVisible(true);
+		}
 	}
 
 	public void clearSelection() {
