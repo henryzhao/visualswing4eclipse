@@ -1077,4 +1077,16 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public void addInvisible(String name, Object object) {
 		invisibles.add(InvisibleAdapter.createAdapter(name, object));
 	}
+
+	public boolean isRenamed() {
+		if(lastName!=null&&!lastName.equals(name))
+			return true;
+		if (isRoot()) {
+			for (InvisibleAdapter inv : invisibles) {
+				if (inv.isRenamed())
+					return true;
+			}
+		}
+		return false;
+	}
 }

@@ -62,4 +62,8 @@ public abstract class InvisibleAdapter extends AbstractAdaptable implements IAda
 			return null;
 		}
 	}
+
+	public boolean isRenamed() {
+		return lastName!=null&&!lastName.equals(name);
+	}
 }

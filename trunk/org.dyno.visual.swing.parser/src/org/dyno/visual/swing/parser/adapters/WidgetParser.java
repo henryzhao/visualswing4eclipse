@@ -69,9 +69,8 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		}
 	}
 
-	private boolean createNonRootCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
-		boolean success = true;
+	@Override
+	public boolean renameField(IType type, IProgressMonitor monitor) {
 		String lastName = adapter.getLastName();
 		String name = adapter.getName();
 		if (lastName != null && !lastName.equals(name)) {
@@ -80,35 +79,45 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				int flags = RenameSupport.UPDATE_GETTER_METHOD
 						| RenameSupport.UPDATE_REFERENCES
 						| RenameSupport.UPDATE_SETTER_METHOD;
-				RenameSupport rs = RenameSupport.create(lastField, name, flags);				
+				RenameSupport rs = RenameSupport.create(lastField, name, flags);
 				if (rs.preCheck().isOK()) {
-					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					IWorkbenchWindow window = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow();
 					Shell parent = window.getShell();
 					rs.perform(parent, window);
+					adapter.setLastName(null);
+					return true;
 				}
 			} catch (Exception e) {
 				ParserPlugin.getLogger().error(e);
 			}
-		} else if (lastName==null){
-			IField field = type.getField(getFieldName(name));
-			if (field != null && !field.exists()) {
-				StringBuilder builder = new StringBuilder();
-				builder.append(getAccessCode(adapter.getFieldAccess()));
-				builder.append(" ");
-				String fqcn = adapter.getWidgetCodeClassName();
-				String beanName = imports.addImport(fqcn);
-				builder.append(beanName);
-				builder.append(" ");
-				builder.append(getFieldName(adapter.getName()));
-				builder.append(";\n");
-				try {
-					type.createField(builder.toString(), null, false, monitor);
-				} catch (JavaModelException e) {
-					ParserPlugin.getLogger().error(e);
-					success = false;
-				}
-
+			return false;
+		} else
+			return true;
+	}
+	
+	private boolean createNonRootCode(IType type, ImportRewrite imports,
+			IProgressMonitor monitor) {
+		boolean success = true;
+		String name = adapter.getName();
+		IField field = type.getField(getFieldName(name));
+		if (field != null && !field.exists()) {
+			StringBuilder builder = new StringBuilder();
+			builder.append(getAccessCode(adapter.getFieldAccess()));
+			builder.append(" ");
+			String fqcn = adapter.getWidgetCodeClassName();
+			String beanName = imports.addImport(fqcn);
+			builder.append(beanName);
+			builder.append(" ");
+			builder.append(getFieldName(adapter.getName()));
+			builder.append(";\n");
+			try {
+				type.createField(builder.toString(), null, false, monitor);
+			} catch (JavaModelException e) {
+				ParserPlugin.getLogger().error(e);
+				success = false;
 			}
+
 		}
 		IJavaElement sibling = null;
 		StringBuilder builder = new StringBuilder();
@@ -117,7 +126,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		if (method != null && method.exists()) {
 			try {
 				sibling = getSibling(type, method);
-				method.delete(false, monitor);				
+				method.delete(false, monitor);
 			} catch (JavaModelException e) {
 				ParserPlugin.getLogger().error(e);
 				success = false;
@@ -143,7 +152,8 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		try {
 			if (sibling == null)
 				sibling = getInitMethodSibling(type);
-			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
+			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
+					false, monitor);
 		} catch (JavaModelException e) {
 			ParserPlugin.getLogger().error(e);
 			success = false;
@@ -229,7 +239,6 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append(getFieldName(adapter.getName()) + " = "
 				+ getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
-		System.out.println();
 		CompositeAdapter conAdapter = adapter.getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = adapter.getWidget().getBounds();
@@ -307,5 +316,6 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adapter = (WidgetAdapter) adaptable;
 	}
+
 
 }

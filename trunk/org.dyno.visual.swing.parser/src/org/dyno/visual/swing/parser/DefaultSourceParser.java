@@ -488,17 +488,24 @@ class DefaultSourceParser implements ISourceParser {
 	public boolean generate(ICompilationUnit unit, WidgetAdapter root,
 			IProgressMonitor monitor) {
 		try {
-			ImportRewrite imports = JavaUtil.createImportRewrite(unit);
 			String unit_name = unit.getElementName();
 			int dot = unit_name.lastIndexOf('.');
 			if (dot != -1)
 				unit_name = unit_name.substring(0, dot);
 			IType type = unit.getType(unit_name);
+			if(!renameFields(type, monitor, root))
+				return false;
+			if (unit.isWorkingCopy()) {
+				unit.commitWorkingCopy(true, monitor);
+			}
+			IParser parser = (IParser) root.getAdapter(IParser.class);
+			if (parser == null)
+				return false;
+			ICompilationUnit copy = unit.getWorkingCopy(monitor);
+			type = copy.getType(unit_name);
 			if (type != null) {
+				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
 				ArrayList<String> fieldAdapters = listBeanName(root);
-				IParser parser = (IParser) root.getAdapter(IParser.class);
-				if (parser == null)
-					return false;
 				boolean success = parser.generateCode(type, imports, monitor);
 				IField[] fields = type.getFields();
 				List<String> declared = new ArrayList<String>();
@@ -536,11 +543,42 @@ class DefaultSourceParser implements ISourceParser {
 				type.createField(newfield, null, false, monitor);
 				if (success) {
 					TextEdit edit = imports.rewriteImports(monitor);
-					JavaUtil.applyEdit(unit, edit, true, monitor);
+					JavaUtil.applyEdit(copy, edit, true, monitor);
+				}
+				if(copy.isWorkingCopy()){
+					copy.commitWorkingCopy(true, monitor);
+					copy.discardWorkingCopy();
 				}
 				return success;
 			} else
 				return false;
+		} catch (Exception e) {
+			ParserPlugin.getLogger().error(e);
+			return false;
+		}
+	}
+
+	private boolean renameFields(IType type,
+			IProgressMonitor monitor, WidgetAdapter root) {
+		try {
+			IParser parser = (IParser) root.getAdapter(IParser.class);
+			if (parser == null)
+				return false;
+			boolean success = parser.renameField(type, monitor);
+			if (!success)
+				return false;
+			if(root instanceof CompositeAdapter){
+				CompositeAdapter ca = (CompositeAdapter) root;
+				int count = ca.getChildCount();
+				for(int i=0;i<count;i++){
+					Component child = ca.getChild(i);
+					WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+					success=renameFields(type, monitor, childAdapter);
+					if(!success)
+						return false;
+				}
+			}
+			return true;
 		} catch (Exception e) {
 			ParserPlugin.getLogger().error(e);
 			return false;

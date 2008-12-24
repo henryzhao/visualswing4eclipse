@@ -56,6 +56,19 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		}
 	}
 
+	@Override
+	public boolean isRenamed() {
+		if(super.isRenamed())
+			return true;
+		int count = getChildCount();
+		for(int i=0;i<count;i++){
+			Component child = getChild(i);
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+			if(childAdapter.isRenamed())
+				return true;
+		}
+		return false;
+	}
 	public boolean interceptPoint(Point p, int ad) {
 		return false;
 	}

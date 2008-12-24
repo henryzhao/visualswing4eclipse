@@ -19,31 +19,45 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.ui.refactoring.RenameSupport;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class ButtonGroupParser implements IParser, IAdaptableContext {
+	@Override
+	public boolean renameField(IType type, IProgressMonitor monitor) {
+		String lastName = adapter.getLastName();
+		String name = adapter.getName();
+		if (lastName != null && !lastName.equals(name)) {
+			IField lastField = type.getField(getFieldName(lastName));
+			try {
+				int flags = RenameSupport.UPDATE_GETTER_METHOD
+						| RenameSupport.UPDATE_REFERENCES
+						| RenameSupport.UPDATE_SETTER_METHOD;
+				RenameSupport rs = RenameSupport.create(lastField, name, flags);
+				if (rs.preCheck().isOK()) {
+					IWorkbenchWindow window = PlatformUI.getWorkbench()
+							.getActiveWorkbenchWindow();
+					Shell parent = window.getShell();
+					rs.perform(parent, window);
+					adapter.setLastName(null);
+					return true;
+				}
+			} catch (Exception e) {
+				ParserPlugin.getLogger().error(e);
+			}
+			return false;
+		} else
+			return true;
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean generateCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
 		boolean success = true;
-		IJavaElement sibling = null;
-		if (adapter.getLastName() != null) {
-			IField lastField;
-			if (!adapter.getLastName().equals(adapter.getName())) {
-				lastField = type.getField(getFieldName(adapter.getLastName()));
-			} else {
-				lastField = type.getField(getFieldName(adapter.getName()));
-			}
-			if (lastField != null && lastField.exists()) {
-				try {
-					lastField.delete(true, monitor);
-				} catch (Exception e) {
-					ParserPlugin.getLogger().error(e);
-					success = false;
-				}
-			}
-		}
 		IField field = type.getField(getFieldName(adapter.getName()));
+		IJavaElement sibling = null;
 		if (field != null && !field.exists()) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("private");
@@ -59,20 +73,6 @@ public class ButtonGroupParser implements IParser, IAdaptableContext {
 			} catch (JavaModelException e) {
 				ParserPlugin.getLogger().error(e);
 				success = false;
-			}
-		}
-		sibling = null;
-		if (adapter.getLastName() != null && !adapter.getLastName().equals(adapter.getName())) {
-			String lastGetMethodName = "init"+NamespaceManager.getInstance().getCapitalName(adapter.getLastName());
-			IMethod lastMethod = type.getMethod(lastGetMethodName, new String[0]);
-			if (lastMethod != null && lastMethod.exists()) {
-				try {
-					sibling = getSibling(type, lastMethod);
-					lastMethod.delete(true, monitor);
-				} catch (Exception e) {
-					ParserPlugin.getLogger().error(e);
-					success = false;
-				}
 			}
 		}
 		StringBuilder builder = new StringBuilder();
