@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository class='org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository' version='1.0.0'?>
-<repository name='file:/D:/eclipse/workspace/org.dyno.visual.swing.site/ - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
+<repository name='Visual Swing Designer for Eclipse' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1230101733628'/>
+    <property name='p2.timestamp' value='1230108598003'/>
   </properties>
   <mappings size='3'>
     <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
@@ -31,17 +31,17 @@
         <property name='download.size' value='861'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.6.I20081219-1200'>
-      <properties size='3'>
-        <property name='artifact.size' value='86203'/>
-        <property name='download.size' value='86203'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.borders' version='0.9.6.I20081219-1200'>
       <properties size='3'>
         <property name='artifact.size' value='51621'/>
         <property name='download.size' value='51621'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.6.I20081219-1200'>
+      <properties size='3'>
+        <property name='artifact.size' value='86724'/>
+        <property name='download.size' value='86724'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
