@@ -14,8 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views,
  org.eclipse.ui.forms,
  org.eclipse.ui.navigator,
- org.eclipse.jdt.core;bundle-version="3.4.2",
- org.eclipse.jdt.ui;bundle-version="3.4.1"
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.ui
 Bundle-ActivationPolicy: lazy;exclude:="org.dyno.visual.swing.contentTypes"
 Export-Package: org.dyno.visual.swing.base,
  org.dyno.visual.swing.layouts,
