@@ -795,7 +795,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (root == null)
 			return false;
 		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
-		return rootAdapter.isDirty();
+		return rootAdapter.isDirty()||rootAdapter.isRenamed();
 	}
 
 	public void fireDirty() {

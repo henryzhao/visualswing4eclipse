@@ -56,7 +56,6 @@ public class VarChangeOperation extends AbstractOperation {
 					if (!adapter.isRoot()) {
 						adapter.getParentAdapter().setDirty(true);
 					}
-					adapter.setDirty(true);
 					adapter.changeNotify();					
 					break;
 				}
