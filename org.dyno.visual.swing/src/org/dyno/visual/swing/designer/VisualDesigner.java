@@ -64,6 +64,7 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -98,6 +99,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private Border designBorder;
 	private Component root;
 	private List<WidgetAdapter> clipboard;
+
+	private boolean lnfChanged;
+	private ICompilationUnit unit;
 
 	private VisualSwingEditor editor;
 	private Composite parent;
@@ -487,7 +491,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void validateContent() {
 		editor.validateContent();
-		repaint();
 	}
 
 	public void changeFocused() {
@@ -522,9 +525,13 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	public void setActionState(IAction action) {
+		if(root==null)
+			return;
 		String id = action.getId();
 		WidgetSelection selection = new WidgetSelection(root);
 		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+		if(rootAdapter==null)
+			return;
 		if (id.equals(ActionFactory.CUT.getId())) {
 			action
 					.setEnabled(!selection.isEmpty()
@@ -831,8 +838,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		return lnfChanged;
 	}
 
-	private boolean lnfChanged;
-
 	public void setFocus() {
 		glass.setFocus();
 	}
@@ -863,6 +868,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		else{
 			return WidgetAdapter.getWidgetAdapter(root).getInvisibles();
 		}
+	}
+	public ICompilationUnit getCompilationUnit(){
+		return unit;
+	}
+	public void setCompilationUnit(ICompilationUnit unit) {
+		this.unit = unit;
 	}
 }
 

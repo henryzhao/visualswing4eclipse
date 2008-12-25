@@ -67,6 +67,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -119,7 +120,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 		}
 	}
-
+	public ICompilationUnit getCompilationUnit(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			return designer.getCompilationUnit();
+		else
+			return null;
+	}
 	public void setProperty(String key, Object value) {
 		if (value == null)
 			properties.remove(key);
