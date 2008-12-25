@@ -37,7 +37,6 @@ public class BeanNameProperty extends PropertyAdapter {
 		if (!adapter.isRoot()) {
 			adapter.getParentAdapter().setDirty(true);
 		}
-		adapter.setDirty(true);
 		adapter.changeNotify();
 	}
 
