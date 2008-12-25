@@ -57,7 +57,6 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 					this.lastName = group.getName();
 					this.lastLastName = group.getLastName();
 					group.setName(name);
-					adapter.setDirty(true);
 					adapter.changeNotify();
 					break;
 				}
