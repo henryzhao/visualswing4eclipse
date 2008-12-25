@@ -120,6 +120,16 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 		}
 	}
+	public void lockDesigner(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			designer.lock();
+	}
+	public void unlockDesigner(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			designer.unlock();
+	}
 	public ICompilationUnit getCompilationUnit(){
 		VisualDesigner designer = getDesigner();
 		if(designer!=null)

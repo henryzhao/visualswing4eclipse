@@ -33,6 +33,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.ILibraryExtension;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
+import org.dyno.visual.swing.plugin.spi.IRenamingListener;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.CoreException;
@@ -56,6 +57,7 @@ public class ExtensionRegistry {
 	private static final String LIBRARY_EXTENSION_POINT="org.dyno.visual.swing.libraryExtension";
 	private static final String ADAPTABLE_ADAPTER_EXTENSION_POINT="org.dyno.visual.swing.adapters";
 	private static final String INVISIBLE_ADPTER_EXTENSION_POINT="org.dyno.visual.swing.invisibleAdapter";
+	private static final String RENAMING_LISTENER_EXTENSION_POINT="org.dyno.visual.swing.renamingListener";
 	private static String CURRENT_SORTING;
 
 	public static void setCurrentSorting(String currentSorting) {
@@ -189,6 +191,7 @@ public class ExtensionRegistry {
 	private static Map<String, IConfigurationElement> invisibles;
 	private static List<IContextCustomizer> contextCustomizers;
 	private static List<ILibraryExtension> libExtensions;
+	private static List<IRenamingListener> renamingListeners;
 	public static IConfigurationElement getInvisibleConfig(String className){
 		return invisibles.get(className);
 	}
@@ -201,7 +204,9 @@ public class ExtensionRegistry {
 	public static Map<String, IConfigurationElement> getRegisteredWidgets() {
 		return widgets;
 	}
-
+	public static List<IRenamingListener> getRenamingListeners(){
+		return renamingListeners;
+	}
 	static {
 		widgets = new HashMap<String, IConfigurationElement>();
 		invisibles = new HashMap<String, IConfigurationElement>();
@@ -211,6 +216,7 @@ public class ExtensionRegistry {
 		contextCustomizers = new ArrayList<IContextCustomizer>();
 		libExtensions= new ArrayList<ILibraryExtension>();
 		adapters = new HashMap<String, Map<String, IConfigurationElement>>();
+		renamingListeners = new ArrayList<IRenamingListener>();
 		parseWidgetExtensions();
 		parseSortingExtensions();
 		parseTypeExtensions();
@@ -219,10 +225,12 @@ public class ExtensionRegistry {
 		parseContextMenus();
 		parseAdapters();
 		parseInvisibleAdapters();
+		parseRenamingListeners();
 	}
 	public static void registerLnfAdapter(String classname, ILookAndFeelAdapter lnfAdapter){
 		lnfAdapters.put(classname, lnfAdapter);
 	}
+
 
 	private static void parseInvisibleAdapters() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(INVISIBLE_ADPTER_EXTENSION_POINT);
@@ -312,6 +320,18 @@ public class ExtensionRegistry {
 		}
 	}
 
+	private static void parseRenamingListeners() {
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(RENAMING_LISTENER_EXTENSION_POINT);
+		if (extensionPoint != null) {
+			IExtension[] extensions = extensionPoint.getExtensions();
+			if (extensions != null && extensions.length > 0) {
+				for (int i = 0; i < extensions.length; i++) {
+					parseRenamingListener(extensions[i]);
+				}
+			}
+		}
+	}
+
 
 	private static void parseLibExtensions() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(LIBRARY_EXTENSION_POINT);
@@ -392,6 +412,22 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
+	private static void parseRenamingListener(IExtension extension) {
+		IConfigurationElement[] configs = extension.getConfigurationElements();
+		if (configs != null && configs.length > 0) {
+			for (int i = 0; i < configs.length; i++) {
+				String name = configs[i].getName();
+				if (name.equals("listener")) {
+					try {
+						renamingListeners.add((IRenamingListener) configs[i].createExecutableExtension("class"));
+					} catch (CoreException e) {
+						VisualSwingPlugin.getLogger().error(e);
+					}
+				}
+			}
+		}
+	}	
 	private static void parseLibExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {

@@ -273,6 +273,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				}
 			}
 			isCreatingDesignerUI = false;
+			designer.unlock();
 			return Status.OK_STATUS;
 		}
 	}
@@ -466,7 +467,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			path = ((IFileEditorInput) getEditorInput()).getFile()
 					.getFullPath();
 			if (deltaPath.equals(path)) {
-				if (!isCreatingDesignerUI) {
+				if (!isCreatingDesignerUI&&!designer.isLocked()) {
 					isCreatingDesignerUI = true;
 					new CreateDesignerUIJob(true).schedule();
 				}

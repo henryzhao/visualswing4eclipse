@@ -148,4 +148,10 @@
             class="org.dyno.visual.swing.parser.adapters.ButtonGroupFieldParser">
       </parser>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.renamingListener">
+      <listener
+            class="org.dyno.visual.swing.parser.DefaultRenamingListener">
+      </listener>
+   </extension>
  </plugin>
