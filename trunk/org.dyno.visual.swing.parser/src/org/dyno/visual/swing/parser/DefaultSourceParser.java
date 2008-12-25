@@ -136,7 +136,7 @@ class DefaultSourceParser implements ISourceParser {
 	}
 
 	@Override
-	public WidgetAdapter parse(ICompilationUnit unit) {
+	public WidgetAdapter parse(ICompilationUnit unit, IProgressMonitor monitor) {
 		try {
 			IType[] types = unit.getPrimary().getAllTypes();
 			for (IType type : types) {
@@ -498,15 +498,15 @@ class DefaultSourceParser implements ISourceParser {
 		return type;
 	}
 	@Override
-	public boolean generate(ICompilationUnit unit, WidgetAdapter root,
-			IProgressMonitor monitor) {
+	public ICompilationUnit generate(WidgetAdapter root,	IProgressMonitor monitor) {
 		try {
+			ICompilationUnit unit = root.getCompilationUnit();
 			IType type = getUnitMainType(unit);
 			if(!renameFields(type, monitor, root))
-				return false;
+				return null;
 			IParser parser = (IParser) root.getAdapter(IParser.class);
 			if (parser == null)
-				return false;
+				return null;
 			ICompilationUnit copy = unit.getWorkingCopy(monitor);
 			type = getUnitMainType(copy);
 			if (type != null) {
@@ -514,7 +514,7 @@ class DefaultSourceParser implements ISourceParser {
 				ArrayList<String> fieldAdapters = listBeanName(root);
 				boolean success = parser.generateCode(type, imports, monitor);
 				if(!success)
-					return false;
+					return null;
 				IField[] fields = type.getFields();
 				List<String> declared = new ArrayList<String>();
 				if (fields != null && fields.length > 0) {
@@ -565,12 +565,12 @@ class DefaultSourceParser implements ISourceParser {
 				if(unit.isWorkingCopy()){
 					unit.commitWorkingCopy(true, monitor);
 				}
-				return success;
+				return unit;
 			} else
-				return false;
+				return null;
 		} catch (Exception e) {
 			ParserPlugin.getLogger().error(e);
-			return false;
+			return null;
 		}
 	}
 	private IWorkbenchPartSite getEditorSite(){

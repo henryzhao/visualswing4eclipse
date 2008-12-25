@@ -145,6 +145,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				try {
 					page.showView(viewId);
 				} catch (Exception e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 		}

@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
  * @author William Chen
  */
 public interface ISourceParser {
-	WidgetAdapter parse(ICompilationUnit unit);
-	boolean generate(ICompilationUnit unit,WidgetAdapter root,IProgressMonitor monitor);
+	WidgetAdapter parse(ICompilationUnit unit,IProgressMonitor monitor);
+	ICompilationUnit generate(WidgetAdapter root,IProgressMonitor monitor);
 }
 
