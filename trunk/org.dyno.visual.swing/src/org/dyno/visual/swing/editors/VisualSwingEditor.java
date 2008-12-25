@@ -563,8 +563,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 
 	public void validateContent() {
 		if (designer != null && scrollPane != null) {
-			designer.clearCapture();
-			designer.repaint();
 			final Dimension size = designer.getPreferredSize();
 			asyncRunnable(new Runnable() {
 				@Override
@@ -572,6 +570,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					scrollPane.setMinSize(size.width, size.height);
 				}
 			});
+			designer.refreshDesigner();
 		}
 	}
 

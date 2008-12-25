@@ -502,7 +502,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public void validateContent() {
 		editor.validateContent();
 	}
-
+	public void refreshDesigner(){
+		validate();
+		clearCapture();
+		repaint();
+	}
 	public void changeFocused() {
 		CompositeAdapter focused = getFocused();
 		glass.setFocusedComposite(focused);
