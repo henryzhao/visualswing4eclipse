@@ -27,6 +27,7 @@ import javax.swing.TransferHandler;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.swt_awt.Platform;
 
 /**
  * 
@@ -142,12 +143,15 @@ public class GlassPlane extends JComponent implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(Platform.isGtk()&&e.isPopupTrigger()){
+			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
+		}
 		super.requestFocus();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.isPopupTrigger()) {
+		if (!Platform.isGtk()&&e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
 		}
 	}

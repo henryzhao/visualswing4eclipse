@@ -504,9 +504,6 @@ class DefaultSourceParser implements ISourceParser {
 			IType type = getUnitMainType(unit);
 			if(!renameFields(type, monitor, root))
 				return false;
-			if (unit.isWorkingCopy()) {
-				unit.commitWorkingCopy(true, monitor);
-			}
 			IParser parser = (IParser) root.getAdapter(IParser.class);
 			if (parser == null)
 				return false;
@@ -567,7 +564,6 @@ class DefaultSourceParser implements ISourceParser {
 				}
 				if(unit.isWorkingCopy()){
 					unit.commitWorkingCopy(true, monitor);
-					unit.discardWorkingCopy();
 				}
 				return success;
 			} else
