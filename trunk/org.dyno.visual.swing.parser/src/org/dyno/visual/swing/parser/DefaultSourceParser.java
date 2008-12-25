@@ -597,6 +597,16 @@ class DefaultSourceParser implements ISourceParser {
 			boolean success = parser.renameField(type, monitor);
 			if (!success)
 				return false;
+			if(root.isRoot()){
+				for(InvisibleAdapter invisible:root.getInvisibles()){
+					IParser iparser=(IParser) invisible.getAdapter(IParser.class);
+					if(iparser!=null){
+						success=iparser.renameField(type, monitor);
+						if(!success)
+							return false;
+					}						
+				}
+			}
 			if(root instanceof CompositeAdapter){
 				CompositeAdapter ca = (CompositeAdapter) root;
 				int count = ca.getChildCount();
