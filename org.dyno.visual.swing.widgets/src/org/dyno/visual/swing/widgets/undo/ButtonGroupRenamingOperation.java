@@ -13,6 +13,10 @@
 
 package org.dyno.visual.swing.widgets.undo;
 
+import java.util.List;
+
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.plugin.spi.IRenamingListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.ButtonGroupAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -57,7 +61,13 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 					this.lastName = group.getName();
 					this.lastLastName = group.getLastName();
 					group.setName(name);
+					group.setLastName(this.lastName);
 					adapter.changeNotify();
+					adapter.lockDesigner();
+					List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
+					for(IRenamingListener listener:listeners){
+						listener.adapterRenamed(adapter.getCompilationUnit(), group);
+					}
 					break;
 				}
 			} else
@@ -77,8 +87,12 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 			throws ExecutionException {
 		group.setName(lastName);
 		group.setLastName(lastLastName);
-		adapter.setDirty(true);
 		adapter.changeNotify();
+		adapter.lockDesigner();
+		List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
+		for(IRenamingListener listener:listeners){
+			listener.adapterRenamed(adapter.getCompilationUnit(), group);
+		}
 		return Status.OK_STATUS;
 	}
 

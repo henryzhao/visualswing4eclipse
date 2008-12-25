@@ -500,15 +500,12 @@ class DefaultSourceParser implements ISourceParser {
 	@Override
 	public ICompilationUnit generate(WidgetAdapter root,	IProgressMonitor monitor) {
 		try {
-			ICompilationUnit unit = root.getCompilationUnit();
-			IType type = getUnitMainType(unit);
-			if(!renameFields(type, monitor, root))
-				return null;
 			IParser parser = (IParser) root.getAdapter(IParser.class);
 			if (parser == null)
 				return null;
+			ICompilationUnit unit = root.getCompilationUnit();
 			ICompilationUnit copy = unit.getWorkingCopy(monitor);
-			type = getUnitMainType(copy);
+			IType type = getUnitMainType(copy);
 			if (type != null) {
 				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
 				ArrayList<String> fieldAdapters = listBeanName(root);
@@ -588,42 +585,7 @@ class DefaultSourceParser implements ISourceParser {
 		}
 		return null;
 	}
-	private boolean renameFields(IType type,
-			IProgressMonitor monitor, WidgetAdapter root) {
-		try {
-			IParser parser = (IParser) root.getAdapter(IParser.class);
-			if (parser == null)
-				return false;
-			boolean success = parser.renameField(type, monitor);
-			if (!success)
-				return false;
-			if(root.isRoot()){
-				for(InvisibleAdapter invisible:root.getInvisibles()){
-					IParser iparser=(IParser) invisible.getAdapter(IParser.class);
-					if(iparser!=null){
-						success=iparser.renameField(type, monitor);
-						if(!success)
-							return false;
-					}						
-				}
-			}
-			if(root instanceof CompositeAdapter){
-				CompositeAdapter ca = (CompositeAdapter) root;
-				int count = ca.getChildCount();
-				for(int i=0;i<count;i++){
-					Component child = ca.getChild(i);
-					WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-					success=renameFields(type, monitor, childAdapter);
-					if(!success)
-						return false;
-				}
-			}
-			return true;
-		} catch (Exception e) {
-			ParserPlugin.getLogger().error(e);
-			return false;
-		}
-	}
+
 
 	private boolean isUnusedPrivateMethod(IType type, IMethod method) {
 		try {

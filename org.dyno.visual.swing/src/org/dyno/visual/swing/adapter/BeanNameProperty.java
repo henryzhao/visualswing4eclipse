@@ -13,7 +13,11 @@
 
 package org.dyno.visual.swing.adapter;
 
+import java.util.List;
+
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.PropertyAdapter;
+import org.dyno.visual.swing.plugin.spi.IRenamingListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -33,11 +37,18 @@ public class BeanNameProperty extends PropertyAdapter {
 	@Override
 	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		String name = (String) value;
+		String lastName = adapter.getName();
 		adapter.setName(name);
+		adapter.setLastName(lastName);
 		if (!adapter.isRoot()) {
 			adapter.getParentAdapter().setDirty(true);
 		}
 		adapter.changeNotify();
+		adapter.lockDesigner();
+		List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
+		for(IRenamingListener listener:listeners){
+			listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
+		}		
 	}
 
 	@Override

@@ -108,7 +108,17 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private IUndoContext undoContext;
 
 	private List<WidgetAdapter> selected;
-
+	
+	private boolean locked;
+	public boolean isLocked(){
+		return locked;
+	}
+	public void lock(){
+		locked = true;
+	}
+	public void unlock(){
+		locked = false;
+	}
 	public VisualDesigner(VisualSwingEditor editor, Composite parent) {
 		this.editor = editor;
 		this.parent = parent;

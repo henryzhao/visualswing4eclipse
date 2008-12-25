@@ -13,7 +13,11 @@
 
 package org.dyno.visual.swing.undo;
 
+import java.util.List;
+
 import org.dyno.visual.swing.adapter.BeanNameValidator;
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.plugin.spi.IRenamingListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -40,8 +44,7 @@ public class VarChangeOperation extends AbstractOperation {
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		while (true) {
 			VarNameDialog dialog = new VarNameDialog(adapter.getShell());
-			dialog
-					.setPromptMessage("Please enter a new variable name for this component:");
+			dialog.setPromptMessage("Please enter a new variable name for this component:");
 			dialog.setInput(adapter.getName());
 			if (dialog.open() == Dialog.OK) {
 				String name = dialog.getInput();
@@ -53,10 +56,16 @@ public class VarChangeOperation extends AbstractOperation {
 					this.lastName = adapter.getName();
 					this.lastLastName = adapter.getLastName();
 					adapter.setName(name);
+					adapter.setLastName(this.lastName);
 					if (!adapter.isRoot()) {
 						adapter.getParentAdapter().setDirty(true);
 					}
-					adapter.changeNotify();					
+					adapter.changeNotify();
+					adapter.lockDesigner();
+					List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
+					for(IRenamingListener listener:listeners){
+						listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
+					}
 					break;
 				}
 			} else
@@ -77,8 +86,12 @@ public class VarChangeOperation extends AbstractOperation {
 		if (!adapter.isRoot()) {
 			adapter.getParentAdapter().setDirty(true);
 		}
-		adapter.setDirty(true);
 		adapter.changeNotify();
+		adapter.lockDesigner();
+		List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
+		for(IRenamingListener listener:listeners){
+			listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
+		}		
 		return Status.OK_STATUS;
 	}
 

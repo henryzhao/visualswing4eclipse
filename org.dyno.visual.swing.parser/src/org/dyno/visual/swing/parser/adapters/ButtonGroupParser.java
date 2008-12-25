@@ -53,7 +53,6 @@ public class ButtonGroupParser implements IParser, IAdaptableContext {
 							.getActiveWorkbenchWindow();
 					Shell parent = window.getShell();
 					rs.perform(parent, window);
-					adapter.setLastName(null);
 					return true;
 				}
 			} catch (Exception e) {
