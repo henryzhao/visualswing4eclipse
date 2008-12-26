@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Layouts Plug-in
 Bundle-SymbolicName: org.dyno.visual.swing.layouts; singleton:=true
-Bundle-Version: 0.9.6.I20081219-1200
+Bundle-Version: 0.9.7.I20081226-1800
 Require-Bundle: org.dyno.visual.swing,
  org.eclipse.jdt.core,
  org.eclipse.ui.views,

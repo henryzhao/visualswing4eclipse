@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.dyno.visual.swing.feature_0.9.6.I20081219-1200.jar" id="org.dyno.visual.swing.feature" version="0.9.6.I20081219-1200">
+   <feature url="features/org.dyno.visual.swing.feature_0.9.7.I20081226-1800.jar" id="org.dyno.visual.swing.feature" version="0.9.7.I20081226-1800">
       <category name="Visual Swing"/>
    </feature>
    <category-def name="Visual Swing" label="VisualSwing"/>
