@@ -137,7 +137,7 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 			List<ILibraryExtension> libExts = ExtensionRegistry
 					.getLibExtensions();
 			for (ILibraryExtension libExt : libExts) {
-				IClasspathContainer[] libPaths = libExt.listLibPaths();
+				IClasspathContainer[] libPaths = libExt.listLibPaths(false);
 				if (libPaths != null) {
 					for (IClasspathContainer libPath : libPaths)
 						paths.add(libPath);
