@@ -1,11 +1,12 @@
 package org.dyno.visual.swing.lnfs.preference;
 
+import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -13,9 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.plaf.UIResource;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.lnfs.LnfPlugin;
+import org.dyno.visual.swing.lnfs.lib.DelegateLookAndFeel;
 import org.dyno.visual.swing.lnfs.lib.LookAndFeelLib;
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
@@ -46,10 +56,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
 public class AddLafDialog extends Dialog {
+	
 	private ListViewer viewer;
 	private Button btnDel;
 	private Text txtName;
 	private Text txtClassname;
+	private List<JarSrc> jarSrcs;
 
 	public AddLafDialog(Shell parentShell) {
 		super(parentShell);
@@ -80,7 +92,7 @@ public class AddLafDialog extends Dialog {
 			}
 		});
 		GridData data = new GridData();
-		data.widthHint = 215;
+		data.widthHint = 250;
 		data.horizontalSpan = 2;
 		txtName.setLayoutData(data);
 		Composite right = new Composite(main, SWT.NONE);
@@ -165,49 +177,124 @@ public class AddLafDialog extends Dialog {
 	}
 
 	protected boolean createLnf(IProgressMonitor monitor) {
-		monitor.beginTask("Create custom look and feel", 100);
 		if (!checkClassname())
 			return false;
-		monitor.worked(20);		
-		String hintID = copyAndConfig();
-		if(hintID==null)
+		String hintID = copyAndConfig(monitor);
+		if (hintID == null)
 			return false;
-		monitor.worked(40);
-		
-		monitor.done();
 		return true;
 	}
-
-	private String copyAndConfig() {
+	private String translateDir(String lafName){
+		String result = lafName.replace(' ', '_');
+		return result;
+	}
+	private String copyAndConfig(IProgressMonitor monitor) {
 		try {
 			IPath path = LookAndFeelLib.getLafLibDir();
-			String hintID = "laf" + System.currentTimeMillis();
+			String hintID = translateDir(lafName);
 			path = path.append(hintID);
 			File folder = path.toFile();
 			if (!folder.exists())
 				folder.mkdirs();
 			File lafFile = new File(folder, "laf.xml");
-			PrintWriter pw = new PrintWriter(new FileWriter(lafFile));
+			
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lafFile),"UTF-8"));
 			pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			pw.println("<lookandfeel name=\"" + lafName + "\"");
-			pw.println("class=\"" + lafClassname + "\">");
+			pw.println("<lookandfeel name=\"" + lafName + "\" class=\"" + lafClassname + "\">");
 			int count = jarSrcs.size();
+			List<URL> urls = new ArrayList<URL>();
 			for (int i = 0; i < count; i++) {
 				JarSrc jarsrc = jarSrcs.get(i);
 				File jarFile = new File(jarsrc.getJar());
 				copyFile(jarFile, folder);
-				pw.println("<classpath jar=\"" + jarFile.getName() + "\"");
+				urls.add(jarFile.toURI().toURL());
+				pw.print("\t<classpath jar=\"" + jarFile.getName() + "\"");
 				if (jarsrc.getSrc() != null) {
 					File srcFile = new File(jarsrc.getSrc());
 					copyFile(srcFile, folder);
-					pw.println(" src=\"" + srcFile.getName() + "\"");
+					pw.print(" src=\"" + srcFile.getName() + "\"");
 				}
 				pw.println("/>");
 			}
+			createDefCompValue(urls, monitor, pw);
 			pw.println("</lookandfeel>");
 			pw.flush();
 			pw.close();
 			return hintID;
+		} catch (Exception e) {
+			LnfPlugin.getLogger().error(e);
+			return null;
+		}
+	}
+	private void createDefCompValue(List<URL> list, IProgressMonitor monitor, final PrintWriter pw) {
+		try {
+			LookAndFeel current = UIManager.getLookAndFeel();
+			LookAndFeel newLnf = createNewLnf(list);
+			UIManager.setLookAndFeel(newLnf);
+			monitor.beginTask("Creating default values...", BeanCreator.COMPONENTS.length);
+			for(int i=0;i<BeanCreator.COMPONENTS.length;i++){
+				final BeanCreator comp=BeanCreator.COMPONENTS[i];
+				pw.print("\t<component class=\"");
+				pw.print(comp.getBeanClass().getName());
+				pw.print("\">\n");
+				SwingUtilities.invokeAndWait(new Runnable(){
+					@Override
+					public void run() {
+						createDefaultXml(comp, pw);
+					}});
+				pw.print("\t</component>\n");
+				monitor.worked(1);
+			}
+			monitor.done();
+			UIManager.setLookAndFeel(current);
+		} catch (Exception e) {
+			LnfPlugin.getLogger().error(e);
+		}
+	}
+	@SuppressWarnings("unchecked")
+	private void createDefaultXml(BeanCreator comp, PrintWriter pw){
+		Component component = comp.createComponent();
+		WidgetAdapter adapter=ExtensionRegistry.createAdapterFor(component);
+		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
+		for (IWidgetPropertyDescriptor property : properties) {
+			String name = property.getDisplayName();
+			if (property.isGencode()&&
+					!name.equals("minimumSize")&&
+					!name.equals("maximumSize")&&
+					!name.equals("preferredSize")) {
+				Object value = property.getFieldValue(adapter.getWidget());
+				Class type=property.getObjectClass();
+				TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
+				String strValue=null;
+				if(value==null)
+					strValue="null";
+				else if(Border.class.isAssignableFrom(type)){
+					strValue="SYSTEM_VALUE";
+				}else if(value instanceof UIResource){
+					strValue="SYSTEM_VALUE";
+				}
+				if(ta!=null&&ta.getEndec()!=null){
+					strValue=ta.getEndec().encode(value);
+				}
+				if(strValue==null)
+					strValue=value.toString();
+				pw.print("\t\t<property name=\"");
+				pw.print(property.getId());
+				pw.print("\" default=\"");
+				pw.print(strValue);
+				pw.print("\"/>\n");
+			}
+		}
+		comp.dispose();
+	}
+	@SuppressWarnings("unchecked")
+	private LookAndFeel createNewLnf(List<URL> list) {
+		try {
+			URL[] urls = new URL[list.size()];
+			list.toArray(urls);
+			URLClassLoader loader = new URLClassLoader(urls, getClass().getClassLoader());
+			Class lafClass = loader.loadClass(lafClassname);
+			return new DelegateLookAndFeel((LookAndFeel) lafClass.newInstance());
 		} catch (Exception e) {
 			LnfPlugin.getLogger().error(e);
 			return null;
@@ -314,8 +401,6 @@ public class AddLafDialog extends Dialog {
 		}
 		getButton(IDialogConstants.OK_ID).setEnabled(true);
 	}
-
-	private List<JarSrc> jarSrcs;
 
 	private class JarSrcInput {
 	}
