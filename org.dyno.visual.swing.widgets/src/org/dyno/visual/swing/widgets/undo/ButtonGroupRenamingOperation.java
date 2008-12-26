@@ -61,13 +61,13 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 					this.lastName = group.getName();
 					this.lastLastName = group.getLastName();
 					group.setName(name);
-					group.setLastName(this.lastName);
-					adapter.changeNotify();
+					group.setLastName(lastName);
 					adapter.lockDesigner();
 					List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
 					for(IRenamingListener listener:listeners){
 						listener.adapterRenamed(adapter.getCompilationUnit(), group);
 					}
+					adapter.changeNotify();
 					break;
 				}
 			} else

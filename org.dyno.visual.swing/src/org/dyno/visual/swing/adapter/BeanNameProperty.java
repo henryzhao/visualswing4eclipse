@@ -43,12 +43,12 @@ public class BeanNameProperty extends PropertyAdapter {
 		if (!adapter.isRoot()) {
 			adapter.getParentAdapter().setDirty(true);
 		}
-		adapter.changeNotify();
 		adapter.lockDesigner();
 		List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
 		for(IRenamingListener listener:listeners){
 			listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
-		}		
+		}
+		adapter.changeNotify();
 	}
 
 	@Override
