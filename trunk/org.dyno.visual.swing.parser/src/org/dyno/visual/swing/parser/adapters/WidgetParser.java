@@ -98,6 +98,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 							.getActiveWorkbenchWindow();
 					Shell parent = window.getShell();
 					rs.perform(parent, window);
+					adapter.setLastName(name);
 					return true;
 				}
 			} catch (Exception e) {
