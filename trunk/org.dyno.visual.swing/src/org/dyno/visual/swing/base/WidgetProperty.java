@@ -244,18 +244,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return null;
 	}
 
-	// private Object _getPropertyValue(Object bean) {
-	// Method readMethod = propertyDescriptor.getReadMethod();
-	// if (readMethod != null) {
-	// try {
-	// return readMethod.invoke(bean);
-	// } catch (Exception e) {
-	// VisualSwingPlugin.getLogger().error(e);
-	// }
-	// }
-	// return null;
-	// }
-
 	@Override
 	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return true;
