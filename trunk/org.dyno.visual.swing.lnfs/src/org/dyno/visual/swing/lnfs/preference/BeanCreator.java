@@ -1,6 +1,8 @@
 package org.dyno.visual.swing.lnfs.preference;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.JApplet;
 import javax.swing.JButton;
@@ -38,75 +40,70 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JTree;
 
+import org.dyno.visual.swing.lnfs.LnfPlugin;
+
 
 @SuppressWarnings("unchecked")
 public interface BeanCreator {
 	Class getBeanClass();
-	Component createComponent();
+	Component createComponent(JFrame jframe);
 	void dispose();
 	abstract class AbstractScrollPaneCreator implements BeanCreator{
-		private JFrame jframe;
 		private Component content;
 		@Override
-		public Component createComponent() {
-			jframe = new JFrame();
-			jframe.setSize(100, 100);
-			jframe.setLocation(-100, -100);
+		public Component createComponent(JFrame jframe) {
+			jframe.getContentPane().removeAll();
 			JScrollPane jsp = new JScrollPane();
 			try {
 				Class clazz = getBeanClass();
 				content = (Component) clazz.newInstance();
 				jsp.setViewportView(content);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LnfPlugin.getLogger().error(e);
 			}
 			jframe.add(jsp);
-			jsp.setVisible(true);
+			jframe.validate();
 			return content;
 		}
 		@Override
 		public void dispose() {
-			jframe.setVisible(false);
 		}
 	}	
 	abstract class AbstractBeanCreator implements BeanCreator{
-		private JFrame jframe;
 		private Component content;
 		@Override
-		public Component createComponent() {
-			jframe = new JFrame();
+		public Component createComponent(JFrame jframe) {
+			jframe.getContentPane().removeAll();
 			try {
 				Class clazz = getBeanClass();
 				content = (Component) clazz.newInstance();
 				jframe.add(content);
+				jframe.validate();
 			} catch (Exception e) {
-				e.printStackTrace();
+				LnfPlugin.getLogger().error(e);
 			}
-			jframe.setSize(100, 100);
-			jframe.setLocation(10, 10);
-			jframe.setVisible(true);
 			return content;
 		}
 		@Override
 		public void dispose() {
-			jframe.setVisible(false);
 		}
 	}
 	BeanCreator[]COMPONENTS={
 			new BeanCreator(){
-				private JFrame jframe;
+				private JFrame frame;
 				@Override
-				public Component createComponent() {
-					jframe = new JFrame();
-					jframe.setSize(100, 100);
-					jframe.setLocation(-100, -100);
-					jframe.setVisible(true);
-					return jframe;
+				public Component createComponent(JFrame jframe) {
+					frame = new JFrame();
+					frame.setSize(100, 100);
+					Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+					frame.setLocation(size.width+1, size.height+1);
+					frame.setVisible(true);
+					return frame;
 				}
 
 				@Override
 				public void dispose() {
-					jframe.setVisible(false);
+					frame.setVisible(false);
 				}
 
 				@Override
@@ -117,11 +114,11 @@ public interface BeanCreator {
 			new BeanCreator(){
 				private JDialog jdialog;
 				@Override
-				public Component createComponent() {
-					JFrame jframe = new JFrame();
+				public Component createComponent(JFrame jframe) {
 					jdialog = new JDialog(jframe);
 					jdialog.setSize(100, 100);
-					jframe.setLocation(-100, -100);
+					Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+					jdialog.setLocation(size.width+1, size.height+1);
 					jdialog.setVisible(true);
 					return jdialog;
 				}
@@ -174,7 +171,7 @@ public interface BeanCreator {
 				}
 
 				@Override
-				public Component createComponent() {
+				public Component createComponent(JFrame jframe) {
 					return new JCheckBoxMenuItem();
 				}
 
@@ -225,7 +222,7 @@ public interface BeanCreator {
 				}
 
 				@Override
-				public Component createComponent() {
+				public Component createComponent(JFrame jframe) {
 					return new JMenuBar();
 				}
 
@@ -240,7 +237,7 @@ public interface BeanCreator {
 				}
 
 				@Override
-				public Component createComponent() {
+				public Component createComponent(JFrame jframe) {
 					return new JMenuItem();
 				}
 
@@ -255,7 +252,7 @@ public interface BeanCreator {
 				}
 
 				@Override
-				public Component createComponent() {
+				public Component createComponent(JFrame jframe) {
 					return new JMenu();
 				}
 
@@ -283,7 +280,7 @@ public interface BeanCreator {
 				}
 
 				@Override
-				public Component createComponent() {
+				public Component createComponent(JFrame jframe) {
 					return new JRadioButtonMenuItem();
 				}
 

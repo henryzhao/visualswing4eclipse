@@ -47,7 +47,7 @@ public class JarSrcDialog extends Dialog {
 				updateButtonState();
 			}});
 		Button btnJar = new Button(main, SWT.PUSH);
-		btnJar.setText("Browse...");
+		btnJar.setText("&Browse...");
 		btnJar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -66,7 +66,7 @@ public class JarSrcDialog extends Dialog {
 				updateButtonState();
 			}});
 		Button btnSrc = new Button(main, SWT.PUSH);
-		btnSrc.setText("Browse...");
+		btnSrc.setText("B&rowse...");
 		btnSrc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
