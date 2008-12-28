@@ -82,7 +82,7 @@ public class LafPreference extends PreferencePage implements
 		right.setLayoutData(data);
 
 		btnAdd = new Button(right, SWT.PUSH);
-		btnAdd.setText("  Add ...  ");
+		btnAdd.setText("  &Add ...  ");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -91,10 +91,10 @@ public class LafPreference extends PreferencePage implements
 		});
 
 		btnEdit = new Button(right, SWT.PUSH);
-		btnEdit.setText("  Edit ...  ");
+		btnEdit.setText("  &Edit ...  ");
 
 		btnDel = new Button(right, SWT.PUSH);
-		btnDel.setText("  Delete   ");
+		btnDel.setText("  &Delete   ");
 
 		updateButtonState();
 

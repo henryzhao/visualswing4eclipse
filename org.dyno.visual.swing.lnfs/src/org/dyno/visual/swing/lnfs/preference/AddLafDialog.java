@@ -1,6 +1,8 @@
 package org.dyno.visual.swing.lnfs.preference;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -13,6 +15,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -31,6 +34,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -52,8 +56,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.progress.IProgressService;
 
 public class AddLafDialog extends Dialog {
 	
@@ -99,7 +101,7 @@ public class AddLafDialog extends Dialog {
 		GridLayout gridLayout = new GridLayout();
 		right.setLayout(gridLayout);
 		Button btnAdd = new Button(right, SWT.PUSH);
-		btnAdd.setText("New ... ");
+		btnAdd.setText("&New ... ");
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -107,7 +109,7 @@ public class AddLafDialog extends Dialog {
 			}
 		});
 		btnDel = new Button(right, SWT.PUSH);
-		btnDel.setText("Remove");
+		btnDel.setText("&Remove");
 		btnDel.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -157,15 +159,15 @@ public class AddLafDialog extends Dialog {
 	protected void okPressed() {
 		lafName = txtName.getText().trim();
 		lafClassname = txtClassname.getText().trim();
-		IProgressService progressService = PlatformUI.getWorkbench()
-				.getProgressService();
 		try {
-			progressService.busyCursorWhile(new IRunnableWithProgress() {
+			IRunnableWithProgress runnable = new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) {
-					if (createLnf(monitor))
-						lnfCreationDone(monitor);
+				if (createLnf(monitor))
+					lnfCreationDone(monitor);
 				}
-			});
+			};
+			ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell()); 
+			dialog.run(true, true, runnable);
 		} catch (Exception e) {
 			LnfPlugin.getLogger().error(e);
 			return;
@@ -189,6 +191,7 @@ public class AddLafDialog extends Dialog {
 		return result;
 	}
 	private String copyAndConfig(IProgressMonitor monitor) {
+		PrintWriter pw = null;
 		try {
 			IPath path = LookAndFeelLib.getLafLibDir();
 			String hintID = translateDir(lafName);
@@ -196,9 +199,8 @@ public class AddLafDialog extends Dialog {
 			File folder = path.toFile();
 			if (!folder.exists())
 				folder.mkdirs();
-			File lafFile = new File(folder, "laf.xml");
-			
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lafFile),"UTF-8"));
+			File lafFile = new File(folder, "laf.xml");			
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lafFile),"UTF-8"));
 			pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 			pw.println("<lookandfeel name=\"" + lafName + "\" class=\"" + lafClassname + "\">");
 			int count = jarSrcs.size();
@@ -216,7 +218,13 @@ public class AddLafDialog extends Dialog {
 				}
 				pw.println("/>");
 			}
-			createDefCompValue(urls, monitor, pw);
+			if(!createDefCompValue(urls, monitor, pw)){
+				if(monitor.isCanceled()){
+					pw.close();
+					deleteDirTree(folder);
+					return null;
+				}
+			}
 			pw.println("</lookandfeel>");
 			pw.flush();
 			pw.close();
@@ -224,15 +232,40 @@ public class AddLafDialog extends Dialog {
 		} catch (Exception e) {
 			LnfPlugin.getLogger().error(e);
 			return null;
+		} finally {
+			if(pw!=null){
+				pw.close();
+			}
 		}
 	}
-	private void createDefCompValue(List<URL> list, IProgressMonitor monitor, final PrintWriter pw) {
+	private void deleteDirTree(File folder) {
+		if (folder.isFile())
+			folder.delete();
+		else if (folder.isDirectory()) {
+			File[] files = folder.listFiles();
+			if (files != null && files.length > 0) {
+				for (File file : files)
+					deleteDirTree(file);
+			}
+			folder.delete();
+		}
+	}
+	private boolean createDefCompValue(List<URL> list, IProgressMonitor monitor, final PrintWriter pw) {
 		try {
 			LookAndFeel current = UIManager.getLookAndFeel();
 			LookAndFeel newLnf = createNewLnf(list);
 			UIManager.setLookAndFeel(newLnf);
 			monitor.beginTask("Creating default values...", BeanCreator.COMPONENTS.length);
+			final JFrame jframe = new JFrame();
+			jframe.setSize(100, 100);
+			Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+			jframe.setLocation(size.width+1, size.height+1);
+			jframe.setVisible(true);
 			for(int i=0;i<BeanCreator.COMPONENTS.length;i++){
+				if(monitor.isCanceled()){
+					jframe.setVisible(false);
+					return false;
+				}
 				final BeanCreator comp=BeanCreator.COMPONENTS[i];
 				pw.print("\t<component class=\"");
 				pw.print(comp.getBeanClass().getName());
@@ -240,20 +273,23 @@ public class AddLafDialog extends Dialog {
 				SwingUtilities.invokeAndWait(new Runnable(){
 					@Override
 					public void run() {
-						createDefaultXml(comp, pw);
+						createDefaultXml(jframe, comp, pw);
 					}});
 				pw.print("\t</component>\n");
 				monitor.worked(1);
 			}
+			jframe.setVisible(false);
 			monitor.done();
 			UIManager.setLookAndFeel(current);
+			return true;
 		} catch (Exception e) {
 			LnfPlugin.getLogger().error(e);
+			return false;
 		}
 	}
 	@SuppressWarnings("unchecked")
-	private void createDefaultXml(BeanCreator comp, PrintWriter pw){
-		Component component = comp.createComponent();
+	private void createDefaultXml(JFrame jframe, BeanCreator comp, PrintWriter pw){
+		Component component = comp.createComponent(jframe);
 		WidgetAdapter adapter=ExtensionRegistry.createAdapterFor(component);
 		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
