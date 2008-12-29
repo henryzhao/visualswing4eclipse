@@ -24,8 +24,7 @@ public class NewAppletPage extends NewComponentPage {
 		return false;
 	}
 
-	private void createInit(IType type, ImportsManager imports,
-			IProgressMonitor monitor) throws JavaModelException {
+	private void createInit(IType type, ImportsManager imports, IProgressMonitor monitor) throws JavaModelException {
 		StringBuffer buf = new StringBuffer();
 		buf.append("public void init(");
 		buf.append("){\n");
