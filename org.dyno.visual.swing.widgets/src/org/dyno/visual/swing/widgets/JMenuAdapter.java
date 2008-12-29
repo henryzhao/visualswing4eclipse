@@ -436,6 +436,7 @@ public class JMenuAdapter extends CompositeAdapter {
 				}
 				clearAllSelected();
 				target.setSelected(true);
+				setDirty(true);
 				addNotify();
 				if (jmenu.isPopupMenuVisible()) {
 					widgetPressed(null);

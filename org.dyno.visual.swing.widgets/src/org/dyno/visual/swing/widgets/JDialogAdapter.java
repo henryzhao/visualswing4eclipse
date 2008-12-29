@@ -361,7 +361,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 			validateContent();
 			clearAllSelected();
 			target.setSelected(true);
-			target.setDirty(true);
+			setDirty(true);
 			addNotify();
 			repaintDesigner();
 			dropStatus = NOOP;

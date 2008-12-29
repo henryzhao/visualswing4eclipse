@@ -23,12 +23,13 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public class JSplitPaneParser extends CompositeParser {
 
 	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JSplitPane jsp = (JSplitPane) adapter.getWidget();
 		int oritentation = jsp.getOrientation();
 		String fieldName = getFieldName(adapter.getName());
+		String prefix="";
+		if(!adapter.isRoot())
+			prefix=fieldName+".";
 		if (oritentation == JSplitPane.HORIZONTAL_SPLIT) {
 			Component left = jsp.getLeftComponent();
 			if (left != null) {
@@ -36,8 +37,8 @@ public class JSplitPaneParser extends CompositeParser {
 				WidgetAdapter leftAdapter = WidgetAdapter
 						.getWidgetAdapter(leftComponent);
 				if (leftAdapter != null) {
-					String leftGetName = leftAdapter.getCreationMethodName();
-					builder.append(fieldName + ".setLeftComponent("
+					String leftGetName = leftAdapter.getCreationMethodName();					
+					builder.append(prefix+"setLeftComponent("
 							+ leftGetName + "());\n");
 				}
 			}
@@ -48,7 +49,7 @@ public class JSplitPaneParser extends CompositeParser {
 						.getWidgetAdapter(rightComponent);
 				if (rightAdapter != null) {
 					String rightGetName = rightAdapter.getCreationMethodName();
-					builder.append(fieldName + ".setRightComponent("
+					builder.append(prefix+"setRightComponent("
 							+ rightGetName + "());\n");
 				}
 			}
@@ -60,7 +61,7 @@ public class JSplitPaneParser extends CompositeParser {
 						.getWidgetAdapter(topComponent);
 				if (topAdapter != null) {
 					String topGetName = topAdapter.getCreationMethodName();
-					builder.append(fieldName + ".setTopComponent(" + topGetName
+					builder.append(prefix+"setTopComponent(" + topGetName
 							+ "());\n");
 				}
 			}
@@ -71,12 +72,11 @@ public class JSplitPaneParser extends CompositeParser {
 						.getWidgetAdapter(bottomComponent);
 				if (bottomAdapter != null) {
 					String bottomGetName = bottomAdapter.getCreationMethodName();
-					builder.append(fieldName + ".setBottomComponent("
+					builder.append(prefix+"setBottomComponent("
 							+ bottomGetName + "());\n");
 				}
 			}
 
 		}
-		return builder.toString();
 	}
 }

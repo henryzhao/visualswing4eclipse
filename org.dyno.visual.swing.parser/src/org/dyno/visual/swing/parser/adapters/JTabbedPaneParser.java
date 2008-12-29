@@ -23,21 +23,20 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public class JTabbedPaneParser extends CompositeParser {
 
 	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JTabbedPane jtp = (JTabbedPane) adapter.getWidget();
-		CompositeAdapter ca=(CompositeAdapter)adapter;
+		CompositeAdapter ca = (CompositeAdapter) adapter;
 		int count = ca.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = ca.getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			String getMethodName = childAdapter.getCreationMethodName();
-			builder.append(getFieldName(ca.getName()) + ".addTab(");
+			if (!adapter.isRoot())
+				builder.append(getFieldName(ca.getName()) + ".");
+			builder.append("addTab(");
 			String title = jtp.getTitleAt(i);
 			builder.append("\"" + title + "\", ");
 			builder.append(getMethodName + "());\n");
 		}
-		return builder.toString();
 	}
 }

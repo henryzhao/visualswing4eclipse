@@ -91,7 +91,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class
 				.getResource("/icons/forbidden.png"));
 	}
-	protected boolean dirty;
+	protected boolean dirty=true;
 	protected int getAccess;
 	protected int fieldAccess;
 	protected Point hotspotPoint;
@@ -185,9 +185,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public void setDirty(boolean d) {
 		if (dirty != d) {
 			dirty = d;
-			if (getDesigner() != null)
-				getDesigner().fireDirty();
 		}
+		if (getDesigner() != null)
+			getDesigner().fireDirty();
 	}
 
 	public void clearDirty() {
@@ -250,7 +250,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		this.hotspotPoint = new Point(widget.getWidth() / 2,
 				widget.getHeight() / 2);
 		attach();
-		this.dirty = true;
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 		this.edited = new HashMap<String, Boolean>();
 	}
@@ -262,7 +261,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public void setWidget(Component widget) {
 		this.widget = widget;
 		attach();
-		this.dirty = false;
 	}
 
 	public void detachWidget() {

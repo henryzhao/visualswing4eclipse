@@ -32,53 +32,12 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JPanelParser extends CompositeParser implements IParser {
 
-	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
-		genAddComponentCode(imports, builder);
-		return builder.toString();
-	}
-
-	void genAddComponentCode(ImportRewrite imports, StringBuilder builder) {
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JPanel panel = (JPanel) adapter.getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
-			builder.append(getFieldName(adapter.getName()) + "."
-					+ "setLayout(null);\n");
-			int count = ((CompositeAdapter) adapter).getChildCount();
-			for (int i = 0; i < count; i++) {
-				Component child = ((CompositeAdapter) adapter).getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
-				String getMethodName = childAdapter.getCreationMethodName();
-				builder.append(getFieldName(adapter.getName()) + "." + "add("
-						+ getMethodName + "());\n");
-			}
-		} else {
-			LayoutAdapter layoutAdapter = ((CompositeAdapter) adapter)
-					.getLayoutAdapter();
-			if (layoutAdapter != null) {
-				ILayoutParser parser = (ILayoutParser) layoutAdapter
-						.getAdapter(ILayoutParser.class);
-				if (parser != null)
-					builder.append(parser.createCode(imports));
-			}
-		}
-	}
-
-	@Override
-	protected String createInitCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createInitCode(imports));
-		createAddCode(imports, builder);
-		return builder.toString();
-	}
-
-	void createAddCode(ImportRewrite imports, StringBuilder builder) {
-		JPanel panel = (JPanel) adapter.getWidget();
-		LayoutManager layout = panel.getLayout();
-		if (layout == null) {
+			if (!adapter.isRoot())
+				builder.append(getFieldName(adapter.getName()) + ".");
 			builder.append("setLayout(null);\n");
 			int count = ((CompositeAdapter) adapter).getChildCount();
 			for (int i = 0; i < count; i++) {
@@ -86,6 +45,8 @@ public class JPanelParser extends CompositeParser implements IParser {
 				WidgetAdapter childAdapter = WidgetAdapter
 						.getWidgetAdapter(child);
 				String getMethodName = childAdapter.getCreationMethodName();
+				if (!adapter.isRoot())
+					builder.append(getFieldName(adapter.getName()) + ".");
 				builder.append("add(" + getMethodName + "());\n");
 			}
 		} else {

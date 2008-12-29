@@ -30,7 +30,7 @@ public class JInternalFrameParser extends RootPaneContainerParser {
 		WidgetAdapter contentAdapter = rootAdapter.getContentAdapter();
 		JPanelParser parser = (JPanelParser) contentAdapter.getAdapter(IParser.class);
 		if (parser != null)
-			parser.genAddComponentCode(imports, builder);
+			parser.genAddCode(imports, builder);
 		contentAdapter.detachWidget();
 		return builder.toString();
 	}

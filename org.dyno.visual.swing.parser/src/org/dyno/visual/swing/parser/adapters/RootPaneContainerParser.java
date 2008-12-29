@@ -37,7 +37,7 @@ public abstract class RootPaneContainerParser extends CompositeParser {
 		builder.append(super.createInitCode(imports));
 		JPanelParser parser=(JPanelParser) rootPaneContainerAdapter.getContentAdapter().getAdapter(IParser.class);
 		if(parser!=null)
-			parser.createAddCode(imports, builder);
+			parser.genAddCode(imports, builder);
 		if(getJMenuBar()!=null){
 			builder.append("setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();

@@ -28,10 +28,9 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 	public String createCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
-		if (adapter.isRoot())
-			builder.append("setLayout(");
-		else
-			builder.append(getFieldName(adapter.getName()) + ".setLayout(");
+		if (!adapter.isRoot())
+			builder.append(getFieldName(adapter.getName()) + ".");
+		builder.append("setLayout(");
 		builder.append(getNewInstanceCode(imports));
 		builder.append(");\n");
 		CompositeAdapter conAdapter = (CompositeAdapter) adapter;
@@ -66,11 +65,10 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter conAdapter = WidgetAdapter.getWidgetAdapter(adapter.getContainer());
 		WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-		if (conAdapter.isRoot()) {
-			builder.append("add(");
-		} else {
-			builder.append(getFieldName(conAdapter.getName()) + ".add(");
+		if (!conAdapter.isRoot()) {
+			builder.append(getFieldName(conAdapter.getName()) + ".");
 		}
+		builder.append("add(");
 		builder.append(childAdapter.getCreationMethodName()+"()");
 		if (constraints != null) {
 			builder.append(", " + constraints);
