@@ -19,6 +19,7 @@ import java.beans.MethodDescriptor;
 
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.parser.ParserPlugin;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -32,7 +33,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
-public class CodeSnippet implements IEventMethod {
+public class CodeSnippet implements IEventMethod, IConstants{
 	private WidgetAdapter adapter;
 	private EventSetDescriptor eventSet;
 	private MethodDescriptor methodDesc;
@@ -61,7 +62,7 @@ public class CodeSnippet implements IEventMethod {
 			if (dot != -1)
 				name = name.substring(0, dot);
 			IType type = unit.getType(name);
-			String mName = adapter.isRoot() ? "initComponent"
+			String mName = adapter.isRoot() ? INIT_METHOD_NAME
 					: getGetMethodName(adapter.getName());
 			IMethod method = type.getMethod(mName, new String[0]);
 			IJavaElement[] children = method.getChildren();

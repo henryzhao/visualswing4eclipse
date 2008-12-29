@@ -22,6 +22,7 @@ import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.ILayoutParser;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -30,7 +31,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
-public class JPanelParser extends CompositeParser implements IParser {
+public class JPanelParser extends CompositeParser implements IParser, IConstants {
 
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JPanel panel = (JPanel) adapter.getWidget();
@@ -67,7 +68,7 @@ public class JPanelParser extends CompositeParser implements IParser {
 		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("public " + type.getElementName() + "(){\n");
-			builder.append("initComponent();\n");
+			builder.append(INIT_METHOD_NAME+"();\n");
 			builder.append("}\n");
 			try {
 				type.createMethod(JavaUtil.formatCode(builder.toString()),

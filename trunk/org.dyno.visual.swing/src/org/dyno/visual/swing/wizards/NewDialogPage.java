@@ -36,7 +36,7 @@ public class NewDialogPage extends NewComponentPage {
 		buf.append("){\n");
 		if (args != null)
 			buf.append("super(" + args + ");\n");
-		buf.append("initComponent();\n");
+		buf.append(INIT_METHOD_NAME+"();\n");
 		buf.append("}\n");
 		type.createMethod(buf.toString(), null, false, monitor);
 	}
@@ -87,7 +87,7 @@ public class NewDialogPage extends NewComponentPage {
 		}
 
 		StringBuffer buf = new StringBuffer();
-		buf.append("private void initComponent(");
+		buf.append("private void "+INIT_METHOD_NAME+"(");
 		buf.append(") {");
 		buf.append(lineDelim);
 		buf.append("setLayout(new ");

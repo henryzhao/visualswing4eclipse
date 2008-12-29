@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.Block;
@@ -32,7 +33,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
-public abstract class AbstractClassModel implements IEventListenerModel {
+public abstract class AbstractClassModel implements IEventListenerModel, IConstants {
 	protected EventSetDescriptor eventSet;
 	protected WidgetAdapter adapter;
 
@@ -58,7 +59,7 @@ public abstract class AbstractClassModel implements IEventListenerModel {
 		for (MethodDeclaration md : mds) {
 			String mdName = md.getName().getFullyQualifiedName();
 			if (adapter.isRoot()) {
-				if (mdName.equals("initComponent")) {
+				if (mdName.equals(INIT_METHOD_NAME)) {
 					if (createEventMethodForWidget(type, adapter, esd, mListener, md))
 						success = true;
 					break;

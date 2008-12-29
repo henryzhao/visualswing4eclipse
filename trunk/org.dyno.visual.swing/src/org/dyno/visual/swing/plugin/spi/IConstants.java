@@ -67,6 +67,7 @@ public interface IConstants {
 	int ACCESS_PROTECTED = 2;
 	int ACCESS_PUBLIC = 3;
 	
-	Color SELECTION_COLOR = new Color(255, 164, 0);	
+	Color SELECTION_COLOR = new Color(255, 164, 0);
+	String INIT_METHOD_NAME="initComponents";
 }
 

@@ -13,10 +13,11 @@
 
 package org.dyno.visual.swing.wizards;
 
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogSettings;
 
-public class NewComponentPage extends NewClassWizardPage {
+public class NewComponentPage extends NewClassWizardPage implements IConstants{
 
 	final static String PAGE_NAME = "NewClassWizardPage"; //$NON-NLS-1$
 
