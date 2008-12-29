@@ -78,8 +78,6 @@ public class ImageIconValidator implements ICellEditorValidator {
 				return e.getLocalizedMessage();
 			}
 			return "Cannot find such image file:" + value + "!";
-		} else {
-			System.out.println(resource);
 		}
 		return null;
 	}

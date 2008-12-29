@@ -97,13 +97,11 @@ public interface BeanCreator {
 					frame.setSize(100, 100);
 					Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 					frame.setLocation(size.width+1, size.height+1);
-					frame.setVisible(true);
 					return frame;
 				}
 
 				@Override
 				public void dispose() {
-					frame.setVisible(false);
 				}
 
 				@Override
@@ -119,7 +117,6 @@ public interface BeanCreator {
 					jdialog.setSize(100, 100);
 					Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 					jdialog.setLocation(size.width+1, size.height+1);
-					jdialog.setVisible(true);
 					return jdialog;
 				}
 

@@ -109,14 +109,12 @@ class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusLi
 		assert e != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("gained (awt). component = "
 		// + e.getComponent().getClass() + ", opposite = "
 		// + e.getOppositeComponent());
 		currentComponent = e.getComponent();
 	}
 
 	public void focusLost(FocusEvent e) {
-		// System.out.println("component focus lost (awt). opposite = "
 		// + e.getOppositeComponent());
 
 		// Intentionally leaving currentComponent set. When window focus is
@@ -140,9 +138,6 @@ class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusLi
 
 	public void windowGainedFocus(WindowEvent e) {
 		assert EventQueue.isDispatchThread(); // On AWT event thread
-		// Component comp = e.getComponent();
-		// System.out.println("WindowFocusListener.windowGainedFocus="
-		// + (comp != null ? comp.getClass() : null));
 		awtHasFocus = true;
 	}
 
@@ -151,7 +146,6 @@ class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusLi
 		assert swtHandler != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("WindowFocusListener.windowLostFocus");
 
 		// Dismiss any popup menus that are
 		// open when losing focus. This prevents situations where
@@ -171,15 +165,6 @@ class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusLi
 		// However, don't grab back focus if a popup was hidden above. The popup
 		// area will not be properly redrawn (the popup, or part of it, will
 		// appear to be still there.
-		// if (!popupShown && swtHandler.hasFocus()) {
-		// System.out.println("**** Taking back focus: " + e);
-		// This seems to have side effects, so it's commented out for now.
-		// (Sometimes, it forces the workbench window to the foreground when
-		// another
-		// program's window is selected.)
-		// gainFocus();
-		// return;
-		// }
 
 		// On a normal change of focus, Swing will turn off any selection
 		// in a text field to help indicate focus is lost. This won't happen
@@ -208,7 +193,6 @@ class AwtFocusHandler implements FocusListener, ContainerListener, WindowFocusLi
 		// Heavyweight popups will be found here.
 		findOwnedPopups(frame, popups);
 
-		// System.out.println("Hiding popups, count=" + popups.size());
 		for (Iterator<Component> iter = popups.iterator(); iter.hasNext();) {
 			Component popup = iter.next();
 			if (popup.isVisible()) {

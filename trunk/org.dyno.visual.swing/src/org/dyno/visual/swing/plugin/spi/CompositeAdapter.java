@@ -183,15 +183,12 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 
 	public void addBefore(Component hovering, Component dragged) {
-		System.out.println("addBefore");
 	}
 
 	public void addAfter(Component hovering, Component dragged) {
-		System.out.println("addAfter");
 	}
 
 	public void addChild(Component widget) {
-		System.out.println("addChild");
 	}
 
 	public boolean doAlignment(String id) {

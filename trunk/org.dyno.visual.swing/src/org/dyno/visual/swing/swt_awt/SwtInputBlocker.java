@@ -68,7 +68,6 @@ public class SwtInputBlocker extends Dialog {
 		assert blockCount >= 0;
 		assert Display.getCurrent() != null; // On SWT event thread
 
-		// System.out.println("Deleting SWT blocker");
 		if (blockCount == 0) {
 			return;
 		}
@@ -82,7 +81,6 @@ public class SwtInputBlocker extends Dialog {
 	public static void block() {
 		assert blockCount >= 0;
 
-		// System.out.println("Creating SWT blocker");
 		final Display display = Display.getCurrent();
 		assert display != null; // On SWT event thread
 

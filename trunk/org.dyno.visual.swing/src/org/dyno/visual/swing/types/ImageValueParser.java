@@ -32,7 +32,6 @@ public class ImageValueParser implements IValueParser {
 					}
 				}
 			}
-			System.out.println();
 		}
 		return oldValue;
 	}
