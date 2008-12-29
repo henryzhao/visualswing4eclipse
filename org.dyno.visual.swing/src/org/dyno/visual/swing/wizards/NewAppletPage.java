@@ -35,7 +35,7 @@ public class NewAppletPage extends NewComponentPage {
 		buf.append(".invokeAndWait(new Runnable() {\n");
 		buf.append("@Override\n");
 		buf.append("public void run() {\n");
-		buf.append("initComponent();\n");
+		buf.append(INIT_METHOD_NAME+"();\n");
 		buf.append("}\n});\n} catch (Exception ex) {\n");
 		buf.append("ex.printStackTrace();\n}\n}\n");
 		type.createMethod(buf.toString(), null, false, monitor);
@@ -57,7 +57,7 @@ public class NewAppletPage extends NewComponentPage {
 		createInit(type, imports, monitor);
 
 		StringBuffer buf = new StringBuffer();
-		buf.append("private void initComponent(");
+		buf.append("private void "+INIT_METHOD_NAME+"(");
 		buf.append(") {");
 		buf.append(lineDelim);
 		buf.append("setSize(400,300);");

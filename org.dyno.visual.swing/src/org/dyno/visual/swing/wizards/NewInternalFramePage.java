@@ -40,13 +40,13 @@ public class NewInternalFramePage extends NewComponentPage {
 		StringBuffer buf = new StringBuffer();
 		buf.append("public " + type.getTypeQualifiedName('.') + "(){");
 		buf.append(lineDelim);
-		buf.append("initComponent();");
+		buf.append(INIT_METHOD_NAME+"();");
 		buf.append(lineDelim);
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
 
 		buf = new StringBuffer();
-		buf.append("private void initComponent(");
+		buf.append("private void "+INIT_METHOD_NAME+"(");
 		buf.append(") {");
 		buf.append(lineDelim);
 		buf.append("setLayout(new ");

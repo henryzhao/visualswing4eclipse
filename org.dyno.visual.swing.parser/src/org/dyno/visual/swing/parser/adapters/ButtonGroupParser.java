@@ -21,6 +21,7 @@ import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IAdaptable;
@@ -36,7 +37,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-public class ButtonGroupParser implements IParser, IAdaptableContext {
+public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants {
 	@Override
 	public boolean renameField(IType type, IProgressMonitor monitor) {
 		String lastName = adapter.getLastName();
@@ -129,8 +130,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext {
 		return NamespaceManager.getInstance().getFieldName(name);
 	}
 	private IJavaElement getInitMethodSibling(IType type) {
-		String initMethodName = "initComponent";
-		IMethod method = type.getMethod(initMethodName, new String[0]);
+		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);
 		if (method != null && method.exists()) {
 			return getSibling(type, method);
 		}

@@ -21,6 +21,7 @@ import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,7 +30,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
-public abstract class RootPaneContainerParser extends CompositeParser {
+public abstract class RootPaneContainerParser extends CompositeParser implements IConstants {
 	@Override
 	protected String createInitCode(ImportRewrite imports) {
 		RootPaneContainerAdapter rootPaneContainerAdapter = (RootPaneContainerAdapter) adapter;
@@ -60,7 +61,7 @@ public abstract class RootPaneContainerParser extends CompositeParser {
 		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("public " + type.getElementName() + "(){\n");
-			builder.append("initComponent();\n");
+			builder.append(INIT_METHOD_NAME+"();\n");
 			builder.append("}\n");
 			try {
 				type.createMethod(JavaUtil.formatCode(builder.toString()), null, false, null);

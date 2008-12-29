@@ -63,8 +63,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	private IJavaElement getInitMethodSibling(IType type) {
-		String initMethodName = "initComponent";
-		IMethod method = type.getMethod(initMethodName, new String[0]);
+		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);
 		if (method != null && method.exists()) {
 			return getSibling(type, method);
 		}
@@ -238,7 +237,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private boolean createRootCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
-		IMethod method = type.getMethod("initComponent", new String[0]);
+		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);
 		IJavaElement sibling = null;
 		if (method != null && method.exists()) {
 			try {
@@ -269,7 +268,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 			IProgressMonitor monitor, IJavaElement sibling) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("private void ");
-		builder.append("initComponent");
+		builder.append(INIT_METHOD_NAME);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
 		for (InvisibleAdapter invisible : adapter.getInvisibles()) {

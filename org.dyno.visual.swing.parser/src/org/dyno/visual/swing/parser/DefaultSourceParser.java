@@ -36,6 +36,7 @@ import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
@@ -94,7 +95,7 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-class DefaultSourceParser implements ISourceParser {
+class DefaultSourceParser implements ISourceParser, IConstants {
 	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser";
 	private DefaultParserFactory factory;
 	private List<IFieldParser> fieldParsers;
@@ -315,8 +316,7 @@ class DefaultSourceParser implements ISourceParser {
 			TypeDeclaration type) {
 		List statements;
 		if (adapter.isRoot()) {
-			MethodDeclaration initMethod = getMethodDeclaration(type,
-					"initComponent");
+			MethodDeclaration initMethod = getMethodDeclaration(type,INIT_METHOD_NAME);
 			Block body = initMethod.getBody();
 			statements = body.statements();
 		} else {
