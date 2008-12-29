@@ -57,7 +57,6 @@ public class AwtDialogListener implements AWTEventListener, ComponentListener {
 		assert display != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("Remove dialog: " + awtDialog);
 		if (removeListener) {
 			awtDialog.removeComponentListener(this);
 		}
@@ -81,7 +80,6 @@ public class AwtDialogListener implements AWTEventListener, ComponentListener {
 		assert modalDialogs != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("Add dialog: " + awtDialog);
 		if (modalDialogs.contains(awtDialog) || !awtDialog.isModal() || !awtDialog.isVisible()) {
 			return;
 		}
@@ -127,7 +125,6 @@ public class AwtDialogListener implements AWTEventListener, ComponentListener {
 					//
 					// The workaround is to use Windows look and feel, rather
 					// than Metal.
-					// System.out.println("Bringing to front");
 
 					awtDialog.requestFocus();
 					awtDialog.toFront();
@@ -205,7 +202,6 @@ public class AwtDialogListener implements AWTEventListener, ComponentListener {
 		assert e != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("Component hidden");
 		Object obj = e.getSource();
 		if (obj instanceof Dialog) {
 			// Remove dialog but keep listener in place so that we know if/when
@@ -218,7 +214,6 @@ public class AwtDialogListener implements AWTEventListener, ComponentListener {
 		assert e != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("Component shown");
 		Object obj = e.getSource();
 		if (obj instanceof Dialog) {
 			handleAddedDialog((Dialog) obj);

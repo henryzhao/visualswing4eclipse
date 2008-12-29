@@ -129,10 +129,8 @@ class EmbeddedChildFocusTraversalPolicy extends LayoutFocusTraversalPolicy {
 		// does
 		// not own the focus. When AWT *does* own the focus, behave normally.
 		if (awtHandler.awtHasFocus()) {
-			// System.out.println("getDefault: super");
 			return super.getDefaultComponent(container);
 		} else {
-			// System.out.println("getDefault: null");
 			return null;
 		}
 	}

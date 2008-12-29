@@ -298,8 +298,8 @@ public class AddLafDialog extends Dialog {
 					!name.equals("minimumSize")&&
 					!name.equals("maximumSize")&&
 					!name.equals("preferredSize")) {
-				Object value = property.getFieldValue(adapter.getWidget());
 				Class type=property.getObjectClass();
+				Object value = property.getFieldValue(adapter.getWidget());
 				TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
 				String strValue=null;
 				if(value==null)

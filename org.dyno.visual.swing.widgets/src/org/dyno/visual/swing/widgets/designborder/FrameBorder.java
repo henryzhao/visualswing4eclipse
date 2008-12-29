@@ -219,6 +219,7 @@ public class FrameBorder implements Border {
 			FontMetrics fm = g.getFontMetrics();
 			gy = y + OUTER_PAD + (TITLE_HEIGHT - fm.getHeight()) / 2
 					+ fm.getAscent();
+			g.setColor(Color.white);
 			g.drawString(title, gx, gy);
 		}
 

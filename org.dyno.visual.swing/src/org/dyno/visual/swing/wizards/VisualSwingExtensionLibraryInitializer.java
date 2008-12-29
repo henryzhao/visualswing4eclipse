@@ -48,7 +48,6 @@ public class VisualSwingExtensionLibraryInitializer extends
 		List<ILibraryExtension> libExts = ExtensionRegistry.getLibExtensions();
 		for (ILibraryExtension libExt : libExts) {
 			IClasspathContainer con = libExt.createLibExt(containerPath);
-			System.out.println();
 			if (con != null) {
 				cons.add(con);
 			}

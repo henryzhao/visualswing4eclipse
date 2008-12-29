@@ -31,7 +31,6 @@ class RecursiveContainerListener implements ContainerListener {
 		assert listener != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("Listening to: " + c);
 		listener.componentAdded(new ContainerEvent(source, ContainerEvent.COMPONENT_ADDED, c));
 		if (c instanceof Container) {
 			((Container) c).addContainerListener(this);
@@ -44,7 +43,6 @@ class RecursiveContainerListener implements ContainerListener {
 		assert listener != null;
 		assert EventQueue.isDispatchThread(); // On AWT event thread
 
-		// System.out.println("Stopped Listening to: " + c);
 		listener.componentRemoved(new ContainerEvent(source, ContainerEvent.COMPONENT_REMOVED, c));
 		if (c instanceof Container) {
 			((Container) c).removeContainerListener(this);
