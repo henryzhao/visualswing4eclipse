@@ -46,7 +46,7 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 			this.value = value;
 		}
 	}
-
+	private static String VISUAL_SWING_CLASS_TAILER=".*//visual swing component.*";
 	private static QualifiedName COMPONENT_TYPE = new QualifiedName("component.type", "Component Type");
 	private static QualifiedName[] QUALIFIERS = new QualifiedName[] { COMPONENT_TYPE };
 	private static String CONTENT_TYPE_PATTERN_EXTENSION_POINT = "org.dyno.visual.swing.contentTypePattern";
@@ -95,11 +95,13 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 			cat.append(line);
 		}
 		String result = cat.toString();
-		for (PatternItem pattern : patterns) {
-			if (result.matches(pattern.value)) {
-				if (description != null)
-					description.setProperty(COMPONENT_TYPE, pattern.type);
-				return VALID;
+		if (result.matches(VISUAL_SWING_CLASS_TAILER)) {
+			for (PatternItem pattern : patterns) {
+				if (result.matches(pattern.value)) {
+					if (description != null)
+						description.setProperty(COMPONENT_TYPE, pattern.type);
+					return VALID;
+				}
 			}
 		}
 		return INVALID;
