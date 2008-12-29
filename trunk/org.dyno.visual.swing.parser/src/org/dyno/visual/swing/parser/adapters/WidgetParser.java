@@ -315,10 +315,11 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 					+ bounds.height + ");\n";
 			builder.append(strBounds);
 		}
+		genAddCode(imports, builder);
 		builder.append(genAddEventCode(imports));
 		return builder.toString();
 	}
-
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {}
 	private String createSetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = adapter
@@ -358,6 +359,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	protected String createInitCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(createSetCode(imports));
+		genAddCode(imports, builder);
 		String code = genAddEventCode(imports);
 		builder.append(code);
 		return builder.toString();

@@ -13,7 +13,6 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -33,6 +32,7 @@ import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
+import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
@@ -113,6 +113,8 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 			JInternalFrame jif = (JInternalFrame) getWidget();
 			contentPane = (JPanel) jif.getContentPane();
 			contentAdapter.setWidget(contentPane);
+			contentAdapter.setDirty(false);
+			contentAdapter.setName(getName());
 		}
 		return contentAdapter;
 	}
@@ -138,11 +140,9 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 
 	@Override
 	protected Component createWidget() {
-		JInternalFrame jif = new JInternalFrame();
+		JInternalFrame jif = new JInternalFrame();		
 		Dimension size = new Dimension(100, 100);
-		WidgetAdapter contentAdapter = ExtensionRegistry
-				.createWidgetAdapter(JPanel.class);
-		jif.add(contentAdapter.getWidget(), BorderLayout.CENTER);
+		jif.setLayout(new GroupLayout());
 		jif.setSize(size);
 		layoutContainer(jif);
 		jif.validate();
@@ -355,6 +355,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 				clearAllSelected();
 				jmenuBarAdapter.setSelected(true);
 				jmenuBarAdapter.addNotify();
+				setDirty(true);
 			}else{
 				Toolkit.getDefaultToolkit().beep();
 				return false;

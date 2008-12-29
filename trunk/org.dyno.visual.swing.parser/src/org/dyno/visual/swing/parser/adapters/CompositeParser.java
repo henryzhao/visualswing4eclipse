@@ -38,22 +38,15 @@ public class CompositeParser extends WidgetParser {
 		return super.generateCode(type, imports, monitor);
 	}
 	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
-		genAddCode(imports, builder);
-		return builder.toString();
-	}
-
-	void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		int count = ((CompositeAdapter)adapter).getChildCount();
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
+		int count = ((CompositeAdapter) adapter).getChildCount();
 		for (int i = 0; i < count; i++) {
-			Component child = ((CompositeAdapter)adapter).getChild(i);
+			Component child = ((CompositeAdapter) adapter).getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			String getMethodName = childAdapter.getCreationMethodName();
-			builder.append(getFieldName(((CompositeAdapter)adapter).getName()) + "." + "add("
-					+ getMethodName + "());\n");
+			if (!adapter.isRoot())
+				builder.append(getFieldName(((CompositeAdapter) adapter).getName()) + ".");
+			builder.append("add(" + getMethodName + "());\n");
 		}
 	}
-
 }

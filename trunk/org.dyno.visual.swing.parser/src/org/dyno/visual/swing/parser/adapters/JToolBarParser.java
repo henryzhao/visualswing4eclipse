@@ -20,18 +20,17 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JToolBarParser extends CompositeParser {
 	@Override
-	protected String createGetCode(ImportRewrite imports) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(super.createGetCode(imports));
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		CompositeAdapter ca = (CompositeAdapter) adapter;
 		int count = ca.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = ca.getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = childAdapter.getCreationMethodName();			
-			builder.append(getFieldName(ca.getName()) + ".add(");
+			String getMethodName = childAdapter.getCreationMethodName();
+			if (!adapter.isRoot())
+				builder.append(getFieldName(ca.getName()) + ".");
+			builder.append("add(");
 			builder.append(getMethodName + "());\n");
 		}
-		return builder.toString();
 	}
 }

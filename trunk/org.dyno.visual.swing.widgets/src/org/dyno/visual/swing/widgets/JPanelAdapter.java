@@ -531,9 +531,9 @@ public class JPanelAdapter extends CompositeAdapter {
 					break;
 				}
 				jpanel.add(child);
-				adapter.setSelected(true);
-				adapter.setDirty(true);
+				adapter.setSelected(true);				
 			}
+			setDirty(true);
 			doLayout();
 			getWidget().validate();
 			repaintDesigner();
@@ -546,8 +546,8 @@ public class JPanelAdapter extends CompositeAdapter {
 				clearAllSelected();
 				for (WidgetAdapter adapter : copy) {
 					adapter.setSelected(true);
-					adapter.setDirty(true);
 				}
+				setDirty(true);
 				layoutAdapter.setContainer(jpanel);
 				doLayout();
 				getWidget().validate();

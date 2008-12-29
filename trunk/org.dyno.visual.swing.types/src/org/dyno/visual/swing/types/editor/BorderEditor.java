@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -45,7 +44,8 @@ public class BorderEditor implements ICellEditorFactory {
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return null;
-		BorderAdapter adapter = BorderAdapter.getBorderAdapter(value.getClass());
+		BorderAdapter adapter = BorderAdapter
+				.getBorderAdapter(value.getClass());
 		return adapter.getInitJavaCode(value, imports);
 	}
 
@@ -53,8 +53,11 @@ public class BorderEditor implements ICellEditorFactory {
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
-		BorderAdapter adapter = BorderAdapter.getBorderAdapter(value.getClass());
-		return adapter.getJavaCode(value, imports);
+		BorderAdapter adapter = BorderAdapter
+				.getBorderAdapter(value.getClass());
+		if (adapter != null)
+			return adapter.getJavaCode(value, imports);
+		else
+			return "null";
 	}
 }
-
