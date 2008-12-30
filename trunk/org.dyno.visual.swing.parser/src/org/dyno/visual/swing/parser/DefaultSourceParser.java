@@ -187,7 +187,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					beanAdapter.clearDirty();
 					return beanAdapter;
 				} catch (Error re) {
-					ParserPlugin.getLogger().error(re);
+					ParserPlugin.getLogger().warning(re);
 				}
 			}
 		} catch (Exception e) {
