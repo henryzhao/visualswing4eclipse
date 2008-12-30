@@ -330,5 +330,10 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	public IAdapter getParent() {
 		return null;
 	}
+
+	public boolean isDefaultLayout() {
+		CompositeAdapter ca = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		return ca.getDefaultLayout()==getLayoutClass();
+	}
 }
 

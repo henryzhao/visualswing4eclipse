@@ -31,7 +31,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
-public class JPanelParser extends CompositeParser implements IParser, IConstants {
+public class JPanelParser extends CompositeParser implements IParser,
+		IConstants {
 
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JPanel panel = (JPanel) adapter.getWidget();
@@ -61,6 +62,7 @@ public class JPanelParser extends CompositeParser implements IParser, IConstants
 			}
 		}
 	}
+
 	@Override
 	protected boolean createConstructor(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
@@ -68,7 +70,7 @@ public class JPanelParser extends CompositeParser implements IParser, IConstants
 		if (!cons.exists()) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("public " + type.getElementName() + "(){\n");
-			builder.append(INIT_METHOD_NAME+"();\n");
+			builder.append(INIT_METHOD_NAME + "();\n");
 			builder.append("}\n");
 			try {
 				type.createMethod(JavaUtil.formatCode(builder.toString()),

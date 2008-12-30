@@ -266,6 +266,9 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public boolean drop(Point p) {
 		setMascotLocation(p);
 		return true;
+	}
+	public Class<?> getDefaultLayout() {
+		return null;
 	}	
 	
 }
