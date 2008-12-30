@@ -30,9 +30,11 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
 		if (!adapter.isRoot())
 			builder.append(getFieldName(adapter.getName()) + ".");
-		builder.append("setLayout(");
-		builder.append(getNewInstanceCode(imports));
-		builder.append(");\n");
+		if (!layoutAdapter.isDefaultLayout()) {
+			builder.append("setLayout(");
+			builder.append(getNewInstanceCode(imports));
+			builder.append(");\n");
+		}
 		CompositeAdapter conAdapter = (CompositeAdapter) adapter;
 		int count = conAdapter.getChildCount();
 		for (int i = 0; i < count; i++) {

@@ -33,12 +33,8 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public abstract class RootPaneContainerParser extends CompositeParser implements IConstants {
 	@Override
 	protected String createInitCode(ImportRewrite imports) {
-		RootPaneContainerAdapter rootPaneContainerAdapter = (RootPaneContainerAdapter) adapter;
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createInitCode(imports));
-		JPanelParser parser=(JPanelParser) rootPaneContainerAdapter.getContentAdapter().getAdapter(IParser.class);
-		if(parser!=null)
-			parser.genAddCode(imports, builder);
 		if(getJMenuBar()!=null){
 			builder.append("setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();
@@ -49,6 +45,15 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 		}
 		return builder.toString();
 	}
+	
+	@Override
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
+		RootPaneContainerAdapter rootPaneContainerAdapter = (RootPaneContainerAdapter) adapter;
+		JPanelParser parser=(JPanelParser) rootPaneContainerAdapter.getContentAdapter().getAdapter(IParser.class);
+		if(parser!=null)
+			parser.genAddCode(imports, builder);
+	}
+
 	@Override
 	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
 		Dimension size = ((RootPaneContainer)adapter.getWidget()).getRootPane().getSize();

@@ -45,7 +45,7 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 			g2d.drawRect(thumb.x - THUMB_PAD / 2, thumb.y - THUMB_PAD / 2, THUMB_PAD, THUMB_PAD);
 		}
 	}
-
+	
 	@Override
 	public boolean dragEnter(Point p) {
 		thumb = getClosetThumb(p);

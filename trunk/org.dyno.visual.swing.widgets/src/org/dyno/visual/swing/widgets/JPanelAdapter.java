@@ -17,6 +17,7 @@ package org.dyno.visual.swing.widgets;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
@@ -81,6 +82,13 @@ public class JPanelAdapter extends CompositeAdapter {
 		if(delegate!=null)
 			return delegate.getRootPane();
 		return super.getRootPane();
+	}
+
+	@Override
+	public Class<?> getDefaultLayout() {
+		if(delegate!=null)
+			return ((CompositeAdapter)delegate).getDefaultLayout();
+		return FlowLayout.class;
 	}
 
 	@Override

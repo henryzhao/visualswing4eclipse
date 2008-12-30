@@ -312,25 +312,28 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List getBeanPropertyInitStatements(WidgetAdapter adapter,
-			TypeDeclaration type) {
+	private List getBeanPropertyInitStatements(WidgetAdapter adapter, TypeDeclaration type) {
 		List statements;
 		if (adapter.isRoot()) {
 			MethodDeclaration initMethod = getMethodDeclaration(type,INIT_METHOD_NAME);
 			Block body = initMethod.getBody();
 			statements = body.statements();
 		} else {
-			String getMethodName = NamespaceManager.getInstance()
-					.getGetMethodName(adapter.getName());
-			MethodDeclaration getMethod = getMethodDeclaration(type,
-					getMethodName);
-			Block body = getMethod.getBody();
-			statements = body.statements();
-			IfStatement ifs = (IfStatement) statements.get(0);
-			Statement thenstmt = ifs.getThenStatement();
-			if (thenstmt instanceof Block) {
-				Block block = (Block) thenstmt;
-				statements = block.statements();
+			String getMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getName());
+			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
+			if (getMethod != null) {
+				Block body = getMethod.getBody();
+				statements = body.statements();
+				IfStatement ifs = (IfStatement) statements.get(0);
+				Statement thenstmt = ifs.getThenStatement();
+				if (thenstmt instanceof Block) {
+					Block block = (Block) thenstmt;
+					statements = block.statements();
+				}
+			}else{				
+				MethodDeclaration initMethod = getMethodDeclaration(type,INIT_METHOD_NAME);
+				Block body = initMethod.getBody();
+				statements = body.statements();
 			}
 		}
 		return statements;
@@ -361,14 +364,19 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 
 	@SuppressWarnings("unchecked")
 	private void parseField(CompilationUnit cunit, Component bean, Field field) {
+		Class clazz = bean.getClass();
+		String fieldName = field.getName();
+		field.setAccessible(true);
+		Object fieldValue = null;
 		try {
-			Class clazz = bean.getClass();
-			field.setAccessible(true);
-			Object fieldValue = field.get(bean);
-			String fieldName = field.getName();
-			JComponent fieldComponent = (JComponent) fieldValue;
-			WidgetAdapter adapter = ExtensionRegistry
-					.createWidgetAdapter(fieldComponent);
+			fieldValue = field.get(bean);
+		}catch(Exception e){
+			ParserPlugin.getLogger().error(e);
+			return;
+		}
+		JComponent fieldComponent = (JComponent) fieldValue;
+		WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
+		try{
 			String widgetName = getNameFromFieldName(fieldName);
 			adapter.setName(widgetName);
 			adapter.setLastName(widgetName);
@@ -382,9 +390,13 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			} else {
 				adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
 			}
+		}catch(Exception e){
+			ParserPlugin.getLogger().warning(e);
+		}
+		try{
 			String getName = getGetMethodName(fieldName);
 			Method getMethod = clazz.getDeclaredMethod(getName);
-			flags = getMethod.getModifiers();
+			int flags = getMethod.getModifiers();
 			if (Modifier.isPrivate(flags)) {
 				adapter.setGetAccess(WidgetAdapter.ACCESS_PRIVATE);
 			} else if (Modifier.isProtected(flags)) {
@@ -394,10 +406,10 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			} else {
 				adapter.setGetAccess(WidgetAdapter.ACCESS_DEFAULT);
 			}
-			parseEventListener(cunit, adapter);
 		} catch (Exception e) {
-			ParserPlugin.getLogger().error(e);
+			ParserPlugin.getLogger().warning(e);
 		}
+		parseEventListener(cunit, adapter);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -415,7 +427,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				return lnf;
 			}
 		} catch (Exception e) {
-			ParserPlugin.getLogger().error(e);
+			ParserPlugin.getLogger().warning(e);			
 		}
 		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
