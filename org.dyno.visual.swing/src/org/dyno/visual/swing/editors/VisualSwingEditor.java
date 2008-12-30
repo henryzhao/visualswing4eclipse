@@ -263,7 +263,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.setTaskName("Generating Designer UI");
-			if (!createDesignerUI(monitor)) {
+			if (!createDesignerUI(monitor)&&!isTimerAction) {
 				switchToJavaEditor();
 			} else {
 				if (!isTimerAction) {
