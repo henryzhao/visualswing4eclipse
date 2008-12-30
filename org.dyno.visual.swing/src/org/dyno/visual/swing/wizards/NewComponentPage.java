@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing.wizards;
 
+import org.dyno.visual.swing.contentTypes.VisualSwingContentDescriber;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -42,7 +43,7 @@ public class NewComponentPage extends NewClassWizardPage implements IConstants{
 	@Override
 	protected String getFileComment(ICompilationUnit parentCU,
 			String lineDelimiter) throws CoreException {
-		return "//visual swing component -- DO NOT REMOVE THIS LINE.";
+		return VisualSwingContentDescriber.VISUAL_SWING_MAGIC+" -- DO NOT REMOVE THIS LINE!";
 	}
 }
 
