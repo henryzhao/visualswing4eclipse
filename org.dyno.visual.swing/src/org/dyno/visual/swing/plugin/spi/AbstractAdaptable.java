@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 public abstract class AbstractAdaptable implements IAdaptable {
 
 	protected Map<String, Object> adapters = new HashMap<String, Object>();
+
 	@SuppressWarnings("unchecked")
 	public abstract Class getObjectClass();
 
@@ -21,10 +22,12 @@ public abstract class AbstractAdaptable implements IAdaptable {
 		Object object = adapters.get(adapterClass.getName());
 		if (object == null) {
 			String adapterClassname = adapterClass.getName();
-			IConfigurationElement config = getConfig(adapterClassname, getObjectClass());
+			IConfigurationElement config = getConfig(adapterClassname,
+					getObjectClass());
 			if (config == null)
-				config=ExtensionRegistry.getAdapterConfig(adapterClassname, "default");
-			if(config==null)
+				config = ExtensionRegistry.getAdapterConfig(adapterClassname,
+						"default");
+			if (config == null)
 				return null;
 			try {
 				object = config.createExecutableExtension("implementation");
@@ -45,7 +48,10 @@ public abstract class AbstractAdaptable implements IAdaptable {
 
 	@SuppressWarnings("unchecked")
 	private IConfigurationElement getConfig(String adapter, Class type) {
-		IConfigurationElement config = ExtensionRegistry.getAdapterConfig(adapter, type.getName());
+		if (type == null)
+			return null;
+		IConfigurationElement config = ExtensionRegistry.getAdapterConfig(
+				adapter, type.getName());
 		if (config == null) {
 			if (type == Object.class)
 				return null;
