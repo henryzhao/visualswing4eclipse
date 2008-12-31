@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Swing Plug-in
+Bundle-Name: Visual Swing Plugin
 Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true
 Bundle-Version: 0.9.7.I20081226-1800
 Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin
