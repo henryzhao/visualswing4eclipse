@@ -1120,6 +1120,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public boolean includeName(String another) {
 		if(name!=null&&name.equals(another))
 			return true;
+		if(isRoot()){
+			for(InvisibleAdapter invisible:getInvisibles()){
+				if(invisible.getName()!=null&&invisible.getName().equals(another)){
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 }
