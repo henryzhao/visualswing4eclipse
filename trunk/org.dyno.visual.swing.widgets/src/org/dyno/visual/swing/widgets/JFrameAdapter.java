@@ -50,7 +50,7 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	private JComponent rootPane;
 	private JRootPane jrootPane;
 	public JFrameAdapter() {
-		super("jFrame");
+		super(null);
 		createContentAdapter();
 	}
 	public WidgetAdapter getContentAdapter(){
@@ -359,6 +359,7 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 			JMenuBar jmb = (JMenuBar) target.getWidget();
 			JFrame jframe = (JFrame) getWidget();
 			jframe.setJMenuBar(jmb);
+			target.requestNewName();
 			jframe.validate();
 			doLayout();
 			validateContent();

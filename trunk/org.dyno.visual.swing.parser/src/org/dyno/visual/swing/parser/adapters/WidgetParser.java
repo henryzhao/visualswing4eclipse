@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -135,7 +135,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				return false;
 		}
 		IJavaElement sibling = null;
-		String mName = NamespaceManager.getInstance().getGetMethodName(name);
+		String mName = NamespaceUtil.getGetMethodName(name);
 		IMethod method = type.getMethod(mName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
@@ -156,7 +156,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private boolean createGetMethod(IType type, ImportRewrite imports,
 			IProgressMonitor monitor, IJavaElement sibling) {
-		String getMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getName());
+		String getMethodName = NamespaceUtil.getGetMethodName(adapter.getName());
 		StringBuilder builder = new StringBuilder();
 		builder.append(getAccessCode(adapter.getGetAccess()));
 		builder.append(" ");
@@ -298,7 +298,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	protected String getFieldName(String lastName) {
-		return NamespaceManager.getInstance().getFieldName(lastName);
+		return NamespaceUtil.getFieldName(lastName);
 	}
 
 	protected String createGetCode(ImportRewrite imports) {

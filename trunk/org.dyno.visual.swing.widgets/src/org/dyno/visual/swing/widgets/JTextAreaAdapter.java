@@ -21,7 +21,7 @@ import javax.swing.text.JTextComponent;
 
 public class JTextAreaAdapter extends J2DTextComponentAdapter {
 	public JTextAreaAdapter() {
-		super("jTextArea");
+		super(null);
 	}
 
 	@Override

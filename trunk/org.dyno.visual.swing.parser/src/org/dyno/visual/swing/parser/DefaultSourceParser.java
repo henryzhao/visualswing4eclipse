@@ -31,7 +31,7 @@ import javax.swing.UIManager;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.parser.spi.IParser;
@@ -319,7 +319,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			Block body = initMethod.getBody();
 			statements = body.statements();
 		} else {
-			String getMethodName = NamespaceManager.getInstance().getGetMethodName(adapter.getName());
+			String getMethodName = NamespaceUtil.getGetMethodName(adapter.getName());
 			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
 			if (getMethod != null) {
 				Block body = getMethod.getBody();
@@ -462,7 +462,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	private String getNameFromFieldName(String fieldName) {
-		return NamespaceManager.getInstance().getNameFromFieldName(fieldName);
+		return NamespaceUtil.getNameFromFieldName(fieldName);
 	}
 
 	private boolean isDesigningField(IType type, IField field) {
@@ -623,12 +623,12 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	private String getFieldNameFromGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().getFieldNameFromGetMethodName(
+		return NamespaceUtil.getFieldNameFromGetMethodName(
 				method.getElementName());
 	}
 
 	private boolean isGetMethod(IMethod method) {
-		return NamespaceManager.getInstance().isGetMethodName(
+		return NamespaceUtil.isGetMethodName(
 				method.getElementName());
 	}
 
@@ -661,11 +661,11 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	private String getFieldName(String fieldName) {
-		return NamespaceManager.getInstance().getFieldName(fieldName);
+		return NamespaceUtil.getFieldName(fieldName);
 	}
 
 	private String getGetMethodName(String fieldName) {
-		return NamespaceManager.getInstance().getGetMethodName(fieldName);
+		return NamespaceUtil.getGetMethodName(fieldName);
 	}
 
 	private ArrayList<String> listBeanName(WidgetAdapter root) {

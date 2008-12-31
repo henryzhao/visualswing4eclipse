@@ -60,12 +60,11 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.PlatformUI;
 
 public class JPanelAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
 	private boolean intermediate = false;
 	private WidgetAdapter delegate;
 
 	public JPanelAdapter() {
-		super("jPanel" + (VAR_INDEX++));
+		super(null);
 	}
 
 	void setDelegate(WidgetAdapter delegate) {
@@ -539,6 +538,7 @@ public class JPanelAdapter extends CompositeAdapter {
 					break;
 				}
 				jpanel.add(child);
+				adapter.requestNewName();
 				adapter.setSelected(true);				
 			}
 			setDirty(true);
@@ -553,9 +553,10 @@ public class JPanelAdapter extends CompositeAdapter {
 			if (layoutAdapter.drop(p)) {
 				clearAllSelected();
 				for (WidgetAdapter adapter : copy) {
+					adapter.requestNewName();
 					adapter.setSelected(true);
 				}
-				setDirty(true);
+				setDirty(true);				
 				layoutAdapter.setContainer(jpanel);
 				doLayout();
 				getWidget().validate();

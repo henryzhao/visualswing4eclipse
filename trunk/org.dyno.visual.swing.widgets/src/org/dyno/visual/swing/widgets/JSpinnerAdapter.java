@@ -24,10 +24,8 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JSpinnerAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JSpinnerAdapter() {
-		super("jSpinner" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override

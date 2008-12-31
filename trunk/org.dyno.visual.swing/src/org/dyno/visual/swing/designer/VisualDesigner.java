@@ -45,6 +45,7 @@ import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
+import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.editors.actions.LnfAction;
@@ -65,6 +66,8 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -110,6 +113,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private List<WidgetAdapter> selected;
 	
 	private boolean locked;
+	
+	private NamespaceManager namespace;
+	
+	public NamespaceManager getNamespace(){
+		return namespace;
+	}
 	public boolean isLocked(){
 		return locked;
 	}
@@ -888,6 +897,20 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 	public void setCompilationUnit(ICompilationUnit unit) {
 		this.unit = unit;
+		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+		VSNamespaceManager vsname = new VSNamespaceManager(rootAdapter);
+		try {
+			IType[] types = unit.getAllTypes();
+			for (IType type : types) {
+				IField[] fields = type.getFields();
+				for (IField field : fields) {
+					vsname.addName(field.getElementName());
+				}
+			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
+		this.namespace = vsname;
 	}
 }
 

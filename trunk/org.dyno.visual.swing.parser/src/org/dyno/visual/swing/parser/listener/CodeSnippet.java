@@ -17,7 +17,7 @@ package org.dyno.visual.swing.parser.listener;
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -48,7 +48,7 @@ public class CodeSnippet implements IEventMethod, IConstants{
 	}
 
 	private String getGetMethodName(String name) {
-		return NamespaceManager.getInstance().getGetMethodName(name);
+		return NamespaceUtil.getGetMethodName(name);
 	}
 
 	@Override

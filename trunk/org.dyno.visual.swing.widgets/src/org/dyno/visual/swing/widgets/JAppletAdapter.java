@@ -48,7 +48,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	private JComponent rootPane;
 	private JRootPane jrootPane;
 	public JAppletAdapter() {
-		super("jApplet");
+		super(null);
 		createContentAdapter();
 	}
 
@@ -349,6 +349,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 			JMenuBar jmb = (JMenuBar) target.getWidget();
 			JApplet japplet = (JApplet) getWidget();
 			japplet.setJMenuBar(jmb);
+			target.requestNewName();
 			japplet.validate();
 			doLayout();
 			validateContent();

@@ -14,7 +14,7 @@ package org.dyno.visual.swing.parser.adapters;
 
 import java.awt.Component;
 
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.parser.spi.ILayoutParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
@@ -57,7 +57,7 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 	}
 
 	protected String getFieldName(String name) {
-		return NamespaceManager.getInstance().getFieldName(name);
+		return NamespaceUtil.getFieldName(name);
 	}
 
 	protected abstract String getNewInstanceCode(ImportRewrite imports);

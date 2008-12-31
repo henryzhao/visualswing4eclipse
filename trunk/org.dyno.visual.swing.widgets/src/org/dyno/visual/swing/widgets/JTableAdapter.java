@@ -28,10 +28,8 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.widgets.editors.TableModelEditor;
 
 public class JTableAdapter extends ComplexWidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JTableAdapter() {
-		super("jTable" + (VAR_INDEX++));
+		super(null);
 	}
 
 	protected Component createWidget() {

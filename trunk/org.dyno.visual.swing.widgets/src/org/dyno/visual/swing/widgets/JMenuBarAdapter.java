@@ -31,10 +31,8 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuBarAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JMenuBarAdapter() {
-		super("jMenuBar" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -179,6 +177,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 			jmb.validate();
 			jmb.doLayout();
 			clearAllSelected();
+			menuAdapter.requestNewName();
 			menuAdapter.setSelected(true);
 			addNotify();
 			repaintDesigner();

@@ -13,7 +13,6 @@
 
 package org.dyno.visual.swing.widgets.undo;
 
-import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
@@ -46,7 +45,7 @@ public class BeanNameValidator implements ICellEditorValidator {
 			if (!Character.isJavaIdentifierPart(ch))
 				throw new Exception("Illegal variable name!");
 		}
-		if (!newName.equals(adapter.getName()) && NamespaceManager.getInstance().hasDeclaredName(newName))
+		if (!newName.equals(adapter.getName()) && adapter.getNamespace().hasDeclaredName(newName))
 			throw new Exception("Already used variable name!");
 	}
 }

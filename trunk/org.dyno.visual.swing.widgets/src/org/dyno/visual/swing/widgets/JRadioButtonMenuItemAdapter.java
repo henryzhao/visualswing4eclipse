@@ -31,9 +31,8 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
 	public JRadioButtonMenuItemAdapter(){
-		super("jRadioButtonMenuItem" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override

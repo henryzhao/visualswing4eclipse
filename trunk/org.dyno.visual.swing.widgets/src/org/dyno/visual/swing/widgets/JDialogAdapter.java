@@ -49,7 +49,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 	private JComponent rootPane;
 	private JRootPane jrootPane;
 	public JDialogAdapter() {
-		super("jDialog");
+		super(null);
 		createContentAdapter();
 	}
 	public WidgetAdapter getContentAdapter(){
@@ -356,6 +356,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 			JMenuBar jmb = (JMenuBar) target.getWidget();
 			JDialog jdialog = (JDialog) getWidget();
 			jdialog.setJMenuBar(jmb);
+			target.requestNewName();
 			jdialog.validate();
 			doLayout();
 			validateContent();

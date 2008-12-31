@@ -48,10 +48,8 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JMenuAdapter() {
-		super("jMenu" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -433,8 +431,13 @@ public class JMenuAdapter extends CompositeAdapter {
 				} else if (target.getWidget() instanceof JSeparator) {
 					JSeparator jsep = (JSeparator) target.getWidget();
 					jmenu.add(jsep);
+				}else{
+					setMascotLocation(p);
+					dropStatus = NOOP;
+					return false;
 				}
 				clearAllSelected();
+				target.requestNewName();
 				target.setSelected(true);
 				setDirty(true);
 				addNotify();
@@ -446,6 +449,9 @@ public class JMenuAdapter extends CompositeAdapter {
 				}
 			} else {
 				Toolkit.getDefaultToolkit().beep();
+				setMascotLocation(p);
+				dropStatus = NOOP;
+				return false;
 			}
 		}
 		setMascotLocation(p);

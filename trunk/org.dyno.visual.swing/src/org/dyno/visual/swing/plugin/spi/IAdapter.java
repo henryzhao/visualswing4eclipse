@@ -19,7 +19,9 @@ import org.eclipse.swt.graphics.Image;
 public interface IAdapter extends IAdaptable{
 	Image getIconImage();
 	String getName();
+	String getBasename();
 	String getCreationMethodName();
 	IAdapter getParent();
+	void requestNewName();
 }
 

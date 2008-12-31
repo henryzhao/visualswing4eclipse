@@ -376,7 +376,9 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 						builder.append(initCode);
 				}
 				if (!adapter.isRoot()) {
-					builder.append(getFieldName(adapter.getName()) + ".");
+					String name = adapter.getName();
+					name = NamespaceUtil.getFieldName(name);
+					builder.append(name + ".");
 				}
 				builder.append(field.getName() + "=");
 				if (typeAdapter != null && typeAdapter.getCodegen() != null) {
@@ -394,10 +396,6 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 				return null;
 		} else
 			return null;
-	}
-
-	private String getFieldName(String name) {
-		return NamespaceManager.getInstance().getFieldName(name);
 	}
 
 	@Override

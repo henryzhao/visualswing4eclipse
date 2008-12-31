@@ -24,10 +24,9 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
-	private static int VAR_INDEX = 0;
 
 	public J2DTextComponentAdapter(String varName) {
-		super(varName + (VAR_INDEX++));
+		super(varName);
 	}
 
 	protected Component createWidget() {

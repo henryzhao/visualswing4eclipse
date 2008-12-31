@@ -36,7 +36,6 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JTabbedPaneAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
 	protected static Color RED_COLOR = new Color(255, 164, 0);
 	protected static Color GREEN_COLOR = new Color(164, 255, 0);
 	protected static Stroke STROKE;
@@ -45,7 +44,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	public JTabbedPaneAdapter() {
-		super("jTabbedPane" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -113,6 +112,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 			jtp.addTab(adapter.getName(), child);
 			jtp.setSelectedComponent(child);
 			adapter.setSelected(true);
+			adapter.requestNewName();
 		}
 		hovered = false;
 		return true;

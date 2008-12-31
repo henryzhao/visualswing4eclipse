@@ -37,13 +37,12 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	private static Color RED_COLOR = new Color(255, 164, 0);
 	private static Color GREEN_COLOR = new Color(164, 255, 0);
 	private static Stroke STROKE;
-	private static int VAR_INDEX = 0;
 	static {
 		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
 	}
 
 	public JScrollPaneAdapter() {
-		super("jScrollPane" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -146,6 +145,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 			JScrollPane jsp = (JScrollPane) getWidget();
 			WidgetAdapter todrop = getDropWidget().get(0);
 			jsp.setViewportView(todrop.getWidget());
+			todrop.requestNewName();
 			getRootAdapter().getWidget().validate();
 			clearAllSelected();
 			todrop.setSelected(true);

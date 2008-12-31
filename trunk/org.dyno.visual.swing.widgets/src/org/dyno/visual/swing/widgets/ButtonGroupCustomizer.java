@@ -259,7 +259,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		@Override
 		public void run() {
-			root.getInvisibles().add(new ButtonGroupAdapter());
+			ButtonGroupAdapter btnAdapter = new ButtonGroupAdapter(root);
+			root.getInvisibles().add(btnAdapter);
 			root.setDirty(true);
 			root.addNotify();
 		}
@@ -277,14 +278,15 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		@Override
 		public void run() {
-			ButtonGroupAdapter buttonGroup = new ButtonGroupAdapter();
-			root.getInvisibles().add(buttonGroup);
+			ButtonGroupAdapter btnAdapter = new ButtonGroupAdapter(root);
+			root.getInvisibles().add(btnAdapter);
+			btnAdapter.setName(root.getNamespace().nextName(btnAdapter.getBasename()));
 			if (selectedButtons.isEmpty())
 				return;
 			for (Component comp : selectedButtons) {
 				AbstractButton aBtn=(AbstractButton) comp;
 				removeButtonFromGroup(aBtn);
-				buttonGroup.getButtonGroup().add(aBtn);
+				btnAdapter.getButtonGroup().add(aBtn);
 			}
 			root.setDirty(true);
 			root.addNotify();

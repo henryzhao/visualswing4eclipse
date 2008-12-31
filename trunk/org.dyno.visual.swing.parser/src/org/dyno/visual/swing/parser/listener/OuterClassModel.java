@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,7 +63,7 @@ public class OuterClassModel extends AbstractClassModel {
 	}
 
 	private String getCapitalName(String name) {
-		return NamespaceManager.getInstance().getCapitalName(name);
+		return NamespaceUtil.getCapitalName(name);
 	}
 
 	@Override
