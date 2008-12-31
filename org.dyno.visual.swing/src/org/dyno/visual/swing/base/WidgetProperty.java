@@ -655,7 +655,9 @@ public class WidgetProperty extends AbstractAdaptable implements
 						builder.append(initCode);
 				}
 				if (!adapter.isRoot()) {
-					builder.append(getFieldName(adapter.getName()) + ".");
+					String name = adapter.getName();
+					name = NamespaceUtil.getFieldName(name);
+					builder.append(name + ".");
 				}
 				builder.append(propertyDescriptor.getWriteMethod().getName()
 						+ "(");
@@ -674,10 +676,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 				return null;
 		} else
 			return null;
-	}
-
-	private String getFieldName(String name) {
-		return NamespaceManager.getInstance().getFieldName(name);
 	}
 
 	@Override

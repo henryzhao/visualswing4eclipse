@@ -32,10 +32,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 
 public abstract class TextWidgetAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public TextWidgetAdapter() {
-		setName(getVarName() + (VAR_INDEX++));
 		this.widget = createWidget();
 		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
 		attach();
@@ -51,13 +48,6 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		}
 	}
 
-	private String getVarName() {
-		String className = getWidgetClass().getName();
-		int dot = className.lastIndexOf('.');
-		if (dot != -1)
-			className = className.substring(dot + 1);
-		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
-	}
 
 	private PropertyDescriptor getTextProperty() {
 		try {
@@ -79,7 +69,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 
 	protected Component createWidget() {
 		JComponent jc = createWidgetByClass();
-		setText(jc, name);
+		setText(jc, getBasename());
 		Dimension size = jc.getPreferredSize();
 		jc.setSize(size);
 		jc.doLayout();

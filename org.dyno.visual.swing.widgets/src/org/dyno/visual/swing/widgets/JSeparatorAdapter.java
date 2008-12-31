@@ -25,10 +25,8 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JSeparatorAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JSeparatorAdapter() {
-		super("jSeparator" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override

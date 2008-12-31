@@ -21,7 +21,7 @@ import javax.swing.text.JTextComponent;
 
 public class JTextPaneAdapter extends J2DTextComponentAdapter {
 	public JTextPaneAdapter() {
-		super("jTextPane");
+		super(null);
 	}
 
 	@Override

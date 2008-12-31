@@ -30,10 +30,8 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JComboBoxAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JComboBoxAdapter() {
-		super("jComboBox" + (VAR_INDEX++));
+		super(null);
 	}
 
 	protected Component createWidget() {

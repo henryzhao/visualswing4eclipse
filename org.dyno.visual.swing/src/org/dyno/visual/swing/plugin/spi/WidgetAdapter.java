@@ -49,6 +49,7 @@ import org.dyno.visual.swing.adapter.FieldAccessProperty;
 import org.dyno.visual.swing.adapter.GetAccessProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.base.WidgetProperty;
@@ -120,6 +121,17 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 		}
 	}
+	@Override
+	public void requestNewName(){
+		if(getName()==null){
+			setName(getNamespace().nextName(getBasename()));
+		}
+	}
+	@Override
+	public String getBasename() {
+		return NamespaceUtil.getBasename(getWidgetClass());
+	}
+
 	public void lockDesigner(){
 		VisualDesigner designer = getDesigner();
 		if(designer!=null)
@@ -169,7 +181,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public String getLastName() {
 		return lastName;
 	}
-
 	public List<WidgetAdapter> getSelectedWidgets() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
@@ -230,11 +241,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return null;
 	}
 
-	protected WidgetAdapter() {
-		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
-		this.edited = new HashMap<String, Boolean>();
-	}
-
 	protected void attach() {
 		if (widget instanceof RootPaneContainer) {
 			JRootPane jrootPane = ((RootPaneContainer) widget).getRootPane();
@@ -244,6 +250,16 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		}
 	}
 
+	protected WidgetAdapter() {
+		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
+		this.edited = new HashMap<String, Boolean>();
+	}
+	public NamespaceManager getNamespace(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			return designer.getNamespace();
+		return null;
+	}
 	protected WidgetAdapter(String name) {
 		setName(name);
 		this.widget = createWidget();
@@ -296,7 +312,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	@Override
 	public String getCreationMethodName() {
-		return NamespaceManager.getInstance().getGetMethodName(getName());
+		return NamespaceUtil.getGetMethodName(getName());
 	}
 
 	public int getCursorLocation(Point p) {
@@ -444,10 +460,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public void setName(String name) {
 		if (this.name == null || !this.name.equals(name)) {
-			if (this.name != null) {
-				NamespaceManager.getInstance().removeName(this.name);
-			}
-			NamespaceManager.getInstance().addName(name);
 			this.name = name;
 		}
 	}
@@ -1102,6 +1114,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 					return true;
 			}
 		}
+		return false;
+	}
+
+	public boolean includeName(String another) {
+		if(name!=null&&name.equals(another))
+			return true;
 		return false;
 	}
 }

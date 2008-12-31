@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
 
 import javax.swing.ButtonGroup;
 
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -39,9 +39,10 @@ public class ButtonGroupFieldParser implements IFieldParser {
 				Object fieldValue = field.get(bean);
 				String fieldName = field.getName();
 				ButtonGroup group = (ButtonGroup) fieldValue;
-				String widgetName = NamespaceManager.getInstance()
+				String widgetName = NamespaceUtil
 						.getNameFromFieldName(fieldName);
-				WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(bean);
+				WidgetAdapter rootAdapter = WidgetAdapter
+						.getWidgetAdapter(bean);
 				rootAdapter.addInvisible(widgetName, group);
 			} catch (Exception e) {
 				ParserPlugin.getLogger().error(e);
@@ -60,8 +61,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 			if (acceptTypeSignature(sig)) {
 				String fieldName = field.getElementName();
 				String getMethodName = "init"
-						+ NamespaceManager.getInstance().getCapitalName(
-								fieldName);
+						+ NamespaceUtil.getCapitalName(fieldName);
 				IMethod method = type.getMethod(getMethodName, new String[0]);
 				if (method != null && method.exists()) {
 					return true;
@@ -72,10 +72,13 @@ public class ButtonGroupFieldParser implements IFieldParser {
 		}
 		return false;
 	}
+
 	@Override
-	public boolean removeField(IType type, String fieldName, IProgressMonitor monitor) {
-		String name = NamespaceManager.getInstance().getFieldName(fieldName);
-		IMethod method = type.getMethod("init"+ NamespaceManager.getInstance().getCapitalName(name), new String[0]);
+	public boolean removeField(IType type, String fieldName,
+			IProgressMonitor monitor) {
+		String name = NamespaceUtil.getFieldName(fieldName);
+		IMethod method = type.getMethod("init"
+				+ NamespaceUtil.getCapitalName(name), new String[0]);
 		if (method != null && method.exists()) {
 			try {
 				method.delete(true, monitor);
@@ -87,4 +90,3 @@ public class ButtonGroupFieldParser implements IFieldParser {
 		return false;
 	}
 }
-

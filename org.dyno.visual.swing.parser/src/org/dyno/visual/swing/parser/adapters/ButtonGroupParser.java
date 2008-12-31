@@ -17,7 +17,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
@@ -127,7 +127,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		return success;		
 	}
 	private String getFieldName(String name) {
-		return NamespaceManager.getInstance().getFieldName(name);
+		return NamespaceUtil.getFieldName(name);
 	}
 	private IJavaElement getInitMethodSibling(IType type) {
 		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);

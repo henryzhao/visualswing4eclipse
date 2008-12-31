@@ -28,6 +28,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.CoreException;
@@ -64,6 +65,19 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		layoutAdapters = new HashMap<String, IConfigurationElement>();
 		layoutBeans = new HashMap<String, ILayoutBean>();
 		parseLayoutExtensions();
+	}
+
+	@Override
+	public void requestNewName() {
+	}
+
+	@Override
+	public String getBasename() {
+		Class<?> lClass = getLayoutClass();
+		if(lClass!=null){
+			return NamespaceUtil.getBasename(lClass);
+		}else
+			return null;
 	}
 
 	public static Set<String> getLayoutClasses() {

@@ -39,13 +39,12 @@ import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JInternalFrameAdapter extends RootPaneContainerAdapter {
-	private static int VAR_INDEX = 0;
 	private static JDesktopPane desktopPane = new JDesktopPane();
 	private JPanel contentPane;
 	private CompositeAdapter contentAdapter;
 
 	public JInternalFrameAdapter() {
-		super("jInternalFrame" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -352,6 +351,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 				WidgetAdapter jmenuBarAdapter=getDropWidget().get(0);
 				JMenuBar jmb=(JMenuBar)jmenuBarAdapter.getWidget();
 				jif.setJMenuBar(jmb);
+				jmenuBarAdapter.requestNewName();
 				clearAllSelected();
 				jmenuBarAdapter.setSelected(true);
 				jmenuBarAdapter.addNotify();

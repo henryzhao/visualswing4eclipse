@@ -41,10 +41,8 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	static {
 		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
 	}
-	private static int VAR_INDEX = 0;
-
 	public JDesktopPaneAdapter() {
-		super("jDesktopPane" + (VAR_INDEX++));
+		super(null);
 	}
 
 	public boolean needGenBoundCode() {
@@ -250,9 +248,10 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 					break;
 				}
 				jtp.add(jif);
+				adapter.requestNewName();
 				jif.setVisible(true);
 				adapter.setSelected(true);
-				jif.toFront();
+				jif.toFront();				
 			}
 			getWidget().validate();
 		} else {

@@ -38,7 +38,6 @@ import org.dyno.visual.swing.widgets.actions.JSplitPanePlacementAction;
 import org.eclipse.jface.action.MenuManager;
 
 public class JSplitPaneAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
 	protected static Color RED_COLOR = new Color(255, 164, 0);
 	protected static Color GREEN_COLOR = new Color(164, 255, 0);
 	protected static Stroke STROKE;
@@ -48,7 +47,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	public JSplitPaneAdapter() {
-		super("jSplitPane" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -274,6 +273,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				else if (position.equals("bottom"))
 					jtp.setBottomComponent(child);
 				clearAllSelected();
+				adapter.requestNewName();
 				adapter.setSelected(true);
 			}
 			position = null;

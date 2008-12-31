@@ -22,10 +22,8 @@ import javax.swing.JLayeredPane;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 
 public class JLayeredPaneAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JLayeredPaneAdapter() {
-		super("jLayeredPane" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override

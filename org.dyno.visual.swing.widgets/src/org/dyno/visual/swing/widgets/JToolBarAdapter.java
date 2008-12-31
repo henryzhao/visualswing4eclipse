@@ -31,7 +31,6 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JToolBarAdapter extends CompositeAdapter {
-	private static int VAR_INDEX = 0;
 	protected static Color RED_COLOR = new Color(255, 164, 0);
 	protected static Stroke STROKE;
 	static {
@@ -40,7 +39,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 	private boolean hovered;
 
 	public JToolBarAdapter() {
-		super("jToolBar" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override
@@ -86,6 +85,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 		for (WidgetAdapter wa : getDropWidget()) {
 			Component child = wa.getWidget();
 			toolbar.add(child);
+			wa.requestNewName();
 			wa.setSelected(true);
 		}
 		getWidget().validate();

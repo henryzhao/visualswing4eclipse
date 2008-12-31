@@ -13,7 +13,6 @@
 
 package org.dyno.visual.swing.base;
 
-import org.dyno.visual.swing.editors.DefaultNamespaceManager;
 /**
  * 
  * NamespaceManager
@@ -21,25 +20,8 @@ import org.dyno.visual.swing.editors.DefaultNamespaceManager;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class NamespaceManager {
-	private static NamespaceManager instance;
-	public static NamespaceManager getInstance(){
-		if(instance==null){
-			initialize();
-		}
-		return instance;
-	}
-	private static void initialize() {
-		instance = new DefaultNamespaceManager();
-	}
-	public abstract String getNameFromFieldName(String fieldName);
-	public abstract String getFieldName(String name);
-	public abstract String getGetMethodName(String name);
-	public abstract boolean isGetMethodName(String name);
-	public abstract String getFieldNameFromGetMethodName(String getMethodName);
-	public abstract String getCapitalName(String name);
-	public abstract void removeName(String name);
-	public abstract void addName(String name);
-	public abstract boolean hasDeclaredName(String newName);
+public interface NamespaceManager {
+	boolean hasDeclaredName(String newName);
+	String nextName(String base);
 }
 

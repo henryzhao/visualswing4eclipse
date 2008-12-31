@@ -25,10 +25,8 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JProgressBarAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JProgressBarAdapter() {
-		super("jProgressBar" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override

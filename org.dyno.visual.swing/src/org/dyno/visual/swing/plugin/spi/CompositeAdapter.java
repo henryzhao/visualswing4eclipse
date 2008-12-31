@@ -39,7 +39,17 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public LayoutAdapter getLayoutAdapter() {
 		return null;
 	}
-
+	@Override
+	public boolean includeName(String another) {
+		int count = getChildCount();
+		for(int i=0;i<count;i++){
+			Component child = getChild(i);
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+			if(childAdapter.includeName(another))
+				return true;
+		}
+		return super.includeName(another);
+	}
 	public CompositeAdapter(String name) {
 		super(name);
 	}

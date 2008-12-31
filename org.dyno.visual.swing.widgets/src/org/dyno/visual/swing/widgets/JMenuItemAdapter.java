@@ -32,10 +32,8 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JMenuItemAdapter extends WidgetAdapter {
-	private static int VAR_INDEX = 0;
-
 	public JMenuItemAdapter() {
-		super("jMenuItem" + (VAR_INDEX++));
+		super(null);
 	}
 
 	@Override

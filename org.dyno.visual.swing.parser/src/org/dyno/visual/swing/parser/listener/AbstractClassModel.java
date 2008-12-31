@@ -19,7 +19,7 @@ import java.beans.MethodDescriptor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.dyno.visual.swing.base.NamespaceManager;
+import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -77,7 +77,7 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 	}
 
 	private String getGetMethodName(String fieldName) {
-		return NamespaceManager.getInstance().getGetMethodName(fieldName);
+		return NamespaceUtil.getGetMethodName(fieldName);
 	}
 	
 	@SuppressWarnings("unchecked")
