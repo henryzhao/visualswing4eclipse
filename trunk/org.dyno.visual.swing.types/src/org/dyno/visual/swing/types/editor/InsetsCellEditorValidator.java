@@ -25,54 +25,54 @@ public class InsetsCellEditorValidator implements ICellEditorValidator {
 		String string = (String) value;
 		string = string.trim();
 		if (string.length() < 9)
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		char c = string.charAt(0);
 		if (c != '(')
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		c = string.charAt(string.length() - 1);
 		if (c != ')')
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		string=string.substring(1, string.length()-1);
-		StringTokenizer tokenizer = new StringTokenizer(string, ",");
+		StringTokenizer tokenizer = new StringTokenizer(string, ","); //$NON-NLS-1$
 		if(!tokenizer.hasMoreTokens())
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		String token = tokenizer.nextToken().trim();
 		try{
 			int x = Integer.parseInt(token);
 			if(x<0)
-				return "top gap must not be less than 0";
+				return Messages.InsetsCellEditorValidator_Top_Gap_GT_0;
 		}catch(NumberFormatException nfe){
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		}
 		if(!tokenizer.hasMoreTokens())
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		token = tokenizer.nextToken().trim();
 		try{
 			int y = Integer.parseInt(token);
 			if(y<0)
-				return "left gap must not be less than 0";
+				return Messages.InsetsCellEditorValidator_Left_Gap_GT_0;
 		}catch(NumberFormatException nfe){
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		}
 		if(!tokenizer.hasMoreTokens())
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		token = tokenizer.nextToken().trim();
 		try{
 			int w = Integer.parseInt(token);
 			if(w<0)
-				return "bottom gap must not be less than 0";
+				return Messages.InsetsCellEditorValidator_Bottom_Gap_GT_0;
 		}catch(NumberFormatException nfe){
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		}
 		if(!tokenizer.hasMoreTokens())
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		token = tokenizer.nextToken().trim();
 		try{
 			int h = Integer.parseInt(token);
 			if(h<0)
-				return "right gap must not be less than 0";
+				return Messages.InsetsCellEditorValidator_Right_Gap_GT_0;
 		}catch(NumberFormatException nfe){
-			return "Incorrect format: (top, left, bottom, right)";
+			return Messages.InsetsCellEditorValidator_Incorrect_Format;
 		}
 		return null;
 	}

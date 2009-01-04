@@ -16,7 +16,7 @@ package org.dyno.visual.swing.types.editor.spinnermodels.types;
 
 public class ByteType extends NumberType {
 	protected ByteType() {
-		super("Byte");
+		super(Messages.ByteType_Byte);
 	}
 
 	@Override

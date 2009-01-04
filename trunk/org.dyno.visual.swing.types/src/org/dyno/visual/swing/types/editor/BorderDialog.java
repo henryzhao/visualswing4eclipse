@@ -50,14 +50,14 @@ public class BorderDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		getShell().setText("Border IEditor");
+		getShell().setText(Messages.BorderDialog_Title);
 		Composite innerComposite = new Composite(composite, SWT.NONE);
 		innerComposite.setLayoutData(new GridData());
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		innerComposite.setLayout(layout);
 		Label lbl = new Label(innerComposite, SWT.NONE);
-		lbl.setText("Type:");
+		lbl.setText(Messages.BorderDialog_Type);
 		GridData data = new GridData();
 		lbl.setLayoutData(data);
 		Combo cmbType = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
@@ -117,7 +117,7 @@ public class BorderDialog extends Dialog {
 	protected void okPressed() {
 		ISelection selection = viewer.getSelection();
 		if (selection.isEmpty()) {
-			MessageDialog.openError(getShell(), "Error", "Please select a spinner model type!");
+			MessageDialog.openError(getShell(), Messages.BorderDialog_Error, Messages.BorderDialog_Prompt);
 			return;
 		}
 		super.okPressed();

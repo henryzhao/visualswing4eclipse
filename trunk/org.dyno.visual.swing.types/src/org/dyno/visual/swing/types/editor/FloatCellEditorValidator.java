@@ -24,7 +24,7 @@ public class FloatCellEditorValidator implements ICellEditorValidator {
 		try {
 			Float.parseFloat(string);
 		} catch (NumberFormatException nfe) {
-			return "Incorrect float format:{0}";
+			return Messages.FloatCellEditorValidator_Incorrect_Format;
 		}
 		return null;
 	}

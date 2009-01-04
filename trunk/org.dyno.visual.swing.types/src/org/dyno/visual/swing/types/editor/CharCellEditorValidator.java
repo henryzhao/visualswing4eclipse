@@ -21,14 +21,14 @@ public class CharCellEditorValidator implements ICellEditorValidator {
 	@Override
 	public String isValid(Object value) {
 		if(value==null)
-			return "Incorrect character format!";
+			return Messages.CharCellEditorValidator_Incorrect_Format;
 		String string = ((String) value).trim();
 		if(string.length()==0)
-			return "Incorrect character format!";
+			return Messages.CharCellEditorValidator_Incorrect_Format;
 		if(string.length()>2)
-			return "Incorrect character format:{0}";
-		if(string.length()==2&&!string.equals("\\0"))
-			return "Incorrect character format:{0}";
+			return Messages.CharCellEditorValidator_Incorrect_Format_1;
+		if(string.length()==2&&!string.equals("\\0")) //$NON-NLS-1$
+			return Messages.CharCellEditorValidator_Incorrect_Format_1;
 		else
 			return null;
 	}

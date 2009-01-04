@@ -40,7 +40,7 @@ public class ListItemDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		getShell().setText("List IEditor");
+		getShell().setText(Messages.ListItemDialog_Title);
 		Composite composite = (Composite) super.createDialogArea(parent);
 		Composite innerComposite = new Composite(composite, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -64,16 +64,16 @@ public class ListItemDialog extends Dialog {
 	}
 	private static String encodeModel(ListModel model) {
 		if (model == null)
-			return "null";
+			return "null"; //$NON-NLS-1$
 		StringBuilder builder = new StringBuilder();
 		int size = model.getSize();
 		for (int i = 0; i < size; i++) {
 			Object object = model.getElementAt(i);
 			if (i != 0) {
-				builder.append("\n");
+				builder.append("\n"); //$NON-NLS-1$
 			}
 			if (object == null) {
-				builder.append("null");
+				builder.append("null"); //$NON-NLS-1$
 			} else {
 				builder.append(object.toString());
 			}
@@ -92,7 +92,7 @@ public class ListItemDialog extends Dialog {
 		String string = text.getText();
 		if (string == null || string.trim().length() == 0) {
 			model = null;
-		} else if (string.equals("null")) {
+		} else if (string.equals("null")) { //$NON-NLS-1$
 			model = null;
 		} else {
 			try {

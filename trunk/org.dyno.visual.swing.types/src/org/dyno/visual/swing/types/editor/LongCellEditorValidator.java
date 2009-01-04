@@ -24,7 +24,7 @@ public class LongCellEditorValidator implements ICellEditorValidator {
 		try {
 			Integer.parseInt(string);
 		} catch (NumberFormatException nfe) {
-			return string + " should be a long, the format is incorrect!";
+			return string + Messages.LongCellEditorValidator_Incorrect_Format;
 		}
 		return null;
 	}

@@ -30,47 +30,47 @@ public class ColorCellEditorValidator implements ICellEditorValidator {
 		if (value instanceof String) {
 			String string = (String) value;
 			string = string.trim();
-			if(string.equals("null"))
+			if(string.equals("null")) //$NON-NLS-1$
 				return null;
 			if (string.length() < 7)
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			char c = string.charAt(0);
 			if (c != '(')
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			c = string.charAt(string.length() - 1);
 			if (c != ')')
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			string = string.substring(1, string.length() - 1);
-			StringTokenizer tokenizer = new StringTokenizer(string, ",");
+			StringTokenizer tokenizer = new StringTokenizer(string, ","); //$NON-NLS-1$
 			if (!tokenizer.hasMoreTokens())
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			String sRed = tokenizer.nextToken().trim();
 			try {
 				int r = Integer.parseInt(sRed);
 				if (r < 0 || r > 255)
-					return "Incorrect color format, red should be between 0 and 255";
+					return Messages.ColorCellEditorValidator_Incorrect_Format_Red_Range;
 			} catch (NumberFormatException nfe) {
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			}
 			if (!tokenizer.hasMoreTokens())
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			String sGreen = tokenizer.nextToken().trim();
 			try {
 				int g = Integer.parseInt(sGreen);
 				if (g < 0 || g > 255)
-					return "Incorrect color format, green should be between 0 and 255";
+					return Messages.ColorCellEditorValidator_Incorrect_Format_Green_Range;
 			} catch (NumberFormatException nfe) {
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			}
 			if (!tokenizer.hasMoreTokens())
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format_Range;
 			String sBlue = tokenizer.nextToken().trim();
 			try {
 				int b = Integer.parseInt(sBlue);
 				if (b < 0 || b > 255)
-					return "Incorrect color format, blue should be between 0 and 255";
+					return Messages.ColorCellEditorValidator_Incorrect_Format_Blue_Range;
 			} catch (NumberFormatException nfe) {
-				return "Incorrect color format: (red, green, blue)";
+				return Messages.ColorCellEditorValidator_Incorrect_Format;
 			}
 		}
 		return null;

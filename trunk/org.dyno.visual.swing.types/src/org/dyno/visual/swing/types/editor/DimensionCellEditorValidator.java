@@ -25,34 +25,34 @@ public class DimensionCellEditorValidator implements ICellEditorValidator {
 		String string = (String) value;
 		string = string.trim();
 		if (string.length() < 5)
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		char c = string.charAt(0);
 		if (c != '(')
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		c = string.charAt(string.length() - 1);
 		if (c != ')')
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		string=string.substring(1, string.length()-1);
-		StringTokenizer tokenizer = new StringTokenizer(string, ",");
+		StringTokenizer tokenizer = new StringTokenizer(string, ","); //$NON-NLS-1$
 		if(!tokenizer.hasMoreTokens())
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		String token = tokenizer.nextToken().trim();
 		try{
 			int w = Integer.parseInt(token);
 			if(w<0)
-				return "width must not be less than 0";
+				return Messages.DimensionCellEditorValidator_Incorrect_Format_Width_GT_0;
 		}catch(NumberFormatException nfe){
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		}
 		if(!tokenizer.hasMoreTokens())
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		token = tokenizer.nextToken().trim();
 		try{
 			int h = Integer.parseInt(token);
 			if(h<0)
-				return "height must not be less than 0";
+				return Messages.DimensionCellEditorValidator_Incorrect_Format_Height_GT_0;
 		}catch(NumberFormatException nfe){
-			return "Incorrect format: (width, height)";
+			return Messages.DimensionCellEditorValidator_Incorrect_Format;
 		}
 		return null;
 	}
