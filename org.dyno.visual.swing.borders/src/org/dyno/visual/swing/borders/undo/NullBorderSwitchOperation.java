@@ -29,7 +29,7 @@ public class NullBorderSwitchOperation extends AbstractOperation {
 	private WidgetAdapter targetAdapter;
 	private Border prevousBorder;
 	public NullBorderSwitchOperation(JComponent w) {
-		super("Switch Border");
+		super(Messages.NullBorderSwitchOperation_Switch_Border);
 		this.target = w;
 		this.targetAdapter = WidgetAdapter.getWidgetAdapter(target);
 		this.prevousBorder = target.getBorder();
