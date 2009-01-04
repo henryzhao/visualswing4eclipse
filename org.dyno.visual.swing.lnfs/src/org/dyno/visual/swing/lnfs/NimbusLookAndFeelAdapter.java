@@ -152,7 +152,7 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 		if (metalLnf == null) {
 			try {
 				metalLnf = (LookAndFeel) Class.forName(
-						"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel")
+						"com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel") //$NON-NLS-1$
 						.newInstance();
 				return metalLnf;
 			} catch (Exception e) {
@@ -164,12 +164,12 @@ public class NimbusLookAndFeelAdapter extends HashMap<Class, WidgetValue>
 
 	@Override
 	public String getClassname() {
-		return "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel";
+		return "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"; //$NON-NLS-1$
 	}
 
 	@Override
 	public String getName() {
-		return "Nimbus Look And Feel";
+		return Messages.NimbusLookAndFeelAdapter_Nimbus_Lnf;
 	}
 }
 
