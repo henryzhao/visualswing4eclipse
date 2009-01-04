@@ -349,5 +349,8 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		CompositeAdapter ca = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		return ca.getDefaultLayout()==getLayoutClass();
 	}
+
+	public void paintGrid(Graphics clipg) {
+	}
 }
 

@@ -15,6 +15,7 @@ package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -279,7 +280,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 	public Class<?> getDefaultLayout() {
 		return null;
+	}
+	public void paintGrid(Graphics clipg) {
 	}	
-	
 }
 

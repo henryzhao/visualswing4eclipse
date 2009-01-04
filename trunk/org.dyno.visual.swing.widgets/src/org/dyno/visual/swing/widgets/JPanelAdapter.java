@@ -632,7 +632,15 @@ public class JPanelAdapter extends CompositeAdapter {
 		clipg.setColor(Color.lightGray);
 		clipg.drawRect(0, 0, jpanel.getWidth() -1 , jpanel.getHeight() - 1);
 	}
-
+	@Override
+	public void paintGrid(Graphics clipg) {
+		JPanel jpanel = (JPanel) getWidget();
+		LayoutManager layout = jpanel.getLayout();
+		if (layout != null) {
+			LayoutAdapter layoutAdapter = getLayoutAdapter();
+			layoutAdapter.paintGrid(clipg);
+		}
+	}
 	@Override
 	public void paintBaselineAnchor(Graphics g) {
 		JPanel jpanel = (JPanel) getWidget();
