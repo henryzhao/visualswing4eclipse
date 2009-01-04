@@ -96,7 +96,7 @@ import org.eclipse.ui.PlatformUI;
  * @author William Chen
  */
 class DefaultSourceParser implements ISourceParser, IConstants {
-	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser";
+	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser"; //$NON-NLS-1$
 	private DefaultParserFactory factory;
 	private List<IFieldParser> fieldParsers;
 
@@ -124,10 +124,10 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		if (configs != null && configs.length > 0) {
 			for (int i = 0; i < configs.length; i++) {
 				String name = configs[i].getName();
-				if (name.equals("parser")) {
+				if (name.equals("parser")) { //$NON-NLS-1$
 					try {
 						fieldParsers.add((IFieldParser) configs[i]
-								.createExecutableExtension("class"));
+								.createExecutableExtension("class")); //$NON-NLS-1$
 					} catch (CoreException e) {
 						ParserPlugin.getLogger().error(e);
 					}
@@ -170,7 +170,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				} catch (Exception e) {
 					Shell shell = PlatformUI.getWorkbench()
 							.getActiveWorkbenchWindow().getShell();
-					MessageDialog.openError(shell, "Error!", e.getMessage());
+					MessageDialog.openError(shell, Messages.DefaultSourceParser_Error, e.getMessage());
 					return null;
 				}
 				try {
@@ -415,7 +415,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	@SuppressWarnings("unchecked")
 	private static String getBeanClassLnf(Class beanClass) {
 		try {
-			Field field = beanClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL");
+			Field field = beanClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
@@ -445,7 +445,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			} else {
 				throw new Exception(
 						lnf
-								+ " specified in this class is not a supported LAF on this java platform!");
+								+ Messages.DefaultSourceParser_Not_Supported_Lnf);
 			}
 		}
 	}
@@ -487,7 +487,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	private boolean isRegisteredWidget(String sig) {
-		if (sig.startsWith("L") || sig.startsWith("Q")) {
+		if (sig.startsWith("L") || sig.startsWith("Q")) { //$NON-NLS-1$ //$NON-NLS-2$
 			String className = sig.substring(1, sig.length() - 1);
 			Map<String, IConfigurationElement> widgets = ExtensionRegistry
 					.getRegisteredWidgets();
@@ -496,7 +496,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				if (widgets.get(className) != null)
 					return true;
 			} else {
-				String cName = "javax.swing." + className;
+				String cName = "javax.swing." + className; //$NON-NLS-1$
 				if (widgets.get(cName) != null)
 					return true;
 			}
@@ -548,17 +548,17 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 						method.delete(false, monitor);
 					}
 				}
-				IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL");
+				IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
 				if (lnfField.exists()) {
 					lnfField.delete(false, monitor);
 				}
 				String className = (String) root
-						.getProperty("preferred.lookandfeel");
-				String newfield = "private static final "
-						+ imports.addImport("java.lang.String")
-						+ " PREFERRED_LOOK_AND_FEEL = "
-						+ (className == null ? "null" : "\"" + className + "\"")
-						+ ";\n";
+						.getProperty("preferred.lookandfeel"); //$NON-NLS-1$
+				String newfield = "private static final " //$NON-NLS-1$
+						+ imports.addImport("java.lang.String") //$NON-NLS-1$
+						+ " PREFERRED_LOOK_AND_FEEL = " //$NON-NLS-1$
+						+ (className == null ? "null" : "\"" + className + "\"") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ ";\n"; //$NON-NLS-1$
 				type.createField(newfield, null, false, monitor);
 				if (success) {
 					TextEdit edit = imports.rewriteImports(monitor);
