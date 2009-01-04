@@ -32,7 +32,7 @@ public class PageDownOperation extends MoveOperation {
 
 	@Override
 	protected String getName() {
-		return "Page Down";
+		return Messages.PageDownOperation_Page_Down;
 	}
 
 }

@@ -30,7 +30,7 @@ public class CenterAlignmentOperation extends AbstractOperation {
 	private List<WidgetAdapter>selection;
 	private List<Integer> boundx;
 	public CenterAlignmentOperation(List<WidgetAdapter>selected) {
-		super("Align Left");
+		super(Messages.CenterAlignmentOperation_Align_Center);
 		selection = new ArrayList<WidgetAdapter>();
 		for(WidgetAdapter adapter:selected){
 			selection.add(adapter);

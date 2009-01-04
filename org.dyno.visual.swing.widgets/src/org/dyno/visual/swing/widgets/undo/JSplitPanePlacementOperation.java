@@ -33,7 +33,7 @@ public class JSplitPanePlacementOperation extends AbstractOperation {
 	private String oldplacement;
 	private JSplitPaneAdapter parent;
 	public JSplitPanePlacementOperation(JSplitPane container, Component child, String placement) {
-		super("Reposite Component");
+		super(Messages.JSplitPanePlacementOperation_Reposite_Component);
 		this.container = container;
 		this.child = child;
 		this.newplacement = placement;
@@ -47,7 +47,7 @@ public class JSplitPanePlacementOperation extends AbstractOperation {
 			throws ExecutionException {
 		if(!newplacement.equals(oldplacement)){
 			if(container.getOrientation()==JSplitPane.HORIZONTAL_SPLIT){
-				if(newplacement.equals("left")){
+				if(newplacement.equals("left")){ //$NON-NLS-1$
 					Component comp = container.getLeftComponent();
 					container.remove(child);
 					if(comp!=null){
@@ -65,7 +65,7 @@ public class JSplitPanePlacementOperation extends AbstractOperation {
 					container.setRightComponent(child);
 				}
 			}else{
-				if(newplacement.equals("top")){
+				if(newplacement.equals("top")){ //$NON-NLS-1$
 					Component comp = container.getTopComponent();
 					container.remove(child);
 					if(comp!=null){
@@ -102,7 +102,7 @@ public class JSplitPanePlacementOperation extends AbstractOperation {
 			throws ExecutionException {
 		if(!oldplacement.equals(newplacement)){
 			if(container.getOrientation()==JSplitPane.HORIZONTAL_SPLIT){
-				if(oldplacement.equals("left")){
+				if(oldplacement.equals("left")){ //$NON-NLS-1$
 					Component comp = container.getLeftComponent();
 					container.remove(child);
 					if(comp!=null){
@@ -120,7 +120,7 @@ public class JSplitPanePlacementOperation extends AbstractOperation {
 					container.setRightComponent(child);
 				}
 			}else{
-				if(oldplacement.equals("top")){
+				if(oldplacement.equals("top")){ //$NON-NLS-1$
 					Component comp = container.getTopComponent();
 					container.remove(child);
 					if(comp!=null){

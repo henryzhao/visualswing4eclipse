@@ -30,7 +30,7 @@ public class LeftAlignmentOperation extends AbstractOperation {
 	private List<WidgetAdapter>selection;
 	private List<Integer> boundx;
 	public LeftAlignmentOperation(List<WidgetAdapter>selected) {
-		super("Align Left");
+		super(Messages.LeftAlignmentOperation_Align_Left);
 		selection = new ArrayList<WidgetAdapter>();
 		for(WidgetAdapter adapter:selected){
 			selection.add(adapter);

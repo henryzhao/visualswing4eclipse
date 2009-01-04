@@ -33,7 +33,7 @@ public class KeyLeftOperation extends MoveOperation {
 
 	@Override
 	protected String getName() {
-		return "Move Left";
+		return Messages.KeyLeftOperation_Move_Left;
 	}
 
 }

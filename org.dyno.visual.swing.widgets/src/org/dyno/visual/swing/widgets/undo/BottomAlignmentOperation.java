@@ -30,7 +30,7 @@ public class BottomAlignmentOperation extends AbstractOperation {
 	private List<WidgetAdapter>selection;
 	private List<Integer> boundy;
 	public BottomAlignmentOperation(List<WidgetAdapter>selected) {
-		super("Align Left");
+		super(Messages.BottomAlignmentOperation_Align_Bottom);
 		selection = new ArrayList<WidgetAdapter>();
 		for(WidgetAdapter adapter:selected){
 			selection.add(adapter);

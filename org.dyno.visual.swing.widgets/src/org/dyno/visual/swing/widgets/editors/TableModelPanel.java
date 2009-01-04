@@ -67,9 +67,9 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		setLayout(new GlassLayout());
 		setLayer(jsp, 0);
 		add(jsp);
-		jsp.setToolTipText("Adjust view");		
-		jsp.getHorizontalScrollBar().setToolTipText("Drag it to adjust view");
-		jsp.getVerticalScrollBar().setToolTipText("Drag it to adjust view");
+		jsp.setToolTipText(Messages.TableModelPanel_Adjust_View);		
+		jsp.getHorizontalScrollBar().setToolTipText(Messages.TableModelPanel_Drag_Adjust_View);
+		jsp.getVerticalScrollBar().setToolTipText(Messages.TableModelPanel_Drag_Adjust_View);
 		TableColumnHeaderGlass columnHeader = new TableColumnHeaderGlass();
 		TableRowHeaderGlass rowHeader = new TableRowHeaderGlass();
 		setLayer(columnHeader, 1);
@@ -78,7 +78,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		add(rowHeader);
 		this.scrollPane = jsp;
 		this.table = (JTable) jsp.getViewport().getView();
-		this.table.setToolTipText("Click cell to edit");
+		this.table.setToolTipText(Messages.TableModelPanel_Click_Edit);
 		this.columnHeader = columnHeader;
 		this.columnHeader.addActionListener(this);
 		this.rowHeader = rowHeader;
@@ -95,7 +95,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		Component parent = this;
 		while (parent != null) {
 			if (parent instanceof JComponent) {
-				Object object = ((JComponent) parent).getClientProperty("embeded.composite");
+				Object object = ((JComponent) parent).getClientProperty("embeded.composite"); //$NON-NLS-1$
 				if (object != null && object instanceof Composite)
 					return (Composite) object;
 			}
@@ -172,7 +172,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		for (int i = 0; i < columnNames.size(); i++) {
 			Object value = getDefaultClassValue(columnClass.get(i));
 			if (value == null)
-				value = "" + row + "x" + i;
+				value = "" + row + "x" + i; //$NON-NLS-1$ //$NON-NLS-2$
 			rowList.add(value);
 		}
 		data.add(row + 1, rowList);
@@ -191,7 +191,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		for (int i = 0; i < columnNames.size(); i++) {
 			Object value = getDefaultClassValue(columnClass.get(i));
 			if (value == null)
-				value = "" + row + "x" + i;
+				value = "" + row + "x" + i; //$NON-NLS-1$ //$NON-NLS-2$
 			rowList.add(value);
 		}
 		data.add(row, rowList);
@@ -245,10 +245,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		}
 	}
 
-	private TypeAction[] actions = new TypeAction[] { new TypeAction(Object.class, "Object", null), new TypeAction(String.class, "String", null),
-			new TypeAction(Boolean.class, "Boolean", new Boolean(false)), new TypeAction(Integer.class, "Integer", (int) 0),
-			new TypeAction(Byte.class, "Byte", (byte) 0), new TypeAction(Short.class, "Short", (short) 0), new TypeAction(Long.class, "Long", 0l),
-			new TypeAction(Float.class, "Float", 0f), new TypeAction(Double.class, "Double", 0d) };
+	private TypeAction[] actions = new TypeAction[] { new TypeAction(Object.class, "Object", null), new TypeAction(String.class, "String", null), //$NON-NLS-1$ //$NON-NLS-2$
+			new TypeAction(Boolean.class, "Boolean", new Boolean(false)), new TypeAction(Integer.class, "Integer", (int) 0), //$NON-NLS-1$ //$NON-NLS-2$
+			new TypeAction(Byte.class, "Byte", (byte) 0), new TypeAction(Short.class, "Short", (short) 0), new TypeAction(Long.class, "Long", 0l), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			new TypeAction(Float.class, "Float", 0f), new TypeAction(Double.class, "Double", 0d) }; //$NON-NLS-1$ //$NON-NLS-2$
 
 	private TypeAction getTypeAction(Class<?> clazz) {
 		for (TypeAction action : actions) {
@@ -268,7 +268,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	}
 
 	private void popupMenu(int column) {
-		MenuManager popup = new MenuManager("#TABLE_MODEL_TYPE_POPUP");
+		MenuManager popup = new MenuManager("#TABLE_MODEL_TYPE_POPUP"); //$NON-NLS-1$
 		for (TypeAction action : actions) {
 			action.setColumn(column);
 			popup.add(action);
@@ -308,7 +308,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 				for (int r = 0; r < data.size(); r++) {
 					List<Object> row = data.get(r);
 					if (defaultValue == null) {
-						row.set(column, "" + r + "x" + column);
+						row.set(column, "" + r + "x" + column); //$NON-NLS-1$ //$NON-NLS-2$
 					} else {
 						row.set(column, defaultValue);
 					}
@@ -334,20 +334,20 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	private void doRightInsert(int column) {
 		int i = column + 1;
 		columnClass.add(i, String.class);
-		columnNames.add(i, "Title " + i);
+		columnNames.add(i, Messages.TableModelPanel_Title + i);
 		for (int r = 0; r < data.size(); r++) {
 			List<Object> row = data.get(r);
-			row.add(i, "" + r + "x" + i);
+			row.add(i, "" + r + "x" + i); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		table.setModel(new InnerTableModel());
 	}
 
 	private void doLeftInsert(int column) {
 		columnClass.add(column, String.class);
-		columnNames.add(column, "Title " + column);
+		columnNames.add(column, Messages.TableModelPanel_Title + column);
 		for (int r = 0; r < data.size(); r++) {
 			List<Object> row = data.get(r);
-			row.add(column, "" + r + "x" + column);
+			row.add(column, "" + r + "x" + column); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		table.setModel(new InnerTableModel());
 	}
@@ -413,18 +413,18 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	private static Icon COLUMN_RIGHT_INSERT_ICON;
 	private static Icon ROW_DOWN_INSERT_ICON;
 	static {
-		COLUMN_LEFT_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png"));
-		ROW_UP_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png"));
-		COLUMN_LEFT_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/left_move.png"));
-		ROW_UP_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/up_move.png"));
-		COLUMN_RIGHT_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png"));
-		ROW_DOWN_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png"));
-		COLUMN_RIGHT_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/right_move.png"));
-		ROW_DOWN_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/down_move.png"));
-		COLUMN_DELETE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png"));
-		ROW_DELETE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png"));
-		COLUMN_EDIT_TEXT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_text.png"));
-		COLUMN_EDIT_TYPE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_type.png"));
+		COLUMN_LEFT_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
+		ROW_UP_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
+		COLUMN_LEFT_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/left_move.png")); //$NON-NLS-1$
+		ROW_UP_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/up_move.png")); //$NON-NLS-1$
+		COLUMN_RIGHT_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
+		ROW_DOWN_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
+		COLUMN_RIGHT_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/right_move.png")); //$NON-NLS-1$
+		ROW_DOWN_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/down_move.png")); //$NON-NLS-1$
+		COLUMN_DELETE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png")); //$NON-NLS-1$
+		ROW_DELETE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png")); //$NON-NLS-1$
+		COLUMN_EDIT_TEXT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_text.png")); //$NON-NLS-1$
+		COLUMN_EDIT_TYPE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_type.png")); //$NON-NLS-1$
 	}
 
 	class ColumnNameAction implements ActionListener {
@@ -469,7 +469,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		}
 
 		private void fireActionPerformed() {
-			ActionEvent event = new ActionEvent(this, 0, "action");
+			ActionEvent event = new ActionEvent(this, 0, "action"); //$NON-NLS-1$
 			for (ActionListener l : listeners)
 				l.actionPerformed(event);
 		}
@@ -728,15 +728,15 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			case NO_OP:
 				return null;
 			case ROW_UP_INSERT:
-				return "Insert row";
+				return Messages.TableModelPanel_Insert_Row;
 			case ROW_UP_MOVE:
-				return "Move upward";
+				return Messages.TableModelPanel_Move_Upward;
 			case ROW_DOWN_INSERT:
-				return "Append row";
+				return Messages.TableModelPanel_Append_Row;
 			case ROW_DOWN_MOVE:
-				return "Move downward";
+				return Messages.TableModelPanel_Move_Downward;
 			case ROW_DELETE:
-				return "Delete row";
+				return Messages.TableModelPanel_Delete_Row;
 			}
 			return null;
 		}
@@ -829,7 +829,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		}
 
 		private void fireActionPerformed() {
-			ActionEvent event = new ActionEvent(this, 0, "action");
+			ActionEvent event = new ActionEvent(this, 0, "action"); //$NON-NLS-1$
 			for (ActionListener l : listeners)
 				l.actionPerformed(event);
 		}
@@ -984,19 +984,19 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			case NO_OP:
 				return null;
 			case COLUMN_LEFT_INSERT:
-				return "Insert column";
+				return Messages.TableModelPanel_Insert_Column;
 			case COLUMN_LEFT_MOVE:
-				return "Move leftward";
+				return Messages.TableModelPanel_Move_Leftward;
 			case COLUMN_RIGHT_INSERT:
-				return "Append column";
+				return Messages.TableModelPanel_Append_Column;
 			case COLUMN_RIGHT_MOVE:
-				return "Move rightward";
+				return Messages.TableModelPanel_Move_Rightward;
 			case COLUMN_DELETE:
-				return "Delete column";
+				return Messages.TableModelPanel_Delete_Column;
 			case COLUMN_EDIT_TEXT:
-				return "Edit column title";
+				return Messages.TableModelPanel_Edit_Col_Title;
 			case COLUMN_EDIT_TYPE:
-				return "Edit column type";
+				return Messages.TableModelPanel_Edit_Col_Type;
 			}
 			return null;
 		}
