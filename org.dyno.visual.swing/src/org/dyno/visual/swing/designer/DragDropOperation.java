@@ -30,7 +30,7 @@ class DragDropOperation extends AbstractOperation {
 	private List<Component> children;
 
 	public DragDropOperation(CompositeAdapter parent, List<Component> children, List<Object> constraints) {
-		super("Delete Component");
+		super(Messages.DragDropOperation_Delete);
 		this.parent = parent;
 		this.constraints = constraints;
 		this.children = children;

@@ -109,6 +109,8 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 		for (WidgetAdapter adapter : getDropWidget()) {
 			Component child = adapter.getComponent();
 			JTabbedPane jtp = (JTabbedPane) getWidget();
+			if(adapter.getName()==null)
+				adapter.setName(getNamespace().nextName(adapter.getBasename()));
 			jtp.addTab(adapter.getName(), child);
 			jtp.setSelectedComponent(child);
 			adapter.setSelected(true);

@@ -35,7 +35,7 @@ public class VarChangeOperation extends AbstractOperation {
 	private String lastName;
 	private String lastLastName;
 	public VarChangeOperation(WidgetAdapter adapter) {
-		super("Change Variable");
+		super(Messages.VarChangeOperation_Change_Var);
 		this.adapter = adapter;
 		this.validator = new BeanNameValidator(adapter);
 	}
@@ -44,14 +44,14 @@ public class VarChangeOperation extends AbstractOperation {
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		while (true) {
 			VarNameDialog dialog = new VarNameDialog(adapter.getShell());
-			dialog.setPromptMessage("Please enter a new variable name for this component:");
+			dialog.setPromptMessage(Messages.VarChangeOperation_Enter_New_Name);
 			dialog.setInput(adapter.getName());
 			if (dialog.open() == Dialog.OK) {
 				String name = dialog.getInput();
 				String message = validator.isValid(name);
 				if (message != null) {
 					MessageDialog.openError(adapter.getShell(),
-							"Invalid identifier", message);
+							Messages.VarChangeOperation_Invalid_Id, message);
 				} else {
 					this.lastName = adapter.getName();
 					this.lastLastName = adapter.getLastName();

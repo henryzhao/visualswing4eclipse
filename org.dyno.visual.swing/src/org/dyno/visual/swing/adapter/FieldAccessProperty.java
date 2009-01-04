@@ -49,17 +49,17 @@ public class FieldAccessProperty extends PropertyAdapter {
 
 	@Override
 	public String getCategory() {
-		return "Code";
+		return Messages.FIELD_ACCESS_PROPERTY_CATEGORY;
 	}
 
 	@Override
 	public String getDisplayName() {
-		return "Bean Field Modifier";
+		return Messages.FIELD_ACCESS_PROPERTY_DISPLAY_NAME;
 	}
 
 	@Override
 	public Object getId() {
-		return "field_access";
+		return "field_access"; //$NON-NLS-1$
 	}
 
 	@Override

@@ -23,12 +23,12 @@ import org.dyno.visual.swing.base.EditorAction;
  * @author William Chen
  */
 public class SameWidthAction extends EditorAction {
-	private static String SAME_WIDTH_ACTION_ICON = "/icons/same_width.png";
+	private static String SAME_WIDTH_ACTION_ICON = "/icons/same_width.png"; //$NON-NLS-1$
 
 	public SameWidthAction() {
 		setId(SAME_WIDTH);
-		setText("Same Width");
-		setToolTipText("Same Width");
+		setText(Messages.SameWidthAction_Same_Width);
+		setToolTipText(Messages.SameWidthAction_Same_Width);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(SAME_WIDTH_ACTION_ICON));
 		setEnabled(false);
 	}

@@ -65,9 +65,9 @@ public class JProgressBarAdapter extends WidgetAdapter {
 		int h = getWidget().getHeight();
 		int oritention = ((JProgressBar) getWidget()).getOrientation();
 		if (oritention == SwingConstants.HORIZONTAL) {
-			return new Rectangle((w - 40) / 2, 0, 40, 23);
+			return new Rectangle((w - 40) / 2, 0, 40, 20);
 		} else {
-			return new Rectangle(0, (h - 23) / 2, w, 23);
+			return new Rectangle(0, (h - 20) / 2, w, 20);
 		}
 	}
 

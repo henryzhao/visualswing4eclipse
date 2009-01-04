@@ -211,5 +211,5 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 	}
 
 	private ComponentTreeInput root;
-	private String otherComponents = "Other Components";
+	private String otherComponents = Messages.ComponentTreeContentProvider_Other_Components;
 }

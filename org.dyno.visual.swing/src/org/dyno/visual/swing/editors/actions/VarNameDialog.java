@@ -52,7 +52,7 @@ class VarNameDialog extends Dialog {
 	}
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		super.getShell().setText("Change variable name");
+		super.getShell().setText(Messages.VarNameDialog_Change_Var_Name);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Label label = new Label(area, SWT.NONE);
 		label.setText(message);

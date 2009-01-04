@@ -49,17 +49,17 @@ public class GetAccessProperty extends PropertyAdapter {
 
 	@Override
 	public String getCategory() {
-		return "Code";
+		return Messages.GET_ACCESS_PROPERTY_CATEGORY;
 	}
 
 	@Override
 	public String getDisplayName() {
-		return "Access Method Modifier";
+		return Messages.GET_ACCESS_PROPERTY_DISPLAY_NAME;
 	}
 
 	@Override
 	public Object getId() {
-		return "get_access";
+		return "get_access"; //$NON-NLS-1$
 	}
 
 	@Override

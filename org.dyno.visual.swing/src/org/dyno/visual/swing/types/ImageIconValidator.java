@@ -29,25 +29,25 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 public class ImageIconValidator implements ICellEditorValidator {
 	@Override
 	public String isValid(Object value) {
-		if (value == null || value.equals("null"))
+		if (value == null || value.equals("null")) //$NON-NLS-1$
 			return null;
-		StringTokenizer tokenizer = new StringTokenizer((String) value, "/");
+		StringTokenizer tokenizer = new StringTokenizer((String) value, "/"); //$NON-NLS-1$
 		if (!tokenizer.hasMoreTokens()) {
-			return "Incorrect icon/image format: [/]package_segment1/package_segment2/package_segment3/.../package_segmentn/file_name";
+			return Messages.ImageIconValidator_Incorrect_Icon_Image_Format;
 		}
 		do {
 			String token = tokenizer.nextToken().trim();
 			if (token.length() == 0)
-				return "Incorrect icon/image format: [/]package_segment1/package_segment2/package_segment3/.../package_segmentn/file_name";
+				return Messages.ImageIconValidator_Incorrect_Icon_Image_Format;
 			char c = token.charAt(0);
 			if (!Character.isJavaIdentifierStart(c)) {
-				return "Incorrect icon/image format: package segment name should be a identifier!";
+				return Messages.ImageIconValidator_Incorrect_Icon_Image_Format_Segment_Id;
 			}
 			int i = 0;
 			while (true) {
 				c = token.charAt(i++);
 				if (!Character.isJavaIdentifierPart(c) && c != '.')
-					return "Incorrect icon/image format: package segment name should be a identifier!";
+					return Messages.ImageIconValidator_Incorrect_Icon_Image_Format_Segment_Id;
 				if (i >= token.length())
 					break;
 			}
@@ -62,14 +62,14 @@ public class ImageIconValidator implements ICellEditorValidator {
 				for (IPackageFragmentRoot root : roots) {
 					if (!root.isArchive()) {
 						String src = root.getElementName();
-						src = "/" + src + value;
+						src = "/" + src + value; //$NON-NLS-1$
 						resource = project.findMember(new Path(src));
 						if (resource != null) {
 							String ext = resource.getFileExtension();
-							if (ext!=null&&(ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg")))
+							if (ext!=null&&(ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg"))) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								return null;
 							else
-								return "This is not an image file:" + value;
+								return Messages.ImageIconValidator_Not_Image_File + value;
 						}
 					}
 				}
@@ -77,7 +77,7 @@ public class ImageIconValidator implements ICellEditorValidator {
 				VisualSwingPlugin.getLogger().error(e);
 				return e.getLocalizedMessage();
 			}
-			return "Cannot find such image file:" + value + "!";
+			return Messages.ImageIconValidator_Cannot_Find_Such_Image_File + value + "!"; //$NON-NLS-2$
 		}
 		return null;
 	}

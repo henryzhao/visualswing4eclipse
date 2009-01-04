@@ -30,7 +30,7 @@ public class PasteOperation extends AbstractOperation {
 	private List<WidgetAdapter> copyedList; 
 	private CompositeAdapter rootAdapter;
 	public PasteOperation(List<WidgetAdapter> clipboard, CompositeAdapter rootAdapter) {
-		super("Paste Components");
+		super(Messages.PasteOperation_Paste_Components);
 		this.clipboard = clipboard;
 		this.rootAdapter = rootAdapter;
 	}

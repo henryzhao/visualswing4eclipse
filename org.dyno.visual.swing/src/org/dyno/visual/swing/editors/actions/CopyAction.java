@@ -28,7 +28,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public class CopyAction extends EditorAction {
 	public CopyAction() {
 		setId(ActionFactory.COPY.getId());
-		setToolTipText("Copy Components (Ctrl+C)");
+		setToolTipText(Messages.CopyAction_Copy_Components);
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY));
 		setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_COPY_DISABLED));
 		setAccelerator(SWT.CTRL | 'C');

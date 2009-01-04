@@ -32,7 +32,7 @@ import org.osgi.framework.BundleContext;
  */
 public class VisualSwingPlugin extends AbstractUIPlugin {
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.dyno.visual.swing";
+	public static final String PLUGIN_ID = "org.dyno.visual.swing"; //$NON-NLS-1$
 
 	public static String getPluginID() {
 		return PLUGIN_ID;

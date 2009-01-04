@@ -32,7 +32,7 @@ class EventDesc {
 		return widget;
 	}
 	public String toString(){
-		return "Events";
+		return Messages.EventDesc_Name;
 	}
 	public List<EventSet> getEventSets() {
 		return eventSets;

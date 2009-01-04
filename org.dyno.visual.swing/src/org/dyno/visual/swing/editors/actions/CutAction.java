@@ -28,7 +28,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public class CutAction extends EditorAction {
 	public CutAction() {
 		setId(ActionFactory.CUT.getId());
-		setToolTipText("Cut Components (Ctrl+X)");
+		setToolTipText(Messages.CutAction_Cut_Components);
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT));
 		setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT_DISABLED));
 		setAccelerator(SWT.CTRL | 'X');

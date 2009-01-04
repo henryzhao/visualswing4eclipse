@@ -28,7 +28,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public class PasteAction extends EditorAction {
 	public PasteAction() {
 		setId(ActionFactory.PASTE.getId());
-		setToolTipText("Paste Components (Ctrl+V)");
+		setToolTipText(Messages.PasteAction_Paste_Components);
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_PASTE));
 		setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_PASTE_DISABLED));
 		setAccelerator(SWT.CTRL | 'V');

@@ -23,12 +23,12 @@ import org.dyno.visual.swing.base.EditorAction;
  * @author William Chen
  */
 public class MiddleAlignAction extends EditorAction {
-	private static String MIDDLE_ACTION_ICON = "/icons/middle_align.png";
+	private static String MIDDLE_ACTION_ICON = "/icons/middle_align.png"; //$NON-NLS-1$
 
 	public MiddleAlignAction() {
 		setId(ALIGNMENT_MIDDLE);
-		setText("Center vertically");
-		setToolTipText("Center vertically");
+		setText(Messages.MiddleAlignAction_Center_Alignment);
+		setToolTipText(Messages.MiddleAlignAction_Center_Alignment);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(MIDDLE_ACTION_ICON));
 		setEnabled(false);
 	}

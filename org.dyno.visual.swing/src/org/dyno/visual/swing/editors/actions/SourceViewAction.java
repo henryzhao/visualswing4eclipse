@@ -29,12 +29,12 @@ import org.eclipse.jface.action.IMenuManager;
  * @author William Chen
  */
 public class SourceViewAction extends EditorAction {
-	private static String SOURCE_ACTION_ID = "/icons/source_view.png";
+	private static String SOURCE_ACTION_ID = "/icons/source_view.png"; //$NON-NLS-1$
 
 	public SourceViewAction() {
 		setId(SOURCE);
-		setText("View Source Code");
-		setToolTipText("View Source Code");
+		setText(Messages.SourceViewAction_View_Source_Code);
+		setToolTipText(Messages.SourceViewAction_View_Source_Code);
 		setImageDescriptor(VisualSwingPlugin
 				.getSharedDescriptor(SOURCE_ACTION_ID));
 	}
@@ -44,7 +44,7 @@ public class SourceViewAction extends EditorAction {
 		if (editor == null)
 			return;
 		if (editor.isDirty()) {
-			Job job = new Job("View Source Code"){
+			Job job = new Job(Messages.SourceViewAction_View_Source_Code){
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					editor.doSave(monitor);

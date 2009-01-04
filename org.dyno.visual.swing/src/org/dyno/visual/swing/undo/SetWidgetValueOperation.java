@@ -26,7 +26,7 @@ public class SetWidgetValueOperation extends AbstractOperation {
 	private Object old_value;
 	private Object new_value;
 	public SetWidgetValueOperation(WidgetAdapter adapter, Object new_value){
-		super("changing component value");
+		super(Messages.SetWidgetValueOperation_Changing_Component_Value);
 		this.adapter = adapter;
 		this.old_value = adapter.getWidgetValue();
 		this.new_value = new_value;

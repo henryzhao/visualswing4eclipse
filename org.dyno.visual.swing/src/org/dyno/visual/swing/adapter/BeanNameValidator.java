@@ -34,19 +34,19 @@ public class BeanNameValidator implements ICellEditorValidator {
 
 	private void validateName(String newName) throws Exception {
 		if (newName == null || newName.trim().length() == 0)
-			throw new Exception("Please specify non-empty name!");
+			throw new Exception(Messages.BEAN_NAME_VALIDATOR_NONEMPTY_WARNING);
 		char ch = newName.charAt(0);
 		if (!Character.isJavaIdentifierStart(ch)) {
-			throw new Exception("Illegal variable name!");
+			throw new Exception(Messages.BEAN_NAME_VALIDATOR_ILLEGAL_VAR_NAME);
 		}
 		int index = 1;
 		while (index < newName.length()) {
 			ch = newName.charAt(index++);
 			if (!Character.isJavaIdentifierPart(ch))
-				throw new Exception("Illegal variable name!");
+				throw new Exception(Messages.BEAN_NAME_VALIDATOR_ILLEGAL_VAR_NAME);
 		}
 		if (!newName.equals(adapter.getName()) && adapter.getNamespace().hasDeclaredName(newName))
-			throw new Exception("Already used variable name!");
+			throw new Exception(Messages.BEAN_NAME_VALIDATOR_ALREADY_USED_VAR_NAME);
 	}
 }
 

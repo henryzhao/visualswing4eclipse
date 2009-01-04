@@ -43,18 +43,18 @@ public class LayoutExtensionLibrary implements IClasspathContainer {
 	public LayoutExtensionLibrary(IPath containerPath){
 		this.containerPath = containerPath;
 		IPath path = Platform.getLocation();
-		path = path.append(".metadata");
-		path = path.append(".plugins");
+		path = path.append(".metadata"); //$NON-NLS-1$
+		path = path.append(".plugins"); //$NON-NLS-1$
 		path = path.append(VisualSwingPlugin.getPluginID());
-		path = path.append("layoutext");		
+		path = path.append("layoutext");		 //$NON-NLS-1$
 		File folder = path.toFile();
 		if (!folder.exists())
 			folder.mkdirs();		
-		File jar = new File(folder, "grouplayout.jar");
-		File src = new File(folder, "grouplayout.zip");
+		File jar = new File(folder, "grouplayout.jar"); //$NON-NLS-1$
+		File src = new File(folder, "grouplayout.zip"); //$NON-NLS-1$
 		if (!jar.exists()) {
-			createFile(jar, "/layoutext/grouplayout.jar");
-			createFile(src, "/layoutext/grouplayout.zip");
+			createFile(jar, "/layoutext/grouplayout.jar"); //$NON-NLS-1$
+			createFile(src, "/layoutext/grouplayout.zip"); //$NON-NLS-1$
 		}
 		jar_path = new Path(jar.getAbsolutePath());
 		src_path = new Path(src.getAbsolutePath());
@@ -92,12 +92,12 @@ public class LayoutExtensionLibrary implements IClasspathContainer {
 	}	
 
 	public IClasspathEntry[] getClasspathEntries() {
-		IClasspathEntry layoutextlib = JavaCore.newLibraryEntry(jar_path, src_path, new Path("src"), true);
+		IClasspathEntry layoutextlib = JavaCore.newLibraryEntry(jar_path, src_path, new Path("src"), true); //$NON-NLS-1$
 		return new IClasspathEntry[] { layoutextlib };
 	}
 
 	public String getDescription() {
-		return "Layout Extension";
+		return Messages.LayoutExtensionLibrary_Layout_Ext;
 	}
 
 	public int getKind() {

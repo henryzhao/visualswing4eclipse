@@ -31,7 +31,7 @@ public class DuplicateOperation extends AbstractOperation {
 	private List<CompositeAdapter> parents;
 	private List<Component> copyedList;
 	public DuplicateOperation(List<Component> selection) {
-		super("Duplicate Components");
+		super(Messages.DuplicateOperation_Duplicate_Components);
 		this.selection = selection;
 	}
 

@@ -38,7 +38,7 @@ public class DeleteOperation extends AbstractOperation {
 	private List<ParentConstraints> constraints;
 
 	public DeleteOperation(List<Component> selection, Component root) {
-		super("Delete Component");
+		super(Messages.DeleteOperation_Delete_Components);
 		this.selection = selection;
 		this.root = root;
 	}

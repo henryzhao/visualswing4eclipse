@@ -32,8 +32,8 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 		IClasspathContainerPage, IClasspathContainerPageExtension,
 		IClasspathContainerPageExtension2 {
 	public NewVisualSwingExtensionLibraryWizard() {
-		super("Visual Swing Extension Libarary Page",
-				"Visual Swing Extension Libarary", null);
+		super(Messages.NewVisualSwingExtensionLibraryWizard_Lib_Page,
+				Messages.NewVisualSwingExtensionLibraryWizard_Lib, null);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 			ITableLabelProvider {
 		@Override
 		public Image getColumnImage(Object element, int columnIndex) {
-			return VisualSwingPlugin.getSharedImage("/icons/library.png");
+			return VisualSwingPlugin.getSharedImage("/icons/library.png"); //$NON-NLS-1$
 		}
 
 		@Override

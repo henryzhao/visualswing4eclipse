@@ -26,14 +26,14 @@ import org.eclipse.core.runtime.jobs.Job;
 
 public class Preloader extends Job {
 	public Preloader(){
-		super("Preloader");
+		super(Messages.PRELOADER_JOB_NAME);
 	}
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		List<String> classes = getPreloadedClasses();
-		monitor.setTaskName("Preloading Swing Classes");
+		monitor.setTaskName(Messages.PRELOADER_TASK_NAME);
 		int count = classes.size();
-		monitor.beginTask("Loading ...", count);
+		monitor.beginTask(Messages.PRELOADER_LOADING, count);
 		for(int i=0;i<count;i++){
 			try {
 				Class.forName(classes.get(i));
@@ -48,7 +48,7 @@ public class Preloader extends Job {
 		BufferedReader br = null;
 		List<String> classes = new ArrayList<String>();
 		try {			
-			InputStream inputStream = getClass().getResourceAsStream("preloaded.txt");
+			InputStream inputStream = getClass().getResourceAsStream("preloaded.txt"); //$NON-NLS-1$
 			br = new BufferedReader(new InputStreamReader(inputStream));
 			String line;
 			while ((line = br.readLine()) != null) {

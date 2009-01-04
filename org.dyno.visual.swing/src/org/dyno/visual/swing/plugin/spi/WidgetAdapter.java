@@ -90,7 +90,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	private static Icon FORBIDDEN_ICON;
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class
-				.getResource("/icons/forbidden.png"));
+				.getResource("/icons/forbidden.png")); //$NON-NLS-1$
 	}
 	protected boolean dirty=true;
 	protected int getAccess;
@@ -219,9 +219,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public String toString() {
 		if (isRoot()) {
-			return "[" + getWidgetName() + "]";
+			return "[" + getWidgetName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			return getName() + " [" + getWidgetName() + "]";
+			return getName() + " [" + getWidgetName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -545,8 +545,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	@Override
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) throws CoreException {
-		widgetName = config.getAttribute("widgetName");
-		String sIcon = config.getAttribute("icon");
+		widgetName = config.getAttribute("widgetName"); //$NON-NLS-1$
+		String sIcon = config.getAttribute("icon"); //$NON-NLS-1$
 		if (sIcon != null && sIcon.trim().length() > 0) {
 			IContributor contributor = config.getContributor();
 			String pluginId = contributor.getName();
@@ -558,7 +558,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	@SuppressWarnings("unchecked")
 	private Class getWidgetClass(IConfigurationElement config) {
 		try {
-			String widgetClassname = config.getAttribute("widgetClass");
+			String widgetClassname = config.getAttribute("widgetClass"); //$NON-NLS-1$
 			IContributor contributor = config.getContributor();
 			String pluginId = contributor.getName();
 			Bundle bundle = Platform.getBundle(pluginId);
@@ -575,9 +575,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			@SuppressWarnings("unchecked")
 			Class widgetClass = getWidgetClass(config);
 			HashMap<String, IConfigurationElement> eProperties = new HashMap<String, IConfigurationElement>();
-			IConfigurationElement[] props = config.getChildren("property");
+			IConfigurationElement[] props = config.getChildren("property"); //$NON-NLS-1$
 			for (IConfigurationElement prop : props) {
-				String propertyId = prop.getAttribute("id");
+				String propertyId = prop.getAttribute("id"); //$NON-NLS-1$
 				eProperties.put(propertyId, prop);
 			}
 			if (widgetClass != Component.class) {
@@ -707,12 +707,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	@SuppressWarnings("unchecked")
 	private IWidgetPropertyDescriptor createProperty(
 			IConfigurationElement config, Class beanClass) {
-		String sClass = config.getAttribute("class");
+		String sClass = config.getAttribute("class"); //$NON-NLS-1$
 		if (sClass != null && sClass.trim().length() > 0) {
 			IWidgetPropertyDescriptor iwpd;
 			try {
 				iwpd = (IWidgetPropertyDescriptor) config
-						.createExecutableExtension("class");
+						.createExecutableExtension("class"); //$NON-NLS-1$
 				iwpd.init(config, beanClass);
 				return iwpd;
 			} catch (CoreException e) {
@@ -726,7 +726,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			HashMap<String, IConfigurationElement> eSources,
 			HashMap<String, IConfigurationElement> eTargets) {
 		for (IConfigurationElement eTarget : eTargets.values()) {
-			String eId = eTarget.getAttribute("id");
+			String eId = eTarget.getAttribute("id"); //$NON-NLS-1$
 			if (eSources.get(eId) == null) {
 				eSources.put(eId, eTarget);
 			}
@@ -940,14 +940,14 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public void fillContextAction(MenuManager menu) {
 		if (!isRoot())
 			menu.add(new VarChangeAction(this));
-		MenuManager eventMenu = new MenuManager("Add/Edit Events", "#EVENT");
+		MenuManager eventMenu = new MenuManager(Messages.WidgetAdapter_Add_Edit_Events, "#EVENT"); //$NON-NLS-2$
 		fillAddEventAction(eventMenu);
 		menu.add(eventMenu);
-		MenuManager delEventMenu = new MenuManager("Delete Events",
-				"#DELETE_EVENT");
+		MenuManager delEventMenu = new MenuManager(Messages.WidgetAdapter_Delete_Events,
+				"#DELETE_EVENT"); //$NON-NLS-1$
 		fillDelEventAction(delEventMenu);
 		menu.add(delEventMenu);
-		MenuManager borderMenu = new MenuManager("Border", "#BORDER");
+		MenuManager borderMenu = new MenuManager(Messages.WidgetAdapter_Border, "#BORDER"); //$NON-NLS-2$
 		fillBorderAction(borderMenu);
 		menu.add(borderMenu);
 		if (!isRoot()) {
@@ -974,7 +974,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		Set<EventSetDescriptor> keys = eventDescriptor.keySet();
 		for (EventSetDescriptor key : keys) {
 			MenuManager subEventMenu = new MenuManager(key.getName(),
-					"#DELETE_EVENT_" + key);
+					"#DELETE_EVENT_" + key); //$NON-NLS-1$
 			IEventListenerModel model = eventDescriptor.get(key);
 			Iterable<MethodDescriptor> mSet = model.methods();
 			for (MethodDescriptor method : mSet) {
@@ -998,7 +998,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		EventSetDescriptor[] esds = getBeanInfo().getEventSetDescriptors();
 		for (EventSetDescriptor esd : esds) {
 			MenuManager subEventMenu = new MenuManager(esd.getName(),
-					"#ADD_EVENT_" + esd.getName());
+					"#ADD_EVENT_" + esd.getName()); //$NON-NLS-1$
 			MethodDescriptor[] eds = esd.getListenerMethodDescriptors();
 			for (MethodDescriptor md : eds) {
 				subEventMenu.add(new AddEventAction(this, esd, md));

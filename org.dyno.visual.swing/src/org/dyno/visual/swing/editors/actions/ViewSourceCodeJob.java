@@ -30,7 +30,7 @@ class ViewSourceCodeJob extends Job {
 
 	public ViewSourceCodeJob(VisualSwingEditor editor,
 			MethodDescriptor methodDesc, IEventListenerModel model) {
-		super("View Source Code");
+		super(Messages.ViewSourceCodeJob_View_Source_Code);
 		this.editor = editor;
 		this.methodDesc = methodDesc;
 		this.model = model;

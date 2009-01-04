@@ -33,7 +33,7 @@ import org.eclipse.jface.dialogs.IDialogSettings;
  * @author William Chen
  */
 public abstract class NewVisualComponentVizard extends NewElementWizard {
-	private static String NEWCLASS_WIZ_ICON = "/icons/newclass_wiz.png";
+	private static String NEWCLASS_WIZ_ICON = "/icons/newclass_wiz.png"; //$NON-NLS-1$
 	private NewComponentPage fPage;
 	private boolean fOpenEditorOnFinish;
 	private String superClassName;
@@ -42,7 +42,7 @@ public abstract class NewVisualComponentVizard extends NewElementWizard {
 		this.superClassName = superClassName;
 		setDefaultPageImageDescriptor(VisualSwingPlugin.getSharedDescriptor(NEWCLASS_WIZ_ICON));
 		setDialogSettings(getDialogSettings());
-		setWindowTitle("New Visual Component");
+		setWindowTitle("New Visual Component"); //$NON-NLS-1$
 		fOpenEditorOnFinish = true;
 	}
 

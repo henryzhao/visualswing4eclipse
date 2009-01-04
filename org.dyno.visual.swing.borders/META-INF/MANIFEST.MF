@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Borders Plug-in
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing.borders;singleton:=true
 Bundle-Version: 0.9.7.I20081226-1800
 Require-Bundle: org.dyno.visual.swing,
@@ -11,6 +11,7 @@ Require-Bundle: org.dyno.visual.swing,
  org.eclipse.ui.workbench,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: Dynamic Object Organization
+Bundle-Vendor: %Bundle-Vendor.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Activator: org.dyno.visual.swing.borders.BorderPlugin
+Bundle-Localization: plugin

@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Visual Swing Plugin
+Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true
 Bundle-Version: 0.9.7.I20081226-1800
 Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin
-Bundle-Vendor: Dynamic Object Organization
+Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
@@ -21,3 +21,4 @@ Export-Package: org.dyno.visual.swing.base,
  org.dyno.visual.swing.layouts,
  org.dyno.visual.swing.plugin.spi
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Localization: plugin
