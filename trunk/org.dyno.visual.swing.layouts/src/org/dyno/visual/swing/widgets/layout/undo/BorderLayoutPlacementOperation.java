@@ -34,7 +34,7 @@ public class BorderLayoutPlacementOperation extends AbstractOperation {
 	private String oldplacement;
 	private CompositeAdapter parent;
 	public BorderLayoutPlacementOperation(JComponent container, JComponent child, String placement) {
-		super("Reposite Component");
+		super(Messages.BorderLayoutPlacementOperation_Reposite_Component);
 		this.container = container;
 		this.child = child;
 		this.newplacement = placement;

@@ -85,8 +85,8 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
-		MenuManager plcMenu = new MenuManager("Component Placement",
-				"#BORDERLAYOUT_CONSTRAINTS");
+		MenuManager plcMenu = new MenuManager(Messages.BorderLayoutAdapter_Component_Placement,
+				"#BORDERLAYOUT_CONSTRAINTS"); //$NON-NLS-1$
 		plcMenu.add(new BorderLayoutPlacementAction(container,
 				BorderLayout.CENTER, (JComponent)child));
 		plcMenu.add(new BorderLayoutPlacementAction(container,
@@ -336,9 +336,9 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
-		WidgetProperty hgapProperty = new WidgetProperty("hgap", "hgap",
+		WidgetProperty hgapProperty = new WidgetProperty("hgap", "hgap", //$NON-NLS-1$ //$NON-NLS-2$
 				BorderLayout.class);
-		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap",
+		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", //$NON-NLS-1$ //$NON-NLS-2$
 				BorderLayout.class);
 		return new IWidgetPropertyDescriptor[] { hgapProperty, vgapProperty };
 	}
