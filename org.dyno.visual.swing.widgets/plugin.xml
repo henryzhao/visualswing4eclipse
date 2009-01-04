@@ -4,7 +4,7 @@
    <extension
    		point="org.dyno.visual.swing.contentTypePattern"
    		id="org.dyno.visual.swing.widgets.panelpattern"
-   		name="Panel Pattern">
+   		name="%ContentTypePattern">
    		<!--JPanel source file-->
    		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.JPanel;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JPanel.*"/>
    		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.JPanel;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JPanel.*"/>
@@ -40,7 +40,7 @@
    <extension
          point="org.dyno.visual.swing.widgetAdapter"
          id="org.dyno.visual.swing.widgets.beans"
-         name="Swing Beans">
+         name="%SwingBeans">
          <widget 
          		class="org.dyno.visual.swing.widgets.ComponentAdapter"
          		widgetClass="java.awt.Component"
@@ -87,7 +87,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JPanelAdapter"
          		widgetClass="javax.swing.JPanel"
-         		widgetName="%Palette.Panel.Name"
+         		widgetName="%Palette.JPanel"
          		groupId="container"
          		icon="/icons/panel_16.png">
         		<property id="border" name="border" />
@@ -99,7 +99,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JLabelAdapter"
          		widgetClass="javax.swing.JLabel"
-         		widgetName="JLabel"
+         		widgetName="%Palette.JLabel"
          		groupId="component"         		
          		icon="/icons/label_16.png">
         		<property id="text" name="text" />
@@ -187,7 +187,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JButtonAdapter"
          		widgetClass="javax.swing.JButton"
-         		widgetName="JButton"
+         		widgetName="%Palette.JButton"
          		groupId="component"         		
          		icon="/icons/button_16.png">
 		        <property id="defaultCapable" name="defaultCapable"/>
@@ -196,28 +196,28 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JToggleButtonAdapter"
          		widgetClass="javax.swing.JToggleButton"
-         		widgetName="JToggleButton"
+         		widgetName="%Palette.JToggleButton"
          		groupId="component"         		
          		icon="/icons/toggle_button_16.png">
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JCheckBoxAdapter"
          		widgetClass="javax.swing.JCheckBox"
-         		widgetName="JCheckBox"
+         		widgetName="%Palette.JCheckBox"
          		groupId="component"         		
          		icon="/icons/check_box_16.png">
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JRadioButtonAdapter"
          		widgetClass="javax.swing.JRadioButton"
-         		widgetName="JRadioButton"
+         		widgetName="%Palette.JRadioButton"
          		groupId="component"         		
          		icon="/icons/radio_button_16.png">
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JComboBoxAdapter"
          		widgetClass="javax.swing.JComboBox"
-         		widgetName="JComboBox"
+         		widgetName="%Palette.JComboBox"
          		groupId="component"         		
          		icon="/icons/combo_box_16.png">
 		    	<property id="editable" name="editable"/>
@@ -230,7 +230,7 @@
         <widget 
          		class="org.dyno.visual.swing.widgets.JScrollPaneAdapter"
          		widgetClass="javax.swing.JScrollPane"
-         		widgetName="JScrollPane"
+         		widgetName="%Palette.JScrollPane"
          		groupId="container"         		
          		icon="/icons/scroll_pane_16.png">
 		    	<property id="horizontalScrollBarPolicy" name="horizontalScrollBarPolicy"
@@ -245,7 +245,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JListAdapter"
          		widgetClass="javax.swing.JList"
-         		widgetName="JList"
+         		widgetName="%Palette.JList"
          		groupId="component"         		
          		icon="/icons/list_16.png">
 		    	<property id="selectionMode" 
@@ -287,7 +287,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JTextFieldAdapter"
          		widgetClass="javax.swing.JTextField"
-         		widgetName="JTextField"
+         		widgetName="%Palette.JTextField"
          		groupId="component"         		
          		icon="/icons/text_field_16.png">
 		    	<property id="columns" name="columns"/>
@@ -301,7 +301,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JTextAreaAdapter"
          		widgetClass="javax.swing.JTextArea"
-         		widgetName="JTextArea"
+         		widgetName="%Palette.JTextArea"
          		groupId="component"         		
          		icon="/icons/text_area_16.png">
 		    	<property id="columns" name="columns"/>
@@ -313,7 +313,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JScrollBarAdapter"
          		widgetClass="javax.swing.JScrollBar"
-         		widgetName="JScrollBar"
+         		widgetName="%Palette.JScrollBar"
          		groupId="component"         		
          		icon="/icons/scroll_bar_16.png">
          		<property id="orientation" name="orientation" 
@@ -330,7 +330,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JSliderAdapter"
          		widgetClass="javax.swing.JSlider"
-         		widgetName="JSlider"
+         		widgetName="%Palette.JSlider"
          		groupId="component"         		
          		icon="/icons/slider_16.png">
 	         		<property id="orientation" name="orientation" 
@@ -352,7 +352,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JProgressBarAdapter"
          		widgetClass="javax.swing.JProgressBar"
-         		widgetName="JProgressBar"
+         		widgetName="%Palette.JProgressBar"
          		groupId="component"         		
          		icon="/icons/progress_bar_16.png">
          		<property id="orientation" name="orientation" 
@@ -369,7 +369,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JFormattedTextFieldAdapter"
          		widgetClass="javax.swing.JFormattedTextField"
-         		widgetName="JFormattedTextField"
+         		widgetName="%Palette.JFormattedTextField"
          		groupId="component"         		
          		icon="/icons/formatted_field_16.png">
     			<property id="border" name="border"/>
@@ -380,7 +380,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JPasswordFieldAdapter"
          		widgetClass="javax.swing.JPasswordField"
-         		widgetName="JPasswordField"
+         		widgetName="%Palette.JPasswordField"
          		groupId="component"         		
          		icon="/icons/password_field_16.png">
 					<property id="echoChar" name="echoChar"/>
@@ -388,7 +388,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JSpinnerAdapter"
          		widgetClass="javax.swing.JSpinner"
-         		widgetName="JSpinner"
+         		widgetName="%Palette.JSpinner"
          		groupId="component"         		
          		icon="/icons/spinner_16.png">
 		        <property id="model" name="model"/>
@@ -396,7 +396,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JSeparatorAdapter"
          		widgetClass="javax.swing.JSeparator"
-         		widgetName="JSeparator"
+         		widgetName="%Palette.JSeparator"
          		groupId="component"         		
          		icon="/icons/separator_16.png">
 		        <property id="orientation" name="orientation"
@@ -406,14 +406,14 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JTextPaneAdapter"
          		widgetClass="javax.swing.JTextPane"
-         		widgetName="JTextPane"
+         		widgetName="%Palette.JTextPane"
          		groupId="component"         		
          		icon="/icons/text_pane_16.png">
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JEditorPaneAdapter"
          		widgetClass="javax.swing.JEditorPane"
-         		widgetName="JEditorPane"
+         		widgetName="%Palette.JEditorPane"
          		groupId="component"         		
          		icon="/icons/editor_pane_16.png">
     	 		<property id="contentType" name="contentType"/>
@@ -421,7 +421,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JTreeAdapter"
          		widgetClass="javax.swing.JTree"
-         		widgetName="JTree"
+         		widgetName="%Palette.JTree"
          		groupId="component"         		
          		icon="/icons/tree_16.png">
 		    	<property id="model" name="model"/>
@@ -440,7 +440,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JTableAdapter"
          		widgetClass="javax.swing.JTable"
-         		widgetName="JTable"
+         		widgetName="%Palette.JTable"
          		groupId="component"         		
          		icon="/icons/table_16.png">
 		    	<property id="autoCreateColumnsFromModel" name="autoCreateColumnsFromModel"/>
@@ -470,7 +470,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JTabbedPaneAdapter"
          		widgetClass="javax.swing.JTabbedPane"
-         		widgetName="JTabbedPane"
+         		widgetName="%Palette.JTabbedPane"
          		groupId="container"         		
          		icon="/icons/tabbed_pane_16.png">
 		    	<property id="selectedIndex" name="selectedIndex" gencode="false"/>
@@ -484,7 +484,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JSplitPaneAdapter"
          		widgetClass="javax.swing.JSplitPane"
-         		widgetName="JSplitPane"
+         		widgetName="%Palette.JSplitPane"
          		groupId="container"         		
          		icon="/icons/split_pane_16.png">
 		    	<property id="dividerLocation" name="dividerLocation"/>
@@ -500,7 +500,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JToolBarAdapter"
          		widgetClass="javax.swing.JToolBar"
-         		widgetName="JToolBar"
+         		widgetName="%Palette.JToolBar"
          		groupId="container"         		
          		icon="/icons/tool_bar_16.png">
 		    	<property id="floatable" name="floatable"/>
@@ -516,7 +516,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JDesktopPaneAdapter"
          		widgetClass="javax.swing.JDesktopPane"
-         		widgetName="JDesktopPane"
+         		widgetName="%Palette.JDesktopPane"
          		groupId="container"         		
          		icon="/icons/desktop_pane_16.png">
     			<property id="dragMode" name="dragMode"
@@ -526,7 +526,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JInternalFrameAdapter"
          		widgetClass="javax.swing.JInternalFrame"
-         		widgetName="JInternalFrame"
+         		widgetName="%Palette.JInternalFrame"
          		groupId="container"         		
          		icon="/icons/internal_frame_16.png">
 		    	<property id="closable" name="closable"/>
@@ -552,7 +552,7 @@
                icon="icons/frame_16.png"
                rootPaneContainer="true"
                widgetClass="javax.swing.JFrame"
-               widgetName="JFrame">
+               widgetName="%Palette.JFrame">
                <property id="title" name="title"/>
                <property
                      editable="true"
@@ -570,7 +570,7 @@
                icon="icons/dialog_16.png"
                rootPaneContainer="true"
                widgetClass="javax.swing.JDialog"
-               widgetName="JDialog">
+               widgetName="%Palette.JDialog">
                <property id="title" name="title"/>
                <property
                      editable="true"
@@ -589,7 +589,7 @@
                icon="icons/applet_16.png"
                rootPaneContainer="true"
                widgetClass="javax.swing.JApplet"
-               widgetName="JApplet">
+               widgetName="%Palette.JApplet">
                <property id="visible" name="visible" gencode="false"/>
          </widget>
          <widget
@@ -599,7 +599,7 @@
                icon="icons/menu_bar_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenuBar"
-               widgetName="JMenuBar">
+               widgetName="%Palette.JMenuBar">
             <property
                   dislayName="borderPainted"
                   editable="true"
@@ -622,7 +622,7 @@
                icon="icons/menu_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenu"
-               widgetName="JMenu">
+               widgetName="%Palette.JMenu">
                <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
@@ -632,7 +632,7 @@
                icon="icons/menu_item_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenuItem"
-               widgetName="JMenuItem">
+               widgetName="%Palette.JMenuItem">
                <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
@@ -642,7 +642,7 @@
                icon="icons/checkbox_menu_item_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JCheckBoxMenuItem"
-               widgetName="JCheckBoxMenuItem">
+               widgetName="%Palette.JCheckBoxMenuItem">
                <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
@@ -652,7 +652,7 @@
                icon="icons/radio_button_menu_item_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JRadioButtonMenuItem"
-               widgetName="JRadioButtonMenuItem">
+               widgetName="%Palette.JRadioButtonMenuItem">
                <property id="selected" name="selected" gencode="false"/>
          </widget>
          <widget
@@ -662,7 +662,7 @@
                icon="icons/popup_menu_16.png"
                rootPaneContainer="false"
                widgetClass="javax.swing.JPopupMenu"
-               widgetName="JPopupMenu"
+               widgetName="%Palette.JPopupMenu"
                shown="false">
          </widget>
                   
@@ -679,25 +679,25 @@
    <extension
          point="org.dyno.visual.swing.widgetGroup">         
          <group
-               displayName="Container"
+               displayName="%Container"
                id="container"
                expanded="false"/>
          <group 
          	   id="component" 
-         	   displayName="Component"/>
+         	   displayName="%Component"/>
 		 <group
-               displayName="Menus"
+               displayName="%Menus"
                expanded="false"
                id="menu">
          </group>
    </extension>     
    <extension
          point="org.dyno.visual.swing.propertyCategory">
-         <sorting id="nogroup" name="Sort By Name">
-         	<category id="default_category" name="Properties" default="true"/>
+         <sorting id="nogroup" name="%SortByName">
+         	<category id="default_category" name="%Properties" default="true"/>
          </sorting>
-         <sorting id="default" name="Sort by Category" default="true">
-         		<category id="frequent" name="Common">
+         <sorting id="default" name="%SortByCategory" default="true">
+         		<category id="frequent" name="%Common">
          			<provider class="javax.swing.JPanel">
 	        			<reference id="background"/>
 	        			<reference id="border"/>
@@ -1014,7 +1014,7 @@
 						<reference id="toolTipText"/>
 					</provider>
          		</category>
-         		<category id="seldom" name="Expert" filters="org.eclipse.ui.views.properties.expert" default="true"/>
+         		<category id="seldom" name="%Expert" filters="org.eclipse.ui.views.properties.expert" default="true"/>
          </sorting>
    </extension>
    <extension
