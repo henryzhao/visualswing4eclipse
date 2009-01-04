@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing.parser;singleton:=true
-Bundle-Version: 0.9.7.I20081226-1800
+Bundle-Version: 0.9.8.I20090104-1800
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.dyno.visual.swing,
