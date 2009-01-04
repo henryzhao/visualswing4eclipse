@@ -24,7 +24,7 @@ public class IntegerCellEditorValidator implements ICellEditorValidator {
 		try {
 			Integer.parseInt(string);
 		} catch (NumberFormatException nfe) {
-			return string + " should be an integer, the format is incorrect!";
+			return string + Messages.IntegerCellEditorValidator_Incorrect_Format;
 		}
 		return null;
 	}

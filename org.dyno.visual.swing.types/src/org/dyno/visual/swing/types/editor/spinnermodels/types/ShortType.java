@@ -18,7 +18,7 @@ package org.dyno.visual.swing.types.editor.spinnermodels.types;
 public class ShortType extends NumberType {
 
 	protected ShortType() {
-		super("Short");
+		super(Messages.ShortType_Short);
 	}
 
 	@Override

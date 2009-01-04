@@ -48,7 +48,7 @@ public class SpinnerModelDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
-		getShell().setText("Spinner Model IEditor");
+		getShell().setText(Messages.SpinnerModelDialog_Title);
 		modelPanes = new HashMap<SpinnerModelType, AccessibleUI>();
 		Composite innerComposite = new Composite(composite, SWT.NONE);
 		innerComposite.setLayoutData(new GridData());
@@ -56,7 +56,7 @@ public class SpinnerModelDialog extends Dialog {
 		layout.numColumns = 2;
 		innerComposite.setLayout(layout);
 		Label lbl = new Label(innerComposite, SWT.NONE);
-		lbl.setText("Type:");
+		lbl.setText(Messages.SpinnerModelDialog_Type);
 		GridData data = new GridData();
 		lbl.setLayoutData(data);
 		Combo cmbType = new Combo(innerComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
@@ -112,14 +112,14 @@ public class SpinnerModelDialog extends Dialog {
 	protected void okPressed() {
 		ISelection selection = viewer.getSelection();
 		if (selection.isEmpty()) {
-			MessageDialog.openError(getShell(), "Error", "Please select a spinner model type!");
+			MessageDialog.openError(getShell(), Messages.SpinnerModelDialog_Error, Messages.SpinnerModelDialog_Select);
 			return;
 		}
 		SpinnerModelType type = (SpinnerModelType) ((StructuredSelection) selection).getFirstElement();
 		AccessibleUI paneUI = modelPanes.get(type);
 		String message = paneUI.isInputValid();
 		if (message != null) {
-			MessageDialog.openError(getShell(), "Error", message);
+			MessageDialog.openError(getShell(), Messages.SpinnerModelDialog_Error, message);
 			return;
 		}
 		model = (SpinnerModel) paneUI.getValue();

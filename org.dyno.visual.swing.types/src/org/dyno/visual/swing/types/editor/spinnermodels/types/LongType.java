@@ -17,7 +17,7 @@ package org.dyno.visual.swing.types.editor.spinnermodels.types;
 public class LongType extends NumberType {
 
 	protected LongType() {
-		super("Long");
+		super(Messages.LongType_Long);
 	}
 
 	@Override

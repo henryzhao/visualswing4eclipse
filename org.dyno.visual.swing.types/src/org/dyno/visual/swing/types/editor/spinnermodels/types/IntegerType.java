@@ -17,7 +17,7 @@ package org.dyno.visual.swing.types.editor.spinnermodels.types;
 public class IntegerType extends NumberType {
 
 	protected IntegerType() {
-		super("Integer");
+		super(Messages.IntegerType_Integer);
 	}
 
 	@Override

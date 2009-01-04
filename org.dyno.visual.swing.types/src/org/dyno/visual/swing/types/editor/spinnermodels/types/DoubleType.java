@@ -17,7 +17,7 @@ package org.dyno.visual.swing.types.editor.spinnermodels.types;
 public class DoubleType extends NumberType {
 
 	protected DoubleType() {
-		super("Double");
+		super(Messages.DoubleType_Double);
 	}
 
 	@Override

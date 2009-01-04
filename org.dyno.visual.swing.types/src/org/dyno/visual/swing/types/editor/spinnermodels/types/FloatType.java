@@ -17,7 +17,7 @@ package org.dyno.visual.swing.types.editor.spinnermodels.types;
 public class FloatType extends NumberType {
 
 	protected FloatType() {
-		super("Float");
+		super(Messages.FloatType_Float);
 	}
 
 	@Override

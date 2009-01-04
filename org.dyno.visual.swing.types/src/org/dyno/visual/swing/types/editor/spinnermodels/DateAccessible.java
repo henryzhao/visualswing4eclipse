@@ -155,7 +155,7 @@ class DateAccessible implements AccessibleUI {
 		layout.verticalSpacing = 10;
 		pane.setLayout(layout);
 		btnDefault = new Button(pane, SWT.CHECK);
-		btnDefault.setText("Use empty argument constructor.");
+		btnDefault.setText(Messages.DateAccessible_Use_Empty_Arg_Cons);
 		GridData data = new GridData();
 		data.horizontalSpan = 2;
 		btnDefault.setLayoutData(data);
@@ -167,7 +167,7 @@ class DateAccessible implements AccessibleUI {
 			}
 		});
 		lblInit = new Label(pane, SWT.NONE);
-		lblInit.setText("Initial Value:");
+		lblInit.setText(Messages.DateAccessible_Initial_Value);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		lblInit.setLayoutData(data);
@@ -176,7 +176,7 @@ class DateAccessible implements AccessibleUI {
 		data.horizontalAlignment = SWT.FILL;
 		spInit.setLayoutData(data);
 		btnMin = new Button(pane, SWT.CHECK);
-		btnMin.setText("Minimum:");
+		btnMin.setText(Messages.DateAccessible_Min);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		btnMin.setLayoutData(data);
@@ -191,7 +191,7 @@ class DateAccessible implements AccessibleUI {
 		data.horizontalAlignment = SWT.FILL;
 		spMin.setLayoutData(data);
 		btnMax = new Button(pane, SWT.CHECK);
-		btnMax.setText("Maximum:");
+		btnMax.setText(Messages.DateAccessible_Max);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		btnMax.setLayoutData(data);
@@ -206,7 +206,7 @@ class DateAccessible implements AccessibleUI {
 		data.horizontalAlignment = SWT.FILL;
 		spMax.setLayoutData(data);
 		lblStep = new Label(pane, SWT.NONE);
-		lblStep.setText("Step Size:");
+		lblStep.setText(Messages.DateAccessible_Step_Size);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		lblStep.setLayoutData(data);
@@ -233,18 +233,18 @@ class DateAccessible implements AccessibleUI {
 			if (btnMin.getSelection()) {
 				Calendar min = spMin.getSelection();				
 				if (after(min, init))
-					return "The initial value should not be earlier the minimum value!";
+					return Messages.DateAccessible_Earlier;
 			}
 			if (btnMax.getSelection()) {
 				Calendar max = spMax.getSelection();
 				if (after(init, max))
-					return "The initial value should not be later than the maximum value!";
+					return Messages.DateAccessible_Later;
 			}
 			if (btnMin.getSelection() && btnMax.getSelection()) {
 				Calendar min = spMin.getSelection();
 				Calendar max = spMax.getSelection();
 				if (after(min, max))
-					return "The minumum value should not be later than the maximum value!";
+					return Messages.DateAccessible_Not_Later;
 			}
 		}
 		return null;

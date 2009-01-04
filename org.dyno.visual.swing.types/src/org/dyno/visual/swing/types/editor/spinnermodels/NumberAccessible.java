@@ -150,7 +150,7 @@ class NumberAccessible implements AccessibleUI {
 		layout.verticalSpacing = 5;
 		pane.setLayout(layout);
 		btnDefault = new Button(pane, SWT.CHECK);
-		btnDefault.setText("Use empty argument constructor.");
+		btnDefault.setText(Messages.NumberAccessible_Use_Empty_Cons);
 		GridData data = new GridData();
 		data.horizontalSpan = 2;
 		data.horizontalAlignment = SWT.FILL;
@@ -164,7 +164,7 @@ class NumberAccessible implements AccessibleUI {
 			}
 		});
 		lblType = new Label(pane, SWT.NONE);
-		lblType.setText("Number Type:");
+		lblType.setText(Messages.NumberAccessible_Number_Type);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		lblType.setLayoutData(data);
@@ -183,7 +183,7 @@ class NumberAccessible implements AccessibleUI {
 		data.horizontalAlignment = SWT.FILL;
 		cmbType.setLayoutData(data);
 		lblInit = new Label(pane, SWT.NONE);
-		lblInit.setText("Initial Value:");
+		lblInit.setText(Messages.NumberAccessible_Initial_Value);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		lblInit.setLayoutData(data);
@@ -195,7 +195,7 @@ class NumberAccessible implements AccessibleUI {
 		data.horizontalAlignment = SWT.FILL;
 		spInit.setLayoutData(data);
 		btnMin = new Button(pane, SWT.CHECK);
-		btnMin.setText("Minimum:");
+		btnMin.setText(Messages.NumberAccessible_Min);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		btnMin.setLayoutData(data);
@@ -213,7 +213,7 @@ class NumberAccessible implements AccessibleUI {
 		spMin.setMaximum(Integer.MAX_VALUE);
 		spMin.setSelection(0);
 		btnMax = new Button(pane, SWT.CHECK);
-		btnMax.setText("Maximum:");
+		btnMax.setText(Messages.NumberAccessible_Max);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		btnMax.setLayoutData(data);
@@ -231,7 +231,7 @@ class NumberAccessible implements AccessibleUI {
 		spMax.setMaximum(Integer.MAX_VALUE);
 		spMax.setSelection(0);
 		lblStep = new Label(pane, SWT.NONE);
-		lblStep.setText("Step Size:");
+		lblStep.setText(Messages.NumberAccessible_Step_Size);
 		data = new GridData();
 		data.horizontalIndent = 25;
 		lblStep.setLayoutData(data);
@@ -257,37 +257,37 @@ class NumberAccessible implements AccessibleUI {
 			int init = spInit.getSelection();
 			int index = cmbType.getSelectionIndex();
 			if (index == -1)
-				return "Please select a value type!";
+				return Messages.NumberAccessible_Value_Type;
 			NumberType type = NumberType.getTypes()[index];
 			int minTValue = type.getMininum();
 			int maxTValue = type.getMaximum();
 			if (init < minTValue || init > maxTValue)
-				return "The initial value value should be between " + minTValue + " and " + maxTValue;
+				return Messages.NumberAccessible_Between + minTValue + Messages.NumberAccessible_And + maxTValue;
 			if (btnMin.getSelection()) {
 				int min = spMin.getSelection();
 				if (min < minTValue || min > maxTValue)
-					return "The minimum value value should be between " + minTValue + " and " + maxTValue;
+					return Messages.NumberAccessible_Min_Between + minTValue + Messages.NumberAccessible_And + maxTValue;
 				if (init < min)
-					return "The initial value should not be less than the minimum value!";
+					return Messages.NumberAccessible_Initial_Between;
 			}
 			if (btnMax.getSelection()) {
 				int max = spMax.getSelection();
 				if (max < minTValue || max > maxTValue)
-					return "The maximum value value should be between " + minTValue + " and " + maxTValue;
+					return Messages.NumberAccessible_Max_Between + minTValue + Messages.NumberAccessible_And + maxTValue;
 				if (init > max)
-					return "The initial value should not be greater than the maximum value!";
+					return Messages.NumberAccessible_Init_Not_GT_Max;
 			}
 			if (btnMin.getSelection() && btnMax.getSelection()) {
 				int min = spMin.getSelection();
 				int max = spMax.getSelection();
 				if (min > max)
-					return "The minumum value should not be greater than the maximum value!";
+					return Messages.NumberAccessible_Min_Not_GT_Max;
 			}
 			int size = spStep.getSelection();
 			if (size <= 0)
-				return "The step size should be greater than 0";
+				return Messages.NumberAccessible_Step_Size_GT_0;
 			if (size > maxTValue)
-				return "The step size should not be greater than " + maxTValue;
+				return Messages.NumberAccessible_Step_Size_Not_GT_Max + maxTValue;
 		}
 		return null;
 	}
