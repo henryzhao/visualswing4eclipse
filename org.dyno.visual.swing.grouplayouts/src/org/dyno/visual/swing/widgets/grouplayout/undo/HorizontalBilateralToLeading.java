@@ -36,7 +36,7 @@ public class HorizontalBilateralToLeading extends AbstractOperation {
 
 	public HorizontalBilateralToLeading(Constraints constraints,
 			JComponent container, Component child) {
-		super("Set Anchor");
+		super(Messages.HorizontalBilateralToLeading_Set_Anchor);
 		this.oldconstraints = constraints;
 		this.container = container;
 		this.child = child;

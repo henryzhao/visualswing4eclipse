@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.Status;
 public class RightAlignmentOperation extends AlignmentOperation {
 
 	public RightAlignmentOperation(JComponent container) {
-		super("Align Top", container);
+		super(Messages.RightAlignmentOperation_Align_Top, container);
 	}
 
 	@Override

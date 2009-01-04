@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.Status;
 public class LeftAlignmentOperation extends AlignmentOperation {
 
 	public LeftAlignmentOperation(JComponent container) {
-		super("Align Left", container);
+		super(Messages.LeftAlignmentOperation_Align_Left, container);
 	}
 
 	@Override

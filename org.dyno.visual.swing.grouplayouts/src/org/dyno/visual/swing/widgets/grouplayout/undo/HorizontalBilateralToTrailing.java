@@ -36,7 +36,7 @@ public class HorizontalBilateralToTrailing extends AbstractOperation {
 
 	public HorizontalBilateralToTrailing(Constraints constraints,
 			JComponent container, Component child) {
-		super("Set Anchor");
+		super(Messages.HorizontalBilateralToTrailing_Set_Anchor);
 		this.oldconstraints = constraints;
 		this.container = container;
 		this.child = child;

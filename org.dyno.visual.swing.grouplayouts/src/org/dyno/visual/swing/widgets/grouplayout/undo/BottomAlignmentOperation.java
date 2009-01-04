@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.Status;
 public class BottomAlignmentOperation extends AlignmentOperation {
 
 	public BottomAlignmentOperation(JComponent container) {
-		super("Align Bottom", container);
+		super(Messages.BottomAlignmentOperation_Align_Bottom, container);
 	}
 
 	@Override

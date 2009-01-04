@@ -36,7 +36,7 @@ public class HorizontalLeadingToTrailing extends AbstractOperation {
 
 	public HorizontalLeadingToTrailing(Constraints constraints,
 			JComponent container, Component child) {
-		super("Set Anchor");
+		super(Messages.HorizontalLeadingToTrailing_Set_Anchor);
 		this.oldconstraints = constraints;
 		this.container = container;
 		this.child = child;
