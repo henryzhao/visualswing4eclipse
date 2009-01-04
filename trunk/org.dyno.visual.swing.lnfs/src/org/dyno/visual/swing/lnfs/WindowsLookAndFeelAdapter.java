@@ -213,7 +213,7 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 
 	private static boolean isXP() {
 		Boolean xp = (Boolean) Toolkit.getDefaultToolkit().getDesktopProperty(
-				"win.xpstyle.themeActive");
+				"win.xpstyle.themeActive"); //$NON-NLS-1$
 		return xp != null && xp.booleanValue();
 	}
 
@@ -245,7 +245,7 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 	public LookAndFeel getLookAndFeelInstance() {
 		if(metalLnf==null){
 			try {
-				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.windows.WindowsLookAndFeel").newInstance();
+				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.windows.WindowsLookAndFeel").newInstance(); //$NON-NLS-1$
 			} catch (Exception e) {
 				LnfPlugin.getLogger().error(e);
 			}
@@ -255,12 +255,12 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 
 	@Override
 	public String getClassname() {
-		return "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+		return "com.sun.java.swing.plaf.windows.WindowsLookAndFeel"; //$NON-NLS-1$
 	}
 
 	@Override
 	public String getName() {
-		return "Windows Look And Feel";
+		return Messages.WindowsLookAndFeelAdapter_Windows_Lnf;
 	}		
 }
 

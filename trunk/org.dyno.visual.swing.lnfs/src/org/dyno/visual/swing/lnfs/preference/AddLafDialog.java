@@ -79,13 +79,13 @@ public class AddLafDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		getShell().setText("New Look And Feel");
+		getShell().setText(Messages.AddLafDialog_New_Laf);
 		Composite main = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		main.setLayout(layout);
 		Label label = new Label(main, SWT.WRAP);
-		label.setText("Name:");
+		label.setText(Messages.AddLafDialog_Name);
 		txtName = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtName.addModifyListener(new ModifyListener() {
 			@Override
@@ -101,7 +101,7 @@ public class AddLafDialog extends Dialog {
 		GridLayout gridLayout = new GridLayout();
 		right.setLayout(gridLayout);
 		Button btnAdd = new Button(right, SWT.PUSH);
-		btnAdd.setText("&New ... ");
+		btnAdd.setText(Messages.AddLafDialog_New);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -109,7 +109,7 @@ public class AddLafDialog extends Dialog {
 			}
 		});
 		btnDel = new Button(right, SWT.PUSH);
-		btnDel.setText("&Remove");
+		btnDel.setText(Messages.AddLafDialog_Remove);
 		btnDel.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -136,7 +136,7 @@ public class AddLafDialog extends Dialog {
 			}
 		});
 		label = new Label(main, SWT.NONE);
-		label.setText("Classname:");
+		label.setText(Messages.AddLafDialog_Classname);
 		txtClassname = new Text(main, SWT.SINGLE | SWT.BORDER);
 		data = new GridData();
 		data.horizontalSpan = 2;
@@ -199,10 +199,10 @@ public class AddLafDialog extends Dialog {
 			File folder = path.toFile();
 			if (!folder.exists())
 				folder.mkdirs();
-			File lafFile = new File(folder, "laf.xml");			
-			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lafFile),"UTF-8"));
-			pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			pw.println("<lookandfeel name=\"" + lafName + "\" class=\"" + lafClassname + "\">");
+			File lafFile = new File(folder, "laf.xml");			 //$NON-NLS-1$
+			pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(lafFile),"UTF-8")); //$NON-NLS-1$
+			pw.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); //$NON-NLS-1$
+			pw.println("<lookandfeel name=\"" + lafName + "\" class=\"" + lafClassname + "\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			int count = jarSrcs.size();
 			List<URL> urls = new ArrayList<URL>();
 			for (int i = 0; i < count; i++) {
@@ -210,13 +210,13 @@ public class AddLafDialog extends Dialog {
 				File jarFile = new File(jarsrc.getJar());
 				copyFile(jarFile, folder);
 				urls.add(jarFile.toURI().toURL());
-				pw.print("\t<classpath jar=\"" + jarFile.getName() + "\"");
+				pw.print("\t<classpath jar=\"" + jarFile.getName() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (jarsrc.getSrc() != null) {
 					File srcFile = new File(jarsrc.getSrc());
 					copyFile(srcFile, folder);
-					pw.print(" src=\"" + srcFile.getName() + "\"");
+					pw.print(" src=\"" + srcFile.getName() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				pw.println("/>");
+				pw.println("/>"); //$NON-NLS-1$
 			}
 			if(!createDefCompValue(urls, monitor, pw)){
 				if(monitor.isCanceled()){
@@ -225,7 +225,7 @@ public class AddLafDialog extends Dialog {
 					return null;
 				}
 			}
-			pw.println("</lookandfeel>");
+			pw.println("</lookandfeel>"); //$NON-NLS-1$
 			pw.flush();
 			pw.close();
 			return hintID;
@@ -255,7 +255,7 @@ public class AddLafDialog extends Dialog {
 			LookAndFeel current = UIManager.getLookAndFeel();
 			LookAndFeel newLnf = createNewLnf(list);
 			UIManager.setLookAndFeel(newLnf);
-			monitor.beginTask("Creating default values...", BeanCreator.COMPONENTS.length);
+			monitor.beginTask(Messages.AddLafDialog_Create_Default_Values, BeanCreator.COMPONENTS.length);
 			final JFrame jframe = new JFrame();
 			jframe.setSize(100, 100);
 			Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
@@ -267,15 +267,15 @@ public class AddLafDialog extends Dialog {
 					return false;
 				}
 				final BeanCreator comp=BeanCreator.COMPONENTS[i];
-				pw.print("\t<component class=\"");
+				pw.print("\t<component class=\""); //$NON-NLS-1$
 				pw.print(comp.getBeanClass().getName());
-				pw.print("\">\n");
+				pw.print("\">\n"); //$NON-NLS-1$
 				SwingUtilities.invokeAndWait(new Runnable(){
 					@Override
 					public void run() {
 						createDefaultXml(jframe, comp, pw);
 					}});
-				pw.print("\t</component>\n");
+				pw.print("\t</component>\n"); //$NON-NLS-1$
 				monitor.worked(1);
 			}
 			jframe.setVisible(false);
@@ -295,30 +295,30 @@ public class AddLafDialog extends Dialog {
 		for (IWidgetPropertyDescriptor property : properties) {
 			String name = property.getDisplayName();
 			if (property.isGencode()&&
-					!name.equals("minimumSize")&&
-					!name.equals("maximumSize")&&
-					!name.equals("preferredSize")) {
+					!name.equals("minimumSize")&& //$NON-NLS-1$
+					!name.equals("maximumSize")&& //$NON-NLS-1$
+					!name.equals("preferredSize")) { //$NON-NLS-1$
 				Class type=property.getObjectClass();
 				Object value = property.getFieldValue(adapter.getWidget());
 				TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
 				String strValue=null;
 				if(value==null)
-					strValue="null";
+					strValue="null"; //$NON-NLS-1$
 				else if(Border.class.isAssignableFrom(type)){
-					strValue="SYSTEM_VALUE";
+					strValue="SYSTEM_VALUE"; //$NON-NLS-1$
 				}else if(value instanceof UIResource){
-					strValue="SYSTEM_VALUE";
+					strValue="SYSTEM_VALUE"; //$NON-NLS-1$
 				}
 				if(ta!=null&&ta.getEndec()!=null){
 					strValue=ta.getEndec().encode(value);
 				}
 				if(strValue==null)
 					strValue=value.toString();
-				pw.print("\t\t<property name=\"");
+				pw.print("\t\t<property name=\""); //$NON-NLS-1$
 				pw.print(property.getId());
-				pw.print("\" default=\"");
+				pw.print("\" default=\""); //$NON-NLS-1$
 				pw.print(strValue);
-				pw.print("\"/>\n");
+				pw.print("\"/>\n"); //$NON-NLS-1$
 			}
 		}
 		comp.dispose();
@@ -395,13 +395,13 @@ public class AddLafDialog extends Dialog {
 	}
 
 	protected void showNotALafClass(String lnfClassname) {
-		MessageDialog.openError(getShell(), "Error", lnfClassname
-				+ " is not a subclass of LookAndFeel.");
+		MessageDialog.openError(getShell(), Messages.AddLafDialog_Error, lnfClassname
+				+ Messages.AddLafDialog_Not_Subclass_Of_Lnf);
 	}
 
 	private void showNoSuchClassError(String className) {
-		MessageDialog.openError(getShell(), "Error", "Cannot find such class:"
-				+ className + " in these archives");
+		MessageDialog.openError(getShell(), Messages.AddLafDialog_Error, Messages.AddLafDialog_Cannot_Find_Class
+				+ className + Messages.AddLafDialog_In_These_Archives);
 	}
 
 	private void lnfCreationDone(final IProgressMonitor monitor) {
@@ -463,7 +463,7 @@ public class AddLafDialog extends Dialog {
 			if (src == null)
 				return jarFile.getName();
 			File srcFile = new File(src);
-			return jarFile.getName() + "[" + srcFile.getName() + "]";
+			return jarFile.getName() + "[" + srcFile.getName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 

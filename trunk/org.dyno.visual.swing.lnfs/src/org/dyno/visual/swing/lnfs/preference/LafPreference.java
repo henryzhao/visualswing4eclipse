@@ -40,7 +40,7 @@ public class LafPreference extends PreferencePage implements
 		layout.numColumns = 2;
 		main.setLayout(layout);
 		Label label = new Label(main, SWT.NONE);
-		label.setText("Look and feel configuration");
+		label.setText(Messages.LafPreference_Lnf_Conf);
 		GridData data = new GridData();
 		data.horizontalSpan = 2;
 		label.setLayoutData(data);
@@ -51,7 +51,7 @@ public class LafPreference extends PreferencePage implements
 			@Override
 			public String getText(Object element) {
 				if (element == null)
-					return "";
+					return ""; //$NON-NLS-1$
 				else if (element instanceof IClasspathContainer) {
 					return ((IClasspathContainer) element).getDescription();
 				} else
@@ -82,7 +82,7 @@ public class LafPreference extends PreferencePage implements
 		right.setLayoutData(data);
 
 		btnAdd = new Button(right, SWT.PUSH);
-		btnAdd.setText("  &Add ...  ");
+		btnAdd.setText(Messages.LafPreference_Add);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -91,10 +91,10 @@ public class LafPreference extends PreferencePage implements
 		});
 
 		btnEdit = new Button(right, SWT.PUSH);
-		btnEdit.setText("  &Edit ...  ");
+		btnEdit.setText(Messages.LafPreference_Edit);
 
 		btnDel = new Button(right, SWT.PUSH);
-		btnDel.setText("  &Delete   ");
+		btnDel.setText(Messages.LafPreference_Delete);
 
 		updateButtonState();
 

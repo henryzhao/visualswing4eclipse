@@ -148,7 +148,7 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 	public LookAndFeel getLookAndFeelInstance() {
 		if(metalLnf==null){
 			try {
-				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.motif.MotifLookAndFeel").newInstance();
+				metalLnf=(LookAndFeel) Class.forName("com.sun.java.swing.plaf.motif.MotifLookAndFeel").newInstance(); //$NON-NLS-1$
 			} catch (Exception e) {
 				LnfPlugin.getLogger().error(e);
 			}
@@ -158,12 +158,12 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 
 	@Override
 	public String getClassname() {
-		return "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
+		return "com.sun.java.swing.plaf.motif.MotifLookAndFeel"; //$NON-NLS-1$
 	}
 
 	@Override
 	public String getName() {
-		return "Motif Look And Feel";
+		return Messages.MotifLookAndFeelAdapter_Motif_Lnf;
 	}	
 }
 

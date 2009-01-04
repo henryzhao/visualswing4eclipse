@@ -30,13 +30,13 @@ public class JarSrcDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		getShell().setText("Choose Java archive");
+		getShell().setText(Messages.JarSrcDialog_Choose_Jar);
 		Composite main = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
 		main.setLayout(layout);
 		Label lblJar = new Label(main, SWT.NONE);
-		lblJar.setText("Archive [Required]:");
+		lblJar.setText(Messages.JarSrcDialog_Archive);
 		GridData data = new GridData();
 		data.widthHint = 180;
 		txtJar = new Text(main, SWT.SINGLE | SWT.BORDER);
@@ -47,7 +47,7 @@ public class JarSrcDialog extends Dialog {
 				updateButtonState();
 			}});
 		Button btnJar = new Button(main, SWT.PUSH);
-		btnJar.setText("&Browse...");
+		btnJar.setText(Messages.JarSrcDialog_Browse_1);
 		btnJar.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -55,7 +55,7 @@ public class JarSrcDialog extends Dialog {
 			}
 		});
 		Label lblSrc = new Label(main, SWT.NONE);
-		lblSrc.setText("Source [Optional]:");
+		lblSrc.setText(Messages.JarSrcDialog_Source);
 		data = new GridData();
 		data.widthHint = 180;
 		txtSrc = new Text(main, SWT.SINGLE | SWT.BORDER);
@@ -66,7 +66,7 @@ public class JarSrcDialog extends Dialog {
 				updateButtonState();
 			}});
 		Button btnSrc = new Button(main, SWT.PUSH);
-		btnSrc.setText("B&rowse...");
+		btnSrc.setText(Messages.JarSrcDialog_Browse_2);
 		btnSrc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -78,8 +78,8 @@ public class JarSrcDialog extends Dialog {
 
 	private void browseJar() {
 		FileDialog dialog = new FileDialog(getShell());
-		dialog.setText("Choose Java Archive");
-		dialog.setFilterExtensions(new String[] { "*.jar" });
+		dialog.setText(Messages.JarSrcDialog_Choose_Jar);
+		dialog.setFilterExtensions(new String[] { "*.jar" }); //$NON-NLS-1$
 		String jarpath = dialog.open();
 		if (jarpath != null) {
 			txtJar.setText(jarpath);
@@ -116,7 +116,7 @@ public class JarSrcDialog extends Dialog {
 			}
 			super.okPressed();
 		} else {
-			MessageDialog.openError(getShell(), "Error", error);
+			MessageDialog.openError(getShell(), Messages.JarSrcDialog_Error, error);
 		}
 	}
 
@@ -124,16 +124,16 @@ public class JarSrcDialog extends Dialog {
 		String jarpath = txtJar.getText().trim();
 		String srcpath = txtSrc.getText().trim();
 		if (jarpath == null || jarpath.length() == 0) {
-			return "Please specify the jar path!";
+			return Messages.JarSrcDialog_Jar_Path;
 		}
 		File file = new File(jarpath);
 		if (!file.exists()) {
-			return "This file does not exist!";
+			return Messages.JarSrcDialog_File_Not_Exist;
 		}
 		if (srcpath != null && srcpath.length() != 0) {
 			file = new File(srcpath);
 			if (!file.exists()) {
-				return "This file does not exist!";
+				return Messages.JarSrcDialog_File_Not_Exist;
 			}
 		}
 		return null;
@@ -144,8 +144,8 @@ public class JarSrcDialog extends Dialog {
 	}
 	private void browseSrc() {
 		FileDialog dialog = new FileDialog(getShell());
-		dialog.setText("Choose Source");
-		dialog.setFilterExtensions(new String[] { "*.zip" });
+		dialog.setText(Messages.JarSrcDialog_Choose_Source);
+		dialog.setFilterExtensions(new String[] { "*.zip" }); //$NON-NLS-1$
 		String srcpath = dialog.open();
 		if (srcpath != null) {
 			txtSrc.setText(srcpath);

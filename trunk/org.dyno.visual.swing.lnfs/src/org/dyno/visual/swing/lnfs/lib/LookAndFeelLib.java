@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter {
-	private static final String LAF_FILE = "laf.xml";
+	private static final String LAF_FILE = "laf.xml"; //$NON-NLS-1$
 	private static Map<String, LookAndFeelLib> lnfLibs = new HashMap<String, LookAndFeelLib>();
 	private static class SystemValue implements ISystemValue{
 		private static final long serialVersionUID = 1L;
@@ -63,8 +63,8 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 	}
 	public static IPath getLafLibDir(){
 		IPath path = Platform.getLocation();
-		path = path.append(".metadata");
-		path = path.append(".plugins");
+		path = path.append(".metadata"); //$NON-NLS-1$
+		path = path.append(".plugins"); //$NON-NLS-1$
 		path = path.append(LnfPlugin.getPluginID());
 		path = path.append(LookAndFeelLibrary.LOOK_AND_FEEL_LIB_DIR);
 		return path;
@@ -80,16 +80,16 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 						.newDocumentBuilder();
 				Document document = newDocumentBuilder.parse(laf_file);
 				Element root = document.getDocumentElement();
-				this.libName = root.getAttribute("name");
-				this.lnfClassname = root.getAttribute("class");
-				NodeList nodes = root.getElementsByTagName("classpath");
+				this.libName = root.getAttribute("name"); //$NON-NLS-1$
+				this.lnfClassname = root.getAttribute("class"); //$NON-NLS-1$
+				NodeList nodes = root.getElementsByTagName("classpath"); //$NON-NLS-1$
 				if(nodes!=null&&nodes.getLength()>0){
 					List<IPath>jars=new ArrayList<IPath>();
 					List<IPath>srcs=new ArrayList<IPath>();
 					for(int i=0;i<nodes.getLength();i++){
 						Element classpathNode=(Element)nodes.item(i);
-						String strJar = classpathNode.getAttribute("jar");
-						String strSrc = classpathNode.getAttribute("src");
+						String strJar = classpathNode.getAttribute("jar"); //$NON-NLS-1$
+						String strSrc = classpathNode.getAttribute("src"); //$NON-NLS-1$
 						jars.add(path.append(strJar));
 						if(strSrc!=null&&strSrc.trim().length()>0){
 							srcs.add(path.append(strSrc));
@@ -106,7 +106,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 					this.libSrcs = new IPath[0];
 				}
 				values = new HashMap<String, Map<String, Object>>();
-				nodes = root.getElementsByTagName("component");
+				nodes = root.getElementsByTagName("component"); //$NON-NLS-1$
 				if (nodes != null && nodes.getLength() > 0) {
 					for (int i = 0; i < nodes.getLength(); i++) {
 						Element node = (Element) nodes.item(i);
@@ -117,7 +117,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 				LnfPlugin.getLogger().error(e);
 			}
 		} else {
-			throw new IllegalArgumentException("Cannot find laf.xml under:"
+			throw new IllegalArgumentException(Messages.LookAndFeelLib_Laf_Xml_Not_Found
 					+ path.toString());
 		}
 	}
@@ -125,14 +125,14 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 	@SuppressWarnings("unchecked")
 	private void extractComponentValue(Element component)
 			throws ClassNotFoundException, IntrospectionException {
-		String strClass = component.getAttribute("class");
+		String strClass = component.getAttribute("class"); //$NON-NLS-1$
 		Class clazz = Class.forName(strClass);
 		Map<String, Object> compValues = values.get(strClass);
 		if (compValues == null) {
 			compValues = new HashMap<String, Object>();
 			values.put(strClass, compValues);
 		}
-		NodeList nodes = component.getElementsByTagName("property");
+		NodeList nodes = component.getElementsByTagName("property"); //$NON-NLS-1$
 		if (nodes != null && nodes.getLength() > 0) {
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Element node = (Element) nodes.item(i);
@@ -144,10 +144,10 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 	@SuppressWarnings("unchecked")
 	private void extractPropertyValue(Map<String, Object> values, Element node,
 			Class clazz) throws IntrospectionException {
-		String name = node.getAttribute("name");
-		String value = node.getAttribute("default");
-		if (value != null && value.trim().length() > 0&&!value.equals("null")) {
-			if(value.equals("SYSTEM_VALUE")){
+		String name = node.getAttribute("name"); //$NON-NLS-1$
+		String value = node.getAttribute("default"); //$NON-NLS-1$
+		if (value != null && value.trim().length() > 0&&!value.equals("null")) { //$NON-NLS-1$
+			if(value.equals("SYSTEM_VALUE")){ //$NON-NLS-1$
 				values.put(name, SYSTEM_VALUE);
 			} else {
 				PropertyDescriptor pd = new PropertyDescriptor(name, clazz);

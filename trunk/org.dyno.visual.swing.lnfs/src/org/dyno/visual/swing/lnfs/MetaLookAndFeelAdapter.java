@@ -160,7 +160,7 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 
 	@Override
 	public String getName() {
-		return "Metal Look And Feel";
+		return Messages.MetaLookAndFeelAdapter_Meta_Lnf;
 	}
 }
 
