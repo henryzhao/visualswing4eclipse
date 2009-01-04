@@ -39,7 +39,7 @@ import org.eclipse.jface.action.Separator;
 
 @SuppressWarnings("serial")
 public class ButtonGroupCustomizer implements IContextCustomizer {
-	private static final String BUTTON_GROUP_ICON = "/icons/button_group_16.png";
+	private static final String BUTTON_GROUP_ICON = "/icons/button_group_16.png"; //$NON-NLS-1$
 	static java.awt.Image BUTTON_GROUP_AWT_ICON_IMAGE;
 	static JComponent DUMMY = new JComponent() {
 	};
@@ -72,8 +72,8 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 	public void fillContextMenu(MenuManager menuManager,
 			WidgetAdapter rootAdapter, List<Component> selected) {
 		if (isAllButton(selected)) {
-			MenuManager subMenu = new MenuManager("Add to button group",
-					"#ADD_TO_BUTTON_GROUP");
+			MenuManager subMenu = new MenuManager(Messages.ButtonGroupCustomizer_Add2_ButtonGroup,
+					"#ADD_TO_BUTTON_GROUP"); //$NON-NLS-1$
 			List<InvisibleAdapter> invisibles = rootAdapter.getInvisibles();
 			boolean hasGroup = false;
 			for (InvisibleAdapter invisibleAdapter : invisibles) {
@@ -169,7 +169,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				if (bg.getButtonCount() > 0) {
 					Enumeration<AbstractButton> elements = bg.getElements();
 					MenuManager delMenu = new MenuManager(
-							"Remove button from this group");
+							Messages.ButtonGroupCustomizer_Remove_Button_From_This_Group);
 					while (elements.hasMoreElements()) {
 						AbstractButton aButton = elements.nextElement();
 						delMenu.add(new DeleteButtonFromThisGroupAction(
@@ -180,7 +180,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				}
 				if (!allButtons.isEmpty()) {
 					MenuManager addMenu = new MenuManager(
-							"Add button to this group");
+							Messages.ButtonGroupCustomizer_Add_Button_2_This_Group);
 					for (AbstractButton aButton : allButtons) {
 						addMenu.add(new AddButtonToThisGroupAction(rootAdapter,
 								aButton, bg));
@@ -253,7 +253,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private WidgetAdapter root;
 
 		public AddButtonGroup(WidgetAdapter root) {
-			super("Add new button group");
+			super(Messages.ButtonGroupCustomizer_Add_New_Button_Group);
 			this.root = root;
 		}
 
@@ -271,7 +271,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		private List<Component> selectedButtons;
 
 		public AddToNewButtonGroup(List<Component> selected, WidgetAdapter root) {
-			super("Add to new button group");
+			super(Messages.ButtonGroupCustomizer_Add_2_New_Button_Group);
 			this.root = root;
 			this.selectedButtons = selected;
 		}
@@ -299,7 +299,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		public DeleteButtonGroup(WidgetAdapter root,
 				List<InvisibleAdapter> adapters) {
-			super("Delete button group");
+			super(Messages.ButtonGroupCustomizer_Delete_Button_Group);
 			this.root = root;
 			this.adapters = new ArrayList<InvisibleAdapter>();
 			for (InvisibleAdapter adapter : adapters) {
@@ -338,7 +338,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 		public DeleteButtonFromParentGroup(WidgetAdapter rootAdapter,
 				List<IAdapter> iadapters) {
-			super("Remove from this group");
+			super(Messages.ButtonGroupCustomizer_Remove_From_This_Group);
 			this.rootAdapter = rootAdapter;
 			this.iadapters = iadapters;
 		}

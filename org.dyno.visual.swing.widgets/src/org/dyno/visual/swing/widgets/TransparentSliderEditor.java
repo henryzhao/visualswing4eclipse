@@ -34,7 +34,7 @@ public class TransparentSliderEditor implements IEditor {
 	@Override
 	public void setFocus() {
 		slider.requestFocus();
-		slider.setToolTipText("Drag slider to adjust its value!");
+		slider.setToolTipText(Messages.TransparentSliderEditor_Drag_Slider_Adjust_Value);
 	}
 
 	@Override

@@ -413,21 +413,21 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	public String toString() {
 		if (isRoot()) {
-			return "[" + getWidgetName() + getLayoutName() + "]";
+			return "[" + getWidgetName() + getLayoutName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			return getName() + " [" + getWidgetName() + getLayoutName() + "]";
+			return getName() + " [" + getWidgetName() + getLayoutName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
 	private String getLayoutName() {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
-		String layoutName = layout == null ? "null" : layout.getClass()
+		String layoutName = layout == null ? "null" : layout.getClass() //$NON-NLS-1$
 				.getName();
 		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT
 				.equals(layoutName);
-		layoutName = layout == null ? "null" : getLayoutAdapter().getName();
-		return default_layout ? "" : "(" + layoutName + ")";
+		layoutName = layout == null ? "null" : getLayoutAdapter().getName(); //$NON-NLS-1$
+		return default_layout ? "" : "(" + layoutName + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -694,7 +694,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	void fillSetLayoutAction(MenuManager menu) {
-		MenuManager layoutMenu = new MenuManager("Set Layout", "#SET_LAYOUT");
+		MenuManager layoutMenu = new MenuManager(Messages.JPanelAdapter_Set_Layout, "#SET_LAYOUT"); //$NON-NLS-2$
 		fillLayoutAction(layoutMenu);
 		menu.add(layoutMenu);
 	}

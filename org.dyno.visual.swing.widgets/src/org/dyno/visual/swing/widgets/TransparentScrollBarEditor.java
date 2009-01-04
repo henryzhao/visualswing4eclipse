@@ -34,7 +34,7 @@ public class TransparentScrollBarEditor implements IEditor {
 	@Override
 	public void setFocus() {
 		scrollBar.requestFocus();
-		scrollBar.setToolTipText("Drag scroll bar to adjust its value!");
+		scrollBar.setToolTipText(Messages.TransparentScrollBarEditor_Drag_ScrollBar_Adjust_Value);
 	}
 
 	@Override

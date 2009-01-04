@@ -101,7 +101,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 		WidgetAdapter menuAdapter = ExtensionRegistry
 				.createWidgetAdapter(JMenu.class);
 		JMenu jmenu = (JMenu) menuAdapter.getWidget();
-		jmenu.setText("File");
+		jmenu.setText(Messages.JMenuBarAdapter_File);
 		jmb.add(jmenu);
 		jmb.setSize(100, 25);
 		jmb.doLayout();
