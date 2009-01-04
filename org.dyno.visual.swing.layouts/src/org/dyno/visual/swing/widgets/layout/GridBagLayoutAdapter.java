@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -14,12 +13,17 @@
 
 package org.dyno.visual.swing.widgets.layout;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.Stroke;
 
 import javax.swing.JComponent;
 
@@ -87,9 +91,49 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
+	public void paintBaselineAnchor(Graphics g) {
+	}
+	private static Stroke STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
+	@Override
+	public void paintGrid(Graphics g) {
+		GridBagLayout layout = (GridBagLayout) container.getLayout();
+		int[][] row_cols = layout.getLayoutDimensions();
+		if (row_cols == null)
+			return;
+		g.setColor(new Color(0,100,180));
+		Stroke old=((Graphics2D)g).getStroke();
+		((Graphics2D)g).setStroke(STROKE);
+		int w = container.getWidth();
+		int h = container.getHeight();
+		Point origin = layout.getLayoutOrigin();
+		int[] widths = layout.columnWidths;
+		if (widths == null)
+			widths = row_cols[0];
+		if (widths != null) {
+			int x = origin!=null?origin.x:0;
+			for (int i = 0; i < widths.length; i++) {
+				g.drawLine(x, 0, x, h - 1);
+				x += widths[i];
+			}
+			g.drawLine(x, 0, x, h - 1);
+		}
+		int[] heights = layout.rowHeights;
+		if (heights == null)
+			heights = row_cols[1];
+		if (heights != null) {
+			int y = origin!=null?origin.y:0;
+			for (int i = 0; i < heights.length; i++) {
+				g.drawLine(0, y, w - 1, y);
+				y += heights[i];
+			}
+			g.drawLine(0, y, w - 1, y);
+		}
+		((Graphics2D)g).setStroke(old);
+	}
+
+	@Override
 	public Object getChildConstraints(Component child) {
 		GridBagLayout layout = (GridBagLayout) container.getLayout();
 		return layout.getConstraints(child);
 	}
 }
-

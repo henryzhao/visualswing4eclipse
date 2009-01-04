@@ -370,11 +370,13 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			adapter.setSelected(true);
 			adapter.changeNotify();
 			state = STATE_SELECTION;
+			glassPlane.setGestureCursor(Cursor.CROSSHAIR_CURSOR);
 			break;
 		default:
 			if (!e.isControlDown())
 				glassPlane.getDesigner().clearSelection();
 			state = STATE_SELECTION;
+			glassPlane.setGestureCursor(Cursor.CROSSHAIR_CURSOR);
 			break;
 		}
 	}
@@ -552,6 +554,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			dragging_event = null;
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;
+			glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
 		} else if (state == STATE_BEAN_TOBE_HOVER) {
 			Point point = e.getPoint();
 			Component hovered = designer.componentAt(point,

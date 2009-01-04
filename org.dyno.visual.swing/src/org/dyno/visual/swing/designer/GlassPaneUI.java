@@ -13,9 +13,11 @@
 
 package org.dyno.visual.swing.designer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
@@ -61,6 +63,7 @@ public class GlassPaneUI extends ComponentUI {
 	/**
 	 */
 	public void paint(Graphics g, JComponent c) {
+		paintGrid(g, c);
 		paintSelection(g, c);
 		paintSelectionThumb(g, c);
 		paintSelectionRegion(g, c);
@@ -70,6 +73,23 @@ public class GlassPaneUI extends ComponentUI {
 		paintBaselineAnchor(g, c);
 	}
 
+	private void paintGrid(Graphics g, JComponent c) {
+		GlassPlane glassPlane = (GlassPlane) c;
+		WidgetAdapter adapter = glassPlane.getHoveredAdapter();
+		if (adapter != null&&adapter instanceof CompositeAdapter) {
+			paintAdapterGrid(g, (CompositeAdapter)adapter);
+		}		
+	}
+	private void paintAdapterGrid(Graphics g, CompositeAdapter grid) {
+		Component jpar = grid.getWidget();
+		if (grid.isRoot())
+			jpar = grid.getRootPane();
+		Rectangle local = SwingUtilities.getLocalBounds(jpar);
+		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
+		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
+		grid.paintGrid(clipg);
+		clipg.dispose();
+	}
 	private void paintContextCustomizer(Graphics g, JComponent c) {
 		Component root = designer.getRoot();
 		if (root != null) {
@@ -90,7 +110,8 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle region = plane.getSelectionRegion();
 		if (region != null) {
 			Color old = g.getColor();
-			g.setColor(SELECTION_COLOR);
+			g.setColor(new Color(0, 164, 255));
+			((Graphics2D)g).setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 5 }, 0));
 			g.drawRect(region.x, region.y, region.width, region.height);
 			g.setColor(old);
 		}
