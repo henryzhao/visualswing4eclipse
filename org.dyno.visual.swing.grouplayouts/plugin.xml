@@ -7,7 +7,7 @@
             class="org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter"
             layoutClass="org.dyno.visual.swing.layouts.GroupLayout" 
             layoutBean="org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter" 
-            name="GroupLayout"
+            name="%GroupLayout"
             default="true"/>
    </extension>
 </plugin>
