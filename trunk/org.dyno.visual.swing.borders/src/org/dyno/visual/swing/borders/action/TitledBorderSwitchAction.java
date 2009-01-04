@@ -25,7 +25,7 @@ public class TitledBorderSwitchAction extends BorderSwitchAction {
 		super(w, TitledBorder.class, new IFactory(){
 			@Override
 			public Object newInstance(Object bean) {
-				return BorderFactory.createTitledBorder("Border Title");
+				return BorderFactory.createTitledBorder(Messages.TitledBorderSwitchAction_Border_Title);
 			}});
 	}
 }

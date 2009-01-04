@@ -31,7 +31,7 @@ public class BorderSwitchOperation extends AbstractOperation {
 	private Border prevousBorder;
 	private IFactory factory;
 	public BorderSwitchOperation(JComponent w, IFactory factory) {
-		super("Switch Border");
+		super(Messages.BorderSwitchOperation_Switch_Border);
 		this.target = w;
 		this.targetAdapter = WidgetAdapter.getWidgetAdapter(target);
 		this.factory = factory;
