@@ -36,7 +36,7 @@ public class VerticalTrailingToLeading extends AbstractOperation {
 
 	public VerticalTrailingToLeading(Constraints constraints,
 			JComponent container, Component child) {
-		super("Set Anchor");
+		super(Messages.VerticalTrailingToLeading_Set_Anchor0);
 		this.oldconstraints = constraints;
 		this.container = container;
 		this.child = child;

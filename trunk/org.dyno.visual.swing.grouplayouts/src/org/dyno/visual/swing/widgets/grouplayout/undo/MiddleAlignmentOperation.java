@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.Status;
 public class MiddleAlignmentOperation extends AlignmentOperation {
 
 	public MiddleAlignmentOperation(JComponent container) {
-		super("Align Middle", container);
+		super(Messages.MiddleAlignmentOperation_Align_Middle, container);
 	}
 
 	@Override

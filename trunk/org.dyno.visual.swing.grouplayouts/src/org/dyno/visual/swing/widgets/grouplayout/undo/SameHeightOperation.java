@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.Status;
 public class SameHeightOperation extends AlignmentOperation {
 
 	public SameHeightOperation(JComponent container) {
-		super("Same Height", container);
+		super(Messages.SameHeightOperation_Same_Height, container);
 	}
 
 	@Override

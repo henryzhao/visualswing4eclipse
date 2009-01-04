@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.Status;
 public class CenterAlignmentOperation extends AlignmentOperation {
 
 	public CenterAlignmentOperation(JComponent container) {
-		super("Align Center", container);
+		super(Messages.CenterAlignmentOperation_Align_Center, container);
 	}
 
 	@Override

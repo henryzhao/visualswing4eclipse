@@ -36,7 +36,7 @@ public class VerticalLeadingToBilateral extends AbstractOperation {
 
 	public VerticalLeadingToBilateral(Constraints constraints,
 			JComponent container, Component child) {
-		super("Set Anchor");
+		super(Messages.VerticalLeadingToBilateral_Set_Anchor);
 		this.oldconstraints = constraints;
 		this.container = container;
 		this.child = child;

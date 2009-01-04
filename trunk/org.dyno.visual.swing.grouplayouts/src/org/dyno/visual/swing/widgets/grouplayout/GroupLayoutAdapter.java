@@ -87,23 +87,23 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
-		MenuManager horizontalAnchorMenu = new MenuManager("Horizontal Anchor",
-				"#HORIZONTAL_ANCHOR");
+		MenuManager horizontalAnchorMenu = new MenuManager(Messages.GroupLayoutAdapter_Horizontal_Anchor,
+				"#HORIZONTAL_ANCHOR"); //$NON-NLS-1$
 		horizontalAnchorMenu.add(new SetAnchorAction(container, true,
-				"leading", child));
+				"leading", child)); //$NON-NLS-1$
 		horizontalAnchorMenu.add(new SetAnchorAction(container, true,
-				"bilateral", child));
+				"bilateral", child)); //$NON-NLS-1$
 		horizontalAnchorMenu.add(new SetAnchorAction(container, true,
-				"trailing", child));
+				"trailing", child)); //$NON-NLS-1$
 		menu.add(horizontalAnchorMenu);
-		MenuManager verticalAnchorMenu = new MenuManager("Vertical Anchor",
-				"#VERTICAL_ANCHOR");
-		verticalAnchorMenu.add(new SetAnchorAction(container, false, "leading",
+		MenuManager verticalAnchorMenu = new MenuManager(Messages.GroupLayoutAdapter_Vertical_Anchor,
+				"#VERTICAL_ANCHOR"); //$NON-NLS-1$
+		verticalAnchorMenu.add(new SetAnchorAction(container, false, "leading", //$NON-NLS-1$
 				child));
 		verticalAnchorMenu.add(new SetAnchorAction(container, false,
-				"bilateral", child));
+				"bilateral", child)); //$NON-NLS-1$
 		verticalAnchorMenu.add(new SetAnchorAction(container, false,
-				"trailing", child));
+				"trailing", child)); //$NON-NLS-1$
 		menu.add(verticalAnchorMenu);
 	}
 
@@ -712,21 +712,21 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	public boolean doAlignment(String id) {
 		IUndoableOperation operation = null;
-		if (id.equals("same_height")) {
+		if (id.equals("same_height")) { //$NON-NLS-1$
 			operation = getSameHeight();
-		} else if (id.equals("same_width")) {
+		} else if (id.equals("same_width")) { //$NON-NLS-1$
 			operation = getSameWidth();
-		} else if (id.equals("middle")) {
+		} else if (id.equals("middle")) { //$NON-NLS-1$
 			operation = getMiddle();
-		} else if (id.equals("center")) {
+		} else if (id.equals("center")) { //$NON-NLS-1$
 			operation = getCenter();
-		} else if (id.equals("bottom")) {
+		} else if (id.equals("bottom")) { //$NON-NLS-1$
 			operation = getBottom();
-		} else if (id.equals("left")) {
+		} else if (id.equals("left")) { //$NON-NLS-1$
 			operation = getLeft();
-		} else if (id.equals("right")) {
+		} else if (id.equals("right")) { //$NON-NLS-1$
 			operation = getRight();
-		} else if (id.equals("top")) {
+		} else if (id.equals("top")) { //$NON-NLS-1$
 			operation = getTop();
 		}
 		if (operation != null) {

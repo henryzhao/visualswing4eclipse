@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.Status;
 public class SameWidthOperation extends AlignmentOperation {
 
 	public SameWidthOperation(JComponent container) {
-		super("Same Width", container);
+		super(Messages.SameWidthOperation_Same_Width, container);
 	}
 
 	@Override
