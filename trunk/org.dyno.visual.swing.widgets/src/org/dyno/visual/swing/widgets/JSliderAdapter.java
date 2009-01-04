@@ -19,7 +19,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import javax.swing.JSlider;
-import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -38,15 +38,12 @@ public class JSliderAdapter extends WidgetAdapter {
 		bar.validate();
 		return bar;
 	}
-
-	private IEditor iEditor;
-
+	private IEditor editor;
 	@Override
 	public IEditor getEditorAt(int x, int y) {
-		if (iEditor == null) {
-			iEditor = new IntegerTextEditor();
-		}
-		return iEditor;
+		Component cloneWidget = cloneWidget();		
+		editor = new TransparentSliderEditor((JSlider) cloneWidget);
+		return editor;
 	}
 
 	@Override
@@ -61,14 +58,7 @@ public class JSliderAdapter extends WidgetAdapter {
 
 	@Override
 	public Rectangle getEditorBounds(int x, int y) {
-		int w = getWidget().getWidth();
-		int h = getWidget().getHeight();
-		int oritention = ((JSlider) getWidget()).getOrientation();
-		if (oritention == SwingConstants.HORIZONTAL) {
-			return new Rectangle((w - 40) / 2, 0, 40, 23);
-		} else {
-			return new Rectangle(0, (h - 23) / 2, w, 23);
-		}
+		return SwingUtilities.getLocalBounds(getWidget());
 	}
 
 	@Override

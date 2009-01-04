@@ -26,12 +26,12 @@ import org.eclipse.ui.texteditor.ITextEditorActionConstants;
  * @author William Chen
  */
 public class DuplicateAction extends EditorAction {
-	private static String DUPLICATE_ACTION_ICON = "/icons/duplicate.png";
+	private static String DUPLICATE_ACTION_ICON = "/icons/duplicate.png"; //$NON-NLS-1$
 
 	public DuplicateAction() {
 		setId(DUPLICATE);
-		setText("Duplicate Components");
-		setToolTipText("Duplicate Components");
+		setText(Messages.DuplicateAction_Duplicate_Components);
+		setToolTipText(Messages.DuplicateAction_Duplicate_Components);
 		setAccelerator(SWT.CTRL | 'D');
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(DUPLICATE_ACTION_ICON));
 		setEnabled(false);

@@ -16,6 +16,9 @@ package org.dyno.visual.swing.borders;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Insets;
+import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -26,8 +29,10 @@ import javax.swing.plaf.UIResource;
 import org.dyno.visual.swing.base.FieldProperty;
 import org.dyno.visual.swing.base.ItemProviderCellEditorFactory;
 import org.dyno.visual.swing.base.ItemProviderLabelProviderFactory;
+import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.borders.action.TitledBorderSwitchAction;
 import org.dyno.visual.swing.plugin.spi.BorderAdapter;
+import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
@@ -117,6 +122,57 @@ public class TitledBorderAdapter extends BorderAdapter {
 		}
 		builder.append(")");
 		return builder.toString();
+	}
+	private IEditor editor;
+	@Override
+	public IEditor getEditorAt(JComponent owner, int x, int y) {
+		Insets insets = owner.getInsets();
+		int w = owner.getWidth();
+		int h = owner.getHeight();
+		if (x >= 0
+				&& x < w
+				&& y >= 0
+				&& y < h
+				&& (x < insets.left || x >= w - insets.right || y < insets.top || y >= h
+						- insets.bottom)) {
+			if (editor == null)
+				editor = new LabelEditor();
+			return editor;
+		}
+		return null;
+	}
+
+	@Override
+	public Rectangle getEditorBounds(JComponent owner, int x, int y) {
+		Insets insets = owner.getInsets();
+		int w = owner.getWidth();
+		int h = owner.getHeight();
+		if (x >= 0
+				&& x < w
+				&& y >= 0
+				&& y < h
+				&& (x < insets.left || x >= w - insets.right || y < insets.top || y >= h
+						- insets.bottom)) {
+			Font f = owner.getFont();
+			FontMetrics fm = owner.getFontMetrics(f);
+			TitledBorder titledBorder = (TitledBorder) owner.getBorder();
+			String title = titledBorder.getTitle();
+			int width = fm.stringWidth(title);
+			return new Rectangle(insets.left, 0, width + insets.left+insets.right, 22);
+		}
+		return null;
+	}
+
+	@Override
+	public Object getWidgetValue(JComponent owner) {
+		TitledBorder titledBorder = (TitledBorder) owner.getBorder();
+		return titledBorder.getTitle();
+	}
+
+	@Override
+	public void setWidgetValue(JComponent owner, Object value) {
+		TitledBorder titledBorder = (TitledBorder) owner.getBorder();
+		titledBorder.setTitle((String)value);
 	}
 
 }

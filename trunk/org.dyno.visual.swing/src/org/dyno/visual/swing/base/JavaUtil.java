@@ -70,7 +70,7 @@ public class JavaUtil {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
-		monitor.beginTask("Applying changes", 3);
+		monitor.beginTask(Messages.JAVA_UTIL_APPLYING_CHANGES, 3);
 
 		try {
 			IDocument document = null;
@@ -166,7 +166,7 @@ public class JavaUtil {
 	private static final int VALIDATE_EDIT_CHANGED_CONTENT = 10003;
 
 	private static IStatus addModified(IStatus status, IFile file) {
-		String message = "File " + file.getFullPath().toString() + " has been modified since the beginning of the operation";
+		String message = Messages.JAVA_UTIL_FILE + file.getFullPath().toString() + Messages.JAVA_UTIL_MODIFIED;
 		IStatus entry = new Status(VALIDATE_EDIT_CHANGED_CONTENT, message, null);
 		if (status == null) {
 			return entry;
@@ -174,7 +174,7 @@ public class JavaUtil {
 			((MultiStatus) status).add(entry);
 			return status;
 		} else {
-			MultiStatus result = new MultiStatus(VisualSwingPlugin.getPluginID(), VALIDATE_EDIT_CHANGED_CONTENT, "There are modified resources", null);
+			MultiStatus result = new MultiStatus(VisualSwingPlugin.getPluginID(), VALIDATE_EDIT_CHANGED_CONTENT, Messages.JAVA_UTIL_MODIFIED_RESOURCE, null);
 			result.add(status);
 			result.add(entry);
 			return result;
@@ -215,14 +215,14 @@ public class JavaUtil {
 			options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
 			options.put(DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS, DefaultCodeFormatterConstants.createAlignmentValue(true,
 					DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE, DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
-			options.put(DefaultCodeFormatterConstants.FORMATTER_LINE_SPLIT, "160");
+			options.put(DefaultCodeFormatterConstants.FORMATTER_LINE_SPLIT, "160"); //$NON-NLS-1$
 			codeFormatter = ToolFactory.createCodeFormatter(options);
 		}
 		return codeFormatter;
 	}
 
 	public static String formatCode(String source) {
-		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_UNKNOWN, source, 0, source.length(), 0, System.getProperty("line.separator"));
+		TextEdit edit = getCodeFormatter().format(CodeFormatter.K_UNKNOWN, source, 0, source.length(), 0, System.getProperty("line.separator")); //$NON-NLS-1$
 		if (edit != null) {
 			IDocument document = new Document(source);
 			try {
@@ -261,7 +261,7 @@ public class JavaUtil {
 		}
 		return true;
 	}
-	public static final IPath VS_LIBRARY=new Path(VisualSwingPlugin.PLUGIN_ID+".VS_LIBRARY");
-	public static final IPath VS_LAYOUTEXT = VS_LIBRARY.append("layoutext");
+	public static final IPath VS_LIBRARY=new Path(VisualSwingPlugin.PLUGIN_ID+".VS_LIBRARY"); //$NON-NLS-1$
+	public static final IPath VS_LAYOUTEXT = VS_LIBRARY.append("layoutext"); //$NON-NLS-1$
 }
 

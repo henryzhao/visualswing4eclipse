@@ -41,7 +41,7 @@ public class SetValueOperation extends AbstractOperation {
 
 	public SetValueOperation(Object bean, IWidgetPropertyDescriptor property,
 			Object new_value) {
-		super("changing " + property.getDisplayName());
+		super(Messages.SetValueOperation_Changing_Value + property.getDisplayName());
 		this.bean = bean;
 		this.property = property;
 		try {
@@ -107,7 +107,7 @@ public class SetValueOperation extends AbstractOperation {
 			if (info != null) {
 				Shell shell = (Shell) info.getAdapter(Shell.class);
 				if (shell != null) {
-					MessageDialog.openError(shell, "Error", "occurs while setting property:"+property.getDisplayName()+"!"+e.getMessage());
+					MessageDialog.openError(shell, Messages.SetValueOperation_Error, Messages.SetValueOperation_Error_Ocurrs_While_Setting_Property+property.getDisplayName()+"!"+e.getMessage()); //$NON-NLS-3$
 				}
 			}
 			VisualSwingPlugin.getLogger().error(e);

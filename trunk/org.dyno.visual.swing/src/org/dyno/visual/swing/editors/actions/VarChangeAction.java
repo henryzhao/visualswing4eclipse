@@ -27,9 +27,9 @@ public class VarChangeAction extends Action {
 
 	public VarChangeAction(WidgetAdapter adapter) {
 		this.adapter = adapter;
-		setText("Change Variable Name ...");
-		setId("change_variable_name");
-		setToolTipText("Change Variable Name ...");
+		setText(Messages.VarChangeAction_Change_Var_Name);
+		setId("change_variable_name"); //$NON-NLS-1$
+		setToolTipText(Messages.VarChangeAction_Change_Var_Name);
 	}
 
 	public void run() {

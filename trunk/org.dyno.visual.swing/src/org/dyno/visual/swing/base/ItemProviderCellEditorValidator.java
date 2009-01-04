@@ -34,7 +34,7 @@ public class ItemProviderCellEditorValidator implements ICellEditorValidator {
 			return null;
 		int index = ((Integer) value).intValue();
 		if (index < 0 || index >= provider.getItems().length)
-			return "Cannot find such item:{0}!";
+			return Messages.ITEMP_PROVIDER_CELL_EDITOR_VALIDATOR_CANNOT_FIND_SUCH_ITEM;
 		return null;
 	}
 }

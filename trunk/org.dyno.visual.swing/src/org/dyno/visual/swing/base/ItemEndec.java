@@ -61,13 +61,13 @@ public class ItemEndec implements ICodeGen {
 				return;
 			}
 		}
-		throw new ValidationException("No such element:" + txt);
+		throw new ValidationException(Messages.ITEM_ENDEC_NO_SUCH_ELEMENT + txt);
 	}
 
 	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
-			return "null";
+			return "null"; //$NON-NLS-1$
 		for (Item item : items) {
 			if (item.getValue().equals(value)) {
 				return item.getCode(imports);

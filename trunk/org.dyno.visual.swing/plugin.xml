@@ -17,7 +17,7 @@
    <extension-point id="org.dyno.visual.swing.invisibleAdapter" name="Invisible Adapter" schema="schema/invisibleAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.renamingListener" name="Renaming Listener" schema="schema/renamingListener.exsd"/>
    <extension point="org.eclipse.core.runtime.contentTypes">
-	   <content-type id="visualSwing" name="Swing Source" 
+	   <content-type id="visualSwing" name="%content-type.name.0" 
 			base-type="org.eclipse.jdt.core.javaSource"
 			file-extensions="java">
 			<describer class="org.dyno.visual.swing.contentTypes.VisualSwingContentDescriber"/>
@@ -27,14 +27,14 @@
          	point="org.eclipse.ui.decorators">
     	<decorator
             adaptable="true"
-            label="Visual Swing Source"
+            label="%decorator.label.0"
             state="true"
             lightweight= "true"
             icon = "icons/thumb.png"
             location="TOP_RIGHT"
             id="org.dyno.visual.swing.decorator">
          	<description>
-         		Visual Swing Source File
+         		%decorator.description.0
          	</description>
          	<enablement>
          		<and>
@@ -67,11 +67,11 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Visual Swing"
+            name="%category.name.0"
             id="org.dyno.visual.swing.editors">
       </category>
       <view
-            name="Palette"
+            name="%view.name.0"
             icon="icons/palette.gif"
             category="org.dyno.visual.swing.editors"
             class="org.dyno.visual.swing.editors.PaletteView"
@@ -99,7 +99,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="Visual Editor"
+            name="%editor.name.0"
             extensions="java"
             icon="/icons/editor.png"
             contributorClass="org.dyno.visual.swing.editors.VisualSwingEditorContributor"
@@ -111,7 +111,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            name="Visual Swing Class"
+            name="%category.name.1"
             id="org.dyno.visual.swing">
       </category>
       <wizard
@@ -119,9 +119,9 @@
             class="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
             icon="icons/internal_frame_16.png"
             id="org.dyno.visual.swing.wizards.NewInternalFrameCreationWizard"
-            name="Internal Frame">
+            name="%wizard.name.0">
          <description>
-            New JInternalFrame
+            %wizard.description.0
          </description>
       </wizard>      
       <wizard
@@ -129,9 +129,9 @@
             class="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
             icon="icons/applet_16.png"
             id="org.dyno.visual.swing.wizards.NewAppletCreationWizard"
-            name="Applet">
+            name="%wizard.name.1">
          <description>
-            New JApplet
+            %wizard.description.1
          </description>
       </wizard>
       <wizard
@@ -139,9 +139,9 @@
             class="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
             icon="icons/dialog_16.png"
             id="org.dyno.visual.swing.wizards.NewDialogCreationWizard"
-            name="Dialog">
+            name="%wizard.name.2">
          <description>
-            New JDialog
+            %wizard.description.2
          </description>
       </wizard>
       <wizard
@@ -149,9 +149,9 @@
             class="org.dyno.visual.swing.wizards.NewFrameCreationWizard"
             icon="icons/frame_16.png"
             id="org.dyno.visual.swing.wizards.NewFrameCreationWizard"
-            name="Frame">
+            name="%wizard.name.3">
          <description>
-            New JFrame
+            %wizard.description.3
          </description>
       </wizard>      
       <wizard
@@ -159,9 +159,9 @@
             class="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
             icon="icons/panel_16.png"
             id="org.dyno.visual.swing.wizards.NewPanelCreationWizard"
-            name="Panel">
+            name="%wizard.name.4">
          <description>
-            New JPanel
+            %wizard.description.4
          </description>
       </wizard>
 	</extension>
@@ -363,7 +363,7 @@
 	<extension point="org.eclipse.jdt.ui.classpathContainerPage">
  		<classpathContainerPage
    			id="org.dyno.visual.swing.VS_LIBRARY"
-   			name="Visual Swing Extension Library"
+   			name="%classpathContainerPage.name.0"
    			class="org.dyno.visual.swing.wizards.NewVisualSwingExtensionLibraryWizard">
   	</classpathContainerPage>
  	</extension>

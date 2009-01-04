@@ -87,7 +87,7 @@
          <widget 
          		class="org.dyno.visual.swing.widgets.JPanelAdapter"
          		widgetClass="javax.swing.JPanel"
-         		widgetName="JPanel"
+         		widgetName="%Palette.Panel.Name"
          		groupId="container"
          		icon="/icons/panel_16.png">
         		<property id="border" name="border" />

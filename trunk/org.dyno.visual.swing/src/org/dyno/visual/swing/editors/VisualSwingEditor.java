@@ -256,13 +256,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		private boolean isTimerAction;
 
 		public CreateDesignerUIJob(boolean isTimer) {
-			super("CreateDesignerUIJob");
+			super(Messages.VisualSwingEditor_Designer_Creation_Job);
 			this.isTimerAction = isTimer;
 		}
 
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
-			monitor.setTaskName("Generating Designer UI");
+			monitor.setTaskName(Messages.VisualSwingEditor_Generating_Designer);
 			if (!createDesignerUI(monitor)&&!isTimerAction) {
 				switchToJavaEditor();
 			} else {
@@ -334,10 +334,10 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					WidgetAdapter rootAdapter = WidgetAdapter
 							.getWidgetAdapter(root);
 					String lnfCN = getLnfClassname();
-					rootAdapter.setProperty("preferred.lookandfeel", lnfCN);
+					rootAdapter.setProperty("preferred.lookandfeel", lnfCN); //$NON-NLS-1$
 					ICompilationUnit unit = sourceParser.generate(rootAdapter,
 							monitor);
-					rootAdapter.setProperty("preferred.lookandfeel", null);
+					rootAdapter.setProperty("preferred.lookandfeel", null); //$NON-NLS-1$
 					if (unit != null) {
 						designer.setCompilationUnit(unit);
 						designer.setLnfChanged(false);
@@ -392,7 +392,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	@SuppressWarnings("unchecked")
 	private void setUpLookAndFeel(Class rootClass) {
 		try {
-			Field field = rootClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL");
+			Field field = rootClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);

@@ -31,7 +31,7 @@ public class CutOperation extends AbstractOperation {
 	private WidgetSelection selection;
 	private List<CompositeAdapter>parents;
 	public CutOperation(WidgetSelection selection) {
-		super("Cut Components");
+		super(Messages.CutOperation_Cut_Components);
 		this.selection = selection;
 	}
 

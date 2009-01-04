@@ -34,6 +34,28 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 	}
 
 	@Override
+	public void requestNewName() {
+		super.requestNewName();
+		if (parent instanceof JScrollPane) {
+			WidgetAdapter parentAdapter = WidgetAdapter.getWidgetAdapter(parent);
+			if (parentAdapter != null)
+				parentAdapter.requestNewName();
+		} else {
+			Component parentWidget = getWidget();
+			while (parentWidget != null
+					&& !(parentWidget instanceof JScrollPane)) {
+				parentWidget = parentWidget.getParent();
+			}
+			if (parentWidget != null) {
+				WidgetAdapter parentAdapter = WidgetAdapter
+						.getWidgetAdapter(parentWidget);
+				if (parentAdapter != null)
+					parentAdapter.requestNewName();
+			}
+		}
+	}
+
+	@Override
 	public Component getComponent() {
 		if (parent == null) {
 			WidgetAdapter jspa = ExtensionRegistry.createWidgetAdapter(JScrollPane.class);

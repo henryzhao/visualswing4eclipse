@@ -28,7 +28,7 @@ import org.eclipse.ui.actions.ActionFactory;
 public class DeleteAction extends EditorAction {
 	public DeleteAction() {
 		setId(ActionFactory.DELETE.getId());
-		setToolTipText("Delete Components (Delete)");
+		setToolTipText(Messages.DeleteAction_Delete_Components);
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
 		setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 		setAccelerator(SWT.DEL);

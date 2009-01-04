@@ -31,7 +31,7 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 
 	protected Component createWidget() {
 		JTextComponent jtc = createTextComponent();
-		jtc.setText(name);
+		jtc.setText(getBasename());
 		Dimension size = new Dimension(100, 100);
 		jtc.setSize(size);
 		jtc.doLayout();
@@ -49,6 +49,13 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 			iEditor = new TextAreaEditor();
 		}
 		return iEditor;
+	}
+
+	@Override
+	public void requestNewName() {
+		super.requestNewName();
+		JTextComponent jtc = (JTextComponent) getWidget();
+		jtc.setText(getName());
 	}
 
 	@Override

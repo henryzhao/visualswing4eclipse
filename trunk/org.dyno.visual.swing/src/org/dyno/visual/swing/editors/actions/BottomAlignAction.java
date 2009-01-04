@@ -23,12 +23,12 @@ import org.dyno.visual.swing.base.EditorAction;
  * @author William Chen
  */
 public class BottomAlignAction extends EditorAction {
-	private static String BOTTOM_ACTION_ICON = "/icons/bottom_align.png";
+	private static String BOTTOM_ACTION_ICON = "/icons/bottom_align.png"; //$NON-NLS-1$
 
 	public BottomAlignAction() {
 		setId(ALIGNMENT_BOTTOM);
-		setText("Bottom Alignment in Row");
-		setToolTipText("Bottom Alignment in Row");
+		setText(Messages.BottomAlignAction_Bottom_Alignment_in_Row);
+		setToolTipText(Messages.BottomAlignAction_Bottom_Alignment_in_Row);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(BOTTOM_ACTION_ICON));
 		setEnabled(false);
 	}

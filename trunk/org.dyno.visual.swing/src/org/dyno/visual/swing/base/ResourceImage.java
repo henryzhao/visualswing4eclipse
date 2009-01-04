@@ -39,7 +39,7 @@ public class ResourceImage extends Image {
 		this.path = path;
 		this.image = image;	
 		if(image==null)
-			throw new IllegalArgumentException("Cannot found such image with path:"+path);
+			throw new IllegalArgumentException(Messages.RESOURCE_IMAGE_CANNOT_FIND_IMG_PATH+path);
 	}
 	public ResourceImage(String p) {
 		this.path = p;
@@ -53,11 +53,11 @@ public class ResourceImage extends Image {
 				for (IPackageFragmentRoot root : roots) {
 					if (!root.isArchive()) {
 						String src = root.getElementName();
-						src = "/" + src + p;
+						src = "/" + src + p; //$NON-NLS-1$
 						resource = project.findMember(new Path(src));
 						if (resource != null) {
 							String ext = resource.getFileExtension();
-							if (ext.equals("gif") || ext.equals("png") || ext.equals("jpg")) {
+							if (ext.equals("gif") || ext.equals("png") || ext.equals("jpg")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								IPath fullPath = project.getWorkspace().getRoot().getRawLocation().append(resource.getFullPath());
 								String fullpath = fullPath.toString();
 								image = Toolkit.getDefaultToolkit().getImage(fullpath);
@@ -72,7 +72,7 @@ public class ResourceImage extends Image {
 			}
 		}
 		if(image==null)
-			throw new IllegalArgumentException("Cannot found such image with path:"+p);
+			throw new IllegalArgumentException(Messages.RESOURCE_IMAGE_CANNOT_FIND_IMG_PATH+p);
 	}
 
 	public String toString() {

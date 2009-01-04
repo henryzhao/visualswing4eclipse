@@ -23,12 +23,12 @@ import org.dyno.visual.swing.base.EditorAction;
  * @author William Chen
  */
 public class SameHeightAction extends EditorAction {
-	private static String SAME_HEIGHT_ACTION_ICON = "/icons/same_height.png";
+	private static String SAME_HEIGHT_ACTION_ICON = "/icons/same_height.png"; //$NON-NLS-1$
 
 	public SameHeightAction() {
 		setId(SAME_HEIGHT);
-		setText("Same Height");
-		setToolTipText("Same Height");
+		setText(Messages.SameHeightAction_Same_Height);
+		setToolTipText(Messages.SameHeightAction_Same_Height);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(SAME_HEIGHT_ACTION_ICON));
 		setEnabled(false);
 	}

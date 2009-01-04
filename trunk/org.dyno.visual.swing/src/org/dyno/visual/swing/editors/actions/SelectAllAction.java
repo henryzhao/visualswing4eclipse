@@ -25,11 +25,11 @@ import org.eclipse.ui.actions.ActionFactory;
  * @author William Chen
  */
 public class SelectAllAction extends EditorAction {
-	private static String SELECT_ALL_ICON = "/icons/selall.png";
+	private static String SELECT_ALL_ICON = "/icons/selall.png"; //$NON-NLS-1$
 
 	public SelectAllAction() {
 		setId(ActionFactory.SELECT_ALL.getId());
-		setToolTipText("Select All (Ctrl+A)");
+		setToolTipText(Messages.SelectAllAction_Select_All);
 		setAccelerator(SWT.CTRL | 'A');
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(SELECT_ALL_ICON));
 		setRetargetable(true);

@@ -60,17 +60,17 @@ public class BeanNameProperty extends PropertyAdapter {
 
 	@Override
 	public String getCategory() {
-		return "Code";
+		return Messages.BEAN_NAME_PROPERTY_CATEGRORY;
 	}
 
 	@Override
 	public String getDisplayName() {
-		return "Bean Field Name";
+		return Messages.BEAN_NAME_PROPERTY_DISPLAY_NAME;
 	}
 
 	@Override
 	public Object getId() {
-		return "bean.name";
+		return "bean.name"; //$NON-NLS-1$
 	}
 }
 

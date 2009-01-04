@@ -70,13 +70,12 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 	protected Component createWidget() {
 		JComponent jc = createWidgetByClass();
 		setText(jc, getBasename());
-		Dimension size = jc.getPreferredSize();
+		Dimension size = jc.getPreferredSize();		
 		jc.setSize(size);
 		jc.doLayout();
 		jc.validate();
 		return jc;
 	}
-
 	private String getText(Component jc) {
 		PropertyDescriptor textProperty = getTextProperty();
 		try {
@@ -85,6 +84,12 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 			WidgetPlugin.getLogger().error(e);
 			return null;
 		}
+	}
+
+	@Override
+	public void requestNewName() {
+		super.requestNewName();
+		setText(getWidget(), getName());
 	}
 
 	private void setText(Component jc, String text) {

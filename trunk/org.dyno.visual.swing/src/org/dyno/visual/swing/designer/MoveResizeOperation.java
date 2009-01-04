@@ -32,7 +32,7 @@ public class MoveResizeOperation extends AbstractOperation {
 	private List<Component> children;
 
 	public MoveResizeOperation(CompositeAdapter old_parent, CompositeAdapter new_parent, List<Component> children, List<Object> old_constraints, List<Object> new_constraints) {
-		super("Reshape Component");
+		super(Messages.MoveResizeOperation_Reshape);
 		this.old_parent = old_parent;
 		this.new_parent = new_parent;
 		this.old_constraints = old_constraints;

@@ -15,6 +15,7 @@ package org.dyno.visual.swing.designer;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.dnd.DropTarget;
@@ -429,6 +430,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				bounds = SwingUtilities.convertRectangle(hovered, bounds,
 						designer);
 			Component comp = iEditor.getComponent();
+			Font f = adapter.getWidget().getFont();
+			if (f != null) {
+				comp.setFont(f);
+			}
 			comp.setBounds(bounds);
 			comp.doLayout();
 			glassPlane.add(comp);
@@ -509,7 +514,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					shell.getDisplay().syncExec(new Runnable() {
 						@Override
 						public void run() {
-							MessageDialog.openError(shell, "Validation Error",
+							MessageDialog.openError(shell, Messages.GLASS_TARGET_VALIDATION_ERROR,
 									message);
 						}
 					});

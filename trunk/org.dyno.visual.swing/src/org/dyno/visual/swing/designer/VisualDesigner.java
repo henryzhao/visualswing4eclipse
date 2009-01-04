@@ -149,7 +149,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		add(container);
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
-		putClientProperty("popup.layer", popupLayer);
+		putClientProperty("popup.layer", popupLayer); //$NON-NLS-1$
 	}
 	private class ContainerPane extends JComponent{
 		private static final long serialVersionUID = 1L;
@@ -257,8 +257,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	private void showPopup(Point dp, List<Component> selected) {
-		MenuManager manager = new MenuManager("#EDIT");
-		MenuManager lnfMenu = new MenuManager("Set Look And Feel", "#LNF");
+		MenuManager manager = new MenuManager("#EDIT"); //$NON-NLS-1$
+		MenuManager lnfMenu = new MenuManager(Messages.VisualDesigner_SetLaf, "#LNF"); //$NON-NLS-2$
 		fillLnfAction(lnfMenu);
 		manager.add(lnfMenu);
 		List<IContextCustomizer> contexts = ExtensionRegistry.getContextCustomizers();

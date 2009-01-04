@@ -25,12 +25,12 @@ import org.eclipse.ui.texteditor.ITextEditorActionConstants;
  * @author William Chen
  */
 public class PreviewAction extends EditorAction {
-	private static String PREVIEW_ACTION_ICON = "/icons/preview.png";
+	private static String PREVIEW_ACTION_ICON = "/icons/preview.png"; //$NON-NLS-1$
 
 	public PreviewAction() {
 		setId(PREVIEW);
-		setText("Preview Design");
-		setToolTipText("Preview Design");
+		setText(Messages.PreviewAction_Preview_Design);
+		setToolTipText(Messages.PreviewAction_Preview_Design);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(PREVIEW_ACTION_ICON));
 	}
 

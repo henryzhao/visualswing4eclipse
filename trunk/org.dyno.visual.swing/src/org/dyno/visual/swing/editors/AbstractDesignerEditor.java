@@ -72,7 +72,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				return true;
 			}
 		} else
-			throw new PartInitException("This is not a legal file input!");
+			throw new PartInitException(Messages.AbstractDesignerEditor_Illegal_File);
 		return false;
 	}
 
@@ -202,9 +202,9 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	private static final String[] RELATED_VIEW_IDS = {
-			"org.dyno.visual.swing.editors.PaletteView",
-			"org.eclipse.ui.views.PropertySheet",
-			"org.eclipse.ui.views.ContentOutline" };
-	private static final String JAVA_EDITOR_ID = "org.eclipse.jdt.ui.CompilationUnitEditor";
-	private static final String NATURE_ID = "org.eclipse.jdt.core.javanature";
+			"org.dyno.visual.swing.editors.PaletteView", //$NON-NLS-1$
+			"org.eclipse.ui.views.PropertySheet", //$NON-NLS-1$
+			"org.eclipse.ui.views.ContentOutline" }; //$NON-NLS-1$
+	private static final String JAVA_EDITOR_ID = "org.eclipse.jdt.ui.CompilationUnitEditor"; //$NON-NLS-1$
+	private static final String NATURE_ID = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
 }

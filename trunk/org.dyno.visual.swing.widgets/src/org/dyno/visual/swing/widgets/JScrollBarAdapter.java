@@ -14,12 +14,12 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.Adjustable;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import javax.swing.JScrollBar;
+import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -43,9 +43,8 @@ public class JScrollBarAdapter extends WidgetAdapter {
 
 	@Override
 	public IEditor getEditorAt(int x, int y) {
-		if (iEditor == null) {
-			iEditor = new IntegerTextEditor();
-		}
+		JScrollBar bar = (JScrollBar) cloneWidget();
+		iEditor = new TransparentScrollBarEditor(bar);
 		return iEditor;
 	}
 
@@ -61,14 +60,7 @@ public class JScrollBarAdapter extends WidgetAdapter {
 
 	@Override
 	public Rectangle getEditorBounds(int x, int y) {
-		int w = getWidget().getWidth();
-		int h = getWidget().getHeight();
-		int oritention = ((JScrollBar) getWidget()).getOrientation();
-		if (oritention == Adjustable.HORIZONTAL) {
-			return new Rectangle((w - 40) / 2, 0, 40, 23);
-		} else {
-			return new Rectangle(0, (h - 23) / 2, w, 23);
-		}
+		return SwingUtilities.getLocalBounds(getWidget());
 	}
 
 	@Override

@@ -31,11 +31,11 @@ import org.eclipse.swt.graphics.Image;
  * @author William Chen
  */
 public class ComponentTreeLabelProvider implements ILabelProvider {
-	private static String OTHER_COMPONENT_ICON = "/icons/other.png";
-	private static String WIDGETS_FORM_ROOT = "/icons/root.png";
-	private static String EVENT_DESC_ICON = "/icons/events.png";
-	private static String EVENT_SET_ICON = "/icons/eventset.png";
-	private static String EVENT_METHOD_ICON = "/icons/eventmethod.png";
+	private static String OTHER_COMPONENT_ICON = "/icons/other.png"; //$NON-NLS-1$
+	private static String WIDGETS_FORM_ROOT = "/icons/root.png"; //$NON-NLS-1$
+	private static String EVENT_DESC_ICON = "/icons/events.png"; //$NON-NLS-1$
+	private static String EVENT_SET_ICON = "/icons/eventset.png"; //$NON-NLS-1$
+	private static String EVENT_METHOD_ICON = "/icons/eventmethod.png"; //$NON-NLS-1$
 	private HashMap<String, Image> images;
 
 	public ComponentTreeLabelProvider() {
@@ -71,15 +71,15 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 	@Override
 	public String getText(Object element) {
 		if (element == null) {
-			return "";
+			return ""; //$NON-NLS-1$
 		} else if (element instanceof ComponentTreeInput) {
-			return "root";
+			return Messages.ComponentTreeLabelProvider_Root;
 		} else if (element instanceof VisualDesigner) {
-			return "Form";
+			return Messages.ComponentTreeLabelProvider_Form;
 		} else if (element instanceof Component) {
 			Component component = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
-			return (adapter.isRoot() ? "" : adapter.getName()) + "[" + adapter.getWidgetName() + "]";
+			return (adapter.isRoot() ? "" : adapter.getName()) + "[" + adapter.getWidgetName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		} else if(element instanceof IAdapter){
 			return ((IAdapter)element).getName();
 		}else

@@ -35,7 +35,7 @@
       <page
             class="org.dyno.visual.swing.lnfs.preference.LafPreference"
             id="org.dyno.visual.swing.lnfs.lafPreference"
-            name="Swing Look And Feel">
+            name="%page.name.0">
       </page>
    </extension>
 </plugin>

@@ -23,12 +23,12 @@ import org.dyno.visual.swing.base.EditorAction;
  * @author William Chen
  */
 public class LeftAlignAction extends EditorAction {
-	private static String LEFT_ACTION_ICON = "/icons/left_align.png";
+	private static String LEFT_ACTION_ICON = "/icons/left_align.png"; //$NON-NLS-1$
 
 	public LeftAlignAction() {
 		setId(ALIGNMENT_LEFT);
-		setText("Left Alignment in Column");
-		setToolTipText("Left Alignment in Column");
+		setText(Messages.LeftAlignAction_Left_Alignment_in_Column);
+		setToolTipText(Messages.LeftAlignAction_Left_Alignment_in_Column);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(LEFT_ACTION_ICON));
 		setEnabled(false);
 	}

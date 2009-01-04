@@ -23,12 +23,12 @@ import org.dyno.visual.swing.base.EditorAction;
  * @author William Chen
  */
 public class CenterAlignAction extends EditorAction {
-	private static String CENTER_ACTION_ICON = "/icons/center_align.png";
+	private static String CENTER_ACTION_ICON = "/icons/center_align.png"; //$NON-NLS-1$
 
 	public CenterAlignAction() {
 		setId(ALIGNMENT_CENTER);
-		setText("Center horizontally");
-		setToolTipText("Center horizontally");
+		setText(Messages.CenterAlignAction_Center_Alignment);
+		setToolTipText(Messages.CenterAlignAction_Center_Alignment);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(CENTER_ACTION_ICON));
 		setEnabled(false);
 	}
