@@ -26,9 +26,9 @@ public class ButtonGroupRenamingAction extends Action {
 	private ButtonGroupAdapter group;
 	public ButtonGroupRenamingAction(WidgetAdapter adapter, ButtonGroupAdapter group) {
 		this.adapter = adapter;
-		setText("Change Variable Name ...");
-		setId("change_variable_name");
-		setToolTipText("Change Variable Name ...");
+		setText(Messages.ButtonGroupRenamingAction_Change_Var_Name);
+		setId("change_variable_name"); //$NON-NLS-1$
+		setToolTipText(Messages.ButtonGroupRenamingAction_Change_Var_Name_Tooltip);
 		this.group = group;
 	}
 

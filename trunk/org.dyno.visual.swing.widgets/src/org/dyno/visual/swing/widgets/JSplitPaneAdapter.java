@@ -165,13 +165,13 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	private Rectangle getHotspotBounds() {
 		if (position == null)
 			return null;
-		if (position.equals("left"))
+		if (position.equals("left")) //$NON-NLS-1$
 			return getLeftBounds();
-		if (position.equals("top"))
+		if (position.equals("top")) //$NON-NLS-1$
 			return getTopBounds();
-		if (position.equals("right"))
+		if (position.equals("right")) //$NON-NLS-1$
 			return getRightBounds();
-		if (position.equals("bottom"))
+		if (position.equals("bottom")) //$NON-NLS-1$
 			return getBottomBounds();
 		return null;
 	}
@@ -239,11 +239,11 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		if (orientation == JSplitPane.HORIZONTAL_SPLIT) {
 			if (getLeftBounds().contains(p)) {
 				JComponent left = (JComponent) jsp.getLeftComponent();
-				position = "left";
+				position = "left"; //$NON-NLS-1$
 				forbid = existsAndDesigning(left);
 			} else if (getRightBounds().contains(p)) {
 				JComponent right = (JComponent) jsp.getRightComponent();
-				position = "right";
+				position = "right"; //$NON-NLS-1$
 				forbid = existsAndDesigning(right);
 			} else {
 				position = null;
@@ -252,11 +252,11 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		} else {
 			if (getTopBounds().contains(p)) {
 				JComponent top = (JComponent) jsp.getTopComponent();
-				position = "top";
+				position = "top"; //$NON-NLS-1$
 				forbid = existsAndDesigning(top);
 			} else if (getBottomBounds().contains(p)) {
 				JComponent bottom = (JComponent) jsp.getBottomComponent();
-				position = "bottom";
+				position = "bottom"; //$NON-NLS-1$
 				forbid = existsAndDesigning(bottom);
 			} else {
 				position = null;
@@ -267,15 +267,15 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
-		MenuManager plcMenu = new MenuManager("Component Placement",
-				"#BORDERLAYOUT_CONSTRAINTS");
+		MenuManager plcMenu = new MenuManager(Messages.JSplitPaneAdapter_Component_Placement,
+				"#BORDERLAYOUT_CONSTRAINTS"); //$NON-NLS-1$
 		JSplitPane jsp = (JSplitPane) getWidget();
 		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
-			plcMenu.add(new JSplitPanePlacementAction(jsp, "left", child));
-			plcMenu.add(new JSplitPanePlacementAction(jsp, "right", child));
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "left", child)); //$NON-NLS-1$
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "right", child)); //$NON-NLS-1$
 		} else {
-			plcMenu.add(new JSplitPanePlacementAction(jsp, "top", child));
-			plcMenu.add(new JSplitPanePlacementAction(jsp, "bottom", child));
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "top", child)); //$NON-NLS-1$
+			plcMenu.add(new JSplitPanePlacementAction(jsp, "bottom", child)); //$NON-NLS-1$
 		}
 		menu.add(plcMenu);
 	}
@@ -292,13 +292,13 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				WidgetAdapter adapter = getDropWidget().get(0);
 				Component child = adapter.getComponent();
 				JSplitPane jtp = (JSplitPane) getWidget();
-				if (position.equals("left"))
+				if (position.equals("left")) //$NON-NLS-1$
 					jtp.setLeftComponent(child);
-				else if (position.equals("right"))
+				else if (position.equals("right")) //$NON-NLS-1$
 					jtp.setRightComponent(child);
-				else if (position.equals("top"))
+				else if (position.equals("top")) //$NON-NLS-1$
 					jtp.setTopComponent(child);
-				else if (position.equals("bottom"))
+				else if (position.equals("bottom")) //$NON-NLS-1$
 					jtp.setBottomComponent(child);
 				clearAllSelected();
 				adapter.requestNewName();
@@ -455,14 +455,14 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	public void addChildByConstraints(Component child, Object constraints) {
 		JSplitPane jsp = (JSplitPane) getWidget();
 		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
-			if ("left".equals(constraints))
+			if ("left".equals(constraints)) //$NON-NLS-1$
 				jsp.setLeftComponent(child);
-			else if ("right".equals(constraints))
+			else if ("right".equals(constraints)) //$NON-NLS-1$
 				jsp.setRightComponent(child);
 		} else {
-			if ("top".equals(constraints))
+			if ("top".equals(constraints)) //$NON-NLS-1$
 				jsp.setTopComponent(child);
-			else if ("bottom".equals(constraints))
+			else if ("bottom".equals(constraints)) //$NON-NLS-1$
 				jsp.setBottomComponent(child);
 		}
 	}
@@ -472,14 +472,14 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		JSplitPane jsp = (JSplitPane) getWidget();
 		if (jsp.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
 			if (jsp.getLeftComponent() == child)
-				return "left";
+				return "left"; //$NON-NLS-1$
 			else if (jsp.getRightComponent() == child)
-				return "right";
+				return "right"; //$NON-NLS-1$
 		} else {
 			if (jsp.getTopComponent() == child)
-				return "top";
+				return "top"; //$NON-NLS-1$
 			else if (jsp.getBottomComponent() == child)
-				return "bottom";
+				return "bottom"; //$NON-NLS-1$
 		}
 		return null;
 	}

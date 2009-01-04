@@ -35,10 +35,10 @@ public class JListAdapter extends ComplexWidgetAdapter {
 	protected Component createWidget() {
 		JList jc = new JList();
 		DefaultListModel dlm = new DefaultListModel();
-		dlm.addElement("item0");
-		dlm.addElement("item1");
-		dlm.addElement("item2");
-		dlm.addElement("item3");
+		dlm.addElement(Messages.JListAdapter_Item_0);
+		dlm.addElement(Messages.JListAdapter_Item_1);
+		dlm.addElement(Messages.JListAdapter_Item_2);
+		dlm.addElement(Messages.JListAdapter_Item_3);
 		jc.setModel(dlm);
 		Dimension size = new Dimension(100, 135);
 		jc.setSize(size);
@@ -61,12 +61,12 @@ public class JListAdapter extends ComplexWidgetAdapter {
 	public Object getWidgetValue() {
 		ListModel model = ((JList) getWidget()).getModel();
 		int size = model.getSize();
-		String items = "";
+		String items = ""; //$NON-NLS-1$
 		for (int i = 0; i < size; i++) {
 			if (i == 0)
 				items += model.getElementAt(i);
 			else
-				items += "\n " + model.getElementAt(i);
+				items += "\n " + model.getElementAt(i); //$NON-NLS-1$
 		}
 		return items;
 	}

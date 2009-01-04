@@ -38,7 +38,7 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 	@Override
 	protected Component createWidget() {
 		JRadioButtonMenuItem jmi = new JRadioButtonMenuItem();
-		jmi.setText("radio button item");
+		jmi.setText(Messages.JRadioButtonMenuItemAdapter_Radio_Button_Item);
 		jmi.setSize(jmi.getPreferredSize());
 		jmi.doLayout();
 		return jmi;
@@ -89,7 +89,7 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 	public void setWidgetValue(Object value) {
 		Component me = getWidget();
 		JMenuItem jmi = (JMenuItem)me;
-		jmi.setText(value==null?"":value.toString());
+		jmi.setText(value==null?"":value.toString()); //$NON-NLS-1$
 	}
 
 	@Override

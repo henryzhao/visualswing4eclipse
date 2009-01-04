@@ -36,7 +36,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 
 	protected Component createWidget() {
 		JComboBox jc = new JComboBox();
-		jc.setModel(new DefaultComboBoxModel(new Object[] { "item0", "item1", "item2", "item3" }));
+		jc.setModel(new DefaultComboBoxModel(new Object[] { Messages.JComboBoxAdapter_Item_0, Messages.JComboBoxAdapter_Item_1, Messages.JComboBoxAdapter_Item_2, Messages.JComboBoxAdapter_Item_3 }));
 		Dimension size = jc.getPreferredSize();
 		jc.setSize(size);
 		jc.doLayout();
@@ -58,12 +58,12 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	public Object getWidgetValue() {
 		ComboBoxModel model = ((JComboBox) getWidget()).getModel();
 		int size = model.getSize();
-		String items = "";
+		String items = ""; //$NON-NLS-1$
 		for (int i = 0; i < size; i++) {
 			if (i == 0)
 				items += model.getElementAt(i);
 			else
-				items += ", " + model.getElementAt(i);
+				items += ", " + model.getElementAt(i); //$NON-NLS-1$
 		}
 		return items;
 	}
@@ -77,7 +77,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 			if (items.trim().length() == 0)
 				((JComboBox) getWidget()).setModel(new DefaultComboBoxModel());
 			else {
-				StringTokenizer tokenizer = new StringTokenizer(items, ",");
+				StringTokenizer tokenizer = new StringTokenizer(items, ","); //$NON-NLS-1$
 				DefaultComboBoxModel model = new DefaultComboBoxModel();
 				while (tokenizer.hasMoreTokens()) {
 					String token = tokenizer.nextToken();
@@ -103,7 +103,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	private Font getButtonFont() {
 		Font f = getWidget().getFont();
 		if (f == null)
-			f = new Font("Dialog", 0, 12);
+			f = new Font("Dialog", 0, 12); //$NON-NLS-1$
 		return f;
 	}
 

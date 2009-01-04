@@ -156,7 +156,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	public void setWidgetValue(Object value) {
 		Component me = getWidget();
 		JMenu jmi = (JMenu) me;
-		jmi.setText(value == null ? "" : value.toString());
+		jmi.setText(value == null ? "" : value.toString()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -290,9 +290,9 @@ public class JMenuAdapter extends CompositeAdapter {
 					StackTraceElement[] trace = Thread.currentThread()
 							.getStackTrace();
 					for (StackTraceElement stack : trace) {
-						if (stack.getClassName().indexOf("MouseGrabber") != -1
+						if (stack.getClassName().indexOf("MouseGrabber") != -1 //$NON-NLS-1$
 								&& stack.getMethodName().equals(
-										"cancelPopupMenu")) {
+										"cancelPopupMenu")) { //$NON-NLS-1$
 							return;
 						}
 					}
@@ -304,9 +304,9 @@ public class JMenuAdapter extends CompositeAdapter {
 		WidgetAdapter menuAdapter = ExtensionRegistry
 				.createWidgetAdapter(JMenuItem.class);
 		JMenuItem jmenu = (JMenuItem) menuAdapter.getWidget();
-		jmenu.setText("menu item");
+		jmenu.setText(Messages.JMenuAdapter_Menu_Item);
 		menu.add(jmenu);
-		menu.setText("menu");
+		menu.setText(Messages.JMenuAdapter_Menu);
 		menu.setSize(menu.getPreferredSize());
 		menu.doLayout();
 		return menu;

@@ -51,7 +51,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 
 	private PropertyDescriptor getTextProperty() {
 		try {
-			return new PropertyDescriptor("text", getWidgetClass());
+			return new PropertyDescriptor("text", getWidgetClass()); //$NON-NLS-1$
 		} catch (IntrospectionException e) {
 			WidgetPlugin.getLogger().error(e);
 			return null;
@@ -117,7 +117,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 
 	@Override
 	public void setWidgetValue(Object value) {
-		setText(getWidget(), value == null ? "" : value.toString());
+		setText(getWidget(), value == null ? "" : value.toString()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 	private Font getButtonFont() {
 		Font f = getWidget().getFont();
 		if (f == null)
-			f = new Font("Dialog", 0, 12);
+			f = new Font("Dialog", 0, 12); //$NON-NLS-1$
 		return f;
 	}
 
@@ -171,8 +171,8 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 
 	class TextEditingAction extends Action {
 		public TextEditingAction() {
-			setText("Edit text ...");
-			setId("EditingTextId");
+			setText(Messages.TextWidgetAdapter_Edit_Text);
+			setId("EditingTextId"); //$NON-NLS-1$
 		}
 
 		public void run() {

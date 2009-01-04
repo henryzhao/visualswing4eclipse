@@ -38,7 +38,7 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 	@Override
 	protected Component createWidget() {
 		JCheckBoxMenuItem jmi = new JCheckBoxMenuItem();
-		jmi.setText("check item");
+		jmi.setText(Messages.JCheckBoxMenuItemAdapter_Check_Item);
 		jmi.setSize(jmi.getPreferredSize());
 		jmi.doLayout();
 		return jmi;
@@ -89,7 +89,7 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 	public void setWidgetValue(Object value) {
 		Component me = getWidget();
 		JMenuItem jmi = (JMenuItem)me;
-		jmi.setText(value==null?"":value.toString());
+		jmi.setText(value==null?"":value.toString()); //$NON-NLS-1$
 	}
 
 	@Override

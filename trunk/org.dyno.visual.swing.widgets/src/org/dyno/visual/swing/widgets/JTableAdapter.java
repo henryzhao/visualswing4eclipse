@@ -34,7 +34,7 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 
 	protected Component createWidget() {
 		JTable jtc = new JTable();
-		jtc.setModel(new DefaultTableModel(new Object[][] { { "0x0", "0x1" }, { "1x0", "1x1" } }, new Object[] { "Title 0", "Title 1" }));
+		jtc.setModel(new DefaultTableModel(new Object[][] { { Messages.JTableAdapter_0, Messages.JTableAdapter_1 }, { Messages.JTableAdapter_2, Messages.JTableAdapter_3 } }, new Object[] { Messages.JTableAdapter_Title_0, Messages.JTableAdapter_Title_1 }));
 		Dimension size = new Dimension(200, 150);
 		jtc.setSize(size);
 		jtc.doLayout();
