@@ -33,7 +33,7 @@ public class KeyUpOperation extends MoveOperation {
 
 	@Override
 	protected String getName() {
-		return "Move Up";
+		return Messages.KeyUpOperation_Move_Up;
 	}
 
 }

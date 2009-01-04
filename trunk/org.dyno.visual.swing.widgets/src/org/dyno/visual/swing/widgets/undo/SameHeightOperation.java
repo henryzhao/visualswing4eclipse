@@ -30,7 +30,7 @@ public class SameHeightOperation extends AbstractOperation {
 	private List<WidgetAdapter>selection;
 	private List<Integer> boundheight;
 	public SameHeightOperation(List<WidgetAdapter>selected) {
-		super("Align Left");
+		super(Messages.SameHeightOperation_Same_Height);
 		selection = new ArrayList<WidgetAdapter>();
 		for(WidgetAdapter adapter:selected){
 			selection.add(adapter);

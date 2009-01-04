@@ -42,7 +42,7 @@ public class SetLayoutOperation extends AbstractOperation {
 
 	public SetLayoutOperation(IConfigurationElement config,
 			JPanelAdapter jpaneladapter) {
-		super("Set Layout");
+		super(Messages.SetLayoutOperation_Set_Layout);
 		this.config = config;
 		this.jpaneladapter = jpaneladapter;
 		this.oldLayoutAdapter = jpaneladapter.getLayoutAdapter();

@@ -62,15 +62,15 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 		setLayout(new GlassLayout());
 		setLayer(jsp, 0);
 		add(jsp);
-		jsp.setToolTipText("Adjust view");
-		jsp.getHorizontalScrollBar().setToolTipText("Drag it to adjust view");
-		jsp.getVerticalScrollBar().setToolTipText("Drag it to adjust view");
+		jsp.setToolTipText(Messages.TreeModelPanel_Adjust_View);
+		jsp.getHorizontalScrollBar().setToolTipText(Messages.TreeModelPanel_Drag_Adjust_View);
+		jsp.getVerticalScrollBar().setToolTipText(Messages.TreeModelPanel_Drag_Adjust_View);
 		TreeGlass glass = new TreeGlass();
 		setLayer(glass, 1);
 		add(glass);
 		this.scrollPane = jsp;
 		this.tree = (JTree) jsp.getViewport().getView();
-		this.tree.setToolTipText("Click cell to edit");
+		this.tree.setToolTipText(Messages.TreeModelPanel_Click_Edit);
 		this.glass = glass;
 		this.glass.addActionListener(this);
 		designFieldBackground = Color.orange.brighter();
@@ -89,9 +89,9 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 	private static Icon EDIT_NODE_ICON;
 	private static Icon ADD_NODE_ICON;
 	static {
-		ADD_NODE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png"));
-		DELETE_NODE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png"));
-		EDIT_NODE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_text.png"));
+		ADD_NODE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
+		DELETE_NODE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png")); //$NON-NLS-1$
+		EDIT_NODE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_text.png")); //$NON-NLS-1$
 	}
 
 	class TreeGlass extends JComponent implements MouseInputListener, MouseWheelListener {
@@ -119,7 +119,7 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 		}
 
 		private void fireActionPerformed() {
-			ActionEvent event = new ActionEvent(this, 0, "action");
+			ActionEvent event = new ActionEvent(this, 0, "action"); //$NON-NLS-1$
 			for (ActionListener l : listeners)
 				l.actionPerformed(event);
 		}
@@ -303,11 +303,11 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			case NO_OP:
 				return null;
 			case ADD_NODE:
-				return "Add child node";
+				return Messages.TreeModelPanel_Add_Child;
 			case EDIT_NODE:
-				return "Edit node";
+				return Messages.TreeModelPanel_Edit_Node;
 			case DELETE_NODE:
-				return "Delete node";
+				return Messages.TreeModelPanel_Delete_Node;
 			}
 			return null;
 		}
@@ -464,7 +464,7 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 		Object object = path.getLastPathComponent();
 		if (object instanceof DefaultMutableTreeNode) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) object;
-			DefaultMutableTreeNode newnode = new DefaultMutableTreeNode("New Node");
+			DefaultMutableTreeNode newnode = new DefaultMutableTreeNode(Messages.TreeModelPanel_New_Node);
 			node.add(newnode);
 			tree.updateUI();
 			tree.expandPath(path);

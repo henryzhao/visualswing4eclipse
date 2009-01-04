@@ -37,7 +37,7 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 	private ButtonGroupAdapter group;
 
 	public ButtonGroupRenamingOperation(WidgetAdapter adapter, ButtonGroupAdapter group) {
-		super("Change Variable");
+		super(Messages.ButtonGroupRenamingOperation_Change_Var);
 		this.adapter = adapter;
 		this.validator = new BeanNameValidator(adapter);
 		this.group = group;
@@ -49,14 +49,14 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 		while (true) {
 			ButtonGroupNameDialog dialog = new ButtonGroupNameDialog(adapter.getShell());
 			dialog
-					.setPromptMessage("Please enter a new variable name for this object:");
+					.setPromptMessage(Messages.ButtonGroupRenamingOperation_New_Var_Name);
 			dialog.setInput(group.getName());
 			if (dialog.open() == Dialog.OK) {
 				String name = dialog.getInput();
 				String message = validator.isValid(name);
 				if (message != null) {
 					MessageDialog.openError(adapter.getShell(),
-							"Invalid identifier", message);
+							Messages.ButtonGroupRenamingOperation_Invalid_ID, message);
 				} else {
 					this.lastName = group.getName();
 					this.lastLastName = group.getLastName();

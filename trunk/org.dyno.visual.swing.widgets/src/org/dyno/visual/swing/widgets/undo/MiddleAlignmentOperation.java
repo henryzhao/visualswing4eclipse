@@ -30,7 +30,7 @@ public class MiddleAlignmentOperation extends AbstractOperation {
 	private List<WidgetAdapter>selection;
 	private List<Integer> boundy;
 	public MiddleAlignmentOperation(List<WidgetAdapter>selected) {
-		super("Align Left");
+		super(Messages.MiddleAlignmentOperation_Align_Middle);
 		selection = new ArrayList<WidgetAdapter>();
 		for(WidgetAdapter adapter:selected){
 			selection.add(adapter);

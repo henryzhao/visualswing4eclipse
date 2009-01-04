@@ -30,7 +30,7 @@ public class SameWidthOperation extends AbstractOperation {
 	private List<WidgetAdapter>selection;
 	private List<Integer> boundwidth;
 	public SameWidthOperation(List<WidgetAdapter>selected) {
-		super("Align Left");
+		super(Messages.SameWidthOperation_Same_Width);
 		selection = new ArrayList<WidgetAdapter>();
 		for(WidgetAdapter adapter:selected){
 			selection.add(adapter);

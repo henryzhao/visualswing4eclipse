@@ -39,7 +39,7 @@ public class NullLayoutOperation extends AbstractOperation {
 	}
 
 	public NullLayoutOperation(JPanelAdapter adapter) {
-		super("Set Layout");
+		super(Messages.NullLayoutOperation_Set_Layout);
 		this.adapter = adapter;
 		this.oldLayoutAdapter = adapter.getLayoutAdapter();
 	}
