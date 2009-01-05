@@ -10,14 +10,36 @@
  * Contributors:                                                                    * 
  *     William Chen - initial API and implementation.                               *
  ************************************************************************************/
-package org.dyno.visual.swing.parser.adapters;
+package org.dyno.visual.swing.designer;
 
-import javax.swing.JInternalFrame;
-import javax.swing.JMenuBar;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 
-public class JInternalFrameParser extends RootPaneContainerParser {
+import javax.swing.SwingUtilities;
+
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+
+class MouseDelegateHandler implements InvocationHandler{
+	private VisualDesigner designer;
+	MouseDelegateHandler(VisualDesigner designer){
+		this.designer= designer;
+	}
 	@Override
-	protected JMenuBar getJMenuBar() {
-		return ((JInternalFrame)adapter.getWidget()).getJMenuBar();
+	public Object invoke(Object proxy, Method method, Object[] args)
+			throws Throwable {
+		MouseEvent e=(MouseEvent)args[0];
+		Point point = e.getPoint();
+		Component hovered = designer.componentAt(point,	WidgetAdapter.ADHERE_PAD);
+		if (hovered != null) {
+			MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e, hovered);
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
+			Object l = adapter.getAdapter(method.getDeclaringClass());
+			if(l!=null)
+				method.invoke(l, new Object[]{mEvent});
+		}
+		return null;
 	}
 }

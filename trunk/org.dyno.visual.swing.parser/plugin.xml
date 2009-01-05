@@ -36,7 +36,8 @@
    <extension
          point="org.dyno.visual.swing.adapters">
       <interface
-            class="org.dyno.visual.swing.parser.spi.IParser">
+            class="org.dyno.visual.swing.parser.spi.IParser"
+            default="org.dyno.visual.swing.parser.adapters.WidgetParser">
          <adapter
                class="javax.swing.JComponent"
                implementation="org.dyno.visual.swing.parser.adapters.WidgetParser">

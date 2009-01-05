@@ -146,16 +146,16 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 			JMenuAdapter jma=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(jmenu);
 			jmenu.add((JMenuItem)target.getWidget());
 			target.requestNewName();
-			jma.widgetPressed(null);
-			jma.widgetPressed(null);
+			jma.widgetPressed();
+			jma.widgetPressed();
 		}else{
 			JPopupMenu popup=(JPopupMenu)getWidget();
 			JMenu jmenu=(JMenu)popup.getInvoker();
 			JMenuAdapter jma=(JMenuAdapter)WidgetAdapter.getWidgetAdapter(jmenu);
 			jmenu.add(target.getComponent(), insert_index);
 			target.requestNewName();
-			jma.widgetPressed(null);
-			jma.widgetPressed(null);
+			jma.widgetPressed();
+			jma.widgetPressed();
 		}
 		return true;
 	}

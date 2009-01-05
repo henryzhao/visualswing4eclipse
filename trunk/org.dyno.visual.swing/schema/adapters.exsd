@@ -62,7 +62,7 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="implementation" type="string">
+         <attribute name="default" type="string">
             <annotation>
                <documentation>
                   

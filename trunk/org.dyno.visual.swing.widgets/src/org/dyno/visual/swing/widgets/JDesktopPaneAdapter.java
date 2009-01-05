@@ -227,6 +227,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		setMascotLocation(hotspot);
 		toBeResized.setSize(w, h);
 		toBeResizedAdapter.doLayout();
+		toBeResizedAdapter.setDirty(true);
 	}
 
 	@Override
@@ -251,6 +252,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 				adapter.requestNewName();
 				jif.setVisible(true);
 				adapter.setSelected(true);
+				adapter.setDirty(true);
 				jif.toFront();				
 			}
 			getWidget().validate();

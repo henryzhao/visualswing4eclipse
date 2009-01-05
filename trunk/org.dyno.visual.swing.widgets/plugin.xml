@@ -1030,4 +1030,25 @@
             type="javax.swing.ButtonGroup">
       </adapter>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.adapters">
+      <interface
+            class="java.awt.event.MouseListener">
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.delegate.JTabbedPaneMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.delegate.JInternalFrameMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenuItem"
+               implementation="org.dyno.visual.swing.widgets.delegate.JMenuItemMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.widgets.delegate.JMenuMouseDelegate">
+         </adapter></interface>
+   </extension>
 </plugin>

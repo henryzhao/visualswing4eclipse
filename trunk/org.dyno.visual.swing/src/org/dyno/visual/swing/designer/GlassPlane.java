@@ -20,6 +20,9 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
+import java.lang.reflect.Proxy;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -38,6 +41,8 @@ import org.dyno.visual.swing.swt_awt.Platform;
  */
 public class GlassPlane extends JComponent implements MouseListener {
 	private static final long serialVersionUID = -409591239915380500L;
+	@SuppressWarnings("unchecked")
+	private static final Class[]MOUSE_INTERFACES={MouseListener.class, MouseMotionListener.class, MouseWheelListener.class};
 	private VisualDesigner designer;
 	private Point hotspotPoint;
 	private Rectangle selectionRegion;
@@ -62,7 +67,6 @@ public class GlassPlane extends JComponent implements MouseListener {
 	boolean editComponent(Component hovered) {
 		return target.editComponent(hovered);
 	}
-
 	public GlassPlane(final VisualDesigner designer) {
 		setLayout(null);
 		this.designer = designer;
@@ -72,6 +76,12 @@ public class GlassPlane extends JComponent implements MouseListener {
 		addMouseMotionListener(target);
 		addMouseWheelListener(target);
 		setDropTarget(target);
+		MouseDelegateHandler handler = new MouseDelegateHandler(designer);
+		ClassLoader loader = getClass().getClassLoader();
+		Object proxy=Proxy.newProxyInstance(loader, MOUSE_INTERFACES, handler);
+		addMouseListener((MouseListener) proxy);
+		addMouseMotionListener((MouseMotionListener) proxy);
+		addMouseWheelListener((MouseWheelListener) proxy);
 		setTransferHandler(new GlassPlaneHandler());
 		setFocusable(true);
 		updateUI();

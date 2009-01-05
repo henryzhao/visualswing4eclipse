@@ -25,7 +25,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
@@ -130,25 +129,6 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 		}
 		return iEditor;
 	}
-
-	@Override
-	public boolean widgetPressed(MouseEvent e) {
-		JTabbedPane tabbedPane = (JTabbedPane) getWidget();
-		int count = tabbedPane.getTabCount();
-		for (int i = 0; i < count; i++) {
-			Rectangle tabBounds = tabbedPane.getBoundsAt(i);
-			if ((tabBounds != null) && tabBounds.contains(e.getX(), e.getY())) {
-				tabbedPane.setSelectedIndex(i);
-				JComponent widget = (JComponent) tabbedPane.getComponent(i);
-				clearAllSelected();
-				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
-				adapter.setSelected(true);
-				return false;
-			}
-		}
-		return true;
-	}
-
 	@Override
 	public Object getWidgetValue() {
 		JTabbedPane jtp = (JTabbedPane) getWidget();

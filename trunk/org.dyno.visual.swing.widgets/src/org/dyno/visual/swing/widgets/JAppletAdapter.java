@@ -66,6 +66,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		rootPane = (JComponent) me.getContentPane();
 		jrootPane = me.getRootPane();
 		contentAdapter.setWidget(rootPane);
+		contentAdapter.setDelegate(this);
 	}
 
 	public void doLayout() {

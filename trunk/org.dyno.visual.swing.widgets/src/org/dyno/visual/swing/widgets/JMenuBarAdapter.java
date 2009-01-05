@@ -51,7 +51,6 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	public boolean isResizable() {
 		return false;
 	}
-
 	@Override
 	public boolean isMoveable() {
 		return true;
