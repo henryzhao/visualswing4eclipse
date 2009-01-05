@@ -24,7 +24,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Stack;
 
@@ -111,10 +111,60 @@ public class JMenuAdapter extends CompositeAdapter {
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
 			public void run() {
-				widgetPressed(null);
-				widgetPressed(null);
+				widgetPressed();
+				widgetPressed();
 			}});
 	}
+	void widgetPressed(){
+		MouseListener l=(MouseListener) getAdapter(MouseListener.class);
+		if(l!=null)
+			l.mousePressed(null);
+	}
+	public void showPopup() {
+		JMenu jmenu = (JMenu) getWidget();
+		Container thisparent = jmenu.getParent();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
+				.getSelectionStack();
+		while (!stack.isEmpty()) {
+			MenuElement ele = stack.peek();
+			if (ele instanceof JMenu) {
+				JMenu jme = (JMenu) ele;
+				Container parent = jme.getParent();
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+				stack.pop();
+				if (parent == thisparent) {
+					break;
+				}
+			} else if (ele == thisparent) {
+				break;
+			} else {
+				stack.pop();
+			}
+		}
+		stack.add(jmenu);
+		stack.add(jmenu.getPopupMenu());
+		jmenu.setPopupMenuVisible(true);
+		jmenu.setSelected(true);
+	}
+
+	public void hidePopup() {
+		JMenu jmenu = (JMenu) getWidget();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
+				.getSelectionStack();
+		while (!stack.isEmpty() && stack.peek() != jmenu) {
+			MenuElement me = stack.pop();
+			if (me instanceof JMenu) {
+				JMenu jme = (JMenu) me;
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+			}
+		}
+		if (!stack.isEmpty())
+			stack.pop();
+		jmenu.setPopupMenuVisible(false);
+		jmenu.setSelected(false);
+	}		
 	public void addAfter(Component hovering, Component dragged) {
 		JMenu jmenu = (JMenu) getWidget();
 		int index = -1;
@@ -177,63 +227,6 @@ public class JMenuAdapter extends CompositeAdapter {
 	private static final int HOR_TEXT_PAD = 20;
 	private static final int VER_TEXT_PAD = 4;
 
-	@Override
-	public boolean widgetPressed(MouseEvent e) {
-		JMenu jmenu = (JMenu) getWidget();
-		boolean v = jmenu.isPopupMenuVisible();
-		if (v) {
-			hidePopup();
-		} else {
-			showPopup();
-		}
-		return true;
-	}
-
-	void showPopup() {
-		JMenu jmenu = (JMenu) getWidget();
-		Container thisparent = jmenu.getParent();
-		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
-				.getSelectionStack();
-		while (!stack.isEmpty()) {
-			MenuElement ele = stack.peek();
-			if (ele instanceof JMenu) {
-				JMenu jme = (JMenu) ele;
-				Container parent = jme.getParent();
-				jme.setPopupMenuVisible(false);
-				jme.setSelected(false);
-				stack.pop();
-				if (parent == thisparent) {
-					break;
-				}
-			} else if (ele == thisparent) {
-				break;
-			} else {
-				stack.pop();
-			}
-		}
-		stack.add(jmenu);
-		stack.add(jmenu.getPopupMenu());
-		jmenu.setPopupMenuVisible(true);
-		jmenu.setSelected(true);
-	}
-
-	void hidePopup() {
-		JMenu jmenu = (JMenu) getWidget();
-		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
-				.getSelectionStack();
-		while (!stack.isEmpty() && stack.peek() != jmenu) {
-			MenuElement me = stack.pop();
-			if (me instanceof JMenu) {
-				JMenu jme = (JMenu) me;
-				jme.setPopupMenuVisible(false);
-				jme.setSelected(false);
-			}
-		}
-		if (!stack.isEmpty())
-			stack.pop();
-		jmenu.setPopupMenuVisible(false);
-		jmenu.setSelected(false);
-	}
 
 	public CompositeAdapter getParentAdapter() {
 		Component me = getWidget();
@@ -442,10 +435,10 @@ public class JMenuAdapter extends CompositeAdapter {
 				setDirty(true);
 				addNotify();
 				if (jmenu.isPopupMenuVisible()) {
-					widgetPressed(null);
-					widgetPressed(null);
+					widgetPressed();
+					widgetPressed();
 				} else {
-					widgetPressed(null);
+					widgetPressed();
 				}
 			} else {
 				Toolkit.getDefaultToolkit().beep();
@@ -511,8 +504,8 @@ public class JMenuAdapter extends CompositeAdapter {
 	@Override
 	public boolean removeChild(Component child) {
 		boolean success = super.removeChild(child);
-		widgetPressed(null);
-		widgetPressed(null);
+		widgetPressed();
+		widgetPressed();
 		return success;
 	}
 	@Override

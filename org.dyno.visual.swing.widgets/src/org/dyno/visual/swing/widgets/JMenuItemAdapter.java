@@ -14,10 +14,8 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.FontMetrics;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
@@ -104,19 +102,6 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	}
 	private static final int HOR_TEXT_PAD = 20;
 	private static final int VER_TEXT_PAD = 4;
-
-
-	@Override
-	public boolean widgetPressed(MouseEvent e) {
-		JMenuItem jmenu = (JMenuItem) getWidget();
-		Container parent = jmenu.getParent();
-		if (parent instanceof JPopupMenu) {
-			boolean selected=jmenu.isSelected();
-			jmenu.setSelected(!selected);
-		}
-		return true;
-	}
-
 	@Override
 	public Component cloneWidget() {
 		JMenuItem jmi = (JMenuItem) super.cloneWidget();

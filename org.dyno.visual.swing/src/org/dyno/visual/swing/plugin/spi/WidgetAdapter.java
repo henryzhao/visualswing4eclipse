@@ -20,7 +20,6 @@ import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.Introspector;
@@ -30,13 +29,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
+import javax.swing.MenuElement;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -48,6 +51,7 @@ import org.dyno.visual.swing.adapter.BeanNameProperty;
 import org.dyno.visual.swing.adapter.FieldAccessProperty;
 import org.dyno.visual.swing.adapter.GetAccessProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.PropertySource2;
@@ -86,13 +90,14 @@ import org.osgi.framework.Bundle;
  * @author William Chen
  */
 public abstract class WidgetAdapter extends AbstractAdaptable implements
-		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants, IAdapter {
+		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants,
+		IAdapter {
 	private static Icon FORBIDDEN_ICON;
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class
 				.getResource("/icons/forbidden.png")); //$NON-NLS-1$
 	}
-	protected boolean dirty=true;
+	protected boolean dirty = true;
 	protected int getAccess;
 	protected int fieldAccess;
 	protected Point hotspotPoint;
@@ -121,34 +126,49 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 		}
 	}
+	public void hideMenu() {
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
+		while (!stack.isEmpty()) {
+			MenuElement me = stack.pop();
+			if (me instanceof JMenu) {
+				JMenu jme = (JMenu) me;
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+			}
+		}
+	}
 	@Override
-	public void requestNewName(){
-		if(getName()==null){
+	public void requestNewName() {
+		if (getName() == null) {
 			setName(getNamespace().nextName(getBasename()));
 		}
 	}
+
 	@Override
 	public String getBasename() {
 		return NamespaceUtil.getBasename(getWidgetClass());
 	}
 
-	public void lockDesigner(){
+	public void lockDesigner() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null)
+		if (designer != null)
 			designer.lock();
 	}
-	public void unlockDesigner(){
+
+	public void unlockDesigner() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null)
+		if (designer != null)
 			designer.unlock();
 	}
-	public ICompilationUnit getCompilationUnit(){
+
+	public ICompilationUnit getCompilationUnit() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null)
+		if (designer != null)
 			return designer.getCompilationUnit();
 		else
 			return null;
 	}
+
 	public void setProperty(String key, Object value) {
 		if (value == null)
 			properties.remove(key);
@@ -181,6 +201,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public String getLastName() {
 		return lastName;
 	}
+
 	public List<WidgetAdapter> getSelectedWidgets() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
@@ -254,12 +275,14 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
 		this.edited = new HashMap<String, Boolean>();
 	}
-	public NamespaceManager getNamespace(){
+
+	public NamespaceManager getNamespace() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null)
+		if (designer != null)
 			return designer.getNamespace();
 		return null;
 	}
+
 	protected WidgetAdapter(String name) {
 		setName(name);
 		this.widget = createWidget();
@@ -490,14 +513,17 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	public VisualDesigner getDesigner() {
-		Component w=getRootPane();
-		if(w==null)
+		Component w = getRootPane();
+		if (w == null)
 			return null;
 		Component parent = w;
-		while(parent!=null&&!(parent instanceof VisualDesigner)){
-			parent=parent.getParent();
+		while (parent != null && !(parent instanceof VisualDesigner)) {
+			if(parent instanceof JPopupMenu){
+				parent = ((JPopupMenu)parent).getInvoker();
+			}
+			parent = parent.getParent();
 		}
-		if(parent==null)
+		if (parent == null)
 			return null;
 		return (VisualDesigner) parent;
 	}
@@ -734,8 +760,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	public WidgetAdapter getRootAdapter() {
-		Component w=getRootPane();
-		if(w==null)
+		Component w = getRootPane();
+		if (w == null)
 			return null;
 		if (isRoot())
 			return this;
@@ -761,7 +787,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		if (isRoot())
 			return null;
 		Component me = getRootPane();
-		if(me==null)
+		if (me == null)
 			return null;
 		Component parent = me.getParent();
 		while (parent != null) {
@@ -908,10 +934,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return 2 * descent;
 	}
 
-	public boolean widgetPressed(MouseEvent e) {
-		return true;
-	}
-
 	public boolean isVisible() {
 		boolean visible = getWidget().isVisible();
 		if (visible) {
@@ -940,14 +962,16 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public void fillContextAction(MenuManager menu) {
 		if (!isRoot())
 			menu.add(new VarChangeAction(this));
-		MenuManager eventMenu = new MenuManager(Messages.WidgetAdapter_Add_Edit_Events, "#EVENT"); //$NON-NLS-2$
+		MenuManager eventMenu = new MenuManager(
+				Messages.WidgetAdapter_Add_Edit_Events, "#EVENT"); //$NON-NLS-2$
 		fillAddEventAction(eventMenu);
 		menu.add(eventMenu);
-		MenuManager delEventMenu = new MenuManager(Messages.WidgetAdapter_Delete_Events,
-				"#DELETE_EVENT"); //$NON-NLS-1$
+		MenuManager delEventMenu = new MenuManager(
+				Messages.WidgetAdapter_Delete_Events, "#DELETE_EVENT"); //$NON-NLS-1$
 		fillDelEventAction(delEventMenu);
 		menu.add(delEventMenu);
-		MenuManager borderMenu = new MenuManager(Messages.WidgetAdapter_Border, "#BORDER"); //$NON-NLS-2$
+		MenuManager borderMenu = new MenuManager(Messages.WidgetAdapter_Border,
+				"#BORDER"); //$NON-NLS-2$
 		fillBorderAction(borderMenu);
 		menu.add(borderMenu);
 		if (!isRoot()) {
@@ -1106,7 +1130,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	public boolean isRenamed() {
-		if(lastName!=null&&!lastName.equals(name))
+		if (lastName != null && !lastName.equals(name))
 			return true;
 		if (isRoot()) {
 			for (InvisibleAdapter inv : invisibles) {
@@ -1118,11 +1142,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	public boolean includeName(String another) {
-		if(name!=null&&name.equals(another))
+		if (name != null && name.equals(another))
 			return true;
-		if(isRoot()){
-			for(InvisibleAdapter invisible:getInvisibles()){
-				if(invisible.getName()!=null&&invisible.getName().equals(another)){
+		if (isRoot()) {
+			for (InvisibleAdapter invisible : getInvisibles()) {
+				if (invisible.getName() != null
+						&& invisible.getName().equals(another)) {
 					return true;
 				}
 			}

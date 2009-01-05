@@ -22,8 +22,7 @@ public abstract class AbstractAdaptable implements IAdaptable {
 		Object object = adapters.get(adapterClass.getName());
 		if (object == null) {
 			String adapterClassname = adapterClass.getName();
-			IConfigurationElement config = getConfig(adapterClassname,
-					getObjectClass());
+			IConfigurationElement config = getConfig(adapterClassname, getObjectClass());
 			if (config == null)
 				config = ExtensionRegistry.getAdapterConfig(adapterClassname,
 						"default");

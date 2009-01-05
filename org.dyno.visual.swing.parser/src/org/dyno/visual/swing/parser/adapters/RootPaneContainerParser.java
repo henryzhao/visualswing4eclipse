@@ -45,7 +45,21 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 		}
 		return builder.toString();
 	}
-	
+
+	@Override
+	protected String createGetCode(ImportRewrite imports) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.createGetCode(imports));
+		if(getJMenuBar()!=null){
+			builder.append(adapter.getName()+".setJMenuBar(");
+			JMenuBar jmb = getJMenuBar();
+			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
+			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getName());
+			builder.append(getName+"()");
+			builder.append(");\n");
+		}
+		return builder.toString();
+	}	
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		RootPaneContainerAdapter rootPaneContainerAdapter = (RootPaneContainerAdapter) adapter;

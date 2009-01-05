@@ -21,7 +21,6 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
@@ -114,6 +113,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 			contentAdapter.setWidget(contentPane);
 			contentAdapter.setDirty(false);
 			contentAdapter.setName(getName());
+			((JPanelAdapter)contentAdapter).setDelegate(this);
 		}
 		return contentAdapter;
 	}
@@ -149,13 +149,6 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 		desktopPane.add(jif);
 		jif.setVisible(true);
 		return jif;
-	}
-
-	@Override
-	public boolean widgetPressed(MouseEvent e) {
-		JInternalFrame jif = (JInternalFrame) getWidget();
-		jif.toFront();
-		return true;
 	}
 
 	private LabelEditor editor;

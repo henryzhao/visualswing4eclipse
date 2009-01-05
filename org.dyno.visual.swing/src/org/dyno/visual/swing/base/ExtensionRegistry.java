@@ -621,7 +621,7 @@ public class ExtensionRegistry {
 			interfaceEntry = new HashMap<String, IConfigurationElement>();
 			adapters.put(interfaceClassname, interfaceEntry);
 		}
-		String defaultImplClassname = config.getAttribute("implementation");
+		String defaultImplClassname = config.getAttribute("default");
 		if(defaultImplClassname!=null&&defaultImplClassname.trim().length()>0){
 			interfaceEntry.put("default", config);
 		}

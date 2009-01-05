@@ -246,15 +246,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				WidgetAdapter.ADHERE_PAD);
 		if (hovered != null) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-			Point hotspot = SwingUtilities.convertPoint(designer, point,
-					hovered);
-			MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e,
-					hovered);
-			boolean should_continue = adapter.widgetPressed(mEvent);
-			if (!should_continue) {
-				designer.repaint();
-				return;
-			}
+			Point hotspot = SwingUtilities.convertPoint(designer, point, hovered);
 			if (adapter.isRoot()) {
 				process_root_pressed(e);
 			} else if (adapter.isSelected()) {

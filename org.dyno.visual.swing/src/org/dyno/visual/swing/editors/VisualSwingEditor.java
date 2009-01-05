@@ -331,12 +331,11 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				ISourceParser sourceParser = factory.newParser();
 				Component root = designer.getRoot();
 				if (root != null) {
-					WidgetAdapter rootAdapter = WidgetAdapter
-							.getWidgetAdapter(root);
+					WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+					rootAdapter.hideMenu();
 					String lnfCN = getLnfClassname();
 					rootAdapter.setProperty("preferred.lookandfeel", lnfCN); //$NON-NLS-1$
-					ICompilationUnit unit = sourceParser.generate(rootAdapter,
-							monitor);
+					ICompilationUnit unit = sourceParser.generate(rootAdapter, monitor);
 					rootAdapter.setProperty("preferred.lookandfeel", null); //$NON-NLS-1$
 					if (unit != null) {
 						designer.setCompilationUnit(unit);
