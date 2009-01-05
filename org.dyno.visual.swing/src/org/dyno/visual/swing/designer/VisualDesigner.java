@@ -912,5 +912,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 		this.namespace = vsname;
 	}
+	public void setCursorType(int type) {
+		glass.setCursorType(type);
+	}
 }
 

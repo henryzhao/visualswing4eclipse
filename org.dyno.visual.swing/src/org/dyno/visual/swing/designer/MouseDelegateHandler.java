@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
@@ -39,7 +40,7 @@ class MouseDelegateHandler implements InvocationHandler {
 			if (hovered != null) {
 				MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e, hovered);
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-				Object l = adapter.getAdapter(method.getDeclaringClass());
+				Object l = adapter.getAdapter(MouseInputListener.class);
 				if (l != null) {
 					method.invoke(l, new Object[] { mEvent });
 					if (mEvent.isConsumed())

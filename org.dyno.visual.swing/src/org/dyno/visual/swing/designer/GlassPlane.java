@@ -17,7 +17,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -95,14 +94,6 @@ public class GlassPlane extends JComponent implements MouseListener {
 		private static final long serialVersionUID = -8997179076129970604L;
 	}
 
-	public void setGestureCursor(int t) {
-		Window w = SwingUtilities.getWindowAncestor(this);
-		int type = w.getCursor().getType();
-		if (type != t) {
-			w.setCursor(Cursor.getPredefinedCursor(t));
-		}
-	}
-
 	public Rectangle getSelectionRegion() {
 		return this.selectionRegion;
 	}
@@ -174,6 +165,11 @@ public class GlassPlane extends JComponent implements MouseListener {
 				GlassPlane.super.requestFocus();
 			}
 		});
+	}
+
+	public void setCursorType(int type) {
+		if(getCursor().getType()!=type)
+			setCursor(Cursor.getPredefinedCursor(type));
 	}
 }
 
