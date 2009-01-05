@@ -32,8 +32,10 @@ import javax.swing.UIManager;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.ISyncUITask;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -263,7 +265,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.setTaskName(Messages.VisualSwingEditor_Generating_Designer);
-			if (!createDesignerUI(monitor)&&!isTimerAction) {
+			if (!createDesignerUI(monitor) && !isTimerAction) {
 				switchToJavaEditor();
 			} else {
 				if (!isTimerAction) {
@@ -291,24 +293,49 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory == null)
 			return false;
-		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
-				.getFile());
+		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 		hostProject = unit.getJavaProject();
 		WhiteBoard.setCurrentProject(hostProject);
 		ISourceParser sourceParser = factory.newParser();
+		isParsing = true;
 		WidgetAdapter adapter = sourceParser.parse(unit, monitor);
-		if (adapter == null)
+		if (adapter == null){
+			isParsing=false;
 			return false;
-		setUpLookAndFeel(adapter.getWidget().getClass());
+		}
 		if (designer != null) {
 			designer.initRootWidget(adapter);
+			setUpLookAndFeel(adapter.getWidget().getClass());
 			designer.setCompilationUnit(unit);
 			refreshTree();
+			isParsing=false;
 			return true;
-		} else
+		} else{
+			isParsing=false;
 			return false;
+		}
 	}
-
+	private boolean isParsing;
+	@SuppressWarnings("unchecked")
+	private void setUpLookAndFeel(Class rootClass) {
+		try {
+			Field field = rootClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL");
+			if (field.getType() == String.class) {
+				field.setAccessible(true);
+				String lnf = (String) field.get(null);
+				String className = UIManager
+						.getCrossPlatformLookAndFeelClassName();
+				if (lnf == null) {
+					lnf = className;
+				}
+				setLnfClassname(lnf);
+			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+			String className = UIManager.getCrossPlatformLookAndFeelClassName();
+			setLnfClassname(className);
+		}
+	}
 	private void refreshTree() {
 		asyncRunnable(new Runnable() {
 			@Override
@@ -331,11 +358,12 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				ISourceParser sourceParser = factory.newParser();
 				Component root = designer.getRoot();
 				if (root != null) {
-					WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+					WidgetAdapter rootAdapter = WidgetAdapter
+							.getWidgetAdapter(root);
 					rootAdapter.hideMenu();
 					String lnfCN = getLnfClassname();
 					rootAdapter.setProperty("preferred.lookandfeel", lnfCN); //$NON-NLS-1$
-					ICompilationUnit unit = sourceParser.generate(rootAdapter, monitor);
+					ICompilationUnit unit = sourceParser.generate(rootAdapter,	monitor);
 					rootAdapter.setProperty("preferred.lookandfeel", null); //$NON-NLS-1$
 					if (unit != null) {
 						designer.setCompilationUnit(unit);
@@ -388,38 +416,46 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		});
 	}
 
-	@SuppressWarnings("unchecked")
-	private void setUpLookAndFeel(Class rootClass) {
-		try {
-			Field field = rootClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
-			if (field.getType() == String.class) {
-				field.setAccessible(true);
-				String lnf = (String) field.get(null);
-				String className = UIManager
-						.getCrossPlatformLookAndFeelClassName();
-				if (lnf == null) {
-					lnf = className;
-				}
-				setLnfClassname(lnf);
-			}
-		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
-			String className = UIManager.getCrossPlatformLookAndFeelClassName();
-			setLnfClassname(className);
-		}
-	}
-
 	public void setLnfClassname(String lnfClassname) {
 		ILookAndFeelAdapter adapter = ExtensionRegistry
 				.getLnfAdapter(lnfClassname);
 		if (adapter != null) {
 			try {
-				UIManager.setLookAndFeel(adapter.getLookAndFeelInstance());
-			} catch (Exception e) {
+				LookAndFeel oldlnf = UIManager.getLookAndFeel();
+				LookAndFeel newlnf = adapter.getLookAndFeelInstance();
+				if (!isLnfEqual(oldlnf, newlnf)) {
+					AwtEnvironment.runWithLnf(newlnf, new ISyncUITask() {
+						@Override
+						public Object doTask() throws Throwable {
+							if (designer != null)
+								SwingUtilities.updateComponentTreeUI(designer);
+							return null;
+						}
+					});
+				}
+			} catch (Throwable e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 		this.lnfClassname = lnfClassname;
+	}
+
+	private boolean isLnfEqual(LookAndFeel lnf1, LookAndFeel lnf2) {
+		if (lnf1 == null) {
+			if (lnf2 == null) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if (lnf2 == null) {
+				return false;
+			} else {
+				String lnfId1 = lnf1.getID();
+				String lnfId2 = lnf2.getID();
+				return lnfId1.equals(lnfId2);
+			}
+		}
 	}
 
 	private String lnfClassname;
@@ -467,7 +503,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			path = ((IFileEditorInput) getEditorInput()).getFile()
 					.getFullPath();
 			if (deltaPath.equals(path)) {
-				if (!isCreatingDesignerUI&&!designer.isLocked()) {
+				if (!isCreatingDesignerUI && !designer.isLocked()) {
 					isCreatingDesignerUI = true;
 					new CreateDesignerUIJob(true).schedule();
 				}
@@ -589,17 +625,18 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	private static final int DELAYED_TIME = 100;
+	private static final int DELAYED_TIME = 250;
 
 	private class ChangeLnfAction implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(isParsing)
+				return;
 			changeToLnf(getLnfClassname());
 			if (designer != null)
 				designer.clearCapture();
 		}
 	}
-
 	private void delaySwingExec(int millies, ActionListener action) {
 		Timer timer = new Timer(millies, action);
 		timer.setRepeats(false);

@@ -33,6 +33,7 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 		BUTTON_GROUP_SWT_ICON_IMAGE = WidgetPlugin.getSharedImage(BUTTON_GROUP_ICON);
 	}
 	private ButtonGroup group;
+	public ButtonGroupAdapter(){}
 	public ButtonGroupAdapter(WidgetAdapter root){
 		group = new ButtonGroup();		
 		setName(root.getNamespace().nextName(getBasename()));

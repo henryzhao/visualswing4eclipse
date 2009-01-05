@@ -10,7 +10,6 @@
  *******************************************************************************/
 package org.dyno.visual.swing.swt_awt;
 
-import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -18,7 +17,6 @@ import java.awt.Toolkit;
 import javax.swing.JApplet;
 import javax.swing.JComponent;
 import javax.swing.RootPaneContainer;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 
@@ -427,11 +425,6 @@ public abstract class EmbeddedSwingComposite extends Composite {
 
 			// Allow subclasses to react to font change if necessary.
 			updateAwtFont(awtFont);
-
-			// Allow components to update their UI based on new font
-			// instead?
-			Container contentPane = swingComponent.getRootPane().getContentPane();
-			SwingUtilities.updateComponentTreeUI(contentPane);
 		}
 	}
 

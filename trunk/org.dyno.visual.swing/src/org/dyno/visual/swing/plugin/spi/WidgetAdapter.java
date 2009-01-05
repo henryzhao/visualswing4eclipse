@@ -1134,7 +1134,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return true;
 		if (isRoot()) {
 			for (InvisibleAdapter inv : invisibles) {
-				if (inv.isRenamed())
+				if (inv!=null&&inv.isRenamed())
 					return true;
 			}
 		}
@@ -1146,7 +1146,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return true;
 		if (isRoot()) {
 			for (InvisibleAdapter invisible : getInvisibles()) {
-				if (invisible.getName() != null
+				if (invisible!=null&&invisible.getName() != null
 						&& invisible.getName().equals(another)) {
 					return true;
 				}
