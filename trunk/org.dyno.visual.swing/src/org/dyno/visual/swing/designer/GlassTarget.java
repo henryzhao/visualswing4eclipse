@@ -362,13 +362,13 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			adapter.setSelected(true);
 			adapter.changeNotify();
 			state = STATE_SELECTION;
-			glassPlane.setGestureCursor(Cursor.CROSSHAIR_CURSOR);
+			glassPlane.setCursorType(Cursor.CROSSHAIR_CURSOR);
 			break;
 		default:
 			if (!e.isControlDown())
 				glassPlane.getDesigner().clearSelection();
 			state = STATE_SELECTION;
-			glassPlane.setGestureCursor(Cursor.CROSSHAIR_CURSOR);
+			glassPlane.setCursorType(Cursor.CROSSHAIR_CURSOR);
 			break;
 		}
 	}
@@ -552,7 +552,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			dragging_event = null;
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;
-			glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+			glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 		} else if (state == STATE_BEAN_TOBE_HOVER) {
 			Point point = e.getPoint();
 			Component hovered = designer.componentAt(point,
@@ -804,7 +804,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					case WidgetAdapter.RIGHT_BOTTOM:
 					case WidgetAdapter.BOTTOM:
 						int type = getCursorType(loc);
-						glassPlane.setGestureCursor(type);
+						glassPlane.setCursorType(type);
 						break;
 					case WidgetAdapter.LEFT_TOP:
 					case WidgetAdapter.LEFT:
@@ -813,7 +813,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					case WidgetAdapter.RIGHT_TOP:
 					case WidgetAdapter.INNER:
 					case WidgetAdapter.OUTER:
-						glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+						glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 						break;
 					}
 				} else if (adapter.isSelected()
@@ -832,29 +832,29 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					case WidgetAdapter.RIGHT_TOP:
 						if (adapter.isResizable()) {
 							int type = getCursorType(loc);
-							glassPlane.setGestureCursor(type);
+							glassPlane.setCursorType(type);
 						} else {
-							glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+							glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 						}
 						break;
 					case WidgetAdapter.INNER:
 						if (adapter.isMoveable())
-							glassPlane.setGestureCursor(Cursor.HAND_CURSOR);
+							glassPlane.setCursorType(Cursor.HAND_CURSOR);
 						else
-							glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+							glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 						break;
 					case WidgetAdapter.OUTER:
-						glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+						glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 						break;
 					}
 				} else {
-					glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+					glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 				}
 			} else {
-				glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+				glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 			}
 		} else {
-			glassPlane.setGestureCursor(Cursor.DEFAULT_CURSOR);
+			glassPlane.setCursorType(Cursor.DEFAULT_CURSOR);
 		}
 	}
 

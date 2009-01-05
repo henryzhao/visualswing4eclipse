@@ -126,6 +126,11 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 		}
 	}
+	public void setCursorType(int type){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			designer.setCursorType(type);
+	}
 	public void hideMenu() {
 		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
 		while (!stack.isEmpty()) {
@@ -1152,6 +1157,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				}
 			}
 		}
+		return false;
+	}
+
+	public boolean isHovered() {
+		VisualDesigner designer = getDesigner();
+		if(designer!=null)
+			return designer.getHoveredAdapter()==this;
 		return false;
 	}
 }

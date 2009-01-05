@@ -42,14 +42,7 @@
    <extension
          point="org.dyno.visual.swing.adapters">
       <interface
-            class="java.awt.event.MouseListener">
-         <adapter
-               class="java.awt.GridBagLayout"
-               implementation="org.dyno.visual.swing.widgets.layout.GridBagLayoutDelegate">
-         </adapter>
-      </interface>
-      <interface
-            class="java.awt.event.MouseMotionListener">
+            class="javax.swing.event.MouseInputListener">
          <adapter
                class="java.awt.GridBagLayout"
                implementation="org.dyno.visual.swing.widgets.layout.GridBagLayoutDelegate">
