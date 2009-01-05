@@ -29,7 +29,9 @@ import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
+import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.ISyncUITask;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.WidgetProperty;
@@ -76,10 +78,8 @@ import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
@@ -152,7 +152,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return null;
 	}
-
 	private WidgetAdapter processType(ICompilationUnit unit, IType type)
 			throws JavaModelException {
 		try {
@@ -161,20 +160,21 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			ArrayList<URL> paths = new ArrayList<URL>();
 			addClasspaths(java_project, paths);
 			URL[] urls = paths.toArray(new URL[paths.size()]);
-			Class<?> beanClass = new URLClassLoader(urls, getClass()
+			final Class<?> beanClass = new URLClassLoader(urls, getClass()
 					.getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
-				try {
-					setUpLookAndFeel(lnf);
-				} catch (Exception e) {
-					Shell shell = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow().getShell();
-					MessageDialog.openError(shell, Messages.DefaultSourceParser_Error, e.getMessage());
-					return null;
-				}
-				try {
-					Component bean = (Component) beanClass.newInstance();
+				ILookAndFeelAdapter lnfAdapter = ExtensionRegistry
+						.getLnfAdapter(lnf);
+				if (lnfAdapter != null) {
+					LookAndFeel newlnf = lnfAdapter.getLookAndFeelInstance();
+					Component bean = (Component) AwtEnvironment.runWithLnf(
+							newlnf, new ISyncUITask() {
+								@Override
+								public Object doTask() throws Throwable {
+									return beanClass.newInstance();
+								}
+							});
 					WidgetAdapter beanAdapter = ExtensionRegistry
 							.createWidgetAdapter(bean);
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
@@ -186,16 +186,13 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					parsePropertyValue(lnf, cunit, beanAdapter);
 					beanAdapter.clearDirty();
 					return beanAdapter;
-				} catch (Error re) {
-					ParserPlugin.getLogger().warning(re);
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			ParserPlugin.getLogger().error(e);
 		}
 		return null;
 	}
-
 	private void addClasspaths(IJavaProject java_project, ArrayList<URL> paths)
 			throws MalformedURLException, CoreException {
 		java_project.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
@@ -431,25 +428,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
-
-	private void setUpLookAndFeel(String lnf) throws Exception {
-		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnf);
-		if (adapter != null) {
-			LookAndFeel instance = adapter.getLookAndFeelInstance();
-			if (instance != null) {
-				try {
-					UIManager.setLookAndFeel(instance);
-				} catch (Exception e) {
-					ParserPlugin.getLogger().error(e);
-				}
-			} else {
-				throw new Exception(
-						lnf
-								+ Messages.DefaultSourceParser_Not_Supported_Lnf);
-			}
-		}
-	}
-
 	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) {
 		EventSetDescriptor[] esds = adapter.getBeanInfo()
 				.getEventSetDescriptors();

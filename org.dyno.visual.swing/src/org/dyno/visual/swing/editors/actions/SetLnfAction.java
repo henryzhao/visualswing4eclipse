@@ -19,11 +19,11 @@ import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.eclipse.jface.action.Action;
 
-public class LnfAction extends Action {
+public class SetLnfAction extends Action {
 	private String lnfClassname;
 	private VisualDesigner designer;
 
-	public LnfAction(VisualDesigner designer, String lnfName, String lnfClassname) {
+	public SetLnfAction(VisualDesigner designer, String lnfName, String lnfClassname) {
 		super(lnfName, AS_RADIO_BUTTON);
 		this.lnfClassname = lnfClassname;
 		this.designer = designer;
@@ -46,7 +46,6 @@ public class LnfAction extends Action {
 		if (lnf == null || !lnf.getClass().getName().equals(lnfClassname)) {
 			try {
 				designer.setLnfClassname(lnfClassname);
-				SwingUtilities.updateComponentTreeUI(designer);
 				designer.repaint();
 			} catch (Exception e) {
 				VisualSwingPlugin.getLogger().error(e);

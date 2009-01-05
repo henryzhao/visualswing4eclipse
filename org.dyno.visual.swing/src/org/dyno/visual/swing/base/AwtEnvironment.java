@@ -18,6 +18,9 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.IndexColorModel;
 import java.awt.image.WritableRaster;
 
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+
 import org.dyno.visual.swing.swt_awt.AwtDialogListener;
 import org.dyno.visual.swing.swt_awt.EmbeddedSwingComposite;
 import org.dyno.visual.swing.swt_awt.SwtInputBlocker;
@@ -113,7 +116,11 @@ public final class AwtEnvironment {
 		this.display = display;
 		dialogListener = new AwtDialogListener(display);
 	}
-
+	public static synchronized Object runWithLnf(LookAndFeel lnf,
+			ISyncUITask task) throws Throwable {
+		UIManager.setLookAndFeel(lnf);
+		return task.doTask();
+	}
 	public BufferedImage convertToAWT(ImageData data) {
 		ColorModel colorModel = null;
 		PaletteData palette = data.palette;

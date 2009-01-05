@@ -48,7 +48,7 @@ import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
-import org.dyno.visual.swing.editors.actions.LnfAction;
+import org.dyno.visual.swing.editors.actions.SetLnfAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
@@ -251,7 +251,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		for(ILookAndFeelAdapter lnfAdapter:lnfAdapters){
 			String lnfName = lnfAdapter.getName();
 			String lnfClassname = lnfAdapter.getClassname();
-			IAction lnfAction = new LnfAction(this, lnfName, lnfClassname);
+			IAction lnfAction = new SetLnfAction(this, lnfName, lnfClassname);
 			lnfMenu.add(lnfAction);
 		}
 	}

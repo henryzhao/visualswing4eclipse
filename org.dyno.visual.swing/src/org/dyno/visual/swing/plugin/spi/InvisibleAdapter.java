@@ -53,8 +53,7 @@ public abstract class InvisibleAdapter extends AbstractAdaptable implements IAda
 		if (config == null)
 			return null;
 		try {
-			InvisibleAdapter invisible = (InvisibleAdapter) config
-					.createExecutableExtension("class");
+			InvisibleAdapter invisible = (InvisibleAdapter) config.createExecutableExtension("class");
 			invisible.init(name, object);
 			return invisible;
 		} catch (Exception e) {

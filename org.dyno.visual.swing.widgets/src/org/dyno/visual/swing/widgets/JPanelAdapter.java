@@ -85,6 +85,20 @@ public class JPanelAdapter extends CompositeAdapter {
 		this.dirty = false;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object getAdapter(Class adapterClass) {
+		Object adaptable = super.getAdapter(adapterClass);
+		if(adaptable==null){
+			LayoutAdapter adapter=getLayoutAdapter();
+			if(adapter!=null)
+				return adapter.getAdapter(adapterClass);
+			else
+				return null;
+		}else
+			return adaptable;
+		
+	}
 	@Override
 	public Component getRootPane() {
 		if(delegate!=null)
