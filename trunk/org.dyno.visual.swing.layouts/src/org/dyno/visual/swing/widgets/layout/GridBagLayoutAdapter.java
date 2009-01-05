@@ -89,10 +89,6 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child, constraints);
 	}
-
-	@Override
-	public void paintBaselineAnchor(Graphics g) {
-	}
 	private static Stroke STROKE = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
 	@Override
 	public void paintGrid(Graphics g) {

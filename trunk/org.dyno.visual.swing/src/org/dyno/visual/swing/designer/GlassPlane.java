@@ -68,6 +68,12 @@ public class GlassPlane extends JComponent implements MouseListener {
 		return target.editComponent(hovered);
 	}
 	public GlassPlane(final VisualDesigner designer) {
+		MouseDelegateHandler handler = new MouseDelegateHandler(designer);
+		ClassLoader loader = getClass().getClassLoader();
+		Object proxy=Proxy.newProxyInstance(loader, MOUSE_INTERFACES, handler);
+		addMouseListener((MouseListener) proxy);
+		addMouseMotionListener((MouseMotionListener) proxy);
+		addMouseWheelListener((MouseWheelListener) proxy);
 		setLayout(null);
 		this.designer = designer;
 		addMouseListener(this);
@@ -76,12 +82,6 @@ public class GlassPlane extends JComponent implements MouseListener {
 		addMouseMotionListener(target);
 		addMouseWheelListener(target);
 		setDropTarget(target);
-		MouseDelegateHandler handler = new MouseDelegateHandler(designer);
-		ClassLoader loader = getClass().getClassLoader();
-		Object proxy=Proxy.newProxyInstance(loader, MOUSE_INTERFACES, handler);
-		addMouseListener((MouseListener) proxy);
-		addMouseMotionListener((MouseMotionListener) proxy);
-		addMouseWheelListener((MouseWheelListener) proxy);
 		setTransferHandler(new GlassPlaneHandler());
 		setFocusable(true);
 		updateUI();
@@ -153,7 +153,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(Platform.isGtk()&&e.isPopupTrigger()){
+		if (!e.isConsumed()&&Platform.isGtk() && e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
 		}
 		super.requestFocus();
@@ -161,9 +161,10 @@ public class GlassPlane extends JComponent implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (!Platform.isGtk()&&e.isPopupTrigger()) {
+		if (!e.isConsumed()&&!Platform.isGtk()&&e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
 		}
+		super.requestFocus();
 	}
 
 	public void setFocus() {

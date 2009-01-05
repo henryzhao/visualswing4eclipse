@@ -217,7 +217,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		Component current=adapter.getWidget();
 		Rectangle localBounds=SwingUtilities.getLocalBounds(current);
 		Rectangle globalBounds=SwingUtilities.convertRectangle(current, localBounds, this);
-		if (sel.contains(globalBounds)) {
+		if (sel.contains(globalBounds)&&adapter.isVisible()) {
 			adapter.setSelected(true);
 			selected = true;
 		}

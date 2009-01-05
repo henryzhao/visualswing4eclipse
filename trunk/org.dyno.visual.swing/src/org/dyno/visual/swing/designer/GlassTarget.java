@@ -374,6 +374,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mousePressed(MouseEvent e) {
+		if (e.isConsumed())
+			return;
 		if (!isAddingState() && (currentEditor == null || stopEditing())) {
 			mouse_pressed(e);
 		} else if (currentEditor != null) {
@@ -383,6 +385,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
+		if (e.isConsumed())
+			return;
 		if (e.getClickCount() > 1 && !isAddingState() && stopEditing()) {
 			Point point = e.getPoint();
 			Component hovered = designer.componentAt(point,
@@ -537,6 +541,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		if(e.isConsumed())
+			return;
 		if (isAddingState()) {
 			drop(e.getPoint());
 		} else if (state == STATE_SELECTION) {
@@ -573,6 +579,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseDragged(MouseEvent e) {
+		if (e.isConsumed())
+			return;
 		if (isAddingState()) {
 			dragOver(e.getPoint());
 		} else if (state == STATE_ROOT_RESIZE_RIGHT) {
@@ -746,6 +754,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseMoved(MouseEvent e) {
+		if (e.isConsumed())
+			return;
 		if (isAddingState()) {
 			dragOver(e.getPoint());
 		} else {
@@ -849,6 +859,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseEntered(MouseEvent e) {
+		if (e.isConsumed())
+			return;
 		if (isAddingState()) {
 			state = STATE_BEAN_HOVER;
 		} else {
@@ -857,11 +869,15 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseExited(MouseEvent e) {
+		if (e.isConsumed())
+			return;
 		glassPlane.setHotspotPoint(null);
 		glassPlane.repaint();
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
+		if (e.isConsumed())
+			return;
 		e.setSource(designer);
 		designer.dispatchEvent(e);
 	}

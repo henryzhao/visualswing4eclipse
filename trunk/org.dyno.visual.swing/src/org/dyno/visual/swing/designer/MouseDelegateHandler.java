@@ -22,23 +22,30 @@ import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
-class MouseDelegateHandler implements InvocationHandler{
+class MouseDelegateHandler implements InvocationHandler {
 	private VisualDesigner designer;
-	MouseDelegateHandler(VisualDesigner designer){
-		this.designer= designer;
+
+	MouseDelegateHandler(VisualDesigner designer) {
+		this.designer = designer;
 	}
+
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
-		MouseEvent e=(MouseEvent)args[0];
-		Point point = e.getPoint();
-		Component hovered = designer.componentAt(point,	WidgetAdapter.ADHERE_PAD);
-		if (hovered != null) {
-			MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e, hovered);
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-			Object l = adapter.getAdapter(method.getDeclaringClass());
-			if(l!=null)
-				method.invoke(l, new Object[]{mEvent});
+		MouseEvent e = (MouseEvent) args[0];
+		if (!e.isConsumed()) {
+			Point point = e.getPoint();
+			Component hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
+			if (hovered != null) {
+				MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e, hovered);
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
+				Object l = adapter.getAdapter(method.getDeclaringClass());
+				if (l != null) {
+					method.invoke(l, new Object[] { mEvent });
+					if (mEvent.isConsumed())
+						e.consume();
+				}
+			}
 		}
 		return null;
 	}
