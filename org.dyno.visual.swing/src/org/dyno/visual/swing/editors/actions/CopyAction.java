@@ -13,7 +13,12 @@
 
 package org.dyno.visual.swing.editors.actions;
 
+import java.awt.Component;
+
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.designer.WidgetSelection;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -36,6 +41,29 @@ public class CopyAction extends EditorAction {
 		setEnabled(false);
 	}
 
+	@Override
+	public void updateState() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		WidgetSelection selection = new WidgetSelection(designer.getRoot());
+		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		setEnabled(!selection.isEmpty()
+				&& !rootAdapter.isSelected());
+	}
+
+	@Override
+	public void run() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		designer.getClipboard().clear();
+		for (Component child : designer.getSelectedComponents()) {
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
+			designer.getClipboard().add((WidgetAdapter) adapter.clone());
+		}
+		designer.publishSelection();
+	}
 	@Override
 	public ActionFactory getActionFactory() {
 		return ActionFactory.COPY;

@@ -381,7 +381,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		if (dropStatus == NOOP) {
 			JApplet japplet = (JApplet) getWidget();
 			JMenuBar jmb = japplet.getJMenuBar();
@@ -393,7 +393,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 				clipg = clipg.create(bounds.x, bounds.y, bounds.width,
 						bounds.height);
 			}
-			contentAdapter.paintFocused(clipg);
+			contentAdapter.paintHovered(clipg);
 			if (jmb != null) {
 				clipg.dispose();
 			}
@@ -441,7 +441,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public void paintBaselineAnchor(Graphics clipg) {
+	public void paintHint(Graphics clipg) {
 		JApplet japplet = (JApplet) getWidget();
 		JMenuBar jmb = japplet.getJMenuBar();
 		if (jmb != null) {
@@ -452,7 +452,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
 					bounds.height);
 		}
-		contentAdapter.paintBaselineAnchor(clipg);
+		contentAdapter.paintHint(clipg);
 		if (jmb != null) {
 			clipg.dispose();
 		}

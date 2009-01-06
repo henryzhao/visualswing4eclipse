@@ -130,6 +130,11 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			g.drawLine(0, y, w - 1, y);
 		}
 		((Graphics2D)g).setStroke(old);
+		WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(container);
+		if (!containerAdapter.isSelected()) {
+			g.setColor(Color.lightGray);
+			g.drawRect(0, 0, w - 1, h - 1);
+		}
 	}
 
 	@Override

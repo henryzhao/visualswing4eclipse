@@ -94,7 +94,7 @@ public class JToolBarAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		if (hovered&&getDropWidget().size()>0) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setStroke(STROKE);

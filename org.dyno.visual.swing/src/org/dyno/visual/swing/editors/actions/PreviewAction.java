@@ -13,8 +13,20 @@
 
 package org.dyno.visual.swing.editors.actions;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JRootPane;
+
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 /**
@@ -33,7 +45,42 @@ public class PreviewAction extends EditorAction {
 		setToolTipText(Messages.PreviewAction_Preview_Design);
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(PREVIEW_ACTION_ICON));
 	}
+	@Override
+	public void updateState() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		setEnabled(designer.getRoot()!=null);
+	}
 
+	@Override
+	public void run() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		Component contentComponent = rootAdapter.cloneWidget();
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		if (contentComponent instanceof JRootPane) {
+			JRootPane jrp = (JRootPane) contentComponent;
+			JMenuBar jmb = jrp.getJMenuBar();
+			if (jmb != null) {
+				frame.setJMenuBar(jmb);
+			}
+			Container contentPane = jrp.getContentPane();
+			Dimension size = rootAdapter.getComponent().getSize();
+			contentPane.setPreferredSize(size);
+			frame.setContentPane(contentPane);
+		} else {
+			contentComponent.setPreferredSize(rootAdapter.getComponent()
+					.getSize());
+			frame.add(contentComponent, BorderLayout.CENTER);
+		}
+		frame.pack();
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+	}
 	@Override
 	public void addToMenu(IMenuManager editMenu) {
 		editMenu.insertAfter(ITextEditorActionConstants.SELECT_ALL, this);

@@ -300,7 +300,7 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		return false;
 	}
 
-	public void paintBaselineAnchor(Graphics g) {
+	public void paintHint(Graphics g) {
 	}
 
 	public IPropertySource getPropertySource(Object layout) {		
@@ -351,6 +351,9 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	}
 
 	public void paintGrid(Graphics clipg) {
+	}
+
+	public void paintAnchor(Graphics g) {
 	}
 }
 

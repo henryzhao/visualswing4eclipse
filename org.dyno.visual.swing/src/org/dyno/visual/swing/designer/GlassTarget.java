@@ -94,10 +94,15 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		dragOver(dtde.getLocation());
 	}
 
-	private WidgetAdapter focusedAdapter;
+	private WidgetAdapter hoveredAdapter;
 
-	WidgetAdapter getFocusedAdapter() {
-		return focusedAdapter;
+	CompositeAdapter getHoveredAdapter() {
+		if (hoveredAdapter == null)
+			return null;
+		if (hoveredAdapter instanceof CompositeAdapter)
+			return (CompositeAdapter) hoveredAdapter;
+		else
+			return hoveredAdapter.getParentAdapter();
 	}
 
 	private void dragOver(Point p) {
@@ -110,31 +115,31 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					adapter = adapter.getParentAdapter();
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
-				if (focusedAdapter != compositeAdapter) {
-					if (focusedAdapter != null
-							&& focusedAdapter.dragExit(focusedAdapter
+				if (hoveredAdapter != compositeAdapter) {
+					if (hoveredAdapter != null
+							&& hoveredAdapter.dragExit(hoveredAdapter
 									.convertToLocal(p)))
 						update = true;
-					focusedAdapter = compositeAdapter;
-					if (focusedAdapter.dragEnter(focusedAdapter
+					hoveredAdapter = compositeAdapter;
+					if (hoveredAdapter.dragEnter(hoveredAdapter
 							.convertToLocal(p)))
 						update = true;
 				} else {
-					if (compositeAdapter.dragOver(focusedAdapter
+					if (compositeAdapter.dragOver(hoveredAdapter
 							.convertToLocal(p)))
 						update = true;
 				}
 			} else {
-				if (focusedAdapter != null) {
-					focusedAdapter.dragExit(focusedAdapter.convertToLocal(p));
-					focusedAdapter = null;
+				if (hoveredAdapter != null) {
+					hoveredAdapter.dragExit(hoveredAdapter.convertToLocal(p));
+					hoveredAdapter = null;
 				}
 				glassPlane.setHotspotPoint(p);
 				update = true;
 			}
 		} else if (currentAdapters != null) {
-			focusedAdapter = currentAdapters.get(0);
-			if (((CompositeAdapter) focusedAdapter).dragOver(focusedAdapter
+			hoveredAdapter = currentAdapters.get(0);
+			if (((CompositeAdapter) hoveredAdapter).dragOver(hoveredAdapter
 					.convertToLocal(p)))
 				update = true;
 		}
@@ -202,7 +207,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					}
 				}
 			}
-			focusedAdapter = null;
+			hoveredAdapter = null;
 			WhiteBoard.setSelectedWidget(null);
 			PaletteView.clearToolSelection();
 		} else if (currentAdapters != null) {
@@ -571,7 +576,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;
 		}
-		focusedAdapter = null;
+		hoveredAdapter = null;
 		lastParent = null;
 		lastConstraints = null;
 		designer.repaint();

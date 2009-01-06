@@ -13,7 +13,15 @@
 
 package org.dyno.visual.swing.editors.actions;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.designer.WidgetSelection;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.undo.DeleteOperation;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -34,6 +42,36 @@ public class DeleteAction extends EditorAction {
 		setAccelerator(SWT.DEL);
 		setRetargetable(true);
 		setEnabled(false);
+	}
+	@Override
+	public void updateState() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		WidgetSelection selection = new WidgetSelection(designer.getRoot());
+		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		setEnabled(!selection.isEmpty()
+				&& !rootAdapter.isSelected());
+	}
+
+	@Override
+	public void run() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		IOperationHistory operationHistory = PlatformUI.getWorkbench()
+				.getOperationSupport().getOperationHistory();
+		IUndoableOperation operation = new DeleteOperation(designer
+				.getSelectedComponents(), designer.getRoot());
+		operation.addContext(designer.getUndoContext());
+		try {
+			operationHistory.execute(operation, null, null);
+		} catch (ExecutionException e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
+		designer.invalidate();
+		designer.doLayout();
+		designer.repaint();
 	}
 
 	@Override

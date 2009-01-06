@@ -170,7 +170,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void paintBaselineAnchor(Graphics g) {
+	public void paintHint(Graphics g) {
 		if (hovered) {
 			Graphics2D g2d = (Graphics2D) g;
 			Stroke old = g2d.getStroke();
@@ -187,7 +187,11 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				}
 			}
 			g2d.setStroke(old);
-		} else {
+		}
+	}
+	@Override
+	public void paintAnchor(Graphics g) {
+		if (!hovered) {
 			Graphics2D g2d = (Graphics2D) g;
 			Stroke old = g2d.getStroke();
 			g2d.setColor(BASELINE_COLOR);
@@ -277,6 +281,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				}
 			}
 			g2d.setStroke(old);
+			WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(container);
+			if (!containerAdapter.isSelected()) {
+				int w = container.getWidth();
+				int h = container.getHeight();
+				g.setColor(Color.lightGray);
+				g.drawRect(0, 0, w - 1, h - 1);
+			}
 		}
 	}
 

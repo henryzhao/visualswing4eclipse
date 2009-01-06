@@ -177,7 +177,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		Rectangle bounds = getHotspotBounds();
 		if (bounds != null) {
 			Graphics2D g2d = (Graphics2D) clipg;

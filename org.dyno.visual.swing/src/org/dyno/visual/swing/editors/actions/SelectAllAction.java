@@ -15,6 +15,9 @@ package org.dyno.visual.swing.editors.actions;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 /**
@@ -34,6 +37,26 @@ public class SelectAllAction extends EditorAction {
 		setImageDescriptor(VisualSwingPlugin.getSharedDescriptor(SELECT_ALL_ICON));
 		setRetargetable(true);
 		setEnabled(false);
+	}
+	@Override
+	public void updateState() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		setEnabled(((CompositeAdapter) rootAdapter)
+				.getChildCount() > 0);
+	}
+
+	@Override
+	public void run() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		rootAdapter.setSelected(false);
+		rootAdapter.selectChildren();
+		designer.publishSelection();
 	}
 
 	@Override

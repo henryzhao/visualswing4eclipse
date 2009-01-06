@@ -155,7 +155,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		if (hovered) {
 			Graphics2D g2d = (Graphics2D) g;
 			Stroke olds = g2d.getStroke();

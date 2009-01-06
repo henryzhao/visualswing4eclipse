@@ -57,7 +57,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		if (hovered) {
 			int w = getWidget().getWidth();
 			int h = getWidget().getHeight();
