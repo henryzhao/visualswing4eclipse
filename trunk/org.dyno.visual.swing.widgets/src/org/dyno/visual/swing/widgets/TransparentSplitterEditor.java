@@ -15,6 +15,7 @@ public class TransparentSplitterEditor implements IEditor {
 	}
 	@Override
 	public void addChangeListener(ChangeListener l) {
+		splitter.addChangeListener(l);
 	}
 
 	@Override
@@ -29,6 +30,7 @@ public class TransparentSplitterEditor implements IEditor {
 
 	@Override
 	public void removeChangeListener(ChangeListener l) {
+		splitter.removeChangeListener(l);
 	}
 
 	@Override

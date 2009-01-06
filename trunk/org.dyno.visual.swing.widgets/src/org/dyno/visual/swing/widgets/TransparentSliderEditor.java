@@ -10,6 +10,7 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 
 public class TransparentSliderEditor implements IEditor {
 	private JSlider slider;
+	
 	public TransparentSliderEditor(JSlider js){
 		slider = js;
 	}
@@ -30,7 +31,6 @@ public class TransparentSliderEditor implements IEditor {
 	@Override
 	public void removeChangeListener(ChangeListener l) {
 	}
-
 	@Override
 	public void setFocus() {
 		slider.requestFocus();
