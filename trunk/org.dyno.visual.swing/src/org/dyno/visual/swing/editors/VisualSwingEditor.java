@@ -57,7 +57,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -159,8 +158,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 
 	public void refreshActionState() {
 		if (designer != null) {
-			for (IAction action : actions.values())
-				designer.setActionState(action);
+			for (EditorAction action : actions.values())
+				action.updateState();
 		}
 	}
 

@@ -642,7 +642,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
@@ -662,15 +662,23 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 	@Override
-	public void paintBaselineAnchor(Graphics g) {
+	public void paintHint(Graphics g) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.paintBaselineAnchor(g);
+			layoutAdapter.paintHint(g);
 		}
 	}
-
+	@Override
+	public void paintAnchor(Graphics g) {
+		JPanel jpanel = (JPanel) getWidget();
+		LayoutManager layout = jpanel.getLayout();
+		if (layout != null) {
+			LayoutAdapter layoutAdapter = getLayoutAdapter();
+			layoutAdapter.paintAnchor(g);
+		}
+	}
 	public boolean removeChild(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();

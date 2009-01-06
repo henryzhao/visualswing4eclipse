@@ -17,7 +17,6 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
@@ -28,9 +27,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 public class CutOperation extends AbstractOperation {
-	private WidgetSelection selection;
+	private List<Component> selection;
 	private List<CompositeAdapter>parents;
-	public CutOperation(WidgetSelection selection) {
+	public CutOperation(List<Component> selection) {
 		super(Messages.CutOperation_Cut_Components);
 		this.selection = selection;
 	}

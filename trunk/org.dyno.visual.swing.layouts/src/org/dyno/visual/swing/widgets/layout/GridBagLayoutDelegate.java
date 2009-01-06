@@ -32,7 +32,7 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 	public void mouseDragged(MouseEvent e) {
 		Container container = adapter.getContainer();
 		WidgetAdapter widgetAdapter = WidgetAdapter.getWidgetAdapter(container);
-		if (widgetAdapter.isHovered() && dragging) {
+		if (widgetAdapter.isFocused() && dragging) {
 			GridBagLayout layout = (GridBagLayout) container.getLayout();
 			int[][] row_cols = layout.getLayoutDimensions();
 			if (row_cols == null)
@@ -71,7 +71,7 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 	public void mouseMoved(MouseEvent e) {
 		Container container = adapter.getContainer();
 		WidgetAdapter widgetAdapter = WidgetAdapter.getWidgetAdapter(container);
-		if (widgetAdapter.isHovered()) {
+		if (widgetAdapter.isFocused()) {
 			GridBagLayout layout = (GridBagLayout) container.getLayout();
 			int[][] row_cols = layout.getLayoutDimensions();
 			if (row_cols == null)
@@ -123,7 +123,7 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 	public void mousePressed(MouseEvent e) {
 		Container container = adapter.getContainer();
 		WidgetAdapter widgetAdapter = WidgetAdapter.getWidgetAdapter(container);
-		if (widgetAdapter.isHovered()) {
+		if (widgetAdapter.isFocused()) {
 			GridBagLayout layout = (GridBagLayout) container.getLayout();
 			int[][] row_cols = layout.getLayoutDimensions();
 			if (row_cols == null)

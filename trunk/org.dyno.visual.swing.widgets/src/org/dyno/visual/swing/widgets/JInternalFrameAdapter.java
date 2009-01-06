@@ -291,7 +291,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		 if (isDroppingMenuBar()) {
 			JInternalFrame jif = (JInternalFrame) getWidget();
 			if (jif.getJMenuBar() == null) {
@@ -307,13 +307,13 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public void paintBaselineAnchor(Graphics g) {
+	public void paintHint(Graphics g) {
 		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
 			if (inContent) {
 				Rectangle rect = getContentBounds();
 				Graphics clipg = g.create(rect.x, rect.y, rect.width,
 						rect.height);
-				getContentAdapter().paintBaselineAnchor(clipg);
+				getContentAdapter().paintHint(clipg);
 				clipg.dispose();
 			}
 		}else if(isDroppingMenuItem()){

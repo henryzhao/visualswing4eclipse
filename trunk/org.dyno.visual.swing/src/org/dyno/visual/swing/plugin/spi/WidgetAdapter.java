@@ -920,8 +920,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return false;
 	}
 
-	public void paintFocused(Graphics clipg) {
-	}
 
 	public int getBaseline() {
 		return getWidget().getHeight() / 2;
@@ -1070,9 +1068,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return new WidgetSelection(getRootAdapter().getWidget());
 	}
 
-	public void paintBaselineAnchor(Graphics g) {
-	}
-
 	public Rectangle getDesignBounds() {
 		int w = getWidget().getWidth();
 		if (w <= 0)
@@ -1160,10 +1155,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return false;
 	}
 
-	public boolean isHovered() {
+	public boolean isFocused() {
 		VisualDesigner designer = getDesigner();
 		if(designer!=null)
-			return designer.getHoveredAdapter()==this;
+			return designer.getFocusedContainer()==this;
 		return false;
 	}
 }

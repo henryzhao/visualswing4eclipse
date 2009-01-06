@@ -388,7 +388,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		if (dropStatus == NOOP) {
 			JDialog jdialog = (JDialog) getWidget();
 			JMenuBar jmb = jdialog.getJMenuBar();
@@ -400,7 +400,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 				clipg = clipg.create(bounds.x, bounds.y, bounds.width,
 						bounds.height);
 			}
-			contentAdapter.paintFocused(clipg);
+			contentAdapter.paintHovered(clipg);
 			if (jmb != null) {
 				clipg.dispose();
 			}
@@ -448,7 +448,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public void paintBaselineAnchor(Graphics clipg) {
+	public void paintHint(Graphics clipg) {
 		JDialog jdialog = (JDialog) getWidget();
 		JMenuBar jmb = jdialog.getJMenuBar();
 		if (jmb != null) {
@@ -459,7 +459,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
 					bounds.height);
 		}
-		contentAdapter.paintBaselineAnchor(clipg);
+		contentAdapter.paintHint(clipg);
 		if (jmb != null) {
 			clipg.dispose();
 		}

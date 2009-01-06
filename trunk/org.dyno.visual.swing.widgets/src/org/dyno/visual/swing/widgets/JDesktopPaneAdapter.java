@@ -140,7 +140,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		if (forbid) {
 			int w = getWidget().getWidth();
 			int h = getWidget().getHeight();

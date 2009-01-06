@@ -28,7 +28,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.swt_awt.Platform;
 
 /**
@@ -119,13 +118,12 @@ public class GlassPlane extends JComponent implements MouseListener {
 		hotspotPoint = e;
 	}
 
-	WidgetAdapter getHoveredAdapter() {
-		WidgetAdapter adapter = target.getFocusedAdapter();
-		if(adapter!=null)
-			return adapter;
-		return designer.getHoveredAdapter();
+	CompositeAdapter getFocusedContainer() {
+		return designer.getFocusedContainer();
 	}
-
+	CompositeAdapter getHoveredAdapter(){
+		return target.getHoveredAdapter();
+	}
 	boolean isWidgetEditing() {
 		return target.isWidgetEditing();
 	}

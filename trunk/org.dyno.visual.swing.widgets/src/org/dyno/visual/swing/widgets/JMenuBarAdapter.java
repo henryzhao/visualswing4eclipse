@@ -191,7 +191,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	private static final int DROPPING_FORBIDDEN = 2;
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		if (dropStatus == DROPPING_FORBIDDEN) {
 			JMenuBar jmenubar = (JMenuBar) getWidget();
 			Graphics2D g2d = (Graphics2D) clipg;

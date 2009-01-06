@@ -67,29 +67,41 @@ public class GlassPaneUI extends ComponentUI {
 		paintSelection(g, c);
 		paintSelectionThumb(g, c);
 		paintSelectionRegion(g, c);
-		paintFocused(g, c);
+		paintHovered(g, c);
 		paintContextCustomizer(g, c);
 		paintMascot(g, c);
-		paintBaselineAnchor(g, c);
+		paintAnchor(g, c);
+		paintHint(g, c);
 	}
+
 
 	private void paintGrid(Graphics g, JComponent c) {
 		GlassPlane glassPlane = (GlassPlane) c;
-		WidgetAdapter adapter = glassPlane.getHoveredAdapter();
-		if (adapter != null&&adapter instanceof CompositeAdapter) {
-			paintAdapterGrid(g, (CompositeAdapter)adapter);
+		CompositeAdapter focused = glassPlane.getFocusedContainer();
+		if (focused != null) {
+			paintAdapterGrid(g, focused);
 		}		
 	}
-	private void paintAdapterGrid(Graphics g, CompositeAdapter grid) {
-		Component jpar = grid.getWidget();
-		if (grid.isRoot())
-			jpar = grid.getRootPane();
+	private void paintAdapterGrid(Graphics g, CompositeAdapter focused) {
+		Component jpar = focused.getWidget();
+		if (focused.isRoot())
+			jpar = focused.getRootPane();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		grid.paintGrid(clipg);
+		focused.paintGrid(clipg);
 		clipg.dispose();
 	}
+	private void paintAdapterAnchor(Graphics g, CompositeAdapter focused) {
+		Component jpar = focused.getWidget();
+		if (focused.isRoot())
+			jpar = focused.getRootPane();
+		Rectangle local = SwingUtilities.getLocalBounds(jpar);
+		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
+		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
+		focused.paintAnchor(clipg);
+		clipg.dispose();
+	}	
 	private void paintContextCustomizer(Graphics g, JComponent c) {
 		Component root = designer.getRoot();
 		if (root != null) {
@@ -218,7 +230,7 @@ public class GlassPaneUI extends ComponentUI {
 
 	private boolean isDesigningWidget(Component widget) {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
-		return adapter != null && adapter.getName() != null;
+		return adapter != null && (adapter.isRoot()||adapter.getName() != null);
 	}
 
 	private void paintSelection(Graphics g, JComponent c) {
@@ -241,44 +253,53 @@ public class GlassPaneUI extends ComponentUI {
 
 	private static Color SELECTION_COLOR = new Color(255, 164, 0);
 
-	private void paintFocused(Graphics g, JComponent c) {
+	private void paintHovered(Graphics g, JComponent c) {
 		GlassPlane glassPlane = (GlassPlane) c;
-		WidgetAdapter adapter = glassPlane.getHoveredAdapter();
-		if (adapter != null) {
-			paintFocusedAdapter(g, adapter);
+		CompositeAdapter hovered = glassPlane.getHoveredAdapter();
+		if (hovered != null) {
+			paintHoveredAdapter(g, hovered);
 		}
 	}
 
-	private void paintBaselineAnchor(Graphics g, JComponent c) {
+	private void paintHint(Graphics g, JComponent c) {
 		GlassPlane glassPlane = (GlassPlane) c;
-		WidgetAdapter adapter = glassPlane.getHoveredAdapter();
-		if (adapter != null) {
-			paintBaselineAnchorAdapter(g, adapter);
+		CompositeAdapter hovered = glassPlane.getHoveredAdapter();
+		if (hovered != null) {
+			paintHintAdapter(g, hovered);
 		}
 	}
 
-	private void paintBaselineAnchorAdapter(Graphics g, WidgetAdapter focused) {
-		Component jpar = focused.getWidget();
-		if (focused.isRoot())
-			jpar = focused.getRootPane();
+	private void paintAnchor(Graphics g, JComponent c) {
+		GlassPlane glassPlane = (GlassPlane) c;
+		CompositeAdapter focused = glassPlane.getFocusedContainer();
+		if (focused != null) {
+			paintAdapterAnchor(g, focused);
+		}		
+	}
+
+
+	private void paintHintAdapter(Graphics g, CompositeAdapter hovered) {
+		Component jpar = hovered.getWidget();
+		if (hovered.isRoot())
+			jpar = hovered.getRootPane();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		focused.paintBaselineAnchor(clipg);
+		hovered.paintHint(clipg);
 		clipg.dispose();
 	}
 
-	private void paintFocusedAdapter(Graphics g, WidgetAdapter focused) {
-		Component jpar = focused.getWidget();
-		if (focused.isRoot())
-			jpar = focused.getRootPane();
-		if (focused.needGlobalGraphics()) {
-			focused.paintFocused(g);
+	private void paintHoveredAdapter(Graphics g, CompositeAdapter hovered) {
+		Component jpar = hovered.getWidget();
+		if (hovered.isRoot())
+			jpar = hovered.getRootPane();
+		if (hovered.needGlobalGraphics()) {
+			hovered.paintHovered(g);
 		} else {
 			Rectangle local = SwingUtilities.getLocalBounds(jpar);
 			Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-			focused.paintFocused(clipg);
+			hovered.paintHovered(clipg);
 			clipg.dispose();
 		}
 	}

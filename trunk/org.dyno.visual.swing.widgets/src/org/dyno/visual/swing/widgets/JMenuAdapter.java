@@ -458,14 +458,14 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics clipg) {
+	public void paintHovered(Graphics clipg) {
 		if (inside_popup) {
 			JMenu jmenu = (JMenu) getWidget();
 			JPopupMenu popup = jmenu.getPopupMenu();
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
+			CompositeAdapter adapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(popup);
 			if (adapter == null)
-				adapter = ExtensionRegistry.createWidgetAdapter(popup);
-			adapter.paintFocused(clipg);
+				adapter = (CompositeAdapter) ExtensionRegistry.createWidgetAdapter(popup);
+			adapter.paintHovered(clipg);
 		} else {
 			if (dropStatus == DROPPING_FORBIDDEN) {
 				JMenu jmenu = (JMenu) getWidget();

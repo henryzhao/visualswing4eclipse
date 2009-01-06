@@ -161,7 +161,7 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		JPopupMenu jpm=(JPopupMenu)getWidget();
 		Rectangle bounds = jpm.getBounds();
 		Point lt=convertToGlobal(new Point(0,0));

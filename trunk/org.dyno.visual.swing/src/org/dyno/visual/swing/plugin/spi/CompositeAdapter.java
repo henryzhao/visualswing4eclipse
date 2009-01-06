@@ -294,5 +294,13 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	}
 	public void paintGrid(Graphics clipg) {
 	}	
+
+	public void paintHovered(Graphics clipg) {
+	}
+
+	public void paintHint(Graphics g) {
+	}
+	public void paintAnchor(Graphics g) {
+	}	
 }
 

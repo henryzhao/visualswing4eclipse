@@ -15,6 +15,7 @@ package org.dyno.visual.swing.editors.actions;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.designer.VisualDesigner;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -55,6 +56,13 @@ public class SourceViewAction extends EditorAction {
 			try {job.join();} catch (Exception e) {}
 		}
 		editor.openSouceEditor();
+	}
+	@Override
+	public void updateState() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		setEnabled(designer.getRoot()!=null);
 	}
 
 	@Override

@@ -13,15 +13,21 @@
 
 package org.dyno.visual.swing.base;
 
+import java.awt.Component;
+
 import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.actions.ActionFactory;
+
 /**
  * 
  * EditorAction
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -46,21 +52,71 @@ public abstract class EditorAction extends Action {
 
 	public EditorAction() {
 	}
+	public void updateState() {
+		VisualDesigner designer = getDesigner();
+		if(designer==null)
+			return;
+		setEnabled(isAlignResize(designer, 1, getId()));
+	}
+	private boolean isAlignResize(VisualDesigner designer, int count, String id) {
+		WidgetSelection selection = new WidgetSelection(designer.getRoot());
+		if (selection.size() > count) {
+			WidgetAdapter parentAdapter = null;
+			for (Component selected : selection) {
+				WidgetAdapter selectedAdapter = WidgetAdapter
+						.getWidgetAdapter(selected);
+				WidgetAdapter selectedParent = selectedAdapter
+						.getParentAdapter();
+				if (parentAdapter == null) {
+					parentAdapter = selectedParent;
+				} else if (parentAdapter != selectedParent) {
+					return false;
+				}
+			}
+			if (parentAdapter == null) {
+				return false;
+			} else {
+				for (Component selected : selection) {
+					WidgetAdapter selectedAdapter = WidgetAdapter
+							.getWidgetAdapter(selected);
+					if (!selectedAdapter.isResizable()) {
+						return false;
+					}
+				}
+				return ((CompositeAdapter) parentAdapter)
+						.isSelectionAlignResize(id);
+			}
+		} else {
+			return false;
+		}
+	}
+	@Override
+	public void run() {
+		VisualDesigner designer = getDesigner();
+		if (designer == null)
+			return;
+		Component child = designer.getSelectedComponents().get(0);
+		WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+		CompositeAdapter parentAdapter = (CompositeAdapter) childAdapter
+				.getParentAdapter();
+		parentAdapter.doAlignment(getId());
+		designer.publishSelection();
+	}
 
 	public void setEditor(VisualSwingEditor editor) {
 		this.editor = editor;
 		this.editor.addAction(this);
 	}
 
-	public void run() {
+	protected VisualDesigner getDesigner() {
 		if (editor == null)
-			return;
+			return null;
 		VisualDesigner designer = editor.getDesigner();
 		if (designer == null)
-			return;
+			return null;
 		if (designer.isWidgetEditing())
-			return;
-		designer.doAction(this);
+			return null;
+		return designer;
 	}
 
 	protected void setRetargetable(boolean b) {
@@ -79,4 +135,3 @@ public abstract class EditorAction extends Action {
 		editMenu.add(this);
 	}
 }
-
