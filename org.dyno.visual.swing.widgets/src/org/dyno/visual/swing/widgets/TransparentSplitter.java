@@ -6,10 +6,13 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
 public class TransparentSplitter extends JComponent implements
@@ -17,12 +20,27 @@ public class TransparentSplitter extends JComponent implements
 	private static final long serialVersionUID = 1L;
 	private JSplitPane splitPane;
 	private Timer timer;
+	private ArrayList<ChangeListener> listeners;
 
 	public TransparentSplitter(JSplitPane splitPane) {
 		this.splitPane = splitPane;
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		timer = new Timer(500, this);
+		listeners = new ArrayList<ChangeListener>();
+	}
+	public void addChangeListener(ChangeListener l) {
+		if (!listeners.contains(l))
+			listeners.add(l);
+	}
+	private void fireStateChanged(ChangeEvent e) {
+		for (ChangeListener l : listeners) {
+			l.stateChanged(e);
+		}
+	}
+	public void removeChangeListener(ChangeListener l) {
+		if (listeners.contains(l))
+			listeners.remove(l);
 	}
 
 	@Override
@@ -80,7 +98,12 @@ public class TransparentSplitter extends JComponent implements
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		dragging = false;
+		if (!dragging) {
+			ChangeEvent ce = new ChangeEvent(e.getSource());
+			fireStateChanged(ce);
+		} else {
+			dragging = false;
+		}
 	}
 
 	@Override

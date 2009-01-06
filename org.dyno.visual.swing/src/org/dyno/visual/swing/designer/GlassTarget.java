@@ -497,6 +497,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				iEditor.getComponent().transferFocus();
 				glassPlane.remove(iEditor.getComponent());
 				glassPlane.validate();
+				designer.repaint();
 				currentEditor = null;
 				return true;
 			} catch (Exception e) {
