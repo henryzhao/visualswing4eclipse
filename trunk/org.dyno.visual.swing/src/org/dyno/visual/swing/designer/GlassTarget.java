@@ -94,10 +94,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		dragOver(dtde.getLocation());
 	}
 
-	private WidgetAdapter hoveredAdapter;
+	private WidgetAdapter focusedAdapter;
 
 	WidgetAdapter getFocusedAdapter() {
-		return hoveredAdapter;
+		return focusedAdapter;
 	}
 
 	private void dragOver(Point p) {
@@ -110,31 +110,31 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					adapter = adapter.getParentAdapter();
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
-				if (hoveredAdapter != compositeAdapter) {
-					if (hoveredAdapter != null
-							&& hoveredAdapter.dragExit(hoveredAdapter
+				if (focusedAdapter != compositeAdapter) {
+					if (focusedAdapter != null
+							&& focusedAdapter.dragExit(focusedAdapter
 									.convertToLocal(p)))
 						update = true;
-					hoveredAdapter = compositeAdapter;
-					if (hoveredAdapter.dragEnter(hoveredAdapter
+					focusedAdapter = compositeAdapter;
+					if (focusedAdapter.dragEnter(focusedAdapter
 							.convertToLocal(p)))
 						update = true;
 				} else {
-					if (compositeAdapter.dragOver(hoveredAdapter
+					if (compositeAdapter.dragOver(focusedAdapter
 							.convertToLocal(p)))
 						update = true;
 				}
 			} else {
-				if (hoveredAdapter != null) {
-					hoveredAdapter.dragExit(hoveredAdapter.convertToLocal(p));
-					hoveredAdapter = null;
+				if (focusedAdapter != null) {
+					focusedAdapter.dragExit(focusedAdapter.convertToLocal(p));
+					focusedAdapter = null;
 				}
 				glassPlane.setHotspotPoint(p);
 				update = true;
 			}
 		} else if (currentAdapters != null) {
-			hoveredAdapter = currentAdapters.get(0);
-			if (((CompositeAdapter) hoveredAdapter).dragOver(hoveredAdapter
+			focusedAdapter = currentAdapters.get(0);
+			if (((CompositeAdapter) focusedAdapter).dragOver(focusedAdapter
 					.convertToLocal(p)))
 				update = true;
 		}
@@ -202,7 +202,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					}
 				}
 			}
-			hoveredAdapter = null;
+			focusedAdapter = null;
 			WhiteBoard.setSelectedWidget(null);
 			PaletteView.clearToolSelection();
 		} else if (currentAdapters != null) {
@@ -362,19 +362,17 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			adapter.setSelected(true);
 			adapter.changeNotify();
 			state = STATE_SELECTION;
-			glassPlane.setCursorType(Cursor.CROSSHAIR_CURSOR);
 			break;
 		default:
 			if (!e.isControlDown())
 				glassPlane.getDesigner().clearSelection();
 			state = STATE_SELECTION;
-			glassPlane.setCursorType(Cursor.CROSSHAIR_CURSOR);
 			break;
 		}
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (e.isConsumed())
+		if (e.isConsumed()||e.getButton()!=MouseEvent.BUTTON1)
 			return;
 		if (!isAddingState() && (currentEditor == null || stopEditing())) {
 			mouse_pressed(e);
@@ -385,7 +383,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (e.isConsumed())
+		if (e.isConsumed()||e.getButton()!=MouseEvent.BUTTON1)
 			return;
 		if (e.getClickCount() > 1 && !isAddingState() && stopEditing()) {
 			Point point = e.getPoint();
@@ -542,7 +540,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		if(e.isConsumed())
+		if (e.isConsumed()||e.getButton()!=MouseEvent.BUTTON1)
 			return;
 		if (isAddingState()) {
 			drop(e.getPoint());
@@ -573,7 +571,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;
 		}
-		hoveredAdapter = null;
+		focusedAdapter = null;
 		lastParent = null;
 		lastConstraints = null;
 		designer.repaint();
@@ -634,6 +632,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		} else if (state == STATE_SELECTION) {
 			Rectangle rect = getSelBounds(dragging_event, e);
 			glassPlane.setSelectionRegion(rect);
+			glassPlane.setCursorType(Cursor.CROSSHAIR_CURSOR);
 		} else if (isSameParent()) {
 			if (isTobeDnd() && isDndReady(e)) {
 				TransferHandler handler = glassPlane.getTransferHandler();

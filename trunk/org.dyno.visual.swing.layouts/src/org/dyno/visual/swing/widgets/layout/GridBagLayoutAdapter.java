@@ -36,6 +36,11 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
+		GridBagLayout layout = new GridBagLayout();
+		layout.columnWeights = new double[]{0.1, 0.1, 0.1, 0.1};
+		layout.columnWidths = new int[]{7, 7, 7, 7};
+		layout.rowWeights = new double[]{0.1, 0.1, 0.1, 0.1};
+		layout.rowHeights = new int[]{7, 7, 7, 7};
 		container.setLayout(new GridBagLayout());
 	}
 
