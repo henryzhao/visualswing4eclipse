@@ -80,6 +80,7 @@ public class CutAction extends EditorAction {
 		rootAdapter.doLayout();
 		designer.getRoot().validate();
 		designer.publishSelection();
+		designer.repaint();
 	}
 	@Override
 	public ActionFactory getActionFactory() {

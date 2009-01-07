@@ -80,6 +80,7 @@ public class DuplicateAction extends EditorAction {
 		rootAdapter.doLayout();
 		designer.getRoot().validate();
 		designer.publishSelection();
+		designer.repaint();
 	}
 	@Override
 	public void addToMenu(IMenuManager editMenu) {
