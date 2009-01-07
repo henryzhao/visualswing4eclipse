@@ -101,6 +101,7 @@ public abstract class EditorAction extends Action {
 				.getParentAdapter();
 		parentAdapter.doAlignment(getId());
 		designer.publishSelection();
+		designer.repaint();
 	}
 
 	public void setEditor(VisualSwingEditor editor) {

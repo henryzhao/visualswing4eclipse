@@ -76,6 +76,7 @@ public class PasteAction extends EditorAction {
 		designer.getClipboard().clear();
 		designer.getRoot().validate();
 		designer.publishSelection();
+		designer.repaint();
 	}
 	@Override
 	public ActionFactory getActionFactory() {
