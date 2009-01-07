@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaModelStatus;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -55,6 +56,13 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 					Shell parent = window.getShell();
 					rs.perform(parent, window);
 					adapter.setLastName(name);
+					return true;
+				}
+			} catch (JavaModelException jme){
+				IJavaModelStatus status=jme.getJavaModelStatus();
+				if(!status.isDoesNotExist()){
+					ParserPlugin.getLogger().error(jme);
+				}else{
 					return true;
 				}
 			} catch (Exception e) {
