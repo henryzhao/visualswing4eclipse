@@ -57,6 +57,7 @@ public class SelectAllAction extends EditorAction {
 		rootAdapter.setSelected(false);
 		rootAdapter.selectChildren();
 		designer.publishSelection();
+		designer.repaint();
 	}
 
 	@Override
