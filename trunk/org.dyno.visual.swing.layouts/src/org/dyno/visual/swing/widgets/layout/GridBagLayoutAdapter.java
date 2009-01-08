@@ -23,10 +23,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
 import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 
 import javax.swing.JComponent;
 
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -129,14 +132,35 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			}
 			g.drawLine(0, y, w - 1, y);
 		}
-		((Graphics2D)g).setStroke(old);
+		((Graphics2D)g).setStroke(old);		
 		WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(container);
 		if (!containerAdapter.isSelected()) {
 			g.setColor(Color.lightGray);
 			g.drawRect(0, 0, w - 1, h - 1);
 		}
 	}
-
+	@Override
+	public void paintAnchor(Graphics g) {
+		CompositeAdapter parentAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		int count = parentAdapter.getChildCount();
+		for(int i=0;i<count;i++){
+			Component child = parentAdapter.getChild(i);
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+			if(childAdapter.isSelected()){
+				Rectangle rect=child.getBounds();
+				g.setColor(Color.white);
+				g.fillRect(rect.x+rect.width-18, rect.y-4, 10, 8);
+				g.setColor(Color.black);
+				g.drawRect(rect.x+rect.width-18, rect.y-4, 10, 8);
+				Polygon p = new Polygon();
+				p.addPoint(rect.x+rect.width-16, rect.y-1);
+				p.addPoint(rect.x+rect.width-9, rect.y-1);
+				p.addPoint(rect.x+rect.width-13, rect.y+3);
+				g.setColor(Color.black);
+				g.fillPolygon(p);
+			}
+		}	
+	}
 	@Override
 	public Object getChildConstraints(Component child) {
 		GridBagLayout layout = (GridBagLayout) container.getLayout();
