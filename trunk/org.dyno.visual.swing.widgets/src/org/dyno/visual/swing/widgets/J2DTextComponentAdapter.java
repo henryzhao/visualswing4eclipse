@@ -61,7 +61,7 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 		super.requestNewName();
 		JTextComponent jtc = (JTextComponent) getWidget();
 		String text = jtc.getText();
-		if (text == null || text.trim().length() == 0)
+		if (text == null)
 			jtc.setText(getName());
 	}
 
