@@ -258,6 +258,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 
 		public CreateDesignerUIJob(boolean isTimer) {
 			super(Messages.VisualSwingEditor_Designer_Creation_Job);
+			setPriority(INTERACTIVE);
 			this.isTimerAction = isTimer;
 		}
 
