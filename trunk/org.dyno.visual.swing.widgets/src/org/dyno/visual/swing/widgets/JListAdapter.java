@@ -40,11 +40,15 @@ public class JListAdapter extends ComplexWidgetAdapter {
 		dlm.addElement(Messages.JListAdapter_Item_2);
 		dlm.addElement(Messages.JListAdapter_Item_3);
 		jc.setModel(dlm);
-		Dimension size = new Dimension(100, 135);
-		jc.setSize(size);
+		jc.setSize(getInitialSize());
 		jc.doLayout();
 		jc.validate();
 		return jc;
+	}
+
+	@Override
+	protected Dimension getInitialSize() {
+		return new Dimension(100, 135);
 	}
 
 	private IEditor iEditor;
