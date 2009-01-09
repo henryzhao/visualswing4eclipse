@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?artifactRepository class='org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository' version='1.0.0'?>
-<repository name='file:/D:/eclipse/workspace/org.dyno.visual.swing.site/ - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
+<repository name='Visual Swing Designer for Eclipse' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1231296219249'/>
+    <property name='p2.timestamp' value='1231467645861'/>
   </properties>
   <mappings size='3'>
     <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
@@ -13,8 +13,15 @@
   <artifacts size='9'>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing' version='0.9.8.I20090104-1800'>
       <properties size='3'>
-        <property name='artifact.size' value='426561'/>
-        <property name='download.size' value='426561'/>
+        <property name='artifact.size' value='426727'/>
+        <property name='download.size' value='426727'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.widgets' version='0.9.8.I20090104-1800'>
+      <properties size='3'>
+        <property name='artifact.size' value='366748'/>
+        <property name='download.size' value='366748'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
@@ -25,6 +32,13 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.8.I20090104-1800'>
+      <properties size='3'>
+        <property name='artifact.size' value='89032'/>
+        <property name='download.size' value='89032'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.borders' version='0.9.8.I20090104-1800'>
       <properties size='3'>
         <property name='artifact.size' value='55385'/>
@@ -32,24 +46,10 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.8.I20090104-1800'>
-      <properties size='3'>
-        <property name='artifact.size' value='88681'/>
-        <property name='download.size' value='88681'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.grouplayouts' version='0.9.8.I20090104-1800'>
       <properties size='3'>
         <property name='artifact.size' value='138052'/>
         <property name='download.size' value='138052'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.widgets' version='0.9.8.I20090104-1800'>
-      <properties size='3'>
-        <property name='artifact.size' value='365185'/>
-        <property name='download.size' value='365185'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
@@ -62,8 +62,8 @@
     </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.layouts' version='0.9.8.I20090104-1800'>
       <properties size='3'>
-        <property name='artifact.size' value='35330'/>
-        <property name='download.size' value='35330'/>
+        <property name='artifact.size' value='36525'/>
+        <property name='download.size' value='36525'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
