@@ -823,5 +823,12 @@ public class JPanelAdapter extends CompositeAdapter {
 	public Class getWidgetClass() {
 		return JPanel.class;
 	}
+	public boolean isFocused() {		
+		WidgetAdapter focused = getFocusedAdapter();
+		if(delegate!=null)
+			return focused==delegate;
+		else
+			return focused==this;
+	}	
 }
 

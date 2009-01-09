@@ -36,8 +36,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.operations.IUndoableOperation;
@@ -506,5 +508,51 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	public Class getWidgetClass() {
 		return JApplet.class;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object getAdapter(Class adapterClass) {
+		Object adaptable = super.getAdapter(adapterClass);
+		if(adaptable==null&&adapterClass==MouseInputListener.class){
+			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
+			if(adapter!=null)
+				return adapter.getAdapter(adapterClass);
+			else
+				return null;
+		}else
+			return adaptable;
+		
+	}	
+	public void paintGrid(Graphics clipg) {
+		JApplet japplet = (JApplet) getWidget();
+		JMenuBar jmb = japplet.getJMenuBar();
+		if (jmb != null) {
+			Rectangle bounds = rootPane.getBounds();
+			bounds.x = bounds.y = 0;
+			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
+					jrootPane);
+			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
+					bounds.height);
+		}
+		contentAdapter.paintGrid(clipg);
+		if (jmb != null) {
+			clipg.dispose();
+		}
+	}	
+	public void paintAnchor(Graphics g) {
+		JApplet japplet = (JApplet) getWidget();
+		JMenuBar jmb = japplet.getJMenuBar();
+		if (jmb != null) {
+			Rectangle bounds = rootPane.getBounds();
+			bounds.x = bounds.y = 0;
+			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
+					jrootPane);
+			g = g.create(bounds.x, bounds.y, bounds.width,
+					bounds.height);
+		}
+		contentAdapter.paintAnchor(g);
+		if (jmb != null) {
+			g.dispose();
+		}
+	}		
 }
 
