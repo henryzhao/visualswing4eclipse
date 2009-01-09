@@ -463,25 +463,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			if (component instanceof Container)
 				unsetDB(db, (Container) component);
 		}
-	}
-
-	public Component getWidget() {
-		if (widget == null) {
-			widget = createWidget();
-			if (widget != null)
-				attach();
-		}
-		return widget;
-	}
-
-	public Component getRootPane() {
-		return getWidget();
-	}
-
-	public Component getComponent() {
-		return getWidget();
-	}
-
+	} 
+	
 	public String getName() {
 		return name;
 	}
@@ -1162,5 +1145,26 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 	public boolean isFocused() {
 		return getFocusedAdapter()==this;
+	}
+
+	public Component getContentPane() {
+		return getWidget();
+	}
+
+	public Component getRootPane() {
+		return getWidget();
+	}
+
+	public Component getComponent() {
+		return getWidget();
+	}
+
+	public Component getWidget() {
+		if (widget == null) {
+			widget = createWidget();
+			if (widget != null)
+				attach();
+		}
+		return widget;
 	}
 }
