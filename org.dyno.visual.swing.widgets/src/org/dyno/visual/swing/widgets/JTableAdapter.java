@@ -35,13 +35,14 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 	protected Component createWidget() {
 		JTable jtc = new JTable();
 		jtc.setModel(new DefaultTableModel(new Object[][] { { Messages.JTableAdapter_0, Messages.JTableAdapter_1 }, { Messages.JTableAdapter_2, Messages.JTableAdapter_3 } }, new Object[] { Messages.JTableAdapter_Title_0, Messages.JTableAdapter_Title_1 }));
-		Dimension size = new Dimension(200, 150);
-		jtc.setSize(size);
+		jtc.setSize(getInitialSize());
 		jtc.doLayout();
 		jtc.validate();
 		return jtc;
 	}
-
+	protected Dimension getInitialSize(){
+		return new Dimension(200, 150);
+	}
 	@Override
 	public IEditor getEditorAt(int x, int y) {
 		CompositeAdapter parent = getParentAdapter();

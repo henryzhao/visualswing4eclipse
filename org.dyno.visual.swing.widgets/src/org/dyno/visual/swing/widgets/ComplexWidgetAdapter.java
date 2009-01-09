@@ -15,11 +15,15 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -31,6 +35,20 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 
 	public ComplexWidgetAdapter(String name) {
 		super(name);
+	}
+
+	@Override
+	public void setWidget(Component widget) {
+		super.setWidget(widget);
+		if(parent==null){
+			Container container=widget.getParent();
+			if(container!=null&&container instanceof JViewport){
+				container = container.getParent();
+				if(container!=null&&container instanceof JScrollPane){
+					parent = (JScrollPane) container;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -56,20 +74,28 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 	}
 
 	@Override
+	public Point getHotspotPoint() {
+		Point p= super.getHotspotPoint();
+		Component parent = getComponent();
+		p=SwingUtilities.convertPoint(getWidget(), p, parent);
+		return p;
+	}
+
+	@Override
 	public Component getComponent() {
 		if (parent == null) {
 			WidgetAdapter jspa = ExtensionRegistry.createWidgetAdapter(JScrollPane.class);
 			parent = ((JScrollPane) jspa.getWidget());
 			parent.setViewportView(getWidget());
 			parent.addNotify();
-			parent.setSize(getWidget().getSize());			
+			parent.setSize(getInitialSize());			
 			layoutContainer(parent);
 			parent.validate();
 			jspa.setHotspotPoint(new Point(parent.getWidth() / 2, parent.getHeight() / 2));
 		}
 		return parent;
 	}
-
+	protected abstract Dimension getInitialSize();
 	private JScrollPane parent;
 
 	@Override

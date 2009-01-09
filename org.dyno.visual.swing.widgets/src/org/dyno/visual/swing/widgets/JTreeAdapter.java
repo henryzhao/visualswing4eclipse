@@ -33,11 +33,15 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 
 	protected Component createWidget() {
 		JTree jtc = new JTree();
-		Dimension size = new Dimension(150, 200);
-		jtc.setSize(size);
+		jtc.setSize(getInitialSize());
 		jtc.doLayout();
 		jtc.validate();
 		return jtc;
+	}
+
+	@Override
+	protected Dimension getInitialSize() {
+		return new Dimension(150, 200);
 	}
 
 	@Override
