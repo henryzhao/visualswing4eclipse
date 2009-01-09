@@ -28,19 +28,22 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.jface.action.MenuManager;
 
 public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	private static JDesktopPane desktopPane = new JDesktopPane();
 	private JPanel contentPane;
-	private CompositeAdapter contentAdapter;
+	private JPanelAdapter contentAdapter;
 
 	public JInternalFrameAdapter() {
 		super(null);
@@ -50,7 +53,11 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	public Component getRootPane() {
 		return getWidget();
 	}
-
+	@Override
+	public void fillContextAction(MenuManager menu) {
+		super.fillContextAction(menu);
+		contentAdapter.fillSetLayoutAction(menu);
+	}
 	public void doLayout() {
 		CompositeAdapter content = getContentAdapter();
 		content.doLayout();
@@ -105,8 +112,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 
 	public CompositeAdapter getContentAdapter() {
 		if (contentAdapter == null) {
-			contentAdapter = (CompositeAdapter) ExtensionRegistry
-					.createWidgetAdapter(JPanel.class);
+			contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
 			((JPanelAdapter) contentAdapter).setIntermediate(true);
 			JInternalFrame jif = (JInternalFrame) getWidget();
 			contentPane = (JPanel) jif.getContentPane();
@@ -384,5 +390,30 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	public Class getWidgetClass() {
 		return JInternalFrame.class;
 	}
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object getAdapter(Class adapterClass) {
+		Object adaptable = super.getAdapter(adapterClass);
+		if(adaptable==null&&adapterClass==MouseInputListener.class){
+			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
+			if(adapter!=null)
+				return adapter.getAdapter(adapterClass);
+			else
+				return null;
+		}else
+			return adaptable;
+		
+	}	
+	public void paintGrid(Graphics clipg) {
+		Rectangle bounds = getContentBounds();
+		clipg = clipg.create(bounds.x, bounds.y, bounds.width, bounds.height);
+		contentAdapter.paintGrid(clipg);
+		clipg.dispose();
+	}	
+	public void paintAnchor(Graphics g) {
+		Rectangle bounds = getContentBounds();
+		g = g.create(bounds.x, bounds.y, bounds.width, bounds.height);
+		contentAdapter.paintAnchor(g);
+		g.dispose();
+	}	
 }

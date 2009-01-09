@@ -36,8 +36,10 @@ import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.designborder.DialogBorder;
@@ -513,5 +515,51 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 	public Class getWidgetClass() {
 		return JDialog.class;
 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public Object getAdapter(Class adapterClass) {
+		Object adaptable = super.getAdapter(adapterClass);
+		if(adaptable==null&&adapterClass==MouseInputListener.class){
+			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
+			if(adapter!=null)
+				return adapter.getAdapter(adapterClass);
+			else
+				return null;
+		}else
+			return adaptable;
+		
+	}	
+	public void paintGrid(Graphics clipg) {
+		JDialog jdialog = (JDialog) getWidget();
+		JMenuBar jmb = jdialog.getJMenuBar();
+		if (jmb != null) {
+			Rectangle bounds = rootPane.getBounds();
+			bounds.x = bounds.y = 0;
+			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
+					jrootPane);
+			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
+					bounds.height);
+		}
+		contentAdapter.paintGrid(clipg);
+		if (jmb != null) {
+			clipg.dispose();
+		}
+	}	
+	public void paintAnchor(Graphics g) {
+		JDialog jdialog = (JDialog) getWidget();
+		JMenuBar jmb = jdialog.getJMenuBar();
+		if (jmb != null) {
+			Rectangle bounds = rootPane.getBounds();
+			bounds.x = bounds.y = 0;
+			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
+					jrootPane);
+			g = g.create(bounds.x, bounds.y, bounds.width,
+					bounds.height);
+		}
+		contentAdapter.paintAnchor(g);
+		if (jmb != null) {
+			g.dispose();
+		}
+	}	
 }
 

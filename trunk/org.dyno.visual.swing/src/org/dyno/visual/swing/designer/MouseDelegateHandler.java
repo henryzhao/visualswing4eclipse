@@ -40,7 +40,7 @@ class MouseDelegateHandler implements InvocationHandler {
 			if (hovered != null) {
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
 				do {
-					MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e, adapter.getWidget());
+					MouseEvent mEvent = SwingUtilities.convertMouseEvent(designer, e, adapter.getComponent());
 					Object l = adapter.getAdapter(MouseInputListener.class);
 					if (l != null) {
 						method.invoke(l, new Object[] { mEvent });

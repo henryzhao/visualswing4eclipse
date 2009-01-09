@@ -1154,11 +1154,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		}
 		return false;
 	}
-
-	public boolean isFocused() {
+	public CompositeAdapter getFocusedAdapter(){
 		VisualDesigner designer = getDesigner();
 		if(designer!=null)
-			return designer.getFocusedContainer()==this;
-		return false;
+			return designer.getFocusedContainer();
+		return null;
+	}
+	public boolean isFocused() {
+		return getFocusedAdapter()==this;
 	}
 }
