@@ -15,6 +15,7 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.LayoutManager;
@@ -99,15 +100,9 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 
 	@Override
 	public boolean needGenBoundCode() {
-		JPanel panel = getContentPane();
+		Container panel = (Container) getContentPane();
 		LayoutManager layout = panel.getLayout();
 		return layout == null;
-	}
-
-	private JPanel getContentPane() {
-		JInternalFrame jif = (JInternalFrame) getWidget();
-		contentPane = (JPanel) jif.getContentPane();
-		return contentPane;
 	}
 
 	public CompositeAdapter getContentAdapter() {
@@ -246,11 +241,11 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	private Rectangle getContentBounds() {
-		JPanel jpanel = getContentPane();
-		int w = jpanel.getWidth();
-		int h = jpanel.getHeight();
+		Component panel = getContentPane();
+		int w = panel.getWidth();
+		int h = panel.getHeight();
 		Rectangle bounds = new Rectangle(0, 0, w, h);
-		return SwingUtilities.convertRectangle(jpanel, bounds, getWidget());
+		return SwingUtilities.convertRectangle(panel, bounds, getWidget());
 	}
 
 	@Override
