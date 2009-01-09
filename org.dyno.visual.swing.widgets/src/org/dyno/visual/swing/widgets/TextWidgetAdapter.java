@@ -91,7 +91,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		super.requestNewName();
 		Component comp = getWidget();
 		String text = getText(comp);
-		if (text == null || text.trim().length() == 0)
+		if (text == null)
 			setText(comp, getName());
 	}
 
