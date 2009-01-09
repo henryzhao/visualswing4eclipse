@@ -69,11 +69,11 @@ public class PreviewAction extends EditorAction {
 				frame.setJMenuBar(jmb);
 			}
 			Container contentPane = jrp.getContentPane();
-			Dimension size = rootAdapter.getComponent().getSize();
+			Dimension size = rootAdapter.getParentContainer().getSize();
 			contentPane.setPreferredSize(size);
 			frame.setContentPane(contentPane);
 		} else {
-			contentComponent.setPreferredSize(rootAdapter.getComponent()
+			contentComponent.setPreferredSize(rootAdapter.getParentContainer()
 					.getSize());
 			frame.add(contentComponent, BorderLayout.CENTER);
 		}

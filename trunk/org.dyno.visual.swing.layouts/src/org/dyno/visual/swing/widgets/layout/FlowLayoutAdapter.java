@@ -118,9 +118,9 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 		for (WidgetAdapter todrop : parent.getDropWidget()) {
 			int size = container.getComponentCount();
 			if (thumb.pi == size)
-				container.add(todrop.getComponent());
+				container.add(todrop.getParentContainer());
 			else
-				container.add(todrop.getComponent(), thumb.pi);
+				container.add(todrop.getParentContainer(), thumb.pi);
 			todrop.setSelected(true);
 		}
 		parent.getRootAdapter().getWidget().validate();

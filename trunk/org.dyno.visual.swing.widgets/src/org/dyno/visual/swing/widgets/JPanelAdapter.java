@@ -536,7 +536,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		Dimension min = new Dimension(10, 10);
 		List<WidgetAdapter>dropWidgets=getDropWidget();
 		assert !dropWidgets.isEmpty();
-		Component beResized=dropWidgets.get(0).getComponent();
+		Component beResized=dropWidgets.get(0).getParentContainer();
 		Dimension size = beResized.getSize();
 		Point hotspot = getMascotLocation();
 		int w = min.width;
@@ -600,7 +600,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			int state = getState();
 			clearAllSelected();
 			for (WidgetAdapter adapter : getDropWidget()) {
-				Component child = adapter.getComponent();
+				Component child = adapter.getParentContainer();
 				Point htsp = adapter.getHotspotPoint();
 				switch (state) {
 				case Azimuth.STATE_BEAN_HOVER:

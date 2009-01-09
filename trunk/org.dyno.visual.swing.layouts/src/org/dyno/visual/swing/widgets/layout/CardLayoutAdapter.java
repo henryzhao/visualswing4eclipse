@@ -77,7 +77,7 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		parent.clearAllSelected();
 		CardLayout layout = (CardLayout) container.getLayout();
 		for (WidgetAdapter todrop : parent.getDropWidget()) {
-			container.add(todrop.getComponent(), todrop.getName());
+			container.add(todrop.getParentContainer(), todrop.getName());
 			layout.show(container, todrop.getName());
 			todrop.setSelected(true);
 		}

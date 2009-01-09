@@ -67,7 +67,7 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
 		parent.clearAllSelected();
 		for (WidgetAdapter todrop : parent.getDropWidget()) {
-			container.add(todrop.getComponent(), new GridBagConstraints());
+			container.add(todrop.getParentContainer(), new GridBagConstraints());
 			todrop.setSelected(true);
 		}
 		parent.getRootAdapter().getWidget().validate();

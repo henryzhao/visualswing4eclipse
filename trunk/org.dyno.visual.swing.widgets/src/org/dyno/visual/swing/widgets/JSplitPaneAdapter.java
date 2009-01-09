@@ -290,7 +290,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 				forbid = false;
 			} else {
 				WidgetAdapter adapter = getDropWidget().get(0);
-				Component child = adapter.getComponent();
+				Component child = adapter.getParentContainer();
 				JSplitPane jtp = (JSplitPane) getWidget();
 				if (position.equals("left")) //$NON-NLS-1$
 					jtp.setLeftComponent(child);
