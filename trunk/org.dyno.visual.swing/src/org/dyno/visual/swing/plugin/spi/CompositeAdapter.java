@@ -59,7 +59,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		for(int i=0;i<count;i++){
 			Component child = getChild(i);
 			WidgetAdapter childAdapter=WidgetAdapter.getWidgetAdapter(child);
-			childAdapter.requestNewName();
+			if (childAdapter.getName() == null)
+				childAdapter.requestNewName();
 		}
 	}
 	public CompositeAdapter(String name) {
