@@ -94,9 +94,9 @@ public class GridLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		parent.clearAllSelected();
 		for (WidgetAdapter todrop : parent.getDropWidget()) {
 			if (index != -1)
-				container.add(todrop.getComponent(), index);
+				container.add(todrop.getParentContainer(), index);
 			else
-				container.add(todrop.getComponent());
+				container.add(todrop.getParentContainer());
 			todrop.setSelected(true);
 		}
 		parent.getRootAdapter().getWidget().validate();

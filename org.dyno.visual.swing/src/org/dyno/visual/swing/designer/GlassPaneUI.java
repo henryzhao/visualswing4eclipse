@@ -313,7 +313,7 @@ public class GlassPaneUI extends ComponentUI {
 		if (adapters == null)
 			return;
 		for (WidgetAdapter adapter : adapters) {
-			Component comp = adapter.getComponent();
+			Component comp = adapter.getParentContainer();
 			int w = comp.getWidth();
 			int h = comp.getHeight();
 			Point hs = adapter.getHotspotPoint();

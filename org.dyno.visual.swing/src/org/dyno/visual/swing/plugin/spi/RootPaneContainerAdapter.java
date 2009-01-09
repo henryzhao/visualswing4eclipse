@@ -13,6 +13,7 @@ public abstract class RootPaneContainerAdapter extends CompositeAdapter {
 	}
 
 	public abstract WidgetAdapter getContentAdapter();
+	
 	public Component getContentPane(){
 		return ((RootPaneContainer)getWidget()).getContentPane();
 	}
@@ -20,6 +21,5 @@ public abstract class RootPaneContainerAdapter extends CompositeAdapter {
 	@Override
 	public Class<?> getDefaultLayout() {
 		return BorderLayout.class;
-	}
-	
+	}	
 }

@@ -70,7 +70,7 @@ class ResizeLeft extends ResizeOperation {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
 		WidgetAdapter dropAdapter = tracingAdapter;
-		JComponent drop = (JComponent)dropAdapter.getComponent();
+		JComponent drop = (JComponent)dropAdapter.getParentContainer();
 		Point hot = dropAdapter.getHotspotPoint();
 		Alignment vertical = adapter.getLastConstraints().getVertical();
 		Alignment horizontal = adapter.getLastConstraints().getHorizontal();

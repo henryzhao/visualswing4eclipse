@@ -426,16 +426,17 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public void paintMascot(Graphics g) {
 		if (getWidget() instanceof JComponent)
-			paintComponent(g, (JComponent) getWidget());
+			paintComponent(g);
 	}
 
-	protected void paintComponent(Graphics g, JComponent root) {
+	protected void paintComponent(Graphics g) {
+		JComponent root =(JComponent) getParentContainer();
 		int w = root.getWidth();
 		int h = root.getHeight();
 		ArrayList<Component> comps = new ArrayList<Component>();
 		unsetDB(comps, root);
 		Graphics clipg = g.create(1, 1, w, h);
-		getComponent().paint(clipg);
+		root.paint(clipg);
 		clipg.dispose();
 		setDB(comps);
 		Color old = g.getColor();
@@ -1146,19 +1147,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public boolean isFocused() {
 		return getFocusedAdapter()==this;
 	}
-
-	public Component getContentPane() {
-		return getWidget();
-	}
-
-	public Component getRootPane() {
-		return getWidget();
-	}
-
-	public Component getComponent() {
-		return getWidget();
-	}
-
 	public Component getWidget() {
 		if (widget == null) {
 			widget = createWidget();
@@ -1166,5 +1154,15 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				attach();
 		}
 		return widget;
+	}
+	public Component getParentContainer(){
+		return getWidget();
+	}
+
+	public Component getRootPane() {
+		return getWidget();
+	}
+	public Component getContentPane(){
+		return getWidget();
 	}
 }

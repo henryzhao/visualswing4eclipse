@@ -200,7 +200,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		return jrp;
 	}
 
-	public Component getComponent() {
+	public Component getParentContainer() {
 		return contentAdapter.getWidget();
 	}
 

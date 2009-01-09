@@ -233,16 +233,16 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				} else {
 					WidgetAdapter todrop = parent.getDropWidget().get(i);
 					if (constraints == null || constraints.get(i) == null){
-						container.add(todrop.getComponent());
+						container.add(todrop.getParentContainer());
 					}else {
 						if (!constraints.get(i).equals(BorderLayout.CENTER)) {
-							Component drop = todrop.getComponent();
+							Component drop = todrop.getParentContainer();
 							Dimension pref = drop.getPreferredSize();
 							if (pref.width == 0 || pref.height == 0)
 								drop.setPreferredSize(drop.getSize());
 						}
 						container
-								.add(todrop.getComponent(), constraints.get(i));
+								.add(todrop.getParentContainer(), constraints.get(i));
 					}
 					todrop.setSelected(true);
 				}

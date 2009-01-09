@@ -169,7 +169,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 						List<Component> children = new ArrayList<Component>();
 						List<Object> new_constraints = new ArrayList<Object>();
 						for (WidgetAdapter wa : WhiteBoard.getSelectedWidget()) {
-							Component child = wa.getComponent();
+							Component child = wa.getParentContainer();
 							children.add(child);
 							new_constraints.add(compositeAdapter
 									.getChildConstraints(child));
@@ -195,7 +195,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 							.getOperationHistory();
 					List<Component> children = new ArrayList<Component>();
 					for (WidgetAdapter wa : WhiteBoard.getSelectedWidget()) {
-						children.add(wa.getComponent());
+						children.add(wa.getParentContainer());
 					}
 					IUndoableOperation operation = new DragDropOperation(
 							lastParent, children, lastConstraints);
@@ -220,7 +220,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					List<Component> children = new ArrayList<Component>();
 					List<Object> new_constraints = new ArrayList<Object>();
 					for (WidgetAdapter wa : WhiteBoard.getSelectedWidget()) {
-						Component child = wa.getComponent();
+						Component child = wa.getParentContainer();
 						children.add(child);
 						new_constraints.add(((CompositeAdapter) adapter)
 								.getChildConstraints(child));

@@ -20,7 +20,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
@@ -76,13 +75,12 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 	@Override
 	public Point getHotspotPoint() {
 		Point p= super.getHotspotPoint();
-		Component parent = getComponent();
+		Component parent = getParentContainer();
 		p=SwingUtilities.convertPoint(getWidget(), p, parent);
 		return p;
 	}
 
-	@Override
-	public Component getComponent() {
+	public Component getParentContainer() {
 		if (parent == null) {
 			WidgetAdapter jspa = ExtensionRegistry.createWidgetAdapter(JScrollPane.class);
 			parent = ((JScrollPane) jspa.getWidget());
@@ -100,7 +98,7 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 
 	@Override
 	public void paintMascot(Graphics g) {
-		paintComponent(g, (JComponent)getComponent());
+		paintComponent(g);
 	}
 
 }
