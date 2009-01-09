@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing.base;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 /**
  * 
@@ -32,6 +33,12 @@ public class FactoryLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element) {
+		if(element instanceof IStructuredSelection){
+			IStructuredSelection structuredSelection = (IStructuredSelection)element;
+			if(structuredSelection.isEmpty())
+				return "";
+			element = structuredSelection.getFirstElement();
+		}
 		for (int i = 0; i < items.length; i++) {
 			if (provider.isSelected(items[i], element)) {
 				return items[i].getObjectName();
