@@ -20,7 +20,6 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 
-import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -33,8 +32,10 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 		BUTTON_GROUP_SWT_ICON_IMAGE = WidgetPlugin.getSharedImage(BUTTON_GROUP_ICON);
 	}
 	private ButtonGroup group;
+	private WidgetAdapter root;
 	public ButtonGroupAdapter(){}
 	public ButtonGroupAdapter(WidgetAdapter root){
+		this.root = root;
 		group = new ButtonGroup();		
 		setName(root.getNamespace().nextName(getBasename()));
 	}
@@ -45,10 +46,7 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 	public Image getIconImage() {
 		return BUTTON_GROUP_SWT_ICON_IMAGE;
 	}
-	@Override
-	public String getCreationMethodName() {
-		return "init"+NamespaceUtil.getCapitalName(name);
-	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List getElements() {
@@ -62,7 +60,7 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 	}
 	@Override
 	public IAdapter getParent() {
-		return null;
+		return root;
 	}
 	@SuppressWarnings("unchecked")
 	@Override
@@ -70,9 +68,10 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 		return ButtonGroup.class;
 	}
 	@Override
-	public void init(String name, Object object) {
-		super.init(name, object);
+	public void init(WidgetAdapter rootAdapter, String name, Object object) {
+		super.init(rootAdapter, name, object);
 		this.group = (ButtonGroup) object;
+		this.root = rootAdapter;
 	}
 	@Override
 	public String getBasename() {

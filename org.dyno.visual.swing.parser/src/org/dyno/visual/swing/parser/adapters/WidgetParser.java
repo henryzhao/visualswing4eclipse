@@ -20,9 +20,10 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
+import org.dyno.visual.swing.parser.spi.IPropertyCodeGenerator;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.IConstants;
@@ -118,7 +119,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	
 	private boolean createNonRootCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
-		String name = adapter.getName();
+		String name = adapter.getID();
 		IField field = type.getField(getFieldName(name));
 		if (field != null) {
 			if (!field.exists()) {
@@ -158,13 +159,13 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 			return false;
 		if(!createEventMethod(type, imports, monitor))
 			return false;
-		adapter.setLastName(adapter.getName());
 		return true;
 	}
 
 	private boolean createGetMethod(IType type, ImportRewrite imports,
 			IProgressMonitor monitor, IJavaElement sibling) {
-		String getMethodName = NamespaceUtil.getGetMethodName(adapter.getName());
+		String id = adapter.getID();
+		String getMethodName = NamespaceUtil.getGetMethodName(id);
 		StringBuilder builder = new StringBuilder();
 		builder.append(getAccessCode(adapter.getGetAccess()));
 		builder.append(" ");
@@ -175,12 +176,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append(getMethodName);
 		builder.append("(){\n");
 		builder.append("if(");
-		builder.append(getFieldName(adapter.getName()));
+		builder.append(getFieldName(id));
 		builder.append("==null){\n");
 		builder.append(createGetCode(imports));
 		builder.append("}\n");
 		builder.append("return ");
-		builder.append(getFieldName(adapter.getName()));
+		builder.append(getFieldName(id));
 		builder.append(";\n");
 		builder.append("}\n");
 		try {
@@ -204,7 +205,8 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		String beanName = imports.addImport(fqcn);
 		builder.append(beanName);
 		builder.append(" ");
-		builder.append(getFieldName(adapter.getName()));
+		String id=adapter.getID();
+		builder.append(getFieldName(id));
 		builder.append(";\n");
 		try {
 			type.createField(builder.toString(), null, false, monitor);
@@ -280,7 +282,8 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
 		for (InvisibleAdapter invisible : adapter.getInvisibles()) {
-			builder.append(invisible.getCreationMethodName() + "();\n");
+			IParser invisibleParser = (IParser) invisible.getAdapter(IParser.class);
+			builder.append(invisibleParser.getCreationMethodName() + "();\n");
 		}
 		createPostInitCode(builder, imports);
 		builder.append("}\n");
@@ -311,13 +314,14 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getFieldName(adapter.getName()) + " = "
+		String id=adapter.getID();
+		builder.append(getFieldName(id) + " = "
 				+ getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
 		CompositeAdapter conAdapter = adapter.getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = adapter.getWidget().getBounds();
-			String strBounds = getFieldName(adapter.getName()) + ".setBounds("
+			String strBounds = getFieldName(id) + ".setBounds("
 					+ bounds.x + ", " + bounds.y + ", " + bounds.width + ", "
 					+ bounds.height + ");\n";
 			builder.append(strBounds);
@@ -335,10 +339,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 			if (property.isPropertySet(adapter.getLnfClassname(),
 					new StructuredSelection(adapter.getWidget()))
 					&& (property.isGencode() || property.isEdited(adapter))) {
-				String setCode = property.getSetCode(adapter.getWidget(),
-						imports);
-				if (setCode != null)
-					builder.append(setCode);
+				IPropertyCodeGenerator generator=(IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
+				if (generator != null) {
+					String setCode = generator.getJavaCode(adapter.getWidget(), imports);
+					if (setCode != null)
+						builder.append(setCode);
+				}
 			}
 		}
 		return builder.toString();
@@ -349,8 +355,9 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		Set<EventSetDescriptor> keySet = adapter.getEventDescriptor().keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
+				String id = adapter.getID();
 				if (!adapter.isRoot())
-					builder.append(getFieldName(adapter.getName()) + ".");
+					builder.append(getFieldName(id) + ".");
 				Method mAdd = eventSet.getAddListenerMethod();
 				builder.append(mAdd.getName() + "(");
 				IEventListenerModel model = adapter.getEventDescriptor().get(
@@ -392,6 +399,11 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	@Override
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adapter = (WidgetAdapter) adaptable;
+	}
+
+	@Override
+	public String getCreationMethodName() {
+		return NamespaceUtil.getGetMethodName(adapter.getID());
 	}
 
 

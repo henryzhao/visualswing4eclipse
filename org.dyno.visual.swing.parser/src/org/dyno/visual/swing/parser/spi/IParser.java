@@ -19,4 +19,5 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public interface IParser {
 	boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor);
 	boolean renameField(IType type,IProgressMonitor monitor);
+	String getCreationMethodName();
 }

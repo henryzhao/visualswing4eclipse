@@ -53,7 +53,6 @@ import org.dyno.visual.swing.adapter.GetAccessProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.NamespaceManager;
-import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.base.WidgetProperty;
@@ -115,7 +114,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	@SuppressWarnings("unchecked")
 	public abstract Class getWidgetClass();
-
+	public String getID(){
+		if(lastName!=null)
+			return lastName;
+		else
+			return name;
+	}
 	protected void layoutContainer(Container container) {
 		container.doLayout();
 		int count = container.getComponentCount();
@@ -148,12 +152,14 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			setName(getNamespace().nextName(getBasename()));
 		}
 	}
-
 	@Override
 	public String getBasename() {
-		return NamespaceUtil.getBasename(getWidgetClass());
+		String className = getWidgetClass().getName();
+		int dot = className.lastIndexOf('.');
+		if (dot != -1)
+			className = className.substring(dot + 1);
+		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 	}
-
 	public void lockDesigner() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null)
@@ -336,11 +342,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public Rectangle getEditorBounds(int x, int y) {
 		return null;
-	}
-
-	@Override
-	public String getCreationMethodName() {
-		return NamespaceUtil.getGetMethodName(getName());
 	}
 
 	public int getCursorLocation(Point p) {
@@ -1110,7 +1111,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	public void addInvisible(String name, Object object) {
-		invisibles.add(InvisibleAdapter.createAdapter(name, object));
+		invisibles.add(InvisibleAdapter.createAdapter(getRootAdapter(), name, object));
 	}
 
 	public boolean isRenamed() {

@@ -17,7 +17,7 @@ package org.dyno.visual.swing.parser.listener;
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -63,7 +63,7 @@ public class CodeSnippet implements IEventMethod, IConstants{
 				name = name.substring(0, dot);
 			IType type = unit.getType(name);
 			String mName = adapter.isRoot() ? INIT_METHOD_NAME
-					: getGetMethodName(adapter.getName());
+					: getGetMethodName(adapter.getID());
 			IMethod method = type.getMethod(mName, new String[0]);
 			IJavaElement[] children = method.getChildren();
 			for (IJavaElement javaElement : children) {

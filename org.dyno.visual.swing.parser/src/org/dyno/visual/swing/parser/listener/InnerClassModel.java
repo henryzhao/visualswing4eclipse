@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -58,7 +58,7 @@ public class InnerClassModel extends AbstractClassModel {
 	@Override
 	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		super.init(adapter, eventSet);
-		this.className = (adapter.isRoot() ? "This" : getCapitalName(adapter.getName())) + getCapitalName(eventSet.getName()) + "Listener";
+		this.className = (adapter.isRoot() ? "This" : getCapitalName(adapter.getID())) + getCapitalName(eventSet.getName()) + "Listener";
 	}
 
 	private String getCapitalName(String name) {

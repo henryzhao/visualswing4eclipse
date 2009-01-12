@@ -16,6 +16,7 @@ import java.awt.Component;
 
 import javax.swing.JTabbedPane;
 
+import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -30,9 +31,10 @@ public class JTabbedPaneParser extends CompositeParser {
 		for (int i = 0; i < count; i++) {
 			Component child = ca.getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = childAdapter.getCreationMethodName();
+			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
+			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(ca.getName()) + ".");
+				builder.append(getFieldName(ca.getID()) + ".");
 			builder.append("addTab(");
 			String title = jtp.getTitleAt(i);
 			builder.append("\"" + title + "\", ");

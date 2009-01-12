@@ -45,16 +45,17 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public abstract class BorderAdapter implements IFactory, IPropertySourceProvider, ICodeGen {
 	public static final String BORDER_EXTENSION_POINT = "org.dyno.visual.swing.borders.borderAdapter";
 	private static List<BorderAdapter> borderAdapters;
-	@SuppressWarnings("unchecked")
+	
 	private static Map<Class, BorderAdapter> borderMap;
 	static {
 		initialize();
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private static void initialize() {
 		borderAdapters = new ArrayList<BorderAdapter>();
 		borderMap = new HashMap<Class, BorderAdapter>();
@@ -85,7 +86,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private static void addBorder(IConfigurationElement config) {
 		try {
 			BorderAdapter adapter = (BorderAdapter) config.createExecutableExtension("adapter");
@@ -102,7 +103,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 		return borderAdapters;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public static BorderAdapter getBorderAdapter(Class borderClass) {
 		return borderMap.get(borderClass);
 	}
@@ -120,7 +121,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public abstract Class getBorderClass();
 
 	public abstract String getBorderName();

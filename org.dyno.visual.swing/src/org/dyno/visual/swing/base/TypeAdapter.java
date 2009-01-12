@@ -28,9 +28,9 @@ import org.dyno.visual.swing.plugin.spi.IValueParser;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class TypeAdapter {
 	private ICodeGen codegen;
-	@SuppressWarnings("unchecked")
 	private Comparator comparator;
 	private ILabelProviderFactory renderer;
 	private ICellEditorFactory editor;
@@ -64,12 +64,12 @@ public class TypeAdapter {
 		this.codegen = codegen;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public Comparator getComparator() {
 		return comparator;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public void setComparator(Comparator comparator) {
 		this.comparator = comparator;
 	}

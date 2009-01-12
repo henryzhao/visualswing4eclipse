@@ -142,17 +142,22 @@
                implementation="org.dyno.visual.swing.parser.adapters.GroupLayoutParser">
          </adapter>
       </interface>
+      <interface
+            class="org.dyno.visual.swing.parser.spi.IPropertyCodeGenerator">
+         <adapter
+               class="org.dyno.visual.swing.base.FieldProperty"
+               implementation="org.dyno.visual.swing.parser.adapters.FieldPropertyParser">
+         </adapter>
+         <adapter
+               class="org.dyno.visual.swing.base.WidgetProperty"
+               implementation="org.dyno.visual.swing.parser.adapters.WidgetPropertyParser">
+         </adapter>
+      </interface>
    </extension>
    <extension
          point="org.dyno.visual.swing.parser.fieldParser">
       <parser
             class="org.dyno.visual.swing.parser.adapters.ButtonGroupFieldParser">
       </parser>
-   </extension>
-   <extension
-         point="org.dyno.visual.swing.renamingListener">
-      <listener
-            class="org.dyno.visual.swing.parser.DefaultRenamingListener">
-      </listener>
    </extension>
  </plugin>

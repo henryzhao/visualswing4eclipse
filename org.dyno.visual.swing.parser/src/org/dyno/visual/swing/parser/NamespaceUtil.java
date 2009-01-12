@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.base;
+package org.dyno.visual.swing.parser;
 
 public class NamespaceUtil {
 	private static String GET = "get";
@@ -28,14 +28,5 @@ public class NamespaceUtil {
 	public static String getCapitalName(String name) {
 		return Character.toUpperCase(name.charAt(0)) + name.substring(1);
 	}
-	
 
-	@SuppressWarnings("unchecked")
-	public static String getBasename(Class clazz) {
-		String className = clazz.getName();
-		int dot = className.lastIndexOf('.');
-		if (dot != -1)
-			className = className.substring(dot + 1);
-		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
-	}	
 }

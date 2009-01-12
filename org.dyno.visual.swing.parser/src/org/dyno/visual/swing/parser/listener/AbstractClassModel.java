@@ -19,7 +19,7 @@ import java.beans.MethodDescriptor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -65,7 +65,7 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 					break;
 				}
 			} else {
-				String getName = getGetMethodName(adapter.getName());
+				String getName = getGetMethodName(adapter.getID());
 				if (mdName.equals(getName)) {
 					if (createEventMethodForWidget(type, adapter, esd, mListener, md))
 						success = true;
@@ -114,7 +114,7 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 				if (optionalExpression instanceof SimpleName) {
 					SimpleName simplename = (SimpleName) optionalExpression;
 					String idName = simplename.getFullyQualifiedName();
-					if (idName.equals(adapter.getName()))
+					if (idName.equals(adapter.getID()))
 						return createAddMethod(type, adapter, esd, mListener, mi);
 					else
 						return false;

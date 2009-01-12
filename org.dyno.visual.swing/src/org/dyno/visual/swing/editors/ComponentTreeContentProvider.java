@@ -36,8 +36,9 @@ import org.eclipse.jface.viewers.Viewer;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class ComponentTreeContentProvider implements ITreeContentProvider {
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (root != null) {
@@ -157,7 +158,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public boolean hasChildren(Object element) {
 		if (element == root) {

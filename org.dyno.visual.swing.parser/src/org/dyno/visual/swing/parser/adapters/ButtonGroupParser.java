@@ -17,7 +17,7 @@ import java.util.List;
 import javax.swing.AbstractButton;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
@@ -77,7 +77,8 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 	public boolean generateCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
 		boolean success = true;
-		IField field = type.getField(getFieldName(adapter.getName()));
+		String id = adapter.getID();
+		IField field = type.getField(getFieldName(id));
 		IJavaElement sibling = null;
 		if (field != null && !field.exists()) {
 			StringBuilder builder = new StringBuilder();
@@ -87,7 +88,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 			String beanName = imports.addImport(fqcn);
 			builder.append(beanName);
 			builder.append(" ");
-			builder.append(getFieldName(adapter.getName()));
+			builder.append(getFieldName(id));
 			builder.append(";\n");
 			try {
 				type.createField(builder.toString(), sibling, false, monitor);
@@ -97,7 +98,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 			}
 		}
 		StringBuilder builder = new StringBuilder();
-		String getMethodName = adapter.getCreationMethodName();
+		String getMethodName = getCreationMethodName();
 		IMethod method = type.getMethod(getMethodName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
@@ -113,13 +114,14 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		builder.append("(){\n");
 		String fqcn ="javax.swing.ButtonGroup";
 		String beanName = imports.addImport(fqcn);
-		builder.append(getFieldName(adapter.getName())+" = new "+beanName+"();\n");
+		builder.append(getFieldName(id)+" = new "+beanName+"();\n");
 		List buttons = adapter.getElements();
 		for(int i=0;i<buttons.size();i++){
 			WidgetAdapter btnAdapter = (WidgetAdapter) buttons.get(i);
 			AbstractButton button = (AbstractButton) btnAdapter.getWidget();
 			WidgetAdapter buttonAdapter = WidgetAdapter.getWidgetAdapter(button);
-			builder.append(getFieldName(adapter.getName())+".add("+buttonAdapter.getCreationMethodName()+"());\n");
+			IParser btnParser = (IParser) buttonAdapter.getAdapter(IParser.class);
+			builder.append(getFieldName(id)+".add("+btnParser.getCreationMethodName()+"());\n");
 		}
 		builder.append("}\n");
 		try {
@@ -131,9 +133,12 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 			ParserPlugin.getLogger().error(e);
 			success = false;
 		}
-		adapter.setLastName(adapter.getName());
 		return success;		
 	}
+	@Override
+	public String getCreationMethodName() {
+		return "init"+NamespaceUtil.getCapitalName(adapter.getID());
+	}	
 	private String getFieldName(String name) {
 		return NamespaceUtil.getFieldName(name);
 	}

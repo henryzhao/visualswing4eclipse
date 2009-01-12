@@ -63,6 +63,7 @@ import org.eclipse.text.edits.TextEdit;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class JavaUtil {
 	private static CodeFormatter codeFormatter;
 
@@ -206,7 +207,6 @@ public class JavaUtil {
 		return CodeStyleConfiguration.createImportRewrite(cu, true);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static CodeFormatter getCodeFormatter() {
 		if (codeFormatter == null) {
 			Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();

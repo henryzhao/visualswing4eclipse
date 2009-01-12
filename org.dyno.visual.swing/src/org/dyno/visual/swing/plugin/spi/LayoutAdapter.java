@@ -28,7 +28,6 @@ import java.util.Set;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.CoreException;
@@ -70,16 +69,21 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	@Override
 	public void requestNewName() {
 	}
-
+	public String getID(){
+			return name;
+	}
 	@Override
 	public String getBasename() {
 		Class<?> lClass = getLayoutClass();
 		if(lClass!=null){
-			return NamespaceUtil.getBasename(lClass);
+			String className = lClass.getName();
+			int dot = className.lastIndexOf('.');
+			if (dot != -1)
+				className = className.substring(dot + 1);
+			return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 		}else
 			return null;
 	}
-
 	public static Set<String> getLayoutClasses() {
 		return layoutAdapters.keySet();
 	}
@@ -322,11 +326,6 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	public abstract Object getChildConstraints(Component child);
 
 	public void fillConstraintsAction(MenuManager menu, Component child) {
-	}
-
-	@Override
-	public String getCreationMethodName() {
-		return null;
 	}
 
 	@Override

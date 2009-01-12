@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -147,7 +147,7 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 		if (adapter.isRoot())
 			methodName = eventSet.getName() + getCapitalName(methodDesc.getName());
 		else
-			methodName = adapter.getName() + getCapitalName(eventSet.getName()) + getCapitalName(methodDesc.getName());
+			methodName = adapter.getID() + getCapitalName(eventSet.getName()) + getCapitalName(methodDesc.getName());
 		IEventMethod content = new EventDelegation(methodDesc, methodName);
 		methods.put(methodDesc, content);
 	}

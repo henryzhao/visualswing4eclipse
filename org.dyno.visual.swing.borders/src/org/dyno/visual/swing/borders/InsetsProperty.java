@@ -263,5 +263,11 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 	public boolean isCompatibleWith(IPropertyDescriptor anotherProperty) {
 		return false;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class getPropertyType() {
+		return Insets.class;
+	}
 }
 

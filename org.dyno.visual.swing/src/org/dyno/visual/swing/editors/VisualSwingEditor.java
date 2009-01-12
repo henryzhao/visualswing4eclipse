@@ -83,6 +83,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class VisualSwingEditor extends AbstractDesignerEditor implements
 		Listener, IResourceChangeListener, ISelectionProvider, IPartListener {
 	private List<ISelectionChangedListener> listeners;
@@ -112,8 +113,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		site.getWorkbenchWindow().getPartService().addPartListener(this);
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
+	@Override	
 	public Object getAdapter(Class adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			if (outline == null && designer != null) {
@@ -316,7 +316,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 	private boolean isParsing;
-	@SuppressWarnings("unchecked")
 	private void setUpLookAndFeel(Class rootClass) {
 		try {
 			Field field = rootClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL");
