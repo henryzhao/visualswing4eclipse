@@ -42,13 +42,8 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
-import org.eclipse.jdt.ui.CodeStyleConfiguration;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -196,15 +191,6 @@ public class JavaUtil {
 		if (resourceAttributes == null)
 			return false;
 		return resourceAttributes.isReadOnly();
-	}
-
-	public static ImportRewrite createImportRewrite(ICompilationUnit unit) {
-		ASTParser parser = ASTParser.newParser(AST.JLS3);
-		parser.setSource(unit);
-		parser.setResolveBindings(false);
-		parser.setFocalPosition(0);
-		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-		return CodeStyleConfiguration.createImportRewrite(cu, true);
 	}
 
 	private static CodeFormatter getCodeFormatter() {
