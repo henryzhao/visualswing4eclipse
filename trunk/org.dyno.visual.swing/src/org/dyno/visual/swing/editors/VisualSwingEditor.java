@@ -57,6 +57,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -344,7 +346,27 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			}
 		});
 	}
-
+	private void safeSave(final IProgressMonitor monitor){
+		getDisplay().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				doSave(monitor);
+			}});
+	}
+	public void saveWithProgress() {
+		try {
+			IRunnableWithProgress runnable = new IRunnableWithProgress() {
+				public void run(IProgressMonitor monitor) {
+					safeSave(monitor);
+				}
+			};
+			ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
+			dialog.run(true, true, runnable);
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+			return;
+		}
+	}
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		isGeneratingCode = true;

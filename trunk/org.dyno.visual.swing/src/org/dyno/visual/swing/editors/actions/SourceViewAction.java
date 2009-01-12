@@ -16,10 +16,6 @@ package org.dyno.visual.swing.editors.actions;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.designer.VisualDesigner;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IMenuManager;
 
 /**
@@ -44,25 +40,17 @@ public class SourceViewAction extends EditorAction {
 	public void run() {
 		if (editor == null)
 			return;
-		if (editor.isDirty()) {
-			Job job = new Job(Messages.SourceViewAction_View_Source_Code){
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					editor.doSave(monitor);
-					return Status.OK_STATUS;
-				}
-			};
-			job.schedule();
-			try {job.join();} catch (Exception e) {}
-		}
+		if (editor.isDirty()) 
+			editor.saveWithProgress();
 		editor.openSouceEditor();
 	}
+
 	@Override
 	public void updateState() {
 		VisualDesigner designer = getDesigner();
-		if(designer==null)
+		if (designer == null)
 			return;
-		setEnabled(designer.getRoot()!=null);
+		setEnabled(designer.getRoot() != null);
 	}
 
 	@Override
@@ -70,4 +58,3 @@ public class SourceViewAction extends EditorAction {
 		editMenu.insertAfter(PREVIEW, this);
 	}
 }
-
