@@ -51,9 +51,15 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 						| RenameSupport.UPDATE_SETTER_METHOD;
 				RenameSupport rs = RenameSupport.create(lastField, name, flags);
 				if (rs.preCheck().isOK()) {
-					IWorkbenchWindow window = PlatformUI.getWorkbench()
-							.getActiveWorkbenchWindow();
-					Shell parent = window.getShell();
+					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+					if(window==null){
+						IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+						if(windows!=null&&windows.length>0)
+							window=windows[0];
+					}
+					Shell parent = null;
+					if (window != null)
+						parent = window.getShell();
 					rs.perform(parent, window);
 					adapter.setLastName(name);
 					return true;
