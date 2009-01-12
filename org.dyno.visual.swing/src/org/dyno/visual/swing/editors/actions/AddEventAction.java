@@ -22,7 +22,6 @@ import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 
@@ -30,7 +29,9 @@ public class AddEventAction extends Action {
 	private EventSetDescriptor eventSet;
 	private MethodDescriptor methodDesc;
 	private WidgetAdapter adapter;
-	public AddEventAction(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc) {		
+
+	public AddEventAction(WidgetAdapter adapter, EventSetDescriptor eventSet,
+			MethodDescriptor methodDesc) {
 		super(methodDesc.getDisplayName(), SWT.CHECK);
 		this.adapter = adapter;
 		this.eventSet = eventSet;
@@ -47,10 +48,12 @@ public class AddEventAction extends Action {
 	}
 
 	public void run() {
-		Map<EventSetDescriptor, IEventListenerModel> eventDescriptor = adapter.getEventDescriptor();
+		Map<EventSetDescriptor, IEventListenerModel> eventDescriptor = adapter
+				.getEventDescriptor();
 		IEventListenerModel model = eventDescriptor.get(eventSet);
 		if (model == null) {
-			model = ParserFactory.getDefaultParserFactory().newModel(adapter, eventSet);
+			model = ParserFactory.getDefaultParserFactory().newModel(adapter,
+					eventSet);
 			eventDescriptor.put(eventSet, model);
 		}
 		if (!model.hasMethod(methodDesc)) {
@@ -62,10 +65,10 @@ public class AddEventAction extends Action {
 		if (designer != null) {
 			VisualSwingEditor editor = designer.getEditor();
 			if (editor != null) {
-				Job job = new ViewSourceCodeJob(editor, methodDesc, model);
-				job.schedule();
+				if (editor.isDirty())
+					editor.saveWithProgress();
+				model.editMethod(editor.openSouceEditor(), methodDesc);
 			}
 		}
 	}
 }
-

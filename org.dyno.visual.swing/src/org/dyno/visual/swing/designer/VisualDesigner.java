@@ -93,6 +93,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private JComponent popupLayer;
 	private Border designBorder;
 	private Component root;
+	private Component banner;
 	private List<WidgetAdapter> clipboard;
 
 	private boolean lnfChanged;
@@ -143,6 +144,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		container = new ContainerPane();
 
 		add(container);
+		banner=new ProgressBanner();
+		add(banner);
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
 		putClientProperty("popup.layer", popupLayer); //$NON-NLS-1$
@@ -569,6 +572,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 		public void layoutContainer(Container parent) {
 			if (root != null && rootBounds != null && designBorder != null) {
+				banner.setBounds(0,0,0,0);
 				int w = root == null ? 0 : root.getWidth();
 				w = w <= 0 ? rootBounds.width : w;
 				int h = root == null ? 0 : root.getHeight();
@@ -580,6 +584,10 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				if (root != null) {
 					root.setBounds(rootBounds.x, rootBounds.y, w, h);
 				}
+			}else{
+				int w = parent.getWidth();
+				int h = parent.getHeight();
+				banner.setBounds(0,0,w,h);
 			}
 			int w = parent.getWidth();
 			int h = parent.getHeight();
