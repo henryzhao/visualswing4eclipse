@@ -76,6 +76,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.ui.CodeStyleConfiguration;
 import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -488,7 +489,14 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		IType type = unit.getType(unit_name);
 		return type;
 	}
-	
+	public static ImportRewrite createImportRewrite(ICompilationUnit unit) {
+		ASTParser parser = ASTParser.newParser(AST.JLS3);
+		parser.setSource(unit);
+		parser.setResolveBindings(false);
+		parser.setFocalPosition(0);
+		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+		return CodeStyleConfiguration.createImportRewrite(cu, true);
+	}
 	@Override
 	public ICompilationUnit generate(WidgetAdapter root, IProgressMonitor monitor) {
 		try {
@@ -499,7 +507,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			ICompilationUnit copy = unit.getWorkingCopy(monitor);
 			IType type = getUnitMainType(copy);
 			if (type != null) {
-				ImportRewrite imports = JavaUtil.createImportRewrite(copy);
+				ImportRewrite imports = createImportRewrite(copy);
 				ArrayList<String> fieldAdapters = listBeanName(root);
 				boolean success = parser.generateCode(type, imports, monitor);
 				if(!success)
