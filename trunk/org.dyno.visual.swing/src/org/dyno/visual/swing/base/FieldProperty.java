@@ -25,7 +25,6 @@ import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,6 +37,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 	private Object lastValue;
 	private Object default_value;
@@ -50,7 +50,6 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 
 	private IStructuredSelection bean;
 
-	@SuppressWarnings("unchecked")
 	public FieldProperty(String id, String name, Class beanClass) {
 		this.id = id;
 		try {
@@ -68,11 +67,10 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 	}
-	@SuppressWarnings("unchecked")
+	
 	public FieldProperty(String id, String name, Class beanClass, ILabelProviderFactory label, ICellEditorFactory editor) {
 		this.id = id;
 		try {
@@ -86,7 +84,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		editorFactory = editor;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private Field getField(Class beanClass, String fieldName) {
 		try {
 			if (beanClass != null)
@@ -102,7 +100,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		this.bean = bean;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Object getPropertyValue(IStructuredSelection bean) {
 		assert !bean.isEmpty();
@@ -126,7 +124,8 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		return null;
 	}
 
-	private Object _getPropertyValue(Object bean) {
+	@Override
+	public Object getFieldValue(Object bean) {
 		try {
 			return field.get(bean);
 		} catch (Exception e) {
@@ -136,11 +135,14 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 	}
 
 	@Override
+	public void setFieldValue(Object bean, Object newValue) {
+	}
+	@Override
 	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public boolean isPropertySet(String lnfClass, IStructuredSelection bean) {
 		assert !bean.isEmpty();
@@ -153,7 +155,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		else if (name.equals("maximumSize") && b instanceof Component)
 			return ((Component) b).isMaximumSizeSet();
 		Class<?> propertyType = field.getType();
-		Object value = _getPropertyValue(b);
+		Object value = getFieldValue(b);
 		if (propertyType == byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
 			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
@@ -245,7 +247,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		assert !bean.isEmpty();
@@ -275,7 +277,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private boolean isEditable() {
 		if (editorFactory == null) {
 			if (lastValue == null)
@@ -292,7 +294,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		if (isEditable()) {
@@ -359,45 +361,6 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public String getSetCode(Object bean, ImportRewrite imports) {
-		if (bean instanceof Component) {
-			Component comp = (Component) bean;
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
-			if (adapter != null) {
-				StringBuilder builder = new StringBuilder();
-				Class typeClass = field.getType();
-				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(typeClass);
-				Object value = _getPropertyValue(bean);
-				if (typeAdapter != null && typeAdapter.getCodegen() != null) {
-					String initCode = typeAdapter.getCodegen().getInitJavaCode(value, imports);
-					if (initCode != null)
-						builder.append(initCode);
-				}
-				if (!adapter.isRoot()) {
-					String name = adapter.getName();
-					name = NamespaceUtil.getFieldName(name);
-					builder.append(name + ".");
-				}
-				builder.append(field.getName() + "=");
-				if (typeAdapter != null && typeAdapter.getCodegen() != null) {
-					if (value == null) {
-						builder.append("null");
-					} else {
-						builder.append(typeAdapter.getCodegen().getJavaCode(value, imports));
-					}
-				} else {
-					builder.append(value == null ? "null" : value.toString());
-				}
-				builder.append(";\n");
-				return builder.toString();
-			} else
-				return null;
-		} else
-			return null;
-	}
-
 	@Override
 	public boolean isGencode() {
 		return false;
@@ -420,20 +383,19 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 	public IValueParser getValueParser() {
 		return null;
 	}
-
-	@Override
-	public Object getFieldValue(Object bean) {
-		return null;
-	}
-
-	@Override
-	public void setFieldValue(Object bean, Object newValue) {
-	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Class getObjectClass() {
-		return null;
+		return getClass();
+	}
+	@Override
+	
+	public Class getPropertyType(){
+		return field.getType();
+	}
+
+	public String getFieldName() {
+		return field.getName();
 	}
 }
 

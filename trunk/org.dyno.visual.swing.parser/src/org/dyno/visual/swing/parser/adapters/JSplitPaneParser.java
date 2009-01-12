@@ -17,6 +17,7 @@ import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
@@ -26,10 +27,10 @@ public class JSplitPaneParser extends CompositeParser {
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JSplitPane jsp = (JSplitPane) adapter.getWidget();
 		int oritentation = jsp.getOrientation();
-		String fieldName = getFieldName(adapter.getName());
-		String prefix="";
-		if(!adapter.isRoot())
-			prefix=fieldName+".";
+		String fieldName = getFieldName(adapter.getID());
+		String prefix = "";
+		if (!adapter.isRoot())
+			prefix = fieldName + ".";
 		if (oritentation == JSplitPane.HORIZONTAL_SPLIT) {
 			Component left = jsp.getLeftComponent();
 			if (left != null) {
@@ -37,9 +38,11 @@ public class JSplitPaneParser extends CompositeParser {
 				WidgetAdapter leftAdapter = WidgetAdapter
 						.getWidgetAdapter(leftComponent);
 				if (leftAdapter != null) {
-					String leftGetName = leftAdapter.getCreationMethodName();					
-					builder.append(prefix+"setLeftComponent("
-							+ leftGetName + "());\n");
+					IParser leftParser = (IParser) leftAdapter
+							.getAdapter(IParser.class);
+					String leftGetName = leftParser.getCreationMethodName();
+					builder.append(prefix + "setLeftComponent(" + leftGetName
+							+ "());\n");
 				}
 			}
 			Component right = jsp.getRightComponent();
@@ -48,9 +51,11 @@ public class JSplitPaneParser extends CompositeParser {
 				WidgetAdapter rightAdapter = WidgetAdapter
 						.getWidgetAdapter(rightComponent);
 				if (rightAdapter != null) {
-					String rightGetName = rightAdapter.getCreationMethodName();
-					builder.append(prefix+"setRightComponent("
-							+ rightGetName + "());\n");
+					IParser rightParser = (IParser) rightAdapter
+							.getAdapter(IParser.class);
+					String rightGetName = rightParser.getCreationMethodName();
+					builder.append(prefix + "setRightComponent(" + rightGetName
+							+ "());\n");
 				}
 			}
 		} else {
@@ -60,8 +65,10 @@ public class JSplitPaneParser extends CompositeParser {
 				WidgetAdapter topAdapter = WidgetAdapter
 						.getWidgetAdapter(topComponent);
 				if (topAdapter != null) {
-					String topGetName = topAdapter.getCreationMethodName();
-					builder.append(prefix+"setTopComponent(" + topGetName
+					IParser topParser = (IParser) topAdapter
+							.getAdapter(IParser.class);
+					String topGetName = topParser.getCreationMethodName();
+					builder.append(prefix + "setTopComponent(" + topGetName
 							+ "());\n");
 				}
 			}
@@ -71,8 +78,10 @@ public class JSplitPaneParser extends CompositeParser {
 				WidgetAdapter bottomAdapter = WidgetAdapter
 						.getWidgetAdapter(bottomComponent);
 				if (bottomAdapter != null) {
-					String bottomGetName = bottomAdapter.getCreationMethodName();
-					builder.append(prefix+"setBottomComponent("
+					IParser bottomParser = (IParser) bottomAdapter
+							.getAdapter(IParser.class);
+					String bottomGetName = bottomParser.getCreationMethodName();
+					builder.append(prefix + "setBottomComponent("
 							+ bottomGetName + "());\n");
 				}
 			}

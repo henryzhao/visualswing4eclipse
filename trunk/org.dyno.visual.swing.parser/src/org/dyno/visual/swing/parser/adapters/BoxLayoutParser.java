@@ -41,7 +41,7 @@ public class BoxLayoutParser extends LayoutParser {
 		}
 		strAxis = name+"."+strAxis;
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());	
-		String conName=adapter.isRoot()?"this":getFieldName(adapter.getName());
+		String conName=adapter.isRoot()?"this":getFieldName(adapter.getID());
 		return "new "+name+"("+conName+", "+strAxis+")";
 	}
 

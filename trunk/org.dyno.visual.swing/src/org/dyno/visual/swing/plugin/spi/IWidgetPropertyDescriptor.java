@@ -17,7 +17,6 @@ import java.awt.Component;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 /**
@@ -27,6 +26,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptable{
     boolean isPropertyResettable(IStructuredSelection bean);
     boolean isPropertySet(String lnfClassname, IStructuredSelection bean);
@@ -34,18 +34,16 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptab
 	void resetPropertyValue(String lnfClassname, IStructuredSelection bean);
 	void setPropertyValue(IStructuredSelection bean, Object value);
 	boolean cloneProperty(Object bean, Component clone);
-	String getSetCode(Object widget, ImportRewrite imports);
 	boolean isGencode();
 	void setBean(IStructuredSelection bean);
 	void setFilterFlags(String[]filters);
 	void setCategory(String categoryName);
-	@SuppressWarnings("unchecked")
 	void init(IConfigurationElement config, Class beanClass);
 	boolean isEdited(WidgetAdapter adapter);
 	IValueParser getValueParser();
 	void setFieldValue(Object bean, Object newValue);
 	Object getFieldValue(Object bean);
-	@SuppressWarnings("unchecked")
 	Class getObjectClass();
+	Class getPropertyType();
 }
 

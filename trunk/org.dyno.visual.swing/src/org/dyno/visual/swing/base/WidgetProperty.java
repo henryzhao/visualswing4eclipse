@@ -38,7 +38,6 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -53,6 +52,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class WidgetProperty extends AbstractAdaptable implements
 		IWidgetPropertyDescriptor {
 	protected Object lastValue;
@@ -69,12 +69,12 @@ public class WidgetProperty extends AbstractAdaptable implements
 	protected String displayName;
 	protected String[] filters;
 
-	@SuppressWarnings("unchecked")
+	
 	protected Class beanClass;
 	protected boolean gencode;
 	protected IValueParser parser;
 
-	@SuppressWarnings("unchecked")
+	
 	public WidgetProperty(String id, String name, Class beanClass,
 			ILabelProviderFactory label, ICellEditorFactory editor) {
 		this.beanClass = beanClass;
@@ -100,7 +100,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return propertyDescriptor;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public WidgetProperty(String id, String name, Class beanClass) {
 		this.beanClass = beanClass;
 		this.id = id;
@@ -121,12 +121,12 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public WidgetProperty(IConfigurationElement config, Class beanClass) {
 		init(config, beanClass);
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 		this.beanClass = beanClass;
@@ -220,7 +220,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		this.bean = bean;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Object getPropertyValue(IStructuredSelection bean) {
 		assert !bean.isEmpty();
@@ -249,7 +249,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
 		assert !bean.isEmpty();
@@ -495,7 +495,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		assert !bean.isEmpty();
@@ -529,7 +529,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private boolean isEditable() {
 		if (editorFactory == null) {
 			if (lastValue == null)
@@ -554,7 +554,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 			return false;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		if (isEditable()) {
@@ -627,57 +627,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		setFieldValue(clone, value);
 		return true;
 	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public String getSetCode(Object bean, ImportRewrite imports) {
-		if (bean instanceof Component) {
-			Component comp = (Component) bean;
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
-			if (adapter != null) {
-				StringBuilder builder = new StringBuilder();
-				Object value = getFieldValue(bean);
-				Class typeClass = propertyDescriptor.getPropertyType();
-				TypeAdapter typeAdapter = ExtensionRegistry
-						.getTypeAdapter(typeClass);
-				ICodeGen gen;
-				if (editorFactory != null
-						&& editorFactory instanceof ItemProviderCellEditorFactory) {
-					gen = editorFactory;
-				} else if (typeAdapter != null) {
-					gen = typeAdapter.getCodegen();
-				} else {
-					gen = editorFactory;
-				}
-				if (gen != null && value != null) {
-					String initCode = gen.getInitJavaCode(value, imports);
-					if (initCode != null)
-						builder.append(initCode);
-				}
-				if (!adapter.isRoot()) {
-					String name = adapter.getName();
-					name = NamespaceUtil.getFieldName(name);
-					builder.append(name + ".");
-				}
-				builder.append(propertyDescriptor.getWriteMethod().getName()
-						+ "(");
-				if (gen != null) {
-					if (value == null) {
-						builder.append("null");
-					} else {
-						builder.append(gen.getJavaCode(value, imports));
-					}
-				} else {
-					builder.append(value == null ? "null" : value.toString());
-				}
-				builder.append(");\n");
-				return builder.toString();
-			} else
-				return null;
-		} else
-			return null;
-	}
-
+	
 	@Override
 	public boolean isGencode() {
 		return gencode;
@@ -694,7 +644,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return parser;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void setFieldValue(Object bean, Object newValue) {
 		try {
@@ -712,7 +662,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Object getFieldValue(Object bean) {
 		try {
@@ -730,9 +680,31 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
-	public Class getObjectClass() {
+	public Class getPropertyType() {
 		return propertyDescriptor.getPropertyType();
+	}
+	
+	@Override
+	public Class getObjectClass(){
+		return getClass();
+	}
+
+	public ICodeGen getCodeGenerator() {
+		Class typeClass = propertyDescriptor.getPropertyType();
+		TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(typeClass);
+		if (editorFactory != null
+				&& editorFactory instanceof ItemProviderCellEditorFactory) {
+			return editorFactory;
+		} else if (typeAdapter != null) {
+			return typeAdapter.getCodegen();
+		} else {
+			return editorFactory;
+		}
+	}
+
+	public String getSetName() {
+		return propertyDescriptor.getWriteMethod().getName();		
 	}
 }

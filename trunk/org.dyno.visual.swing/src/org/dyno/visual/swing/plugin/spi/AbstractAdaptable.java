@@ -9,14 +9,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractAdaptable implements IAdaptable {
 
 	protected Map<String, Object> adapters = new HashMap<String, Object>();
 
-	@SuppressWarnings("unchecked")
 	public abstract Class getObjectClass();
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		Object object = adapters.get(adapterClass.getName());
@@ -45,7 +45,7 @@ public abstract class AbstractAdaptable implements IAdaptable {
 			return object;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private IConfigurationElement getConfig(String adapter, Class type) {
 		if (type == null)
 			return null;

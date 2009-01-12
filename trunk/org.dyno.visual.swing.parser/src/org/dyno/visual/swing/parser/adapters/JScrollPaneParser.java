@@ -14,6 +14,7 @@ package org.dyno.visual.swing.parser.adapters;
 
 import java.awt.Component;
 
+import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -25,9 +26,10 @@ public class JScrollPaneParser extends CompositeParser {
 		if (jspa.getChildCount() > 0) {
 			Component child = jspa.getChild(0);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = childAdapter.getCreationMethodName();
+			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
+			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(jspa.getName()) + ".");
+				builder.append(getFieldName(jspa.getID()) + ".");
 			builder.append("setViewportView(" + getMethodName + "());\n");
 		}
 	}

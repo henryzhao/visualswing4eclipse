@@ -39,14 +39,20 @@ public abstract class InvisibleAdapter extends AbstractAdaptable implements IAda
 	public String getName() {
 		return name;
 	}
-
-	public void init(String name, Object object) {
+	public String getID(){
+		if(lastName!=null)
+			return lastName;
+		else
+			return name;
+	}
+	public void init(WidgetAdapter rootAdapter, String name, Object object) {
 		this.name = name;
+		this.lastName = name;
 	}
 	@SuppressWarnings("unchecked")
 	public abstract List getElements();
 
-	public static InvisibleAdapter createAdapter(String name, Object object) {
+	public static InvisibleAdapter createAdapter(WidgetAdapter rootAdapter, String name, Object object) {
 		String className = object.getClass().getName();
 		IConfigurationElement config = ExtensionRegistry
 				.getInvisibleConfig(className);
@@ -54,7 +60,7 @@ public abstract class InvisibleAdapter extends AbstractAdaptable implements IAda
 			return null;
 		try {
 			InvisibleAdapter invisible = (InvisibleAdapter) config.createExecutableExtension("class");
-			invisible.init(name, object);
+			invisible.init(rootAdapter, name, object);
 			return invisible;
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);

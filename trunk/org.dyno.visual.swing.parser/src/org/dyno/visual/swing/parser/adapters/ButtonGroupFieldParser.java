@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
 
 import javax.swing.ButtonGroup;
 
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;

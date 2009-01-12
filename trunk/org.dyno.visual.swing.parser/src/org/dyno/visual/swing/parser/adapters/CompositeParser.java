@@ -43,9 +43,10 @@ public class CompositeParser extends WidgetParser {
 		for (int i = 0; i < count; i++) {
 			Component child = ((CompositeAdapter) adapter).getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			String getMethodName = childAdapter.getCreationMethodName();
+			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
+			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(((CompositeAdapter) adapter).getName()) + ".");
+				builder.append(getFieldName(((CompositeAdapter) adapter).getID()) + ".");
 			builder.append("add(" + getMethodName + "());\n");
 		}
 	}

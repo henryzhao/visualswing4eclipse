@@ -33,7 +33,6 @@ import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.ISyncUITask;
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceUtil;
 import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.parser.spi.IParser;
@@ -316,7 +315,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			Block body = initMethod.getBody();
 			statements = body.statements();
 		} else {
-			String getMethodName = NamespaceUtil.getGetMethodName(adapter.getName());
+			String getMethodName = NamespaceUtil.getGetMethodName(adapter.getID());
 			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
 			if (getMethod != null) {
 				Block body = getMethod.getBody();
@@ -489,8 +488,9 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		IType type = unit.getType(unit_name);
 		return type;
 	}
+	
 	@Override
-	public ICompilationUnit generate(WidgetAdapter root,	IProgressMonitor monitor) {
+	public ICompilationUnit generate(WidgetAdapter root, IProgressMonitor monitor) {
 		try {
 			IParser parser = (IParser) root.getAdapter(IParser.class);
 			if (parser == null)
@@ -551,6 +551,8 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					OrganizeImportsAction action = new OrganizeImportsAction(site);
 					action.run(unit);
 				}
+				type = getUnitMainType(unit);
+				rename(type, root);
 				if(unit.isWorkingCopy()){
 					unit.commitWorkingCopy(true, monitor);
 				}
@@ -562,6 +564,38 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			return null;
 		}
 	}
+	private void rename(IType type, WidgetAdapter root) {
+		if(root.getLastName()!=null&&root.getName()!=null&&!root.getLastName().equals(root.getName())){
+			IParser parser = (IParser) root.getAdapter(IParser.class);
+			if (parser != null) {
+				parser.renameField(type, null);
+			}
+		}
+		if(root.isRoot()){
+			for(InvisibleAdapter invisible:root.getInvisibles()){
+				renameInvisible(type, invisible);
+			}
+		}
+		if(root instanceof CompositeAdapter){
+			CompositeAdapter container = (CompositeAdapter) root;
+			int count = container.getChildCount();
+			for(int i=0;i<count;i++){
+				Component child = container.getChild(i);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				rename(type, childAdapter);
+			}
+		}
+	}
+
+	private void renameInvisible(IType type, InvisibleAdapter root) {
+		if(root.getLastName()!=null&&root.getName()!=null&&!root.getLastName().equals(root.getName())){
+			IParser parser = (IParser) root.getAdapter(IParser.class);
+			if (parser != null) {
+				parser.renameField(type, null);
+			}
+		}
+	}
+
 	private IWorkbenchPartSite getEditorSite(){
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if(workbench!=null){
@@ -654,10 +688,10 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 
 	private void _listNames(WidgetAdapter root, ArrayList<String> list) {
 		if (!root.isRoot()) {
-			list.add(root.getName());
+			list.add(root.getID());
 		} else {
 			for (InvisibleAdapter adapter : root.getInvisibles()) {
-				list.add(adapter.getName());
+				list.add(adapter.getID());
 			}
 		}
 		if (root instanceof CompositeAdapter) {

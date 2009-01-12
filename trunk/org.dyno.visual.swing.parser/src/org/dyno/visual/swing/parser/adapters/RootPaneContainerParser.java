@@ -18,7 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.RootPaneContainer;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.NamespaceUtil;
+import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.IConstants;
@@ -39,7 +39,7 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 			builder.append("setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();
 			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
-			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getName());
+			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getID());
 			builder.append(getName+"()");
 			builder.append(");\n");
 		}
@@ -51,10 +51,10 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createGetCode(imports));
 		if(getJMenuBar()!=null){
-			builder.append(adapter.getName()+".setJMenuBar(");
+			builder.append(adapter.getID()+".setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();
 			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
-			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getName());
+			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getID());
 			builder.append(getName+"()");
 			builder.append(");\n");
 		}

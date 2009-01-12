@@ -19,13 +19,12 @@ package org.dyno.visual.swing.base;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class FactoryItem {
 	private String objectName;
-	@SuppressWarnings("unchecked")
 	private Class objectClazz;
 	private IFactory factory;
 
-	@SuppressWarnings("unchecked")
 	public FactoryItem(String name, Class clazz, IFactory factory) {
 		this.objectName = name;
 		this.factory = factory;

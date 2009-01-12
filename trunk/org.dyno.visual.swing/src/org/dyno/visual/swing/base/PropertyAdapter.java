@@ -20,13 +20,13 @@ import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+@SuppressWarnings("unchecked")
 public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 
 	@Override
@@ -39,12 +39,6 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 		return null;
 	}
 
-	@Override
-	public String getSetCode(Object widget, ImportRewrite imports) {
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 	}
@@ -148,10 +142,16 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 	public void setFieldValue(Object bean, Object newValue) {
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public Class getObjectClass() {
-		return null;
+		return getClass();
+	}
+
+	
+	@Override
+	public Class getPropertyType() {
+		return getClass();
 	}
 }
 

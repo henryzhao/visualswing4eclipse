@@ -36,7 +36,7 @@ public class CardLayoutParser extends LayoutParser {
 
 	@Override
 	protected String getChildConstraints(Component child, ImportRewrite imports) {
-		return "\""+WidgetAdapter.getWidgetAdapter(child).getName()+"\"";
+		return "\""+WidgetAdapter.getWidgetAdapter(child).getID()+"\"";
 	}
 
 }
