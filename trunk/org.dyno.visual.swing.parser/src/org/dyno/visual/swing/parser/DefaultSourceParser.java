@@ -205,8 +205,14 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				cons.setAccessible(true);
 				return cons.newInstance(new Frame());
 			}catch(NoSuchMethodException ex){
-				ParserPlugin.getLogger().error(ex);
-				return null;
+				try {
+					Constructor cons = beanClass
+							.getConstructor(new Class[] { String.class });
+					cons.setAccessible(true);
+					return cons.newInstance(new String());
+				} catch (NoSuchMethodException exx) {
+					return null;
+				}
 			}
 		}
 	}
