@@ -35,6 +35,7 @@ import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
@@ -74,14 +75,14 @@ public class GlassPaneUI extends ComponentUI {
 		paintHint(g, c);
 	}
 
-
 	private void paintGrid(Graphics g, JComponent c) {
 		GlassPlane glassPlane = (GlassPlane) c;
 		CompositeAdapter focused = glassPlane.getFocusedContainer();
 		if (focused != null) {
 			paintAdapterGrid(g, focused);
-		}		
+		}
 	}
+
 	private void paintAdapterGrid(Graphics g, CompositeAdapter focused) {
 		Component jpar = focused.getWidget();
 		if (focused.isRoot())
@@ -92,6 +93,7 @@ public class GlassPaneUI extends ComponentUI {
 		focused.paintGrid(clipg);
 		clipg.dispose();
 	}
+
 	private void paintAdapterAnchor(Graphics g, CompositeAdapter selected) {
 		Component jpar = selected.getWidget();
 		if (selected.isRoot())
@@ -101,7 +103,8 @@ public class GlassPaneUI extends ComponentUI {
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
 		selected.paintAnchor(clipg);
 		clipg.dispose();
-	}	
+	}
+
 	private void paintContextCustomizer(Graphics g, JComponent c) {
 		Component root = designer.getRoot();
 		if (root != null) {
@@ -123,7 +126,8 @@ public class GlassPaneUI extends ComponentUI {
 		if (region != null) {
 			Color old = g.getColor();
 			g.setColor(new Color(0, 164, 255));
-			((Graphics2D)g).setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 5 }, 0));
+			((Graphics2D) g).setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT,
+					BasicStroke.JOIN_BEVEL, 0, new float[] { 5 }, 0));
 			g.drawRect(region.x, region.y, region.width, region.height);
 			g.setColor(old);
 		}
@@ -131,24 +135,23 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void paintSelectionThumb(Graphics g, JComponent c) {
 		if (designer.getSelectedComponents().size() == 1)
-			paintTranverse(g, c, new ThumbTranverse(), WidgetAdapter.ADHERE_PAD);
+			paintTranverse(g, c, new ThumbTranverse(), IConstants.ADHERE_PAD);
 	}
 
 	class ThumbTranverse implements Tranverse {
-		public void paint(Graphics g, Component jc) {			
+		public void paint(Graphics g, Component jc) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jc);
 			if (adapter.isSelected() && adapter.isResizable()) {
 				int w = jc.getWidth();
 				int h = jc.getHeight();
-				int pad = WidgetAdapter.ADHERE_PAD;
 				THUMB_NAIL.paintIcon(jc, g, 0, 0);
-				THUMB_NAIL.paintIcon(jc, g, (w + pad) / 2, 0);
-				THUMB_NAIL.paintIcon(jc, g, w + pad, 0);
-				THUMB_NAIL.paintIcon(jc, g, w + pad, (h + pad) / 2);
-				THUMB_NAIL.paintIcon(jc, g, w + pad, h + pad);
-				THUMB_NAIL.paintIcon(jc, g, (w + pad) / 2, h + pad);
-				THUMB_NAIL.paintIcon(jc, g, 0, h + pad);
-				THUMB_NAIL.paintIcon(jc, g, 0, (h + pad) / 2);
+				THUMB_NAIL.paintIcon(jc, g, w / 2, 0);
+				THUMB_NAIL.paintIcon(jc, g, w, 0);
+				THUMB_NAIL.paintIcon(jc, g, w, h / 2);
+				THUMB_NAIL.paintIcon(jc, g, w, h);
+				THUMB_NAIL.paintIcon(jc, g, w / 2, h);
+				THUMB_NAIL.paintIcon(jc, g, 0, h);
+				THUMB_NAIL.paintIcon(jc, g, 0, h / 2);
 			}
 		}
 	}
@@ -230,7 +233,8 @@ public class GlassPaneUI extends ComponentUI {
 
 	private boolean isDesigningWidget(Component widget) {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
-		return adapter != null && (adapter.isRoot()||adapter.getName() != null);
+		return adapter != null
+				&& (adapter.isRoot() || adapter.getName() != null);
 	}
 
 	private void paintSelection(Graphics g, JComponent c) {
@@ -274,9 +278,8 @@ public class GlassPaneUI extends ComponentUI {
 		CompositeAdapter selected = glassPlane.getSelectedContainer();
 		if (selected != null) {
 			paintAdapterAnchor(g, selected);
-		}		
+		}
 	}
-
 
 	private void paintHintAdapter(Graphics g, CompositeAdapter hinted) {
 		Component jpar = hinted.getWidget();
@@ -297,8 +300,10 @@ public class GlassPaneUI extends ComponentUI {
 			hovered.paintHovered(g);
 		} else {
 			Rectangle local = SwingUtilities.getLocalBounds(jpar);
-			Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
-			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
+			Rectangle pub = SwingUtilities.convertRectangle(jpar, local,
+					designer);
+			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1,
+					pub.height + 1);
 			hovered.paintHovered(clipg);
 			clipg.dispose();
 		}
@@ -325,4 +330,3 @@ public class GlassPaneUI extends ComponentUI {
 		}
 	}
 }
-
