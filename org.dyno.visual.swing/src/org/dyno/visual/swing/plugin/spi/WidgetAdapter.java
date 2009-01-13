@@ -1142,7 +1142,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public CompositeAdapter getFocusedAdapter(){
 		VisualDesigner designer = getDesigner();
 		if(designer!=null)
-			return designer.getFocusedContainer();
+			return designer.getSelectedContainer();
 		return null;
 	}
 	public boolean isFocused() {
