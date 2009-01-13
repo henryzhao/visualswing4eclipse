@@ -3,49 +3,14 @@
 <repository name='Visual Swing Designer for Eclipse' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1231825659580'/>
+    <property name='p2.timestamp' value='1231827370661'/>
   </properties>
   <mappings size='3'>
     <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
     <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
-  <artifacts size='14'>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing' version='0.9.8.I20090112-1400'>
-      <properties size='3'>
-        <property name='artifact.size' value='424997'/>
-        <property name='download.size' value='424997'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing' version='0.9.8.I20090112-1400'>
-      <properties size='3'>
-        <property name='artifact.size' value='424750'/>
-        <property name='download.size' value='424750'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.grouplayouts' version='0.9.8.I20090112-1400'>
-      <properties size='3'>
-        <property name='artifact.size' value='138033'/>
-        <property name='download.size' value='138033'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.8.I20090112-1400'>
-      <properties size='3'>
-        <property name='artifact.size' value='93295'/>
-        <property name='download.size' value='93295'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.types' version='0.9.8.I20090112-1400'>
-      <properties size='3'>
-        <property name='artifact.size' value='176982'/>
-        <property name='download.size' value='176982'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
+  <artifacts size='10'>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.layouts' version='0.9.8.I20090112-1400'>
       <properties size='3'>
         <property name='artifact.size' value='36568'/>
@@ -57,6 +22,13 @@
       <properties size='3'>
         <property name='artifact.size' value='367029'/>
         <property name='download.size' value='367029'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing' version='0.9.8.I20090112-1400'>
+      <properties size='3'>
+        <property name='artifact.size' value='424997'/>
+        <property name='download.size' value='424997'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
@@ -73,6 +45,13 @@
         <property name='download.size' value='861'/>
       </properties>
     </artifact>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.grouplayouts' version='0.9.8.I20090112-1400'>
+      <properties size='3'>
+        <property name='artifact.size' value='138031'/>
+        <property name='download.size' value='138031'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.lnfs' version='0.9.8.I20090112-1400'>
       <properties size='3'>
         <property name='artifact.size' value='298924'/>
@@ -80,31 +59,24 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.grouplayouts' version='0.9.8.I20090112-1400'>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.8.I20090112-1400'>
       <properties size='3'>
-        <property name='artifact.size' value='138070'/>
-        <property name='download.size' value='138070'/>
+        <property name='artifact.size' value='93687'/>
+        <property name='download.size' value='93687'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.parser' version='0.9.8.I20090112-1400'>
       <properties size='3'>
-        <property name='artifact.size' value='94345'/>
-        <property name='download.size' value='94345'/>
+        <property name='artifact.size' value='93353'/>
+        <property name='download.size' value='93353'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.layouts' version='0.9.8.I20090112-1400'>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.types' version='0.9.8.I20090112-1400'>
       <properties size='3'>
-        <property name='artifact.size' value='36577'/>
-        <property name='download.size' value='36577'/>
-        <property name='download.contentType' value='application/zip'/>
-      </properties>
-    </artifact>
-    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.widgets' version='0.9.8.I20090112-1400'>
-      <properties size='3'>
-        <property name='artifact.size' value='367037'/>
-        <property name='download.size' value='367037'/>
+        <property name='artifact.size' value='176982'/>
+        <property name='download.size' value='176982'/>
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
