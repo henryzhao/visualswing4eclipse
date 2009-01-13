@@ -17,7 +17,7 @@ package org.dyno.visual.swing.widgets.grouplayout;
 import java.awt.Point;
 
 interface IDragOperation {
-	int THRESHOLD_DISTANCE = 4;
+	int THRESHOLD_DISTANCE = 2;
 
 	int NORTH = 0;
 	int NORTH_EAST = 1;

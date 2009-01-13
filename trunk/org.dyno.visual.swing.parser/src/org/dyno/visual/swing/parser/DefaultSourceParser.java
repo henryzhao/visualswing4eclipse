@@ -44,6 +44,7 @@ import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -151,7 +152,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		try {
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(java_project);
+            java_project.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);			String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(java_project);
 			URL[] urls = new URL[classPath.length];
 			for(int i=0;i<classPath.length;i++){
 				File cp = new File(classPath[i]);
