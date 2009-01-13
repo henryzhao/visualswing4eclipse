@@ -92,14 +92,14 @@ public class GlassPaneUI extends ComponentUI {
 		focused.paintGrid(clipg);
 		clipg.dispose();
 	}
-	private void paintAdapterAnchor(Graphics g, CompositeAdapter focused) {
-		Component jpar = focused.getWidget();
-		if (focused.isRoot())
-			jpar = focused.getRootPane();
+	private void paintAdapterAnchor(Graphics g, CompositeAdapter selected) {
+		Component jpar = selected.getWidget();
+		if (selected.isRoot())
+			jpar = selected.getRootPane();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		focused.paintAnchor(clipg);
+		selected.paintAnchor(clipg);
 		clipg.dispose();
 	}	
 	private void paintContextCustomizer(Graphics g, JComponent c) {
@@ -263,29 +263,29 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void paintHint(Graphics g, JComponent c) {
 		GlassPlane glassPlane = (GlassPlane) c;
-		CompositeAdapter hovered = glassPlane.getHoveredAdapter();
-		if (hovered != null) {
-			paintHintAdapter(g, hovered);
+		CompositeAdapter hinted = glassPlane.getHintedAdapter();
+		if (hinted != null) {
+			paintHintAdapter(g, hinted);
 		}
 	}
 
 	private void paintAnchor(Graphics g, JComponent c) {
 		GlassPlane glassPlane = (GlassPlane) c;
-		CompositeAdapter focused = glassPlane.getFocusedContainer();
-		if (focused != null) {
-			paintAdapterAnchor(g, focused);
+		CompositeAdapter selected = glassPlane.getSelectedContainer();
+		if (selected != null) {
+			paintAdapterAnchor(g, selected);
 		}		
 	}
 
 
-	private void paintHintAdapter(Graphics g, CompositeAdapter hovered) {
-		Component jpar = hovered.getWidget();
-		if (hovered.isRoot())
-			jpar = hovered.getRootPane();
+	private void paintHintAdapter(Graphics g, CompositeAdapter hinted) {
+		Component jpar = hinted.getWidget();
+		if (hinted.isRoot())
+			jpar = hinted.getRootPane();
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		hovered.paintHint(clipg);
+		hinted.paintHint(clipg);
 		clipg.dispose();
 	}
 

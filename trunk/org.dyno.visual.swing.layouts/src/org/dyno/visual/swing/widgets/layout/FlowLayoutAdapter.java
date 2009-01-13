@@ -37,7 +37,7 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 	private Thumb thumb;
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		if (thumb != null) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setStroke(STROKE);

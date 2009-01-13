@@ -746,8 +746,41 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (selected.isEmpty())
 			return null;
 		if (selected.size() == 1) {
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(selected
-					.get(0));
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(selected.get(0));
+			if(adapter.isRoot())
+				return (CompositeAdapter) adapter;
+			else if(adapter instanceof CompositeAdapter)
+				return (CompositeAdapter) adapter;
+			else
+				return adapter.getParentAdapter();
+		}
+		WidgetAdapter parent = null;
+		for (Component comp : selected) {
+			WidgetAdapter compAdapter = WidgetAdapter.getWidgetAdapter(comp);
+			if (parent == null) {
+				if (compAdapter.isRoot())
+					return null;
+				parent = compAdapter.getParentAdapter();
+			} else if (parent != compAdapter.getParentAdapter()) {
+				return null;
+			}
+		}
+		if (parent == null)
+			return null;
+		else if (parent instanceof CompositeAdapter)
+			return (CompositeAdapter) parent;
+		else
+			return parent.getParentAdapter();
+	}
+
+	public CompositeAdapter getSelectedContainer() {
+		if (root == null)
+			return null;
+		List<Component> selected = new WidgetSelection(root);
+		if (selected.isEmpty())
+			return null;
+		if (selected.size() == 1) {
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(selected.get(0));
 			if(adapter.getParentAdapter()!=null)
 				return adapter.getParentAdapter();
 			else

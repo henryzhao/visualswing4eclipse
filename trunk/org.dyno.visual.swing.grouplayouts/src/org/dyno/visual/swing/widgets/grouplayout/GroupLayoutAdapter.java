@@ -166,10 +166,6 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private static final int BOX = 5;
 
 	@Override
-	public void paintFocused(Graphics g) {
-	}
-
-	@Override
 	public void paintHint(Graphics g) {
 		if (hovered) {
 			Graphics2D g2d = (Graphics2D) g;

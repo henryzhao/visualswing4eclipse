@@ -118,10 +118,19 @@ public class GlassPlane extends JComponent implements MouseListener {
 		hotspotPoint = e;
 	}
 
+	CompositeAdapter getSelectedContainer() {
+		return designer.getSelectedContainer();
+	}
+
 	CompositeAdapter getFocusedContainer() {
 		return designer.getFocusedContainer();
 	}
+	
 	CompositeAdapter getHoveredAdapter(){
+		return target.getHoveredAdapter();
+	}
+
+	CompositeAdapter getHintedAdapter() {
 		return target.getHoveredAdapter();
 	}
 	boolean isWidgetEditing() {

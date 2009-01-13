@@ -101,7 +101,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		if (placement != null && forbid != null) {
 			for (int i = 0; i < placement.size(); i++) {
 				Rectangle place = placement.get(i);

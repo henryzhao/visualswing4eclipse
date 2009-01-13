@@ -647,7 +647,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
 			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.paintFocused(clipg);
+			layoutAdapter.paintHovered(clipg);
 		}
 		clipg.setColor(Color.lightGray);
 		clipg.drawRect(0, 0, jpanel.getWidth() -1 , jpanel.getHeight() - 1);

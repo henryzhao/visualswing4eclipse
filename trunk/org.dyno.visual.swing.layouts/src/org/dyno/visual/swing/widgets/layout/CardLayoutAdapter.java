@@ -87,7 +87,7 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	@Override
-	public void paintFocused(Graphics g) {
+	public void paintHovered(Graphics g) {
 		if (hovered) {
 			Insets insets = container.getInsets();
 			Graphics2D g2d = (Graphics2D) g;

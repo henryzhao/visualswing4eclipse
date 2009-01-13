@@ -234,8 +234,6 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	public JComponent getContainer(){
 		return this.container;
 	}
-	public void paintFocused(Graphics g) {
-	}
 
 	public boolean dragOver(Point p) {
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
@@ -303,10 +301,14 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	public boolean isSelectionAlignResize(String id) {
 		return false;
 	}
-
 	public void paintHint(Graphics g) {
 	}
-
+	public void paintHovered(Graphics g) {
+	}
+	public void paintGrid(Graphics clipg) {
+	}
+	public void paintAnchor(Graphics g) {
+	}	
 	public IPropertySource getPropertySource(Object layout) {		
 		return new PropertySource2(new StructuredSelection(layout), getLayoutProperties());
 	}
@@ -349,10 +351,5 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		return ca.getDefaultLayout()==getLayoutClass();
 	}
 
-	public void paintGrid(Graphics clipg) {
-	}
-
-	public void paintAnchor(Graphics g) {
-	}
 }
 
