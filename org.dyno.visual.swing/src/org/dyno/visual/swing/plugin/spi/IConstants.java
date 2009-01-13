@@ -47,7 +47,6 @@ public interface IConstants {
 	int STATE_ROOT_RESIZE_RIGHT = 21;
 	int STATE_ROOT_RESIZE_RIGHT_BOTTOM = 22;
 	int STATE_ROOT_RESIZE_BOTTOM = 23;
-	int DND_THRESHOLD = 5;
 	
 	String ADAPTER_PROPERTY = "widget.adapter";
 	int OUTER = 0;
@@ -60,7 +59,7 @@ public interface IConstants {
 	int BOTTOM = 7;
 	int LEFT_BOTTOM = 8;
 	int LEFT = 9;
-	int ADHERE_PAD = 6;
+	int ADHERE_PAD = 3;
 
 	int ACCESS_PRIVATE = 0;
 	int ACCESS_DEFAULT = 1;
