@@ -221,6 +221,11 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 								.getRoot().getLocation().append(absPath);
 						if (ip.toFile().exists()) {
 							url = ip.toFile().toURI().toURL();
+						}else{
+							ip=java_project.getProject().getLocation().append("..").append(absPath);
+							if(ip.toFile().exists()){
+								url = ip.toFile().toURI().toURL();
+							}
 						}
 					}
 					break;
