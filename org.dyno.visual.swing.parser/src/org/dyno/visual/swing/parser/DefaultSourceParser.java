@@ -14,8 +14,10 @@
 package org.dyno.visual.swing.parser;
 
 import java.awt.Component;
+import java.awt.Frame;
 import java.beans.EventSetDescriptor;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -90,6 +92,7 @@ import org.eclipse.ui.PlatformUI;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 class DefaultSourceParser implements ISourceParser, IConstants {
 	private static final String FIELD_PARSER_EXTENSION_ID = "org.dyno.visual.swing.parser.fieldParser"; //$NON-NLS-1$
 	private DefaultParserFactory factory;
@@ -170,7 +173,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 							newlnf, new ISyncUITask() {
 								@Override
 								public Object doTask() throws Throwable {
-									return beanClass.newInstance();
+									return createBeanFromClass(beanClass);
 								}
 							});
 					WidgetAdapter beanAdapter = ExtensionRegistry
@@ -190,6 +193,22 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			ParserPlugin.getLogger().error(e);
 		}
 		return null;
+	}
+	private Object createBeanFromClass(Class beanClass)throws Throwable{
+		try {
+			Constructor cons=beanClass.getConstructor(new Class[0]);
+			cons.setAccessible(true);
+			return cons.newInstance();
+		}catch (NoSuchMethodException e) {
+			try{
+				Constructor cons=beanClass.getConstructor(new Class[]{Frame.class});
+				cons.setAccessible(true);
+				return cons.newInstance(new Frame());
+			}catch(NoSuchMethodException ex){
+				ParserPlugin.getLogger().error(ex);
+				return null;
+			}
+		}
 	}
 	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit,
 			WidgetAdapter adapter) {
@@ -215,8 +234,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return null;
 	}
-
-	@SuppressWarnings("unchecked")
 	private void parseWidgetProperty(String lnfClassname,
 			CompilationUnit cunit, WidgetAdapter adapter) {
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
@@ -235,8 +252,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
-
-	@SuppressWarnings("unchecked")
 	private void checkSatement(Object bean, IWidgetPropertyDescriptor property,
 			Statement statement) {
 		if (statement instanceof ExpressionStatement) {
@@ -260,8 +275,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
-
-	@SuppressWarnings("unchecked")
 	private List getBeanPropertyInitStatements(WidgetAdapter adapter, TypeDeclaration type) {
 		List statements;
 		if (adapter.isRoot()) {
@@ -288,8 +301,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return statements;
 	}
-
-	@SuppressWarnings("unchecked")
 	private void initDesignedWidget(CompilationUnit cunit, Component bean) {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -311,8 +322,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
-
-	@SuppressWarnings("unchecked")
 	private void parseField(CompilationUnit cunit, Component bean, Field field) {
 		Class clazz = bean.getClass();
 		String fieldName = field.getName();
@@ -362,7 +371,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		parseEventListener(cunit, adapter);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static String getBeanClassLnf(Class beanClass) {
 		try {
 			Field field = beanClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
