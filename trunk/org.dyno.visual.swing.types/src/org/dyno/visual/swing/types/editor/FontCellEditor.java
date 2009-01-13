@@ -179,7 +179,10 @@ public class FontCellEditor extends DialogCellEditor {
 				styleString = "REGULAR";
 			}
 		}
-		return "(" + font.getName() + ", " + styleString + ", " + font.getHeight() + ")";
+		String name = font.getName();
+		if(name==null||name.trim().length()==0)
+			name="Dialog";
+		return "(" + name + ", " + styleString + ", " + font.getHeight() + ")";
 	}
 	private static FontData decodeFontData(String string) {
 		string = string.trim();

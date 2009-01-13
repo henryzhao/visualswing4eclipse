@@ -97,6 +97,7 @@ public class NewFramePage extends NewComponentPage {
 		cName = type.getTypeQualifiedName('.');
 		buf.append(cName + " frame = new " + cName + "();\n");
 		buf.append("frame.setTitle(\"" + type.getElementName() + "\");\n");
+		buf.append("frame.pack();\n");
 		buf.append("frame.setLocationRelativeTo(null);\n");
 		buf.append("frame.setVisible(true);\n");
 		buf.append("}\n");

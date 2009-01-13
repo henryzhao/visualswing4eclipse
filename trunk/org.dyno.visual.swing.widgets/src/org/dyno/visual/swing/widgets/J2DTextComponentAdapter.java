@@ -41,7 +41,7 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 
 	@Override
 	protected Dimension getInitialSize() {
-		return new Dimension(100, 160);
+		return new Dimension(100, 80);
 	}
 
 	protected abstract JTextComponent createTextComponent();
