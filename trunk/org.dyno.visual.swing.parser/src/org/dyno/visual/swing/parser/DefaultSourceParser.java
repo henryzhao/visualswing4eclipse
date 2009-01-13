@@ -214,7 +214,15 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				switch (pathEntry.getContentKind()) {
 				case IPackageFragmentRoot.K_BINARY:
 					absPath = pathEntry.getPath();
-					url = absPath.toFile().toURI().toURL();
+					if (absPath.toFile().exists()) {
+						url = absPath.toFile().toURI().toURL();
+					} else {
+						IPath ip = java_project.getProject().getWorkspace()
+								.getRoot().getLocation().append(absPath);
+						if (ip.toFile().exists()) {
+							url = ip.toFile().toURI().toURL();
+						}
+					}
 					break;
 				}
 				break;
