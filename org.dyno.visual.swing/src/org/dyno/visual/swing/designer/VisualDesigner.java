@@ -491,8 +491,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void capture() {
 		if (root != null) {
-			captured = root.createVolatileImage(root.getWidth(), root
-					.getHeight());
+			captured = null;
+			System.gc();
+			captured = root.createVolatileImage(root.getWidth(), root.getHeight());
 			Graphics offg = captured.getGraphics();
 			root.paint(offg);
 			repaint();
