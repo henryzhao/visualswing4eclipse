@@ -15,10 +15,10 @@ package org.dyno.visual.swing.parser;
 
 import java.awt.Component;
 import java.beans.EventSetDescriptor;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -44,25 +44,18 @@ import org.dyno.visual.swing.plugin.spi.IValueParser;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.Flags;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -76,6 +69,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.ui.CodeStyleConfiguration;
 import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -157,11 +151,14 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		try {
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			ArrayList<URL> paths = new ArrayList<URL>();
-			addClasspaths(java_project, paths);
-			URL[] urls = paths.toArray(new URL[paths.size()]);
-			final Class<?> beanClass = new URLClassLoader(urls, getClass()
-					.getClassLoader()).loadClass(className);
+			String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(java_project);
+			URL[] urls = new URL[classPath.length];
+			for(int i=0;i<classPath.length;i++){
+				File cp = new File(classPath[i]);
+				if(cp.exists())
+					urls[i]=cp.toURI().toURL();
+			}
+			final Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
 				ILookAndFeelAdapter lnfAdapter = ExtensionRegistry
@@ -193,64 +190,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return null;
 	}
-	private void addClasspaths(IJavaProject java_project, ArrayList<URL> paths)
-			throws MalformedURLException, CoreException {
-		java_project.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
-		IClasspathEntry[] classpaths = java_project.getResolvedClasspath(true);
-		IPath prjPath = java_project.getProject().getLocation();
-		IPath absPath;
-		for (IClasspathEntry pathEntry : classpaths) {
-			URL url = null;
-			switch (pathEntry.getEntryKind()) {
-			case IClasspathEntry.CPE_SOURCE:
-				absPath = prjPath.append(pathEntry.getPath());
-				url = absPath.toFile().toURI().toURL();
-				break;
-			case IClasspathEntry.CPE_CONTAINER:
-				absPath = prjPath.append(pathEntry.getPath());
-				url = absPath.toFile().toURI().toURL();
-				break;
-			case IClasspathEntry.CPE_LIBRARY:
-				switch (pathEntry.getContentKind()) {
-				case IPackageFragmentRoot.K_BINARY:
-					absPath = pathEntry.getPath();
-					if (absPath.toFile().exists()) {
-						url = absPath.toFile().toURI().toURL();
-					} else {
-						IPath ip = java_project.getProject().getWorkspace()
-								.getRoot().getLocation().append(absPath);
-						if (ip.toFile().exists()) {
-							url = ip.toFile().toURI().toURL();
-						}else{
-							ip=java_project.getProject().getLocation().append("..").append(absPath);
-							if(ip.toFile().exists()){
-								url = ip.toFile().toURI().toURL();
-							}
-						}
-					}
-					break;
-				}
-				break;
-			case IClasspathEntry.CPE_PROJECT:
-				IPath ip = pathEntry.getPath();
-				IProject prj = ResourcesPlugin.getWorkspace().getRoot().getProject(ip.segment(0));
-				IJavaProject jp = JavaCore.create(prj);
-				addClasspaths(jp, paths);
-				break;
-			case IClasspathEntry.CPE_VARIABLE:
-				absPath = prjPath.append(pathEntry.getPath());
-				url = absPath.toFile().toURI().toURL();
-				break;
-			}
-			if (url != null && !paths.contains(url)) {
-				paths.add(url);
-			}
-		}
-		IPath projPath = java_project.getProject().getLocation();
-		String bin=java_project.getOutputLocation().lastSegment();
-		paths.add(projPath.append(bin).toFile().toURI().toURL());
-	}
-
 	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit,
 			WidgetAdapter adapter) {
 		parseWidgetProperty(lnfClassname, cunit, adapter);
