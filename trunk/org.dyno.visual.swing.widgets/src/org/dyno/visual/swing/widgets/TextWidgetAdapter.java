@@ -69,7 +69,8 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 
 	protected Component createWidget() {
 		JComponent jc = createWidgetByClass();
-		setText(jc, getBasename());
+		requestGlobalNewName();
+		setText(jc, getName());
 		Dimension size = jc.getPreferredSize();		
 		jc.setSize(size);
 		jc.doLayout();

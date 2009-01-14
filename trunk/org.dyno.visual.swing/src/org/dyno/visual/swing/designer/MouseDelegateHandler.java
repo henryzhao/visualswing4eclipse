@@ -46,7 +46,9 @@ class MouseDelegateHandler implements InvocationHandler {
 						method.invoke(l, new Object[] { mEvent });
 						if (mEvent.isConsumed()) {
 							e.consume();
-							break;
+							return null;
+						}else if(mEvent.getSource()==null){
+							return null;
 						}
 					}
 					adapter=adapter.getParentAdapter();

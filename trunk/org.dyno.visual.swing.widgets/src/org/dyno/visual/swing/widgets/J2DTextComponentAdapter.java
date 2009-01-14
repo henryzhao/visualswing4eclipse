@@ -31,7 +31,8 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 
 	protected Component createWidget() {
 		JTextComponent jtc = createTextComponent();
-		jtc.setText(getBasename());
+		requestGlobalNewName();
+		jtc.setText(getName());
 		Dimension size = getInitialSize();
 		jtc.setSize(size);
 		jtc.doLayout();

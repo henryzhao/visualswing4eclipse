@@ -1,18 +1,18 @@
 package org.dyno.visual.swing.widgets.delegate;
 
 import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
+import javax.swing.event.MouseInputAdapter;
 
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.JTabbedPaneAdapter;
 import org.eclipse.core.runtime.IAdaptable;
 
-public class JTabbedPaneMouseDelegate extends MouseAdapter implements
+public class JTabbedPaneMouseDelegate extends MouseInputAdapter implements
 		IAdaptableContext {
 	private JTabbedPaneAdapter adapter;
 
