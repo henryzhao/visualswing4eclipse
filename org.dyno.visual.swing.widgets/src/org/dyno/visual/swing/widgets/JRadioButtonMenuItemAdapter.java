@@ -38,7 +38,8 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 	@Override
 	protected Component createWidget() {
 		JRadioButtonMenuItem jmi = new JRadioButtonMenuItem();
-		jmi.setText(Messages.JRadioButtonMenuItemAdapter_Radio_Button_Item);
+		requestGlobalNewName();
+		jmi.setText(getName());
 		jmi.setSize(jmi.getPreferredSize());
 		jmi.doLayout();
 		return jmi;

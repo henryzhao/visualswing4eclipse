@@ -37,7 +37,8 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	@Override
 	protected Component createWidget() {
 		JMenuItem jmi = new JMenuItem();
-		jmi.setText(Messages.JMenuItemAdapter_Menu_Item);
+		requestGlobalNewName();		
+		jmi.setText(getName());
 		jmi.setSize(jmi.getPreferredSize());
 		jmi.doLayout();
 		return jmi;

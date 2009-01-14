@@ -107,6 +107,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		listeners = new ArrayList<ISelectionChangedListener>();
 	}
 
+	public IJavaProject getHostProject(){
+		return hostProject;
+	}
 	@Override
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
@@ -186,8 +189,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 		if (designer != null)
 			designer.setFocus();
-		WhiteBoard.setCurrentProject(hostProject);
-		WhiteBoard.setEditorListener(this);
+		WhiteBoard.setCurrentEditor(this);
 	}
 
 	public void changeToLnf(String className) {
@@ -297,7 +299,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			return false;
 		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 		hostProject = unit.getJavaProject();
-		WhiteBoard.setCurrentProject(hostProject);
 		ISourceParser sourceParser = factory.newParser();
 		isParsing = true;
 		WidgetAdapter adapter = sourceParser.parse(unit, monitor);

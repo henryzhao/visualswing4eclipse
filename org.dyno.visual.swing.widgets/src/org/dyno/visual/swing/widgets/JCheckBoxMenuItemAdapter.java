@@ -38,7 +38,8 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 	@Override
 	protected Component createWidget() {
 		JCheckBoxMenuItem jmi = new JCheckBoxMenuItem();
-		jmi.setText(Messages.JCheckBoxMenuItemAdapter_Check_Item);
+		requestGlobalNewName();
+		jmi.setText(getName());
 		jmi.setSize(jmi.getPreferredSize());
 		jmi.doLayout();
 		return jmi;

@@ -643,7 +643,10 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JCheckBoxMenuItem"
                widgetName="%Palette.JCheckBoxMenuItem">
-               <property id="selected" name="selected" gencode="false"/>
+               <property
+                     gencode="true"
+                     id="selected"
+                     name="selected"/>
          </widget>
          <widget
                abstract="false"
@@ -653,7 +656,10 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JRadioButtonMenuItem"
                widgetName="%Palette.JRadioButtonMenuItem">
-               <property id="selected" name="selected" gencode="false"/>
+               <property
+                     gencode="true"
+                     id="selected"
+                     name="selected"/>
          </widget>
          <widget
                abstract="false"
@@ -1049,6 +1055,22 @@
          <adapter
                class="javax.swing.JMenu"
                implementation="org.dyno.visual.swing.widgets.delegate.JMenuMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBoxMenuItem"
+               implementation="org.dyno.visual.swing.widgets.delegate.JCheckBoxMenuItemMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButtonMenuItem"
+               implementation="org.dyno.visual.swing.widgets.delegate.JRadioButtonMenuItemMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.delegate.JRadioButtonMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.delegate.JCheckBoxMouseDelegate">
          </adapter></interface>
    </extension>
 </plugin>

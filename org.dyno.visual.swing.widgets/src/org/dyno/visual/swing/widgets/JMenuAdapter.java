@@ -24,7 +24,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.Toolkit;
-import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Stack;
 
@@ -37,6 +36,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.LabelEditor;
@@ -116,7 +116,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			}});
 	}
 	void widgetPressed(){
-		MouseListener l=(MouseListener) getAdapter(MouseListener.class);
+		MouseInputListener l=(MouseInputListener) getAdapter(MouseInputListener.class);
 		if(l!=null)
 			l.mousePressed(null);
 	}
@@ -294,12 +294,12 @@ public class JMenuAdapter extends CompositeAdapter {
 			}
 
 		};
+		requestGlobalNewName();
+		menu.setText(getName());
 		WidgetAdapter menuAdapter = ExtensionRegistry
 				.createWidgetAdapter(JMenuItem.class);
 		JMenuItem jmenu = (JMenuItem) menuAdapter.getWidget();
-		jmenu.setText(Messages.JMenuAdapter_Menu_Item);
-		menu.add(jmenu);
-		menu.setText(Messages.JMenuAdapter_Menu);
+		menu.add(jmenu);		
 		menu.setSize(menu.getPreferredSize());
 		menu.doLayout();
 		return menu;
