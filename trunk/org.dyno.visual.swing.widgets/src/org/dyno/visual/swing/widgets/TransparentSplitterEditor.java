@@ -42,12 +42,17 @@ public class TransparentSplitterEditor implements IEditor {
 	public void setFont(Font f) {
 		splitter.setFont(f);
 	}
-
+	private Object old;
 	@Override
 	public void setValue(Object v) {
+		old=v;
 	}
 
 	@Override
 	public void validateValue() throws Exception {
+	}
+	@Override
+	public Object getOldValue() {
+		return old;
 	}
 }

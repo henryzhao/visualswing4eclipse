@@ -61,12 +61,18 @@ public class TreeModelEditor implements IEditor {
 	public void setFont(Font f) {
 		tmPanel.setFont(f);
 	}
+	private Object old;
 	@Override
 	public void setValue(Object v) {
+		old = v;
 		tmPanel.setTreeModel((TreeModel)v);
 	}
 	@Override
 	public void validateValue() throws Exception {
+	}
+	@Override
+	public Object getOldValue() {
+		return old;
 	}
 }
 

@@ -55,7 +55,7 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		ComboBoxModel model = ((JComboBox) getWidget()).getModel();
 		int size = model.getSize();
 		String items = ""; //$NON-NLS-1$

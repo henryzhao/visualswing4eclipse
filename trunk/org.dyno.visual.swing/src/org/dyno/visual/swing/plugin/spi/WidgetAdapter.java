@@ -54,7 +54,6 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.PropertySource2;
-import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry.Category;
 import org.dyno.visual.swing.base.ExtensionRegistry.Provider;
@@ -346,7 +345,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public void setWidgetValue(Object value) {
 	}
 
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		return null;
 	}
 
@@ -1079,28 +1078,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public Map<EventSetDescriptor, IEventListenerModel> getEventDescriptor() {
 		return eventDescriptor;
-	}
-
-	@SuppressWarnings("unchecked")
-	public boolean isWidgetValueChanged(Object newValue) {
-		Object lastValue = getWidgetValue();
-		if (lastValue == null) {
-			if (newValue == null)
-				return false;
-			else
-				return true;
-		} else {
-			if (newValue == null)
-				return true;
-			else {
-				TypeAdapter typeAdapter = ExtensionRegistry
-						.getTypeAdapter(lastValue.getClass());
-				if (typeAdapter != null && typeAdapter.getComparator() != null)
-					return typeAdapter.getComparator().compare(lastValue,
-							newValue) != 0;
-				return !lastValue.equals(newValue);
-			}
-		}
 	}
 
 	public boolean needGlobalGraphics() {

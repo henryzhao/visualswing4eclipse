@@ -50,7 +50,7 @@ public class JProgressBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		return ((JProgressBar) getWidget()).getValue();
 	}
 

@@ -196,7 +196,7 @@ public class JMenuAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		Component me = getWidget();
 		JMenu jmi = (JMenu) me;
 		return jmi.getText();

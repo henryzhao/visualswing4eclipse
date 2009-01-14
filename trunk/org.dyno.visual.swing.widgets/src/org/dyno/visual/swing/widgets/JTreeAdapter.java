@@ -69,7 +69,7 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		JTree tree = (JTree) getWidget();
 		return tree.getModel();
 	}

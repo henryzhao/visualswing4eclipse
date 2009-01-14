@@ -10,10 +10,11 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 
 public class TransparentSliderEditor implements IEditor {
 	private JSlider slider;
-	
-	public TransparentSliderEditor(JSlider js){
+
+	public TransparentSliderEditor(JSlider js) {
 		slider = js;
 	}
+
 	@Override
 	public void addChangeListener(ChangeListener l) {
 	}
@@ -31,10 +32,12 @@ public class TransparentSliderEditor implements IEditor {
 	@Override
 	public void removeChangeListener(ChangeListener l) {
 	}
+
 	@Override
 	public void setFocus() {
 		slider.requestFocus();
-		slider.setToolTipText(Messages.TransparentSliderEditor_Drag_Slider_Adjust_Value);
+		slider
+				.setToolTipText(Messages.TransparentSliderEditor_Drag_Slider_Adjust_Value);
 	}
 
 	@Override
@@ -42,13 +45,21 @@ public class TransparentSliderEditor implements IEditor {
 		slider.setFont(f);
 	}
 
+	private Object old;
+
 	@Override
 	public void setValue(Object v) {
-		int value = v==null?0:((Number)v).intValue();
+		this.old = v;
+		int value = v == null ? 0 : ((Number) v).intValue();
 		slider.setValue(value);
 	}
 
 	@Override
 	public void validateValue() throws Exception {
+	}
+
+	@Override
+	public Object getOldValue() {
+		return old;
 	}
 }

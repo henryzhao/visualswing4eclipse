@@ -41,14 +41,19 @@ public class TransparentScrollBarEditor implements IEditor {
 	public void setFont(Font f) {
 		scrollBar.setFont(f);
 	}
-
+	private Object old_value;
 	@Override
 	public void setValue(Object v) {
 		int value = v==null?0:((Number)v).intValue();
 		scrollBar.setValue(value);
+		this.old_value = v;
 	}
 
 	@Override
 	public void validateValue() throws Exception {
+	}
+	@Override
+	public Object getOldValue() {
+		return old_value;
 	}
 }

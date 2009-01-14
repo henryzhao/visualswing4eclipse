@@ -179,7 +179,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		JInternalFrame jif = (JInternalFrame) getWidget();
 		return jif.getTitle();
 	}

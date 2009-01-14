@@ -25,10 +25,10 @@ public class SetWidgetValueOperation extends AbstractOperation {
 	private WidgetAdapter adapter;
 	private Object old_value;
 	private Object new_value;
-	public SetWidgetValueOperation(WidgetAdapter adapter, Object new_value){
+	public SetWidgetValueOperation(WidgetAdapter adapter, Object old_value, Object new_value){
 		super(Messages.SetWidgetValueOperation_Changing_Component_Value);
 		this.adapter = adapter;
-		this.old_value = adapter.getWidgetValue();
+		this.old_value = old_value;
 		this.new_value = new_value;
 	}
 	@Override

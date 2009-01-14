@@ -130,14 +130,13 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 		return iEditor;
 	}
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		JTabbedPane jtp = (JTabbedPane) getWidget();
-		int index = jtp.getSelectedIndex();
+		int index = getTabIndexAt(jtp, x, y);
 		if (index != -1) {
 			return jtp.getTitleAt(index);
-		} else {
-			return null;
 		}
+		return null;		
 	}
 
 	@Override

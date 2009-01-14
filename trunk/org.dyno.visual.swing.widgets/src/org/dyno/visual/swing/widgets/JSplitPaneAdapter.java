@@ -95,7 +95,7 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		JSplitPane jsp = (JSplitPane) getWidget();
 		return jsp.getDividerLocation();
 	}

@@ -62,7 +62,7 @@ public class JListAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		ListModel model = ((JList) getWidget()).getModel();
 		int size = model.getSize();
 		String items = ""; //$NON-NLS-1$
