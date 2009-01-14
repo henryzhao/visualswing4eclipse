@@ -3,13 +3,13 @@
 <repository name='Visual Swing Designer for Eclipse' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1231905872061'/>
+    <property name='p2.timestamp' value='1231906031312'/>
   </properties>
   <references size='2'>
     <repository url='http://visualswing4eclipse.googlecode.com/svn/trunk/org.dyno.visual.swing.site/' type='1' options='0'/>
     <repository url='http://visualswing4eclipse.googlecode.com/svn/trunk/org.dyno.visual.swing.site/' type='0' options='0'/>
   </references>
-  <units size='16'>
+  <units size='18'>
     <unit id='org.dyno.visual.swing.layouts' version='0.9.8.I20090114-1200'>
       <update id='org.dyno.visual.swing.layouts' range='[0.0.0,0.9.8.I20090114-1200)' severity='0'/>
       <properties size='4'>
@@ -651,10 +651,83 @@
       <touchpointData size='1'>
         <instructions size='1'>
           <instruction key='manifest'>
-            Bundle-ManifestVersion: 2&#xA;Export-Package: org.dyno.visual.swing.base,org.dyno.visual.swing.layouts,org.dyno.visual.swing.plugin.spi&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.editors,org.eclipse.ui.ide,org.eclipse.ui.views,org.eclipse.ui.forms,org.eclipse.ui.navigator,org.eclipse.jdt.core,org.eclipse.jdt.ui&#xA;Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.9.8.I20090114-1201&#xA;Bundle-Vendor: %Bundle-Vendor.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true&#xA;Bundle-ActivationPolicy: lazy;exclude:=&quot;org.dyno.visual.swing.contentTypes&quot;&#xA;Manifest-Version: 1.0&#xA;
+            Bundle-ManifestVersion: 2&#xA;Export-Package: org.dyno.visual.swing.base,org.dyno.visual.swing.layouts,org.dyno.visual.swing.plugin.spi&#xA;Bundle-RequiredExecutionEnvironment: JavaSE-1.6&#xA;Bundle-Localization: plugin&#xA;Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.jface.text,org.eclipse.core.resources,org.eclipse.ui.editors,org.eclipse.ui.ide,org.eclipse.ui.views,org.eclipse.ui.forms,org.eclipse.ui.navigator,org.eclipse.jdt.core,org.eclipse.jdt.ui&#xA;Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin&#xA;Bundle-Name: %Bundle-Name.0&#xA;Bundle-Version: 0.9.8.I20090114-1201&#xA;Bundle-Vendor: %Bundle-Vendor.0&#xA;Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true&#xA;Bundle-ActivationPolicy: lazy;exclude:=&quot;org.dyno.visual.swing.contentTypes&quot;&#xA;Manifest-Version: 1.0
           </instruction>
         </instructions>
       </touchpointData>
+    </unit>
+    <unit id='org.dyno.visual.swing.feature.feature.group' version='0.9.8.I20090114-1201' singleton='false'>
+      <update id='org.dyno.visual.swing.feature.feature.group' range='[0.0.0,0.9.8.I20090114-1201)' severity='0'/>
+      <properties size='5'>
+        <property name='org.eclipse.equinox.p2.name' value='Visual Swing Designer for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Dynamic Object Organization'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.feature.feature.group' version='0.9.8.I20090114-1201'/>
+      </provides>
+      <requires size='9'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing' range='[0.9.8.I20090114-1201,0.9.8.I20090114-1201]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.borders' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.grouplayouts' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.layouts' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.lnfs' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.parser' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.types' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.widgets' range='[0.9.8.I20090114-1200,0.9.8.I20090114-1200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.feature.feature.jar' range='[0.9.8.I20090114-1201,0.9.8.I20090114-1201]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id='org.dyno.visual.swing.feature.feature.jar' version='0.9.8.I20090114-1201'>
+      <update id='org.dyno.visual.swing.feature.feature.jar' range='[0.0.0,0.9.8.I20090114-1201)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Visual Swing Designer for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
+        <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Dynamic Object Organization'/>
+      </properties>
+      <provides size='3'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.dyno.visual.swing.feature.feature.jar' version='0.9.8.I20090114-1201'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='org.dyno.visual.swing.feature' version='0.9.8.I20090114-1201'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='org.dyno.visual.swing.feature' version='0.9.8.I20090114-1201'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license url='http://www.example.com/license'>
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright url='http://www.example.com/copyright'>
+        [Enter Copyright Description here.]
+      </copyright>
     </unit>
   </units>
 </repository>
