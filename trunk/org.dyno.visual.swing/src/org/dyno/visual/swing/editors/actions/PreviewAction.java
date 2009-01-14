@@ -59,6 +59,7 @@ public class PreviewAction extends EditorAction {
 		if(designer==null)
 			return;
 		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		rootAdapter.hideMenu();
 		Component contentComponent = rootAdapter.cloneWidget();
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
