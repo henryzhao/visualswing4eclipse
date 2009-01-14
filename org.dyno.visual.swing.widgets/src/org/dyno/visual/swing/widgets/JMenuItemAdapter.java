@@ -74,7 +74,7 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		Component me = getWidget();
 		JMenuItem jmi = (JMenuItem)me;
 		return jmi.getText();

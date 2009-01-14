@@ -62,6 +62,12 @@ public class IntegerTextEditor extends JFormattedTextField implements IEditor, A
 		}
 		selectAll();
 	}
+	private Object old_value;
+	@Override
+	public void setValue(Object value) {
+		this.old_value = value;
+		super.setValue(value);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -79,6 +85,11 @@ public class IntegerTextEditor extends JFormattedTextField implements IEditor, A
 
 	@Override
 	public void validateValue() throws Exception {
+	}
+
+	@Override
+	public Object getOldValue() {
+		return this.old_value;
 	}
 }
 

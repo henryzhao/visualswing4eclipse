@@ -67,7 +67,7 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		return ((JTextComponent) getWidget()).getText();
 	}
 

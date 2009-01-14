@@ -47,7 +47,7 @@ public class JSliderAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		return ((JSlider) getWidget()).getValue();
 	}
 

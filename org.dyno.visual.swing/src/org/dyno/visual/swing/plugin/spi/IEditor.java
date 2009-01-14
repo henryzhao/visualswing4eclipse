@@ -40,5 +40,7 @@ public interface IEditor {
 	void removeChangeListener(ChangeListener l);
 	
 	void setFont(Font f);
+
+	Object getOldValue();
 }
 

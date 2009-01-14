@@ -44,9 +44,10 @@ public class TextAreaEditor extends TextArea implements IEditor {
 	@Override
 	public void removeChangeListener(ChangeListener l) {
 	}
-
+	private Object old_value;
 	@Override
 	public void setValue(Object v) {
+		this.old_value = v;
 		setText(v == null ? "" : v.toString());
 	}
 
@@ -64,6 +65,11 @@ public class TextAreaEditor extends TextArea implements IEditor {
 
 	@Override
 	public void validateValue() throws Exception {
+	}
+
+	@Override
+	public Object getOldValue() {
+		return old_value;
 	}
 }
 

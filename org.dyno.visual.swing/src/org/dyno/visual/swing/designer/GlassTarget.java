@@ -416,7 +416,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		IEditor iEditor = adapter.getEditorAt(loc.x, loc.y);
 		if (iEditor != null) {
 			iEditor.setFont(adapter.getWidget().getFont());
-			iEditor.setValue(adapter.getWidgetValue());
+			iEditor.setValue(adapter.getWidgetValue(loc.x, loc.y));
 			iEditor.addChangeListener(this);
 			Rectangle bounds = adapter.getEditorBounds(loc.x, loc.y);
 			if (adapter.isRoot())
@@ -467,7 +467,21 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private EditorAdapter currentEditor;
 	private boolean stoppingEditing;
-
+	private boolean isValueChanged(Object old_value, Object new_value){
+		if(old_value==null){
+			if(new_value==null){
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			if(new_value==null){
+				return true;
+			}else{
+				return !old_value.equals(new_value);
+			}
+		}
+	}
 	private boolean _stopEditing(boolean silence) {
 		if (currentEditor != null) {
 			stoppingEditing = true;
@@ -476,9 +490,9 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			try {
 				iEditor.validateValue();
 				Object newValue = iEditor.getValue();
-				if (adapter.isWidgetValueChanged(newValue)) {
-					IUndoableOperation operation = new SetWidgetValueOperation(
-							adapter, newValue);
+				Object oldValue = iEditor.getOldValue();
+				if (isValueChanged(oldValue, newValue)) {
+					IUndoableOperation operation = new SetWidgetValueOperation(adapter, oldValue, newValue);
 					Shell shell = designer.getShell();
 					IOperationHistory operationHistory = PlatformUI
 							.getWorkbench().getOperationSupport()

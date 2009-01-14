@@ -114,7 +114,7 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		return getText(getWidget());
 	}
 

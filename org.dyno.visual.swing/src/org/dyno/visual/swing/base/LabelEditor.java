@@ -60,9 +60,10 @@ public class LabelEditor extends TextField implements IEditor, ActionListener {
 		if (listeners.contains(l))
 			listeners.remove(l);
 	}
-
+	private Object old;
 	@Override
 	public void setValue(Object v) {
+		this.old = v;
 		setText(v == null ? "" : v.toString());
 	}
 
@@ -92,6 +93,11 @@ public class LabelEditor extends TextField implements IEditor, ActionListener {
 
 	@Override
 	public void validateValue() throws Exception {
+	}
+
+	@Override
+	public Object getOldValue() {
+		return this.old;
 	}
 }
 

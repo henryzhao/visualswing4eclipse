@@ -49,7 +49,7 @@ public class JSpinnerAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		return ((JSpinner) getWidget()).getValue();
 	}
 

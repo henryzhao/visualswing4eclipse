@@ -114,7 +114,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		JPanel panel = (JPanel) getWidget();
 		Border border = panel.getBorder();
 		if (border != null) {

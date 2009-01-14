@@ -68,7 +68,7 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue() {
+	public Object getWidgetValue(int x, int y) {
 		JTable table = (JTable) getWidget();
 		return table.getModel();
 	}
