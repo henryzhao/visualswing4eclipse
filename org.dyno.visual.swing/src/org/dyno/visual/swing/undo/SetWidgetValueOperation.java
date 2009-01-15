@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing.undo;
 
+import org.dyno.visual.swing.plugin.spi.IEditorAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -25,33 +26,41 @@ public class SetWidgetValueOperation extends AbstractOperation {
 	private WidgetAdapter adapter;
 	private Object old_value;
 	private Object new_value;
-	public SetWidgetValueOperation(WidgetAdapter adapter, Object old_value, Object new_value){
+
+	public SetWidgetValueOperation(WidgetAdapter adapter, Object old_value,
+			Object new_value) {
 		super(Messages.SetWidgetValueOperation_Changing_Component_Value);
 		this.adapter = adapter;
 		this.old_value = old_value;
 		this.new_value = new_value;
 	}
+
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		adapter.setWidgetValue(new_value);
+		IEditorAdapter editorAdapter = (IEditorAdapter) adapter
+				.getAdapter(IEditorAdapter.class);
+		if (editorAdapter != null)
+			editorAdapter.setWidgetValue(new_value);
 		adapter.repaintDesigner();
 		return Status.OK_STATUS;
 	}
 
 	@Override
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info)
-			throws ExecutionException {		
+			throws ExecutionException {
 		return execute(monitor, info);
 	}
 
 	@Override
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
-		adapter.setWidgetValue(old_value);
+		IEditorAdapter editorAdapter = (IEditorAdapter) adapter
+				.getAdapter(IEditorAdapter.class);
+		if (editorAdapter != null)
+			editorAdapter.setWidgetValue(old_value);
 		adapter.repaintDesigner();
 		return Status.OK_STATUS;
 	}
 
 }
-

@@ -1039,7 +1039,8 @@
    <extension
          point="org.dyno.visual.swing.adapters">
       <interface
-            class="javax.swing.event.MouseInputListener">
+            class="javax.swing.event.MouseInputListener"
+            default="javax.swing.event.MouseInputAdapter">
          <adapter
                class="javax.swing.JTabbedPane"
                implementation="org.dyno.visual.swing.widgets.delegate.JTabbedPaneMouseDelegate">
@@ -1182,6 +1183,133 @@
          <adapter
                class="javax.swing.JToolBar"
                implementation="org.dyno.visual.swing.widgets.painter.JToolBarPainter">
+         </adapter>
+      </interface>
+      <interface
+            class="org.dyno.visual.swing.plugin.spi.IBaselineAdapter"
+            default="org.dyno.visual.swing.widgets.baseline.WidgetBaseline">
+         <adapter
+               class="javax.swing.JComboBox"
+               implementation="org.dyno.visual.swing.widgets.baseline.JComboBoxBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JButton"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JFormattedTextField"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JLabel"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JPasswordField"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextField"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JToggleButton"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter></interface>
+      <interface
+            class="org.dyno.visual.swing.plugin.spi.IEditorAdapter"
+            default="org.dyno.visual.swing.widgets.editoradapter.WidgetEditorAdapter">
+         <adapter
+               class="javax.swing.JCheckBoxMenuItem"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JCheckBoxMenuItemEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JComboBox"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JComboBoxEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JInternalFrameEdtiorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JList"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JListEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JMenuEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenuItem"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JMenuItemEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JPanel"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JPanelEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JProgressBar"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JProgressBarEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButtonMenuItem"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JRadioButtonMenuItemEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JScrollBar"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JScrollBarEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSlider"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JSliderEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSpinner"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JSpinnerEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSplitPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JSplitPaneEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTabbedPaneEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTable"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTableEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTree"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTreeEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JCheckBoxEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JFormattedTextField"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JFormattedTextFieldEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JPasswordField"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JPasswordFieldEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JRadioButtonEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextField"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTextFieldEditorAdapter">
          </adapter>
       </interface>
    </extension>

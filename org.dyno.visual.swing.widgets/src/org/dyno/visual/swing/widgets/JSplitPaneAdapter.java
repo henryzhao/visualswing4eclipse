@@ -17,13 +17,11 @@ package org.dyno.visual.swing.widgets;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.actions.JSplitPanePlacementAction;
 import org.eclipse.jface.action.MenuManager;
@@ -42,34 +40,6 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		jsp.doLayout();
 		jsp.validate();
 		return jsp;
-	}
-
-	private IEditor editor;
-	@Override
-	public IEditor getEditorAt(int x, int y) {
-		if(editor==null)
-			editor = new TransparentSplitterEditor((JSplitPane) getWidget());
-		return editor;
-	}
-
-	@Override
-	public Rectangle getEditorBounds(int x, int y) {
-		int w = getWidget().getWidth();
-		int h = getWidget().getHeight();
-		return new Rectangle(0, 0, w, h);
-	}
-
-	@Override
-	public Object getWidgetValue(int x, int y) {
-		JSplitPane jsp = (JSplitPane) getWidget();
-		return jsp.getDividerLocation();
-	}
-
-	@Override
-	public void setWidgetValue(Object value) {
-		JSplitPane jsp = (JSplitPane) getWidget();
-		int div = value==null?0:((Integer)value).intValue();
-		jsp.setDividerLocation(div);
 	}
 
 	@Override

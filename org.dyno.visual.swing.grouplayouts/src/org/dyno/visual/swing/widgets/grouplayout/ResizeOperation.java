@@ -27,6 +27,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IBaselineAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.grouplayout.anchor.HorizontalBaselineAnchor;
 import org.dyno.visual.swing.widgets.grouplayout.anchor.HorizontalBottomAlignAnchor;
@@ -349,11 +350,13 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		su = tby + su;
 		sm = tby + sm;
 		WidgetAdapter dropAdapter = WidgetAdapter.getWidgetAdapter(todrop);
+		IBaselineAdapter dropBaseline=(IBaselineAdapter) dropAdapter.getAdapter(IBaselineAdapter.class);
 		WidgetAdapter targetAdapter = WidgetAdapter.getWidgetAdapter(target);
-		int tb = targetAdapter.getBaseline();
+		IBaselineAdapter targetBaseline=(IBaselineAdapter) targetAdapter.getAdapter(IBaselineAdapter.class);
+		int tb = targetBaseline.getBaseline();
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
 		Point sp = parent.getMascotLocation();
-		int sb = dropAdapter.getBaseline(this_point.y - sp.y);
+		int sb = dropBaseline.getBaseline(this_point.y - sp.y);
 		int dby = this_point.y;
 		tb = ty + tb;
 		sb = sp.y + sb;
@@ -372,7 +375,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 			return list;
 		} else if (Math.abs(tb - sb) < THRESHOLD_DISTANCE) {
 			List<Quartet> list = new ArrayList<Quartet>();
-			int dh = dropAdapter.getHeightByBaseline(tb - sp.y);
+			int dh = dropBaseline.getHeightByBaseline(tb - sp.y);
 			Quartet trio = new Quartet(tb, sp.y + dh, minx, maxr, new HorizontalBaselineAnchor(target));
 			list.add(trio);
 			return list;
@@ -420,8 +423,10 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 		WidgetAdapter targetAdapter = WidgetAdapter.getWidgetAdapter(target);
 		WidgetAdapter parent = WidgetAdapter.getWidgetAdapter(container);
 		Point sp = parent.getMascotLocation();
-		int tb = targetAdapter.getBaseline();
-		int sb = dropAdapter.getBaseline(sp.y + todrop.getHeight() - this_point.y);
+		IBaselineAdapter targetBaseline=(IBaselineAdapter) targetAdapter.getAdapter(IBaselineAdapter.class);
+		IBaselineAdapter dropBaseline=(IBaselineAdapter) dropAdapter.getAdapter(IBaselineAdapter.class);
+		int tb = targetBaseline.getBaseline();
+		int sb = dropBaseline.getBaseline(sp.y + todrop.getHeight() - this_point.y);
 		int dy = this_point.y;
 		tb = ty + tb;
 		sb = dy + sb;
@@ -436,7 +441,7 @@ public abstract class ResizeOperation extends AbstractDragOperation {
 			List<Quartet> list = new ArrayList<Quartet>();
 			int by = sp.y + todrop.getHeight();
 			int th = by - tb;
-			int H = dropAdapter.getHeightByDescent(th);
+			int H = dropBaseline.getHeightByDescent(th);
 			Quartet trio = new Quartet(tb, by - H, minx, maxr, new HorizontalBaselineAnchor(target));
 			list.add(trio);
 			return list;

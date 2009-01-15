@@ -16,12 +16,9 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 
 import javax.swing.JSlider;
-import javax.swing.SwingUtilities;
 
-import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JSliderAdapter extends WidgetAdapter {
@@ -37,28 +34,6 @@ public class JSliderAdapter extends WidgetAdapter {
 		bar.doLayout();
 		bar.validate();
 		return bar;
-	}
-	private IEditor editor;
-	@Override
-	public IEditor getEditorAt(int x, int y) {
-		Component cloneWidget = cloneWidget();		
-		editor = new TransparentSliderEditor((JSlider) cloneWidget);
-		return editor;
-	}
-
-	@Override
-	public Object getWidgetValue(int x, int y) {
-		return ((JSlider) getWidget()).getValue();
-	}
-
-	@Override
-	public void setWidgetValue(Object value) {
-		((JSlider) getWidget()).setValue(((Number) value).intValue());
-	}
-
-	@Override
-	public Rectangle getEditorBounds(int x, int y) {
-		return SwingUtilities.getLocalBounds(getWidget());
 	}
 
 	@Override

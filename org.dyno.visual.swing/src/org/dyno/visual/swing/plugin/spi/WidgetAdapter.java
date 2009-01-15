@@ -307,22 +307,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public Point getHotspotPoint() {
 		return this.hotspotPoint;
 	}
-
-	public IEditor getEditorAt(int x, int y) {
-		return null;
-	}
-
-	public void setWidgetValue(Object value) {
-	}
-
-	public Object getWidgetValue(int x, int y) {
-		return null;
-	}
-
-	public Rectangle getEditorBounds(int x, int y) {
-		return null;
-	}
-
 	public boolean isResizable() {
 		if (isRoot())
 			return false;
@@ -770,23 +754,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		else
 			return 0;
 	}
-
-	public int getBaseline() {
-		return getWidget().getHeight() / 2;
-	}
-
-	public int getBaseline(int h) {
-		return h / 2;
-	}
-
-	public int getHeightByBaseline(int baseline) {
-		return 2 * baseline;
-	}
-
-	public int getHeightByDescent(int descent) {
-		return 2 * descent;
-	}
-
 	
 	public void fillContextAction(MenuManager menu) {
 		if (!isRoot())
