@@ -366,6 +366,5 @@
    			name="%classpathContainerPage.name.0"
    			class="org.dyno.visual.swing.wizards.NewVisualSwingExtensionLibraryWizard">
   	</classpathContainerPage>
- 	</extension>
-      
+ 	</extension>      
 </plugin>

@@ -33,7 +33,6 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.jface.action.MenuManager;
 
 public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	private static JDesktopPane desktopPane = new JDesktopPane();
@@ -47,11 +46,6 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	@Override
 	public Component getRootPane() {
 		return getWidget();
-	}
-	@Override
-	public void fillContextAction(MenuManager menu) {
-		super.fillContextAction(menu);
-		contentAdapter.fillSetLayoutAction(menu);
 	}
 	public void doLayout() {
 		CompositeAdapter content = getContentAdapter();

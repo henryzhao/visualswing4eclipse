@@ -12,7 +12,7 @@
  *     William Chen - initial API and implementation.                               *
  ************************************************************************************/
 
-package org.dyno.visual.swing.widgets;
+package org.dyno.visual.swing.widgets.editors;
 
 import java.awt.Component;
 import java.awt.TextArea;

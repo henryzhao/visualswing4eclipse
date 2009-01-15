@@ -1,56 +1,64 @@
-package org.dyno.visual.swing.widgets;
+package org.dyno.visual.swing.widgets.editors;
 
 import java.awt.Component;
 import java.awt.Font;
 
-import javax.swing.JSplitPane;
+import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.widgets.Messages;
 
-public class TransparentSplitterEditor implements IEditor {
-	private TransparentSplitter splitter;
-	public TransparentSplitterEditor(JSplitPane jsp){
-		splitter = new TransparentSplitter(jsp);
+public class TransparentSliderEditor implements IEditor {
+	private JSlider slider;
+
+	public TransparentSliderEditor(JSlider js) {
+		slider = js;
 	}
+
 	@Override
 	public void addChangeListener(ChangeListener l) {
-		splitter.addChangeListener(l);
 	}
 
 	@Override
 	public Component getComponent() {
-		return splitter;
+		return slider;
 	}
 
 	@Override
 	public Object getValue() {
-		return splitter.getDividerLocation();
+		return slider.getValue();
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener l) {
-		splitter.removeChangeListener(l);
 	}
 
 	@Override
 	public void setFocus() {
-		splitter.requestFocus();
+		slider.requestFocus();
+		slider
+				.setToolTipText(Messages.TransparentSliderEditor_Drag_Slider_Adjust_Value);
 	}
 
 	@Override
 	public void setFont(Font f) {
-		splitter.setFont(f);
+		slider.setFont(f);
 	}
+
 	private Object old;
+
 	@Override
 	public void setValue(Object v) {
-		old=v;
+		this.old = v;
+		int value = v == null ? 0 : ((Number) v).intValue();
+		slider.setValue(value);
 	}
 
 	@Override
 	public void validateValue() throws Exception {
 	}
+
 	@Override
 	public Object getOldValue() {
 		return old;

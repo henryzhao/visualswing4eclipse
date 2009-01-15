@@ -6,7 +6,7 @@ import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
-import org.dyno.visual.swing.widgets.TransparentScrollBarEditor;
+import org.dyno.visual.swing.widgets.editors.TransparentScrollBarEditor;
 
 public class JScrollBarEditorAdapter extends WidgetEditorAdapter {
 

@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import javax.swing.JSpinner;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
-import org.dyno.visual.swing.widgets.IntegerTextEditor;
+import org.dyno.visual.swing.widgets.editors.IntegerTextEditor;
 
 public class JSpinnerEditorAdapter extends WidgetEditorAdapter {
 

@@ -10,8 +10,8 @@ import javax.swing.JList;
 import javax.swing.ListModel;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
-import org.dyno.visual.swing.widgets.TextAreaEditor;
 import org.dyno.visual.swing.widgets.WidgetPlugin;
+import org.dyno.visual.swing.widgets.editors.TextAreaEditor;
 
 public class JListEditorAdapter extends ComplexWidgetEditorAdapter {
 

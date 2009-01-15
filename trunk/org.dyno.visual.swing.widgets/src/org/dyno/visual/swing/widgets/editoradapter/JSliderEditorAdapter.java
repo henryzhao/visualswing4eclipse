@@ -7,7 +7,7 @@ import javax.swing.JSlider;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
-import org.dyno.visual.swing.widgets.TransparentSliderEditor;
+import org.dyno.visual.swing.widgets.editors.TransparentSliderEditor;
 
 public class JSliderEditorAdapter extends WidgetEditorAdapter {
 	private IEditor editor;
