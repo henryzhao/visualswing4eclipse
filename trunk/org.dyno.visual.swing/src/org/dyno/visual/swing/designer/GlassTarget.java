@@ -44,6 +44,7 @@ import org.dyno.visual.swing.editors.PaletteView;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.IEditorAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.SetWidgetValueOperation;
 import org.eclipse.core.commands.ExecutionException;
@@ -473,12 +474,15 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	private void startEditComponent(Component hovered, Point loc) {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-		IEditor iEditor = adapter.getEditorAt(loc.x, loc.y);
+		IEditorAdapter editorAdapter = (IEditorAdapter) adapter.getAdapter(IEditorAdapter.class);
+		IEditor iEditor = null;
+		if (editorAdapter != null)
+			iEditor = editorAdapter.getEditorAt(loc.x, loc.y);
 		if (iEditor != null) {
 			iEditor.setFont(adapter.getWidget().getFont());
-			iEditor.setValue(adapter.getWidgetValue(loc.x, loc.y));
+			iEditor.setValue(editorAdapter.getWidgetValue(loc.x, loc.y));
 			iEditor.addChangeListener(this);
-			Rectangle bounds = adapter.getEditorBounds(loc.x, loc.y);
+			Rectangle bounds = editorAdapter.getEditorBounds(loc.x, loc.y);
 			if (adapter.isRoot())
 				bounds = SwingUtilities.convertRectangle(hovered, bounds,
 						designer);

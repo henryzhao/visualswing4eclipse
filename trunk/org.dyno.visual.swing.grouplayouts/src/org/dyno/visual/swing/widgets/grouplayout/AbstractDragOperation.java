@@ -27,6 +27,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IBaselineAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.grouplayout.anchor.HorizontalBaselineAnchor;
 import org.dyno.visual.swing.widgets.grouplayout.anchor.HorizontalBottomAlignAnchor;
@@ -474,8 +475,10 @@ abstract class AbstractDragOperation implements IDragOperation {
 		sm = tby + sm;
 		WidgetAdapter dropAdapter = WidgetAdapter.getWidgetAdapter(todrop);
 		WidgetAdapter targetAdapter = WidgetAdapter.getWidgetAdapter(target);
-		int tb = targetAdapter.getBaseline();
-		int sb = dropAdapter.getBaseline();
+		IBaselineAdapter targetBaseline=(IBaselineAdapter) targetAdapter.getAdapter(IBaselineAdapter.class);
+		int tb = targetBaseline.getBaseline();
+		IBaselineAdapter dropBaseline=(IBaselineAdapter) dropAdapter.getAdapter(IBaselineAdapter.class);
+		int sb = dropBaseline.getBaseline();
 		int dy = this_point.y - dropAdapter.getHotspotPoint().y;
 		int dby = dy + todrop.getHeight();
 		tb = ty + tb;
@@ -491,7 +494,7 @@ abstract class AbstractDragOperation implements IDragOperation {
 		if (Math.abs(tb - sb) < THRESHOLD_DISTANCE) {
 			List<Quartet> list = new ArrayList<Quartet>();
 			Anchor a = new HorizontalBaselineAnchor(target);
-			Quartet trio = new Quartet(tb, tb - dropAdapter.getBaseline() + dropAdapter.getHotspotPoint().y, minx, maxr, a);
+			Quartet trio = new Quartet(tb, tb - dropBaseline.getBaseline() + dropAdapter.getHotspotPoint().y, minx, maxr, a);
 			list.add(trio);
 			return list;
 		} else if (Math.abs(dy - targety) < THRESHOLD_DISTANCE) {

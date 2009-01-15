@@ -16,11 +16,9 @@ package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 
 import javax.swing.JSpinner;
 
-import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JSpinnerAdapter extends WidgetAdapter {
@@ -36,33 +34,6 @@ public class JSpinnerAdapter extends WidgetAdapter {
 		spinner.doLayout();
 		spinner.validate();
 		return spinner;
-	}
-
-	private IEditor iEditor;
-
-	@Override
-	public IEditor getEditorAt(int x, int y) {
-		if (iEditor == null) {
-			iEditor = new IntegerTextEditor();
-		}
-		return iEditor;
-	}
-
-	@Override
-	public Object getWidgetValue(int x, int y) {
-		return ((JSpinner) getWidget()).getValue();
-	}
-
-	@Override
-	public void setWidgetValue(Object value) {
-		((JSpinner) getWidget()).setValue(((Number) value).intValue());
-	}
-
-	@Override
-	public Rectangle getEditorBounds(int x, int y) {
-		int w = getWidget().getWidth();
-		int h = getWidget().getHeight();
-		return new Rectangle(0, 0, w, h);
 	}
 
 	@Override

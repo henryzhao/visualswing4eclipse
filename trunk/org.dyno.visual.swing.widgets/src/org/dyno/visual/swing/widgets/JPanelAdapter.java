@@ -25,12 +25,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
-import javax.swing.border.Border;
 
 import org.dyno.visual.swing.base.EditorAction;
-import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -108,56 +105,6 @@ public class JPanelAdapter extends CompositeAdapter {
 		return FlowLayout.class;
 	}
 
-	@Override
-	public Object getWidgetValue(int x, int y) {
-		JPanel panel = (JPanel) getWidget();
-		Border border = panel.getBorder();
-		if (border != null) {
-			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
-			if(borderAdapter!=null){
-				return borderAdapter.getWidgetValue(panel);
-			}
-		} 
-		return null;
-	}
-
-	@Override
-	public void setWidgetValue(Object value) {
-		JPanel panel = (JPanel) getWidget();
-		Border border = panel.getBorder();
-		if (border != null) {
-			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
-			if(borderAdapter!=null){
-				borderAdapter.setWidgetValue(panel, value);
-			}
-		} 
-	}
-
-	@Override
-	public IEditor getEditorAt(int x, int y) {
-		JPanel panel = (JPanel) getWidget();
-		Border border = panel.getBorder();
-		if (border != null) {
-			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
-			if(borderAdapter!=null){
-				return borderAdapter.getEditorAt(panel, x, y);
-			}
-		} 
-		return null;
-	}
-
-	@Override
-	public Rectangle getEditorBounds(int x, int y) {
-		JPanel panel = (JPanel) getWidget();
-		Border border = panel.getBorder();
-		if (border != null) {
-			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
-			if(borderAdapter!=null){
-				return borderAdapter.getEditorBounds(panel, x, y);
-			}
-		} 
-		return null;
-	}
 
 	@Override
 	public List<WidgetAdapter> getDropWidget() {

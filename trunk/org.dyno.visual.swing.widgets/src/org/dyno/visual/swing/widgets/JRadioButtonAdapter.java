@@ -14,8 +14,6 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.Rectangle;
-
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JRadioButton;
@@ -26,21 +24,12 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 
 public class JRadioButtonAdapter extends TextWidgetAdapter {
 
-	private static final int BOX_THUMB = 16;
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JRadioButton.class;
 	}
 
-	@Override
-	public Rectangle getEditorBounds(int x, int y) {
-		Rectangle bounds = super.getEditorBounds(x, y);
-		bounds.x += BOX_THUMB;
-		bounds.width -= BOX_THUMB;
-		return bounds;
-	}
 	@Override
 	public IAdapter getParent() {
 		JRadioButton jb=(JRadioButton)getWidget();
