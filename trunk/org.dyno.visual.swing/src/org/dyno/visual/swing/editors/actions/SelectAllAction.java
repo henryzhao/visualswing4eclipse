@@ -43,9 +43,10 @@ public class SelectAllAction extends EditorAction {
 		VisualDesigner designer = getDesigner();
 		if(designer==null)
 			return;
+		if(designer.getRoot()==null)
+			return;
 		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(designer.getRoot());
-		setEnabled(((CompositeAdapter) rootAdapter)
-				.getChildCount() > 0);
+		setEnabled(((CompositeAdapter) rootAdapter).getChildCount() > 0);
 	}
 
 	@Override
