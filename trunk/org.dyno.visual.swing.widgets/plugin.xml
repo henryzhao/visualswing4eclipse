@@ -1311,6 +1311,18 @@
                class="javax.swing.JTextField"
                implementation="org.dyno.visual.swing.widgets.editoradapter.JTextFieldEditorAdapter">
          </adapter>
+         <adapter
+               class="javax.swing.JButton"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JToggleButton"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JLabel"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
+         </adapter>
       </interface>
       <interface
           class="org.dyno.visual.swing.plugin.spi.IMenuContext"
