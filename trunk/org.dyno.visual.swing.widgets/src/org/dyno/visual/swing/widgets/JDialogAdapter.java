@@ -13,26 +13,16 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Stroke;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -49,8 +39,8 @@ import org.eclipse.jface.action.MenuManager;
 
 public class JDialogAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
-	private JComponent rootPane;
-	private JRootPane jrootPane;
+	private JComponent contentPane;
+	private JRootPane rootPane;
 	public JDialogAdapter() {
 		super(null);
 		createContentAdapter();
@@ -69,9 +59,9 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 		contentAdapter.setDelegate(this);
 		JDialog me = (JDialog) getWidget();
 		JavaUtil.layoutContainer(me);
-		rootPane = (JComponent) me.getContentPane();
-		jrootPane = me.getRootPane();
-		contentAdapter.setWidget(rootPane);
+		contentPane = (JComponent) me.getContentPane();
+		rootPane = me.getRootPane();
+		contentAdapter.setWidget(contentPane);
 		contentAdapter.setDelegate(this);
 	}
 
@@ -118,7 +108,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 
 	@Override
 	public Component getRootPane() {
-		return jrootPane;
+		return rootPane;
 	}
 
 	@Override
@@ -129,7 +119,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 
 	@Override
 	public Rectangle getDesignBounds() {
-		Rectangle bounds = this.jrootPane.getBounds();
+		Rectangle bounds = this.rootPane.getBounds();
 		if (bounds.width <= 0)
 			bounds.width = 400;
 		if (bounds.height <= 0)
@@ -233,162 +223,13 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 		return contentAdapter.allowChildResize();
 	}
 
-	@Override
-	public boolean dragOver(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = DROPPING_FORBIDDEN;
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			dropStatus = DROPPING_PERMITTED;
-			return true;
-		} else
-			return contentAdapter.dragOver(p);
-	}
-
-	@Override
-	public boolean dragEnter(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = DROPPING_FORBIDDEN;
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			dropStatus = DROPPING_PERMITTED;
-			return true;
-		} else
-			return contentAdapter.dragEnter(p);
-	}
-
-	private int getJMenuBarHeight() {
-		JDialog jdialog = (JDialog) getWidget();
-		JMenuBar jmb = jdialog.getJMenuBar();
-		return jmb.getHeight();
-	}
-
-	private int dropStatus;
-	private static final int NOOP = 0;
-	private static final int DROPPING_PERMITTED = 1;
-	private static final int DROPPING_FORBIDDEN = 2;
-
-	private boolean isDroppingForbbiden() {
-		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = NOOP;
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			dropStatus = NOOP;
-			return true;
-		} else
-			return contentAdapter.dragExit(p);
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = NOOP;
-			Toolkit.getDefaultToolkit().beep();
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			WidgetAdapter target = getDropWidget().get(0);
-			JMenuBar jmb = (JMenuBar) target.getWidget();
-			JDialog jdialog = (JDialog) getWidget();
-			jdialog.setJMenuBar(jmb);
-			target.requestNewName();
-			jdialog.validate();
-			doLayout();
-			validateContent();
-			clearAllSelected();
-			target.setSelected(true);
-			setDirty(true);
-			addNotify();
-			repaintDesigner();
-			dropStatus = NOOP;
-			return true;
-		} else
-			return contentAdapter.drop(p);
-	}
-
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop != null
-				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
-	}
-
-	private boolean hasMenuBar() {
-		JDialog jdialog = (JDialog) getWidget();
-		JMenuBar jmb = jdialog.getJMenuBar();
-		return jmb != null;
-	}
-
-	@Override
-	public void paintHovered(Graphics clipg) {
-		if (dropStatus == NOOP) {
-			JDialog jdialog = (JDialog) getWidget();
-			JMenuBar jmb = jdialog.getJMenuBar();
-			if (jmb != null) {
-				Rectangle bounds = rootPane.getBounds();
-				bounds.x = bounds.y = 0;
-				bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-						jrootPane);
-				clipg = clipg.create(bounds.x, bounds.y, bounds.width,
-						bounds.height);
-			}
-			contentAdapter.paintHovered(clipg);
-			if (jmb != null) {
-				clipg.dispose();
-			}
-		} else if (dropStatus == DROPPING_FORBIDDEN) {
-			Rectangle bounds = rootPane.getBounds();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(RED_COLOR);
-			g2d.drawRect(0, 0, bounds.width, 22);
-		} else if (dropStatus == DROPPING_PERMITTED) {
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(GREEN_COLOR);
-			Rectangle bounds = rootPane.getBounds();
-			g2d.drawRect(0, 0, bounds.width, 22);
-		}
-	}
-
-	protected static Color RED_COLOR = new Color(255, 164, 0);
-	protected static Color GREEN_COLOR = new Color(164, 255, 0);
-	protected static Stroke STROKE;
-
-	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
-	}
-
 	public Point convertToGlobal(Point p) {
 		JDialog jdialog = (JDialog) getWidget();
 		JMenuBar jmb = jdialog.getJMenuBar();
 		if (jmb == null)
 			return contentAdapter.convertToGlobal(p);
 		else {
-			p = SwingUtilities.convertPoint(jrootPane, p, rootPane);
+			p = SwingUtilities.convertPoint(rootPane, p, contentPane);
 			return contentAdapter.convertToGlobal(p);
 		}
 	}
@@ -401,26 +242,6 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 		return this;
 	}
 
-	@Override
-	public void paintHint(Graphics clipg) {
-		JDialog jdialog = (JDialog) getWidget();
-		JMenuBar jmb = jdialog.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-					jrootPane);
-			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
-					bounds.height);
-		}
-		contentAdapter.paintHint(clipg);
-		if (jmb != null) {
-			clipg.dispose();
-		}
-	}
-
-
-
 	public boolean removeChild(Component child) {
 		if (child instanceof JMenuBar) {
 			JDialog jdialog = (JDialog) getWidget();
@@ -431,7 +252,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	protected boolean isChildVisible(Component child) {
+	public boolean isChildVisible(Component child) {
 		return contentAdapter.isChildVisible(child);
 	}
 
@@ -480,38 +301,6 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 		}else
 			return adaptable;
 		
-	}	
-	public void paintGrid(Graphics clipg) {
-		JDialog jdialog = (JDialog) getWidget();
-		JMenuBar jmb = jdialog.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-					jrootPane);
-			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
-					bounds.height);
-		}
-		contentAdapter.paintGrid(clipg);
-		if (jmb != null) {
-			clipg.dispose();
-		}
-	}	
-	public void paintAnchor(Graphics g) {
-		JDialog jdialog = (JDialog) getWidget();
-		JMenuBar jmb = jdialog.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-					jrootPane);
-			g = g.create(bounds.x, bounds.y, bounds.width,
-					bounds.height);
-		}
-		contentAdapter.paintAnchor(g);
-		if (jmb != null) {
-			g.dispose();
-		}
 	}	
 }
 

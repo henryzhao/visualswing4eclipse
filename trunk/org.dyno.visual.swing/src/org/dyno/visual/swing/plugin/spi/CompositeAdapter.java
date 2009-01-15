@@ -15,14 +15,9 @@ package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.util.List;
-
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.jface.action.MenuManager;
@@ -159,7 +154,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return -1;
 	}
 
-	protected boolean isChildVisible(Component child) {
+	public boolean isChildVisible(Component child) {
 		return child.isVisible();
 	}
 
@@ -247,61 +242,10 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	public void fillConstraintsAction(MenuManager menu, Component widget) {
 	}
-	
-	protected boolean isDroppingMenuItem(){
-		List<WidgetAdapter> target = getDropWidget();
-		if(target==null)
-			return false;
-		if(target.size()!=1)
-			return false;
-		Component drop = target.get(0).getWidget();
-		return drop instanceof JMenuItem;
-	}
-	protected boolean isDroppingMenuBar(){
-		List<WidgetAdapter> target = getDropWidget();
-		if(target==null)
-			return false;
-		if(target.size()!=1)
-			return false;
-		Component drop =  target.get(0).getWidget();
-		return drop instanceof JMenuBar;
-	}
-	
-	@Override
-	public boolean dragEnter(Point p) {
-		setMascotLocation(p);
-		return true;
-	}
 
-	@Override
-	public boolean dragExit(Point p) {
-		setMascotLocation(p);
-		return true;
-	}
 
-	@Override
-	public boolean dragOver(Point p) {
-		setMascotLocation(p);
-		return true;
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		setMascotLocation(p);
-		return true;
-	}
 	public Class<?> getDefaultLayout() {
 		return null;
 	}
-	public void paintGrid(Graphics clipg) {
-	}	
-
-	public void paintHovered(Graphics clipg) {
-	}
-
-	public void paintHint(Graphics g) {
-	}
-	public void paintAnchor(Graphics g) {
-	}	
 }
 

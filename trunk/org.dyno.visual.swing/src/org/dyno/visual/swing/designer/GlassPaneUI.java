@@ -37,6 +37,7 @@ import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
+import org.dyno.visual.swing.plugin.spi.IPainter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 /**
@@ -90,7 +91,8 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		focused.paintGrid(clipg);
+		IPainter painter=(IPainter) focused.getAdapter(IPainter.class);
+		painter.paintGrid(clipg);
 		clipg.dispose();
 	}
 
@@ -101,7 +103,8 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		selected.paintAnchor(clipg);
+		IPainter painter=(IPainter)selected.getAdapter(IPainter.class);
+		painter.paintAnchor(clipg);
 		clipg.dispose();
 	}
 
@@ -288,7 +291,8 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		hinted.paintHint(clipg);
+		IPainter painter=(IPainter) hinted.getAdapter(IPainter.class);
+		painter.paintHint(clipg);
 		clipg.dispose();
 	}
 
@@ -296,15 +300,16 @@ public class GlassPaneUI extends ComponentUI {
 		Component jpar = hovered.getWidget();
 		if (hovered.isRoot())
 			jpar = hovered.getRootPane();
+		IPainter painter=(IPainter) hovered.getAdapter(IPainter.class);
 		if (hovered.needGlobalGraphics()) {
-			hovered.paintHovered(g);
+			painter.paintHovered(g);
 		} else {
 			Rectangle local = SwingUtilities.getLocalBounds(jpar);
 			Rectangle pub = SwingUtilities.convertRectangle(jpar, local,
 					designer);
 			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1,
 					pub.height + 1);
-			hovered.paintHovered(clipg);
+			painter.paintHovered(clipg);
 			clipg.dispose();
 		}
 	}
@@ -325,7 +330,8 @@ public class GlassPaneUI extends ComponentUI {
 			int x = e.x - hs.x;
 			int y = e.y - hs.y;
 			Graphics clipg = g.create(x - 1, y - 1, w + 2, h + 2);
-			adapter.paintMascot(clipg);
+			IPainter painter=(IPainter) adapter.getAdapter(IPainter.class);
+			painter.paintMascot(clipg);
 			clipg.dispose();
 		}
 	}

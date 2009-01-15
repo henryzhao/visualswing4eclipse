@@ -14,13 +14,9 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.LayoutManager;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -31,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.border.Border;
 
-import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -473,56 +468,12 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 
-	@Override
-	public boolean dragOver(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragOver(p);
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout == null) {
-			int state = getState();
-			if (state == Azimuth.STATE_BEAN_HOVER) {
-				setMascotLocation(p);
-			} else {
-				resize_widget(p);
-			}
-			return true;
-		} else {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			return layoutAdapter.dragOver(p);
-		}
-	}
 
 	@Override
 	protected WidgetAdapter getDelegateAdapter() {
 		return this.delegate;
 	}
 
-	@Override
-	public boolean dragEnter(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragEnter(p);
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null) {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			return layoutAdapter.dragEnter(p);
-		} else
-			return true;
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragExit(p);
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null) {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			return layoutAdapter.dragExit(p);
-		} else
-			return true;
-	}
 
 	@Override
 	public boolean needGenBoundCode() {
@@ -530,155 +481,7 @@ public class JPanelAdapter extends CompositeAdapter {
 		LayoutManager layout = panel.getLayout();
 		return layout == null;
 	}
-	
-	private void resize_widget(Point p) {
-		int state = getState();
-		Dimension min = new Dimension(10, 10);
-		List<WidgetAdapter>dropWidgets=getDropWidget();
-		assert !dropWidgets.isEmpty();
-		Component beResized=dropWidgets.get(0).getParentContainer();
-		Dimension size = beResized.getSize();
-		Point hotspot = getMascotLocation();
-		int w = min.width;
-		int h = min.height;
-		switch (state) {
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_BOTTOM:
-			w = p.x - hotspot.x;
-			h = p.y - hotspot.y;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_BOTTOM:
-			w = size.width;
-			h = p.y - hotspot.y;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_BOTTOM:
-			w = size.width + hotspot.x - p.x;
-			h = p.y - hotspot.y;
-			hotspot.x = p.x;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_LEFT:
-			w = size.width + hotspot.x - p.x;
-			h = size.height;
-			hotspot.x = p.x;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_LEFT_TOP:
-			w = size.width + hotspot.x - p.x;
-			h = size.height + hotspot.y - p.y;
-			hotspot.x = p.x;
-			hotspot.y = p.y;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_TOP:
-			w = size.width;
-			h = size.height + hotspot.y - p.y;
-			hotspot.y = p.y;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT_TOP:
-			w = p.x - hotspot.x;
-			h = size.height + hotspot.y - p.y;
-			hotspot.y = p.y;
-			break;
-		case Azimuth.STATE_BEAN_RESIZE_RIGHT:
-			w = p.x - hotspot.x;
-			h = size.height;
-			break;
-		}
-		if (w <= min.width)
-			w = min.width;
-		if (h <= min.height)
-			h = min.height;
-		setMascotLocation(hotspot);
-		beResized.setSize(w, h);
-		beResized.doLayout();
-	}
 
-	@Override
-	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.drop(p);
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout == null) {
-			int state = getState();
-			clearAllSelected();
-			for (WidgetAdapter adapter : getDropWidget()) {
-				Component child = adapter.getParentContainer();
-				Point htsp = adapter.getHotspotPoint();
-				switch (state) {
-				case Azimuth.STATE_BEAN_HOVER:
-					child.setLocation(p.x - htsp.x, p.y - htsp.y);
-					break;
-				default:
-					Point pt = getMascotLocation();
-					child.setLocation(pt.x - htsp.x, pt.y - htsp.y);
-					break;
-				}
-				jpanel.add(child);
-				adapter.requestNewName();
-				adapter.setSelected(true);				
-			}
-			setDirty(true);
-			doLayout();
-			getWidget().validate();
-			repaintDesigner();
-			return true;
-		} else {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			WidgetAdapter[]copy=new WidgetAdapter[getDropWidget().size()];
-			getDropWidget().toArray(copy);
-			if (layoutAdapter.drop(p)) {
-				clearAllSelected();
-				for (WidgetAdapter adapter : copy) {
-					adapter.requestNewName();
-					adapter.setSelected(true);
-				}
-				setDirty(true);				
-				layoutAdapter.setContainer(jpanel);
-				doLayout();
-				getWidget().validate();
-				repaintDesigner();
-				return true;
-			} else
-				return false;
-		}
-	}
-
-	@Override
-	public void paintHovered(Graphics clipg) {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null) {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.paintHovered(clipg);
-		}
-		clipg.setColor(Color.lightGray);
-		clipg.drawRect(0, 0, jpanel.getWidth() -1 , jpanel.getHeight() - 1);
-	}
-	@Override
-	public void paintGrid(Graphics clipg) {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null) {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.paintGrid(clipg);
-		}
-	}
-	@Override
-	public void paintHint(Graphics g) {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null) {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.paintHint(g);
-		}
-	}
-	@Override
-	public void paintAnchor(Graphics g) {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null) {
-			LayoutAdapter layoutAdapter = getLayoutAdapter();
-			layoutAdapter.paintAnchor(g);
-		}
-	}
 	public boolean removeChild(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
@@ -699,7 +502,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected boolean isChildVisible(Component child) {
+	public boolean isChildVisible(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {

@@ -13,22 +13,18 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
@@ -222,144 +218,6 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 		else
 			return getContentAdapter().getIndexOfChild(child) + 1;
 	}
-
-	private boolean inContent;
-
-	@Override
-	public boolean dragEnter(Point p) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem() && isInContentPane(p)) {
-			inContent = true;
-			Point cp = SwingUtilities.convertPoint(getWidget(), p,
-					getContentPane());
-			return getContentAdapter().dragEnter(cp);
-		}
-		setMascotLocation(p);
-		return true;
-	}
-
-	private boolean isInContentPane(Point p) {
-		return getContentBounds().contains(p);
-	}
-
-	private Rectangle getContentBounds() {
-		Component panel = getContentPane();
-		int w = panel.getWidth();
-		int h = panel.getHeight();
-		Rectangle bounds = new Rectangle(0, 0, w, h);
-		return SwingUtilities.convertRectangle(panel, bounds, getWidget());
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if (inContent) {
-			inContent = false;
-			Point cp = SwingUtilities.convertPoint(getWidget(), p,
-					getContentPane());
-			return getContentAdapter().dragExit(cp);
-		} else{
-			setMascotLocation(p);
-			return true;
-		}
-	}
-
-	@Override
-	public boolean dragOver(Point p) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
-			if (isInContentPane(p)) {
-				if (!inContent) {
-					inContent = true;
-					Point cp = SwingUtilities.convertPoint(getWidget(), p,
-							getContentPane());
-					return getContentAdapter().dragEnter(cp);
-				} else {
-					Point cp = SwingUtilities.convertPoint(getWidget(), p,
-							getContentPane());
-					return getContentAdapter().dragOver(cp);
-				}
-			} else {
-				if (inContent) {
-					inContent = false;
-					Point cp = SwingUtilities.convertPoint(getWidget(), p,
-							getContentPane());
-					return getContentAdapter().dragExit(cp);
-				} else {
-					setMascotLocation(p);
-					return true;
-				}
-			}
-		}
-		setMascotLocation(p);
-		return true;
-	}
-
-	@Override
-	public void paintHovered(Graphics g) {
-		 if (isDroppingMenuBar()) {
-			JInternalFrame jif = (JInternalFrame) getWidget();
-			if (jif.getJMenuBar() == null) {
-				Rectangle rect = getContentBounds();
-				Graphics clipg = g.create(rect.x, rect.y, rect.width,
-						rect.height);
-				clipg.setColor(Color.GREEN);
-				int h = getDropWidget().get(0).getWidget().getHeight();
-				clipg.drawRect(0, 0, rect.width, h);
-				clipg.dispose();
-			} 
-		}
-	}
-
-	@Override
-	public void paintHint(Graphics g) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
-			if (inContent) {
-				Rectangle rect = getContentBounds();
-				Graphics clipg = g.create(rect.x, rect.y, rect.width,
-						rect.height);
-				getContentAdapter().paintHint(clipg);
-				clipg.dispose();
-			}
-		}else if(isDroppingMenuItem()){
-			paintForbiddenMascot(g);
-		}else if(isDroppingMenuBar()){
-			JInternalFrame jif = (JInternalFrame) getWidget();
-			if (jif.getJMenuBar() != null) {
-				paintForbiddenMascot(g);
-			}
-		}
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
-		inContent = false;
-			if (isInContentPane(p)) {
-				Point cp = SwingUtilities.convertPoint(getWidget(), p,
-						getContentPane());
-				return getContentAdapter().drop(cp);
-			} else {
-				Toolkit.getDefaultToolkit().beep();
-				return true;
-			}
-		}else if (isDroppingMenuBar()) {
-			JInternalFrame jif = (JInternalFrame) getWidget();
-			if(jif.getJMenuBar()==null){
-				WidgetAdapter jmenuBarAdapter=getDropWidget().get(0);
-				JMenuBar jmb=(JMenuBar)jmenuBarAdapter.getWidget();
-				jif.setJMenuBar(jmb);
-				jmenuBarAdapter.requestNewName();
-				clearAllSelected();
-				jmenuBarAdapter.setSelected(true);
-				jmenuBarAdapter.addNotify();
-				setDirty(true);
-			}else{
-				Toolkit.getDefaultToolkit().beep();
-				return false;
-			}
-		}
-		setMascotLocation(p);
-		return true;
-	}
-
 	@Override
 	protected Component newWidget() {
 		return new JInternalFrame();
@@ -400,16 +258,5 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 			return adaptable;
 		
 	}	
-	public void paintGrid(Graphics clipg) {
-		Rectangle bounds = getContentBounds();
-		clipg = clipg.create(bounds.x, bounds.y, bounds.width, bounds.height);
-		contentAdapter.paintGrid(clipg);
-		clipg.dispose();
-	}	
-	public void paintAnchor(Graphics g) {
-		Rectangle bounds = getContentBounds();
-		g = g.create(bounds.x, bounds.y, bounds.width, bounds.height);
-		contentAdapter.paintAnchor(g);
-		g.dispose();
-	}	
+
 }

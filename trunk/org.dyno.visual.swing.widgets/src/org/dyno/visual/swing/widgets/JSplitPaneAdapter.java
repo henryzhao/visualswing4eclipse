@@ -14,20 +14,10 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Composite;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Stroke;
-import java.awt.Toolkit;
-import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
@@ -39,13 +29,6 @@ import org.dyno.visual.swing.widgets.actions.JSplitPanePlacementAction;
 import org.eclipse.jface.action.MenuManager;
 
 public class JSplitPaneAdapter extends CompositeAdapter {
-	protected static Color RED_COLOR = new Color(255, 164, 0);
-	protected static Color GREEN_COLOR = new Color(164, 255, 0);
-	protected static Stroke STROKE;
-	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
-	}
 
 	public JSplitPaneAdapter() {
 		super(null);
@@ -61,24 +44,6 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		return jsp;
 	}
 
-	private String position;
-
-	private Rectangle getLeftBounds() {
-		JSplitPane jsp = (JSplitPane) getWidget();
-		int height = jsp.getHeight();
-		int divideLocation = jsp.getDividerLocation();
-		Insets insets = jsp.getInsets();
-		int x = 0, y = 0, w = 0, h = 0;
-		x = insets.left;
-		y = insets.top;
-		w = divideLocation - x;
-		if(w<10){
-			w = 10;
-			x = divideLocation-w;
-		}
-		h = height - insets.top - insets.bottom;
-		return new Rectangle(x, y, w, h);
-	}
 	private IEditor editor;
 	@Override
 	public IEditor getEditorAt(int x, int y) {
@@ -107,164 +72,6 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		jsp.setDividerLocation(div);
 	}
 
-	private Rectangle getRightBounds() {
-		JSplitPane jsp = (JSplitPane) getWidget();
-		int width = jsp.getWidth();
-		int height = jsp.getHeight();
-		int divideLocation = jsp.getDividerLocation();
-		int dividerSize = jsp.getDividerSize();
-		Insets insets = jsp.getInsets();
-		int x = 0, y = 0, w = 0, h = 0;
-		x = divideLocation + dividerSize;
-		y = insets.top;
-		w = width - x - insets.right;
-		if (w < 10) {
-			w = 10;
-			x = width - insets.right - w;
-		}
-		h = height - insets.top - insets.bottom;
-		return new Rectangle(x, y, w, h);
-	}
-
-	private Rectangle getTopBounds() {
-		JSplitPane jsp = (JSplitPane) getWidget();
-		int width = jsp.getWidth();
-		int divideLocation = jsp.getDividerLocation();
-		Insets insets = jsp.getInsets();
-		int x = 0, y = 0, w = 0, h = 0;
-		x = insets.left;
-		y = insets.top;
-		h = divideLocation - y;
-		if(h<10){
-			h=10;
-			y = divideLocation - h;
-		}		
-		w = width - insets.left - insets.right;
-		return new Rectangle(x, y, w, h);
-	}
-
-	private Rectangle getBottomBounds() {
-		JSplitPane jsp = (JSplitPane) getWidget();
-		int width = jsp.getWidth();
-		int height = jsp.getHeight();
-		int divideLocation = jsp.getDividerLocation();
-		int dividerSize = jsp.getDividerSize();
-		Insets insets = jsp.getInsets();
-		int x = 0, y = 0, w = 0, h = 0;
-		y = insets.top + divideLocation + dividerSize;
-		x = insets.left;
-		h = height - y;
-		if (h < 10) {
-			h = 10;
-			y = height - h;
-		}
-		w = width - insets.left - insets.right;
-		return new Rectangle(x, y, w, h);
-	}
-
-	private Rectangle getHotspotBounds() {
-		if (position == null)
-			return null;
-		if (position.equals("left")) //$NON-NLS-1$
-			return getLeftBounds();
-		if (position.equals("top")) //$NON-NLS-1$
-			return getTopBounds();
-		if (position.equals("right")) //$NON-NLS-1$
-			return getRightBounds();
-		if (position.equals("bottom")) //$NON-NLS-1$
-			return getBottomBounds();
-		return null;
-	}
-
-	@Override
-	public void paintHovered(Graphics clipg) {
-		Rectangle bounds = getHotspotBounds();
-		if (bounds != null) {
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setColor(forbid ? RED_COLOR : GREEN_COLOR);
-			Composite oldComposite = g2d.getComposite();
-			AlphaComposite composite = AlphaComposite.getInstance(
-					AlphaComposite.SRC_OVER, 0.5f);
-			g2d.setComposite(composite);
-			g2d.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setColor(forbid ? GREEN_COLOR : RED_COLOR);
-			g2d.setStroke(STROKE);
-			g2d.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
-			g2d.setStroke(oldStroke);
-			g2d.setComposite(oldComposite);
-		}
-	}
-
-	@Override
-	public boolean dragEnter(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragEnter(p);
-		updatePosition(p);
-		return true;
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragExit(p);
-		updatePosition(p);
-		return true;
-	}
-
-	@Override
-	public boolean dragOver(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragOver(p);
-		updatePosition(p);
-		setMascotLocation(p);
-		return true;
-	}
-
-	private boolean existsAndDesigning(JComponent comp) {
-		return comp != null && WidgetAdapter.getWidgetAdapter(comp) != null;
-	}
-
-	private boolean forbid;
-
-	private void updatePosition(Point p) {
-		List<WidgetAdapter>dropping=getDropWidget();
-		if(dropping==null||dropping.size()!=1){
-			forbid=true;
-			position=null;
-			return;
-		}
-		JSplitPane jsp = (JSplitPane) getWidget();
-		int orientation = jsp.getOrientation();
-		if (orientation == JSplitPane.HORIZONTAL_SPLIT) {
-			if (getLeftBounds().contains(p)) {
-				JComponent left = (JComponent) jsp.getLeftComponent();
-				position = "left"; //$NON-NLS-1$
-				forbid = existsAndDesigning(left);
-			} else if (getRightBounds().contains(p)) {
-				JComponent right = (JComponent) jsp.getRightComponent();
-				position = "right"; //$NON-NLS-1$
-				forbid = existsAndDesigning(right);
-			} else {
-				position = null;
-				forbid = true;
-			}
-		} else {
-			if (getTopBounds().contains(p)) {
-				JComponent top = (JComponent) jsp.getTopComponent();
-				position = "top"; //$NON-NLS-1$
-				forbid = existsAndDesigning(top);
-			} else if (getBottomBounds().contains(p)) {
-				JComponent bottom = (JComponent) jsp.getBottomComponent();
-				position = "bottom"; //$NON-NLS-1$
-				forbid = existsAndDesigning(bottom);
-			} else {
-				position = null;
-				forbid = true;
-			}
-		}
-	}
-
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {
 		MenuManager plcMenu = new MenuManager(Messages.JSplitPaneAdapter_Component_Placement,
@@ -279,34 +86,8 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		}
 		menu.add(plcMenu);
 	}
-
-	@Override
-	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.drop(p);
-		if (position != null) {
-			if (forbid) {
-				Toolkit.getDefaultToolkit().beep();
-				forbid = false;
-			} else {
-				WidgetAdapter adapter = getDropWidget().get(0);
-				Component child = adapter.getParentContainer();
-				JSplitPane jtp = (JSplitPane) getWidget();
-				if (position.equals("left")) //$NON-NLS-1$
-					jtp.setLeftComponent(child);
-				else if (position.equals("right")) //$NON-NLS-1$
-					jtp.setRightComponent(child);
-				else if (position.equals("top")) //$NON-NLS-1$
-					jtp.setTopComponent(child);
-				else if (position.equals("bottom")) //$NON-NLS-1$
-					jtp.setBottomComponent(child);
-				clearAllSelected();
-				adapter.requestNewName();
-				adapter.setSelected(true);
-			}
-			position = null;
-		}
-		return true;
+	private boolean existsAndDesigning(JComponent comp) {
+		return comp != null && WidgetAdapter.getWidgetAdapter(comp) != null;
 	}
 
 	@Override

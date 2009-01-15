@@ -16,7 +16,6 @@ package org.dyno.visual.swing.plugin.spi;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Graphics;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -31,8 +30,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
@@ -86,11 +83,7 @@ import org.osgi.framework.Bundle;
 public abstract class WidgetAdapter extends AbstractAdaptable implements
 		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants,
 		IAdapter {
-	private static Icon FORBIDDEN_ICON;
-	static {
-		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class
-				.getResource("/icons/forbidden.png")); //$NON-NLS-1$
-	}
+
 	protected boolean dirty = true;
 	protected int getAccess;
 	protected int fieldAccess;
@@ -361,48 +354,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		} else
 			return provider;
 	}
-
-	public void paintMascot(Graphics g) {
-		if (getWidget() instanceof JComponent)
-			paintComponent(g);
-	}
-
-	protected void paintComponent(Graphics g) {
-		JComponent root =(JComponent) getParentContainer();
-		int w = root.getWidth();
-		int h = root.getHeight();
-		ArrayList<Component> comps = new ArrayList<Component>();
-		unsetDB(comps, root);
-		Graphics clipg = g.create(1, 1, w, h);
-		root.paint(clipg);
-		clipg.dispose();
-		setDB(comps);
-		Color old = g.getColor();
-		g.setColor(SELECTION_COLOR);
-		g.drawRect(0, 0, w + 1, h + 1);
-		g.setColor(old);
-	}
-
-	private void setDB(ArrayList<Component> db) {
-		for (Component comp : db) {
-			if (comp instanceof JComponent) {
-				((JComponent) comp).setDoubleBuffered(true);
-			}
-		}
-	}
-
-	private void unsetDB(ArrayList<Component> db, Container container) {
-		if (container instanceof JComponent && container.isDoubleBuffered()) {
-			((JComponent) container).setDoubleBuffered(false);
-			db.add(container);
-		}
-		int count = container.getComponentCount();
-		for (int i = 0; i < count; i++) {
-			Component component = container.getComponent(i);
-			if (component instanceof Container)
-				unsetDB(db, (Container) component);
-		}
-	} 
 	
 	public String getName() {
 		return name;
@@ -765,11 +716,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		}
 	}
 
-	protected void paintForbiddenMascot(Graphics g) {
-		Point p = getMascotLocation();
-		FORBIDDEN_ICON.paintIcon(getWidget(), g, p.x - 16, p.y - 16);
-	}
-
 	public Point getMascotLocation() {
 		GlassPlane glassPlane = getGlass();
 		Point p = glassPlane.getHotspotPoint();
@@ -785,8 +731,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				.getSelectedWidget();
 	}
 
-	private static List<WidgetAdapter> EMPTY_LIST = new ArrayList<WidgetAdapter>(
-			0);
+	private static List<WidgetAdapter> EMPTY_LIST = new ArrayList<WidgetAdapter>(0);
 
 	protected Point getGlassHotspot() {
 		GlassPlane glassPlane = getGlass();
@@ -826,23 +771,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return 0;
 	}
 
-	public boolean dragExit(Point p) {
-		return false;
-	}
-
-	public boolean dragOver(Point p) {
-		return false;
-	}
-
-	public boolean drop(Point p) {
-		return false;
-	}
-
-	public boolean dragEnter(Point p) {
-		return false;
-	}
-
-
 	public int getBaseline() {
 		return getWidget().getHeight() / 2;
 	}
@@ -859,31 +787,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return 2 * descent;
 	}
 
-	public boolean isVisible() {
-		boolean visible = getWidget().isVisible();
-		if (visible) {
-			if (isRoot())
-				return true;
-			else {
-				WidgetAdapter adapter = getParentAdapter();
-				if (adapter.isVisible()) {
-					return ((CompositeAdapter) adapter)
-							.isChildVisible(getWidget());
-				} else
-					return false;
-			}
-		} else
-			return false;
-	}
-
-	public void makeVisibleInTree() {
-		if (!isVisible() && !isRoot()) {
-			CompositeAdapter parent = (CompositeAdapter) getParentAdapter();
-			parent.makeVisibleInTree();
-			parent.showChild(getWidget());
-		}
-	}
-
+	
 	public void fillContextAction(MenuManager menu) {
 		if (!isRoot())
 			menu.add(new VarChangeAction(this));

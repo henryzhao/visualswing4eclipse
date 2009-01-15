@@ -23,13 +23,15 @@ public abstract class AbstractAdaptable implements IAdaptable {
 		if (object == null) {
 			String adapterClassname = adapterClass.getName();
 			IConfigurationElement config = getConfig(adapterClassname, getObjectClass());
-			if (config == null)
-				config = ExtensionRegistry.getAdapterConfig(adapterClassname,
-						"default");
+			boolean isDefault=false;
+			if (config == null){
+				config = ExtensionRegistry.getAdapterConfig(adapterClassname, "default");
+				isDefault=true;
+			}
 			if (config == null)
 				return null;
 			try {
-				object = config.createExecutableExtension("implementation");
+				object = config.createExecutableExtension(isDefault?"default":"implementation");
 				if (object == null)
 					return null;
 				if (object instanceof IAdaptableContext) {

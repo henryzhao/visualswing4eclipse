@@ -14,26 +14,16 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Stroke;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.JApplet;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
@@ -48,7 +38,7 @@ import org.eclipse.jface.action.MenuManager;
 
 public class JAppletAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
-	private JComponent rootPane;
+	private JComponent contentPane;
 	private JRootPane jrootPane;
 	public JAppletAdapter() {
 		super(null);
@@ -66,9 +56,9 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		contentAdapter.setDelegate(this);
 		JApplet me = (JApplet) getWidget();
 		JavaUtil.layoutContainer(me);
-		rootPane = (JComponent) me.getContentPane();
+		contentPane = (JComponent) me.getContentPane();
 		jrootPane = me.getRootPane();
-		contentAdapter.setWidget(rootPane);
+		contentAdapter.setWidget(contentPane);
 		contentAdapter.setDelegate(this);
 	}
 
@@ -226,154 +216,6 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		return contentAdapter.allowChildResize();
 	}
 
-	@Override
-	public boolean dragOver(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = DROPPING_FORBIDDEN;
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			dropStatus = DROPPING_PERMITTED;
-			return true;
-		} else
-			return contentAdapter.dragOver(p);
-	}
-
-	@Override
-	public boolean dragEnter(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = DROPPING_FORBIDDEN;
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			dropStatus = DROPPING_PERMITTED;
-			return true;
-		} else
-			return contentAdapter.dragEnter(p);
-	}
-
-	private int getJMenuBarHeight() {
-		JApplet japplet = (JApplet) getWidget();
-		JMenuBar jmb = japplet.getJMenuBar();
-		return jmb.getHeight();
-	}
-
-	private int dropStatus;
-	private static final int NOOP = 0;
-	private static final int DROPPING_PERMITTED = 1;
-	private static final int DROPPING_FORBIDDEN = 2;
-
-	private boolean isDroppingForbbiden() {
-		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = NOOP;
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			dropStatus = NOOP;
-			return true;
-		} else
-			return contentAdapter.dragExit(p);
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
-			setMascotLocation(p);
-			dropStatus = NOOP;
-			Toolkit.getDefaultToolkit().beep();
-			return true;
-		} else if (isDroppingMenuBar()) {
-			setMascotLocation(p);
-			WidgetAdapter target = getDropWidget().get(0);
-			JMenuBar jmb = (JMenuBar) target.getWidget();
-			JApplet japplet = (JApplet) getWidget();
-			japplet.setJMenuBar(jmb);
-			target.requestNewName();
-			japplet.validate();
-			doLayout();
-			validateContent();
-			clearAllSelected();
-			target.setSelected(true);
-			setDirty(true);
-			addNotify();
-			repaintDesigner();
-			dropStatus = NOOP;
-			return true;
-		} else
-			return contentAdapter.drop(p);
-	}
-
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop != null
-				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
-	}
-
-	private boolean hasMenuBar() {
-		JApplet japplet = (JApplet) getWidget();
-		JMenuBar jmb = japplet.getJMenuBar();
-		return jmb != null;
-	}
-
-	@Override
-	public void paintHovered(Graphics clipg) {
-		if (dropStatus == NOOP) {
-			JApplet japplet = (JApplet) getWidget();
-			JMenuBar jmb = japplet.getJMenuBar();
-			if (jmb != null) {
-				Rectangle bounds = rootPane.getBounds();
-				bounds.x = bounds.y = 0;
-				bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-						jrootPane);
-				clipg = clipg.create(bounds.x, bounds.y, bounds.width,
-						bounds.height);
-			}
-			contentAdapter.paintHovered(clipg);
-			if (jmb != null) {
-				clipg.dispose();
-			}
-		} else if (dropStatus == DROPPING_FORBIDDEN) {
-			Rectangle bounds = rootPane.getBounds();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(RED_COLOR);
-			g2d.drawRect(0, 0, bounds.width, 22);
-		} else if (dropStatus == DROPPING_PERMITTED) {
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(GREEN_COLOR);
-			Rectangle bounds = rootPane.getBounds();
-			g2d.drawRect(0, 0, bounds.width, 22);
-		}
-	}
-
-	protected static Color RED_COLOR = new Color(255, 164, 0);
-	protected static Color GREEN_COLOR = new Color(164, 255, 0);
-	protected static Stroke STROKE;
-
-	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
-	}
 
 	public Point convertToGlobal(Point p) {
 		JApplet japplet = (JApplet) getWidget();
@@ -381,7 +223,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		if (jmb == null)
 			return contentAdapter.convertToGlobal(p);
 		else {
-			p = SwingUtilities.convertPoint(jrootPane, p, rootPane);
+			p = SwingUtilities.convertPoint(jrootPane, p, contentPane);
 			return contentAdapter.convertToGlobal(p);
 		}
 	}
@@ -394,23 +236,6 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		return this;
 	}
 
-	@Override
-	public void paintHint(Graphics clipg) {
-		JApplet japplet = (JApplet) getWidget();
-		JMenuBar jmb = japplet.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-					jrootPane);
-			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
-					bounds.height);
-		}
-		contentAdapter.paintHint(clipg);
-		if (jmb != null) {
-			clipg.dispose();
-		}
-	}
 	public boolean removeChild(Component child) {
 		if (child instanceof JMenuBar) {
 			JApplet japplet = (JApplet) getWidget();
@@ -423,7 +248,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		return contentAdapter;
 	}
 	@Override
-	protected boolean isChildVisible(Component child) {
+	public boolean isChildVisible(Component child) {
 		return contentAdapter.isChildVisible(child);
 	}
 
@@ -473,38 +298,6 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		}else
 			return adaptable;
 		
-	}	
-	public void paintGrid(Graphics clipg) {
-		JApplet japplet = (JApplet) getWidget();
-		JMenuBar jmb = japplet.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-					jrootPane);
-			clipg = clipg.create(bounds.x, bounds.y, bounds.width,
-					bounds.height);
-		}
-		contentAdapter.paintGrid(clipg);
-		if (jmb != null) {
-			clipg.dispose();
-		}
-	}	
-	public void paintAnchor(Graphics g) {
-		JApplet japplet = (JApplet) getWidget();
-		JMenuBar jmb = japplet.getJMenuBar();
-		if (jmb != null) {
-			Rectangle bounds = rootPane.getBounds();
-			bounds.x = bounds.y = 0;
-			bounds = SwingUtilities.convertRectangle(rootPane, bounds,
-					jrootPane);
-			g = g.create(bounds.x, bounds.y, bounds.width,
-					bounds.height);
-		}
-		contentAdapter.paintAnchor(g);
-		if (jmb != null) {
-			g.dispose();
-		}
-	}		
+	}
 }
 

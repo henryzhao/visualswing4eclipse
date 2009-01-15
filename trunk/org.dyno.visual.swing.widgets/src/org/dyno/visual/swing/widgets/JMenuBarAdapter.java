@@ -13,15 +13,8 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Stroke;
-import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -119,109 +112,7 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	public Object getChildConstraints(Component child) {
 		return null;
 	}
-	private int insert_x;
-	@Override
-	public boolean dragEnter(Point p) {
-		setMascotLocation(p);
-		if (isDroppingMenu()) {
-			dropStatus = DROPPING_PERMITTED;
-			insert_x=calculateInsert(p);
-		} else {
-			dropStatus = DROPPING_FORBIDDEN;
-		}
-		return true;
-	}
-	private int calculateInsert(Point p){
-		JMenuBar jmb=(JMenuBar)getWidget();
-		int count=jmb.getMenuCount();
-		int calx=0;
-		for(int i=0;i<count;i++){
-			JMenu jmu=jmb.getMenu(i);
-			if(p.x>=calx&&p.x<calx+jmu.getWidth()){
-				return calx;
-			}
-			calx+=jmu.getWidth();
-		}
-		return calx;
-	}
-	@Override
-	public boolean dragExit(Point p) {
-		setMascotLocation(p);
-		dropStatus = NOOP;
-		return true;
-	}
 
-	@Override
-	public boolean dragOver(Point p) {
-		setMascotLocation(p);
-		if (isDroppingMenu()) {
-			dropStatus = DROPPING_PERMITTED;
-			insert_x=calculateInsert(p);
-		} else {
-			dropStatus = DROPPING_FORBIDDEN;
-		}
-		return true;
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		setMascotLocation(p);
-		dropStatus=NOOP;
-		if (isDroppingMenu()) {
-			WidgetAdapter menuAdapter = getDropWidget().get(0);
-			JMenu jmenu = (JMenu) menuAdapter.getWidget();
-			JMenuBar jmb = (JMenuBar) getWidget();
-			jmb.add(jmenu);
-			jmb.validate();
-			jmb.doLayout();
-			clearAllSelected();
-			menuAdapter.requestNewName();
-			menuAdapter.setSelected(true);
-			addNotify();
-			repaintDesigner();
-		} else {
-		}
-		return true;
-	}
-
-	private int dropStatus;
-	private static final int NOOP = 0;
-	private static final int DROPPING_PERMITTED = 1;
-	private static final int DROPPING_FORBIDDEN = 2;
-
-	@Override
-	public void paintHovered(Graphics clipg) {
-		if (dropStatus == DROPPING_FORBIDDEN) {
-			JMenuBar jmenubar = (JMenuBar) getWidget();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(RED_COLOR);
-			g2d.drawRect(0, 0, jmenubar.getWidth(), jmenubar.getHeight());
-		} else if (dropStatus == DROPPING_PERMITTED) {
-			JMenuBar jmenubar = (JMenuBar) getWidget();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setStroke(STROKE);
-			g2d.setColor(GREEN_COLOR);
-			g2d.drawRect(0, 0, jmenubar.getWidth(), jmenubar.getHeight());
-			g2d.drawLine(insert_x, 0, insert_x, jmenubar.getHeight());
-		}
-	}
-
-	protected static Color RED_COLOR = new Color(255, 164, 0);
-	protected static Color GREEN_COLOR = new Color(164, 255, 0);
-	protected static Stroke STROKE;
-
-	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
-	}
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop instanceof JMenu;
-	}
 	@Override
 	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
