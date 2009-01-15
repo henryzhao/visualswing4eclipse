@@ -51,7 +51,9 @@ public class PasteAction extends EditorAction {
 		VisualDesigner designer = getDesigner();
 		if(designer==null)
 			return;
-		setEnabled(!designer.getClipboard().isEmpty());
+		boolean notEmpty =!designer.getClipboard().isEmpty();
+		boolean hasFocused=designer.getFocusedContainer()!=null;
+		setEnabled(hasFocused&&notEmpty);
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class PasteAction extends EditorAction {
 		VisualDesigner designer = getDesigner();
 		if(designer==null)
 			return;
-		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
+		CompositeAdapter rootAdapter = designer.getFocusedContainer();
 		List<WidgetAdapter> copyedList = new ArrayList<WidgetAdapter>();
 		copyedList.addAll(designer.getClipboard());
 		IOperationHistory operationHistory = PlatformUI.getWorkbench()
