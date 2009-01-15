@@ -14,17 +14,9 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Composite;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Stroke;
 
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
@@ -35,13 +27,6 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JTabbedPaneAdapter extends CompositeAdapter {
-	protected static Color RED_COLOR = new Color(255, 164, 0);
-	protected static Color GREEN_COLOR = new Color(164, 255, 0);
-	protected static Stroke STROKE;
-	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 2 }, 0);
-	}
-
 	public JTabbedPaneAdapter() {
 		super(null);
 	}
@@ -56,70 +41,6 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 		return tab;
 	}
 
-	@Override
-	public void paintHovered(Graphics clipg) {
-		if (hovered) {
-			int w = getWidget().getWidth();
-			int h = getWidget().getHeight();
-			Graphics2D g2d = (Graphics2D) clipg;
-			g2d.setColor(GREEN_COLOR);
-			Composite oldComposite = g2d.getComposite();
-			AlphaComposite composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f);
-			g2d.setComposite(composite);
-			g2d.fillRect(0, 0, w, h);
-			Stroke oldStroke = g2d.getStroke();
-			g2d.setColor(RED_COLOR);
-			g2d.setStroke(STROKE);
-			g2d.drawRect(0, 0, w, h);
-			g2d.setStroke(oldStroke);
-			g2d.setComposite(oldComposite);
-		}
-	}
-
-	@Override
-	public boolean dragEnter(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragEnter(p);
-		hovered = true;
-		return true;
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragExit(p);
-		hovered = false;
-		return true;
-	}
-
-	@Override
-	public boolean dragOver(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.dragOver(p);
-		setMascotLocation(p);
-		return true;
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
-			return super.drop(p);
-		clearAllSelected();
-		for (WidgetAdapter adapter : getDropWidget()) {
-			Component child = adapter.getParentContainer();
-			JTabbedPane jtp = (JTabbedPane) getWidget();
-			if(adapter.getName()==null)
-				adapter.setName(getNamespace().nextName(adapter.getBasename()));
-			jtp.addTab(adapter.getName(), child);
-			jtp.setSelectedComponent(child);
-			adapter.setSelected(true);
-			adapter.requestNewName();
-		}
-		hovered = false;
-		return true;
-	}
-
-	private boolean hovered;
 	private IEditor iEditor;
 
 	@Override
@@ -193,7 +114,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	protected boolean isChildVisible(Component child) {
+	public boolean isChildVisible(Component child) {
 		JTabbedPane tp = (JTabbedPane) getWidget();
 		return child == tp.getSelectedComponent();
 	}

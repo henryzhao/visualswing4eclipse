@@ -13,18 +13,10 @@
 
 package org.dyno.visual.swing.widgets;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Stroke;
-import java.awt.Toolkit;
-import java.util.List;
 import java.util.Stack;
 
 import javax.swing.ButtonGroup;
@@ -33,7 +25,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
 import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
@@ -43,9 +34,11 @@ import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
+import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.design.JMenuDesignOperation;
 
 public class JMenuAdapter extends CompositeAdapter {
 	public JMenuAdapter() {
@@ -310,196 +303,13 @@ public class JMenuAdapter extends CompositeAdapter {
 		return new JMenu();
 	}
 
-	private boolean isOutOfBounds(Point p) {
-		JMenu jmenu = (JMenu) getWidget();
-		Rectangle bounds = jmenu.getBounds();
-		bounds.x = 0;
-		bounds.y = 0;
-		return !bounds.contains(p);
-	}
-
-	private boolean isPopupMenuVisible() {
-		JMenu jmenu = (JMenu) getWidget();
-		return jmenu.isPopupMenuVisible();
-	}
-
-	private boolean inside_popup = false;
-
-	@Override
-	public boolean dragEnter(Point p) {
-		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup = true;
-			JMenu jmenu = (JMenu) getWidget();
-			JPopupMenu popup = jmenu.getPopupMenu();
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
-			if (adapter == null)
-				adapter = ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp = new Point(p);
-			SwingUtilities.convertPointToScreen(sp, jmenu);
-			SwingUtilities.convertPointFromScreen(sp, popup);
-			adapter.dragEnter(sp);
-			return true;
-		} else {
-			inside_popup = false;
-			if (isDroppingPermitted()) {
-				dropStatus = DROPPING_PERMITTED;
-			} else {
-				dropStatus = DROPPING_FORBIDDEN;
-			}
-		}
-		setMascotLocation(p);
-		return true;
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup = false;
-			JMenu jmenu = (JMenu) getWidget();
-			JPopupMenu popup = jmenu.getPopupMenu();
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
-			if (adapter == null)
-				adapter = ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp = new Point(p);
-			SwingUtilities.convertPointToScreen(sp, jmenu);
-			SwingUtilities.convertPointFromScreen(sp, popup);
-			adapter.dragExit(sp);
-			return true;
-		} else {
-			inside_popup = false;
-			dropStatus = NOOP;
-		}
-		setMascotLocation(p);
-		return true;
-	}
-
-	@Override
-	public boolean dragOver(Point p) {
-		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup = true;
-			JMenu jmenu = (JMenu) getWidget();
-			JPopupMenu popup = jmenu.getPopupMenu();
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
-			if (adapter == null)
-				adapter = ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp = new Point(p);
-			SwingUtilities.convertPointToScreen(sp, jmenu);
-			SwingUtilities.convertPointFromScreen(sp, popup);
-			adapter.dragOver(sp);
-			return true;
-		} else {
-			inside_popup = false;
-			if (isDroppingPermitted()) {
-				dropStatus = DROPPING_PERMITTED;
-			} else {
-				dropStatus = DROPPING_FORBIDDEN;
-			}
-		}
-		setMascotLocation(p);
-		return true;
-	}
-
-	@Override
-	public boolean drop(Point p) {
-		if (isOutOfBounds(p) && isPopupMenuVisible()) {
-			inside_popup = false;
-			JMenu jmenu = (JMenu) getWidget();
-			JPopupMenu popup = jmenu.getPopupMenu();
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(popup);
-			if (adapter == null)
-				adapter = ExtensionRegistry.createWidgetAdapter(popup);
-			Point sp = new Point(p);
-			SwingUtilities.convertPointToScreen(sp, jmenu);
-			SwingUtilities.convertPointFromScreen(sp, popup);
-			adapter.drop(sp);
-			return true;
-		} else {
-			inside_popup = false;
-			if (isDroppingPermitted()) {
-				JMenu jmenu = (JMenu) getWidget();
-				WidgetAdapter target = getDropWidget().get(0);
-				if (target.getWidget() instanceof JMenuItem) {
-					JMenuItem drop = (JMenuItem) target.getWidget();
-					jmenu.add(drop);
-				} else if (target.getWidget() instanceof JSeparator) {
-					JSeparator jsep = (JSeparator) target.getWidget();
-					jmenu.add(jsep);
-				}else{
-					setMascotLocation(p);
-					dropStatus = NOOP;
-					return false;
-				}
-				clearAllSelected();
-				target.requestNewName();
-				target.setSelected(true);
-				setDirty(true);
-				addNotify();
-				if (jmenu.isPopupMenuVisible()) {
-					widgetPressed();
-					widgetPressed();
-				} else {
-					widgetPressed();
-				}
-			} else {
-				Toolkit.getDefaultToolkit().beep();
-				setMascotLocation(p);
-				dropStatus = NOOP;
-				return false;
-			}
-		}
-		setMascotLocation(p);
-		dropStatus = NOOP;
-		return true;
-	}
-
 	@Override
 	public boolean needGlobalGraphics() {
-		return inside_popup;
+		JMenuDesignOperation operation = (JMenuDesignOperation) getAdapter(IDesignOperation.class);
+		return operation.isInside_popup();
 	}
 
-	@Override
-	public void paintHovered(Graphics clipg) {
-		if (inside_popup) {
-			JMenu jmenu = (JMenu) getWidget();
-			JPopupMenu popup = jmenu.getPopupMenu();
-			CompositeAdapter adapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(popup);
-			if (adapter == null)
-				adapter = (CompositeAdapter) ExtensionRegistry.createWidgetAdapter(popup);
-			adapter.paintHovered(clipg);
-		} else {
-			if (dropStatus == DROPPING_FORBIDDEN) {
-				JMenu jmenu = (JMenu) getWidget();
-				Graphics2D g2d = (Graphics2D) clipg;
-				g2d.setStroke(STROKE);
-				g2d.setColor(RED_COLOR);
-				g2d.drawRect(0, 0, jmenu.getWidth(), jmenu.getHeight());
-			} else if (dropStatus == DROPPING_PERMITTED) {
-				JMenu jmenu = (JMenu) getWidget();
-				Graphics2D g2d = (Graphics2D) clipg;
-				g2d.setStroke(STROKE);
-				g2d.setColor(GREEN_COLOR);
-				g2d.drawRect(0, 0, jmenu.getWidth(), jmenu.getHeight());
-			}
-		}
-	}
 
-	protected static Color RED_COLOR = new Color(255, 164, 0);
-	protected static Color GREEN_COLOR = new Color(164, 255, 0);
-	protected static Stroke STROKE;
-
-	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
-	}
-
-	private boolean isDroppingPermitted() {
-		List<WidgetAdapter>droppings=getDropWidget();
-		if(droppings.size()!=1)
-			return false;
-		WidgetAdapter target = getDropWidget().get(0);
-		Component drop = target.getWidget();
-		return drop instanceof JMenuItem || drop instanceof JSeparator;
-	}
 
 	@Override
 	public boolean removeChild(Component child) {
@@ -537,9 +347,5 @@ public class JMenuAdapter extends CompositeAdapter {
 			bg.remove(jb);
 		}
 	}	
-	private int dropStatus;
-	private static final int NOOP = 0;
-	private static final int DROPPING_PERMITTED = 1;
-	private static final int DROPPING_FORBIDDEN = 2;
 }
 

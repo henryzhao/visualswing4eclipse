@@ -42,6 +42,7 @@ import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.PaletteView;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.undo.SetWidgetValueOperation;
@@ -116,32 +117,38 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 				if (hoveredAdapter != compositeAdapter) {
-					if (hoveredAdapter != null
-							&& hoveredAdapter.dragExit(hoveredAdapter
-									.convertToLocal(p)))
-						update = true;
+					if (hoveredAdapter != null) {
+						IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+						if (operation != null&& operation.dragExit(hoveredAdapter.convertToLocal(p)))
+							update = true;
+					}
 					hoveredAdapter = compositeAdapter;
-					if (hoveredAdapter.dragEnter(hoveredAdapter
-							.convertToLocal(p)))
+					IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+					if (operation!=null&&operation.dragEnter(hoveredAdapter.convertToLocal(p)))
 						update = true;
-				} else {
-					if (compositeAdapter.dragOver(hoveredAdapter
-							.convertToLocal(p)))
+				} else if(compositeAdapter!=null){
+					hoveredAdapter = compositeAdapter;
+					IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+					if (operation != null&&operation.dragOver(hoveredAdapter.convertToLocal(p))){
 						update = true;
+					}
 				}
 			} else {
 				if (hoveredAdapter != null) {
-					hoveredAdapter.dragExit(hoveredAdapter.convertToLocal(p));
+					IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+					if(operation!=null&&operation.dragExit(hoveredAdapter.convertToLocal(p))){
+						update = true;
+					}
 					hoveredAdapter = null;
 				}
 				glassPlane.setHotspotPoint(p);
-				update = true;
 			}
 		} else if (currentAdapters != null) {
 			hoveredAdapter = currentAdapters.get(0);
-			if (((CompositeAdapter) hoveredAdapter).dragOver(hoveredAdapter
-					.convertToLocal(p)))
+			IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+			if (operation!=null&&operation.dragOver(hoveredAdapter.convertToLocal(p))){
 				update = true;
+			}
 		}
 		if (update)
 			glassPlane.repaint();
@@ -161,7 +168,9 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					adapter = adapter.getParentAdapter();
 				}
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
-				if (compositeAdapter.drop(compositeAdapter.convertToLocal(p))) {
+				hoveredAdapter = compositeAdapter;
+				IDesignOperation design = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+				if (design!=null&&design.drop(compositeAdapter.convertToLocal(p))) {
 					if (lastParent != null) {
 						IOperationHistory operationHistory = PlatformUI
 								.getWorkbench().getOperationSupport()
@@ -212,7 +221,9 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			PaletteView.clearToolSelection();
 		} else if (currentAdapters != null) {
 			WidgetAdapter adapter = currentAdapters.get(0);
-			if (((CompositeAdapter) adapter).drop(adapter.convertToLocal(p))) {
+			hoveredAdapter = adapter;
+			IDesignOperation design = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+			if (design!=null&&design.drop(adapter.convertToLocal(p))) {
 				if (lastParent != null) {
 					IOperationHistory operationHistory = PlatformUI
 							.getWorkbench().getOperationSupport()

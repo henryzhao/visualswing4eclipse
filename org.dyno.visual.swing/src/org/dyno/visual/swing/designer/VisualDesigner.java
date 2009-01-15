@@ -215,13 +215,28 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 	}
 
+	private boolean isAdapterVisible(WidgetAdapter root) {
+		boolean visible = root.getWidget().isVisible();
+		if (visible) {
+			if (root.isRoot())
+				return true;
+			else {
+				WidgetAdapter adapter = root.getParentAdapter();
+				if (isAdapterVisible(adapter)) {
+					return ((CompositeAdapter) adapter).isChildVisible(root.getWidget());
+				} else
+					return false;
+			}
+		} else
+			return false;
+	}
 	private boolean _selectWidget(Rectangle sel, WidgetAdapter adapter) {
 		boolean selected = false;
 		Component current = adapter.getWidget();
 		Rectangle localBounds = SwingUtilities.getLocalBounds(current);
 		Rectangle globalBounds = SwingUtilities.convertRectangle(current,
 				localBounds, this);
-		if (sel.contains(globalBounds) && adapter.isVisible()) {
+		if (sel.contains(globalBounds) && isAdapterVisible(adapter)) {
 			adapter.setSelected(true);
 			selected = true;
 		}
