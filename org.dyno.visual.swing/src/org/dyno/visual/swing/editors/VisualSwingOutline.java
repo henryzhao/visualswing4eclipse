@@ -22,6 +22,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
@@ -219,7 +220,14 @@ public class VisualSwingOutline extends ContentOutlinePage {
 					WidgetAdapter adapter = WidgetAdapter
 							.getWidgetAdapter((Component) object);
 					if (adapter != null) {
-						adapter.setSelected(true);
+						adapter.setSelected(true);						
+						while (!adapter.isRoot()) {							
+							CompositeAdapter parentAdapter = adapter
+									.getParentAdapter();
+							parentAdapter.showChild(adapter.getWidget());
+							adapter = parentAdapter;
+						}
+						adapter.repaintDesigner();
 					}
 				}
 			}

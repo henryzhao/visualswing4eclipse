@@ -36,6 +36,7 @@ import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.ISyncUITask;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -382,7 +383,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				if (root != null) {
 					WidgetAdapter rootAdapter = WidgetAdapter
 							.getWidgetAdapter(root);
-					rootAdapter.hideMenu();
+					JavaUtil.hideMenu();
 					String lnfCN = getLnfClassname();
 					rootAdapter.setProperty("preferred.lookandfeel", lnfCN); //$NON-NLS-1$
 					ICompilationUnit unit = sourceParser.generate(rootAdapter,	monitor);

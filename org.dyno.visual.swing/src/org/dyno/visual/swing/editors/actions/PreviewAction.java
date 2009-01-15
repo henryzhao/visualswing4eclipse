@@ -24,6 +24,7 @@ import javax.swing.JRootPane;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -52,14 +53,13 @@ public class PreviewAction extends EditorAction {
 			return;
 		setEnabled(designer.getRoot()!=null);
 	}
-
 	@Override
 	public void run() {
 		VisualDesigner designer = getDesigner();
 		if(designer==null)
 			return;
 		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
-		rootAdapter.hideMenu();
+		JavaUtil.hideMenu();
 		Component contentComponent = rootAdapter.cloneWidget();
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

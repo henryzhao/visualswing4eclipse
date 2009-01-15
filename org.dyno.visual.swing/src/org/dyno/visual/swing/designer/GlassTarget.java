@@ -245,6 +245,55 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		glassPlane.repaint();
 	}
 
+	private int getCursorLocation(WidgetAdapter adapter, Point p) {
+		Component widget = adapter.getRootPane();
+		int w = widget.getWidth();
+		int h = widget.getHeight();
+		int x = p.x;
+		int y = p.y;
+		if (x < -ADHERE_PAD) {
+			return OUTER;
+		} else if (x < ADHERE_PAD) {
+			if (y < -ADHERE_PAD) {
+				return OUTER;
+			} else if (y < ADHERE_PAD) {
+				return LEFT_TOP;
+			} else if (y < h - ADHERE_PAD) {
+				return LEFT;
+			} else if (y < h + ADHERE_PAD) {
+				return LEFT_BOTTOM;
+			} else {
+				return OUTER;
+			}
+		} else if (x < w - ADHERE_PAD) {
+			if (y < -ADHERE_PAD) {
+				return OUTER;
+			} else if (y < ADHERE_PAD) {
+				return TOP;
+			} else if (y < h - ADHERE_PAD) {
+				return INNER;
+			} else if (y < h + ADHERE_PAD) {
+				return BOTTOM;
+			} else {
+				return OUTER;
+			}
+		} else if (x < w + ADHERE_PAD) {
+			if (y < -ADHERE_PAD) {
+				return OUTER;
+			} else if (y < ADHERE_PAD) {
+				return RIGHT_TOP;
+			} else if (y < h - ADHERE_PAD) {
+				return RIGHT;
+			} else if (y < h + ADHERE_PAD) {
+				return RIGHT_BOTTOM;
+			} else {
+				return OUTER;
+			}
+		} else {
+			return OUTER;
+		}
+	}
+
 	private void mouse_pressed(MouseEvent e) {
 		Point point = e.getPoint();
 		Component hovered = designer.componentAt(point,
@@ -255,7 +304,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 			if (adapter.isRoot()) {
 				process_root_pressed(e);
 			} else if (adapter.isSelected()) {
-				int loc = adapter.getCursorLocation(hotspot);
+				int loc = getCursorLocation(adapter, hotspot);
 				if (loc != WidgetAdapter.INNER && adapter.isResizable()) {
 					process_bean_resize(e);
 				} else if (loc == WidgetAdapter.INNER && adapter.isMoveable()) {
@@ -312,7 +361,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		currentAdapters = new ArrayList<WidgetAdapter>();
 		currentAdapters.add(adapter);
 		Point rel = SwingUtilities.convertPoint(designer, point, hovered);
-		int loc = adapter.getCursorLocation(rel);
+		int loc = getCursorLocation(adapter, rel);
 		switch (loc) {
 		case WidgetAdapter.RIGHT:
 			state = STATE_BEAN_TOBE_RESIZED_RIGHT;
@@ -347,7 +396,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				WidgetAdapter.ADHERE_PAD);
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
 		Point rel = SwingUtilities.convertPoint(designer, point, hovered);
-		int loc = adapter.getCursorLocation(rel);
+		int loc = getCursorLocation(adapter,rel);
 		dragging_event = e;
 		currentAdapters = new ArrayList<WidgetAdapter>();
 		currentAdapters.add(adapter);
@@ -817,7 +866,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				if (adapter.isRoot()) {
 					Point rel = SwingUtilities.convertPoint(designer, point,
 							hovered);
-					int loc = adapter.getCursorLocation(rel);
+					int loc = getCursorLocation(adapter,rel);
 					switch (loc) {
 					case WidgetAdapter.RIGHT:
 					case WidgetAdapter.RIGHT_BOTTOM:
@@ -839,7 +888,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 						&& designer.getSelectedComponents().size() == 1) {
 					Point rel = SwingUtilities.convertPoint(designer, point,
 							hovered);
-					int loc = adapter.getCursorLocation(rel);
+					int loc = getCursorLocation(adapter, rel);
 					switch (loc) {
 					case WidgetAdapter.RIGHT:
 					case WidgetAdapter.RIGHT_BOTTOM:

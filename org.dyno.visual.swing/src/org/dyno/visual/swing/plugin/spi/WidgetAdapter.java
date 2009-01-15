@@ -29,17 +29,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.LookAndFeel;
-import javax.swing.MenuElement;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -51,7 +48,7 @@ import org.dyno.visual.swing.adapter.BeanNameProperty;
 import org.dyno.visual.swing.adapter.FieldAccessProperty;
 import org.dyno.visual.swing.adapter.GetAccessProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry;
-import org.dyno.visual.swing.base.MenuSelectionManager;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
 import org.dyno.visual.swing.base.PropertySource2;
 import org.dyno.visual.swing.base.WidgetProperty;
@@ -75,7 +72,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.osgi.framework.Bundle;
@@ -119,32 +115,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		else
 			return name;
 	}
-	protected void layoutContainer(Container container) {
-		container.doLayout();
-		int count = container.getComponentCount();
-		for (int i = 0; i < count; i++) {
-			Component child = container.getComponent(i);
-			if (child instanceof Container) {
-				layoutContainer((Container) child);
-			}
-		}
-	}
+
 	public void setCursorType(int type){
 		VisualDesigner designer = getDesigner();
 		if(designer!=null)
 			designer.setCursorType(type);
 	}
-	public void hideMenu() {
-		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
-		while (!stack.isEmpty()) {
-			MenuElement me = stack.pop();
-			if (me instanceof JMenu) {
-				JMenu jme = (JMenu) me;
-				jme.setPopupMenuVisible(false);
-				jme.setSelected(false);
-			}
-		}
-	}
+
 	@Override
 	public void requestNewName() {
 		if (getName() == null) {
@@ -272,7 +249,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public void doLayout() {
 		if (getWidget() instanceof Container)
-			layoutContainer((Container) getWidget());
+			JavaUtil.layoutContainer((Container) getWidget());
 	}
 
 	public List<Component> getSelectedComponents() {
@@ -351,55 +328,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public Rectangle getEditorBounds(int x, int y) {
 		return null;
-	}
-
-	public int getCursorLocation(Point p) {
-		Component widget = getWidget();
-		int w = widget.getWidth();
-		int h = widget.getHeight();
-		int x = p.x;
-		int y = p.y;
-		if (x < -ADHERE_PAD) {
-			return OUTER;
-		} else if (x < ADHERE_PAD) {
-			if (y < -ADHERE_PAD) {
-				return OUTER;
-			} else if (y < ADHERE_PAD) {
-				return LEFT_TOP;
-			} else if (y < h - ADHERE_PAD) {
-				return LEFT;
-			} else if (y < h + ADHERE_PAD) {
-				return LEFT_BOTTOM;
-			} else {
-				return OUTER;
-			}
-		} else if (x < w - ADHERE_PAD) {
-			if (y < -ADHERE_PAD) {
-				return OUTER;
-			} else if (y < ADHERE_PAD) {
-				return TOP;
-			} else if (y < h - ADHERE_PAD) {
-				return INNER;
-			} else if (y < h + ADHERE_PAD) {
-				return BOTTOM;
-			} else {
-				return OUTER;
-			}
-		} else if (x < w + ADHERE_PAD) {
-			if (y < -ADHERE_PAD) {
-				return OUTER;
-			} else if (y < ADHERE_PAD) {
-				return RIGHT_TOP;
-			} else if (y < h - ADHERE_PAD) {
-				return RIGHT;
-			} else if (y < h + ADHERE_PAD) {
-				return RIGHT_BOTTOM;
-			} else {
-				return OUTER;
-			}
-		} else {
-			return OUTER;
-		}
 	}
 
 	public boolean isResizable() {
@@ -1026,14 +954,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 			eventMenu.add(subEventMenu);
 		}
-	}
-
-	public Shell getShell() {
-		return getDesigner().getShell();
-	}
-
-	public Object getBean() {
-		return getWidget();
 	}
 
 	public Object clone() {
