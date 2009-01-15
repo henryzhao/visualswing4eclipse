@@ -12,6 +12,9 @@
  ************************************************************************************/
 
 package org.dyno.visual.swing.base;
+
+import org.dyno.visual.swing.plugin.spi.IConstants;
+
 /**
  * 
  * Azimuth
@@ -19,7 +22,7 @@ package org.dyno.visual.swing.base;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public interface Azimuth {
+public interface Azimuth extends IConstants{
 	int STATE_MOUSE_HOVER = 0;
 	int STATE_MOUSE_DRAGGING = 1;
 	int STATE_BEAN_TOBE_HOVER = 2;

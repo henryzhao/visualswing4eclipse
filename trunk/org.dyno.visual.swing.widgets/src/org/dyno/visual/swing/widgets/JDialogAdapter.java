@@ -39,6 +39,7 @@ import javax.swing.border.Border;
 import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -67,7 +68,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 		contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
 		contentAdapter.setDelegate(this);
 		JDialog me = (JDialog) getWidget();
-		layoutContainer(me);
+		JavaUtil.layoutContainer(me);
 		rootPane = (JComponent) me.getContentPane();
 		jrootPane = me.getRootPane();
 		contentAdapter.setWidget(rootPane);
@@ -96,56 +97,7 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 			jmbAdapter.clearSelection();
 		}
 		contentAdapter.clearSelection();
-	}
-	
-	@Override
-	public int getCursorLocation(Point p) {
-		int w = jrootPane.getWidth();
-		int h = jrootPane.getHeight();
-		int x = p.x;
-		int y = p.y;
-		if (x < -ADHERE_PAD) {
-			return OUTER;
-		} else if (x < ADHERE_PAD) {
-			if (y < -ADHERE_PAD) {
-				return OUTER;
-			} else if (y < ADHERE_PAD) {
-				return LEFT_TOP;
-			} else if (y < h - ADHERE_PAD) {
-				return LEFT;
-			} else if (y < h + ADHERE_PAD) {
-				return LEFT_BOTTOM;
-			} else {
-				return OUTER;
-			}
-		} else if (x < w - ADHERE_PAD) {
-			if (y < -ADHERE_PAD) {
-				return OUTER;
-			} else if (y < ADHERE_PAD) {
-				return TOP;
-			} else if (y < h - ADHERE_PAD) {
-				return INNER;
-			} else if (y < h + ADHERE_PAD) {
-				return BOTTOM;
-			} else {
-				return OUTER;
-			}
-		} else if (x < w + ADHERE_PAD) {
-			if (y < -ADHERE_PAD) {
-				return OUTER;
-			} else if (y < ADHERE_PAD) {
-				return RIGHT_TOP;
-			} else if (y < h - ADHERE_PAD) {
-				return RIGHT;
-			} else if (y < h + ADHERE_PAD) {
-				return RIGHT_BOTTOM;
-			} else {
-				return OUTER;
-			}
-		} else {
-			return OUTER;
-		}
-	}
+	}	
 
 	@Override
 	protected Component createWidget() {

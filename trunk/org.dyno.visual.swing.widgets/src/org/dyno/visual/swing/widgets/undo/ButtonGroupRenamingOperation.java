@@ -28,6 +28,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class ButtonGroupRenamingOperation extends AbstractOperation {
 	private WidgetAdapter adapter;
@@ -47,16 +51,15 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
 		while (true) {
-			ButtonGroupNameDialog dialog = new ButtonGroupNameDialog(adapter.getShell());
-			dialog
-					.setPromptMessage(Messages.ButtonGroupRenamingOperation_New_Var_Name);
+			Shell parent = getCurrentShell();			
+			ButtonGroupNameDialog dialog = new ButtonGroupNameDialog(parent);
+			dialog.setPromptMessage(Messages.ButtonGroupRenamingOperation_New_Var_Name);
 			dialog.setInput(group.getName());
 			if (dialog.open() == Dialog.OK) {
 				String name = dialog.getInput();
 				String message = validator.isValid(name);
 				if (message != null) {
-					MessageDialog.openError(adapter.getShell(),
-							Messages.ButtonGroupRenamingOperation_Invalid_ID, message);
+					MessageDialog.openError(parent, Messages.ButtonGroupRenamingOperation_Invalid_ID, message);
 				} else {
 					this.lastName = group.getName();
 					this.lastLastName = group.getLastName();
@@ -74,6 +77,22 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 				break;
 		}
 		return Status.OK_STATUS;
+	}
+
+	private Shell getCurrentShell() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if(window==null){
+			IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+			if(windows!=null&&windows.length>0){
+				window=windows[0];
+			}
+		}
+		Shell parent=null;
+		if(window!=null)
+			parent=window.getShell();
+		else
+			parent = Display.getDefault().getActiveShell();
+		return parent;
 	}
 
 	@Override

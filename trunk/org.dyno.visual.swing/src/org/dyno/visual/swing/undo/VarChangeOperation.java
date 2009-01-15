@@ -28,6 +28,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ICellEditorValidator;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class VarChangeOperation extends AbstractOperation {
 	private WidgetAdapter adapter;
@@ -43,15 +47,15 @@ public class VarChangeOperation extends AbstractOperation {
 	@Override
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		while (true) {
-			VarNameDialog dialog = new VarNameDialog(adapter.getShell());
+			Shell parent = getCurrentShell();
+			VarNameDialog dialog = new VarNameDialog(parent);
 			dialog.setPromptMessage(Messages.VarChangeOperation_Enter_New_Name);
 			dialog.setInput(adapter.getName());
 			if (dialog.open() == Dialog.OK) {
 				String name = dialog.getInput();
 				String message = validator.isValid(name);
 				if (message != null) {
-					MessageDialog.openError(adapter.getShell(),
-							Messages.VarChangeOperation_Invalid_Id, message);
+					MessageDialog.openError(parent, Messages.VarChangeOperation_Invalid_Id, message);
 				} else {
 					this.lastName = adapter.getName();
 					this.lastLastName = adapter.getLastName();
@@ -72,6 +76,22 @@ public class VarChangeOperation extends AbstractOperation {
 				break;
 		}
 		return Status.OK_STATUS;
+	}
+
+	private Shell getCurrentShell() {
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if(window==null){
+			IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+			if(windows!=null&&windows.length>0){
+				window=windows[0];
+			}
+		}
+		Shell parent=null;
+		if(window!=null)
+			parent=window.getShell();
+		else
+			parent = Display.getDefault().getActiveShell();
+		return parent;
 	}
 
 	@Override

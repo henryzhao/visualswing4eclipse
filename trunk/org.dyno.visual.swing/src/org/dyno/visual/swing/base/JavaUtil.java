@@ -13,11 +13,17 @@
 
 package org.dyno.visual.swing.base;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+
+import javax.swing.JMenu;
+import javax.swing.MenuElement;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
@@ -61,7 +67,16 @@ import org.eclipse.text.edits.TextEdit;
 @SuppressWarnings("unchecked")
 public class JavaUtil {
 	private static CodeFormatter codeFormatter;
-
+	public static void layoutContainer(Container container) {
+		container.doLayout();
+		int count = container.getComponentCount();
+		for (int i = 0; i < count; i++) {
+			Component child = container.getComponent(i);
+			if (child instanceof Container) {
+				layoutContainer((Container) child);
+			}
+		}
+	}
 	public static void applyEdit(ICompilationUnit cu, TextEdit edit, boolean save, IProgressMonitor monitor) throws CoreException {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
@@ -86,7 +101,17 @@ public class JavaUtil {
 			monitor.done();
 		}
 	}
-
+	public static void hideMenu() {
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
+		while (!stack.isEmpty()) {
+			MenuElement me = stack.pop();
+			if (me instanceof JMenu) {
+				JMenu jme = (JMenu) me;
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+			}
+		}
+	}	
 	private static void releaseDocument(ICompilationUnit cu, IDocument document, IProgressMonitor monitor) throws CoreException {
 		if (cu.getOwner() == null) {
 			IFile file = (IFile) cu.getResource();

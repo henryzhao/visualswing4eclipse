@@ -32,6 +32,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.LabelEditor;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -144,7 +145,7 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 		Dimension size = new Dimension(100, 100);
 		jif.setLayout(new GroupLayout());
 		jif.setSize(size);
-		layoutContainer(jif);
+		JavaUtil.layoutContainer(jif);
 		jif.validate();
 		jif.addNotify();
 		desktopPane.add(jif);

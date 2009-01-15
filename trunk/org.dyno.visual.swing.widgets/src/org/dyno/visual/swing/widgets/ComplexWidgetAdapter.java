@@ -25,6 +25,7 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public abstract class ComplexWidgetAdapter extends WidgetAdapter {
@@ -87,7 +88,7 @@ public abstract class ComplexWidgetAdapter extends WidgetAdapter {
 			parent.setViewportView(getWidget());
 			parent.addNotify();
 			parent.setSize(getInitialSize());			
-			layoutContainer(parent);
+			JavaUtil.layoutContainer(parent);
 			parent.validate();
 			jspa.setHotspotPoint(new Point(parent.getWidth() / 2, parent.getHeight() / 2));
 		}
