@@ -23,8 +23,6 @@ import java.beans.PropertyDescriptor;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.MenuManager;
 
 public abstract class TextWidgetAdapter extends WidgetAdapter {
 	public TextWidgetAdapter() {
@@ -85,24 +83,6 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		if (getName() == null) {
 			super.requestNewName();
 			setText(getWidget(), getName());
-		}
-	}
-
-
-	@Override
-	public void fillContextAction(MenuManager menu) {
-		super.fillContextAction(menu);
-		menu.add(new TextEditingAction());
-	}
-
-	class TextEditingAction extends Action {
-		public TextEditingAction() {
-			setText(Messages.TextWidgetAdapter_Edit_Text);
-			setId("EditingTextId"); //$NON-NLS-1$
-		}
-
-		public void run() {
-			editValue();
 		}
 	}
 }

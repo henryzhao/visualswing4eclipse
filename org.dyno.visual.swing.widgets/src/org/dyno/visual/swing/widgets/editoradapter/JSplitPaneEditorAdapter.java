@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import javax.swing.JSplitPane;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
-import org.dyno.visual.swing.widgets.TransparentSplitterEditor;
+import org.dyno.visual.swing.widgets.editors.TransparentSplitterEditor;
 
 public class JSplitPaneEditorAdapter extends CompositeEdtiorAdapter {
 

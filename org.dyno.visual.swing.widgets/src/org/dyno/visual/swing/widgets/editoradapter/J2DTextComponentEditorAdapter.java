@@ -7,7 +7,7 @@ import javax.swing.text.JTextComponent;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.JScrollPaneAdapter;
-import org.dyno.visual.swing.widgets.TextAreaEditor;
+import org.dyno.visual.swing.widgets.editors.TextAreaEditor;
 
 public class J2DTextComponentEditorAdapter extends ComplexWidgetEditorAdapter {
 

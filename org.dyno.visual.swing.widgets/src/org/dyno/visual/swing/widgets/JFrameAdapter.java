@@ -36,7 +36,6 @@ import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.designborder.FrameBorder;
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.jface.action.MenuManager;
 
 public class JFrameAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
@@ -276,18 +275,6 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	@Override
 	public void showChild(Component widget) {
 		contentAdapter.showChild(widget);
-	}
-
-	@Override
-	public void fillContextAction(MenuManager menu) {
-		super.fillContextAction(menu);
-		contentAdapter.fillSetLayoutAction(menu);
-	}
-
-	@Override
-	public void fillConstraintsAction(MenuManager menu, Component child) {
-		if (!(child instanceof JMenuBar))
-			contentAdapter.fillConstraintsAction(menu, child);
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.widgets;
+package org.dyno.visual.swing.widgets.editors;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -7,6 +7,7 @@ import javax.swing.JScrollBar;
 import javax.swing.event.ChangeListener;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.widgets.Messages;
 
 public class TransparentScrollBarEditor implements IEditor {
 	private JScrollBar scrollBar;

@@ -31,8 +31,6 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.widgets.actions.NullLayoutAction;
-import org.dyno.visual.swing.widgets.actions.SetLayoutAction;
 import org.dyno.visual.swing.widgets.undo.BottomAlignmentOperation;
 import org.dyno.visual.swing.widgets.undo.CenterAlignmentOperation;
 import org.dyno.visual.swing.widgets.undo.KeyDownOperation;
@@ -49,9 +47,6 @@ import org.dyno.visual.swing.widgets.undo.SameWidthOperation;
 import org.dyno.visual.swing.widgets.undo.TopAlignmentOperation;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.ui.PlatformUI;
 
 public class JPanelAdapter extends CompositeAdapter {
@@ -472,48 +467,6 @@ public class JPanelAdapter extends CompositeAdapter {
 			layoutAdapter.showChild(widget);
 		}
 	}
-
-	@Override
-	public void fillContextAction(MenuManager menu) {
-		super.fillContextAction(menu);
-		fillSetLayoutAction(menu);
-	}
-
-	void fillSetLayoutAction(MenuManager menu) {
-		MenuManager layoutMenu = new MenuManager(Messages.JPanelAdapter_Set_Layout, "#SET_LAYOUT"); //$NON-NLS-2$
-		fillLayoutAction(layoutMenu);
-		menu.add(layoutMenu);
-	}
-
-	@Override
-	public void fillConstraintsAction(MenuManager menu, Component child) {
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout != null)
-			getLayoutAdapter().fillConstraintsAction(menu, child);
-	}
-
-	private void fillLayoutAction(MenuManager layoutMenu) {
-		Action nullLayoutAction = new NullLayoutAction(this);
-		JPanel jpanel = (JPanel) getWidget();
-		LayoutManager layout = jpanel.getLayout();
-		if (layout == null)
-			nullLayoutAction.setChecked(true);
-		layoutMenu.add(nullLayoutAction);
-		for (String layoutClass : LayoutAdapter.getLayoutClasses()) {
-			IConfigurationElement config = LayoutAdapter
-					.getLayoutConfig(layoutClass);
-			SetLayoutAction action = new SetLayoutAction(this, config);
-			if (layout != null) {
-				String currLayoutClass = layout.getClass().getName();
-				if (currLayoutClass.equals(layoutClass)) {
-					action.setChecked(true);
-				}
-			}
-			layoutMenu.add(action);
-		}
-	}
-
 	@Override
 	public void adjustLayout(Component widget) {
 		JPanel jpanel = (JPanel) getWidget();

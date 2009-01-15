@@ -20,7 +20,6 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import org.eclipse.core.commands.operations.IUndoableOperation;
-import org.eclipse.jface.action.MenuManager;
 
 /**
  * 
@@ -238,9 +237,6 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	public boolean isViewContainer() {
 		return false;
-	}
-
-	public void fillConstraintsAction(MenuManager menu, Component widget) {
 	}
 
 

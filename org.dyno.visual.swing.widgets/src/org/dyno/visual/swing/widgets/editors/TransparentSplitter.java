@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.widgets;
+package org.dyno.visual.swing.widgets.editors;
 
 import java.awt.Color;
 import java.awt.Cursor;

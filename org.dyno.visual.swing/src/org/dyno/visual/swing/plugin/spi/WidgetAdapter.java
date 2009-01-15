@@ -22,12 +22,10 @@ import java.awt.Rectangle;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
 import java.beans.Introspector;
-import java.beans.MethodDescriptor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -55,9 +53,6 @@ import org.dyno.visual.swing.base.ExtensionRegistry.Sorting;
 import org.dyno.visual.swing.designer.GlassPlane;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
-import org.dyno.visual.swing.editors.actions.AddEventAction;
-import org.dyno.visual.swing.editors.actions.DelEventAction;
-import org.dyno.visual.swing.editors.actions.VarChangeAction;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -65,8 +60,6 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -236,7 +229,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		}
 	}
 
-	protected boolean editValue() {
+	public boolean editValue() {
 		return getDesigner().editComponent(getWidget());
 	}
 
@@ -754,55 +747,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		else
 			return 0;
 	}
-	
-	public void fillContextAction(MenuManager menu) {
-		if (!isRoot())
-			menu.add(new VarChangeAction(this));
-		MenuManager eventMenu = new MenuManager(
-				Messages.WidgetAdapter_Add_Edit_Events, "#EVENT"); //$NON-NLS-2$
-		fillAddEventAction(eventMenu);
-		menu.add(eventMenu);
-		MenuManager delEventMenu = new MenuManager(
-				Messages.WidgetAdapter_Delete_Events, "#DELETE_EVENT"); //$NON-NLS-1$
-		fillDelEventAction(delEventMenu);
-		menu.add(delEventMenu);
-		MenuManager borderMenu = new MenuManager(Messages.WidgetAdapter_Border,
-				"#BORDER"); //$NON-NLS-2$
-		fillBorderAction(borderMenu);
-		menu.add(borderMenu);
-		if (!isRoot()) {
-			CompositeAdapter parentAdapter = getParentAdapter();
-			if (parentAdapter != null) {
-				parentAdapter.fillConstraintsAction(menu, getWidget());
-			}
-		}
-	}
-
-	private void fillBorderAction(MenuManager borderMenu) {
-		List<BorderAdapter> list = BorderAdapter.getBorderList();
-
-		for (BorderAdapter adapter : list) {
-			if (getWidget() instanceof JComponent) {
-				IAction action = adapter
-						.getContextAction((JComponent) getWidget());
-				borderMenu.add(action);
-			}
-		}
-	}
-
-	protected void fillDelEventAction(MenuManager eventMenu) {
-		Set<EventSetDescriptor> keys = eventDescriptor.keySet();
-		for (EventSetDescriptor key : keys) {
-			MenuManager subEventMenu = new MenuManager(key.getName(),
-					"#DELETE_EVENT_" + key); //$NON-NLS-1$
-			IEventListenerModel model = eventDescriptor.get(key);
-			Iterable<MethodDescriptor> mSet = model.methods();
-			for (MethodDescriptor method : mSet) {
-				subEventMenu.add(new DelEventAction(this, key, method));
-			}
-			eventMenu.add(subEventMenu);
-		}
-	}
 
 	public BeanInfo getBeanInfo() {
 		try {
@@ -814,18 +758,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return null;
 	}
 
-	protected void fillAddEventAction(MenuManager eventMenu) {
-		EventSetDescriptor[] esds = getBeanInfo().getEventSetDescriptors();
-		for (EventSetDescriptor esd : esds) {
-			MenuManager subEventMenu = new MenuManager(esd.getName(),
-					"#ADD_EVENT_" + esd.getName()); //$NON-NLS-1$
-			MethodDescriptor[] eds = esd.getListenerMethodDescriptors();
-			for (MethodDescriptor md : eds) {
-				subEventMenu.add(new AddEventAction(this, esd, md));
-			}
-			eventMenu.add(subEventMenu);
-		}
-	}
 
 	public Object clone() {
 		return ExtensionRegistry.createAdapterFor(cloneWidget());
