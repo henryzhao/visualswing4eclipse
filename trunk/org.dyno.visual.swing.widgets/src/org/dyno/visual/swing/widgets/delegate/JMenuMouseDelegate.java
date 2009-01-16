@@ -9,8 +9,10 @@ import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.widgets.JMenuAdapter;
 import org.eclipse.core.runtime.IAdaptable;
 
-public class JMenuMouseDelegate extends MouseInputAdapter implements IAdaptableContext{
+public class JMenuMouseDelegate extends MouseInputAdapter implements
+		IAdaptableContext {
 	private JMenuAdapter adapter;
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 		JMenu jmenu = (JMenu) adapter.getWidget();
@@ -20,11 +22,16 @@ public class JMenuMouseDelegate extends MouseInputAdapter implements IAdaptableC
 		} else {
 			adapter.showPopup();
 		}
-		if(e!=null)
+		if (e != null && !e.isControlDown())
+			adapter.clearAllSelected();
+		adapter.setSelected(true);
+		adapter.changeNotify();
+		if (e != null)
 			e.consume();
 	}
+
 	@Override
 	public void setAdaptable(IAdaptable adaptable) {
-		this.adapter=(JMenuAdapter) adaptable;
+		this.adapter = (JMenuAdapter) adaptable;
 	}
 }
