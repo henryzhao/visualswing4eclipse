@@ -174,7 +174,7 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 
 	private Object encodeValue(Object value) {
 		if (value == null)
-			return "null";
+			return null;
 		else {
 			Insets insets = (Insets) value;
 			return "(" + insets.top + ", " + insets.left + ", " + insets.bottom + ", " + insets.right + ")";

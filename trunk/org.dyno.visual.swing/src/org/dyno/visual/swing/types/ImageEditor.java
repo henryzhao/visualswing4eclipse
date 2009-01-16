@@ -43,7 +43,7 @@ public class ImageEditor extends ImageWrapper implements ICellEditorFactory {
 	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
-			return "null";
+			return null;
 		return value.toString();
 	}
 }

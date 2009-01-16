@@ -65,7 +65,7 @@ public class RectangleEditor extends RectangleWrapper implements ICellEditorFact
 	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
-			return "null";
+			return null;
 		else {
 			Rectangle bounds = (Rectangle) value;
 			return "(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ")";

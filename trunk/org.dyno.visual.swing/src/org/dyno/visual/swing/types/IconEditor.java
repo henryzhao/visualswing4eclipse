@@ -25,7 +25,6 @@ import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 public class IconEditor extends IconWrapper implements ICellEditorFactory {
@@ -33,16 +32,15 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 
 	@Override
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
-		CellEditor editor = new TextCellEditor(parent);
-		editor.setValidator(new ImageIconValidator());
-		return editor;
+		//CellEditor editor = new TextCellEditor(parent);
+		//editor.setValidator(new ImageIconValidator());
+		//return editor;
+		return new IconCellEditor(parent);
 	}
 
 	@Override
 	public Object decodeValue(Object value) {
 		if (value == null)
-			return null;
-		if (value.equals("null"))
 			return null;
 		String string = (String) value;
 		return new ResourceIcon(string);
@@ -51,7 +49,7 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
-			return "null";
+			return null;
 		if (value instanceof ImageIcon) {
 			ImageIcon imageIcon = (ImageIcon) value;
 			String filename = IconWrapper.getImageIconFilename(imageIcon);
@@ -74,7 +72,7 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 						return null;
 					}
 				} else
-					return "null";
+					return null;
 			}
 		} else
 			return value.toString();

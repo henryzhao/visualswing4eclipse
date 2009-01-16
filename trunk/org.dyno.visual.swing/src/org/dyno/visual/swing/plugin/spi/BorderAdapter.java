@@ -130,7 +130,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 	
 	protected String encodeValue(Object value, ImportRewrite imports){
 		if(value==null)
-			return "null";
+			return null;
 		TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(value.getClass());
 		if(adapter!=null&&adapter.getCodegen()!=null)
 			return adapter.getCodegen().getJavaCode(value, imports);
@@ -139,7 +139,7 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 	}
 	protected String encodeValue(ItemProvider provider, Object value, ImportRewrite imports){
 		if(value==null)
-			return "null";
+			return null;
 		ItemEndec codegen = new ItemEndec(provider);
 		return codegen.getJavaCode(value, imports);
 	}

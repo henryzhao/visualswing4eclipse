@@ -29,7 +29,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 public class ImageIconValidator implements ICellEditorValidator {
 	@Override
 	public String isValid(Object value) {
-		if (value == null || value.equals("null")) //$NON-NLS-1$
+		if (value == null || value.equals("")) //$NON-NLS-1$
 			return null;
 		StringTokenizer tokenizer = new StringTokenizer((String) value, "/"); //$NON-NLS-1$
 		if (!tokenizer.hasMoreTokens()) {
