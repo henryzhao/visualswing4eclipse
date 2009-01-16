@@ -32,9 +32,6 @@ public class IconEditor extends IconWrapper implements ICellEditorFactory {
 
 	@Override
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
-		//CellEditor editor = new TextCellEditor(parent);
-		//editor.setValidator(new ImageIconValidator());
-		//return editor;
 		return new IconCellEditor(parent);
 	}
 

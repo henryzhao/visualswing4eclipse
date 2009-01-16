@@ -17,7 +17,6 @@ package org.dyno.visual.swing.types;
 import org.dyno.visual.swing.base.ResourceImage;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 
 public class ImageEditor extends ImageWrapper implements ICellEditorFactory {
@@ -25,9 +24,7 @@ public class ImageEditor extends ImageWrapper implements ICellEditorFactory {
 
 	@Override
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
-		CellEditor editor = new TextCellEditor(parent);
-		editor.setValidator(new ImageIconValidator());
-		return editor;
+		return new IconCellEditor(parent);
 	}
 
 	@Override
