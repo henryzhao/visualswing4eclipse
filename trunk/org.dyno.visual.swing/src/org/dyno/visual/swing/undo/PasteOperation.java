@@ -41,7 +41,6 @@ public class PasteOperation extends AbstractOperation {
 		for (WidgetAdapter childAdapter : clipboard) {
 			WidgetAdapter adapter = (WidgetAdapter) childAdapter.clone();
 			rootAdapter.addChild(adapter.getWidget());
-			adapter.requestNewName();
 			copyedList.add(adapter);
 		}
 		return Status.OK_STATUS;

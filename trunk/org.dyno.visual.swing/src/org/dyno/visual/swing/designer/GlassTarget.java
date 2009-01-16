@@ -157,10 +157,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 
 	@Override
 	public synchronized void drop(DropTargetDropEvent dtde) {
-		drop(dtde.getLocation());
+		drop(dtde.getLocation(), false);
 	}
 
-	private void drop(Point p) {
+	private void drop(Point p, boolean shift) {
 		if (state == STATE_BEAN_HOVER) {
 			Component hovered = designer.componentAt(p, 0);
 			if (hovered != null) {
@@ -217,9 +217,6 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					}
 				}
 			}
-			hoveredAdapter = null;
-			WhiteBoard.setSelectedWidget(null);
-			PaletteView.clearToolSelection();
 		} else if (currentAdapters != null) {
 			WidgetAdapter adapter = currentAdapters.get(0);
 			hoveredAdapter = adapter;
@@ -251,9 +248,20 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				adapter.setDirty(true);
 			}
 		}
-		currentAdapters = null;
-		state = STATE_MOUSE_HOVER;
-		WhiteBoard.setSelectedWidget(null);
+		if (!shift) {
+			currentAdapters = null;
+			state = STATE_MOUSE_HOVER;
+			WhiteBoard.setSelectedWidget(null);
+			PaletteView.clearToolSelection();
+		} else {
+			List<WidgetAdapter> adapters = WhiteBoard.getSelectedWidget();
+			List<WidgetAdapter> clones = new ArrayList<WidgetAdapter>();
+			for (WidgetAdapter adapter : adapters) {
+				WidgetAdapter clone = (WidgetAdapter) adapter.clone();
+				clones.add(clone);
+			}
+			WhiteBoard.setSelectedWidget(clones);
+		}
 		glassPlane.repaint();
 	}
 
@@ -626,7 +634,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		if (e.isConsumed()||e.getButton()!=MouseEvent.BUTTON1)
 			return;
 		if (isAddingState()) {
-			drop(e.getPoint());
+			drop(e.getPoint(), e.isShiftDown());
 		} else if (state == STATE_SELECTION) {
 			Rectangle rect = getSelBounds(dragging_event, e);
 			designer.selectWidgets(rect);

@@ -63,6 +63,12 @@ public class JPanelAdapter extends CompositeAdapter {
 		return name;
 	}
 
+	@Override
+	public String getID() {
+		if(delegate!=null)
+			return delegate.getID();
+		return super.getID();
+	}
 	void setDelegate(WidgetAdapter delegate) {
 		this.delegate = delegate;
 	}

@@ -44,7 +44,6 @@ public class DuplicateOperation extends AbstractOperation {
 			WidgetAdapter adapter = (WidgetAdapter) childAdapter.clone();
 			CompositeAdapter parentAdapter = (CompositeAdapter) childAdapter.getParentAdapter();
 			parentAdapter.addChild(adapter.getWidget());
-			adapter.requestNewName();
 			copyedList.add(adapter.getWidget());
 			parents.add(parentAdapter);
 			parentAdapter.setDirty(true);

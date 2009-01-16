@@ -70,6 +70,13 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		}
 	}
 
+	@Override
+	public Object clone() {
+		TextWidgetAdapter widgetAdapter= (TextWidgetAdapter) super.clone();
+		widgetAdapter.setText(widgetAdapter.getWidget(), widgetAdapter.getName());
+		return widgetAdapter;
+	}
+
 	private void setText(Component jc, String text) {
 		PropertyDescriptor textProperty = getTextProperty();
 		try {

@@ -119,7 +119,7 @@ public class JDesktopPaneDesignOperation extends CompositeDesignOperation {
 			adaptable.clearAllSelected();			
 			for (WidgetAdapter drop : adaptable.getDropWidget()) {
 				JInternalFrame jif = (JInternalFrame) drop.getWidget();
-				Point htsp = adaptable.getHotspotPoint();
+				Point htsp = drop.getHotspotPoint();
 				int state = adaptable.getState();
 				switch (state) {
 				case Azimuth.STATE_BEAN_HOVER:
