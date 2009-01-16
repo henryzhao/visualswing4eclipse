@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -16,8 +15,12 @@ package org.dyno.visual.swing.types;
 
 import java.text.MessageFormat;
 
+import org.dyno.visual.swing.VisualSwingPlugin;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -39,17 +42,20 @@ public class IconCellEditor extends DialogCellEditor {
 	private ModifyListener modifyListener;
 
 	private class IconCellLayout extends Layout {
-		public Point computeSize(Composite editor, int wHint, int hHint, boolean force) {
+		public Point computeSize(Composite editor, int wHint, int hHint,
+				boolean force) {
 			if (wHint != SWT.DEFAULT && hHint != SWT.DEFAULT) {
 				return new Point(wHint, hHint);
 			}
-			Point rgbSize = iconText.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+			Point rgbSize = iconText.computeSize(SWT.DEFAULT, SWT.DEFAULT,
+					force);
 			return new Point(GAP + rgbSize.x, rgbSize.y);
 		}
 
 		public void layout(Composite editor, boolean force) {
 			Rectangle bounds = editor.getClientArea();
-			Point rgbSize = iconText.computeSize(SWT.DEFAULT, SWT.DEFAULT, force);
+			Point rgbSize = iconText.computeSize(SWT.DEFAULT, SWT.DEFAULT,
+					force);
 			int ty = (bounds.height - rgbSize.y) / 2;
 			if (ty < 0) {
 				ty = 0;
@@ -83,68 +89,76 @@ public class IconCellEditor extends DialogCellEditor {
 		iconText.setFont(cell.getFont());
 		iconText.addModifyListener(getModifyListener());
 		iconText.addSelectionListener(new SelectionAdapter() {
-            @Override
+			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-            	fontTextChanged();
+				fontTextChanged();
 			}
-        });		
+		});
 		return composite;
 	}
-	private void fontTextChanged(){
+
+	private void fontTextChanged() {
 		String text = iconText.getText();
-            boolean newValidState = isCorrect(text);
-            if (newValidState) {
-                markDirty();  
-                doSetValue(text);
-            } else {
-                setErrorMessage(MessageFormat.format(getErrorMessage(),
-                        new Object[] {text}));
-            }
-            fireApplyEditorValue();
+		boolean newValidState = isCorrect(text);
+		if (newValidState) {
+			markDirty();
+			doSetValue(text);
+		} else {
+			setErrorMessage(MessageFormat.format(getErrorMessage(),
+					new Object[] { text }));
+		}
+		fireApplyEditorValue();
 	}
-    private ModifyListener getModifyListener() {
-        if (modifyListener == null) {
-            modifyListener = new ModifyListener() {
-                public void modifyText(ModifyEvent e) {
-                    editOccured(e);
-                }
-            };
-        }
-        return modifyListener;
-    }
-    
-    protected void editOccured(ModifyEvent e) {
-        String value = iconText.getText();
-        if (value == null) {
+
+	private ModifyListener getModifyListener() {
+		if (modifyListener == null) {
+			modifyListener = new ModifyListener() {
+				public void modifyText(ModifyEvent e) {
+					editOccured(e);
+				}
+			};
+		}
+		return modifyListener;
+	}
+
+	protected void editOccured(ModifyEvent e) {
+		String value = iconText.getText();
+		if (value == null) {
 			value = "";//$NON-NLS-1$
 		}
-        Object typedValue = value;
-        boolean oldValidState = isValueValid();
-        boolean newValidState = isCorrect(typedValue);
-        if (typedValue == null && newValidState) {
+		Object typedValue = value;
+		boolean oldValidState = isValueValid();
+		boolean newValidState = isCorrect(typedValue);
+		if (typedValue == null && newValidState) {
 			Assert.isTrue(false,
-                    "Validator isn't limiting the cell editor's type range");//$NON-NLS-1$
+					"Validator isn't limiting the cell editor's type range");//$NON-NLS-1$
 		}
-        if (!newValidState) {
-            // try to insert the current value into the error message.
-            setErrorMessage(MessageFormat.format(getErrorMessage(),
-                    new Object[] { value }));
-        }
-        valueChanged(oldValidState, newValidState);
-    }    
+		if (!newValidState) {
+			// try to insert the current value into the error message.
+			setErrorMessage(MessageFormat.format(getErrorMessage(),
+					new Object[] { value }));
+		}
+		valueChanged(oldValidState, newValidState);
+	}
+
 	protected Object openDialogBox(Control cellEditorWindow) {
-//		try {
-//			SelectionDialog selDialog=JavaUI.createTypeDialog(cellEditorWindow.getShell(), new ProgressMonitorDialog(cellEditorWindow.getShell()), WhiteBoard.getCurrentProject().getProject(), IJavaElementSearchConstants.CONSIDER_CLASSES, false);
-//			int ret=selDialog.open();
-//			if(ret==Window.OK){
-//				Object[] sels = selDialog.getResult();
-//				if(sels!=null){
-//					return sels[0];
-//				}
-//			}
-//		} catch (Exception e) {
-//			VisualSwingPlugin.getLogger().error(e);
-//		}
+		try {
+			ImageSelectionDialog isd = new ImageSelectionDialog(
+					cellEditorWindow.getShell());
+			int ret = isd.open();
+			if (ret == Window.OK) {
+				IFile file = isd.getImageFile();
+				IPath location = file.getFullPath();
+				location = location.removeFirstSegments(2);
+				String path = location.toString();
+				if (path.startsWith("/"))
+					return path;
+				else
+					return "/" + path;
+			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
 		return null;
 	}
 
@@ -155,7 +169,6 @@ public class IconCellEditor extends DialogCellEditor {
 	}
 
 	protected void updateContents(Object value) {
-		iconText.setText(value==null?"":(String)value);
+		iconText.setText(value == null ? "" : (String) value);
 	}
 }
-

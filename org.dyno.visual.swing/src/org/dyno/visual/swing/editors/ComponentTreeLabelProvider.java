@@ -21,7 +21,7 @@ import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 /**
  * 
@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Image;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class ComponentTreeLabelProvider implements ILabelProvider {
+public class ComponentTreeLabelProvider extends LabelProvider implements ILabelProvider {
 	private static String OTHER_COMPONENT_ICON = "/icons/other.png"; //$NON-NLS-1$
 	private static String WIDGETS_FORM_ROOT = "/icons/root.png"; //$NON-NLS-1$
 	private static String EVENT_DESC_ICON = "/icons/events.png"; //$NON-NLS-1$
@@ -87,24 +87,11 @@ public class ComponentTreeLabelProvider implements ILabelProvider {
 	}
 
 	@Override
-	public void addListener(ILabelProviderListener listener) {
-	}
-
-	@Override
 	public void dispose() {
 		for (String key : images.keySet()) {
 			Image image = images.get(key);
 			image.dispose();
 		}
-	}
-
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		return false;
-	}
-
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
 	}
 }
 
