@@ -16,9 +16,15 @@ package org.dyno.visual.swing.types;
 import java.text.MessageFormat;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
+import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -141,10 +147,40 @@ public class IconCellEditor extends DialogCellEditor {
 		valueChanged(oldValidState, newValidState);
 	}
 
+	private IPackageFragmentRoot getSourceRoot(IJavaProject prj) {
+		try {
+			IJavaElement[] children = prj.getChildren();
+			for (IJavaElement child : children) {
+				if (child instanceof IPackageFragmentRoot) {
+					IPackageFragmentRoot childRoot = (IPackageFragmentRoot) child;
+					if (!childRoot.isArchive())
+						return childRoot;
+				}
+			}
+		} catch (JavaModelException e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
+		return null;
+	}
+
 	protected Object openDialogBox(Control cellEditorWindow) {
 		try {
 			ImageSelectionDialog isd = new ImageSelectionDialog(
 					cellEditorWindow.getShell());
+			String text = iconText.getText();
+			if (text != null && text.trim().length() > 0) {
+				IJavaProject javaProject = WhiteBoard.getCurrentProject();
+				if (javaProject != null) {
+					IPackageFragmentRoot src_root = getSourceRoot(javaProject);
+					if (src_root != null) {
+						String srcName=src_root.getElementName();						
+						IProject prj = javaProject.getProject();
+						IFile file = prj.getFolder(srcName).getFile(text);
+						if (file != null && file.exists())
+							isd.setImageFile(file);
+					}
+				}
+			}
 			int ret = isd.open();
 			if (ret == Window.OK) {
 				IFile file = isd.getImageFile();

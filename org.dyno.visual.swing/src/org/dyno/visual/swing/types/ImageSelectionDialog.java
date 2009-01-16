@@ -2,6 +2,7 @@ package org.dyno.visual.swing.types;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
@@ -21,15 +22,19 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -45,7 +50,7 @@ public class ImageSelectionDialog extends Dialog {
 				if (parentElement instanceof IJavaProject) {
 					IJavaProject prj = (IJavaProject) parentElement;
 					IJavaElement[] children = prj.getChildren();
-					List list = new ArrayList();
+					List<Object> list = new ArrayList<Object>();
 					for (IJavaElement jElement : children) {
 						if (jElement instanceof IPackageFragmentRoot) {
 							IPackageFragmentRoot pkgRoot = (IPackageFragmentRoot) jElement;
@@ -60,7 +65,7 @@ public class ImageSelectionDialog extends Dialog {
 				} else if (parentElement instanceof IPackageFragment) {
 					IPackageFragment pkg = (IPackageFragment) parentElement;
 					Object[] nonJavaResources = pkg.getNonJavaResources();
-					List list = new ArrayList();
+					List<Object> list = new ArrayList<Object>();
 					for (Object resource : nonJavaResources) {
 						if (resource instanceof IFile) {
 							IFile file = (IFile) resource;
@@ -76,8 +81,6 @@ public class ImageSelectionDialog extends Dialog {
 						}
 					}
 					return list.toArray();
-				} else {
-					System.out.println();
 				}
 			} catch (Exception e) {
 				VisualSwingPlugin.getLogger().error(e);
@@ -87,7 +90,6 @@ public class ImageSelectionDialog extends Dialog {
 
 		@Override
 		public Object getParent(Object element) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -197,6 +199,7 @@ public class ImageSelectionDialog extends Dialog {
 		data.widthHint = 350;
 		data.heightHint = 200;
 		view.getTree().setLayoutData(data);
+		view.setUseHashlookup(true);
 		view.setContentProvider(new ProjectTreeContent());
 		view.setLabelProvider(new ProjectLabelProvider());
 		view.setInput(WhiteBoard.getCurrentProject());
@@ -206,16 +209,48 @@ public class ImageSelectionDialog extends Dialog {
 				view_selectionChanged(event);
 			}
 		});
-		if(imgFile!=null){
-			view.setSelection(new StructuredSelection(imgFile));
-		}
-		label = new Label(area, SWT.BORDER);
+		Group group = new Group(area, SWT.NONE);
+		group.setText("Preview");
+		group.setLayout(new FillLayout());
 		data = new GridData();
 		data.grabExcessHorizontalSpace = true;
 		data.horizontalAlignment = SWT.FILL;
 		data.heightHint = 50;
-		label.setLayoutData(data);
+		group.setLayoutData(data);
+		label = new Label(group, SWT.CENTER);
 		return parent;
+	}
+
+	private boolean buildPath(Object target, Object root, Stack<Object> stack) {
+		stack.push(root);
+		if (root.equals(target)) {
+			return true;
+		}
+		ITreeContentProvider provider = (ITreeContentProvider) view
+				.getContentProvider();
+		Object[] children = provider.getChildren(root);
+		for (Object child : children) {
+			if (buildPath(target, child, stack))
+				return true;
+		}
+		stack.pop();
+		return false;
+	}
+
+	@Override
+	protected Control createContents(Composite parent) {
+		Control ctrl = super.createContents(parent);
+		if (imgFile != null) {
+			IJavaProject prj = WhiteBoard.getCurrentProject();
+			Stack<Object> stack = new Stack<Object>();
+			if (buildPath(imgFile, prj, stack)) {
+				TreePath path = new TreePath(stack.toArray());
+				view.expandToLevel(path, 0);
+				view.expandAll();
+				view.setSelection(new StructuredSelection(imgFile));
+			}
+		}
+		return ctrl;
 	}
 
 	private void view_selectionChanged(SelectionChangedEvent event) {
@@ -235,14 +270,19 @@ public class ImageSelectionDialog extends Dialog {
 				}
 			}
 		}
-		getButton(IDialogConstants.OK_ID).setEnabled(false);
+		Button btn = getButton(IDialogConstants.OK_ID);
+		if (btn != null)
+			btn.setEnabled(false);
 	}
+
 	private Image image;
+
 	private void updatePicture() {
 		if (imgFile != null) {
 			try {
-				ImageDescriptor d = ImageDescriptor.createFromURL(imgFile.getLocationURI().toURL());
-				if(image!=null)
+				ImageDescriptor d = ImageDescriptor.createFromURL(imgFile
+						.getLocationURI().toURL());
+				if (image != null)
 					image.dispose();
 				image = d.createImage();
 				label.setImage(image);
@@ -254,7 +294,7 @@ public class ImageSelectionDialog extends Dialog {
 
 	@Override
 	public boolean close() {
-		if(image!=null)
+		if (image != null)
 			image.dispose();
 		return super.close();
 	}
