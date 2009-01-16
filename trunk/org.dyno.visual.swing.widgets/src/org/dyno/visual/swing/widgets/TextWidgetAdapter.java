@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -25,22 +24,23 @@ import javax.swing.JComponent;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public abstract class TextWidgetAdapter extends WidgetAdapter {
+
 	public TextWidgetAdapter() {
 		this.widget = createWidget();
-		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
+		this.hotspotPoint = new Point(widget.getWidth() / 2,
+				widget.getHeight() / 2);
 		attach();
 	}
 
 	@Override
 	protected Component newWidget() {
 		try {
-			return (JComponent)getWidgetClass().newInstance();
+			return (JComponent) getWidgetClass().newInstance();
 		} catch (Exception e) {
 			WidgetPlugin.getLogger().error(e);
 			return null;
 		}
 	}
-
 
 	private JComponent createWidgetByClass() {
 		try {
@@ -55,11 +55,14 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		JComponent jc = createWidgetByClass();
 		requestGlobalNewName();
 		setText(jc, getName());
-		Dimension size = jc.getPreferredSize();		
+		Dimension size = getPreferredInitialSize(jc);
 		jc.setSize(size);
 		jc.doLayout();
 		jc.validate();
 		return jc;
+	}
+	protected Dimension getPreferredInitialSize(JComponent jc){
+		return jc.getPreferredSize();
 	}
 	private PropertyDescriptor getTextProperty() {
 		try {
@@ -72,8 +75,9 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 
 	@Override
 	public Object clone() {
-		TextWidgetAdapter widgetAdapter= (TextWidgetAdapter) super.clone();
-		widgetAdapter.setText(widgetAdapter.getWidget(), widgetAdapter.getName());
+		TextWidgetAdapter widgetAdapter = (TextWidgetAdapter) super.clone();
+		widgetAdapter.setText(widgetAdapter.getWidget(), widgetAdapter
+				.getName());
 		return widgetAdapter;
 	}
 
@@ -84,7 +88,8 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		} catch (Exception e) {
 			WidgetPlugin.getLogger().error(e);
 		}
-	}	
+	}
+
 	@Override
 	public void requestNewName() {
 		if (getName() == null) {
@@ -93,4 +98,3 @@ public abstract class TextWidgetAdapter extends WidgetAdapter {
 		}
 	}
 }
-
