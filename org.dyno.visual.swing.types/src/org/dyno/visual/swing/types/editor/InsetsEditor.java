@@ -65,7 +65,7 @@ public class InsetsEditor extends InsetsWrapper implements ICellEditorFactory {
 	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
-			return "null";
+			return null;
 		else {
 			Insets insets = (Insets) value;
 			return "(" + insets.top + ", " + insets.left + ", " + insets.bottom + ", " + insets.right + ")";

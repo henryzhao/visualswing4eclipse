@@ -59,7 +59,7 @@ public class DimensionEditor extends DimensionWrapper implements ICellEditorFact
 	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
-			return "null";
+			return null;
 		else {
 			Dimension dim = (Dimension) value;
 			return "(" + dim.width + ", " + dim.height + ")";
