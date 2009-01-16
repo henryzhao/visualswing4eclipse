@@ -14,6 +14,9 @@
 
 package org.dyno.visual.swing.widgets;
 
+import java.awt.Dimension;
+
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 public class JLabelAdapter extends TextWidgetAdapter {
@@ -24,5 +27,12 @@ public class JLabelAdapter extends TextWidgetAdapter {
 		return JLabel.class;
 	}
 
+	@Override
+	protected Dimension getPreferredInitialSize(JComponent jc) {
+		Dimension size= super.getPreferredInitialSize(jc);
+		size.width += 8;
+		size.height += 6;
+		return size;
+	}
 }
 
