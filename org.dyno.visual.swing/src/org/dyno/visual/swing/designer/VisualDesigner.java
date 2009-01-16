@@ -216,7 +216,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	private boolean isAdapterVisible(WidgetAdapter root) {
-		boolean visible = root.getWidget().isVisible();
+		boolean visible = root.getRootPane().isVisible();
 		if (visible) {
 			if (root.isRoot())
 				return true;

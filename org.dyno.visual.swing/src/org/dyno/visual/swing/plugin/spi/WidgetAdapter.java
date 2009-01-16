@@ -114,7 +114,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			setName(getNamespace().nextName(getBasename()));
 		}
 	}
-	protected void requestGlobalNewName() {
+	public void requestGlobalNewName() {
 		if (getName() == null) {
 			VisualDesigner designer = WhiteBoard.getCurrentDesigner();
 			if(designer != null){
