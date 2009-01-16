@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing.lnfs;singleton:=true
-Bundle-Version: 0.9.8.I20090115-1800
+Bundle-Version: 0.9.8.I20090116-1100
 Require-Bundle: org.dyno.visual.swing,
  org.eclipse.core.runtime,
  org.eclipse.jdt.core,
