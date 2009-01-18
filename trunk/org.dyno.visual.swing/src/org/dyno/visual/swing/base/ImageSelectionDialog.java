@@ -1,4 +1,4 @@
-package org.dyno.visual.swing.types;
+package org.dyno.visual.swing.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +60,28 @@ public class ImageSelectionDialog extends Dialog {
 					}
 					return list.toArray();
 				} else if (parentElement instanceof IPackageFragmentRoot) {
-					IPackageFragmentRoot pkgRoot = (IPackageFragmentRoot) parentElement;
-					return pkgRoot.getChildren();
+					IPackageFragmentRoot packageRoot = (IPackageFragmentRoot) parentElement;
+					IJavaElement[] children = packageRoot.getChildren();
+					Object[]nonJavaResources=packageRoot.getNonJavaResources();
+					List<Object>list = new ArrayList<Object>();
+					if(children!=null){
+						for(Object child:children){
+							list.add(child);
+						}
+					}
+					if(nonJavaResources!=null){
+						for(Object resource:nonJavaResources){
+							if(resource instanceof IFile){
+								IFile file = (IFile)resource;
+								String name = file.getName();
+								name=name.toLowerCase();
+								if(name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".jpg")){
+									list.add(file);
+								}
+							}
+						}
+					}
+					return list.toArray();					
 				} else if (parentElement instanceof IPackageFragment) {
 					IPackageFragment pkg = (IPackageFragment) parentElement;
 					Object[] nonJavaResources = pkg.getNonJavaResources();
@@ -100,6 +120,26 @@ public class ImageSelectionDialog extends Dialog {
 				if (element instanceof IPackageFragmentRoot) {
 					IPackageFragmentRoot packageRoot = (IPackageFragmentRoot) element;
 					children = packageRoot.getChildren();
+					Object[]nonJavaResources=packageRoot.getNonJavaResources();
+					List<Object>list = new ArrayList<Object>();
+					if(children!=null){
+						for(Object child:children){
+							list.add(child);
+						}
+					}
+					if(nonJavaResources!=null){
+						for(Object resource:nonJavaResources){
+							if(resource instanceof IFile){
+								IFile file = (IFile)resource;
+								String name = file.getName();
+								name=name.toLowerCase();
+								if(name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".jpg")){
+									list.add(file);
+								}
+							}
+						}
+					}
+					return !list.isEmpty();
 				} else if (element instanceof IPackageFragment) {
 					IPackageFragment pkg = (IPackageFragment) element;
 					Object[] nonJavaResources = pkg.getNonJavaResources();
@@ -118,6 +158,8 @@ public class ImageSelectionDialog extends Dialog {
 						}
 					}
 					return false;
+				}else{
+					System.out.println();
 				}
 				return children != null && children.length > 0;
 			} catch (Exception e) {
@@ -185,12 +227,13 @@ public class ImageSelectionDialog extends Dialog {
 		}
 	}
 
-	protected ImageSelectionDialog(Shell parentShell) {
+	public ImageSelectionDialog(Shell parentShell) {
 		super(parentShell);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
+		getShell().setText("Select image");
 		Composite area = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		area.setLayout(layout);

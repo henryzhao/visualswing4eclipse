@@ -17,6 +17,7 @@ import java.text.MessageFormat;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
+import org.dyno.visual.swing.base.ImageSelectionDialog;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Assert;
