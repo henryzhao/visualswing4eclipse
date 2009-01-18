@@ -39,6 +39,7 @@ public class JarSrcDialog extends Dialog {
 		lblJar.setText(Messages.JarSrcDialog_Archive);
 		GridData data = new GridData();
 		data.widthHint = 180;
+		data.heightHint = 16;
 		txtJar = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtJar.setLayoutData(data);
 		txtJar.addModifyListener(new ModifyListener(){
@@ -58,6 +59,7 @@ public class JarSrcDialog extends Dialog {
 		lblSrc.setText(Messages.JarSrcDialog_Source);
 		data = new GridData();
 		data.widthHint = 180;
+		data.heightHint = 16;
 		txtSrc = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtSrc.setLayoutData(data);
 		txtSrc.addModifyListener(new ModifyListener(){

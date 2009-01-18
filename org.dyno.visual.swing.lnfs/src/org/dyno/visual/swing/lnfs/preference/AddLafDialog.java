@@ -96,6 +96,7 @@ public class AddLafDialog extends Dialog {
 		GridData data = new GridData();
 		data.widthHint = 250;
 		data.horizontalSpan = 2;
+		data.heightHint = 16;
 		txtName.setLayoutData(data);
 		Composite right = new Composite(main, SWT.NONE);
 		GridLayout gridLayout = new GridLayout();
@@ -142,6 +143,7 @@ public class AddLafDialog extends Dialog {
 		data.horizontalSpan = 2;
 		data.grabExcessHorizontalSpace = true;
 		data.horizontalAlignment = SWT.FILL;
+		data.heightHint = 16;
 		txtClassname.setLayoutData(data);
 		txtClassname.addModifyListener(new ModifyListener() {
 			@Override
