@@ -153,6 +153,14 @@
                implementation="org.dyno.visual.swing.parser.adapters.WidgetPropertyParser">
          </adapter>
       </interface>
+      <interface
+            class="org.dyno.visual.swing.parser.spi.IWidgetASTParser"
+            default="org.dyno.visual.swing.parser.adapters.WidgetASTParser">
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.parser.adapters.JTabbedPaneASTParser">
+         </adapter>
+      </interface>
    </extension>
    <extension
          point="org.dyno.visual.swing.parser.fieldParser">

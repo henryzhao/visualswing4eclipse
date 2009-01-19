@@ -345,7 +345,7 @@ public class ImageSelectionDialog extends Dialog {
 				image = d.createImage();
 				label.setImage(image);
 			} catch (Exception e) {
-				e.printStackTrace();
+				VisualSwingPlugin.getLogger().error(e);
 			}
 		}
 	}

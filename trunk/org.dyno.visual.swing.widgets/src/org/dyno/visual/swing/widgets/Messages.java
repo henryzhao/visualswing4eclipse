@@ -38,6 +38,7 @@ public class Messages extends NLS {
 	public static String TextWidgetAdapter_Edit_Text;
 	public static String TransparentScrollBarEditor_Drag_ScrollBar_Adjust_Value;
 	public static String TransparentSliderEditor_Drag_Slider_Adjust_Value;
+	public static String JTabbedPaneMenuContext_Tab_Properties;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
