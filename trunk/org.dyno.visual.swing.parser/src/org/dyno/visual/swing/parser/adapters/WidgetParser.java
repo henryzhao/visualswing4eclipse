@@ -45,7 +45,6 @@ import org.eclipse.jdt.ui.refactoring.RenameSupport;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 
 public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	protected WidgetAdapter adapter;
@@ -95,15 +94,8 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 						| RenameSupport.UPDATE_SETTER_METHOD;
 				RenameSupport rs = RenameSupport.create(lastField, name, flags);
 				if (rs.preCheck().isOK()) {
-					IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-					if(window==null){
-						IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
-						if(windows!=null&&windows.length>0)
-							window=windows[0];
-					}
-					Shell parent = null;
-					if (window != null)
-						parent = window.getShell();
+					IWorkbenchWindow window = JavaUtil.getEclipseWindow();
+					Shell parent = JavaUtil.getEclipseShell();
 					rs.perform(parent, window);
 					adapter.setLastName(name);
 					return true;

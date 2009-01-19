@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 public class JTextFieldEditorAdapter extends TextWidgetEditorAdapter {
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		return new Rectangle(0, 0, w, h);

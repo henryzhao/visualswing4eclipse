@@ -12,14 +12,14 @@ import org.dyno.visual.swing.widgets.editors.TransparentSliderEditor;
 public class JSliderEditorAdapter extends WidgetEditorAdapter {
 	private IEditor editor;
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		Component cloneWidget = adaptable.cloneWidget();		
 		editor = new TransparentSliderEditor((JSlider) cloneWidget);
 		return editor;
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		return ((JSlider) adaptable.getWidget()).getValue();
 	}
 
@@ -29,7 +29,7 @@ public class JSliderEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		return SwingUtilities.getLocalBounds(adaptable.getWidget());
 	}
 }

@@ -54,8 +54,12 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.RewriteSessionEditProcessor;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * 
@@ -77,6 +81,27 @@ public class JavaUtil {
 			}
 		}
 	}
+	public static IWorkbenchWindow getEclipseWindow(){
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if(window==null){
+			IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+			if(windows!=null&&windows.length>0)
+				return windows[0];
+			else
+				return null;
+		}else
+			return window;
+	}
+	public static Display getEclipseDisplay() {
+		return PlatformUI.getWorkbench().getDisplay();
+	}	
+	public static Shell getEclipseShell() {
+		IWorkbenchWindow window = getEclipseWindow();
+		if(window!=null)
+			return window.getShell();
+		else
+			return Display.getDefault().getActiveShell();
+	}	
 	public static void applyEdit(ICompilationUnit cu, TextEdit edit, boolean save, IProgressMonitor monitor) throws CoreException {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();

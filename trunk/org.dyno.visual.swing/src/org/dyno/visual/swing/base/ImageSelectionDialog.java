@@ -233,7 +233,6 @@ public class ImageSelectionDialog extends Dialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		getShell().setText("Select image");
 		Composite area = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		area.setLayout(layout);
@@ -262,6 +261,22 @@ public class ImageSelectionDialog extends Dialog {
 		group.setLayoutData(data);
 		label = new Label(group, SWT.CENTER);
 		return parent;
+	}
+
+	private static final int NULL_ID = IDialogConstants.CLIENT_ID+1;
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		createButton(parent, NULL_ID, "Null", true);
+		super.createButtonsForButtonBar(parent);
+	}
+
+	@Override
+	protected void buttonPressed(int buttonId) {
+		if(buttonId==NULL_ID){
+			imgFile = null;
+			super.okPressed();
+		}else
+		super.buttonPressed(buttonId);
 	}
 
 	private boolean buildPath(Object target, Object root, Stack<Object> stack) {

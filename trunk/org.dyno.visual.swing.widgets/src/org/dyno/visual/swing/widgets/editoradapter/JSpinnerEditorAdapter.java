@@ -12,7 +12,7 @@ public class JSpinnerEditorAdapter extends WidgetEditorAdapter {
 	private IEditor iEditor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (iEditor == null) {
 			iEditor = new IntegerTextEditor();
 		}
@@ -20,7 +20,7 @@ public class JSpinnerEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		return ((JSpinner) adaptable.getWidget()).getValue();
 	}
 
@@ -30,7 +30,7 @@ public class JSpinnerEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		return new Rectangle(0, 0, w, h);

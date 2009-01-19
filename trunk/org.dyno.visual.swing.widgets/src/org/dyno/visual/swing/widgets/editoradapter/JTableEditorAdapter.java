@@ -12,7 +12,7 @@ import org.dyno.visual.swing.widgets.editors.TableModelEditor;
 
 public class JTableEditorAdapter extends ComplexWidgetEditorAdapter {
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		CompositeAdapter parent = adaptable.getParentAdapter();
 		if (parent != null && parent.getWidget() instanceof JScrollPane)
 			return new TableModelEditor((JScrollPane) parent.cloneWidget());
@@ -21,7 +21,7 @@ public class JTableEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		CompositeAdapter parent = adaptable.getParentAdapter();
 		if (parent != null && parent.getWidget() instanceof JScrollPane) {
 			Rectangle bounds = parent.getWidget().getBounds();
@@ -36,7 +36,7 @@ public class JTableEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		JTable table = (JTable) adaptable.getWidget();
 		return table.getModel();
 	}

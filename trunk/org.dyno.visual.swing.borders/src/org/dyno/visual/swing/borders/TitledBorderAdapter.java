@@ -18,6 +18,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import javax.swing.BorderFactory;
@@ -125,8 +126,10 @@ public class TitledBorderAdapter extends BorderAdapter {
 	}
 	private IEditor editor;
 	@Override
-	public IEditor getEditorAt(JComponent owner, int x, int y) {
+	public IEditor getEditorAt(JComponent owner, Point hotspot) {
 		Insets insets = owner.getInsets();
+		int x = hotspot.x;
+		int y = hotspot.y;
 		int w = owner.getWidth();
 		int h = owner.getHeight();
 		if (x >= 0
@@ -143,8 +146,10 @@ public class TitledBorderAdapter extends BorderAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(JComponent owner, int x, int y) {
+	public Rectangle getEditorBounds(JComponent owner, Point hotspot) {
 		Insets insets = owner.getInsets();
+		int x = hotspot.x;
+		int y = hotspot.y;
 		int w = owner.getWidth();
 		int h = owner.getHeight();
 		if (x >= 0
@@ -164,13 +169,13 @@ public class TitledBorderAdapter extends BorderAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(JComponent owner) {
+	public Object getWidgetValue(JComponent owner, Point hotspot) {
 		TitledBorder titledBorder = (TitledBorder) owner.getBorder();
 		return titledBorder.getTitle();
 	}
 
 	@Override
-	public void setWidgetValue(JComponent owner, Object value) {
+	public void setWidgetValue(JComponent owner, Object value, Point hotspot) {
 		TitledBorder titledBorder = (TitledBorder) owner.getBorder();
 		titledBorder.setTitle((String)value);
 	}

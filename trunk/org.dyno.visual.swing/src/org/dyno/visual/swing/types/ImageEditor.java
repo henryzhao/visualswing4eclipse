@@ -31,7 +31,9 @@ public class ImageEditor extends ImageWrapper implements ICellEditorFactory {
 	public Object decodeValue(Object value) {
 		if (value == null)
 			return null;
-		if (value.equals("null"))
+		if (value.equals(""))
+			return null;
+		if(value.equals("null"))
 			return null;
 		String string = (String) value;
 		return new ResourceImage(string);

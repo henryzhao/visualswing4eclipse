@@ -11,13 +11,13 @@ import org.dyno.visual.swing.plugin.spi.IEditor;
 public class JPanelEditorAdapter extends CompositeEdtiorAdapter {
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		JPanel panel = (JPanel) adaptable.getWidget();
 		Border border = panel.getBorder();
 		if (border != null) {
 			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
 			if(borderAdapter!=null){
-				return borderAdapter.getWidgetValue(panel);
+				return borderAdapter.getWidgetValue(panel, hotspot);
 			}
 		} 
 		return null;
@@ -30,32 +30,32 @@ public class JPanelEditorAdapter extends CompositeEdtiorAdapter {
 		if (border != null) {
 			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
 			if(borderAdapter!=null){
-				borderAdapter.setWidgetValue(panel, value);
+				borderAdapter.setWidgetValue(panel, value, hotspot);
 			}
 		} 
 	}
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		JPanel panel = (JPanel) adaptable.getWidget();
 		Border border = panel.getBorder();
 		if (border != null) {
 			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
 			if(borderAdapter!=null){
-				return borderAdapter.getEditorAt(panel, x, y);
+				return borderAdapter.getEditorAt(panel, hotspot);
 			}
 		} 
 		return null;
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		JPanel panel = (JPanel) adaptable.getWidget();
 		Border border = panel.getBorder();
 		if (border != null) {
 			BorderAdapter borderAdapter = BorderAdapter.getBorderAdapter(border.getClass());
 			if(borderAdapter!=null){
-				return borderAdapter.getEditorBounds(panel, x, y);
+				return borderAdapter.getEditorBounds(panel, hotspot);
 			}
 		} 
 		return null;

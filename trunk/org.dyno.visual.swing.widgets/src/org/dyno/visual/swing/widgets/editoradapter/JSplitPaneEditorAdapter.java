@@ -11,21 +11,21 @@ public class JSplitPaneEditorAdapter extends CompositeEdtiorAdapter {
 
 	private IEditor editor;
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if(editor==null)
 			editor = new TransparentSplitterEditor((JSplitPane) adaptable.getWidget());
 		return editor;
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		return new Rectangle(0, 0, w, h);
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		JSplitPane jsp = (JSplitPane) adaptable.getWidget();
 		return jsp.getDividerLocation();
 	}

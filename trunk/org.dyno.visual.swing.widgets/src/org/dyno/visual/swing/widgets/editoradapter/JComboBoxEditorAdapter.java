@@ -15,7 +15,7 @@ public class JComboBoxEditorAdapter extends WidgetEditorAdapter {
 	private LabelEditor editor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (editor == null) {
 			editor = new LabelEditor();
 		}
@@ -23,7 +23,7 @@ public class JComboBoxEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		ComboBoxModel model = ((JComboBox) adaptable.getWidget()).getModel();
 		int size = model.getSize();
 		String items = ""; //$NON-NLS-1$
@@ -57,7 +57,7 @@ public class JComboBoxEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		return new Rectangle(0, 0, w - 1, h - 1);
