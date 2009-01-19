@@ -14,8 +14,11 @@ package org.dyno.visual.swing.parser.adapters;
 
 import java.awt.Component;
 
+import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.TypeAdapter;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -37,8 +40,28 @@ public class JTabbedPaneParser extends CompositeParser {
 				builder.append(getFieldName(ca.getID()) + ".");
 			builder.append("addTab(");
 			String title = jtp.getTitleAt(i);
+			String tip = jtp.getToolTipTextAt(i);
+			Icon icon = jtp.getIconAt(i);
 			builder.append("\"" + title + "\", ");
-			builder.append(getMethodName + "());\n");
+			if (icon == null && tip == null) {
+				builder.append(getMethodName + "());\n");
+			} else {
+				TypeAdapter ta = ExtensionRegistry.getTypeAdapter(Icon.class);
+				if (ta != null && ta.getCodegen() != null) {
+					String init = ta.getCodegen()
+							.getInitJavaCode(icon, imports);
+					if (init != null)
+						builder.append(init);
+					builder.append(ta.getCodegen().getJavaCode(icon, imports));
+					builder.append(", ");
+				}
+				if (tip == null) {
+					builder.append(getMethodName + "());\n");
+				} else {
+					builder.append(getMethodName + "(), ");
+					builder.append("\"" + tip + "\");\n");
+				}
+			}
 		}
 	}
 }

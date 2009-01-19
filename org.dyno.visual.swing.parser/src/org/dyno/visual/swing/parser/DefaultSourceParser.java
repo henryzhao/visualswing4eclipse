@@ -35,15 +35,13 @@ import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.ISyncUITask;
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.spi.IFieldParser;
 import org.dyno.visual.swing.parser.spi.IParser;
+import org.dyno.visual.swing.parser.spi.IWidgetASTParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
-import org.dyno.visual.swing.plugin.spi.IValueParser;
-import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -62,21 +60,12 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.ui.CodeStyleConfiguration;
 import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbench;
@@ -218,7 +207,9 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit,
 			WidgetAdapter adapter) {
-		parseWidgetProperty(lnfClassname, cunit, adapter);
+		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
+		IWidgetASTParser widgetParser=(IWidgetASTParser) adapter.getAdapter(IWidgetASTParser.class);
+		widgetParser.parse(lnfClassname, type);
 		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 			int count = compositeAdapter.getChildCount();
@@ -229,83 +220,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				parsePropertyValue(lnfClassname, cunit, childAdapter);
 			}
 		}
-	}
-
-	private MethodDeclaration getMethodDeclaration(TypeDeclaration type,
-			String name) {
-		MethodDeclaration[] methods = type.getMethods();
-		for (MethodDeclaration method : methods) {
-			if (method.getName().getFullyQualifiedName().equals(name))
-				return method;
-		}
-		return null;
-	}
-	private void parseWidgetProperty(String lnfClassname,
-			CompilationUnit cunit, WidgetAdapter adapter) {
-		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
-		ArrayList<IWidgetPropertyDescriptor> properties = adapter
-				.getPropertyDescriptors();
-		Object bean = adapter.getWidget();
-		IStructuredSelection sel = new StructuredSelection(bean);
-		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(lnfClassname, sel)
-					&& property instanceof WidgetProperty) {
-				List statements = getBeanPropertyInitStatements(adapter, type);
-				for (Object stmt : statements) {
-					Statement statement = (Statement) stmt;
-					checkSatement(bean, property, statement);
-				}
-			}
-		}
-	}
-	private void checkSatement(Object bean, IWidgetPropertyDescriptor property,
-			Statement statement) {
-		if (statement instanceof ExpressionStatement) {
-			ExpressionStatement expressionStatement = (ExpressionStatement) statement;
-			Expression expression = expressionStatement.getExpression();
-			if (expression instanceof MethodInvocation) {
-				MethodInvocation mi = (MethodInvocation) expression;
-				String setMethodName = mi.getName().getFullyQualifiedName();
-				WidgetProperty wp = (WidgetProperty) property;
-				String writeMethodName = wp.getPropertyDescriptor()
-						.getWriteMethod().getName();
-				if (setMethodName.equals(writeMethodName)) {
-					List args = mi.arguments();
-					IValueParser vp = property.getValueParser();
-					if (vp != null) {
-						Object oldValue = property.getFieldValue(bean);
-						Object newValue = vp.parseValue(oldValue, args);
-						property.setFieldValue(bean, newValue);
-					}
-				}
-			}
-		}
-	}
-	private List getBeanPropertyInitStatements(WidgetAdapter adapter, TypeDeclaration type) {
-		List statements;
-		if (adapter.isRoot()) {
-			MethodDeclaration initMethod = getMethodDeclaration(type,INIT_METHOD_NAME);
-			Block body = initMethod.getBody();
-			statements = body.statements();
-		} else {
-			String getMethodName = NamespaceUtil.getGetMethodName(adapter.getID());
-			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
-			if (getMethod != null) {
-				Block body = getMethod.getBody();
-				statements = body.statements();
-				IfStatement ifs = (IfStatement) statements.get(0);
-				Statement thenstmt = ifs.getThenStatement();
-				if (thenstmt instanceof Block) {
-					Block block = (Block) thenstmt;
-					statements = block.statements();
-				}
-			}else{				
-				MethodDeclaration initMethod = getMethodDeclaration(type,INIT_METHOD_NAME);
-				Block body = initMethod.getBody();
-				statements = body.statements();
-			}
-		}
-		return statements;
 	}
 	private void initDesignedWidget(CompilationUnit cunit, Component bean) {
 		Class clazz = bean.getClass();

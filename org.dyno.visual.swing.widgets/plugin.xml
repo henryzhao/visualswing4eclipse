@@ -1383,6 +1383,10 @@
                class="javax.swing.JToggleButton"
                implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
          </adapter>
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.menucontext.JTabbedPaneMenuContext">
+         </adapter>
       </interface>
     </extension>
 </plugin>
