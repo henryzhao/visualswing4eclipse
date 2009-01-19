@@ -1,5 +1,10 @@
 package org.dyno.visual.swing.base;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -7,6 +12,7 @@ import java.util.Stack;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -15,6 +21,7 @@ import org.eclipse.jdt.ui.ISharedImages;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -34,6 +41,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -62,26 +70,26 @@ public class ImageSelectionDialog extends Dialog {
 				} else if (parentElement instanceof IPackageFragmentRoot) {
 					IPackageFragmentRoot packageRoot = (IPackageFragmentRoot) parentElement;
 					IJavaElement[] children = packageRoot.getChildren();
-					Object[]nonJavaResources=packageRoot.getNonJavaResources();
-					List<Object>list = new ArrayList<Object>();
-					if(children!=null){
-						for(Object child:children){
+					Object[] nonJavaResources = packageRoot.getNonJavaResources();
+					List<Object> list = new ArrayList<Object>();
+					if (children != null) {
+						for (Object child : children) {
 							list.add(child);
 						}
 					}
-					if(nonJavaResources!=null){
-						for(Object resource:nonJavaResources){
-							if(resource instanceof IFile){
-								IFile file = (IFile)resource;
+					if (nonJavaResources != null) {
+						for (Object resource : nonJavaResources) {
+							if (resource instanceof IFile) {
+								IFile file = (IFile) resource;
 								String name = file.getName();
-								name=name.toLowerCase();
-								if(name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".jpg")){
+								name = name.toLowerCase();
+								if (name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpg")) {
 									list.add(file);
 								}
 							}
 						}
 					}
-					return list.toArray();					
+					return list.toArray();
 				} else if (parentElement instanceof IPackageFragment) {
 					IPackageFragment pkg = (IPackageFragment) parentElement;
 					Object[] nonJavaResources = pkg.getNonJavaResources();
@@ -92,9 +100,7 @@ public class ImageSelectionDialog extends Dialog {
 							String name = file.getName();
 							if (name != null) {
 								name = name.toLowerCase();
-								if (name.endsWith(".gif")
-										|| name.endsWith(".png")
-										|| name.endsWith(".jpg")) {
+								if (name.endsWith(".gif") || name.endsWith(".png") || name.endsWith(".jpg")) {
 									list.add(file);
 								}
 							}
@@ -120,20 +126,20 @@ public class ImageSelectionDialog extends Dialog {
 				if (element instanceof IPackageFragmentRoot) {
 					IPackageFragmentRoot packageRoot = (IPackageFragmentRoot) element;
 					children = packageRoot.getChildren();
-					Object[]nonJavaResources=packageRoot.getNonJavaResources();
-					List<Object>list = new ArrayList<Object>();
-					if(children!=null){
-						for(Object child:children){
+					Object[] nonJavaResources = packageRoot.getNonJavaResources();
+					List<Object> list = new ArrayList<Object>();
+					if (children != null) {
+						for (Object child : children) {
 							list.add(child);
 						}
 					}
-					if(nonJavaResources!=null){
-						for(Object resource:nonJavaResources){
-							if(resource instanceof IFile){
-								IFile file = (IFile)resource;
+					if (nonJavaResources != null) {
+						for (Object resource : nonJavaResources) {
+							if (resource instanceof IFile) {
+								IFile file = (IFile) resource;
 								String name = file.getName();
-								name=name.toLowerCase();
-								if(name.endsWith(".png")||name.endsWith(".gif")||name.endsWith(".jpg")){
+								name = name.toLowerCase();
+								if (name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpg")) {
 									list.add(file);
 								}
 							}
@@ -149,16 +155,14 @@ public class ImageSelectionDialog extends Dialog {
 							String name = file.getName();
 							if (name != null) {
 								name = name.toLowerCase();
-								if (name.endsWith(".gif")
-										|| name.endsWith(".png")
-										|| name.endsWith(".jpg")) {
+								if (name.endsWith(".gif") || name.endsWith(".png") || name.endsWith(".jpg")) {
 									return true;
 								}
 							}
 						}
 					}
 					return false;
-				}else{
+				} else {
 					System.out.println();
 				}
 				return children != null && children.length > 0;
@@ -189,14 +193,11 @@ public class ImageSelectionDialog extends Dialog {
 			if (element == null)
 				return null;
 			if (element instanceof IPackageFragmentRoot) {
-				return JavaUI.getSharedImages().getImage(
-						ISharedImages.IMG_OBJS_PACKFRAG_ROOT);
+				return JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PACKFRAG_ROOT);
 			} else if (element instanceof IPackageFragment) {
-				return JavaUI.getSharedImages().getImage(
-						ISharedImages.IMG_OBJS_PACKAGE);
+				return JavaUI.getSharedImages().getImage(ISharedImages.IMG_OBJS_PACKAGE);
 			} else if (element instanceof IFile) {
-				return PlatformUI.getWorkbench().getSharedImages().getImage(
-						org.eclipse.ui.ISharedImages.IMG_OBJ_FILE);
+				return PlatformUI.getWorkbench().getSharedImages().getImage(org.eclipse.ui.ISharedImages.IMG_OBJ_FILE);
 			}
 			return null;
 		}
@@ -263,29 +264,80 @@ public class ImageSelectionDialog extends Dialog {
 		return parent;
 	}
 
-	private static final int NULL_ID = IDialogConstants.CLIENT_ID+1;
+	private static final int NULL_ID = IDialogConstants.CLIENT_ID + 1;
+	private static final int IMPORT_ID = IDialogConstants.CLIENT_ID + 2;
+
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, NULL_ID, "Null", true);
+		createButton(parent, IMPORT_ID, "Import", false);
+		createButton(parent, NULL_ID, "Null", false);
 		super.createButtonsForButtonBar(parent);
 	}
 
 	@Override
 	protected void buttonPressed(int buttonId) {
-		if(buttonId==NULL_ID){
+		if (buttonId == NULL_ID) {
 			imgFile = null;
 			super.okPressed();
-		}else
-		super.buttonPressed(buttonId);
+		} else if (buttonId == IMPORT_ID) {
+			TreeSelection sel = (TreeSelection) view.getSelection();
+			if (sel != null && !sel.isEmpty()) {
+				Object element = sel.getFirstElement();
+				String path = null;
+				if (element instanceof IPackageFragmentRoot) {
+					path = ((IPackageFragmentRoot) element).getResource().getRawLocation().toFile().getAbsolutePath();
+				} else if (element instanceof IPackageFragment) {
+					path = ((IPackageFragment) element).getResource().getRawLocation().toFile().getAbsolutePath();
+				}
+				if (path != null) {
+					FileDialog dialog = new FileDialog(getShell());
+					dialog.setText("Import images");
+					dialog.setFilterExtensions(new String[] { "*.png;*.gif;*.jpg" }); //$NON-NLS-1$
+					String imgPath = dialog.open();
+					if (imgPath != null) {
+						copy(imgPath, path);
+					}
+				}
+			}
+		} else {
+			super.buttonPressed(buttonId);
+		}
 	}
 
-	private boolean buildPath(Object target, Object root, Stack<Object> stack) {
+	private void copy(String imgPath, String path) {
+		try {
+			File input = new File(imgPath);
+			File output = new File(path, input.getName());
+			if(output.exists()){
+				if(!MessageDialog.openQuestion(getShell(), "Overwrite", "There is already an image file "+input.getName()+" under the package.\n Do you really want to overwrite it?"))
+					return;
+			}
+			byte[] data = new byte[1024];
+			FileInputStream fis = new FileInputStream(imgPath);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(output));
+			int length;
+			while ((length = bis.read(data)) > 0) {
+				bos.write(data, 0, length);
+				bos.flush();
+			}
+			bos.close();
+			fis.close();
+			IJavaProject ijp=WhiteBoard.getCurrentProject();
+			if(ijp!=null){
+				ijp.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+				view.refresh();
+				view.expandAll();
+			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
+	}	private boolean buildPath(Object target, Object root, Stack<Object> stack) {
 		stack.push(root);
 		if (root.equals(target)) {
 			return true;
 		}
-		ITreeContentProvider provider = (ITreeContentProvider) view
-				.getContentProvider();
+		ITreeContentProvider provider = (ITreeContentProvider) view.getContentProvider();
 		Object[] children = provider.getChildren(root);
 		for (Object child : children) {
 			if (buildPath(target, child, stack))
@@ -319,13 +371,17 @@ public class ImageSelectionDialog extends Dialog {
 				IFile file = (IFile) selected;
 				String name = file.getName();
 				name = name.toLowerCase();
-				if (name.endsWith(".png") || name.endsWith(".gif")
-						|| name.endsWith(".jpg")) {
+				if (name.endsWith(".png") || name.endsWith(".gif") || name.endsWith(".jpg")) {
 					getButton(IDialogConstants.OK_ID).setEnabled(true);
+					getButton(IMPORT_ID).setEnabled(false);
 					this.imgFile = file;
 					updatePicture();
 					return;
 				}
+			} else if (selected instanceof IPackageFragment) {
+				getButton(IMPORT_ID).setEnabled(true);
+			} else {
+				getButton(IMPORT_ID).setEnabled(false);
 			}
 		}
 		Button btn = getButton(IDialogConstants.OK_ID);
@@ -338,8 +394,7 @@ public class ImageSelectionDialog extends Dialog {
 	private void updatePicture() {
 		if (imgFile != null) {
 			try {
-				ImageDescriptor d = ImageDescriptor.createFromURL(imgFile
-						.getLocationURI().toURL());
+				ImageDescriptor d = ImageDescriptor.createFromURL(imgFile.getLocationURI().toURL());
 				if (image != null)
 					image.dispose();
 				image = d.createImage();
