@@ -18,7 +18,7 @@ public class JListEditorAdapter extends ComplexWidgetEditorAdapter {
 	private IEditor iEditor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (iEditor == null) {
 			iEditor = new TextAreaEditor();
 		}
@@ -26,7 +26,7 @@ public class JListEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		ListModel model = ((JList) adaptable.getWidget()).getModel();
 		int size = model.getSize();
 		String items = ""; //$NON-NLS-1$
@@ -65,7 +65,7 @@ public class JListEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		return new Rectangle(0, 0, w, h);

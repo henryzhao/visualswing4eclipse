@@ -174,7 +174,7 @@ public class IconCellEditor extends DialogCellEditor {
 				if (javaProject != null) {
 					IPackageFragmentRoot src_root = getSourceRoot(javaProject);
 					if (src_root != null) {
-						String srcName=src_root.getElementName();						
+						String srcName = src_root.getElementName();
 						IProject prj = javaProject.getProject();
 						IFile file = prj.getFolder(srcName).getFile(text);
 						if (file != null && file.exists())
@@ -185,13 +185,17 @@ public class IconCellEditor extends DialogCellEditor {
 			int ret = isd.open();
 			if (ret == Window.OK) {
 				IFile file = isd.getImageFile();
-				IPath location = file.getFullPath();
-				location = location.removeFirstSegments(2);
-				String path = location.toString();
-				if (path.startsWith("/"))
-					return path;
-				else
-					return "/" + path;
+				if (file == null) {
+					return "";
+				} else {
+					IPath location = file.getFullPath();
+					location = location.removeFirstSegments(2);
+					String path = location.toString();
+					if (path.startsWith("/"))
+						return path;
+					else
+						return "/" + path;
+				}
 			}
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);

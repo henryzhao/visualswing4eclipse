@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing.plugin.spi;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,18 +145,18 @@ public abstract class BorderAdapter implements IFactory, IPropertySourceProvider
 		return codegen.getJavaCode(value, imports);
 	}
 
-	public Object getWidgetValue(JComponent owner) {
+	public Object getWidgetValue(JComponent owner, Point hotspot) {
 		return null;
 	}
 
-	public void setWidgetValue(JComponent owner, Object value) {
+	public void setWidgetValue(JComponent owner, Object value, Point hotspot) {
 	}
 
-	public IEditor getEditorAt(JComponent owner, int x, int y) {
+	public IEditor getEditorAt(JComponent owner, Point hotspot) {
 		return null;
 	}
 
-	public Rectangle getEditorBounds(JComponent owner, int x, int y) {
+	public Rectangle getEditorBounds(JComponent owner, Point hotspot) {
 		return null;
 	}
 }

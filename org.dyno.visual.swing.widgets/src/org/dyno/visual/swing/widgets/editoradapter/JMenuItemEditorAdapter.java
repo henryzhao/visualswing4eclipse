@@ -14,7 +14,7 @@ public class JMenuItemEditorAdapter extends WidgetEditorAdapter {
 	private LabelEditor editor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (editor == null) {
 			editor = new LabelEditor();
 		}
@@ -22,7 +22,7 @@ public class JMenuItemEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		Component me = adaptable.getWidget();
 		JMenuItem jmi = (JMenuItem)me;
 		return jmi.getText();
@@ -36,7 +36,7 @@ public class JMenuItemEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		Component widget = adaptable.getWidget();

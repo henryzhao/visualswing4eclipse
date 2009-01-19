@@ -14,7 +14,7 @@ public class J2DTextComponentEditorAdapter extends ComplexWidgetEditorAdapter {
 	private IEditor iEditor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (iEditor == null) {
 			iEditor = new TextAreaEditor();
 		}
@@ -22,7 +22,7 @@ public class J2DTextComponentEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		return ((JTextComponent) adaptable.getWidget()).getText();
 	}
 
@@ -33,7 +33,7 @@ public class J2DTextComponentEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		WidgetAdapter parent = adaptable.getParentAdapter();
 		int w, h;
 		if (parent != null && parent instanceof JScrollPaneAdapter) {

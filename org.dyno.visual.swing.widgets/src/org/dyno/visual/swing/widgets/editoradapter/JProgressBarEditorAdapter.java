@@ -13,7 +13,7 @@ public class JProgressBarEditorAdapter extends WidgetEditorAdapter {
 	private IEditor iEditor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (iEditor == null) {
 			iEditor = new IntegerTextEditor();
 		}
@@ -21,7 +21,7 @@ public class JProgressBarEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		return ((JProgressBar) adaptable.getWidget()).getValue();
 	}
 
@@ -31,7 +31,7 @@ public class JProgressBarEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		int oritention = ((JProgressBar) adaptable.getWidget()).getOrientation();

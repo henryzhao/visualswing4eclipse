@@ -13,7 +13,7 @@ import org.dyno.visual.swing.widgets.editors.TreeModelEditor;
 public class JTreeEditorAdapter extends ComplexWidgetEditorAdapter {
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		CompositeAdapter parent = adaptable.getParentAdapter();
 		if (parent != null && parent.getWidget() instanceof JScrollPane)
 			return new TreeModelEditor((JScrollPane) parent.cloneWidget());
@@ -22,7 +22,7 @@ public class JTreeEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		CompositeAdapter parent = adaptable.getParentAdapter();
 		if (parent != null && parent.getWidget() instanceof JScrollPane) {
 			Rectangle bounds = parent.getWidget().getBounds();
@@ -37,7 +37,7 @@ public class JTreeEditorAdapter extends ComplexWidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		JTree tree = (JTree) adaptable.getWidget();
 		return tree.getModel();
 	}

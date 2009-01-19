@@ -13,14 +13,14 @@ public class JScrollBarEditorAdapter extends WidgetEditorAdapter {
 	private IEditor iEditor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		JScrollBar bar = (JScrollBar) adaptable.cloneWidget();
 		iEditor = new TransparentScrollBarEditor(bar);
 		return iEditor;
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		return ((JScrollBar) adaptable.getWidget()).getValue();
 	}
 
@@ -30,7 +30,7 @@ public class JScrollBarEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		return SwingUtilities.getLocalBounds(adaptable.getWidget());
 	}
 

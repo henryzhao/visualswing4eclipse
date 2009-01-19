@@ -16,7 +16,7 @@ public class TextWidgetEditorAdapter extends WidgetEditorAdapter {
 	private LabelEditor editor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
+	public IEditor getEditorAt() {
 		if (editor == null) {
 			editor = new LabelEditor();
 		}
@@ -24,7 +24,7 @@ public class TextWidgetEditorAdapter extends WidgetEditorAdapter {
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		return getText(adaptable.getWidget());
 	}
 	private PropertyDescriptor getTextProperty() {
@@ -58,7 +58,7 @@ public class TextWidgetEditorAdapter extends WidgetEditorAdapter {
 		}
 	}
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
+	public Rectangle getEditorBounds() {
 		int w = adaptable.getWidget().getWidth();
 		int h = adaptable.getWidget().getHeight();
 		Component widget = adaptable.getWidget();

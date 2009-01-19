@@ -12,8 +12,8 @@ public class JInternalFrameEdtiorAdapter extends RootPaneContainerEditorAdapter 
 	private LabelEditor editor;
 
 	@Override
-	public IEditor getEditorAt(int x, int y) {
-		if (getCaptionBounds().contains(x, y)) {
+	public IEditor getEditorAt() {
+		if (getCaptionBounds().contains(hotspot)) {
 			if (editor == null)
 				editor = new LabelEditor();
 			return editor;
@@ -28,15 +28,15 @@ public class JInternalFrameEdtiorAdapter extends RootPaneContainerEditorAdapter 
 	}
 
 	@Override
-	public Rectangle getEditorBounds(int x, int y) {
-		if (getCaptionBounds().contains(x, y)) {
+	public Rectangle getEditorBounds() {
+		if (getCaptionBounds().contains(hotspot)) {
 			return new Rectangle(4, 4, adaptable.getWidget().getWidth() - 8, 23);
 		} else
 			return null;
 	}
 
 	@Override
-	public Object getWidgetValue(int x, int y) {
+	public Object getWidgetValue() {
 		JInternalFrame jif = (JInternalFrame) adaptable.getWidget();
 		return jif.getTitle();
 	}
