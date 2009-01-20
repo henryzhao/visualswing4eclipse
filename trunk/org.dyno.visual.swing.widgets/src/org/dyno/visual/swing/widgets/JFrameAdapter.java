@@ -248,16 +248,14 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
-		Object adaptable = super.getAdapter(adapterClass);
-		if(adaptable==null&&adapterClass==MouseInputListener.class){
+		if(adapterClass==MouseInputListener.class){
 			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
 			if(adapter!=null)
 				return adapter.getAdapter(adapterClass);
 			else
 				return null;
 		}else
-			return adaptable;
-		
+			return super.getAdapter(adapterClass);
 	}	
 
 	public boolean removeChild(Component child) {

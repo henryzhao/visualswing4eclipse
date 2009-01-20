@@ -74,6 +74,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 		addMouseWheelListener((MouseWheelListener) proxy);
 		setLayout(null);
 		this.designer = designer;
+		this.hotspotPoint = new Point(0,0);
 		addMouseListener(this);
 		target = new GlassTarget(this);
 		addMouseListener(target);
