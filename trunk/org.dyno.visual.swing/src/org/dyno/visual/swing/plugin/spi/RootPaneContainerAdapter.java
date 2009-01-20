@@ -11,6 +11,11 @@ public abstract class RootPaneContainerAdapter extends CompositeAdapter {
 	public RootPaneContainerAdapter(String name) {
 		super(name);
 	}
+	@Override
+	public Component getContentArea(){
+		RootPaneContainer rootPaneContainer = (RootPaneContainer) getWidget();
+		return rootPaneContainer.getRootPane();
+	}
 
 	public abstract WidgetAdapter getContentAdapter();
 	

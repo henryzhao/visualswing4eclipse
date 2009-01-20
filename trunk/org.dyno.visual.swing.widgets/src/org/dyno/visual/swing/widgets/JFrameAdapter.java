@@ -220,9 +220,11 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 			return contentAdapter.getIndexOfChild(child) + 1;
 	}
 
-	@Override
-	public boolean allowChildResize() {
-		return contentAdapter.allowChildResize();
+ 	@Override
+	public boolean allowChildResize(Component child) {
+		if (child instanceof JMenuBar)
+			return false;
+		return contentAdapter.allowChildResize(child);
 	}
 
 	public Point convertToGlobal(Point p) {

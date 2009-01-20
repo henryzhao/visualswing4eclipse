@@ -40,7 +40,7 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 
 
 	@Override
-	public boolean allowChildResize() {
+	public boolean allowChildResize(Component child) {
 		return false;
 	}
 
