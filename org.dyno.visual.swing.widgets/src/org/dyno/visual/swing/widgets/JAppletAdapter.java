@@ -277,15 +277,13 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
-		Object adaptable = super.getAdapter(adapterClass);
-		if (adaptable == null && adapterClass == MouseInputListener.class) {
-			LayoutAdapter adapter = contentAdapter.getLayoutAdapter();
-			if (adapter != null)
+		if(adapterClass==MouseInputListener.class){
+			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
+			if(adapter!=null)
 				return adapter.getAdapter(adapterClass);
 			else
 				return null;
-		} else
-			return adaptable;
-
+		}else
+			return super.getAdapter(adapterClass);
 	}
 }
