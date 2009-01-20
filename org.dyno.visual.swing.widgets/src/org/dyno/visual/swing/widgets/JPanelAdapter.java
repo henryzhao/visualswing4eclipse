@@ -17,6 +17,7 @@ package org.dyno.visual.swing.widgets;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -56,6 +57,11 @@ public class JPanelAdapter extends CompositeAdapter {
 	public JPanelAdapter() {
 		super(null);
 	}
+	public Component getContentArea(){
+		if(delegate!=null)
+			return delegate.getContentArea();
+		return getWidget();
+	}	
 	@Override
 	public String getName() {
 		if(delegate!=null)
@@ -204,6 +210,12 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 
+	@Override
+	public Point getHotspotPoint() {
+		if(delegate!=null)
+			return delegate.getHotspotPoint();
+		return super.getHotspotPoint();
+	}
 	private int getComponentIndex(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		int count = jpanel.getComponentCount();
@@ -406,7 +418,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public boolean allowChildResize() {
+	public boolean allowChildResize(Component child) {
 		JPanel jpanel = (JPanel) getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout == null) {

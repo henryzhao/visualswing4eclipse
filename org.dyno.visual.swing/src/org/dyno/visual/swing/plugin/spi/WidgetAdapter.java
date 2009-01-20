@@ -309,7 +309,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		else {
 			Component comp = focused.getWidget();
 			if (comp instanceof Container) {
-				return focused.allowChildResize();
+				return focused.allowChildResize(getWidget());
 			} else
 				return false;
 		}
@@ -672,7 +672,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				if (layoutMgr == null)
 					return true;
 			}
-			return parentAdapter.isChildMoveable();
+			return parentAdapter.isChildMoveable(getWidget());
 		} else {
 			return false;
 		}
@@ -721,15 +721,17 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public Point convertToLocal(Point p) {
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
-			return SwingUtilities.convertPoint(designer, p, getWidget());
+			return SwingUtilities.convertPoint(designer, p, getContentArea());
 		} else
 			return p;
 	}
-
+	public Component getContentArea(){
+		return getWidget();
+	}
 	public Point convertToGlobal(Point p) {
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
-			return SwingUtilities.convertPoint(getWidget(), p, designer);
+			return SwingUtilities.convertPoint(getContentArea(), p, designer);
 		} else
 			return p;
 	}

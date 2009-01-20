@@ -90,7 +90,7 @@ public class JScrollPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public boolean allowChildResize() {
+	public boolean allowChildResize(Component child) {
 		return false;
 	}
 

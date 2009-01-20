@@ -2,122 +2,131 @@ package org.dyno.visual.swing.widgets.design;
 
 import java.awt.Component;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.SwingUtilities;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
+import org.dyno.visual.swing.plugin.spi.IPainter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.painter.JInternalFramePainter;
 
 public class JInternalFrameDesignOperation extends
 		RootPaneContainerDesignOperation {
-	private boolean inContent;
-	public boolean isInContent(){
-		return inContent;
-	}
-	@Override
-	public boolean dragEnter(Point p) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem() && isInContentPane(p)) {
-			inContent = true;
-			Point cp = SwingUtilities.convertPoint(adaptable.getWidget(), p, adaptable.getContentPane());
-			return getContentOperation().dragEnter(cp);
-		}
-		adaptable.setMascotLocation(p);
-		return true;
-	}
-
-
-	@Override
-	public boolean drop(Point p) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
-		inContent = false;
-			if (isInContentPane(p)) {
-				Point cp = SwingUtilities.convertPoint(adaptable.getWidget(), p,
-						adaptable.getContentPane());
-				return getContentOperation().drop(cp);
-			} else {
-				Toolkit.getDefaultToolkit().beep();
-				return true;
-			}
-		}else if (isDroppingMenuBar()) {
-			JInternalFrame jif = (JInternalFrame) adaptable.getWidget();
-			if(jif.getJMenuBar()==null){
-				WidgetAdapter jmenuBarAdapter=adaptable.getDropWidget().get(0);
-				JMenuBar jmb=(JMenuBar)jmenuBarAdapter.getWidget();
-				jif.setJMenuBar(jmb);
-				jmenuBarAdapter.requestNewName();
-				adaptable.clearAllSelected();
-				jmenuBarAdapter.setSelected(true);
-				jmenuBarAdapter.addNotify();
-				adaptable.setDirty(true);
-			}else{
-				Toolkit.getDefaultToolkit().beep();
-				return false;
-			}
-		}
-		adaptable.setMascotLocation(p);
-		return true;
-	}
-	private boolean isInContentPane(Point p) {
-		return getContentBounds().contains(p);
-	}
-
-	private Rectangle getContentBounds() {
-		Component panel = adaptable.getContentPane();
-		int w = panel.getWidth();
-		int h = panel.getHeight();
-		Rectangle bounds = new Rectangle(0, 0, w, h);
-		return SwingUtilities.convertRectangle(panel, bounds, adaptable.getWidget());
-	}
-
-	@Override
-	public boolean dragExit(Point p) {
-		if (inContent) {
-			inContent = false;
-			Point cp = SwingUtilities.convertPoint(adaptable.getWidget(), p,
-					adaptable.getContentPane());
-			return getContentOperation().dragExit(cp);
-		} else{
-			adaptable.setMascotLocation(p);
-			return true;
-		}
-	}
 	private IDesignOperation getContentOperation(){
 		WidgetAdapter contentAdapter = ((RootPaneContainerAdapter)adaptable).getContentAdapter();
 		return (IDesignOperation) contentAdapter.getAdapter(IDesignOperation.class);
 	}
+	private void setDropStatus(int dropStatus){
+		JInternalFramePainter jap=(JInternalFramePainter) adaptable.getAdapter(IPainter.class);
+		jap.setDropStatus(dropStatus);
+	}	
 	@Override
 	public boolean dragOver(Point p) {
-		if (!isDroppingMenuBar() && !isDroppingMenuItem()) {
-			if (isInContentPane(p)) {
-				if (!inContent) {
-					inContent = true;
-					Point cp = SwingUtilities.convertPoint(adaptable.getWidget(), p,
-							adaptable.getContentPane());
-					return getContentOperation().dragEnter(cp);
-				} else {
-					Point cp = SwingUtilities.convertPoint(adaptable.getWidget(), p,
-							adaptable.getContentPane());
-					return getContentOperation().dragOver(cp);
-				}
-			} else {
-				if (inContent) {
-					inContent = false;
-					Point cp = SwingUtilities.convertPoint(adaptable.getWidget(), p,
-							adaptable.getContentPane());
-					return getContentOperation().dragExit(cp);
-				} else {
-					adaptable.setMascotLocation(p);
-					return true;
-				}
-			}
-		}
-		adaptable.setMascotLocation(p);
-		return true;
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.DROPPING_FORBIDDEN);
+			return true;
+		} else if (isDroppingMenuBar()) {
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.DROPPING_PERMITTED);
+			return true;
+		} else
+			return getContentOperation().dragOver(p);
 	}
 
+	@Override
+	public boolean dragEnter(Point p) {
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.DROPPING_FORBIDDEN);
+			return true;
+		} else if (isDroppingMenuBar()) {
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.DROPPING_PERMITTED);
+			return true;
+		} else
+			return getContentOperation().dragEnter(p);
+	}
+
+	private int getJMenuBarHeight() {
+		JInternalFrame jframe = (JInternalFrame) adaptable.getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		return jmb.getHeight();
+	}
+
+	private boolean isDroppingForbbiden() {
+		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
+	}
+
+	@Override
+	public boolean dragExit(Point p) {
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.NOOP);
+			return true;
+		} else if (isDroppingMenuBar()) {
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.NOOP);
+			return true;
+		} else
+			return getContentOperation().dragExit(p);
+	}
+
+	@Override
+	public boolean drop(Point p) {
+		if (isDroppingForbbiden()) {
+			if (hasMenuBar())
+				p.y += getJMenuBarHeight();
+			adaptable.setMascotLocation(p);
+			setDropStatus(JInternalFramePainter.NOOP);
+			Toolkit.getDefaultToolkit().beep();
+			return true;
+		} else if (isDroppingMenuBar()) {
+			adaptable.setMascotLocation(p);
+			WidgetAdapter target = adaptable.getDropWidget().get(0);
+			JMenuBar jmb = (JMenuBar) target.getWidget();
+			JInternalFrame jframe = (JInternalFrame) adaptable.getWidget();
+			jframe.setJMenuBar(jmb);
+			target.requestNewName();
+			jframe.validate();
+			adaptable.doLayout();
+			adaptable.validateContent();
+			adaptable.clearAllSelected();
+			target.setSelected(true);
+			adaptable.setDirty(true);
+			adaptable.addNotify();
+			adaptable.repaintDesigner();
+			setDropStatus(JInternalFramePainter.NOOP);
+			return true;
+		} else
+			return getContentOperation().drop(p);
+	}
+
+	private boolean isDroppingMenu() {
+		List<WidgetAdapter> targets = adaptable.getDropWidget();
+		if(targets.size()!=1)
+			return false;
+		Component drop = targets.get(0).getWidget();
+		return drop != null
+				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
+	}
+
+	private boolean hasMenuBar() {
+		JInternalFrame jframe = (JInternalFrame) adaptable.getWidget();
+		JMenuBar jmb = jframe.getJMenuBar();
+		return jmb != null;
+	}
 }

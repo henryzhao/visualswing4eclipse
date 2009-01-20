@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -39,6 +38,7 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
 	private JComponent contentPane;
 	private JRootPane jrootPane;
+
 	public JAppletAdapter() {
 		super(null);
 		createContentAdapter();
@@ -64,7 +64,6 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	public void doLayout() {
 		contentAdapter.doLayout();
 	}
-
 
 	@Override
 	public void addChildByConstraints(Component child, Object constraints) {
@@ -211,10 +210,11 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	public boolean allowChildResize() {
-		return contentAdapter.allowChildResize();
+	public boolean allowChildResize(Component child) {
+		if (child instanceof JMenuBar)
+			return false;
+		return contentAdapter.allowChildResize(child);
 	}
-
 
 	public Point convertToGlobal(Point p) {
 		JApplet japplet = (JApplet) getWidget();
@@ -243,9 +243,11 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		} else
 			return contentAdapter.removeChild(child);
 	}
-	public WidgetAdapter getContentAdapter(){
+
+	public WidgetAdapter getContentAdapter() {
 		return contentAdapter;
 	}
+
 	@Override
 	public boolean isChildVisible(Component child) {
 		return contentAdapter.isChildVisible(child);
@@ -266,25 +268,24 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		return contentAdapter.isSelectionAlignResize(id);
 	}
 
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JApplet.class;
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		Object adaptable = super.getAdapter(adapterClass);
-		if(adaptable==null&&adapterClass==MouseInputListener.class){
-			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
-			if(adapter!=null)
+		if (adaptable == null && adapterClass == MouseInputListener.class) {
+			LayoutAdapter adapter = contentAdapter.getLayoutAdapter();
+			if (adapter != null)
 				return adapter.getAdapter(adapterClass);
 			else
 				return null;
-		}else
+		} else
 			return adaptable;
-		
+
 	}
 }
-

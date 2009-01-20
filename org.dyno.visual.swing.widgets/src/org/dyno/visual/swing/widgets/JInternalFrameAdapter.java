@@ -44,6 +44,12 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
+	public boolean allowChildResize(Component child) {
+		if (child instanceof JMenuBar)
+			return false;
+		return contentAdapter.allowChildResize(child);
+	}
+	@Override
 	public Component getRootPane() {
 		return getWidget();
 	}
@@ -92,7 +98,6 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 		LayoutManager layout = panel.getLayout();
 		return layout == null;
 	}
-
 	public CompositeAdapter getContentAdapter() {
 		if (contentAdapter == null) {
 			contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);

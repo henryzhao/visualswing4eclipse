@@ -43,7 +43,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public boolean allowChildResize() {
+	public boolean allowChildResize(Component child) {
 		return true;
 	}
 
@@ -87,7 +87,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public boolean isChildMoveable() {
+	public boolean isChildMoveable(Component child) {
 		return true;
 	}
 
