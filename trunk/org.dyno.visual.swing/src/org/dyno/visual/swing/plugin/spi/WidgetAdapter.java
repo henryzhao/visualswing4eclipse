@@ -379,7 +379,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			parent = parent.getParent();
 		}
 		if (parent == null)
-			return null;
+			return WhiteBoard.getCurrentDesigner();
 		return (VisualDesigner) parent;
 	}
 

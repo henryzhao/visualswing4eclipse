@@ -832,9 +832,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public ICompilationUnit getCompilationUnit() {
 		return unit;
 	}
-
-	public void setCompilationUnit(ICompilationUnit unit) {
+	public void setCompilationUnit(ICompilationUnit unit){
 		this.unit = unit;
+	}
+	public void initNamespaceWithUnit(ICompilationUnit unit) {
+		setCompilationUnit(unit);
 		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
 		VSNamespaceManager vsname = new VSNamespaceManager(rootAdapter);
 		try {
@@ -850,7 +852,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 		this.namespace = vsname;
 	}
-
 	public void setCursorType(int type) {
 		glass.setCursorType(type);
 	}
