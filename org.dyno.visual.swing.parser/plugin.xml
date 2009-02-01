@@ -13,29 +13,40 @@
    <extension
          point="org.dyno.visual.swing.parser.listenerModel">
       <model
-            class="org.dyno.visual.swing.parser.listener.AnonymousInnerClassModel"
-            id="org.dyno.visual.swing.parser.model.anonymous"
-            name="Anonymous Inner Class Listener">
+            class="org.dyno.visual.swing.parser.listener.DelegationModel"
+            id="org.dyno.visual.swing.parser.model.delegation"
+            name="Delegation Listener"
+            priority="0">
       </model>
       <model
             class="org.dyno.visual.swing.parser.listener.ThisClassModel"
             id="org.dyno.visual.swing.parser.model.this"
-            name="This Class Listener">
+            name="This Class Listener"
+            priority="5">
       </model>
       <model
             class="org.dyno.visual.swing.parser.listener.OuterClassModel"
             id="org.dyno.visual.swing.parser.model.outer"
-            name="Outer Class Listener">
+            name="Outer Class Listener"
+            priority="3">
       </model>
       <model
             class="org.dyno.visual.swing.parser.listener.InnerClassModel"
             id="org.dyno.visual.swing.parser.model.inner"
-            name="Inner Class Listener">
+            name="Inner Class Listener"
+            priority="2">
       </model>
       <model
             class="org.dyno.visual.swing.parser.listener.StandaloneClassModel"
             id="org.dyno.visual.swing.parser.model.standalone"
-            name="Standalone Class Listener">
+            name="Standalone Class Listener"
+            priority="4">
+      </model>
+      <model
+            class="org.dyno.visual.swing.parser.listener.AnonymousInnerModel"
+            id="org.dyno.visual.swing.parser.model.anonymous"
+            name="Anonymous Inner Class"
+            priority="1">
       </model>
    </extension>
    <extension

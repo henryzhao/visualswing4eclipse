@@ -38,7 +38,6 @@ public class CodeSnippet implements IEventMethod, IConstants{
 	private EventSetDescriptor eventSet;
 	private MethodDescriptor methodDesc;
 	private String code;
-
 	public CodeSnippet(WidgetAdapter adapter, EventSetDescriptor eventSet,
 			MethodDescriptor methodDesc, String code) {
 		this.adapter = adapter;
@@ -46,7 +45,6 @@ public class CodeSnippet implements IEventMethod, IConstants{
 		this.methodDesc = methodDesc;
 		this.code = code;
 	}
-
 	private String getGetMethodName(String name) {
 		return NamespaceUtil.getGetMethodName(name);
 	}
@@ -81,7 +79,6 @@ public class CodeSnippet implements IEventMethod, IConstants{
 								.createTypeSignature(param, false);
 						IMember member = anonymous.getMethod(mName,
 								new String[] { sig });
-						member.getChildren();
 						JavaUI.revealInEditor(editor, (IJavaElement) member);
 					}
 				}
@@ -96,7 +93,7 @@ public class CodeSnippet implements IEventMethod, IConstants{
 			final EventSetDescriptor eventSet, IType anonymous) {
 		try {
 			Class clazz = eventSet.getListenerType();
-			Class adapterClass = AnonymousInnerClassModel
+			Class adapterClass = DelegationModel
 					.getListenerAdapter(clazz);
 			String superClassname = anonymous.getSuperclassName();
 			boolean targetClass = false;

@@ -1,17 +1,3 @@
-
-/************************************************************************************
- * Copyright (c) 2008 William Chen.                                                 *
- *                                                                                  *
- * All rights reserved. This program and the accompanying materials are made        *
- * available under the terms of the Eclipse Public License v1.0 which accompanies   *
- * this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html *
- *                                                                                  *
- * Use is subject to the terms of Eclipse Public License v1.0.                      *
- *                                                                                  *
- * Contributors:                                                                    * 
- *     William Chen - initial API and implementation.                               *
- ************************************************************************************/
-
 package org.dyno.visual.swing.parser.listener;
 
 import java.awt.event.MouseAdapter;
@@ -24,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.ParserPlugin;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -39,32 +24,29 @@ import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.Name;
-import org.eclipse.jdt.core.dom.ThisExpression;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.ui.IEditorPart;
 import org.osgi.framework.Bundle;
 
-public class AnonymousInnerClassModel extends AbstractClassModel {
-	@SuppressWarnings("unchecked")
-	private static HashMap<Class, Class> listenerAdapters;
+
+@SuppressWarnings("unchecked")
+abstract class AbstractInnerModel extends AbstractClassModel {
+	protected static HashMap<Class, Class> listenerAdapters;
 	public static final String LISTENER_ADAPTER_EXTENSION = "org.dyno.visual.swing.listenerAdapter";
 	static {
 		initListenerAdapters();
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void initListenerAdapters() {
 		listenerAdapters = new HashMap<Class, Class>();
 		parseListenerAdapterExtensions();
 		listenerAdapters.put(MouseListener.class, MouseAdapter.class);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static Class getListenerAdapter(Class list) {
 		return listenerAdapters.get(list);
 	}
@@ -93,7 +75,6 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void addListenerAdapter(IConfigurationElement config) {
 		String interf = config.getAttribute("interface");
 		String adapter = config.getAttribute("adapter");
@@ -108,13 +89,10 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 			ParserPlugin.getLogger().error(e);
 		}
 	}
-
-	private Map<MethodDescriptor, IEventMethod> methods;
-
-	public AnonymousInnerClassModel() {
+	protected Map<MethodDescriptor, IEventMethod> methods;
+	public AbstractInnerModel() {
 		methods = new HashMap<MethodDescriptor, IEventMethod>();
 	}
-
 	@Override
 	public String getDisplayName(MethodDescriptor method) {
 		IEventMethod content = methods.get(method);
@@ -140,22 +118,6 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 	public boolean isEmpty() {
 		return methods.isEmpty();
 	}
-
-	@Override
-	public void addMethod(MethodDescriptor methodDesc) {
-		String methodName;
-		if (adapter.isRoot())
-			methodName = eventSet.getName() + getCapitalName(methodDesc.getName());
-		else
-			methodName = adapter.getID() + getCapitalName(eventSet.getName()) + getCapitalName(methodDesc.getName());
-		IEventMethod content = new EventDelegation(methodDesc, methodName);
-		methods.put(methodDesc, content);
-	}
-
-	private String getCapitalName(String name) {
-		return NamespaceUtil.getCapitalName(name);
-	}
-
 	@Override
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
 		IEventMethod content = methods.get(methodDesc);
@@ -180,8 +142,7 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 		}
 		return true;
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public String createListenerInstance(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
@@ -192,7 +153,17 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 			lClass = listenerAdapters.get(lClass);
 		String lName = lClass.getName();
 		String cName = imports.addImport(lName);
-		builder.append(cName + "(){\n");
+		builder.append(cName + "()");
+		createNewListenerContent(imports, builder, hasAdapter);
+		return builder.toString();
+	}
+	
+	protected void createNewListenerContent(ImportRewrite imports, StringBuilder builder, boolean hasAdapter){
+		builder.append("{\n");
+		createNewListener(imports, builder, hasAdapter);
+	}
+	
+	protected void createNewListener(ImportRewrite imports, StringBuilder builder, boolean hasAdapter) {
 		for (MethodDescriptor mdesc : methods()) {
 			Method mEvent = mdesc.getMethod();
 			boolean genOverride = !hasAdapter || hasMethod(mdesc);
@@ -217,67 +188,23 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 				builder.append("}\n");
 		}
 		builder.append("}\n");
-		return builder.toString();
-	}
+	}	
 
-	@SuppressWarnings("unchecked")
-	private void parse(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, ClassInstanceCreation instanceExpression) {
-		AnonymousClassDeclaration acd = instanceExpression.getAnonymousClassDeclaration();
-		List bodys = acd.bodyDeclarations();
-		for (Object element : bodys) {
-			if (element instanceof MethodDeclaration) {
-				processListenerMethod(adapter, esd, mListener, (MethodDeclaration) element);
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private IEventMethod getDelegatingContent(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body) {
-		List statements = body.statements();
-		if (statements.size() == 1) {
-			Object stmt = statements.get(0);
-			if (stmt instanceof ExpressionStatement) {
-				ExpressionStatement es = (ExpressionStatement) stmt;
-				Expression expression = es.getExpression();
-				if (expression instanceof MethodInvocation) {
-					MethodInvocation mi = (MethodInvocation) expression;
-					Expression optional = mi.getExpression();
-					if (optional == null) {
-						return new EventDelegation(methodDesc, mi.getName().getFullyQualifiedName());
-					} else if (optional instanceof ThisExpression) {
-						ThisExpression thisExpression = (ThisExpression) optional;
-						Name qName = thisExpression.getQualifier();
-						if (qName != null) {
-							return new EventDelegation(methodDesc, mi.getName().getFullyQualifiedName());
-						} else {
-							return new CodeSnippet(adapter, eventSet, methodDesc, es.toString());
-						}
-					} else {
-						return new CodeSnippet(adapter, eventSet, methodDesc, es.toString());
-					}
-				} else
-					return new CodeSnippet(adapter, eventSet, methodDesc, es.toString());
-			} else
-				return new CodeSnippet(adapter, eventSet, methodDesc, stmt.toString());
-		} else {
-			StringBuilder builder = new StringBuilder();
-			for (Object stmt : statements) {
-				builder.append(stmt.toString());
-			}
-			return new CodeSnippet(adapter, eventSet, methodDesc, builder.toString());
-		}
-	}
-
-	private void processListenerMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration methoddec) {
+	protected boolean processListenerMethod(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration methoddec) {
 		if (methoddec.getName().getFullyQualifiedName().equals(mListener.getName())) {
 			Block mbody = methoddec.getBody();
-			IEventMethod content = getDelegatingContent(adapter, esd, mListener, mbody);
+			SingleVariableDeclaration var = (SingleVariableDeclaration) methoddec.parameters().get(0);
+			IEventMethod content = getDelegatingContent(adapter, esd, mListener, mbody, var);
 			methods.put(mListener, content);
+			return true;
+		} else {
+			return false;
 		}
 	}
+	
+	protected abstract IEventMethod getDelegatingContent(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body, SingleVariableDeclaration var);
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {
@@ -286,8 +213,8 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 				ClassInstanceCreation cic = (ClassInstanceCreation) argExpression;
 				AnonymousClassDeclaration acd = cic.getAnonymousClassDeclaration();
 				if (acd != null) {
-					parse(adapter, esd, mListener, cic);
-					return true;
+					if (parse(adapter, esd, mListener, cic))
+						return true;
 				} else
 					return false;
 			} else
@@ -295,5 +222,6 @@ public class AnonymousInnerClassModel extends AbstractClassModel {
 		}
 		return false;
 	}
-}
 
+	protected abstract boolean parse(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor listener, ClassInstanceCreation cic);
+}
