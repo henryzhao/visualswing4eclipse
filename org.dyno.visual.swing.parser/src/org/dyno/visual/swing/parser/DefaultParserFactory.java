@@ -14,8 +14,12 @@
 package org.dyno.visual.swing.parser;
 
 import java.beans.EventSetDescriptor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.dyno.visual.swing.parser.listener.AbstractClassModel;
@@ -79,13 +83,30 @@ public class DefaultParserFactory extends ParserFactory {
 			}
 		};
 	}
+	class PriorityComparator implements Comparator<String>{
+		@Override
+		public int compare(String o1, String o2) {
+			IConfigurationElement config1 = listenerModels.get(o1);
+			IConfigurationElement config2 = listenerModels.get(o2);
+			String sp1=config1.getAttribute("priority");
+			String sp2=config2.getAttribute("priority");
+			int p1=sp1==null?Integer.MAX_VALUE:Integer.parseInt(sp1);
+			int p2=sp1==null?Integer.MAX_VALUE:Integer.parseInt(sp2);
+			return p1-p2;
+		}
+	}
 	private class ModelIterator implements Iterator<AbstractClassModel> {
 		private Iterator<String> ids;
 		private WidgetAdapter adapter;
 		private EventSetDescriptor eventSet;
 
 		public ModelIterator(WidgetAdapter adapter, EventSetDescriptor eventSet) {
-			ids = listenerModels.keySet().iterator();
+			List<String>keys=new ArrayList<String>();
+			for(String id:listenerModels.keySet()){
+				keys.add(id);
+			}
+			Collections.sort(keys, new PriorityComparator());
+			ids = keys.iterator();
 			this.adapter = adapter;
 			this.eventSet = eventSet;
 		}
@@ -130,6 +151,7 @@ public class DefaultParserFactory extends ParserFactory {
 			}
 		}
 	}
+	
 	private AbstractClassModel newModel(String id, WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		IConfigurationElement config = listenerModels.get(id);
 		try {
