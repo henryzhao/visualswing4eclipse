@@ -302,6 +302,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		hostProject = unit.getJavaProject();
 		ISourceParser sourceParser = factory.newParser();
 		isParsing = true;
+		WhiteBoard.setCurrentEditor(this);
+		this.designer.setCompilationUnit(unit);
 		WidgetAdapter adapter = sourceParser.parse(unit, monitor);
 		if (adapter == null){
 			isParsing=false;
@@ -310,7 +312,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (designer != null) {
 			designer.initRootWidget(adapter);
 			setUpLookAndFeel(adapter.getWidget().getClass());
-			designer.setCompilationUnit(unit);
+			designer.initNamespaceWithUnit(unit);
 			refreshTree();
 			isParsing=false;
 			return true;
@@ -389,7 +391,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					ICompilationUnit unit = sourceParser.generate(rootAdapter,	monitor);
 					rootAdapter.setProperty("preferred.lookandfeel", null); //$NON-NLS-1$
 					if (unit != null) {
-						designer.setCompilationUnit(unit);
+						designer.initNamespaceWithUnit(unit);
 						designer.setLnfChanged(false);
 						fireDirty();
 						designer.clearDirty();
