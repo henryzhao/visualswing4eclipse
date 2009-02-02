@@ -387,9 +387,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 							.getWidgetAdapter(root);
 					JavaUtil.hideMenu();
 					String lnfCN = getLnfClassname();
-					rootAdapter.setProperty("preferred.lookandfeel", lnfCN); //$NON-NLS-1$
+					rootAdapter.setPreferredLookAndFeel(lnfCN); //$NON-NLS-1$
 					ICompilationUnit unit = sourceParser.generate(rootAdapter,	monitor);
-					rootAdapter.setProperty("preferred.lookandfeel", null); //$NON-NLS-1$
+					rootAdapter.setPreferredLookAndFeel(null); //$NON-NLS-1$
 					if (unit != null) {
 						designer.initNamespaceWithUnit(unit);
 						designer.setLnfChanged(false);

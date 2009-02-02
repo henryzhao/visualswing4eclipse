@@ -15,6 +15,7 @@ package org.dyno.visual.swing.editors.actions;
 
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
+import java.util.Map;
 
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -31,21 +32,21 @@ public class DelEventAction extends Action {
 		setId(eventSet.getName() + "_" + methodDesc.getName());
 		this.eventSet = eventSet;
 		this.methodDesc = methodDesc;
-		
-		IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+		Map<EventSetDescriptor, IEventListenerModel> eventDesc=adapter.getEventDescriptor();		
+		IEventListenerModel model = eventDesc.get(eventSet);
 		String methodName = model.getDisplayName(methodDesc);
 		setText(methodName);
 	}
 
 	public void run() {
-		IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+		Map<EventSetDescriptor, IEventListenerModel> eventDesc=adapter.getEventDescriptor();		
+		IEventListenerModel model = eventDesc.get(eventSet);
 		if (model != null) {
-
 			if (model.hasMethod(methodDesc)) {
 				model.removeMethod(methodDesc);
 			}
 			if (model.isEmpty()) {
-				adapter.getEventDescriptor().remove(eventSet);
+				eventDesc.remove(eventSet);
 			}
 			adapter.setDirty(true);
 			adapter.changeNotify();

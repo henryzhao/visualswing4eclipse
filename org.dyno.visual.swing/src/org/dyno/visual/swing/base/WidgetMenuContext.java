@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.beans.EventSetDescriptor;
 import java.beans.MethodDescriptor;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JComponent;
@@ -78,11 +79,12 @@ public class WidgetMenuContext implements IMenuContext, IAdaptableContext {
 	}
 
 	protected void fillDelEventAction(MenuManager eventMenu) {
-		Set<EventSetDescriptor> keys = adaptable.getEventDescriptor().keySet();
+		Map<EventSetDescriptor, IEventListenerModel> eventDesc=adaptable.getEventDescriptor();
+		Set<EventSetDescriptor> keys = eventDesc.keySet();
 		for (EventSetDescriptor key : keys) {
 			MenuManager subEventMenu = new MenuManager(key.getName(),
 					"#DELETE_EVENT_" + key); //$NON-NLS-1$
-			IEventListenerModel model = adaptable.getEventDescriptor().get(key);
+			IEventListenerModel model = eventDesc.get(key);
 			Iterable<MethodDescriptor> mSet = model.methods();
 			for (MethodDescriptor method : mSet) {
 				subEventMenu.add(new DelEventAction(adaptable, key, method));

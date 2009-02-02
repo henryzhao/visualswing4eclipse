@@ -419,8 +419,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				if (lnfField.exists()) {
 					lnfField.delete(false, monitor);
 				}
-				String className = (String) root
-						.getProperty("preferred.lookandfeel"); //$NON-NLS-1$
+				String className = (String) root.getPreferredLookAndFeel();
 				String newfield = "private static final " //$NON-NLS-1$
 						+ imports.addImport("java.lang.String") //$NON-NLS-1$
 						+ " PREFERRED_LOOK_AND_FEEL = " //$NON-NLS-1$
