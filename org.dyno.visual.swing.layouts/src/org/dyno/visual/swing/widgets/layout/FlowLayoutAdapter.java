@@ -158,10 +158,10 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
-		WidgetProperty hgapProperty = new WidgetProperty("hgap","hgap", FlowLayout.class);
-		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", FlowLayout.class);
-		WidgetProperty alignOnBaselineProperty = new WidgetProperty("alignOnBaseline", "alignOnBaseline", FlowLayout.class);
-		WidgetProperty alignmentProperty = new WidgetProperty("alignment", "alignment", FlowLayout.class, new FlowLayoutAlignmentRenderer(), new FlowLayoutAlignmentEditor());
+		WidgetProperty hgapProperty = new WidgetProperty("hgap", FlowLayout.class);
+		WidgetProperty vgapProperty = new WidgetProperty("vgap", FlowLayout.class);
+		WidgetProperty alignOnBaselineProperty = new WidgetProperty("alignOnBaseline", FlowLayout.class);
+		WidgetProperty alignmentProperty = new WidgetProperty("alignment", FlowLayout.class, new FlowLayoutAlignmentRenderer(), new FlowLayoutAlignmentEditor());
 		return new IWidgetPropertyDescriptor[]{alignmentProperty, hgapProperty, vgapProperty, alignOnBaselineProperty};
 	}
 

@@ -126,13 +126,6 @@
             <element ref="description" minOccurs="0" maxOccurs="1"/>
             <element ref="filter" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
-         <attribute name="id" type="string" use="required">
-            <annotation>
-               <documentation>
-                  
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
