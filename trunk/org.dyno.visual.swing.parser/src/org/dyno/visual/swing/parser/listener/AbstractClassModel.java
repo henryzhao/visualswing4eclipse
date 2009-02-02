@@ -84,11 +84,14 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 	private boolean createEventMethodForWidget(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration md) {
 		Block body = md.getBody();
 		List statements = body.statements();
-		if (!adapter.isRoot()) {
-			IfStatement ifstatement = (IfStatement) statements.get(0);
-			Statement thenstatement = ifstatement.getThenStatement();
-			if (thenstatement instanceof Block) {
-				statements = ((Block) thenstatement).statements();
+		if (!adapter.isRoot()&&!statements.isEmpty()) {
+			Object firstStatement = statements.get(0);
+			if (firstStatement instanceof IfStatement) {
+				IfStatement ifstatement = (IfStatement) firstStatement;
+				Statement thenstatement = ifstatement.getThenStatement();
+				if (thenstatement instanceof Block) {
+					statements = ((Block) thenstatement).statements();
+				}
 			}
 		}
 		boolean success = false;
