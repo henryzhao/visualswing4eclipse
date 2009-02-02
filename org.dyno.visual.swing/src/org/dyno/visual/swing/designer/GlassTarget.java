@@ -108,7 +108,6 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	private void dragOver(Point p) {
-		boolean update = false;
 		if (state == STATE_BEAN_HOVER) {
 			Component hovered = designer.componentAt(p, 0);
 			if (hovered != null) {
@@ -120,25 +119,25 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				if (hoveredAdapter != compositeAdapter) {
 					if (hoveredAdapter != null) {
 						IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
-						if (operation != null&& operation.dragExit(hoveredAdapter.convertToLocal(p)))
-							update = true;
+						if (operation != null)
+							operation.dragExit(hoveredAdapter.convertToLocal(p));
 					}
 					hoveredAdapter = compositeAdapter;
 					IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
-					if (operation!=null&&operation.dragEnter(hoveredAdapter.convertToLocal(p)))
-						update = true;
+					if (operation!=null)
+						operation.dragEnter(hoveredAdapter.convertToLocal(p));
 				} else if(compositeAdapter!=null){
 					hoveredAdapter = compositeAdapter;
 					IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
-					if (operation != null&&operation.dragOver(hoveredAdapter.convertToLocal(p))){
-						update = true;
+					if (operation != null){
+						operation.dragOver(hoveredAdapter.convertToLocal(p));
 					}
 				}
 			} else {
 				if (hoveredAdapter != null) {
 					IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
-					if(operation!=null&&operation.dragExit(hoveredAdapter.convertToLocal(p))){
-						update = true;
+					if(operation!=null){
+						operation.dragExit(hoveredAdapter.convertToLocal(p));
 					}
 					hoveredAdapter = null;
 				}
@@ -147,12 +146,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 		} else if (currentAdapters != null) {
 			hoveredAdapter = currentAdapters.get(0);
 			IDesignOperation operation = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
-			if (operation!=null&&operation.dragOver(hoveredAdapter.convertToLocal(p))){
-				update = true;
+			if (operation!=null){
+				operation.dragOver(hoveredAdapter.convertToLocal(p));
 			}
 		}
-		if (update)
-			glassPlane.repaint();
+		glassPlane.repaint();
 	}
 
 	@Override
