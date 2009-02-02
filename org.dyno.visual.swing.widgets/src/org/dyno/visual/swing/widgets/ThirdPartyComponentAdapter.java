@@ -1,11 +1,10 @@
-package org.dyno.visual.swing.widgets.spi;
+package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.widgets.WidgetPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;

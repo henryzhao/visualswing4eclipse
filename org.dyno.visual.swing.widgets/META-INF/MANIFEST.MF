@@ -17,4 +17,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: %Bundle-Vendor.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
-Export-Package: org.dyno.visual.swing.widgets.spi
+Export-Package: org.dyno.visual.swing.widgets
