@@ -57,7 +57,7 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class getObjectClass() {
+	protected Class getObjectClass() {
 		return null;
 	}
 

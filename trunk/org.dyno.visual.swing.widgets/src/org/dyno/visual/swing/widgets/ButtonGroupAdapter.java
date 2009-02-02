@@ -64,7 +64,7 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class getObjectClass() {
+	protected Class getObjectClass() {
 		return ButtonGroup.class;
 	}
 	@Override

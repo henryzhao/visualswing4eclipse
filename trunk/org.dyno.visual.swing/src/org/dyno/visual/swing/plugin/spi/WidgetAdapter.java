@@ -91,7 +91,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	protected Map<String, Boolean> edited;
 	protected Image iconImage;
 	protected List<InvisibleAdapter> invisibles = new ArrayList<InvisibleAdapter>();
-	protected Map<String, Object> properties = new HashMap<String, Object>();
 
 	@SuppressWarnings("unchecked")
 	public abstract Class getWidgetClass();
@@ -150,17 +149,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return designer.getCompilationUnit();
 		else
 			return null;
-	}
-
-	public void setProperty(String key, Object value) {
-		if (value == null)
-			properties.remove(key);
-		else
-			properties.put(key, value);
-	}
-
-	public Object getProperty(String key) {
-		return properties.get(key);
 	}
 
 	public List<InvisibleAdapter> getInvisibles() {
@@ -818,7 +806,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class getObjectClass() {
+	protected Class getObjectClass() {
 		return this.getWidgetClass();
 	}
 

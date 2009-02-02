@@ -39,7 +39,7 @@ import javax.swing.event.MouseInputListener;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.Azimuth;
-import org.dyno.visual.swing.base.ShellAdaptable;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.editors.PaletteView;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
@@ -566,13 +566,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 				Object oldValue = iEditor.getOldValue();
 				if (isValueChanged(oldValue, newValue)) {
 					IUndoableOperation operation = new SetWidgetValueOperation(adapter, oldValue, newValue);
-					Shell shell = designer.getShell();
 					IOperationHistory operationHistory = PlatformUI
 							.getWorkbench().getOperationSupport()
 							.getOperationHistory();
 					operation.addContext(adapter.getUndoContext());
-					operationHistory.execute(operation, null,
-							new ShellAdaptable(shell));
+					operationHistory.execute(operation, null,null);
 					adapter.setDirty(true);
 					CompositeAdapter container = (CompositeAdapter) adapter
 							.getParentAdapter();
@@ -598,8 +596,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 					glassPlane.validate();
 					currentEditor = null;
 				} else {
-					final Shell shell = designer.getShell();
 					final String message = e.getMessage();
+					final Shell shell = JavaUtil.getEclipseShell();
 					shell.getDisplay().syncExec(new Runnable() {
 						@Override
 						public void run() {
