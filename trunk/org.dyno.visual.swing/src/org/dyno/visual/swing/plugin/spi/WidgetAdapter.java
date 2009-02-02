@@ -234,11 +234,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	protected void attach() {
-		if (widget instanceof RootPaneContainer) {
-			JRootPane jrootPane = ((RootPaneContainer) widget).getRootPane();
-			jrootPane.putClientProperty(ADAPTER_PROPERTY, this);
-		} else if (widget instanceof JComponent) {
-			((JComponent) widget).putClientProperty(ADAPTER_PROPERTY, this);
+		if (widget != null) {
+			if (widget instanceof RootPaneContainer) {
+				JRootPane jrootPane = ((RootPaneContainer) widget).getRootPane();
+				jrootPane.putClientProperty(ADAPTER_PROPERTY, this);
+			} else if (widget instanceof JComponent) {
+				((JComponent) widget).putClientProperty(ADAPTER_PROPERTY, this);
+			}
 		}
 	}
 
@@ -851,11 +853,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 		return editingMap;
 	}
-	
-	public void setPreferredLookAndFeel(String lnf){
+
+	public void setPreferredLookAndFeel(String lnf) {
 		setProperty("preferred.lookandfeel", lnf);
 	}
-	public String getPreferredLookAndFeel(){
+
+	public String getPreferredLookAndFeel() {
 		return (String) getProperty("preferred.lookandfeel");
 	}
 }
