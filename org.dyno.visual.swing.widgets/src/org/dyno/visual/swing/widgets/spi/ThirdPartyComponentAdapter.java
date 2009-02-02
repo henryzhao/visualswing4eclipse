@@ -4,9 +4,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javax.swing.JComponent;
-import javax.swing.JSlider;
-
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.WidgetPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -26,7 +23,7 @@ public class ThirdPartyComponentAdapter extends WidgetAdapter {
 	protected Component createWidget() {
 		if (beanClass != null) {
 			try {
-				JComponent comp = (JComponent) beanClass.newInstance();
+				Component comp = (Component) beanClass.newInstance();
 				Dimension size = comp.getPreferredSize();
 				comp.setSize(size);
 				comp.doLayout();
@@ -41,7 +38,14 @@ public class ThirdPartyComponentAdapter extends WidgetAdapter {
 
 	@Override
 	protected Component newWidget() {
-		return new JSlider();
+		if (beanClass != null) {
+			try {
+				return (Component) beanClass.newInstance();
+			} catch (Exception e) {
+				WidgetPlugin.getLogger().error(e);
+			}
+		}
+		return null;
 	}
 
 	@Override
