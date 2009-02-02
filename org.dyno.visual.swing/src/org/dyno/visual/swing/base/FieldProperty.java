@@ -385,7 +385,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 	}
 	
 	@Override
-	public Class getObjectClass() {
+	protected Class getObjectClass() {
 		return getClass();
 	}
 	@Override

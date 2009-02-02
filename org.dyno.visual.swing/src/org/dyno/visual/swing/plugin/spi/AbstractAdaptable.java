@@ -13,8 +13,20 @@ import org.eclipse.core.runtime.IConfigurationElement;
 public abstract class AbstractAdaptable implements IAdaptable {
 
 	protected Map<String, Object> adapters = new HashMap<String, Object>();
+	protected Map<String, Object> properties = new HashMap<String, Object>();
+	
+	protected abstract Class getObjectClass();
 
-	public abstract Class getObjectClass();
+	public void setProperty(String key, Object value) {
+		if (value == null)
+			properties.remove(key);
+		else
+			properties.put(key, value);
+	}
+
+	public Object getProperty(String key) {
+		return properties.get(key);
+	}
 
 	
 	@Override

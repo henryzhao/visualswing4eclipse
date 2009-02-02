@@ -43,7 +43,6 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptab
 	IValueParser getValueParser();
 	void setFieldValue(Object bean, Object newValue);
 	Object getFieldValue(Object bean);
-	Class getObjectClass();
 	Class getPropertyType();
 }
 

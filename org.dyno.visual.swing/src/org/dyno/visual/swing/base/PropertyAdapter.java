@@ -144,7 +144,7 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 
 	
 	@Override
-	public Class getObjectClass() {
+	protected Class getObjectClass() {
 		return getClass();
 	}
 

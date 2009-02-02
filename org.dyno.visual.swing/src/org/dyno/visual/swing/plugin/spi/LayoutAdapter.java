@@ -337,7 +337,7 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Class getObjectClass() {
+	protected Class getObjectClass() {
 		return getLayoutClass();
 	}
 

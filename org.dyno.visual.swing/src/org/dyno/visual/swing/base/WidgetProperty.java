@@ -687,7 +687,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 	}
 	
 	@Override
-	public Class getObjectClass(){
+	protected Class getObjectClass(){
 		return getClass();
 	}
 

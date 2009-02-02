@@ -42,7 +42,6 @@ import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.base.NamespaceManager;
-import org.dyno.visual.swing.base.ShellAdaptable;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.dyno.visual.swing.editors.actions.SetLnfAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -66,7 +65,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPage;
@@ -178,10 +176,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public String getLnfClassname() {
 		return editor.getLnfClassname();
-	}
-
-	public Shell getShell() {
-		return editor.getEditorSite().getShell();
 	}
 
 	public GlassPlane getGlass() {
@@ -698,14 +692,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 						.getParentAdapter();
 				IUndoableOperation operation = parentAdapter.doKeyPressed(e);
 				if (operation != null) {
-					Shell shell = getShell();
 					IOperationHistory operationHistory = PlatformUI
 							.getWorkbench().getOperationSupport()
 							.getOperationHistory();
 					operation.addContext(getUndoContext());
 					try {
-						operationHistory.execute(operation, null,
-								new ShellAdaptable(shell));
+						operationHistory.execute(operation, null, null);
 					} catch (ExecutionException ex) {
 						VisualSwingPlugin.getLogger().error(ex);
 					}
