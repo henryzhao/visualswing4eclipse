@@ -71,8 +71,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		return null;
 	}
 
-	public boolean generateCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	public boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		if (!adapter.isDirty())
 			return true;
 		if (adapter.isRoot()) {
@@ -89,9 +88,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		if (lastName != null && !lastName.equals(name)) {
 			IField lastField = type.getField(getFieldName(lastName));
 			try {
-				int flags = RenameSupport.UPDATE_GETTER_METHOD
-						| RenameSupport.UPDATE_REFERENCES
-						| RenameSupport.UPDATE_SETTER_METHOD;
+				int flags = RenameSupport.UPDATE_GETTER_METHOD | RenameSupport.UPDATE_REFERENCES | RenameSupport.UPDATE_SETTER_METHOD;
 				RenameSupport rs = RenameSupport.create(lastField, name, flags);
 				if (rs.preCheck().isOK()) {
 					IWorkbenchWindow window = JavaUtil.getEclipseWindow();
@@ -100,28 +97,27 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 					adapter.setLastName(name);
 					return true;
 				}
-			} catch (JavaModelException jme){
-				IJavaModelStatus status=jme.getJavaModelStatus();
-				if(!status.isDoesNotExist()){
+			} catch (JavaModelException jme) {
+				IJavaModelStatus status = jme.getJavaModelStatus();
+				if (!status.isDoesNotExist()) {
 					ParserPlugin.getLogger().error(jme);
-				}else{
+				} else {
 					return true;
 				}
-			} catch(Exception e) {
+			} catch (Exception e) {
 				ParserPlugin.getLogger().error(e);
 			}
 			return false;
 		} else
 			return true;
 	}
-	
-	private boolean createNonRootCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+
+	private boolean createNonRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		String name = adapter.getID();
 		IField field = type.getField(getFieldName(name));
 		if (field != null) {
 			if (!field.exists()) {
-				if(!createField(type, imports, monitor))
+				if (!createField(type, imports, monitor))
 					return false;
 			} else {
 				try {
@@ -129,7 +125,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 					int access_code = getAccessModifier(flags);
 					if (adapter.getFieldAccess() != access_code) {
 						field.delete(true, monitor);
-						if(!createField(type, imports, monitor))
+						if (!createField(type, imports, monitor))
 							return false;
 					}
 				} catch (Exception e) {
@@ -138,7 +134,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				}
 			}
 		} else {
-			if(!createField(type, imports, monitor))
+			if (!createField(type, imports, monitor))
 				return false;
 		}
 		IJavaElement sibling = null;
@@ -153,15 +149,14 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				return false;
 			}
 		}
-		if(!createGetMethod(type, imports, monitor, sibling))
+		if (!createGetMethod(type, imports, monitor, sibling))
 			return false;
-		if(!createEventMethod(type, imports, monitor))
+		if (!createEventMethod(type, imports, monitor))
 			return false;
 		return true;
 	}
 
-	private boolean createGetMethod(IType type, ImportRewrite imports,
-			IProgressMonitor monitor, IJavaElement sibling) {
+	private boolean createGetMethod(IType type, ImportRewrite imports, IProgressMonitor monitor, IJavaElement sibling) {
 		String id = adapter.getID();
 		String getMethodName = NamespaceUtil.getGetMethodName(id);
 		StringBuilder builder = new StringBuilder();
@@ -185,8 +180,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		try {
 			if (sibling == null)
 				sibling = getInitMethodSibling(type);
-			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
-					false, monitor);
+			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
 			return true;
 		} catch (JavaModelException e) {
 			ParserPlugin.getLogger().error(e);
@@ -194,8 +188,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		}
 	}
 
-	private boolean createField(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	private boolean createField(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(getAccessCode(adapter.getFieldAccess()));
 		builder.append(" ");
@@ -203,7 +196,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		String beanName = imports.addImport(fqcn);
 		builder.append(beanName);
 		builder.append(" ");
-		String id=adapter.getID();
+		String id = adapter.getID();
 		builder.append(getFieldName(id));
 		builder.append(";\n");
 		try {
@@ -216,35 +209,32 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	private int getAccessModifier(int flags) {
-		int access_code=ACCESS_PRIVATE;
-		if(Flags.isPublic(flags)){
-			access_code=ACCESS_PUBLIC;
-		}else if(Flags.isProtected(flags)){
-			access_code=ACCESS_PROTECTED;
-		}else if(Flags.isPackageDefault(flags)){
-			access_code=ACCESS_DEFAULT;
-		}else if(Flags.isPrivate(flags)){
-			access_code=ACCESS_PRIVATE;
+		int access_code = ACCESS_PRIVATE;
+		if (Flags.isPublic(flags)) {
+			access_code = ACCESS_PUBLIC;
+		} else if (Flags.isProtected(flags)) {
+			access_code = ACCESS_PROTECTED;
+		} else if (Flags.isPackageDefault(flags)) {
+			access_code = ACCESS_DEFAULT;
+		} else if (Flags.isPrivate(flags)) {
+			access_code = ACCESS_PRIVATE;
 		}
 		return access_code;
 	}
 
-	private boolean createEventMethod(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	private boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
 		Set<EventSetDescriptor> keySet = adapter.getEventDescriptor().keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
-				IEventListenerModel model = adapter.getEventDescriptor().get(
-						eventSet);
+				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
 				success = model.createEventMethod(type, imports, monitor);
 			}
 		}
 		return success;
 	}
 
-	private boolean createRootCode(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	private boolean createRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);
 		IJavaElement sibling = null;
 		if (method != null && method.exists()) {
@@ -256,24 +246,23 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				return false;
 			}
 		}
-		if(!createInitMethod(type, imports, monitor, sibling))
+		if (!createInitMethod(type, imports, monitor, sibling))
 			return false;
 		for (InvisibleAdapter invisible : adapter.getInvisibles()) {
 			IParser parser = (IParser) invisible.getAdapter(IParser.class);
-			if (parser != null){
-				if(!parser.generateCode(type, imports, monitor))
+			if (parser != null) {
+				if (!parser.generateCode(type, imports, monitor))
 					return false;
 			}
 		}
-		if(!createEventMethod(type, imports, monitor))
+		if (!createEventMethod(type, imports, monitor))
 			return false;
-		if(!createConstructor(type, imports, monitor))
+		if (!createConstructor(type, imports, monitor))
 			return false;
 		return true;
 	}
 
-	private boolean createInitMethod(IType type, ImportRewrite imports,
-			IProgressMonitor monitor, IJavaElement sibling) {
+	private boolean createInitMethod(IType type, ImportRewrite imports, IProgressMonitor monitor, IJavaElement sibling) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("private void ");
 		builder.append(INIT_METHOD_NAME);
@@ -286,8 +275,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		createPostInitCode(builder, imports);
 		builder.append("}\n");
 		try {
-			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling,
-					false, monitor);
+			type.createMethod(JavaUtil.formatCode(builder.toString()), sibling, false, monitor);
 		} catch (JavaModelException e) {
 			ParserPlugin.getLogger().error(e);
 			return false;
@@ -295,14 +283,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		return true;
 	}
 
-	protected void createPostInitCode(StringBuilder builder,
-			ImportRewrite imports) {
+	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
 		Dimension size = adapter.getWidget().getSize();
 		builder.append("setSize(" + size.width + ", " + size.height + ");\n");
 	}
 
-	protected boolean createConstructor(IType type, ImportRewrite imports,
-			IProgressMonitor monitor) {
+	protected boolean createConstructor(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		return true;
 	}
 
@@ -312,32 +298,29 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		String id=adapter.getID();
-		builder.append(getFieldName(id) + " = "
-				+ getNewInstanceCode(imports) + ";\n");
+		String id = adapter.getID();
+		builder.append(getFieldName(id) + " = " + getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
 		CompositeAdapter conAdapter = adapter.getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = adapter.getWidget().getBounds();
-			String strBounds = getFieldName(id) + ".setBounds("
-					+ bounds.x + ", " + bounds.y + ", " + bounds.width + ", "
-					+ bounds.height + ");\n";
+			String strBounds = getFieldName(id) + ".setBounds(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ");\n";
 			builder.append(strBounds);
 		}
 		genAddCode(imports, builder);
 		builder.append(genAddEventCode(imports));
 		return builder.toString();
 	}
-	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {}
+
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
+	}
+
 	private String createSetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		ArrayList<IWidgetPropertyDescriptor> properties = adapter
-				.getPropertyDescriptors();
+		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(adapter.getLnfClassname(),
-					new StructuredSelection(adapter.getWidget()))
-					&& (property.isGencode() || property.isEdited(adapter))) {
-				IPropertyCodeGenerator generator=(IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
+			if (property.isPropertySet(adapter.getLnfClassname(), new StructuredSelection(adapter.getWidget())) && (property.isGencode() || property.isEdited(adapter))) {
+				IPropertyCodeGenerator generator = (IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
 				if (generator != null) {
 					String setCode = generator.getJavaCode(adapter.getWidget(), imports);
 					if (setCode != null)
@@ -358,8 +341,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 					builder.append(getFieldName(id) + ".");
 				Method mAdd = eventSet.getAddListenerMethod();
 				builder.append(mAdd.getName() + "(");
-				IEventListenerModel model = adapter.getEventDescriptor().get(
-						eventSet);
+				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
 				String newcode = model.createListenerInstance(imports);
 				builder.append(newcode);
 				builder.append(");\n");
@@ -403,6 +385,5 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	public String getCreationMethodName() {
 		return NamespaceUtil.getGetMethodName(adapter.getID());
 	}
-
 
 }

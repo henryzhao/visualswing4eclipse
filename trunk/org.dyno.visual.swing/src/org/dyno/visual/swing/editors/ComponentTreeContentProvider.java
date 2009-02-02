@@ -68,8 +68,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				Component component = (Component) parentElement;
 				WidgetAdapter adapter = WidgetAdapter
 						.getWidgetAdapter(component);
-				Map<EventSetDescriptor, IEventListenerModel> events = adapter
-						.getEventDescriptor();
+				Map<EventSetDescriptor, IEventListenerModel> events = adapter.getEventDescriptor();
 				Set<EventSetDescriptor> keys = events.keySet();
 				List<Object> children = new ArrayList<Object>();
 				if (!keys.isEmpty()) {
@@ -168,8 +167,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		} else if (element instanceof Component) {
 			Component child = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-			Map<EventSetDescriptor, IEventListenerModel> events = adapter
-					.getEventDescriptor();
+			Map<EventSetDescriptor, IEventListenerModel> events=adapter.getEventDescriptor();
 			Set<EventSetDescriptor> keys = events.keySet();
 			if (!keys.isEmpty()) {
 				return true;

@@ -74,9 +74,7 @@ import org.osgi.framework.Bundle;
  * @author William Chen
  */
 @SuppressWarnings("unchecked")
-public abstract class WidgetAdapter extends AbstractAdaptable implements
-		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants,
-		IAdapter {
+public abstract class WidgetAdapter extends AbstractAdaptable implements IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants, IAdapter {
 
 	protected boolean dirty = true;
 	protected int getAccess;
@@ -88,22 +86,21 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	protected String widgetName;
 	protected boolean selected;
 	protected Map<String, IConfigurationElement> propertyConfigs;
-	protected Map<EventSetDescriptor, IEventListenerModel> eventDescriptor;
-	protected Map<String, Boolean> edited;
 	protected Image iconImage;
 	protected List<InvisibleAdapter> invisibles = new ArrayList<InvisibleAdapter>();
 
 	public abstract Class getWidgetClass();
-	public String getID(){
-		if(lastName!=null)
+
+	public String getID() {
+		if (lastName != null)
 			return lastName;
 		else
 			return name;
 	}
 
-	public void setCursorType(int type){
+	public void setCursorType(int type) {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null)
+		if (designer != null)
 			designer.setCursorType(type);
 	}
 
@@ -113,16 +110,18 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			setName(getNamespace().nextName(getBasename()));
 		}
 	}
+
 	public void requestGlobalNewName() {
 		if (getName() == null) {
 			VisualDesigner designer = WhiteBoard.getCurrentDesigner();
-			if(designer != null){
+			if (designer != null) {
 				NamespaceManager namespace = designer.getNamespace();
 				if (namespace != null)
 					setName(namespace.nextName(getBasename()));
-			}			
+			}
 		}
 	}
+
 	@Override
 	public String getBasename() {
 		String className = getWidgetClass().getName();
@@ -131,6 +130,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			className = className.substring(dot + 1);
 		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 	}
+
 	public void lockDesigner() {
 		VisualDesigner designer = getDesigner();
 		if (designer != null)
@@ -211,9 +211,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 
 	public String toString() {
 		if (isRoot()) {
-			return "[" + getWidgetName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+			return "[" + getWidgetName() + "]";
 		} else {
-			return getName() + " [" + getWidgetName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+			return getName() + " [" + getWidgetName() + "]";
 		}
 	}
 
@@ -243,8 +243,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	protected WidgetAdapter() {
-		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
-		this.edited = new HashMap<String, Boolean>();
 	}
 
 	public NamespaceManager getNamespace() {
@@ -257,15 +255,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	protected WidgetAdapter(String name) {
 		setName(name);
 		this.widget = createWidget();
-		this.hotspotPoint = new Point(widget.getWidth() / 2,
-				widget.getHeight() / 2);
+		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
 		attach();
-		this.eventDescriptor = new HashMap<EventSetDescriptor, IEventListenerModel>();
-		this.edited = new HashMap<String, Boolean>();
-	}
-
-	public Map<String, Boolean> getEdited() {
-		return edited;
 	}
 
 	public void setWidget(Component widget) {
@@ -288,6 +279,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	public Point getHotspotPoint() {
 		return this.hotspotPoint;
 	}
+
 	public boolean isResizable() {
 		if (isRoot())
 			return false;
@@ -307,8 +299,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return widgetName;
 	}
 
-	private Provider getProvider(HashMap<String, Provider> providers,
-			Class<?> class1) {
+	private Provider getProvider(HashMap<String, Provider> providers, Class<?> class1) {
 		String classname = class1.getName();
 		Provider provider = providers.get(classname);
 		if (provider == null && class1 != Component.class) {
@@ -319,7 +310,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		} else
 			return provider;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -361,8 +352,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return null;
 		Component parent = w;
 		while (parent != null && !(parent instanceof VisualDesigner)) {
-			if(parent instanceof JPopupMenu){
-				parent = ((JPopupMenu)parent).getInvoker();
+			if (parent instanceof JPopupMenu) {
+				parent = ((JPopupMenu) parent).getInvoker();
 			}
 			parent = parent.getParent();
 		}
@@ -398,12 +389,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		if (comp instanceof RootPaneContainer) {
 			Container content = ((RootPaneContainer) comp).getRootPane();
 			if (content instanceof JComponent) {
-				return (WidgetAdapter) ((JComponent) content)
-						.getClientProperty(ADAPTER_PROPERTY);
+				return (WidgetAdapter) ((JComponent) content).getClientProperty(ADAPTER_PROPERTY);
 			}
 		} else if (comp instanceof JComponent)
-			return (WidgetAdapter) ((JComponent) comp)
-					.getClientProperty(ADAPTER_PROPERTY);
+			return (WidgetAdapter) ((JComponent) comp).getClientProperty(ADAPTER_PROPERTY);
 		return null;
 	}
 
@@ -412,8 +401,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	@Override
-	public void setInitializationData(IConfigurationElement config,
-			String propertyName, Object data) throws CoreException {
+	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		widgetName = config.getAttribute("widgetName"); //$NON-NLS-1$
 		String sIcon = config.getAttribute("icon"); //$NON-NLS-1$
 		if (sIcon != null && sIcon.trim().length() > 0) {
@@ -437,8 +425,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		}
 	}
 
-	private HashMap<String, IConfigurationElement> parseProperties(
-			IConfigurationElement config) {
+	private HashMap<String, IConfigurationElement> parseProperties(IConfigurationElement config) {
 		try {
 			Class widgetClass = getWidgetClass(config);
 			HashMap<String, IConfigurationElement> eProperties = new HashMap<String, IConfigurationElement>();
@@ -449,8 +436,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			}
 			if (widgetClass != Component.class) {
 				Class superClass = widgetClass.getSuperclass();
-				IConfigurationElement superConfig = ExtensionRegistry
-						.getWidgetConfig(superClass);
+				IConfigurationElement superConfig = ExtensionRegistry.getWidgetConfig(superClass);
 				while (superConfig == null && superClass != Component.class) {
 					superClass = superClass.getSuperclass();
 					superConfig = ExtensionRegistry.getWidgetConfig(superClass);
@@ -476,8 +462,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				propdesc.add(new FieldAccessProperty(this));
 				propdesc.add(new GetAccessProperty(this));
 			}
-			IWidgetPropertyDescriptor[] properties = propdesc
-					.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
+			IWidgetPropertyDescriptor[] properties = propdesc.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
 			String lnfClassname = null;
 			if (!selection.isEmpty()) {
 				lnfClassname = getLnfClassname();
@@ -489,11 +474,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				propdesc.add(new FieldAccessProperty(this));
 				propdesc.add(new GetAccessProperty(this));
 			}
-			IWidgetPropertyDescriptor[] properties = propdesc
-					.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
-			return new PropertySource2(getLnfClassname(),
-					new StructuredSelection(new Object[] { object }),
-					properties);
+			IWidgetPropertyDescriptor[] properties = propdesc.toArray(new IWidgetPropertyDescriptor[propdesc.size()]);
+			return new PropertySource2(getLnfClassname(), new StructuredSelection(new Object[] { object }), properties);
 		}
 	}
 
@@ -525,12 +507,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			Provider provider = getProvider(category.getProviders(), beanClass);
 			if (provider != null) {
 				for (String refid : provider.getRefIds()) {
-					IConfigurationElement prop = this.propertyConfigs
-							.get(refid);
+					IConfigurationElement prop = this.propertyConfigs.get(refid);
 					if (prop != null) {
 						references.put(refid, refid);
-						IWidgetPropertyDescriptor property = createProperty(
-								prop, beanClass);
+						IWidgetPropertyDescriptor property = createProperty(prop, beanClass);
 						property.setCategory(category.getName());
 						property.setFilterFlags(category.getFilters());
 						propdesc.add(property);
@@ -546,8 +526,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				IConfigurationElement prop = propertyConfigs.get(refid);
 				if (prop != null) {
 					references.put(refid, refid);
-					IWidgetPropertyDescriptor property = createProperty(prop,
-							beanClass);
+					IWidgetPropertyDescriptor property = createProperty(prop, beanClass);
 					property.setCategory(category.getName());
 					property.setFilterFlags(category.getFilters());
 					propdesc.add(property);
@@ -557,8 +536,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		if (!isRoot()) {
 			CompositeAdapter parent = getParentAdapter();
 			if (parent != null) {
-				IWidgetPropertyDescriptor[] constraints = parent
-						.getConstraintsProperties(getWidget());
+				IWidgetPropertyDescriptor[] constraints = parent.getConstraintsProperties(getWidget());
 				if (constraints != null) {
 					for (IWidgetPropertyDescriptor prop : constraints) {
 						propdesc.add(prop);
@@ -569,14 +547,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return propdesc;
 	}
 
-	private IWidgetPropertyDescriptor createProperty(
-			IConfigurationElement config, Class beanClass) {
+	private IWidgetPropertyDescriptor createProperty(IConfigurationElement config, Class beanClass) {
 		String sClass = config.getAttribute("class"); //$NON-NLS-1$
 		if (sClass != null && sClass.trim().length() > 0) {
 			IWidgetPropertyDescriptor iwpd;
 			try {
-				iwpd = (IWidgetPropertyDescriptor) config
-						.createExecutableExtension("class"); //$NON-NLS-1$
+				iwpd = (IWidgetPropertyDescriptor) config.createExecutableExtension("class"); //$NON-NLS-1$
 				iwpd.init(config, beanClass);
 				return iwpd;
 			} catch (CoreException e) {
@@ -586,9 +562,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return new WidgetProperty(config, beanClass);
 	}
 
-	private void mergeProperties(
-			HashMap<String, IConfigurationElement> eSources,
-			HashMap<String, IConfigurationElement> eTargets) {
+	private void mergeProperties(HashMap<String, IConfigurationElement> eSources, HashMap<String, IConfigurationElement> eTargets) {
 		for (IConfigurationElement eTarget : eTargets.values()) {
 			String eId = eTarget.getAttribute("id"); //$NON-NLS-1$
 			if (eSources.get(eId) == null) {
@@ -687,8 +661,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	}
 
 	public List<WidgetAdapter> getDropWidget() {
-		return WhiteBoard.getSelectedWidget() == null ? EMPTY_LIST : WhiteBoard
-				.getSelectedWidget();
+		return WhiteBoard.getSelectedWidget() == null ? EMPTY_LIST : WhiteBoard.getSelectedWidget();
 	}
 
 	private static List<WidgetAdapter> EMPTY_LIST = new ArrayList<WidgetAdapter>(0);
@@ -708,9 +681,11 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		} else
 			return p;
 	}
-	public Component getContentArea(){
+
+	public Component getContentArea() {
 		return getWidget();
 	}
+
 	public Point convertToGlobal(Point p) {
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
@@ -743,7 +718,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return null;
 	}
 
-
 	public Object clone() {
 		return ExtensionRegistry.createAdapterFor(cloneWidget());
 	}
@@ -754,8 +728,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		Component clone = newWidget();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(getLnfClassname(),
-					new StructuredSelection(getWidget()))) {
+			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))) {
 				property.cloneProperty(getWidget(), clone);
 			}
 		}
@@ -784,10 +757,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return getWidgetClass().getName();
 	}
 
-	public Map<EventSetDescriptor, IEventListenerModel> getEventDescriptor() {
-		return eventDescriptor;
-	}
-
 	public boolean needGlobalGraphics() {
 		return false;
 	}
@@ -813,7 +782,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return true;
 		if (isRoot()) {
 			for (InvisibleAdapter inv : invisibles) {
-				if (inv!=null&&inv.isRenamed())
+				if (inv != null && inv.isRenamed())
 					return true;
 			}
 		}
@@ -825,23 +794,25 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 			return true;
 		if (isRoot()) {
 			for (InvisibleAdapter invisible : getInvisibles()) {
-				if (invisible!=null&&invisible.getName() != null
-						&& invisible.getName().equals(another)) {
+				if (invisible != null && invisible.getName() != null && invisible.getName().equals(another)) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	public CompositeAdapter getFocusedAdapter(){
+
+	public CompositeAdapter getFocusedAdapter() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null)
+		if (designer != null)
 			return designer.getSelectedContainer();
 		return null;
 	}
+
 	public boolean isFocused() {
-		return getFocusedAdapter()==this;
+		return getFocusedAdapter() == this;
 	}
+
 	public Component getWidget() {
 		if (widget == null) {
 			widget = createWidget();
@@ -850,14 +821,41 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		}
 		return widget;
 	}
-	public Component getParentContainer(){
+
+	public Component getParentContainer() {
 		return getWidget();
 	}
 
 	public Component getRootPane() {
 		return getWidget();
 	}
-	public Component getContentPane(){
+
+	public Component getContentPane() {
 		return getWidget();
+	}
+
+	public Map<EventSetDescriptor, IEventListenerModel> getEventDescriptor() {
+		Map<EventSetDescriptor, IEventListenerModel> map = (Map<EventSetDescriptor, IEventListenerModel>) getProperty("event.descriptor");
+		if (map == null) {
+			map = new HashMap<EventSetDescriptor, IEventListenerModel>();
+			setProperty("event.descriptor", map);
+		}
+		return map;
+	}
+
+	public Map<String, Boolean> getEditingMap() {
+		Map<String, Boolean> editingMap = (Map<String, Boolean>) getProperty("editing.map");
+		if (editingMap == null) {
+			editingMap = new HashMap<String, Boolean>();
+			setProperty("editing.map", editingMap);
+		}
+		return editingMap;
+	}
+	
+	public void setPreferredLookAndFeel(String lnf){
+		setProperty("preferred.lookandfeel", lnf);
+	}
+	public String getPreferredLookAndFeel(){
+		return (String) getProperty("preferred.lookandfeel");
 	}
 }

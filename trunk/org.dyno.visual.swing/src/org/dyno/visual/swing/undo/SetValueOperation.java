@@ -98,6 +98,7 @@ public class SetValueOperation extends AbstractOperation {
 				Component jcomp = (Component) bean;
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 				adapter.setDirty(true);
+				adapter.getEditingMap().put((String)property.getId(), Boolean.TRUE);
 				if (adapter != null) {
 					SwingUtilities.invokeLater(new SetValueRunnable(adapter));
 				}

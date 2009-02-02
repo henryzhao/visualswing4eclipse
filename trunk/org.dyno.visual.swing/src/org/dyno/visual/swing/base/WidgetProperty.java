@@ -19,6 +19,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Comparator;
+import java.util.Map;
 
 import javax.swing.UIManager;
 import javax.swing.plaf.UIResource;
@@ -635,7 +636,8 @@ public class WidgetProperty extends AbstractAdaptable implements
 
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
-		Boolean bool = adapter.getEdited().get(propertyName);
+		Map<String, Boolean> editedMap=adapter.getEditingMap();
+		Boolean bool = editedMap.get(id);
 		return bool == null ? false : bool.booleanValue();
 	}
 

@@ -37,7 +37,8 @@ public class AddEventAction extends Action {
 		this.eventSet = eventSet;
 		this.methodDesc = methodDesc;
 		setId(eventSet.getName() + "_" + methodDesc.getName());
-		IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+		Map<EventSetDescriptor, IEventListenerModel> eventDesc=adapter.getEventDescriptor();
+		IEventListenerModel model = eventDesc.get(eventSet);
 		if (model != null) {
 			if (model.hasMethod(methodDesc)) {
 				String displayName = model.getDisplayName(methodDesc);
@@ -48,8 +49,7 @@ public class AddEventAction extends Action {
 	}
 
 	public void run() {
-		Map<EventSetDescriptor, IEventListenerModel> eventDescriptor = adapter
-				.getEventDescriptor();
+		Map<EventSetDescriptor, IEventListenerModel> eventDescriptor = adapter.getEventDescriptor();
 		IEventListenerModel model = eventDescriptor.get(eventSet);
 		if (model == null) {
 			model = ParserFactory.getDefaultParserFactory().newModel(adapter,
