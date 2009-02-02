@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+@SuppressWarnings("unchecked")
 class DateAccessible implements AccessibleUI {
 	private Item[] calendarItems;
 	private Button btnDefault;
@@ -44,7 +45,6 @@ class DateAccessible implements AccessibleUI {
 	private Combo spStep;
 	private Label lblInit;
     private Label lblStep;
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setValue(Object value) {
 		SpinnerDateModel model = (SpinnerDateModel) value;

@@ -33,6 +33,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
+@SuppressWarnings("unchecked")
 public class CodeSnippet implements IEventMethod, IConstants{
 	private WidgetAdapter adapter;
 	private EventSetDescriptor eventSet;
@@ -88,7 +89,6 @@ public class CodeSnippet implements IEventMethod, IConstants{
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private boolean isTargetClass(final WidgetAdapter adapter,
 			final EventSetDescriptor eventSet, IType anonymous) {
 		try {

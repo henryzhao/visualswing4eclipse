@@ -34,6 +34,7 @@ import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 
+@SuppressWarnings("unchecked")
 public class JAppletAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
 	private JComponent contentPane;
@@ -269,12 +270,10 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JApplet.class;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		if(adapterClass==MouseInputListener.class){

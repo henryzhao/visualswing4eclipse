@@ -35,8 +35,8 @@ import org.eclipse.jface.action.IAction;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class BevelBorderAdapter extends BorderAdapter {
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class getBorderClass() {
 		return BevelBorder.class;

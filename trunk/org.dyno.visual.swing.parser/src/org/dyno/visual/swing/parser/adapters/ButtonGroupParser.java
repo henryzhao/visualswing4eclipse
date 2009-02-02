@@ -37,6 +37,7 @@ import org.eclipse.jdt.ui.refactoring.RenameSupport;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 
+@SuppressWarnings("unchecked")
 public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants {
 	@Override
 	public boolean renameField(IType type, IProgressMonitor monitor) {
@@ -70,7 +71,6 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		} else
 			return true;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean generateCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {

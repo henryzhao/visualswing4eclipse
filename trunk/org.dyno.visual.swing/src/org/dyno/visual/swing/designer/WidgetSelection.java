@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class WidgetSelection extends ArrayList<Component> implements IStructuredSelection {
 	private static final long serialVersionUID = -7010445264838695570L;
 
@@ -55,7 +56,6 @@ public class WidgetSelection extends ArrayList<Component> implements IStructured
 		return isEmpty()?null:get(0);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List toList() {
 		return this;

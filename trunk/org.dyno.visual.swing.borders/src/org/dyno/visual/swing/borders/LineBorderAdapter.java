@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
 
 
+@SuppressWarnings("unchecked")
 public class LineBorderAdapter extends BorderAdapter{
 	@Override
 	public IAction getContextAction(JComponent widget) {
@@ -42,7 +43,6 @@ public class LineBorderAdapter extends BorderAdapter{
 		return new IWidgetPropertyDescriptor[]{thicknessProperty, lineColorProperty, roundedCornersProperty};
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class getBorderClass() {
 		return LineBorder.class;

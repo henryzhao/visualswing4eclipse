@@ -21,9 +21,9 @@ import javax.swing.JButton;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 
+@SuppressWarnings("unchecked")
 public class JButtonAdapter extends TextWidgetAdapter {
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JButton.class;
 	}

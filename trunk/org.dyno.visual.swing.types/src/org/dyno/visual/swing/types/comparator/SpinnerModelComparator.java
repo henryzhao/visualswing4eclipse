@@ -21,8 +21,8 @@ import javax.swing.SpinnerModel;
 import org.dyno.visual.swing.types.editor.spinnermodels.SpinnerModelType;
 import org.dyno.visual.swing.types.editor.spinnermodels.SpinnerNumberModelType;
 
+@SuppressWarnings("unchecked")
 public class SpinnerModelComparator implements Comparator<SpinnerModel> {
-	@SuppressWarnings("unchecked")
 	@Override
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		if (o1 == null) {

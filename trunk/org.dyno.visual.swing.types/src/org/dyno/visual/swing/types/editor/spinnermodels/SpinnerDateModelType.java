@@ -24,6 +24,7 @@ import org.dyno.visual.swing.types.endec.CalendarFieldWrapper;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.swt.widgets.Composite;
 
+@SuppressWarnings("unchecked")
 public class SpinnerDateModelType extends SpinnerModelType {
 
 	protected SpinnerDateModelType() {
@@ -35,7 +36,6 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		return new DateAccessible(parent);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
@@ -50,7 +50,6 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		return "spinnerDateModel";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		SpinnerDateModel sdm1 = (SpinnerDateModel) o1;
@@ -74,7 +73,6 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		return 0;
 	}
 
-	@SuppressWarnings("unchecked")
 	private boolean equals(Comparable o1, Comparable o2) {
 		if (o1 == null) {
 			if (o2 == null) {
@@ -91,7 +89,6 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
@@ -129,7 +126,6 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		return builder.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone(Object object) {
 		SpinnerDateModel model = (SpinnerDateModel) object;

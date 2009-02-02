@@ -25,6 +25,7 @@ import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 	public JCheckBoxMenuItemAdapter(){
 		super(null);
@@ -65,7 +66,6 @@ public class JCheckBoxMenuItemAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JCheckBoxMenuItem.class;
 	}

@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
+@SuppressWarnings("unchecked")
 class NumberAccessible implements AccessibleUI {
 	private Button btnDefault;
 	private Composite pane;
@@ -45,7 +46,6 @@ class NumberAccessible implements AccessibleUI {
 	private Label lblInit;
 	private Label lblStep;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setValue(Object value) {
 		SpinnerNumberModel model = (SpinnerNumberModel) value;
@@ -74,7 +74,6 @@ class NumberAccessible implements AccessibleUI {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getValue() {
 		if (btnDefault.getSelection())

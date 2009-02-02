@@ -19,6 +19,7 @@ import java.awt.Container;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class ContainerAdapter extends WidgetAdapter {
 
 	public ContainerAdapter() {
@@ -35,7 +36,6 @@ public class ContainerAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return Container.class;
 	}

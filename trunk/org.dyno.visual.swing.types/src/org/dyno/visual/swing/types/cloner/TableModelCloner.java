@@ -19,9 +19,9 @@ import javax.swing.table.TableModel;
 
 import org.dyno.visual.swing.plugin.spi.ICloner;
 
+@SuppressWarnings("unchecked")
 public class TableModelCloner implements ICloner {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone(Object object) {
 		TableModel tableModel = (TableModel) object;

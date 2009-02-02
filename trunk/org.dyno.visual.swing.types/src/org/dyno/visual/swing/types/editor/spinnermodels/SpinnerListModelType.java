@@ -24,6 +24,7 @@ import org.dyno.visual.swing.base.TypeAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.swt.widgets.Composite;
 
+@SuppressWarnings("unchecked")
 public class SpinnerListModelType extends SpinnerModelType {
 
 	protected SpinnerListModelType() {
@@ -35,7 +36,6 @@ public class SpinnerListModelType extends SpinnerModelType {
 		return new ListAccessible(parent);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
@@ -64,7 +64,6 @@ public class SpinnerListModelType extends SpinnerModelType {
 		return builder.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		SpinnerListModel slm1 = (SpinnerListModel) o1;

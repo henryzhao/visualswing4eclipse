@@ -83,6 +83,7 @@ import org.eclipse.ui.operations.UndoActionHandler;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class VisualDesigner extends JComponent implements KeyListener {
 	private static final long serialVersionUID = -8003291919574427325L;
 	private Rectangle rootBounds;
@@ -523,7 +524,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 						new Object[] { new WidgetSelection(root) })));
 	}
 
-	@SuppressWarnings("unchecked")
 	public void showPopup(Event event) {
 		Object[] param = (Object[]) event.getParameter();
 		Point p = (Point) param[0];

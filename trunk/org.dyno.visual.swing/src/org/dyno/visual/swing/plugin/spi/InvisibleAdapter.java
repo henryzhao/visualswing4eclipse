@@ -18,7 +18,7 @@ import java.util.List;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.eclipse.core.runtime.IConfigurationElement;
-
+@SuppressWarnings("unchecked")
 public abstract class InvisibleAdapter extends AbstractAdaptable implements IAdapter {
 	protected String name;
 	protected String lastName;
@@ -49,7 +49,6 @@ public abstract class InvisibleAdapter extends AbstractAdaptable implements IAda
 		this.name = name;
 		this.lastName = name;
 	}
-	@SuppressWarnings("unchecked")
 	public abstract List getElements();
 
 	public static InvisibleAdapter createAdapter(WidgetAdapter rootAdapter, String name, Object object) {

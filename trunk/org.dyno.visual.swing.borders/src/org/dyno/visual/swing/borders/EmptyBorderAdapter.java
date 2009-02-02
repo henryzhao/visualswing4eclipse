@@ -32,9 +32,9 @@ import org.eclipse.jface.action.IAction;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class EmptyBorderAdapter extends BorderAdapter {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class getBorderClass() {
 		return EmptyBorder.class;
@@ -48,7 +48,6 @@ public class EmptyBorderAdapter extends BorderAdapter {
 	@Override
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		InsetsProperty insetsProperty = new InsetsProperty() {
-			@SuppressWarnings("unchecked")
 			@Override
 			protected Class getBorderClass() {
 				return EmptyBorder.class;

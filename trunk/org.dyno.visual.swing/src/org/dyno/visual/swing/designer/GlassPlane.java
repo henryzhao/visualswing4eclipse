@@ -37,9 +37,9 @@ import org.dyno.visual.swing.swt_awt.Platform;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class GlassPlane extends JComponent implements MouseListener {
 	private static final long serialVersionUID = -409591239915380500L;
-	@SuppressWarnings("unchecked")
 	private static final Class[]MOUSE_INTERFACES={MouseListener.class, MouseMotionListener.class, MouseWheelListener.class};
 	private VisualDesigner designer;
 	private Point hotspotPoint;

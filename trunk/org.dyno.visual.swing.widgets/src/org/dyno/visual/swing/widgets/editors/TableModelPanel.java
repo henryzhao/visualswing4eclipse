@@ -52,6 +52,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 
+@SuppressWarnings("unchecked")
 public class TableModelPanel extends JLayeredPane implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JScrollPane scrollPane;
@@ -226,7 +227,6 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void swap(List list, int i, int j) {
 		Object temp = list.get(i);
 		list.set(i, list.get(j));

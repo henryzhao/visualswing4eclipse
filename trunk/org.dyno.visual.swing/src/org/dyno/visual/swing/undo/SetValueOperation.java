@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
+@SuppressWarnings("unchecked")
 public class SetValueOperation extends AbstractOperation {
 	private Object bean;
 	private Object old_value;
@@ -71,9 +72,7 @@ public class SetValueOperation extends AbstractOperation {
 			adapter.repaintDesigner();
 		}
 	}
-	@SuppressWarnings("unchecked")
 	private static Map<Class, Object> DEFAULT_BEANS= new HashMap<Class, Object>();	
-	@SuppressWarnings("unchecked")
 	private static Object getDefaultValue(Object bean, IWidgetPropertyDescriptor property){
 		try {
 			Class beanClass = bean.getClass();

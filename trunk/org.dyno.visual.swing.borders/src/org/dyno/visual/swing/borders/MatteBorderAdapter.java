@@ -29,9 +29,9 @@ import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
 
+@SuppressWarnings("unchecked")
 public class MatteBorderAdapter extends BorderAdapter {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class getBorderClass() {
 		return MatteBorder.class;
@@ -45,7 +45,6 @@ public class MatteBorderAdapter extends BorderAdapter {
 	@Override
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		InsetsProperty insetsProperty = new InsetsProperty(){
-			@SuppressWarnings("unchecked")
 			@Override
 			protected Class getBorderClass() {
 				return MatteBorder.class;

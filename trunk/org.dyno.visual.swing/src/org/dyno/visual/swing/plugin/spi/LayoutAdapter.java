@@ -47,6 +47,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public abstract class LayoutAdapter extends AbstractAdaptable implements IPropertySourceProvider, ILayoutBean, IAdapter {
 	public static String DEFAULT_LAYOUT = "java.awt.FlowLayout";
 	public static final String LAYOUT_EXTENSION_POINT = "org.dyno.visual.swing.widgets.layoutAdapter";
@@ -96,7 +97,6 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		return createLayoutAdapter(getLayoutConfig(layoutClass));
 	}
 
-	@SuppressWarnings("unchecked")
 	public static LayoutAdapter createLayoutAdapter(Class layoutClass) {
 		return createLayoutAdapter(layoutClass.getName());
 	}
@@ -335,7 +335,6 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Class getObjectClass() {
 		return getLayoutClass();

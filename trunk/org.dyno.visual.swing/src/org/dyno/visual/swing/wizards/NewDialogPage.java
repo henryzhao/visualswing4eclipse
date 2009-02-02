@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
+@SuppressWarnings("unchecked")
 public class NewDialogPage extends NewComponentPage {
 	@Override
 	public boolean isCreateMain() {
@@ -41,7 +42,6 @@ public class NewDialogPage extends NewComponentPage {
 		type.createMethod(buf.toString(), null, false, monitor);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void createTypeMembers(IType type, ImportsManager imports, IProgressMonitor monitor) throws CoreException {
 		super.createTypeMembers(type, imports, monitor);

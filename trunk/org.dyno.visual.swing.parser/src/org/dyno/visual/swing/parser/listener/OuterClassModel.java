@@ -29,6 +29,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
+@SuppressWarnings("unchecked")
 public class OuterClassModel extends BaseClassModel {
 	@Override
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
@@ -48,7 +49,6 @@ public class OuterClassModel extends BaseClassModel {
 			JavaUI.revealInEditor(editor, (IJavaElement) member);
 		}		
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	protected TypeDeclaration[] getInnerTypes(TypeDeclaration type) {
 		List innerTypes = ((CompilationUnit)type.getParent()).types();		

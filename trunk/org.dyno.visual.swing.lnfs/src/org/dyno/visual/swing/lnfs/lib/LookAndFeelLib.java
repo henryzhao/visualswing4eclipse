@@ -29,6 +29,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+@SuppressWarnings("unchecked")
 public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter {
 	private static final String LAF_FILE = "laf.xml"; //$NON-NLS-1$
 	private static Map<String, LookAndFeelLib> lnfLibs = new HashMap<String, LookAndFeelLib>();
@@ -122,7 +123,6 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void extractComponentValue(Element component)
 			throws ClassNotFoundException, IntrospectionException {
 		String strClass = component.getAttribute("class"); //$NON-NLS-1$
@@ -141,7 +141,6 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void extractPropertyValue(Map<String, Object> values, Element node,
 			Class clazz) throws IntrospectionException {
 		String name = node.getAttribute("name"); //$NON-NLS-1$
@@ -197,7 +196,6 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 			return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getDefaultValue(Class widgetClass, String propertyName) {
 		Map<String, Object> map = values.get(widgetClass.getName());
@@ -207,7 +205,6 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public LookAndFeel getLookAndFeelInstance() {
 		if (lnfInstance == null) {

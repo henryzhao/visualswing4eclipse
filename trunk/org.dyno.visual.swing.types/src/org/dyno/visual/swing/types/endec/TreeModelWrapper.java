@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  * 
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public class TreeModelWrapper implements ICodeGen {
 	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
@@ -47,7 +48,6 @@ public class TreeModelWrapper implements ICodeGen {
 		return builder.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void genCode(TreeNode node, StringBuilder builder, int depth, ImportRewrite imports) {
 		builder.append("{\n");
 		DefaultMutableTreeNode mtn = (DefaultMutableTreeNode) node;
