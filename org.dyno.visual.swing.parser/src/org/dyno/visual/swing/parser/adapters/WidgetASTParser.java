@@ -120,11 +120,16 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 			if (getMethod != null) {
 				Block body = getMethod.getBody();
 				statements = body.statements();
-				IfStatement ifs = (IfStatement) statements.get(0);
-				Statement thenstmt = ifs.getThenStatement();
-				if (thenstmt instanceof Block) {
-					Block block = (Block) thenstmt;
-					statements = block.statements();
+				if(!statements.isEmpty()){
+					Object first=statements.get(0);
+					if (first instanceof IfStatement) {
+						IfStatement ifs = (IfStatement) statements.get(0);
+						Statement thenstmt = ifs.getThenStatement();
+						if (thenstmt instanceof Block) {
+							Block block = (Block) thenstmt;
+							statements = block.statements();
+						}
+					}
 				}
 			} else {
 				MethodDeclaration initMethod = getMethodDeclaration(type, INIT_METHOD_NAME);
