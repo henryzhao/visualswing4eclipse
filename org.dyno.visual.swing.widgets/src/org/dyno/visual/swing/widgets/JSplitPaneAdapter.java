@@ -24,6 +24,7 @@ import javax.swing.JSplitPane;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JSplitPaneAdapter extends CompositeAdapter {
 
 	public JSplitPaneAdapter() {
@@ -219,7 +220,6 @@ public class JSplitPaneAdapter extends CompositeAdapter {
 		return null;
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSplitPane.class;
 	}

@@ -50,6 +50,7 @@ import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.ui.PlatformUI;
 
+@SuppressWarnings("unchecked")
 public class JPanelAdapter extends CompositeAdapter {
 	private boolean intermediate = false;
 	private WidgetAdapter delegate;
@@ -84,7 +85,6 @@ public class JPanelAdapter extends CompositeAdapter {
 		this.dirty = false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		Object adaptable = super.getAdapter(adapterClass);
@@ -540,7 +540,6 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JPanel.class;
 	}

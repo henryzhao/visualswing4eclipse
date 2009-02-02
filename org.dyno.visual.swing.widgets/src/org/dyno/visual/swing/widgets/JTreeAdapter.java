@@ -19,6 +19,7 @@ import java.awt.Dimension;
 
 import javax.swing.JTree;
 
+@SuppressWarnings("unchecked")
 public class JTreeAdapter extends ComplexWidgetAdapter {
 	public JTreeAdapter() {
 		super(null);
@@ -42,7 +43,6 @@ public class JTreeAdapter extends ComplexWidgetAdapter {
 		return new JTree();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTree.class;
 	}

@@ -36,6 +36,7 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.designborder.DialogBorder;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 
+@SuppressWarnings("unchecked")
 public class JDialogAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
 	private JComponent contentPane;
@@ -273,11 +274,9 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JDialog.class;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		if(adapterClass==MouseInputListener.class){

@@ -21,6 +21,7 @@ import javax.swing.JScrollBar;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JScrollBarAdapter extends WidgetAdapter {
 	public JScrollBarAdapter() {
 		super(null);
@@ -41,7 +42,6 @@ public class JScrollBarAdapter extends WidgetAdapter {
 		return new JScrollBar();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JScrollBar.class;
 	}

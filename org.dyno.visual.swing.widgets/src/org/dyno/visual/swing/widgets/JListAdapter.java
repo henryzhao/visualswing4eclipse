@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
+@SuppressWarnings("unchecked")
 public class JListAdapter extends ComplexWidgetAdapter {
 	public JListAdapter() {
 		super(null);
@@ -49,7 +50,6 @@ public class JListAdapter extends ComplexWidgetAdapter {
 		return new JList();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JList.class;
 	}

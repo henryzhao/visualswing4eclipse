@@ -21,6 +21,7 @@ import javax.swing.JProgressBar;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JProgressBarAdapter extends WidgetAdapter {
 	public JProgressBarAdapter() {
 		super(null);
@@ -41,7 +42,6 @@ public class JProgressBarAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JProgressBar.class;
 	}

@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+@SuppressWarnings("unchecked")
 public class JTableAdapter extends ComplexWidgetAdapter {
 	public JTableAdapter() {
 		super(null);
@@ -42,7 +43,6 @@ public class JTableAdapter extends ComplexWidgetAdapter {
 		return new JTable();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTable.class;
 	}

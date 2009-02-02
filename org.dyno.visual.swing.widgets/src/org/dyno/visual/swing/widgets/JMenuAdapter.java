@@ -36,6 +36,7 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.design.JMenuDesignOperation;
 
+@SuppressWarnings("unchecked")
 public class JMenuAdapter extends CompositeAdapter {
 	public JMenuAdapter() {
 		super(null);
@@ -273,7 +274,6 @@ public class JMenuAdapter extends CompositeAdapter {
 		return success;
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JMenu.class;
 	}

@@ -34,6 +34,7 @@ import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	private static JDesktopPane desktopPane = new JDesktopPane();
 	private JPanel contentPane;
@@ -199,11 +200,9 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JInternalFrame.class;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		if(adapterClass==MouseInputListener.class){

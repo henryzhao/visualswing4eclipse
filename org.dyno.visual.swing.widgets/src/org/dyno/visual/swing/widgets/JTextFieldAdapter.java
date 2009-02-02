@@ -16,10 +16,10 @@ package org.dyno.visual.swing.widgets;
 
 import javax.swing.JTextField;
 
+@SuppressWarnings("unchecked")
 public class JTextFieldAdapter extends TextWidgetAdapter {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextField.class;
 	}

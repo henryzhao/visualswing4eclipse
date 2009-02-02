@@ -19,6 +19,7 @@ import java.awt.Component;
 import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
 
+@SuppressWarnings("unchecked")
 public class JTextPaneAdapter extends J2DTextComponentAdapter {
 	public JTextPaneAdapter() {
 		super(null);
@@ -34,7 +35,6 @@ public class JTextPaneAdapter extends J2DTextComponentAdapter {
 		return new JTextPane();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextPane.class;
 	}

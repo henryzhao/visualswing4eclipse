@@ -20,6 +20,7 @@ import javax.swing.text.JTextComponent;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JTextComponentAdapter extends WidgetAdapter {
 
 	public JTextComponentAdapter() {
@@ -35,7 +36,6 @@ public class JTextComponentAdapter extends WidgetAdapter {
 		return null;
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextComponent.class;
 	}
