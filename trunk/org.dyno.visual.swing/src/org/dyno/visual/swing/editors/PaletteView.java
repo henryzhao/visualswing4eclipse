@@ -143,7 +143,7 @@ public class PaletteView extends ViewPart implements SelectionListener {
 
 	private void addGroup(IConfigurationElement config, Bundle bundle,
 			Composite bar) {
-		String id = config.getAttribute("name");
+		String id = config.getAttribute("id");
 		String displayName = config.getAttribute("displayName");
 		if (displayName == null || displayName.equals("")) {
 			displayName = id;
