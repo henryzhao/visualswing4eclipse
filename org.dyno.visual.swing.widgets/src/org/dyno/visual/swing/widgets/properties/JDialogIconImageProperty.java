@@ -11,9 +11,9 @@ import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.widgets.WidgetPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 
+@SuppressWarnings("unchecked")
 public class JDialogIconImageProperty extends WidgetProperty {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 		try {

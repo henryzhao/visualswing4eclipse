@@ -48,6 +48,7 @@ import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
+@SuppressWarnings("unchecked")
 public class ThisClassModel extends AbstractClassModel {
 	private Map<MethodDescriptor, MethodDescriptor> methods;
 
@@ -60,7 +61,6 @@ public class ThisClassModel extends AbstractClassModel {
 		methods.put(methodDesc, methodDesc);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean createEventMethod(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
@@ -112,7 +112,6 @@ public class ThisClassModel extends AbstractClassModel {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void addImplInterface(IType type, String cName) {
 		try {
 			ICompilationUnit icunit = type.getCompilationUnit();
@@ -189,7 +188,6 @@ public class ThisClassModel extends AbstractClassModel {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	protected boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {

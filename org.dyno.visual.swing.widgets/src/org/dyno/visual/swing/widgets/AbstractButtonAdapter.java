@@ -20,6 +20,7 @@ import javax.swing.AbstractButton;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class AbstractButtonAdapter extends WidgetAdapter {
 
 	public AbstractButtonAdapter() {
@@ -36,7 +37,6 @@ public class AbstractButtonAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return AbstractButton.class;
 	}

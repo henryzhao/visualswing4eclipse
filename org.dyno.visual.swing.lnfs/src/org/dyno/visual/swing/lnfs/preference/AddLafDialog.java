@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+@SuppressWarnings("unchecked")
 public class AddLafDialog extends Dialog {
 	
 	private ListViewer viewer;
@@ -289,7 +290,6 @@ public class AddLafDialog extends Dialog {
 			return false;
 		}
 	}
-	@SuppressWarnings("unchecked")
 	private void createDefaultXml(JFrame jframe, BeanCreator comp, PrintWriter pw){
 		Component component = comp.createComponent(jframe);
 		WidgetAdapter adapter=ExtensionRegistry.createAdapterFor(component);
@@ -325,7 +325,6 @@ public class AddLafDialog extends Dialog {
 		}
 		comp.dispose();
 	}
-	@SuppressWarnings("unchecked")
 	private LookAndFeel createNewLnf(List<URL> list) {
 		try {
 			URL[] urls = new URL[list.size()];
@@ -358,7 +357,6 @@ public class AddLafDialog extends Dialog {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private boolean checkClassname() {
 		URL[] urls = new URL[jarSrcs.size()];
 		for (int i = 0; i < jarSrcs.size(); i++) {

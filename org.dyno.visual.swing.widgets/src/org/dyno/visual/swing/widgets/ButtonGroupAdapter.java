@@ -25,6 +25,7 @@ import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.swt.graphics.Image;
 
+@SuppressWarnings("unchecked")
 public class ButtonGroupAdapter extends InvisibleAdapter {
 	private static final String BUTTON_GROUP_ICON = "/icons/button_group_16.png";
 	static Image BUTTON_GROUP_SWT_ICON_IMAGE;
@@ -47,7 +48,6 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 		return BUTTON_GROUP_SWT_ICON_IMAGE;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List getElements() {
 		Enumeration<AbstractButton> elements = this.group.getElements();
@@ -62,7 +62,6 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 	public IAdapter getParent() {
 		return root;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Class getObjectClass() {
 		return ButtonGroup.class;

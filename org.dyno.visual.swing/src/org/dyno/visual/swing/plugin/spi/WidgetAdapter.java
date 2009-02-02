@@ -73,6 +73,7 @@ import org.osgi.framework.Bundle;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public abstract class WidgetAdapter extends AbstractAdaptable implements
 		IExecutableExtension, Cloneable, IPropertySourceProvider, IConstants,
 		IAdapter {
@@ -92,7 +93,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	protected Image iconImage;
 	protected List<InvisibleAdapter> invisibles = new ArrayList<InvisibleAdapter>();
 
-	@SuppressWarnings("unchecked")
 	public abstract Class getWidgetClass();
 	public String getID(){
 		if(lastName!=null)
@@ -424,7 +424,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		propertyConfigs = parseProperties(config); // ...
 	}
 
-	@SuppressWarnings("unchecked")
 	private Class getWidgetClass(IConfigurationElement config) {
 		try {
 			String widgetClassname = config.getAttribute("widgetClass"); //$NON-NLS-1$
@@ -441,7 +440,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 	private HashMap<String, IConfigurationElement> parseProperties(
 			IConfigurationElement config) {
 		try {
-			@SuppressWarnings("unchecked")
 			Class widgetClass = getWidgetClass(config);
 			HashMap<String, IConfigurationElement> eProperties = new HashMap<String, IConfigurationElement>();
 			IConfigurationElement[] props = config.getChildren("property"); //$NON-NLS-1$
@@ -450,7 +448,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 				eProperties.put(propertyId, prop);
 			}
 			if (widgetClass != Component.class) {
-				@SuppressWarnings("unchecked")
 				Class superClass = widgetClass.getSuperclass();
 				IConfigurationElement superConfig = ExtensionRegistry
 						.getWidgetConfig(superClass);
@@ -519,7 +516,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		this.fieldAccess = fieldAccess;
 	}
 
-	@SuppressWarnings("unchecked")
 	public ArrayList<IWidgetPropertyDescriptor> getPropertyDescriptors() {
 		Sorting sorting = ExtensionRegistry.getCurrentSorting();
 		HashMap<String, String> references = new HashMap<String, String>();
@@ -573,7 +569,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return propdesc;
 	}
 
-	@SuppressWarnings("unchecked")
 	private IWidgetPropertyDescriptor createProperty(
 			IConfigurationElement config, Class beanClass) {
 		String sClass = config.getAttribute("class"); //$NON-NLS-1$
@@ -804,7 +799,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements
 		return fieldAccess;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Class getObjectClass() {
 		return this.getWidgetClass();

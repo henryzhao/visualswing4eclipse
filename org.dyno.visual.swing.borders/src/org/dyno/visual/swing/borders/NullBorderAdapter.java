@@ -21,6 +21,7 @@ import org.dyno.visual.swing.plugin.spi.BorderAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.action.IAction;
 
+@SuppressWarnings("unchecked")
 public class NullBorderAdapter extends BorderAdapter {
 
 	@Override
@@ -28,7 +29,6 @@ public class NullBorderAdapter extends BorderAdapter {
 		return new NullBorderSwitchAction(widget);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class getBorderClass() {
 		return null;

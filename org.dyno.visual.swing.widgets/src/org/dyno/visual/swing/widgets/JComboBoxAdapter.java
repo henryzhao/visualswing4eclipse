@@ -22,6 +22,7 @@ import javax.swing.JComboBox;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JComboBoxAdapter extends WidgetAdapter {
 	public JComboBoxAdapter() {
 		super(null);
@@ -43,7 +44,6 @@ public class JComboBoxAdapter extends WidgetAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JComboBox.class;
 	}

@@ -22,8 +22,8 @@ import javax.swing.LookAndFeel;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
+@SuppressWarnings("unchecked")
 public interface ILookAndFeelAdapter {
-	@SuppressWarnings("unchecked")
 	Object getDefaultValue(Class widgetClass, String propertyName);
 
 	LookAndFeel getLookAndFeelInstance();

@@ -127,13 +127,11 @@ import org.dyno.visual.swing.lnfs.windowsxp.XpJToolBarValue;
 import org.dyno.visual.swing.lnfs.windowsxp.XpJTreeValue;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 
+@SuppressWarnings("unchecked")
 public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
-	@SuppressWarnings("unchecked")
 	private HashMap<Class, WidgetValue> xpValues;
-	@SuppressWarnings("unchecked")
 	private HashMap<Class, WidgetValue> classicValues;
 
-	@SuppressWarnings("unchecked")
 	public WindowsLookAndFeelAdapter() {
 		xpValues = new HashMap<Class, WidgetValue>();
 		classicValues = new HashMap<Class, WidgetValue>();
@@ -217,7 +215,6 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 		return xp != null && xp.booleanValue();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object getDefaultValue(Class widgetClass, String propertyName) {
 		WidgetValue widgetValue = getWidgetValue(widgetClass);
@@ -226,7 +223,6 @@ public class WindowsLookAndFeelAdapter implements ILookAndFeelAdapter {
 		}else
 			return null;
 	}
-	@SuppressWarnings("unchecked")
 	private WidgetValue getWidgetValue(Class widgetClass){
 		WidgetValue widgetValue;
 		if (isXP()) {

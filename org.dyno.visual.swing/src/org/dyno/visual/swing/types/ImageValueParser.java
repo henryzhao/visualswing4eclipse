@@ -9,10 +9,10 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
+@SuppressWarnings("unchecked")
 public class ImageValueParser implements IValueParser {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object parseValue(Object oldValue, List args) {
 		if (oldValue != null && !(oldValue instanceof ResourceImage)) {
 			Image icon = (Image)oldValue;

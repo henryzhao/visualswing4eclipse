@@ -20,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.swt.widgets.Composite;
 
+@SuppressWarnings("unchecked")
 public class SpinnerNumberModelType extends SpinnerModelType {
 
 	protected SpinnerNumberModelType() {
@@ -55,13 +56,11 @@ public class SpinnerNumberModelType extends SpinnerModelType {
 		return getSpinnerModelCode(className, typeName, init, min, max, step);
 	}
 
-	@SuppressWarnings("unchecked")
 	private String getSpinnerModelCode(String className, String typeCode, Number init, Comparable min, Comparable max, Number step) {
 		return "new " + className + "(" + typeCode + ".valueOf(" + init + "), " + typeCode + ".valueOf(" + min + "), " + typeCode + ".valueOf(" + max + "), "
 				+ typeCode + ".valueOf(" + step + "))";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		SpinnerNumberModel snm1 = (SpinnerNumberModel) o1;
@@ -84,7 +83,6 @@ public class SpinnerNumberModelType extends SpinnerModelType {
 			return 1;
 		return 0;
 	}
-	@SuppressWarnings("unchecked")
 	private boolean equals(Comparable o1, Comparable o2){
 		if(o1==null){
 			if(o2==null){
@@ -106,7 +104,6 @@ public class SpinnerNumberModelType extends SpinnerModelType {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone(Object object) {
 		SpinnerNumberModel snm = (SpinnerNumberModel) object;

@@ -11,9 +11,9 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.StringLiteral;
 
+@SuppressWarnings("unchecked")
 public class IconValueParser implements IValueParser {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object parseValue(Object oldValue, List args) {
 		if (oldValue != null && !(oldValue instanceof ResourceIcon)) {

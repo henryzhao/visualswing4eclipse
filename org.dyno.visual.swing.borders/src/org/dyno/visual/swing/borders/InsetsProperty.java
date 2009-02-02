@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
+@SuppressWarnings("unchecked")
 abstract class InsetsProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 	private Field top;
 	private Field left;
@@ -55,7 +56,6 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected Class getObjectClass() {
 		return null;
@@ -81,10 +81,8 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 	@Override
 	public void setFieldValue(Object bean, Object newValue) {
 	}
-	@SuppressWarnings("unchecked")
 	protected abstract Class getBorderClass();
 
-	@SuppressWarnings("unchecked")
 	private Field getField(Class beanClass, String fieldName) {
 		try {
 			if (beanClass != null)
@@ -185,7 +183,6 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 	}
@@ -264,7 +261,6 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Class getPropertyType() {
 		return Insets.class;

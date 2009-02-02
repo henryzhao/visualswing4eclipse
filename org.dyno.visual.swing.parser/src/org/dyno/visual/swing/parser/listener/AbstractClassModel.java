@@ -33,6 +33,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+@SuppressWarnings("unchecked")
 public abstract class AbstractClassModel implements IEventListenerModel, IConstants {
 	protected EventSetDescriptor eventSet;
 	protected WidgetAdapter adapter;
@@ -80,7 +81,6 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 		return NamespaceUtil.getGetMethodName(fieldName);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private boolean createEventMethodForWidget(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration md) {
 		Block body = md.getBody();
 		List statements = body.statements();

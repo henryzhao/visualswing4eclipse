@@ -29,6 +29,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
+@SuppressWarnings("unchecked")
 public class EventDelegation implements IEventMethod {
 
 	private MethodDescriptor methodDesc;
@@ -69,7 +70,6 @@ public class EventDelegation implements IEventMethod {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public String createEventMethod(IType type, ImportRewrite imports) {
 		Method mEvent = methodDesc.getMethod();
