@@ -24,6 +24,7 @@ import javax.swing.JInternalFrame;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JDesktopPaneAdapter extends CompositeAdapter {
 
 	public JDesktopPaneAdapter() {
@@ -128,7 +129,6 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JDesktopPane.class;
 	}

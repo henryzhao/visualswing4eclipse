@@ -21,6 +21,7 @@ import javax.swing.JLayeredPane;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 
+@SuppressWarnings("unchecked")
 public class JLayeredPaneAdapter extends CompositeAdapter {
 	public JLayeredPaneAdapter() {
 		super(null);
@@ -53,7 +54,6 @@ public class JLayeredPaneAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JLayeredPane.class;
 	}

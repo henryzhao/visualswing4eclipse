@@ -21,6 +21,7 @@ import javax.swing.JSpinner;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JSpinnerAdapter extends WidgetAdapter {
 	public JSpinnerAdapter() {
 		super(null);
@@ -41,7 +42,6 @@ public class JSpinnerAdapter extends WidgetAdapter {
 		return new JSpinner();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSpinner.class;
 	}

@@ -23,6 +23,7 @@ import javax.swing.JToolBar;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JToolBarAdapter extends CompositeAdapter {
 	public JToolBarAdapter() {
 		super(null);
@@ -68,7 +69,6 @@ public class JToolBarAdapter extends CompositeAdapter {
 		return null;
 	}	
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JToolBar.class;
 	}

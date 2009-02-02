@@ -21,6 +21,7 @@ import javax.swing.JPopupMenu;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JPopupMenuAdapter extends CompositeAdapter {
 	public JPopupMenuAdapter(){
 	}
@@ -87,7 +88,6 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JPopupMenu.class;
 	}

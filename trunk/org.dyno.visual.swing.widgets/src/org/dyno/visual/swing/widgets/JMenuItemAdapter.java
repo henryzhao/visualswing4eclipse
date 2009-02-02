@@ -25,6 +25,7 @@ import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JMenuItemAdapter extends WidgetAdapter {
 	public JMenuItemAdapter() {
 		super(null);
@@ -66,7 +67,6 @@ public class JMenuItemAdapter extends WidgetAdapter {
 		return jmi;
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JMenuItem.class;
 	}

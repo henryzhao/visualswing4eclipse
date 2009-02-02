@@ -24,6 +24,7 @@ import javax.swing.JSeparator;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JSeparatorAdapter extends WidgetAdapter {
 	public JSeparatorAdapter() {
 		super(null);
@@ -56,7 +57,6 @@ public class JSeparatorAdapter extends WidgetAdapter {
 		return new JSeparator();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSeparator.class;
 	}

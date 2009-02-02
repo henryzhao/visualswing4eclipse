@@ -19,6 +19,7 @@ import java.awt.Component;
 import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
+@SuppressWarnings("unchecked")
 public class JTextAreaAdapter extends J2DTextComponentAdapter {
 	public JTextAreaAdapter() {
 		super(null);
@@ -34,7 +35,6 @@ public class JTextAreaAdapter extends J2DTextComponentAdapter {
 		return new JTextArea();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTextArea.class;
 	}

@@ -19,10 +19,10 @@ import java.awt.Dimension;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+@SuppressWarnings("unchecked")
 public class JLabelAdapter extends TextWidgetAdapter {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JLabel.class;
 	}

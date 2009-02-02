@@ -21,6 +21,7 @@ import javax.swing.JSlider;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JSliderAdapter extends WidgetAdapter {
 	public JSliderAdapter() {
 		super(null);
@@ -41,7 +42,6 @@ public class JSliderAdapter extends WidgetAdapter {
 		return new JSlider();
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JSlider.class;
 	}

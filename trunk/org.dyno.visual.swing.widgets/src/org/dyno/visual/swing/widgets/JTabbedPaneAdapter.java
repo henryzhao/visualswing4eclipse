@@ -23,6 +23,7 @@ import javax.swing.JTabbedPane;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JTabbedPaneAdapter extends CompositeAdapter {
 	public JTabbedPaneAdapter() {
 		super(null);
@@ -111,7 +112,6 @@ public class JTabbedPaneAdapter extends CompositeAdapter {
 			return null;
 	}
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JTabbedPane.class;
 	}

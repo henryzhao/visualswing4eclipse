@@ -23,6 +23,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
+@SuppressWarnings("unchecked")
 public class JMenuBarAdapter extends CompositeAdapter {
 	public JMenuBarAdapter() {
 		super(null);
@@ -114,7 +115,6 @@ public class JMenuBarAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JMenuBar.class;
 	}

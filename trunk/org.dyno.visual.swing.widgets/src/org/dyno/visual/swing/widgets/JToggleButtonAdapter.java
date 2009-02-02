@@ -22,10 +22,10 @@ import javax.swing.JToggleButton.ToggleButtonModel;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 
+@SuppressWarnings("unchecked")
 public class JToggleButtonAdapter extends TextWidgetAdapter {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JToggleButton.class;
 	}

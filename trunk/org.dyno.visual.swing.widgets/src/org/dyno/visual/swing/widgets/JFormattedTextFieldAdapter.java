@@ -16,10 +16,10 @@ package org.dyno.visual.swing.widgets;
 
 import javax.swing.JFormattedTextField;
 
+@SuppressWarnings("unchecked")
 public class JFormattedTextFieldAdapter extends TextWidgetAdapter {
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Class getWidgetClass() {
 		return JFormattedTextField.class;
 	}
