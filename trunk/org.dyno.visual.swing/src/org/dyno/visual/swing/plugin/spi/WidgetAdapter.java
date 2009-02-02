@@ -431,7 +431,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			HashMap<String, IConfigurationElement> eProperties = new HashMap<String, IConfigurationElement>();
 			IConfigurationElement[] props = config.getChildren("property"); //$NON-NLS-1$
 			for (IConfigurationElement prop : props) {
-				String propertyId = prop.getAttribute("id"); //$NON-NLS-1$
+				String propertyId = prop.getAttribute("name"); //$NON-NLS-1$
 				eProperties.put(propertyId, prop);
 			}
 			if (widgetClass != Component.class) {
@@ -564,7 +564,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	private void mergeProperties(HashMap<String, IConfigurationElement> eSources, HashMap<String, IConfigurationElement> eTargets) {
 		for (IConfigurationElement eTarget : eTargets.values()) {
-			String eId = eTarget.getAttribute("id"); //$NON-NLS-1$
+			String eId = eTarget.getAttribute("name"); //$NON-NLS-1$
 			if (eSources.get(eId) == null) {
 				eSources.put(eId, eTarget);
 			}

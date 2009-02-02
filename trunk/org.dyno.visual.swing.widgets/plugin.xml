@@ -45,44 +45,43 @@
          		class="org.dyno.visual.swing.widgets.ComponentAdapter"
          		widgetClass="java.awt.Component"
          		abstract="true">
-         		<property id="foreground" name="foreground"/>
-         		<property id="background" name="background"/>
-        		<property id="font" name="font"/>;        
-        		<property id="enabled" name="enabled"/>
-         		<property id="bounds" name="bounds" editable="false" gencode="false"/>
-        		<property id="minimumSize" name="minimumSize"/>
-        		<property id="maximumSize" name="maximumSize"/>
-        		<property id="preferredSize" name="preferredSize"/>
-        		<property id="focusable" name="focusable"/>
-        		<property id="visible" name="visible"/>         		
+         		<property name="foreground"/>
+         		<property name="background"/>
+        		<property name="font"/>;        
+        		<property name="enabled"/>
+         		<property name="bounds" editable="false" gencode="false"/>
+        		<property name="minimumSize"/>
+        		<property name="maximumSize"/>
+        		<property name="preferredSize"/>
+        		<property name="focusable"/>
+        		<property name="visible"/>         		
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.ContainerAdapter"
          		widgetClass="java.awt.Container"
          		abstract="true">
-        		<property id="focusCycleRoot" name="focusCycleRoot"/>
-        		<property id="focusTraversalPolicyProvider" name="focusTraversalPolicyProvider"/>
+        		<property name="focusCycleRoot"/>
+        		<property name="focusTraversalPolicyProvider"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JComponentAdapter"
          		widgetClass="javax.swing.JComponent"
          		abstract="true">
-        		<property id="border" name="border"/>
-        		<property id="opaque" name="opaque"/>
-        		<property id="toolTipText" name="toolTipText"/>
-        		<property id="doubleBuffered" name="doubleBuffered"/>
-        		<property id="alignmentX" name="alignmentX"/>
-        		<property id="alignmentY" name="alignmentY"/>
-        		<property id="autoscrolls" name="autoscrolls"/>
-        		<property 
-        				id="debugGraphicsOptions" 
+        		<property name="border"/>
+        		<property name="opaque"/>
+        		<property name="toolTipText"/>
+        		<property name="doubleBuffered"/>
+        		<property name="alignmentX"/>
+        		<property name="alignmentY"/>
+        		<property name="autoscrolls"/>
+        		<property        				
         				name="debugGraphicsOptions" 
         				editor="org.dyno.visual.swing.widgets.editors.DebugGraphicsOptionsEditorFactory"
         				renderer="org.dyno.visual.swing.widgets.renderers.DebugGraphicsOptionsRendererFactory" 
         				/>
-        		<property id="inheritsPopupMenu" name="inheritsPopupMenu"/>
-        		<property id="requestFocusEnabled" name="requestFocusEnabled"/>
-        		<property id="verifyInputWhenFocusTarget" name="verifyInputWhenFocusTarget"/>         		
+        		<property name="inheritsPopupMenu"/>
+        		<property name="requestFocusEnabled"/>
+        		<property name="verifyInputWhenFocusTarget"/>         		
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JPanelAdapter"
@@ -90,11 +89,11 @@
          		widgetName="%Palette.JPanel"
          		groupId="container"
          		icon="/icons/panel_16.png">
-        		<property id="border" name="border" />
-        		<property id="font" name="font"/>
-        		<property id="layout" name="layout" gencode="false"/>
-        		<property id="alignmentX" name="alignmentX" gencode="false"/>
-        		<property id="alignmentX" name="alignmentY" gencode="false"/>
+        		<property name="border" />
+        		<property name="font"/>
+        		<property name="layout" gencode="false"/>
+        		<property name="alignmentX" gencode="false"/>
+        		<property name="alignmentY" gencode="false"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JLabelAdapter"
@@ -102,40 +101,33 @@
          		widgetName="%Palette.JLabel"
          		groupId="component"         		
          		icon="/icons/label_16.png">
-        		<property id="text" name="text" />
-        		<property 	
-        			id="horizontalAlignment"
+        		<property name="text" />
+        		<property
         			name="horizontalAlignment" 
                   	editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
                   	renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"
                   	/>
-        		<property 	
-        			id="verticalAlignment"
+        		<property
         			name="verticalAlignment"
                   	editor="org.dyno.visual.swing.widgets.editors.VerticalAlignmentEditor"
                   	renderer="org.dyno.visual.swing.widgets.renderers.VerticalAlignmentRenderer"
                   	/>
-        		<property 	
-        			id="icon" 
+        		<property 
         			name="icon"
         			/>
-        		<property 	
-        			id="disabledIcon"
+        		<property
         			name="disabledIcon" 
         			gencode="false"
         			/>
         		<property
                 class="org.dyno.visual.swing.widgets.properties.HorizontalTextPositionProperty"
                 editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
-                id="horizontalTextPosition"
                 name="horizontalTextPosition"
                 renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
-        		<property 	
-        			id="iconTextGap"
+        		<property
         			name="iconTextGap" 
         			/>
-        		<property 	
-        			id="verticalTextPosition"
+        		<property 
         			name="verticalTextPosition"
                   	editor="org.dyno.visual.swing.widgets.editors.VerticalAlignmentEditor"
                   	renderer="org.dyno.visual.swing.widgets.renderers.VerticalAlignmentRenderer"
@@ -147,40 +139,37 @@
          		widgetName="AbstractButton"
          		groupId="component"
          		abstract="true">
-        		<property id="text" name="text"/>
-		        <property id="margin" name="margin"/>
-		        <property id="borderPainted" name="borderPainted"/>
-		        <property id="contentAreaFilled" name="contentAreaFilled"/>
-		        <property id="disabledIcon" name="disabledIcon" gencode="false"/>
-		        <property id="disabledSelectedIcon" name="disabledSelectedIcon" gencode="false"/>
-		        <property id="focusPainted" name="focusPainted"/>
-		        <property id="hideActionText" name="hideActionText"/>
-		        <property id="horizontalAlignment" name="horizontalAlignment" 
+        		<property name="text"/>
+		        <property name="margin"/>
+		        <property name="borderPainted"/>
+		        <property name="contentAreaFilled"/>
+		        <property name="disabledIcon" gencode="false"/>
+		        <property name="disabledSelectedIcon" gencode="false"/>
+		        <property name="focusPainted"/>
+		        <property name="hideActionText"/>
+		        <property name="horizontalAlignment" 
 		                  editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
-		        <property id="horizontalTextPosition" name="horizontalTextPosition" 
+		        <property name="horizontalTextPosition" 
 	           			class="org.dyno.visual.swing.widgets.properties.HorizontalTextPositionProperty"	
 		                  editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
-		        <property id="icon" name="icon"/>
-		        <property id="iconTextGap" name="iconTextGap"/>
-		        <property id="multiClickThreshhold" name="multiClickThreshhold"/>
-		        <property id="pressedIcon" name="pressedIcon"/>
-		        <property id="rolloverEnabled" name="rolloverEnabled"/>
-		        <property id="rolloverIcon" name="rolloverIcon"/>
-		        <property id="rolloverSelectedIcon" name="rolloverSelectedIcon"/>
-		        <property id="selected" name="selected"/>
-		        <property id="selectedIcon" name="selectedIcon"/>
-		   		<property id="verticalAlignment"
-		        			name="verticalAlignment"
+		        <property name="icon"/>
+		        <property name="iconTextGap"/>
+		        <property name="multiClickThreshhold"/>
+		        <property name="pressedIcon"/>
+		        <property name="rolloverEnabled"/>
+		        <property name="rolloverIcon"/>
+		        <property name="rolloverSelectedIcon"/>
+		        <property name="selected"/>
+		        <property name="selectedIcon"/>
+		   		<property name="verticalAlignment"
 		                  	editor="org.dyno.visual.swing.widgets.editors.VerticalAlignmentEditor"
 		                  	renderer="org.dyno.visual.swing.widgets.renderers.VerticalAlignmentRenderer"/>
-		   		<property id="verticalTextPosition"
-		        			name="verticalTextPosition"
+		   		<property name="verticalTextPosition"
 		                  	editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
 		                  	renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
-		        <property id="mnemonic"
-		        			name="mnemonic"
+		        <property name="mnemonic"
 		        			editor="org.dyno.visual.swing.widgets.editors.CharacterEditor"
 		        			renderer="org.dyno.visual.swing.widgets.renderers.CharacterRenderer"/>
          </widget>     
@@ -190,8 +179,8 @@
          		widgetName="%Palette.JButton"
          		groupId="component"         		
          		icon="/icons/button_16.png">
-		        <property id="defaultCapable" name="defaultCapable"/>
-		        <property id="border" name="border"/>
+		        <property name="defaultCapable"/>
+		        <property name="border"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JToggleButtonAdapter"
@@ -220,12 +209,12 @@
          		widgetName="%Palette.JComboBox"
          		groupId="component"         		
          		icon="/icons/combo_box_16.png">
-		    	<property id="editable" name="editable"/>
-		    	<property id="maximumRowCount" name="maximumRowCount"/>
-		    	<property id="selectedIndex" name="selectedIndex" gencode="false"/>
-		    	<property id="selectedItem" name="selectedItem" gencode="false"/>
-		        <property id="model" name="model"/>
-		        <property id="lightWeightPopupEnabled" name="lightWeightPopupEnabled"/>
+		    	<property name="editable"/>
+		    	<property name="maximumRowCount"/>
+		    	<property name="selectedIndex" gencode="false"/>
+		    	<property name="selectedItem" gencode="false"/>
+		        <property name="model"/>
+		        <property name="lightWeightPopupEnabled"/>
          </widget>
         <widget 
          		class="org.dyno.visual.swing.widgets.JScrollPaneAdapter"
@@ -233,14 +222,14 @@
          		widgetName="%Palette.JScrollPane"
          		groupId="container"         		
          		icon="/icons/scroll_pane_16.png">
-		    	<property id="horizontalScrollBarPolicy" name="horizontalScrollBarPolicy"
+		    	<property name="horizontalScrollBarPolicy"
 		        			editor="org.dyno.visual.swing.widgets.editors.HorizontalScrollBarPolicyEditor"
 		        			renderer="org.dyno.visual.swing.widgets.renderers.HorizontalScrollBarPolicyRenderer"/>
-		    	<property id="verticalScrollBarPolicy" name="verticalScrollBarPolicy"
+		    	<property name="verticalScrollBarPolicy"
 		        			editor="org.dyno.visual.swing.widgets.editors.VerticalScrollBarPolicyEditor"
 		        			renderer="org.dyno.visual.swing.widgets.renderers.VerticalScrollBarPolicyRenderer"/>
-		        <property id="viewportBorder" name="viewportBorder"/>                  
-		    	<property id="wheelScrollingEnabled" name="wheelScrollingEnabled"/>
+		        <property name="viewportBorder"/>                  
+		    	<property name="wheelScrollingEnabled"/>
 		</widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JListAdapter"
@@ -248,23 +237,23 @@
          		widgetName="%Palette.JList"
          		groupId="component"         		
          		icon="/icons/list_16.png">
-		    	<property id="selectionMode" 
+		    	<property 
 		    			  name="selectionMode" 
 		                  editor="org.dyno.visual.swing.widgets.editors.ListSelectionModeEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.ListSelectionModeRenderer"/>
-		        <property id="model" 
+		        <property 
 		        		  name="model"/> 
-		        <property id="dragEnabled" name="dragEnabled"/>
-		        <property id="fixedCellHeight" name="fixedCellHeight"/>
-		        <property id="fixedCellWidth" name="fixedCellWidth"/>
-		        <property id="layoutOrientation" name="layoutOrientation"
+		        <property name="dragEnabled"/>
+		        <property name="fixedCellHeight"/>
+		        <property name="fixedCellWidth"/>
+		        <property name="layoutOrientation"
 		                  editor="org.dyno.visual.swing.widgets.editors.LayoutOrientationEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.LayoutOrientationRenderer"/>
-		        <property id="selectedIndex" name="selectedIndex" gencode="false"/>
-		        <property id="selectionBackground" name="selectionBackground"/>
-		        <property id="selectionForeground" name="selectionForeground"/>
-		        <property id="valueIsAdjusting" name="valueIsAdjusting"/>
-		        <property id="visibleRowCount" name="visibleRowCount"/>
+		        <property name="selectedIndex" gencode="false"/>
+		        <property name="selectionBackground"/>
+		        <property name="selectionForeground"/>
+		        <property name="valueIsAdjusting"/>
+		        <property name="visibleRowCount"/>
          </widget>
          <widget
          		class="org.dyno.visual.swing.widgets.JTextComponentAdapter"
@@ -272,17 +261,17 @@
          		widgetName="JTextComponent"
          		groupId="component"
          		abstract="true">
-		        <property id="text" name="text"/>
-		    	<property id="editable" name="editable"/>
-		    	<property id="caretColor" name="caretColor"/>
-		    	<property id="caretPosition" name="caretPosition" gencode="false"/>
-		    	<property id="disabledTextColor" name="disabledTextColor"/>
-		    	<property id="dragEnabled" name="dragEnabled"/>
-		    	<property id="margin" name="margin"/>
-		    	<property id="selectedTextColor" name="selectedTextColor"/>
-		    	<property id="selectionColor" name="selectionColor"/>
-		    	<property id="selectionEnd" name="selectionEnd" gencode="false"/>
-		    	<property id="selectionStart" name="selectionStart" gencode="false"/>         		
+		        <property name="text"/>
+		    	<property name="editable"/>
+		    	<property name="caretColor"/>
+		    	<property name="caretPosition" gencode="false"/>
+		    	<property name="disabledTextColor"/>
+		    	<property name="dragEnabled"/>
+		    	<property name="margin"/>
+		    	<property name="selectedTextColor"/>
+		    	<property name="selectionColor"/>
+		    	<property name="selectionEnd" gencode="false"/>
+		    	<property name="selectionStart" gencode="false"/>         		
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JTextFieldAdapter"
@@ -290,13 +279,12 @@
          		widgetName="%Palette.JTextField"
          		groupId="component"         		
          		icon="/icons/text_field_16.png">
-		    	<property id="columns" name="columns"/>
-        		<property 	
-        			id="horizontalAlignment"
+		    	<property name="columns"/>
+        		<property 
         			name="horizontalAlignment" 
                   	editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
                   	renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
-				<property id="scrollOffset" name="scrollOffset" gencode="false"/>
+				<property name="scrollOffset" gencode="false"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JTextAreaAdapter"
@@ -304,11 +292,11 @@
          		widgetName="%Palette.JTextArea"
          		groupId="component"         		
          		icon="/icons/text_area_16.png">
-		    	<property id="columns" name="columns"/>
-		    	<property id="lineWrap" name="lineWrap"/>
-		    	<property id="rows" name="rows"/>
-		    	<property id="tabSize" name="tabSize"/>
-		    	<property id="wrapStyleWord" name="wrapStyleWord"/>
+		    	<property name="columns"/>
+		    	<property name="lineWrap"/>
+		    	<property name="rows"/>
+		    	<property name="tabSize"/>
+		    	<property name="wrapStyleWord"/>
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JScrollBarAdapter"
@@ -316,16 +304,16 @@
          		widgetName="%Palette.JScrollBar"
          		groupId="component"         		
          		icon="/icons/scroll_bar_16.png">
-         		<property id="orientation" name="orientation" 
+         		<property name="orientation" 
 		         		editor="org.dyno.visual.swing.widgets.editors.ScrollBarOrientationEditor"
 		         		renderer="org.dyno.visual.swing.widgets.renderers.ScrollBarOrientationRenderer"/>
-		    	<property id="blockIncrement" name="blockIncrement"/>
-		    	<property id="maximum" name="maximum"/>
-		    	<property id="minimum" name="minimum"/>
-		        <property id="unitIncrement" name="unitIncrement"/>
-		        <property id="visibleAmount" name="visibleAmount"/>
-		        <property id="value" name="value"/>
-		        <property id="valueIsAdjusting" name="valueIsAdjusting"/>
+		    	<property name="blockIncrement"/>
+		    	<property name="maximum"/>
+		    	<property name="minimum"/>
+		        <property name="unitIncrement"/>
+		        <property name="visibleAmount"/>
+		        <property name="value"/>
+		        <property name="valueIsAdjusting"/>
 		 </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JSliderAdapter"
@@ -333,21 +321,21 @@
          		widgetName="%Palette.JSlider"
          		groupId="component"         		
          		icon="/icons/slider_16.png">
-	         		<property id="orientation" name="orientation" 
+	         		<property name="orientation" 
 			         		editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
 			         		renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
-			        <property id="value" name="value"/>
-			        <property id="majorTickSpacing" name="majorTickSpacing"/>
-			        <property id="maximum" name="maximum"/>
-			        <property id="minimum" name="minimum"/>
-			        <property id="minorTickSpacing" name="minorTickSpacing"/>
-			        <property id="paintLabels" name="paintLabels"/>
-			        <property id="paintTicks" name="paintTicks"/>
-			        <property id="paintTrack" name="paintTrack"/>
-			        <property id="snapToTicks" name="snapToTicks"/>
-			        <property id="extent" name="extent"/>
-			        <property id="inverted" name="inverted"/>
-			        <property id="valueIsAdjusting" name="valueIsAdjusting"/>
+			        <property name="value"/>
+			        <property name="majorTickSpacing"/>
+			        <property name="maximum"/>
+			        <property name="minimum"/>
+			        <property name="minorTickSpacing"/>
+			        <property name="paintLabels"/>
+			        <property name="paintTicks"/>
+			        <property name="paintTrack"/>
+			        <property name="snapToTicks"/>
+			        <property name="extent"/>
+			        <property name="inverted"/>
+			        <property name="valueIsAdjusting"/>
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JProgressBarAdapter"
@@ -355,16 +343,16 @@
          		widgetName="%Palette.JProgressBar"
          		groupId="component"         		
          		icon="/icons/progress_bar_16.png">
-         		<property id="orientation" name="orientation" 
+         		<property name="orientation" 
 	         		editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
 	         		renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
-         		<property id="value" name="value"/>
-		        <property id="maximum" name="maximum"/>
-		        <property id="minimum" name="minimum"/>
-		        <property id="string" name="string"/>
-		        <property id="borderPainted" name="borderPainted"/>
-		        <property id="stringPainted" name="stringPainted"/>
-		        <property id="indeterminate" name="indeterminate"/>
+         		<property name="value"/>
+		        <property name="maximum"/>
+		        <property name="minimum"/>
+		        <property name="string"/>
+		        <property name="borderPainted"/>
+		        <property name="stringPainted"/>
+		        <property name="indeterminate"/>
         </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JFormattedTextFieldAdapter"
@@ -372,8 +360,8 @@
          		widgetName="%Palette.JFormattedTextField"
          		groupId="component"         		
          		icon="/icons/formatted_field_16.png">
-    			<property id="border" name="border"/>
-				<property id="focusLostBehavior" name="focusLostBehavior"
+    			<property name="border"/>
+				<property name="focusLostBehavior"
 	         		editor="org.dyno.visual.swing.widgets.editors.FocusLostBehaviorEditor"
 	         		renderer="org.dyno.visual.swing.widgets.renderers.FocusLostBehaviorRenderer"/>
          </widget>
@@ -383,7 +371,7 @@
          		widgetName="%Palette.JPasswordField"
          		groupId="component"         		
          		icon="/icons/password_field_16.png">
-					<property id="echoChar" name="echoChar"/>
+					<property name="echoChar"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JSpinnerAdapter"
@@ -391,7 +379,7 @@
          		widgetName="%Palette.JSpinner"
          		groupId="component"         		
          		icon="/icons/spinner_16.png">
-		        <property id="model" name="model"/>
+		        <property name="model"/>
          </widget>
          <widget 
          		class="org.dyno.visual.swing.widgets.JSeparatorAdapter"
@@ -399,7 +387,7 @@
          		widgetName="%Palette.JSeparator"
          		groupId="component"         		
          		icon="/icons/separator_16.png">
-		        <property id="orientation" name="orientation"
+		        <property name="orientation"
 		                  editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
          </widget>
@@ -416,7 +404,7 @@
          		widgetName="%Palette.JEditorPane"
          		groupId="component"         		
          		icon="/icons/editor_pane_16.png">
-    	 		<property id="contentType" name="contentType"/>
+    	 		<property name="contentType"/>
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JTreeAdapter"
@@ -424,18 +412,18 @@
          		widgetName="%Palette.JTree"
          		groupId="component"         		
          		icon="/icons/tree_16.png">
-		    	<property id="model" name="model"/>
-		        <property id="dragEnabled" name="dragEnabled"/>
-		        <property id="editable" name="editable"/>
-		        <property id="expandsSelectedPaths" name="expandsSelectedPaths"/>
-		        <property id="invokesStopCellEditing" name="invokesStopCellEditing"/>
-		        <property id="largeModel" name="largeModel"/>
-		        <property id="rootVisible" name="rootVisible"/>
-		        <property id="rowHeight" name="rowHeight"/>
-		        <property id="scrollsOnExpand" name="scrollsOnExpand"/>
-		        <property id="showsRootHandles" name="showsRootHandles"/>
-		        <property id="toggleClickCount" name="toggleClickCount"/>
-		        <property id="visibleRowCount" name="visibleRowCount"/>
+		    	<property name="model"/>
+		        <property name="dragEnabled"/>
+		        <property name="editable"/>
+		        <property name="expandsSelectedPaths"/>
+		        <property name="invokesStopCellEditing"/>
+		        <property name="largeModel"/>
+		        <property name="rootVisible"/>
+		        <property name="rowHeight"/>
+		        <property name="scrollsOnExpand"/>
+		        <property name="showsRootHandles"/>
+		        <property name="toggleClickCount"/>
+		        <property name="visibleRowCount"/>
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JTableAdapter"
@@ -443,29 +431,29 @@
          		widgetName="%Palette.JTable"
          		groupId="component"         		
          		icon="/icons/table_16.png">
-		    	<property id="autoCreateColumnsFromModel" name="autoCreateColumnsFromModel"/>
-		    	<property id="autoCreateRowSorter" name="autoCreateRowSorter"/>
-		    	<property id="model" name="model"/>
-		        <property id="autoResizeMode" name="autoResizeMode"
+		    	<property name="autoCreateColumnsFromModel"/>
+		    	<property name="autoCreateRowSorter"/>
+		    	<property name="model"/>
+		        <property name="autoResizeMode"
 		                  editor="org.dyno.visual.swing.widgets.editors.AutoResizeModeEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.AutoResizeModeRenderer"/>		                  
-		    	<property id="cellSelectionEnabled" name="cellSelectionEnabled"/>
-		    	<property id="columnSelectionAllowed" name="columnSelectionAllowed"/>
-		    	<property id="dragEnabled" name="dragEnabled"/>
-		    	<property id="editingColumn" name="editingColumn"/>
-		    	<property id="editingRow" name="editingRow"/>
-		    	<property id="fillsViewportHeight" name="fillsViewportHeight"/>
-		    	<property id="gridColor" name="gridColor"/>
-		    	<property id="intercellSpacing" name="intercellSpacing"/>
-		    	<property id="rowHeight" name="rowHeight"/>
-		    	<property id="rowMargin" name="rowMargin"/>
-		    	<property id="rowSelectionAllowed" name="rowSelectionAllowed"/>
-		    	<property id="selectionBackground" name="selectionBackground"/>
-		    	<property id="selectionForeground" name="selectionForeground"/>
-		    	<property id="showHorizontalLines" name="showHorizontalLines"/>
-		    	<property id="showVerticalLines" name="showVerticalLines"/>
-		    	<property id="surrendersFocusOnKeystroke" name="surrendersFocusOnKeystroke"/>
-		    	<property id="updateSelectionOnSort" name="updateSelectionOnSort"/>         		
+		    	<property name="cellSelectionEnabled"/>
+		    	<property name="columnSelectionAllowed"/>
+		    	<property name="dragEnabled"/>
+		    	<property name="editingColumn"/>
+		    	<property name="editingRow"/>
+		    	<property name="fillsViewportHeight"/>
+		    	<property name="gridColor"/>
+		    	<property name="intercellSpacing"/>
+		    	<property name="rowHeight"/>
+		    	<property name="rowMargin"/>
+		    	<property name="rowSelectionAllowed"/>
+		    	<property name="selectionBackground"/>
+		    	<property name="selectionForeground"/>
+		    	<property name="showHorizontalLines"/>
+		    	<property name="showVerticalLines"/>
+		    	<property name="surrendersFocusOnKeystroke"/>
+		    	<property name="updateSelectionOnSort"/>         		
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JTabbedPaneAdapter"
@@ -473,11 +461,11 @@
          		widgetName="%Palette.JTabbedPane"
          		groupId="container"         		
          		icon="/icons/tabbed_pane_16.png">
-		    	<property id="selectedIndex" name="selectedIndex" gencode="false"/>
-    			<property id="tabLayoutPolicy" name="tabLayoutPolicy"
+		    	<property name="selectedIndex" gencode="false"/>
+    			<property name="tabLayoutPolicy"
                   		editor="org.dyno.visual.swing.widgets.editors.TabLayoutPolicyEditor"
                   		renderer="org.dyno.visual.swing.widgets.renderers.TabLayoutPolicyRenderer"/>
-    			<property id="tabPlacement" name="tabPlacement"
+    			<property name="tabPlacement"
                   		editor="org.dyno.visual.swing.widgets.editors.TabPlacementEditor"
                   		renderer="org.dyno.visual.swing.widgets.renderers.TabPlacementRenderer"/>
          </widget>         
@@ -487,15 +475,15 @@
          		widgetName="%Palette.JSplitPane"
          		groupId="container"         		
          		icon="/icons/split_pane_16.png">
-		    	<property id="dividerLocation" name="dividerLocation"/>
-		    	<property id="dividerSize" name="dividerSize"/>
-		        <property id="orientation" name="orientation"
+		    	<property name="dividerLocation"/>
+		    	<property name="dividerSize"/>
+		        <property name="orientation"
                   		editor="org.dyno.visual.swing.widgets.editors.SplitPaneOrientationEditor"
                   		renderer="org.dyno.visual.swing.widgets.renderers.SplitPaneOrientationRenderer"/>
-		    	<property id="resizeWeight" name="resizeWeight"/>
-		    	<property id="continuousLayout" name="continuousLayout"/>
-		    	<property id="lastDividerLocation" name="lastDividerLocation" gencode="false"/>
-		    	<property id="oneTouchExpandable" name="oneTouchExpandable"/>
+		    	<property name="resizeWeight"/>
+		    	<property name="continuousLayout"/>
+		    	<property name="lastDividerLocation" gencode="false"/>
+		    	<property name="oneTouchExpandable"/>
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JToolBarAdapter"
@@ -503,15 +491,15 @@
          		widgetName="%Palette.JToolBar"
          		groupId="container"         		
          		icon="/icons/tool_bar_16.png">
-		    	<property id="floatable" name="floatable"/>
-		    	<property id="rollover" name="rollover"/>
-		        <property id="orientation" name="orientation"
+		    	<property name="floatable"/>
+		    	<property name="rollover"/>
+		        <property name="orientation"
                   		editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
                   		renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
-		        <property id="borderPainted" name="borderPainted"/>
-		        <property id="font" name="font"/>
-		        <property id="margin" name="margin"/>
-		        <property id="alignmentY" name="alignmentY" gencode="false"/>         		
+		        <property name="borderPainted"/>
+		        <property name="font"/>
+		        <property name="margin"/>
+		        <property name="alignmentY" gencode="false"/>         		
          </widget>         
          <widget 
          		class="org.dyno.visual.swing.widgets.JDesktopPaneAdapter"
@@ -519,7 +507,7 @@
          		widgetName="%Palette.JDesktopPane"
          		groupId="container"         		
          		icon="/icons/desktop_pane_16.png">
-    			<property id="dragMode" name="dragMode"
+    			<property name="dragMode"
                   		editor="org.dyno.visual.swing.widgets.editors.DesktopPaneDragModeEditor"
                   		renderer="org.dyno.visual.swing.widgets.renderers.DesktopPaneDragModeRenderer"/>
          </widget>         
@@ -529,22 +517,22 @@
          		widgetName="%Palette.JInternalFrame"
          		groupId="container"         		
          		icon="/icons/internal_frame_16.png">
-		    	<property id="closable" name="closable"/>
-		        <property id="defaultCloseOperation" name="defaultCloseOperation"
+		    	<property name="closable"/>
+		        <property name="defaultCloseOperation"
                   		editor="org.dyno.visual.swing.widgets.editors.InternalFrameDefaultCloseOperationEditor"
                   		renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer"/>
-				<property id="iconifiable" name="iconifiable"/>
-				<property id="maximizable" name="maximizable"/>
-				<property id="resizable" name="resizable"/>
-				<property id="title" name="title"/>                  
-		        <property id="frameIcon" name="frameIcon"/>
-		        <property id="icon" name="icon"/>
-		        <property id="layer" name="layer"/>
-		        <property id="maximum" name="maximum"/>
-		        <property id="normalBounds" name="normalBounds" gencode="false"/>
-		        <property id="selected" name="selected" gencode="false"/>
-		        <property id="visible" name="visible"/>
-		        <property id="border" name="border"/>
+				<property name="iconifiable"/>
+				<property name="maximizable"/>
+				<property name="resizable"/>
+				<property name="title"/>                  
+		        <property name="frameIcon"/>
+		        <property name="icon"/>
+		        <property name="layer"/>
+		        <property name="maximum"/>
+		        <property name="normalBounds" gencode="false"/>
+		        <property name="selected" gencode="false"/>
+		        <property name="visible"/>
+		        <property name="border"/>
          </widget>
          <widget
                abstract="false"
@@ -553,16 +541,15 @@
                rootPaneContainer="true"
                widgetClass="javax.swing.JFrame"
                widgetName="%Palette.JFrame">
-               <property id="title" name="title"/>
+               <property name="title"/>
                <property
                      editable="true"
                      editor="org.dyno.visual.swing.widgets.editors.FrameDefaultCloseOperationEditor"
-                     id="defaultCloseOperation"
                      name="defaultCloseOperation"
                      renderer="org.dyno.visual.swing.widgets.renderers.FrameDefaultCloseOperationRenderer">
                </property>
-               <property id="visible" name="visible" gencode="false"/>
-               <property id="iconImage" name="iconImage"/>
+               <property name="visible" gencode="false"/>
+               <property name="iconImage"/>
          </widget>
          <widget
                abstract="false"
@@ -571,16 +558,15 @@
                rootPaneContainer="true"
                widgetClass="javax.swing.JDialog"
                widgetName="%Palette.JDialog">
-               <property id="title" name="title"/>
+               <property name="title"/>
                <property
                      editable="true"
                      editor="org.dyno.visual.swing.widgets.editors.InternalFrameDefaultCloseOperationEditor"
-                     id="defaultCloseOperation"
                      name="defaultCloseOperation"
                      renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer">
                </property>
-               <property id="visible" name="visible" gencode="false"/>
-               <property id="iconImage" name="iconImage"
+               <property name="visible" gencode="false"/>
+               <property name="iconImage"
                			class = "org.dyno.visual.swing.widgets.properties.JDialogIconImageProperty"/>
          </widget>
          <widget
@@ -590,7 +576,7 @@
                rootPaneContainer="true"
                widgetClass="javax.swing.JApplet"
                widgetName="%Palette.JApplet">
-               <property id="visible" name="visible" gencode="false"/>
+               <property name="visible" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -604,14 +590,12 @@
                   dislayName="borderPainted"
                   editable="true"
                   gencode="true"
-                  id="borderPainted"
                   name="borderPainted">
             </property>
             <property
                   dislayName="margin"
                   editable="true"
                   gencode="true"
-                  id="margin"
                   name="margin">
             </property>
          </widget>
@@ -623,7 +607,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenu"
                widgetName="%Palette.JMenu">
-               <property id="selected" name="selected" gencode="false"/>
+               <property name="selected" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -633,7 +617,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JMenuItem"
                widgetName="%Palette.JMenuItem">
-               <property id="selected" name="selected" gencode="false"/>
+               <property name="selected" gencode="false"/>
          </widget>
          <widget
                abstract="false"
@@ -645,7 +629,6 @@
                widgetName="%Palette.JCheckBoxMenuItem">
                <property
                      gencode="true"
-                     id="selected"
                      name="selected"/>
          </widget>
          <widget
@@ -658,7 +641,6 @@
                widgetName="%Palette.JRadioButtonMenuItem">
                <property
                      gencode="true"
-                     id="selected"
                      name="selected"/>
          </widget>
          <widget

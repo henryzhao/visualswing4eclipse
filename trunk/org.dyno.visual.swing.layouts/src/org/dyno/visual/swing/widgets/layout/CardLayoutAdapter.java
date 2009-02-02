@@ -124,8 +124,8 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
-		WidgetProperty hgapProperty = new WidgetProperty("hgap","hgap", CardLayout.class);
-		WidgetProperty vgapProperty = new WidgetProperty("vgap", "vgap", CardLayout.class);
+		WidgetProperty hgapProperty = new WidgetProperty("hgap", CardLayout.class);
+		WidgetProperty vgapProperty = new WidgetProperty("vgap", CardLayout.class);
 		return new IWidgetPropertyDescriptor[]{hgapProperty, vgapProperty};
 	}
 

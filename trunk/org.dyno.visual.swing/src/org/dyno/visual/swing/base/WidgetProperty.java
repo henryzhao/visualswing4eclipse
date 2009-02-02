@@ -66,7 +66,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 	protected String helpContextId;
 	protected String description;
 	protected String propertyName;
-	protected String id;
 	protected String displayName;
 	protected String[] filters;
 
@@ -76,10 +75,9 @@ public class WidgetProperty extends AbstractAdaptable implements
 	protected IValueParser parser;
 
 	
-	public WidgetProperty(String id, String name, Class beanClass,
+	public WidgetProperty(String name, Class beanClass,
 			ILabelProviderFactory label, ICellEditorFactory editor) {
 		this.beanClass = beanClass;
-		this.id = id;
 		this.propertyName = name;
 		try {
 			propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
@@ -102,9 +100,8 @@ public class WidgetProperty extends AbstractAdaptable implements
 	}
 
 	
-	public WidgetProperty(String id, String name, Class beanClass) {
+	public WidgetProperty(String name, Class beanClass) {
 		this.beanClass = beanClass;
-		this.id = id;
 		this.propertyName = name;
 		try {
 			propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
@@ -131,7 +128,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 		this.beanClass = beanClass;
-		id = config.getAttribute("id");
 		propertyName = config.getAttribute("name");
 		if (propertyDescriptor == null) {
 			try {
@@ -602,7 +598,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 
 	@Override
 	public Object getId() {
-		return id;
+		return propertyName;
 	}
 
 	@Override
@@ -637,7 +633,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
 		Map<String, Boolean> editedMap=adapter.getEditingMap();
-		Boolean bool = editedMap.get(id);
+		Boolean bool = editedMap.get(propertyName);
 		return bool == null ? false : bool.booleanValue();
 	}
 
