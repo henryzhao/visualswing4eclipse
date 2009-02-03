@@ -455,16 +455,17 @@ public class GlassTarget extends DropTarget implements MouseInputListener,
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if (e.isConsumed()||e.getButton()!=MouseEvent.BUTTON1)
+		if (e.isConsumed() || e.getButton() != MouseEvent.BUTTON1)
 			return;
 		if (e.getClickCount() > 1 && !isAddingState() && stopEditing()) {
 			Point point = e.getPoint();
-			Component hovered = designer.componentAt(point,
-					WidgetAdapter.ADHERE_PAD);
+			Component hovered = designer.componentAt(point, WidgetAdapter.ADHERE_PAD);
 			if (hovered != null) {
-				Point loc = SwingUtilities.convertPoint(designer, point,
-						hovered);
+				Point loc = SwingUtilities.convertPoint(designer, point, hovered);
 				startEditComponent(hovered, loc);
+			} else {
+				Point loc = SwingUtilities.convertPoint(designer, point, designer.getRoot());
+				startEditComponent(designer.getRoot(), loc);
 			}
 		}
 	}

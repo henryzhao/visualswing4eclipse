@@ -1305,6 +1305,14 @@
                class="javax.swing.JLabel"
                implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
          </adapter>
+         <adapter
+               class="javax.swing.JFrame"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JFrameEdtiorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JDialog"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JDialogEdtiorAdapter">
+         </adapter>
       </interface>
       <interface
           class="org.dyno.visual.swing.plugin.spi.IMenuContext"
