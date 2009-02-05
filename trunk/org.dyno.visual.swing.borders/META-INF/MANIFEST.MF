@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing.borders;singleton:=true
-Bundle-Version: 0.9.8.I20090203-1200
+Bundle-Version: 0.9.8.I20090205-1400
 Require-Bundle: org.dyno.visual.swing,
  org.eclipse.jface,
  org.eclipse.ui.views,
