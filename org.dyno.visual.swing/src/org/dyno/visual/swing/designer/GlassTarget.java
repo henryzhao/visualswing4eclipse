@@ -475,12 +475,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			iEditor.setValue(editorAdapter.getWidgetValue());
 			iEditor.addChangeListener(this);
 			Rectangle bounds = editorAdapter.getEditorBounds();
-			if (adapter.isRoot())
-				bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
-			else if (((CompositeAdapter) adapter.getParentAdapter()).isEnclosingContainer())
-				bounds = SwingUtilities.convertRectangle(((CompositeAdapter) adapter.getParentAdapter()).getWidget(), bounds, designer);
-			else
-				bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
+			bounds = SwingUtilities.convertRectangle(hovered, bounds, designer);
 			Component comp = iEditor.getComponent();
 			Font f = adapter.getWidget().getFont();
 			if (f != null) {
