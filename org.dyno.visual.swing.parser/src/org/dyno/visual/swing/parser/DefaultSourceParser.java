@@ -43,6 +43,7 @@ import org.dyno.visual.swing.plugin.spi.IConstants;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
+import org.dyno.visual.swing.plugin.spi.ParserException;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
@@ -124,7 +125,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	@Override
-	public WidgetAdapter parse(ICompilationUnit unit, IProgressMonitor monitor) {
+	public WidgetAdapter parse(ICompilationUnit unit, IProgressMonitor monitor) throws ParserException {
 		try {
 			IType[] types = unit.getPrimary().getAllTypes();
 			for (IType type : types) {
@@ -134,43 +135,40 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 						return result;
 				}
 			}
-		} catch (Exception e) {
-			ParserPlugin.getLogger().error(e);
+		} catch (JavaModelException jme) {
+			ParserPlugin.getLogger().error(jme);
+			throw new ParserException(jme);
 		}
 		return null;
 	}
-	private WidgetAdapter processType(ICompilationUnit unit, IType type)
-			throws JavaModelException {
+	private WidgetAdapter processType(ICompilationUnit unit, IType type) throws ParserException {
 		try {
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-            java_project.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);			String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(java_project);
+			java_project.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
+			String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(java_project);
 			URL[] urls = new URL[classPath.length];
-			for(int i=0;i<classPath.length;i++){
+			for (int i = 0; i < classPath.length; i++) {
 				File cp = new File(classPath[i]);
-				if(cp.exists())
-					urls[i]=cp.toURI().toURL();
+				if (cp.exists())
+					urls[i] = cp.toURI().toURL();
 			}
 			final Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
-				ILookAndFeelAdapter lnfAdapter = ExtensionRegistry
-						.getLnfAdapter(lnf);
+				ILookAndFeelAdapter lnfAdapter = ExtensionRegistry.getLnfAdapter(lnf);
 				if (lnfAdapter != null) {
 					LookAndFeel newlnf = lnfAdapter.getLookAndFeelInstance();
-					Component bean = (Component) AwtEnvironment.runWithLnf(
-							newlnf, new ISyncUITask() {
-								@Override
-								public Object doTask() throws Throwable {
-									return createBeanFromClass(beanClass);
-								}
-							});
-					WidgetAdapter beanAdapter = ExtensionRegistry
-							.createWidgetAdapter(bean);
+					Component bean = (Component) AwtEnvironment.runWithLnf(newlnf, new ISyncUITask() {
+						@Override
+						public Object doTask() throws Throwable {
+							return createBeanFromClass(beanClass);
+						}
+					});
+					WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
 					ASTParser parser = ASTParser.newParser(AST.JLS3);
 					parser.setSource(unit);
-					CompilationUnit cunit = (CompilationUnit) parser
-							.createAST(null);
+					CompilationUnit cunit = (CompilationUnit) parser.createAST(null);
 					parseEventListener(cunit, beanAdapter);
 					initDesignedWidget(cunit, bean);
 					parsePropertyValue(lnf, cunit, beanAdapter);
@@ -178,8 +176,11 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					return beanAdapter;
 				}
 			}
+		} catch (ParserException pe) {
+			throw pe;
 		} catch (Throwable e) {
 			ParserPlugin.getLogger().error(e);
+			throw new ParserException(e);
 		}
 		return null;
 	}
@@ -221,7 +222,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
-	private void initDesignedWidget(CompilationUnit cunit, Component bean) {
+	private void initDesignedWidget(CompilationUnit cunit, Component bean) throws ParserException {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
@@ -237,58 +238,71 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 						}
 					}
 				}
+			} catch (ParserException e) {
+				throw e;
 			} catch (Exception e) {
 				ParserPlugin.getLogger().error(e);
+				throw new ParserException(e);
 			}
 		}
 	}
-	private void parseField(CompilationUnit cunit, Component bean, Field field) {
+	private void parseField(CompilationUnit cunit, Component bean, Field field) throws ParserException {
 		Class clazz = bean.getClass();
 		String fieldName = field.getName();
 		field.setAccessible(true);
 		Object fieldValue = null;
 		try {
-			fieldValue = field.get(bean);
-		}catch(Exception e){
+			fieldValue = field.get(bean);			
+		} catch (Exception e) {
 			ParserPlugin.getLogger().error(e);
-			return;
+			throw new ParserException(e);
 		}
+		
 		JComponent fieldComponent = (JComponent) fieldValue;
 		WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
-		try{
-			String widgetName = getNameFromFieldName(fieldName);
-			adapter.setName(widgetName);
-			adapter.setLastName(widgetName);
-			int flags = field.getModifiers();
-			if (Modifier.isPrivate(flags)) {
-				adapter.setFieldAccess(WidgetAdapter.ACCESS_PRIVATE);
-			} else if (Modifier.isProtected(flags)) {
-				adapter.setFieldAccess(WidgetAdapter.ACCESS_PROTECTED);
-			} else if (Modifier.isPublic(flags)) {
-				adapter.setFieldAccess(WidgetAdapter.ACCESS_PUBLIC);
-			} else {
-				adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
-			}
-		}catch(Exception e){
-			ParserPlugin.getLogger().warning(e);
+		String widgetName = getNameFromFieldName(fieldName);
+		adapter.setName(widgetName);
+		adapter.setLastName(widgetName);
+		
+		int flags = field.getModifiers();
+		setAdapterFieldAccess(adapter, flags);
+		
+		
+		String getName = getGetMethodName(fieldName);
+		Method getMethod = null;
+		try {
+			getMethod = clazz.getDeclaredMethod(getName);
+		} catch (NoSuchMethodException nsme) {
+			throw new ParserException("Method " + getName + "() is not found!\n" + "Please define it to initialize " + fieldName);
 		}
-		try{
-			String getName = getGetMethodName(fieldName);
-			Method getMethod = clazz.getDeclaredMethod(getName);
-			int flags = getMethod.getModifiers();
-			if (Modifier.isPrivate(flags)) {
-				adapter.setGetAccess(WidgetAdapter.ACCESS_PRIVATE);
-			} else if (Modifier.isProtected(flags)) {
-				adapter.setGetAccess(WidgetAdapter.ACCESS_PROTECTED);
-			} else if (Modifier.isPublic(flags)) {
-				adapter.setGetAccess(WidgetAdapter.ACCESS_PUBLIC);
-			} else {
-				adapter.setGetAccess(WidgetAdapter.ACCESS_DEFAULT);
-			}
-		} catch (Exception e) {
-			ParserPlugin.getLogger().warning(e);
-		}
+		
+		flags = getMethod.getModifiers();
+		setAdapterGetMethodAccess(adapter, flags);
 		parseEventListener(cunit, adapter);
+	}
+
+	private void setAdapterGetMethodAccess(WidgetAdapter adapter, int flags) {
+		if (Modifier.isPrivate(flags)) {
+			adapter.setGetAccess(WidgetAdapter.ACCESS_PRIVATE);
+		} else if (Modifier.isProtected(flags)) {
+			adapter.setGetAccess(WidgetAdapter.ACCESS_PROTECTED);
+		} else if (Modifier.isPublic(flags)) {
+			adapter.setGetAccess(WidgetAdapter.ACCESS_PUBLIC);
+		} else {
+			adapter.setGetAccess(WidgetAdapter.ACCESS_DEFAULT);
+		}
+	}
+
+	private void setAdapterFieldAccess(WidgetAdapter adapter, int flags) {
+		if (Modifier.isPrivate(flags)) {
+			adapter.setFieldAccess(WidgetAdapter.ACCESS_PRIVATE);
+		} else if (Modifier.isProtected(flags)) {
+			adapter.setFieldAccess(WidgetAdapter.ACCESS_PROTECTED);
+		} else if (Modifier.isPublic(flags)) {
+			adapter.setFieldAccess(WidgetAdapter.ACCESS_PUBLIC);
+		} else {
+			adapter.setFieldAccess(WidgetAdapter.ACCESS_DEFAULT);
+		}
 	}
 
 	private static String getBeanClassLnf(Class beanClass) {
@@ -309,7 +323,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
-	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) {
+	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) throws ParserException{
 		EventSetDescriptor[] esds = adapter.getBeanInfo()
 				.getEventSetDescriptors();
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);

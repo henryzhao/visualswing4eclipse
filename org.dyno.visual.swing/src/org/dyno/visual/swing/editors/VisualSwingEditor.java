@@ -270,15 +270,16 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		@Override
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.setTaskName(Messages.VisualSwingEditor_Generating_Designer);
-			if (!createDesignerUI(monitor) && !isTimerAction) {
-				switchToJavaEditor();
-			} else {
-				if (!isTimerAction) {
-					onEditorOpen();
-				} else {
-					validateContent();
-				}
+			try {
+				createDesignerUI(monitor);
+			} catch (Exception e) {
+				designer.initRootWidget(null);
+				designer.setError(e);				
 			}
+			if (isTimerAction)
+				validateContent();
+			else
+				onEditorOpen();
 			isCreatingDesignerUI = false;
 			designer.unlock();
 			monitor.done();
@@ -286,7 +287,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	private boolean createDesignerUI(IProgressMonitor monitor) {
+	private void createDesignerUI(IProgressMonitor monitor) throws Exception {
 		final IFileEditorInput file = (IFileEditorInput) getEditorInput();
 		asyncRunnable(new Runnable() {
 			@Override
@@ -297,28 +298,23 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		});
 		ParserFactory factory = ParserFactory.getDefaultParserFactory();
 		if (factory == null)
-			return false;
+			throw new Exception("No parser factory available!");
 		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file.getFile());
 		hostProject = unit.getJavaProject();
 		ISourceParser sourceParser = factory.newParser();
 		isParsing = true;
 		WhiteBoard.setCurrentEditor(this);
 		this.designer.setCompilationUnit(unit);
-		WidgetAdapter adapter = sourceParser.parse(unit, monitor);
-		if (adapter == null){
-			isParsing=false;
-			return false;
-		}
-		if (designer != null) {
+		try {
+			WidgetAdapter adapter = sourceParser.parse(unit, monitor);
 			designer.initRootWidget(adapter);
 			setUpLookAndFeel(adapter.getWidget().getClass());
 			designer.initNamespaceWithUnit(unit);
 			refreshTree();
-			isParsing=false;
-			return true;
-		} else{
-			isParsing=false;
-			return false;
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			isParsing = false;
 		}
 	}
 	private boolean isParsing;
