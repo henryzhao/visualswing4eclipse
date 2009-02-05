@@ -44,7 +44,7 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 		this.eventSet = eventSet;
 	}
 
-	public boolean parse(TypeDeclaration type) {
+	public boolean parse(TypeDeclaration type){
 		MethodDescriptor[] mListeners = eventSet.getListenerMethodDescriptors();
 		boolean success = false;
 		for (MethodDescriptor mListener : mListeners) {

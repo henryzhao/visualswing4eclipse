@@ -7,9 +7,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-class ProgressBanner extends JLabel implements ActionListener {
+class Banner extends JLabel implements ActionListener {
 	private static final long serialVersionUID = 1L;
-	public ProgressBanner(){
+	private boolean error;
+	public boolean isError(){
+		return error;
+	}
+	public void setError(boolean v){
+		error = v;
+		if (error)
+			setIcon(new ImageIcon(getClass().getResource("/icons/error.png")));
+	}
+	public Banner(){
 		setHorizontalAlignment(CENTER);
 		setVerticalAlignment(CENTER);
 		Timer timer = new Timer(2000, this);
@@ -18,6 +27,7 @@ class ProgressBanner extends JLabel implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		setIcon(new ImageIcon(getClass().getResource("/icons/progress.gif")));
+		if (!error)
+			setIcon(new ImageIcon(getClass().getResource("/icons/progress.gif")));
 	}
 }

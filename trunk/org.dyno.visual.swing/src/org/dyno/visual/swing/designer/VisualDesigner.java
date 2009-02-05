@@ -92,7 +92,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private JComponent popupLayer;
 	private Border designBorder;
 	private Component root;
-	private Component banner;
+	private Banner banner;
 	private List<WidgetAdapter> clipboard;
 
 	private boolean lnfChanged;
@@ -143,7 +143,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		container = new ContainerPane();
 
 		add(container);
-		banner=new ProgressBanner();
+		banner = new Banner();
 		add(banner);
 		setFocusCycleRoot(true);
 		setFocusTraversalPolicy(new DesignerFocusTraversalPolicy());
@@ -156,11 +156,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			if (captured != null && root != null && rootBounds != null
-					&& designBorder != null) {
+			if (captured != null && root != null && rootBounds != null && designBorder != null) {
 				Insets insets = designBorder.getBorderInsets(this);
-				Graphics clipg = g.create(insets.left, insets.top, root
-						.getWidth(), root.getHeight());
+				Graphics clipg = g.create(insets.left, insets.top, root.getWidth(), root.getHeight());
 				clipg.drawImage(captured, 0, 0, this);
 				clipg.dispose();
 			}
@@ -198,8 +196,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public void selectWidgets(Rectangle selectionRegion) {
 		if (root != null) {
-			CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter
-					.getWidgetAdapter(root);
+			CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(root);
 			if (_selectWidget(selectionRegion, rootAdapter)) {
 				if (rootAdapter != null) {
 					rootAdapter.setSelected(false);
@@ -225,12 +222,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		} else
 			return false;
 	}
+
 	private boolean _selectWidget(Rectangle sel, WidgetAdapter adapter) {
 		boolean selected = false;
 		Component current = adapter.getWidget();
 		Rectangle localBounds = SwingUtilities.getLocalBounds(current);
-		Rectangle globalBounds = SwingUtilities.convertRectangle(current,
-				localBounds, this);
+		Rectangle globalBounds = SwingUtilities.convertRectangle(current, localBounds, this);
 		if (sel.contains(globalBounds) && isAdapterVisible(adapter)) {
 			adapter.setSelected(true);
 			selected = true;
@@ -240,8 +237,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			int size = compositeAdapter.getChildCount();
 			for (int i = 0; i < size; i++) {
 				Component child = compositeAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				if (childAdapter != null && _selectWidget(sel, childAdapter)) {
 					selected = true;
 				}
@@ -262,8 +258,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	}
 
 	private void fillLnfAction(MenuManager lnfMenu) {
-		Collection<ILookAndFeelAdapter> lnfAdapters = ExtensionRegistry
-				.getLnfAdapters();
+		Collection<ILookAndFeelAdapter> lnfAdapters = ExtensionRegistry.getLnfAdapters();
 		for (ILookAndFeelAdapter lnfAdapter : lnfAdapters) {
 			String lnfName = lnfAdapter.getName();
 			String lnfClassname = lnfAdapter.getClassname();
@@ -274,12 +269,10 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	private void showPopup(Point dp, List<Component> selected) {
 		MenuManager manager = new MenuManager("#EDIT"); //$NON-NLS-1$
-		MenuManager lnfMenu = new MenuManager(Messages.VisualDesigner_SetLaf,
-				"#LNF"); //$NON-NLS-2$
+		MenuManager lnfMenu = new MenuManager(Messages.VisualDesigner_SetLaf, "#LNF"); //$NON-NLS-2$
 		fillLnfAction(lnfMenu);
 		manager.add(lnfMenu);
-		List<IContextCustomizer> contexts = ExtensionRegistry
-				.getContextCustomizers();
+		List<IContextCustomizer> contexts = ExtensionRegistry.getContextCustomizers();
 		if (!contexts.isEmpty()) {
 			manager.add(new Separator());
 			WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
@@ -300,8 +293,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			if (action == null) {
 				manager.add(new Separator());
 			} else if (action.isRetargetable()) {
-				IWorkbenchAction workbenchAction = action.getActionFactory()
-						.create(window);
+				IWorkbenchAction workbenchAction = action.getActionFactory().create(window);
 				if (workbenchAction instanceof RetargetAction) {
 					RetargetAction retargetAction = (RetargetAction) workbenchAction;
 					page.addPartListener(retargetAction);
@@ -355,8 +347,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public Component componentAt(Point p, int offset) {
 		if (root != null) {
-			MenuElement[] menu_selection = MenuSelectionManager
-					.defaultManager().getSelectedPath();
+			MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
 			if (menu_selection != null && menu_selection.length > 0) {
 				for (int i = menu_selection.length - 1; i >= 0; i--) {
 					if (menu_selection[i] instanceof JPopupMenu) {
@@ -396,11 +387,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private boolean isPointInRoot(Point p, int offset) {
 		int w = root.getWidth();
 		int h = root.getHeight();
-		if (p.x < -offset || p.y < -offset || p.x >= w + offset
-				|| p.y >= h + offset)
+		if (p.x < -offset || p.y < -offset || p.x >= w + offset || p.y >= h + offset)
 			return false;
-		if (p.x >= offset && p.y >= offset && p.x < w - offset
-				&& p.y < h - offset)
+		if (p.x >= offset && p.y >= offset && p.x < w - offset && p.y < h - offset)
 			return false;
 		return true;
 	}
@@ -418,12 +407,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			int count = compAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = compAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
-				if (child.isVisible() && childAdapter != null
-						&& childAdapter.isSelected()) {
-					Point location = SwingUtilities
-							.convertPoint(comp, p, child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				if (child.isVisible() && childAdapter != null && childAdapter.isSelected()) {
+					Point location = SwingUtilities.convertPoint(comp, p, child);
 					Component jcomp = _getComponentAt(child, location, ad);
 					if (jcomp != null)
 						return jcomp;
@@ -432,12 +418,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 			for (int i = 0; i < count; i++) {
 				Component child = compAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
-				if (child.isVisible() && childAdapter != null
-						&& !childAdapter.isSelected()) {
-					Point location = SwingUtilities
-							.convertPoint(comp, p, child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				if (child.isVisible() && childAdapter != null && !childAdapter.isSelected()) {
+					Point location = SwingUtilities.convertPoint(comp, p, child);
 					Component jcomp = _getComponentAt(child, location, ad);
 					if (jcomp != null)
 						return jcomp;
@@ -448,13 +431,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (compParent != null && compParent.isEnclosingContainer()) {
 			Rectangle bounds = compParent.getVisibleRect(comp);
 			if (bounds != null) {
-				if (p.x >= bounds.x - ad && p.x <= bounds.width + ad
-						&& p.y >= bounds.y - ad && p.y <= bounds.height + ad)
+				if (p.x >= bounds.x - ad && p.x <= bounds.width + ad && p.y >= bounds.y - ad && p.y <= bounds.height + ad)
 					return comp;
 			}
 		}
-		if (p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad
-				&& p.y < comp.getHeight() + ad)
+		if (p.x >= -ad && p.y >= -ad && p.x < comp.getWidth() + ad && p.y < comp.getHeight() + ad)
 			return comp;
 		else
 			return null;
@@ -481,20 +462,23 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			undoAction = new UndoActionHandler(site, getUndoContext());
 			redoAction = new RedoActionHandler(site, getUndoContext());
 			IActionBars actionBars = site.getActionBars();
-			actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(),
-					undoAction);
-			actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(),
-					redoAction);
+			actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
+			actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 			rootBounds = adapter.getDesignBounds();
 			root.setSize(rootBounds.width, rootBounds.height);
 			add(root);
 			root.setVisible(true);
 			designBorder = adapter.getDesignBorder();
 			container.setBorder(designBorder);
-			validateContent();
-			setLnfChanged(false);
-			setFocus();
+		} else {
+			root = null;
+			designBorder = null;
+			rootBounds = null;
+			container.setBorder(null);
 		}
+		validateContent();
+		setLnfChanged(false);
+		setFocus();
 	}
 
 	private Image captured;
@@ -519,9 +503,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private RedoActionHandler redoAction;
 
 	public void publishSelection() {
-		WhiteBoard.sendEvent(createEvent(Event.EVENT_SELECTION,
-				new StructuredSelection(
-						new Object[] { new WidgetSelection(root) })));
+		WhiteBoard.sendEvent(createEvent(Event.EVENT_SELECTION, new StructuredSelection(new Object[] { new WidgetSelection(root) })));
 	}
 
 	public void showPopup(Event event) {
@@ -582,22 +564,20 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 		public void layoutContainer(Container parent) {
 			if (root != null && rootBounds != null && designBorder != null) {
-				banner.setBounds(0,0,0,0);
+				banner.setBounds(0, 0, 0, 0);
 				int w = root == null ? 0 : root.getWidth();
 				w = w <= 0 ? rootBounds.width : w;
 				int h = root == null ? 0 : root.getHeight();
 				h = h <= 0 ? rootBounds.height : h;
 				Insets insets = designBorder.getBorderInsets(parent);
-				container.setBounds(rootBounds.x - insets.left, rootBounds.y
-						- insets.top, w + insets.left + insets.right, h
-						+ insets.top + insets.bottom);
+				container.setBounds(rootBounds.x - insets.left, rootBounds.y - insets.top, w + insets.left + insets.right, h + insets.top + insets.bottom);
 				if (root != null) {
 					root.setBounds(rootBounds.x, rootBounds.y, w, h);
 				}
-			}else{
+			} else {
 				int w = parent.getWidth();
 				int h = parent.getHeight();
-				banner.setBounds(0,0,w,h);
+				banner.setBounds(0, 0, w, h);
 			}
 			int w = parent.getWidth();
 			int h = parent.getHeight();
@@ -606,14 +586,14 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 
 		public Dimension minimumLayoutSize(Container parent) {
-			return new Dimension(2 * rootBounds.x, 2 * rootBounds.y);
+			return new Dimension(rootBounds == null ? 24 : 2 * rootBounds.x, rootBounds == null ? 24 : 2 * rootBounds.y);
 		}
 
 		public Dimension preferredLayoutSize(Container parent) {
-			int w = root == null ? rootBounds.width : root.getWidth();
-			int h = root == null ? rootBounds.height : root.getHeight();
-			w += 2 * rootBounds.x;
-			h += 2 * rootBounds.y;
+			int w = root == null ? (rootBounds == null ? 400 : rootBounds.width) : root.getWidth();
+			int h = root == null ? (rootBounds == null ? 300 : rootBounds.height) : root.getHeight();
+			w += rootBounds == null ? 24 : 2 * rootBounds.x;
+			h += rootBounds == null ? 24 : 2 * rootBounds.y;
 			Dimension prefSize = new Dimension(0, 0);
 			int count = popupLayer.getComponentCount();
 			for (int i = 0; i < count; i++) {
@@ -626,8 +606,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 						prefSize.height = bounds.y + bounds.height;
 				}
 			}
-			return new Dimension(prefSize.width > w ? prefSize.width : w,
-					prefSize.height > h ? prefSize.height : h);
+			return new Dimension(prefSize.width > w ? prefSize.width : w, prefSize.height > h ? prefSize.height : h);
 		}
 
 		public void removeLayoutComponent(Component comp) {
@@ -639,10 +618,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (selection.size() > count) {
 			WidgetAdapter parentAdapter = null;
 			for (Component selected : selection) {
-				WidgetAdapter selectedAdapter = WidgetAdapter
-						.getWidgetAdapter(selected);
-				WidgetAdapter selectedParent = selectedAdapter
-						.getParentAdapter();
+				WidgetAdapter selectedAdapter = WidgetAdapter.getWidgetAdapter(selected);
+				WidgetAdapter selectedParent = selectedAdapter.getParentAdapter();
 				if (parentAdapter == null) {
 					parentAdapter = selectedParent;
 				} else if (parentAdapter != selectedParent) {
@@ -653,14 +630,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				return false;
 			} else {
 				for (Component selected : selection) {
-					WidgetAdapter selectedAdapter = WidgetAdapter
-							.getWidgetAdapter(selected);
+					WidgetAdapter selectedAdapter = WidgetAdapter.getWidgetAdapter(selected);
 					if (!selectedAdapter.isResizable()) {
 						return false;
 					}
 				}
-				return ((CompositeAdapter) parentAdapter)
-						.isSelectionAlignResize(id);
+				return ((CompositeAdapter) parentAdapter).isSelectionAlignResize(id);
 			}
 		} else {
 			return false;
@@ -686,15 +661,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			if (isMoved) {
 				WidgetSelection selection = new WidgetSelection(root);
 				Component child = selection.get(0);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
-				CompositeAdapter parentAdapter = (CompositeAdapter) childAdapter
-						.getParentAdapter();
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+				CompositeAdapter parentAdapter = (CompositeAdapter) childAdapter.getParentAdapter();
 				IUndoableOperation operation = parentAdapter.doKeyPressed(e);
 				if (operation != null) {
-					IOperationHistory operationHistory = PlatformUI
-							.getWorkbench().getOperationSupport()
-							.getOperationHistory();
+					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					operation.addContext(getUndoContext());
 					try {
 						operationHistory.execute(operation, null, null);
@@ -755,9 +726,9 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			return null;
 		if (selected.size() == 1) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(selected.get(0));
-			if(adapter.isRoot())
+			if (adapter.isRoot())
 				return (CompositeAdapter) adapter;
-			else if(adapter instanceof CompositeAdapter)
+			else if (adapter instanceof CompositeAdapter)
 				return (CompositeAdapter) adapter;
 			else
 				return adapter.getParentAdapter();
@@ -789,7 +760,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			return null;
 		if (selected.size() == 1) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(selected.get(0));
-			if(adapter.getParentAdapter()!=null)
+			if (adapter.getParentAdapter() != null)
 				return adapter.getParentAdapter();
 			else
 				return (CompositeAdapter) adapter;
@@ -824,9 +795,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public ICompilationUnit getCompilationUnit() {
 		return unit;
 	}
-	public void setCompilationUnit(ICompilationUnit unit){
+
+	public void setCompilationUnit(ICompilationUnit unit) {
 		this.unit = unit;
 	}
+
 	public void initNamespaceWithUnit(ICompilationUnit unit) {
 		setCompilationUnit(unit);
 		WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
@@ -844,7 +817,14 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 		this.namespace = vsname;
 	}
+
 	public void setCursorType(int type) {
 		glass.setCursorType(type);
+	}
+
+	public void setError(Exception e) {
+		banner.setIcon(null);
+		banner.setError(true);
+		banner.setText(e.getMessage());
 	}
 }
