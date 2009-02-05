@@ -27,6 +27,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,8 +36,8 @@ import org.eclipse.core.runtime.Status;
 
 public class MiddleAlignmentOperation extends AlignmentOperation {
 
-	public MiddleAlignmentOperation(JComponent container) {
-		super(Messages.MiddleAlignmentOperation_Align_Middle, container);
+	public MiddleAlignmentOperation(JComponent container, GroupLayoutAdapter glAdapter) {
+		super(Messages.MiddleAlignmentOperation_Align_Middle, container, glAdapter);
 	}
 
 	@Override

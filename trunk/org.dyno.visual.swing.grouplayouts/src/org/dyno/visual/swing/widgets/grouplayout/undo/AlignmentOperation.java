@@ -23,6 +23,7 @@ import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -34,13 +35,15 @@ public abstract class AlignmentOperation extends AbstractOperation {
 	protected JComponent container;
 	protected List<CompCons> compcons;
 	protected List<WidgetAdapter> widgets;
+	protected GroupLayoutAdapter glAdapter;
 	protected class CompCons {
 		Component component;
 		Constraints constraints;
 	}
 
-	public AlignmentOperation(String name, JComponent container) {
+	public AlignmentOperation(String name, JComponent container, GroupLayoutAdapter glAdapter) {
 		super(name);
+		this.glAdapter = glAdapter;
 		this.container = container;
 		this.widgets = new ArrayList<WidgetAdapter>();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);

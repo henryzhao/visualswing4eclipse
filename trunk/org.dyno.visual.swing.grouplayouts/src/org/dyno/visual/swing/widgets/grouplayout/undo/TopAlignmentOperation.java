@@ -26,6 +26,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,8 +35,8 @@ import org.eclipse.core.runtime.Status;
 
 public class TopAlignmentOperation extends AlignmentOperation {
 
-	public TopAlignmentOperation(JComponent container) {
-		super(Messages.TopAlignmentOperation_Align_Top, container);
+	public TopAlignmentOperation(JComponent container, GroupLayoutAdapter glAdapter) {
+		super(Messages.TopAlignmentOperation_Align_Top, container, glAdapter);
 	}
 
 	@Override
