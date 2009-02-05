@@ -27,6 +27,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,8 +36,8 @@ import org.eclipse.core.runtime.Status;
 
 public class SameWidthOperation extends AlignmentOperation {
 
-	public SameWidthOperation(JComponent container) {
-		super(Messages.SameWidthOperation_Same_Width, container);
+	public SameWidthOperation(JComponent container, GroupLayoutAdapter glAdapter) {
+		super(Messages.SameWidthOperation_Same_Width, container, glAdapter);
 	}
 
 	@Override
@@ -76,6 +77,7 @@ public class SameWidthOperation extends AlignmentOperation {
 					constraints = new Constraints(trailing, constraints.getVertical());
 				}
 				layout.setConstraints(child, constraints);
+				glAdapter.adjustLayout(child);
 			}
 		} else if (postAlignment instanceof Trailing) {
 			for (int i = 1; i < widgets.size(); i++) {
@@ -102,6 +104,7 @@ public class SameWidthOperation extends AlignmentOperation {
 					constraints = new Constraints(trailing, constraints.getVertical());
 				}
 				layout.setConstraints(child, constraints);
+				glAdapter.adjustLayout(child);
 			}
 		} else if (postAlignment instanceof Bilateral) {
 			for (int i = 1; i < widgets.size(); i++) {
@@ -133,6 +136,7 @@ public class SameWidthOperation extends AlignmentOperation {
 					constraints = new Constraints(bilateral, constraints.getVertical());
 				}
 				layout.setConstraints(child, constraints);
+				glAdapter.adjustLayout(child);
 			}
 		}
 		container.invalidate();

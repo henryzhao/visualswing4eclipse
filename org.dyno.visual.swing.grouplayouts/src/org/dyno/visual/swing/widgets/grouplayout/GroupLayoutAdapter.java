@@ -477,52 +477,88 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		Alignment horizontal = constraints.getHorizontal();
 		if (horizontal instanceof Leading) {
 			Leading leading = (Leading) horizontal;
-			int now_width = widget.getWidth();
-			int pref_width = widget.getPreferredSize().width;
-			int delta_width = pref_width - now_width;
-			if (delta_width != 0 && leading.getSize() == Alignment.PREFERRED) {
-				if(!adjustHorizontalLeadingBy(widget, delta_width)){
-					leading.setSize(now_width);
+			if (leading.getSize() == Alignment.PREFERRED) {
+				int now_width = widget.getWidth();
+				int pref_width = widget.getPreferredSize().width;
+				int delta_width = pref_width - now_width;
+				if (delta_width != 0) {
+					if (!adjustHorizontalLeadingBy(widget, delta_width)) {
+						leading.setSize(now_width);
+					}
+					container.doLayout();
+					container.validate();
 				}
-				container.doLayout();
-				container.validate();
+			}else{
+				int delta_width = leading.getSize()-widget.getWidth();
+				if (delta_width != 0) {
+					adjustHorizontalLeadingBy(widget, delta_width);
+					container.doLayout();
+					container.validate();
+				}
 			}
 		} else if (horizontal instanceof Trailing) {
 			Trailing trailing = (Trailing) horizontal;
-			int now_width = widget.getWidth();
-			int pref_width = widget.getPreferredSize().width;
-			int delta_width = pref_width - now_width;
-			if (delta_width != 0 && trailing.getSize() == Alignment.PREFERRED) {
-				if(!adjustHorizontalTrailingBy(widget, delta_width)){
-					trailing.setSize(now_width);
+			if (trailing.getSize() == Alignment.PREFERRED) {
+				int now_width = widget.getWidth();
+				int pref_width = widget.getPreferredSize().width;
+				int delta_width = pref_width - now_width;
+				if (delta_width != 0) {
+					if (!adjustHorizontalTrailingBy(widget, delta_width)) {
+						trailing.setSize(now_width);
+					}
+					container.doLayout();
+					container.validate();
 				}
-				container.doLayout();
-				container.validate();
+			}else{
+				int delta_width = trailing.getSize() - widget.getWidth();
+				if (delta_width != 0) {
+					adjustHorizontalTrailingBy(widget, delta_width);
+					container.doLayout();
+					container.validate();
+				}
 			}
 		}
 
 		Alignment vertical = constraints.getVertical();
 		if (vertical instanceof Leading) {
 			Leading leading = (Leading) vertical;
-			int now_height = widget.getHeight();
-			int pref_height = widget.getPreferredSize().height;
-			int delta_height = pref_height - now_height;
-			if (delta_height != 0 && leading.getSize() == Alignment.PREFERRED) {
-				if(!adjustVerticalLeadingBy(widget, delta_height))
-					leading.setSize(now_height);
-				container.doLayout();
-				container.validate();
+			if (leading.getSize() == Alignment.PREFERRED) {
+				int now_height = widget.getHeight();
+				int pref_height = widget.getPreferredSize().height;
+				int delta_height = pref_height - now_height;
+				if (delta_height != 0) {
+					if (!adjustVerticalLeadingBy(widget, delta_height))
+						leading.setSize(now_height);
+					container.doLayout();
+					container.validate();
+				}
+			}else{
+				int delta_height = leading.getSize() - widget.getHeight();
+				if(delta_height!=0){
+					adjustVerticalLeadingBy(widget, delta_height);
+					container.doLayout();
+					container.validate();
+				}
 			}
 		} else if (vertical instanceof Trailing) {
 			Trailing trailing = (Trailing) vertical;
-			int now_height = widget.getHeight();
-			int pref_height = widget.getPreferredSize().height;
-			int delta_height = pref_height - now_height;
-			if (delta_height != 0 && trailing.getSize() == Alignment.PREFERRED) {
-				if(!adjustVerticalTrailingBy(widget, delta_height))
-					trailing.setSize(now_height);
-				container.doLayout();
-				container.validate();
+			if (trailing.getSize() == Alignment.PREFERRED) {
+				int now_height = widget.getHeight();
+				int pref_height = widget.getPreferredSize().height;
+				int delta_height = pref_height - now_height;
+				if (delta_height != 0) {
+					if (!adjustVerticalTrailingBy(widget, delta_height))
+						trailing.setSize(now_height);
+					container.doLayout();
+					container.validate();
+				}
+			}else{
+				int delta_height = trailing.getSize() - widget.getHeight();
+				if(delta_height!=0){
+					adjustVerticalTrailingBy(widget, delta_height);
+					container.doLayout();
+					container.validate();
+				}
 			}
 		}
 	}
@@ -770,35 +806,35 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	}
 
 	private IUndoableOperation getTop() {
-		return new TopAlignmentOperation(container);
+		return new TopAlignmentOperation(container, this);
 	}
 
 	private IUndoableOperation getRight() {
-		return new RightAlignmentOperation(container);
+		return new RightAlignmentOperation(container, this);
 	}
 
 	private IUndoableOperation getLeft() {
-		return new LeftAlignmentOperation(container);
+		return new LeftAlignmentOperation(container, this);
 	}
 
 	private IUndoableOperation getBottom() {
-		return new BottomAlignmentOperation(container);
+		return new BottomAlignmentOperation(container, this);
 	}
 
 	private IUndoableOperation getCenter() {
-		return new CenterAlignmentOperation(container);
+		return new CenterAlignmentOperation(container, this);
 	}
 
 	private IUndoableOperation getMiddle() {
-		return new MiddleAlignmentOperation(container);
+		return new MiddleAlignmentOperation(container, this);
 	}
 
 	private IUndoableOperation getSameWidth() {
-		return new SameWidthOperation(container);
+		return new SameWidthOperation(container, this);
 	}
 
 	private IUndoableOperation getSameHeight() {
-		return new SameHeightOperation(container);
+		return new SameHeightOperation(container, this);
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Trailing;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,8 +35,8 @@ import org.eclipse.core.runtime.Status;
 
 public class LeftAlignmentOperation extends AlignmentOperation {
 
-	public LeftAlignmentOperation(JComponent container) {
-		super(Messages.LeftAlignmentOperation_Align_Left, container);
+	public LeftAlignmentOperation(JComponent container, GroupLayoutAdapter glAdapter) {
+		super(Messages.LeftAlignmentOperation_Align_Left, container, glAdapter);
 	}
 
 	@Override
