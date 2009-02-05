@@ -482,9 +482,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				int pref_width = widget.getPreferredSize().width;
 				int delta_width = pref_width - now_width;
 				if (delta_width != 0) {
-					if (!adjustHorizontalLeadingBy(widget, delta_width)) {
-						leading.setSize(now_width);
-					}
+					adjustHorizontalLeadingBy(widget, delta_width);
 					container.doLayout();
 					container.validate();
 				}
@@ -503,9 +501,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				int pref_width = widget.getPreferredSize().width;
 				int delta_width = pref_width - now_width;
 				if (delta_width != 0) {
-					if (!adjustHorizontalTrailingBy(widget, delta_width)) {
-						trailing.setSize(now_width);
-					}
+					adjustHorizontalTrailingBy(widget, delta_width);
 					container.doLayout();
 					container.validate();
 				}
@@ -527,8 +523,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				int pref_height = widget.getPreferredSize().height;
 				int delta_height = pref_height - now_height;
 				if (delta_height != 0) {
-					if (!adjustVerticalLeadingBy(widget, delta_height))
-						leading.setSize(now_height);
+					adjustVerticalLeadingBy(widget, delta_height);
 					container.doLayout();
 					container.validate();
 				}
@@ -547,8 +542,7 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				int pref_height = widget.getPreferredSize().height;
 				int delta_height = pref_height - now_height;
 				if (delta_height != 0) {
-					if (!adjustVerticalTrailingBy(widget, delta_height))
-						trailing.setSize(now_height);
+					adjustVerticalTrailingBy(widget, delta_height);
 					container.doLayout();
 					container.validate();
 				}
@@ -563,12 +557,11 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 	}
 
-	private boolean adjustVerticalTrailingBy(Component widget, int delta_height) {
+	private void adjustVerticalTrailingBy(Component widget, int delta_height) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
-		boolean moved=false;
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
@@ -580,16 +573,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						leading.setTrailing(leading.getTrailing()
 								+ delta_height);
 						adjustVerticalTrailingBy(target, delta_height);
-						moved=true;
 					} else if (vertical instanceof Bilateral) {
 						Bilateral spring = (Bilateral) vertical;
 						spring.setTrailing(spring.getTrailing() + delta_height);
-						moved=true;
 					}
 				}
 			}
 		}
-		return moved;
 	}
 
 	private boolean isTopRelatedTo(JComponent target, JComponent widget) {
@@ -613,12 +603,11 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return false;
 	}
 
-	private boolean adjustVerticalLeadingBy(Component widget, int delta_height) {
+	private void adjustVerticalLeadingBy(Component widget, int delta_height) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
-		boolean moved=false;
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
@@ -629,16 +618,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						Leading leading = (Leading) vertical;
 						leading.setLeading(leading.getLeading() + delta_height);
 						adjustVerticalLeadingBy(target, delta_height);
-						moved=true;
 					} else if (vertical instanceof Bilateral) {
 						Bilateral spring = (Bilateral) vertical;
 						spring.setLeading(spring.getLeading() + delta_height);
-						moved=true;
 					}
 				}
 			}
 		}
-		return moved;
 	}	
 
 	private boolean isBottomRelatedTo(JComponent target, JComponent widget) {
@@ -662,12 +648,11 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return false;
 	}
 
-	private boolean adjustHorizontalTrailingBy(Component widget, int delta_width) {
+	private void adjustHorizontalTrailingBy(Component widget, int delta_width) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
-		boolean moved=false;
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
@@ -678,16 +663,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						Trailing leading = (Trailing) horizontal;
 						leading.setTrailing(leading.getTrailing()+ delta_width);
 						adjustHorizontalTrailingBy(target, delta_width);
-						moved=true;
 					} else if (horizontal instanceof Bilateral) {
 						Bilateral spring = (Bilateral) horizontal;
 						spring.setTrailing(spring.getTrailing() + delta_width);
-						moved=true;
 					}
 				}
 			}
 		}
-		return moved;
 	}
 
 	private boolean isLeftRelatedTo(JComponent target, JComponent widget) {
@@ -711,12 +693,11 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return false;
 	}
 
-	private boolean adjustHorizontalLeadingBy(Component widget, int delta_width) {
+	private void adjustHorizontalLeadingBy(Component widget, int delta_width) {
 		GroupLayout layout = (GroupLayout) container.getLayout();
 		CompositeAdapter containerAdapter = (CompositeAdapter) WidgetAdapter
 				.getWidgetAdapter(container);
 		int count = containerAdapter.getChildCount();
-		boolean moved=false;
 		for (int i = 0; i < count; i++) {
 			Component target = containerAdapter.getChild(i);
 			if (target != widget) {
@@ -727,16 +708,13 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 						Leading leading = (Leading) horizontal;
 						leading.setLeading(leading.getLeading() + delta_width);
 						adjustHorizontalLeadingBy(target, delta_width);
-						moved=true;
 					} else if (horizontal instanceof Bilateral) {
 						Bilateral spring = (Bilateral) horizontal;
 						spring.setLeading(spring.getLeading() + delta_width);
-						moved=true;
 					}
 				}
 			}
 		}
-		return moved;
 	}
 
 	private boolean isRightRelatedTo(JComponent target, JComponent widget) {
