@@ -14,7 +14,6 @@ package org.dyno.visual.swing.parser.adapters;
 
 import java.awt.Component;
 
-import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.spi.ILayoutParser;
 import org.dyno.visual.swing.parser.spi.IParser;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -30,7 +29,7 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
 		if (!adapter.isRoot())
-			builder.append(getFieldName(adapter.getID()) + ".");
+			builder.append(adapter.getID() + ".");
 		if (!layoutAdapter.isDefaultLayout()) {
 			builder.append("setLayout(");
 			builder.append(getNewInstanceCode(imports));
@@ -57,10 +56,6 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 		return null;
 	}
 
-	protected String getFieldName(String name) {
-		return NamespaceUtil.getFieldName(name);
-	}
-
 	protected abstract String getNewInstanceCode(ImportRewrite imports);
 
 	protected String getAddChildCode(LayoutAdapter adapter, Component child, ImportRewrite imports) {
@@ -69,7 +64,7 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 		WidgetAdapter conAdapter = WidgetAdapter.getWidgetAdapter(adapter.getContainer());
 		WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 		if (!conAdapter.isRoot()) {
-			builder.append(getFieldName(conAdapter.getID()) + ".");
+			builder.append(conAdapter.getID() + ".");
 		}
 		builder.append("add(");
 		IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);

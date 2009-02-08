@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public interface IFieldParser {
 	void parseField(CompilationUnit cunit, Component bean, Field field);
-	boolean isDesigningField(IType type, IField field);
 	boolean removeField(IType type, String fieldName, IProgressMonitor monitor);
+	boolean isDesigningField(IType type, IField field);
 }
 

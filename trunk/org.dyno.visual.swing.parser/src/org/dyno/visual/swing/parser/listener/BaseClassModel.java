@@ -37,11 +37,7 @@ abstract class BaseClassModel extends AbstractClassModel {
 	@Override
 	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		super.init(adapter, eventSet);
-		this.className = (adapter.isRoot() ? "This" : getCapitalName(adapter.getID())) + getCapitalName(eventSet.getName()) + "Listener";
-	}
-
-	private String getCapitalName(String name) {
-		return NamespaceUtil.getCapitalName(name);
+		this.className = (adapter.isRoot() ? "This" : NamespaceUtil.getCapitalName(adapter.getID())) + NamespaceUtil.getCapitalName(eventSet.getName()) + "Listener";
 	}
 
 	@Override

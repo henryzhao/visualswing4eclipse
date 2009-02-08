@@ -39,11 +39,9 @@ public class ButtonGroupFieldParser implements IFieldParser {
 				Object fieldValue = field.get(bean);
 				String fieldName = field.getName();
 				ButtonGroup group = (ButtonGroup) fieldValue;
-				String widgetName = NamespaceUtil
-						.getNameFromFieldName(fieldName);
 				WidgetAdapter rootAdapter = WidgetAdapter
 						.getWidgetAdapter(bean);
-				rootAdapter.addInvisible(widgetName, group);
+				rootAdapter.addInvisible(fieldName, group);
 			} catch (Exception e) {
 				ParserPlugin.getLogger().error(e);
 			}
@@ -60,8 +58,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 			String sig = field.getTypeSignature();
 			if (acceptTypeSignature(sig)) {
 				String fieldName = field.getElementName();
-				String getMethodName = "init"
-						+ NamespaceUtil.getCapitalName(fieldName);
+				String getMethodName = NamespaceUtil.getInitMethodName(fieldName);
 				IMethod method = type.getMethod(getMethodName, new String[0]);
 				if (method != null && method.exists()) {
 					return true;
@@ -76,9 +73,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 	@Override
 	public boolean removeField(IType type, String fieldName,
 			IProgressMonitor monitor) {
-		String name = NamespaceUtil.getFieldName(fieldName);
-		IMethod method = type.getMethod("init"
-				+ NamespaceUtil.getCapitalName(name), new String[0]);
+		IMethod method = type.getMethod(NamespaceUtil.getInitMethodName(fieldName), new String[0]);
 		if (method != null && method.exists()) {
 			try {
 				method.delete(true, monitor);

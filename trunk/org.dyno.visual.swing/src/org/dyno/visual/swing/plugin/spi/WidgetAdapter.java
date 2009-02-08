@@ -60,8 +60,17 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.osgi.framework.Bundle;
@@ -327,13 +336,59 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		selected = b;
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
-			if (b)
+			if (b){
 				designer.addSelectedWidget(this);
-			else
+				revealInEditor(designer, designer.getCompilationUnit());
+			}else
 				designer.removeSelectedWidget(this);
 		}
 	}
+	private void revealInEditor(VisualDesigner designer, ICompilationUnit unit) {
+		String methodName = isRoot()?INIT_METHOD_NAME:getGetMethodName(getName());
+		try {
+			String unitname = unit.getElementName();
+			int dot = unitname.indexOf('.');
+			if (dot != -1)
+				unitname = unitname.substring(0, dot);
+			IType type = unit.getType(unitname);
+			final IMethod method = type.getMethod(methodName, new String[0]);
+			IWorkbenchWindow window = JavaUtil.getEclipseWindow();
+			if(window!=null){
+				IWorkbenchPage[] pages = window.getPages();
+				for(IWorkbenchPage page:pages){
+					IEditorReference[] refs = page.getEditorReferences();
+					for(IEditorReference ref:refs){
+						if(ref.getId().equals(JavaUI.ID_CU_EDITOR)){
+							IEditorInput input = ref.getEditorInput();
+							IEditorInput thisinput = designer.getEditor().getEditorInput();
+							if(thisinput.equals(input)){
+								final IEditorReference ieref=ref;
+								designer.getEditor().getDisplay().asyncExec(new Runnable(){
+									@Override
+									public void run() {
+										moveToMethod(ieref.getEditor(true), method);
+									}
+								});
+								return;
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
+	}
 
+	private void moveToMethod(IEditorPart editor, IMethod method) {
+		JavaUI.revealInEditor(editor, (IJavaElement)method);
+	}	
+	private String getGetMethodName(String name){
+		String methodName = (String) getProperty("getMethodName");
+		if(methodName!=null)
+			return methodName;
+		return "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+	}
 	public void changeNotify() {
 		VisualDesigner d = getDesigner();
 		if (d != null) {
@@ -860,5 +915,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public String getPreferredLookAndFeel() {
 		return (String) getProperty("preferred.lookandfeel");
+	}
+	public WidgetAdapter findWidgetAdapter(String compname){
+		if(compname.equals(getName()))
+			return this;
+		return null;
 	}
 }

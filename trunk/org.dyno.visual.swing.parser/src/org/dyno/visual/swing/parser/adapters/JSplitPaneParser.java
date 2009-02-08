@@ -27,7 +27,7 @@ public class JSplitPaneParser extends CompositeParser {
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JSplitPane jsp = (JSplitPane) adapter.getWidget();
 		int oritentation = jsp.getOrientation();
-		String fieldName = getFieldName(adapter.getID());
+		String fieldName = adapter.getID();
 		String prefix = "";
 		if (!adapter.isRoot())
 			prefix = fieldName + ".";

@@ -30,7 +30,7 @@ public class JToolBarParser extends CompositeParser {
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(ca.getID()) + ".");
+				builder.append(ca.getID() + ".");
 			builder.append("add(");
 			builder.append(getMethodName + "());\n");
 		}

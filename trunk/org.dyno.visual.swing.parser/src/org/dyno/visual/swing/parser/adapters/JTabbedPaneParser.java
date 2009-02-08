@@ -37,7 +37,7 @@ public class JTabbedPaneParser extends CompositeParser {
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(ca.getID()) + ".");
+				builder.append(ca.getID() + ".");
 			builder.append("addTab(");
 			String title = jtp.getTitleAt(i);
 			String tip = jtp.getToolTipTextAt(i);

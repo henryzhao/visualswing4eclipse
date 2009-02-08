@@ -230,8 +230,8 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				field.setAccessible(true);
 				Object fieldValue = field.get(bean);
 				if (fieldValue != null) {
-					if (JComponent.class.isAssignableFrom(field.getType())) {
-						parseField(cunit, bean, field);
+					if (Component.class.isAssignableFrom(field.getType())) {
+						parseField(cunit, bean, field, (Component)fieldValue);
 					} else {
 						for (IFieldParser parser : fieldParsers) {
 							parser.parseField(cunit, bean, field);
@@ -246,7 +246,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
-	private void parseField(CompilationUnit cunit, Component bean, Field field) throws ParserException {
+	private void parseField(CompilationUnit cunit, Component bean, Field field, Component widget) throws ParserException {
 		Class clazz = bean.getClass();
 		String fieldName = field.getName();
 		field.setAccessible(true);
@@ -260,20 +260,27 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		
 		JComponent fieldComponent = (JComponent) fieldValue;
 		WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
-		String widgetName = getNameFromFieldName(fieldName);
-		adapter.setName(widgetName);
-		adapter.setLastName(widgetName);
+		
+		adapter.setName(fieldName);
+		adapter.setLastName(fieldName);
 		
 		int flags = field.getModifiers();
 		setAdapterFieldAccess(adapter, flags);
 		
 		
-		String getName = getGetMethodName(fieldName);
+		String getName = NamespaceUtil.getGetMethodName(fieldName);
 		Method getMethod = null;
 		try {
 			getMethod = clazz.getDeclaredMethod(getName);
 		} catch (NoSuchMethodException nsme) {
-			throw new ParserException("Method " + getName + "() is not found!\n" + "Please define it to initialize " + fieldName);
+			getName = NamespaceUtil.getGetMethodName(cunit, fieldName);
+			try {
+				getMethod = clazz.getDeclaredMethod(getName);
+				WidgetAdapter ba = WidgetAdapter.getWidgetAdapter(widget);
+				ba.setProperty("getMethodName", getName);
+			} catch (NoSuchMethodException e) {
+				throw new ParserException("Method " + getName + "() is not found!\n" + "Please define it to initialize " + fieldName);
+			}
 		}
 		
 		flags = getMethod.getModifiers();
@@ -334,20 +341,11 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 	}
 
-	private String getNameFromFieldName(String fieldName) {
-		return NamespaceUtil.getNameFromFieldName(fieldName);
-	}
-
 	private boolean isDesigningField(IType type, IField field) {
 		try {
 			String sig = field.getTypeSignature();
 			if (isRegisteredWidget(sig)) {
-				String fieldName = field.getElementName();
-				String getMethodName = getGetMethodName(fieldName);
-				IMethod method = type.getMethod(getMethodName, new String[0]);
-				if (method != null && method.exists()) {
-					return true;
-				}
+				return true;
 			}
 			for (IFieldParser parser : fieldParsers) {
 				if (parser.isDesigningField(type, field))
@@ -420,19 +418,24 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				for (String iadapter : fieldAdapters) {
 					declared.remove(iadapter);
 				}
-				for (String declare : declared) {
-					removeField(type, declare, monitor);
+				ASTParser astparser = ASTParser.newParser(AST.JLS3);
+				astparser.setSource(unit);
+				CompilationUnit cunit = (CompilationUnit) astparser.createAST(null);
+				List<String> getmethods=new ArrayList<String>();
+				for(int i=0;i<declared.size();i++){
+					String declare = declared.get(i);
+					String getmethod = NamespaceUtil.getGetMethodName(cunit, declare);
+					getmethods.add(getmethod);
 				}
-				IMethod[] methods = type.getMethods();
-				for (IMethod method : methods) {
-					if (isUnusedPrivateMethod(type, method)) {
-						method.delete(false, monitor);
-					}
+				for (int i=0;i<declared.size();i++) {
+					String declare = declared.get(i);
+					String getmethod=getmethods.get(i);
+					removeField(type, declare, getmethod, monitor);
 				}
 				IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
 				if (lnfField.exists()) {
 					lnfField.delete(false, monitor);
-				}
+				 }
 				String className = (String) root.getPreferredLookAndFeel();
 				String newfield = "private static final " //$NON-NLS-1$
 						+ imports.addImport("java.lang.String") //$NON-NLS-1$
@@ -514,41 +517,8 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		return null;
 	}
 
-
-	private boolean isUnusedPrivateMethod(IType type, IMethod method) {
-		try {
-			int flags = method.getFlags();
-			if (Flags.isPrivate(flags)) {
-				String sig = method.getReturnType();
-				if (isRegisteredWidget(sig)) {
-					if (isGetMethod(method)) {
-						String fieldName = getFieldNameFromGetMethod(method);
-						IField field = type.getField(fieldName);
-						if (!field.exists()) {
-							return true;
-						}
-					}
-				}
-			}
-		} catch (JavaModelException e) {
-			ParserPlugin.getLogger().error(e);
-		}
-		return false;
-	}
-
-	private String getFieldNameFromGetMethod(IMethod method) {
-		return NamespaceUtil.getFieldNameFromGetMethodName(
-				method.getElementName());
-	}
-
-	private boolean isGetMethod(IMethod method) {
-		return NamespaceUtil.isGetMethodName(
-				method.getElementName());
-	}
-
-	private void removeField(IType type, String fieldName,
-			IProgressMonitor monitor) {
-		IField field = type.getField(getFieldName(fieldName));
+	private void removeField(IType type, String fieldName, String methodName, IProgressMonitor monitor) {
+		IField field = type.getField(fieldName);
 		if (field != null && field.exists()) {
 			try {
 				field.delete(true, monitor);
@@ -557,8 +527,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				return;
 			}
 		}
-		IMethod method = type.getMethod(getGetMethodName(fieldName),
-				new String[0]);
+		IMethod method = type.getMethod(methodName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
 				method.delete(true, monitor);
@@ -572,14 +541,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					return;
 			}
 		}
-	}
-
-	private String getFieldName(String fieldName) {
-		return NamespaceUtil.getFieldName(fieldName);
-	}
-
-	private String getGetMethodName(String fieldName) {
-		return NamespaceUtil.getGetMethodName(fieldName);
 	}
 
 	private ArrayList<String> listBeanName(WidgetAdapter root) {

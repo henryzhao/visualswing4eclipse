@@ -115,7 +115,7 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 			Block body = initMethod.getBody();
 			statements = body.statements();
 		} else {
-			String getMethodName = NamespaceUtil.getGetMethodName(adapter.getID());
+			String getMethodName = NamespaceUtil.getGetMethodName(adapter, adapter.getID());
 			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);
 			if (getMethod != null) {
 				Block body = getMethod.getBody();

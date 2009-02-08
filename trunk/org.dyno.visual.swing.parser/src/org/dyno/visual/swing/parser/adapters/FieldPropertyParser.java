@@ -5,7 +5,6 @@ import java.awt.Component;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.FieldProperty;
 import org.dyno.visual.swing.base.TypeAdapter;
-import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.spi.IPropertyCodeGenerator;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -32,7 +31,6 @@ public class FieldPropertyParser implements IPropertyCodeGenerator, IAdaptableCo
 				}
 				if (!adapter.isRoot()) {
 					String name = adapter.getID();
-					name = NamespaceUtil.getFieldName(name);
 					builder.append(name + ".");
 				}
 				builder.append(property.getFieldName() + "=");

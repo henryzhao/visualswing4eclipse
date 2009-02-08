@@ -39,7 +39,7 @@ public class JPanelParser extends CompositeParser implements IParser,
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
 			if (!adapter.isRoot())
-				builder.append(getFieldName(adapter.getID()) + ".");
+				builder.append(adapter.getID() + ".");
 			builder.append("setLayout(null);\n");
 			int count = ((CompositeAdapter) adapter).getChildCount();
 			for (int i = 0; i < count; i++) {
@@ -49,7 +49,7 @@ public class JPanelParser extends CompositeParser implements IParser,
 				IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 				String getMethodName = childParser.getCreationMethodName();
 				if (!adapter.isRoot())
-					builder.append(getFieldName(adapter.getID()) + ".");
+					builder.append(adapter.getID() + ".");
 				builder.append("add(" + getMethodName + "());\n");
 			}
 		} else {

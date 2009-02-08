@@ -86,7 +86,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		String lastName = adapter.getLastName();
 		String name = adapter.getName();
 		if (lastName != null && !lastName.equals(name)) {
-			IField lastField = type.getField(getFieldName(lastName));
+			IField lastField = type.getField(lastName);
 			try {
 				int flags = RenameSupport.UPDATE_GETTER_METHOD | RenameSupport.UPDATE_REFERENCES | RenameSupport.UPDATE_SETTER_METHOD;
 				RenameSupport rs = RenameSupport.create(lastField, name, flags);
@@ -114,7 +114,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private boolean createNonRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		String name = adapter.getID();
-		IField field = type.getField(getFieldName(name));
+		IField field = type.getField(name);
 		if (field != null) {
 			if (!field.exists()) {
 				if (!createField(type, imports, monitor))
@@ -138,7 +138,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				return false;
 		}
 		IJavaElement sibling = null;
-		String mName = NamespaceUtil.getGetMethodName(name);
+		String mName = NamespaceUtil.getGetMethodName(adapter, name);
 		IMethod method = type.getMethod(mName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
@@ -158,7 +158,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private boolean createGetMethod(IType type, ImportRewrite imports, IProgressMonitor monitor, IJavaElement sibling) {
 		String id = adapter.getID();
-		String getMethodName = NamespaceUtil.getGetMethodName(id);
+		String getMethodName = NamespaceUtil.getGetMethodName(adapter, id);
 		StringBuilder builder = new StringBuilder();
 		builder.append(getAccessCode(adapter.getGetAccess()));
 		builder.append(" ");
@@ -169,12 +169,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append(getMethodName);
 		builder.append("(){\n");
 		builder.append("if(");
-		builder.append(getFieldName(id));
+		builder.append(id);
 		builder.append("==null){\n");
 		builder.append(createGetCode(imports));
 		builder.append("}\n");
 		builder.append("return ");
-		builder.append(getFieldName(id));
+		builder.append(id);
 		builder.append(";\n");
 		builder.append("}\n");
 		try {
@@ -197,7 +197,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append(beanName);
 		builder.append(" ");
 		String id = adapter.getID();
-		builder.append(getFieldName(id));
+		builder.append(id);
 		builder.append(";\n");
 		try {
 			type.createField(builder.toString(), null, false, monitor);
@@ -292,19 +292,15 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		return true;
 	}
 
-	protected String getFieldName(String lastName) {
-		return NamespaceUtil.getFieldName(lastName);
-	}
-
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		String id = adapter.getID();
-		builder.append(getFieldName(id) + " = " + getNewInstanceCode(imports) + ";\n");
+		builder.append(id + " = " + getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
 		CompositeAdapter conAdapter = adapter.getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
 			Rectangle bounds = adapter.getWidget().getBounds();
-			String strBounds = getFieldName(id) + ".setBounds(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ");\n";
+			String strBounds = id + ".setBounds(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ");\n";
 			builder.append(strBounds);
 		}
 		genAddCode(imports, builder);
@@ -338,7 +334,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 			for (EventSetDescriptor eventSet : keySet) {
 				String id = adapter.getID();
 				if (!adapter.isRoot())
-					builder.append(getFieldName(id) + ".");
+					builder.append(id + ".");
 				Method mAdd = eventSet.getAddListenerMethod();
 				builder.append(mAdd.getName() + "(");
 				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
@@ -383,7 +379,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	@Override
 	public String getCreationMethodName() {
-		return NamespaceUtil.getGetMethodName(adapter.getID());
+		return NamespaceUtil.getGetMethodName(adapter, adapter.getID());
 	}
 
 }

@@ -46,7 +46,7 @@ public class CompositeParser extends WidgetParser {
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(((CompositeAdapter) adapter).getID()) + ".");
+				builder.append(((CompositeAdapter) adapter).getID() + ".");
 			builder.append("add(" + getMethodName + "());\n");
 		}
 	}

@@ -3,7 +3,6 @@ package org.dyno.visual.swing.parser.adapters;
 import java.awt.Component;
 
 import org.dyno.visual.swing.base.WidgetProperty;
-import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.spi.IPropertyCodeGenerator;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
@@ -29,7 +28,6 @@ public class WidgetPropertyParser implements IPropertyCodeGenerator, IAdaptableC
 				}
 				if (!adapter.isRoot()) {
 					String name = adapter.getID();
-					name = NamespaceUtil.getFieldName(name);
 					builder.append(name + ".");
 				}
 				builder.append(property.getSetName() + "(");
