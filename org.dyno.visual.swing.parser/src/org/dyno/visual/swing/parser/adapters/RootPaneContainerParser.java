@@ -39,7 +39,7 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 			builder.append("setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();
 			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
-			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getID());
+			String getName=NamespaceUtil.getGetMethodName(jmbAdapter, jmbAdapter.getID());
 			builder.append(getName+"()");
 			builder.append(");\n");
 		}
@@ -54,7 +54,7 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 			builder.append(adapter.getID()+".setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();
 			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
-			String getName=NamespaceUtil.getGetMethodName(jmbAdapter.getID());
+			String getName=NamespaceUtil.getGetMethodName(jmbAdapter, jmbAdapter.getID());
 			builder.append(getName+"()");
 			builder.append(");\n");
 		}

@@ -29,7 +29,7 @@ public class JScrollPaneParser extends CompositeParser {
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
 			if (!adapter.isRoot())
-				builder.append(getFieldName(jspa.getID()) + ".");
+				builder.append(jspa.getID() + ".");
 			builder.append("setViewportView(" + getMethodName + "());\n");
 		}
 	}

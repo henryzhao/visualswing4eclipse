@@ -66,7 +66,7 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 					break;
 				}
 			} else {
-				String getName = getGetMethodName(adapter.getID());
+				String getName = NamespaceUtil.getGetMethodName(adapter, adapter.getID());
 				if (mdName.equals(getName)) {
 					if (createEventMethodForWidget(type, adapter, esd, mListener, md))
 						success = true;
@@ -77,9 +77,6 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 		return success;
 	}
 
-	private String getGetMethodName(String fieldName) {
-		return NamespaceUtil.getGetMethodName(fieldName);
-	}
 	
 	private boolean createEventMethodForWidget(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodDeclaration md) {
 		Block body = md.getBody();

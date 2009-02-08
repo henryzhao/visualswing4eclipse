@@ -44,7 +44,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		String lastName = adapter.getLastName();
 		String name = adapter.getName();
 		if (lastName != null && !lastName.equals(name)) {
-			IField lastField = type.getField(getFieldName(lastName));
+			IField lastField = type.getField(lastName);
 			try {
 				int flags = RenameSupport.UPDATE_GETTER_METHOD
 						| RenameSupport.UPDATE_REFERENCES
@@ -76,7 +76,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 			IProgressMonitor monitor) {
 		boolean success = true;
 		String id = adapter.getID();
-		IField field = type.getField(getFieldName(id));
+		IField field = type.getField(id);
 		IJavaElement sibling = null;
 		if (field != null && !field.exists()) {
 			StringBuilder builder = new StringBuilder();
@@ -86,7 +86,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 			String beanName = imports.addImport(fqcn);
 			builder.append(beanName);
 			builder.append(" ");
-			builder.append(getFieldName(id));
+			builder.append(id);
 			builder.append(";\n");
 			try {
 				type.createField(builder.toString(), sibling, false, monitor);
@@ -112,14 +112,14 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		builder.append("(){\n");
 		String fqcn ="javax.swing.ButtonGroup";
 		String beanName = imports.addImport(fqcn);
-		builder.append(getFieldName(id)+" = new "+beanName+"();\n");
+		builder.append(id+" = new "+beanName+"();\n");
 		List buttons = adapter.getElements();
 		for(int i=0;i<buttons.size();i++){
 			WidgetAdapter btnAdapter = (WidgetAdapter) buttons.get(i);
 			AbstractButton button = (AbstractButton) btnAdapter.getWidget();
 			WidgetAdapter buttonAdapter = WidgetAdapter.getWidgetAdapter(button);
 			IParser btnParser = (IParser) buttonAdapter.getAdapter(IParser.class);
-			builder.append(getFieldName(id)+".add("+btnParser.getCreationMethodName()+"());\n");
+			builder.append(id+".add("+btnParser.getCreationMethodName()+"());\n");
 		}
 		builder.append("}\n");
 		try {
@@ -135,11 +135,9 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 	}
 	@Override
 	public String getCreationMethodName() {
-		return "init"+NamespaceUtil.getCapitalName(adapter.getID());
+		return NamespaceUtil.getInitMethodName(adapter.getID());
 	}	
-	private String getFieldName(String name) {
-		return NamespaceUtil.getFieldName(name);
-	}
+
 	private IJavaElement getInitMethodSibling(IType type) {
 		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);
 		if (method != null && method.exists()) {

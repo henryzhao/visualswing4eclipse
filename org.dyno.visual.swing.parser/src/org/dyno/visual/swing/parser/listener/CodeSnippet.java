@@ -46,9 +46,6 @@ public class CodeSnippet implements IEventMethod, IConstants{
 		this.methodDesc = methodDesc;
 		this.code = code;
 	}
-	private String getGetMethodName(String name) {
-		return NamespaceUtil.getGetMethodName(name);
-	}
 
 	@Override
 	public void editCode(IEditorPart editor) {
@@ -62,7 +59,7 @@ public class CodeSnippet implements IEventMethod, IConstants{
 				name = name.substring(0, dot);
 			IType type = unit.getType(name);
 			String mName = adapter.isRoot() ? INIT_METHOD_NAME
-					: getGetMethodName(adapter.getID());
+					: NamespaceUtil.getGetMethodName(adapter, adapter.getID());
 			IMethod method = type.getMethod(mName, new String[0]);
 			IJavaElement[] children = method.getChildren();
 			for (IJavaElement javaElement : children) {
