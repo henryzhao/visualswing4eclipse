@@ -344,7 +344,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 	}
 	private void revealInEditor(VisualDesigner designer, ICompilationUnit unit) {
-		String methodName = isRoot()?INIT_METHOD_NAME:getGetMethodName(getName());
+		String methodName = isRoot()?INIT_METHOD_NAME:getGetMethodName(getID());
 		try {
 			String unitname = unit.getElementName();
 			int dot = unitname.indexOf('.');

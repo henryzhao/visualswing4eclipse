@@ -274,6 +274,8 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			getMethod = clazz.getDeclaredMethod(getName);
 		} catch (NoSuchMethodException nsme) {
 			getName = NamespaceUtil.getGetMethodName(cunit, fieldName);
+			if(getName==null)
+				throw new ParserException("Method " + NamespaceUtil.getGetMethodName(fieldName) + "() is not found!\n" + "Please define it to initialize " + fieldName);
 			try {
 				getMethod = clazz.getDeclaredMethod(getName);
 				WidgetAdapter ba = WidgetAdapter.getWidgetAdapter(widget);
