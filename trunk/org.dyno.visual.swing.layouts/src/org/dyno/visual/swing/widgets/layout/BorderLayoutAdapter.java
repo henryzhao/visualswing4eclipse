@@ -130,65 +130,67 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		placement = new ArrayList<Rectangle>();
 		constraints = new ArrayList<String>();
 		Point hsp = parent.getMascotLocation();
-		for (WidgetAdapter todrop : parent.getDropWidget()) {
-			Dimension pref = todrop.getWidget().getPreferredSize();
-			int prefw = pref.width == 0 ? todrop.getWidget().getWidth() : pref.width;
-			int prefh = pref.height == 0 ? todrop.getWidget().getHeight() : pref.height;
-			BorderLayout layout = (BorderLayout) container.getLayout();
-			Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
-			int north = prefh + insets.top;
-			if (nComp != null)
-				north = nComp.getHeight() + insets.top;
-			Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
-			int south = prefh + insets.bottom;
-			if (sComp != null)
-				south = sComp.getHeight() + insets.bottom;
-			Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
-			int east = prefw + insets.right;
-			if (eComp != null)
-				east = eComp.getWidth() + insets.right;
-			Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
-			int west = prefw + insets.left;
-			if (wComp != null)
-				west = wComp.getWidth() + insets.left;
-			Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
-			Point thsp = todrop.getHotspotPoint();
-			int x = hsp.x - thsp.x + todrop.getWidget().getWidth() / 2;
-			int y = hsp.y - thsp.y + todrop.getWidget().getHeight() / 2;
-			if (y < north) {
-				constraints.add(BorderLayout.NORTH);
-				forbid.add(nComp != null);
-				placement.add(new Rectangle(insets.left, insets.top, width - insets.left - insets.right, north - insets.top));
-			} else if ((y >= north) && (y < (height - south))) {
-				if (x < west) {
-					constraints.add(BorderLayout.WEST);
-					forbid.add(wComp != null);
-					int t = nComp != null ? north : insets.top;
-					int l = insets.left;
-					int w = west - insets.left;
-					int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
-					placement.add(new Rectangle(l, t, w, h));
-				} else if ((x >= west) && (x < (width - east))) {
-					constraints.add(BorderLayout.CENTER);
-					forbid.add(cComp != null);
-					int t = nComp != null ? north : insets.top;
-					int l = wComp != null ? west : insets.left;
-					int w = width - (wComp != null ? west : insets.left) - (eComp != null ? east : insets.right);
-					int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
-					placement.add(new Rectangle(l, t, w, h));
+		if (hsp != null) {
+			for (WidgetAdapter todrop : parent.getDropWidget()) {
+				Dimension pref = todrop.getWidget().getPreferredSize();
+				int prefw = pref.width == 0 ? todrop.getWidget().getWidth() : pref.width;
+				int prefh = pref.height == 0 ? todrop.getWidget().getHeight() : pref.height;
+				BorderLayout layout = (BorderLayout) container.getLayout();
+				Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
+				int north = prefh + insets.top;
+				if (nComp != null)
+					north = nComp.getHeight() + insets.top;
+				Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
+				int south = prefh + insets.bottom;
+				if (sComp != null)
+					south = sComp.getHeight() + insets.bottom;
+				Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
+				int east = prefw + insets.right;
+				if (eComp != null)
+					east = eComp.getWidth() + insets.right;
+				Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
+				int west = prefw + insets.left;
+				if (wComp != null)
+					west = wComp.getWidth() + insets.left;
+				Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
+				Point thsp = todrop.getHotspotPoint();
+				int x = hsp.x - thsp.x + todrop.getWidget().getWidth() / 2;
+				int y = hsp.y - thsp.y + todrop.getWidget().getHeight() / 2;
+				if (y < north) {
+					constraints.add(BorderLayout.NORTH);
+					forbid.add(nComp != null);
+					placement.add(new Rectangle(insets.left, insets.top, width - insets.left - insets.right, north - insets.top));
+				} else if ((y >= north) && (y < (height - south))) {
+					if (x < west) {
+						constraints.add(BorderLayout.WEST);
+						forbid.add(wComp != null);
+						int t = nComp != null ? north : insets.top;
+						int l = insets.left;
+						int w = west - insets.left;
+						int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
+						placement.add(new Rectangle(l, t, w, h));
+					} else if ((x >= west) && (x < (width - east))) {
+						constraints.add(BorderLayout.CENTER);
+						forbid.add(cComp != null);
+						int t = nComp != null ? north : insets.top;
+						int l = wComp != null ? west : insets.left;
+						int w = width - (wComp != null ? west : insets.left) - (eComp != null ? east : insets.right);
+						int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
+						placement.add(new Rectangle(l, t, w, h));
+					} else {
+						constraints.add(BorderLayout.EAST);
+						forbid.add(eComp != null);
+						int t = nComp != null ? north : insets.top;
+						int l = width - east;
+						int w = east - insets.right;
+						int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
+						placement.add(new Rectangle(l, t, w, h));
+					}
 				} else {
-					constraints.add(BorderLayout.EAST);
-					forbid.add(eComp != null);
-					int t = nComp != null ? north : insets.top;
-					int l = width - east;
-					int w = east - insets.right;
-					int h = height - (nComp != null ? north : insets.top) - (sComp != null ? south : insets.bottom);
-					placement.add(new Rectangle(l, t, w, h));
+					constraints.add(BorderLayout.SOUTH);
+					forbid.add(sComp != null);
+					placement.add(new Rectangle(insets.left, height - south, width - insets.left - insets.right, south - insets.bottom));
 				}
-			} else {
-				constraints.add(BorderLayout.SOUTH);
-				forbid.add(sComp != null);
-				placement.add(new Rectangle(insets.left, height - south, width - insets.left - insets.right, south - insets.bottom));
 			}
 		}
 		parent.setMascotLocation(p);
