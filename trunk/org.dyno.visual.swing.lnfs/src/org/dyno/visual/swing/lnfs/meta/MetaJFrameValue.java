@@ -25,6 +25,8 @@ public class MetaJFrameValue extends WidgetValue {
 		put("enabled", true);
 		put("focusCycleRoot",true);    
 		put("defaultCloseOperation", WindowConstants.HIDE_ON_CLOSE);
+		put("focusableWindowState", true);
+		put("resizable", true);
 	}
 }
 

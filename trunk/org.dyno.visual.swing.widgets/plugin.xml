@@ -41,10 +41,11 @@
          point="org.dyno.visual.swing.widgetAdapter"
          id="org.dyno.visual.swing.widgets.beans"
          name="%SwingBeans">
-         <widget 
-         		class="org.dyno.visual.swing.widgets.ComponentAdapter"
-         		widgetClass="java.awt.Component"
-         		abstract="true">
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.ComponentAdapter"
+               icon="icons/widgets.png"
+               widgetClass="java.awt.Component">
          		<property name="foreground"/>
          		<property name="background"/>
         		<property name="font"/>;        
@@ -56,17 +57,19 @@
         		<property name="focusable"/>
         		<property name="visible"/>         		
          </widget>
-         <widget 
-         		class="org.dyno.visual.swing.widgets.ContainerAdapter"
-         		widgetClass="java.awt.Container"
-         		abstract="true">
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.ContainerAdapter"
+               icon="icons/widgets.png"
+               widgetClass="java.awt.Container">
         		<property name="focusCycleRoot"/>
         		<property name="focusTraversalPolicyProvider"/>
          </widget>
-         <widget 
-         		class="org.dyno.visual.swing.widgets.JComponentAdapter"
-         		widgetClass="javax.swing.JComponent"
-         		abstract="true">
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.JComponentAdapter"
+               icon="icons/widgets.png"
+               widgetClass="javax.swing.JComponent">
         		<property name="border"/>
         		<property name="opaque"/>
         		<property name="toolTipText"/>
@@ -134,11 +137,12 @@
                   	/>
          </widget>
          <widget
-         		class="org.dyno.visual.swing.widgets.AbstractButtonAdapter"
-         		widgetClass="javax.swing.AbstractButton"
-         		widgetName="AbstractButton"
-         		groupId="component"
-         		abstract="true">
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.AbstractButtonAdapter"
+               groupId="component"
+               icon="icons/widgets.png"
+               widgetClass="javax.swing.AbstractButton"
+               widgetName="AbstractButton">
         		<property name="text"/>
 		        <property name="margin"/>
 		        <property name="borderPainted"/>
@@ -256,11 +260,12 @@
 		        <property name="visibleRowCount"/>
          </widget>
          <widget
-         		class="org.dyno.visual.swing.widgets.JTextComponentAdapter"
-         		widgetClass="javax.swing.text.JTextComponent"
-         		widgetName="JTextComponent"
-         		groupId="component"
-         		abstract="true">
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.JTextComponentAdapter"
+               groupId="component"
+               icon="icons/widgets.png"
+               widgetClass="javax.swing.text.JTextComponent"
+               widgetName="JTextComponent">
 		        <property name="text"/>
 		    	<property name="editable"/>
 		    	<property name="caretColor"/>
@@ -560,7 +565,6 @@
                widgetName="%Palette.JDialog">
                <property name="title"/>
                <property
-                     editable="true"
                      editor="org.dyno.visual.swing.widgets.editors.InternalFrameDefaultCloseOperationEditor"
                      name="defaultCloseOperation"
                      renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer">
@@ -639,8 +643,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JRadioButtonMenuItem"
                widgetName="%Palette.JRadioButtonMenuItem">
-               <property
-                     gencode="true"
+               <property gencode="true"
                      name="selected"/>
          </widget>
          <widget
@@ -653,16 +656,94 @@
                widgetName="%Palette.JPopupMenu"
                shown="false">
          </widget>
-                  
-         <!--
-         <widget 
-         		class="org.dyno.visual.swing.widgets.JLayeredPaneAdapter"
-         		widgetClass="javax.swing.JLayeredPane"
-         		widgetName="JLayeredPane"
-         		groupId="container"         		
-         		icon="/icons/layered_pane_16.png">
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.WindowAdapter"
+               icon="icons/widgets.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="java.awt.Window"
+               widgetName="Window">
+            <property
+                  name="focusableWindowState">
+            </property>
+            <property
+                  name="alwaysOnTop">
+            </property>
+            <property
+                  name="focusCycleRoot">
+            </property>
+            <property
+                  name="locationByPlatform">
+            </property>
          </widget>
-         -->
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.DialogAdapter"
+               icon="icons/widgets.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="java.awt.Dialog"
+               widgetName="Dialog">
+            <property
+                  name="title">
+            </property>
+            <property
+                  name="modal">
+            </property>
+            <property
+                  name="resizable">
+            </property>
+            <property
+                  class="org.dyno.visual.swing.widgets.properties.UndecoratedProperty"
+                  name="undecorated">
+            </property>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.FrameAdapter"
+               icon="icons/widgets.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="java.awt.Frame"
+               widgetName="Frame">
+            <property
+                  editor="org.dyno.visual.swing.widgets.editors.FrameExtendedStateEditor"
+                  name="extendedState"
+                  renderer="org.dyno.visual.swing.widgets.renderers.FrameExtendedStateRenderer">
+            </property>
+            <property
+                  name="iconImage">
+            </property>
+            <property
+                  name="maximizedBounds">
+            </property>
+            <property
+                  editor="org.dyno.visual.swing.widgets.editors.FrameStateEditor"
+                  name="state"
+                  renderer="org.dyno.visual.swing.widgets.renderers.FrameStateRenderer">
+            </property>
+            <property
+                  name="title">
+            </property>
+            <property
+                  class="org.dyno.visual.swing.widgets.properties.UndecoratedProperty"
+                  name="undecorated">
+            </property>
+            <property
+                  name="resizable">
+            </property>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.JLayeredPaneAdapter"
+               groupId="container"
+               icon="icons/layered_pane_16.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="javax.swing.JLayeredPane"
+               widgetName="JLayeredPane">
+         </widget>
    </extension>
    <extension
          point="org.dyno.visual.swing.widgetGroup">         

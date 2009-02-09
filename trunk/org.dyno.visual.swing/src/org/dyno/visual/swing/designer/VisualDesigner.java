@@ -449,6 +449,17 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		return root;
 	}
 
+	public void resetRoot() {
+		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(root);
+		rootBounds = adapter.getDesignBounds();
+		root.setSize(rootBounds.width, rootBounds.height);
+		designBorder = adapter.getDesignBorder();
+		container.setBorder(designBorder);
+		validateContent();
+		setLnfChanged(false);
+		setFocus();
+	}
+
 	public void initRootWidget(WidgetAdapter adapter) {
 		if (root != null)
 			remove(root);
@@ -827,4 +838,5 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		banner.setError(true);
 		banner.setText(e.getMessage());
 	}
+
 }

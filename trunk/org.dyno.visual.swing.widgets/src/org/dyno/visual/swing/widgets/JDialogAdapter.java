@@ -113,6 +113,10 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 
 	@Override
 	public Border getDesignBorder() {
+		JDialog jframe = (JDialog) getWidget();
+		boolean undec = jframe.isUndecorated();
+		if (undec)
+			return super.getDesignBorder();
 		DialogBorder frameBorder = new DialogBorder((JDialog)getWidget());
 		return frameBorder;
 	}
@@ -124,7 +128,9 @@ public class JDialogAdapter extends RootPaneContainerAdapter {
 			bounds.width = 400;
 		if (bounds.height <= 0)
 			bounds.height = 300;
-		bounds.y = 44;
+		JDialog jframe = (JDialog) getWidget();
+		boolean undec = jframe.isUndecorated();
+		bounds.y = undec?24:44;
 		bounds.x = 24;
 		return bounds;
 	}

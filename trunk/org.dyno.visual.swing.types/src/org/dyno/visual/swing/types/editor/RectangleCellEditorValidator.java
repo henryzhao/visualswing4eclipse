@@ -22,6 +22,8 @@ public class RectangleCellEditorValidator implements ICellEditorValidator {
 
 	@Override
 	public String isValid(Object value) {
+		if(value==null)
+			return null;
 		String string = (String) value;
 		string = string.trim();
 		if (string.length() < 9)
