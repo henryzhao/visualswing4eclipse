@@ -96,7 +96,7 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="abstract" type="string" use="default" value="false">
+         <attribute name="abstract" type="boolean" use="default" value="false">
             <annotation>
                <documentation>
                   

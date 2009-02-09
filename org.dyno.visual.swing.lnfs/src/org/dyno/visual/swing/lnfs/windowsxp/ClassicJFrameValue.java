@@ -25,6 +25,8 @@ public class ClassicJFrameValue extends WidgetValue {
 		put("focusCycleRoot", true);
 		put("enabled", true);
 		put("focusable", true);
+		put("focusableWindowState", true);
+		put("resizable", true);
 	}
 }
 

@@ -25,6 +25,8 @@ public class XpJFrameValue extends WidgetValue {
 		put("focusCycleRoot", true);
 		put("enabled", true);
 		put("focusable", true);
+		put("focusableWindowState", true);
+		put("resizable", true);
 	}
 }
 

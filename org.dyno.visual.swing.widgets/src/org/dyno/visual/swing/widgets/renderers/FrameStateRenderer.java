@@ -12,21 +12,17 @@
  *     William Chen - initial API and implementation.                               *
  ************************************************************************************/
 
-package org.dyno.visual.swing.lnfs.nimbus;
+package org.dyno.visual.swing.widgets.renderers;
 
-import javax.swing.WindowConstants;
+import org.dyno.visual.swing.base.ItemProviderLabelProviderFactory;
+import org.dyno.visual.swing.widgets.items.FrameStateItems;
 
-import org.dyno.visual.swing.lnfs.WidgetValue;
-
-public class JFrameValue extends WidgetValue {
+public class FrameStateRenderer extends ItemProviderLabelProviderFactory {
 	private static final long serialVersionUID = 1L;
-	public JFrameValue() {
-		put("defaultCloseOperation", WindowConstants.HIDE_ON_CLOSE);
-		put("focusCycleRoot", true);
-		put("enabled", true);
-		put("focusable", true);
-		put("focusableWindowState", true);
-		put("resizable", true);
+
+	public FrameStateRenderer() {
+		super(new FrameStateItems());
 	}
+
 }
 

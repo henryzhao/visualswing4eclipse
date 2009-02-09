@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -42,13 +41,16 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	private JPanelAdapter contentAdapter;
 	private JComponent contentPane;
 	private JRootPane rootPane;
+
 	public JFrameAdapter() {
 		super(null);
 		createContentAdapter();
 	}
-	public WidgetAdapter getContentAdapter(){
+
+	public WidgetAdapter getContentAdapter() {
 		return contentAdapter;
 	}
+
 	@Override
 	public void setWidget(Component widget) {
 		super.setWidget(widget);
@@ -69,7 +71,6 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	public void doLayout() {
 		contentAdapter.doLayout();
 	}
-
 
 	@Override
 	public void addChildByConstraints(Component child, Object constraints) {
@@ -116,6 +117,10 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 
 	@Override
 	public Border getDesignBorder() {
+		JFrame jframe = (JFrame) getWidget();
+		boolean undec = jframe.isUndecorated();
+		if (undec)
+			return super.getDesignBorder();
 		FrameBorder frameBorder = new FrameBorder((JFrame) getWidget());
 		return frameBorder;
 	}
@@ -127,7 +132,9 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 			bounds.width = 400;
 		if (bounds.height <= 0)
 			bounds.height = 300;
-		bounds.y = 44;
+		JFrame jframe = (JFrame) getWidget();
+		boolean undec = jframe.isUndecorated();
+		bounds.y = undec ? 24 : 44;
 		bounds.x = 24;
 		return bounds;
 	}
@@ -221,7 +228,7 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 			return contentAdapter.getIndexOfChild(child) + 1;
 	}
 
- 	@Override
+	@Override
 	public boolean allowChildResize(Component child) {
 		if (child instanceof JMenuBar)
 			return false;
@@ -246,17 +253,18 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	public WidgetAdapter getRootAdapter() {
 		return this;
 	}
+
 	@Override
 	public Object getAdapter(Class adapterClass) {
-		if(adapterClass==MouseInputListener.class){
-			LayoutAdapter adapter=contentAdapter.getLayoutAdapter();
-			if(adapter!=null)
+		if (adapterClass == MouseInputListener.class) {
+			LayoutAdapter adapter = contentAdapter.getLayoutAdapter();
+			if (adapter != null)
 				return adapter.getAdapter(adapterClass);
 			else
 				return null;
-		}else
+		} else
 			return super.getAdapter(adapterClass);
-	}	
+	}
 
 	public boolean removeChild(Component child) {
 		if (child instanceof JMenuBar) {
@@ -292,4 +300,3 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 		return JFrame.class;
 	}
 }
-

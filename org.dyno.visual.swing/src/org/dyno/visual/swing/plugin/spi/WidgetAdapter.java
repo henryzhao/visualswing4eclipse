@@ -921,4 +921,11 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			return this;
 		return null;
 	}
+
+	public void resetDesignerRoot() {
+		VisualDesigner designer = getDesigner();
+		if(designer!=null){
+			designer.resetRoot();
+		}
+	}
 }
