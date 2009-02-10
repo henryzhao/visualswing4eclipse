@@ -184,4 +184,10 @@
             class="org.dyno.visual.swing.parser.adapters.ButtonGroupFieldParser">
       </parser>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.selectionListener">
+      <listener
+            class="org.dyno.visual.swing.parser.listener.SyncEditorListener">
+      </listener>
+   </extension>
  </plugin>

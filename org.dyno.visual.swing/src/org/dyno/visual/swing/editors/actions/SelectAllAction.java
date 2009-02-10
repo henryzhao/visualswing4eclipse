@@ -13,11 +13,18 @@
 
 package org.dyno.visual.swing.editors.actions;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.ISelectionListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.actions.ActionFactory;
 /**
@@ -57,8 +64,25 @@ public class SelectAllAction extends EditorAction {
 		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
 		rootAdapter.setSelected(false);
 		rootAdapter.selectChildren();
+		fireWidgetSelected(rootAdapter);
 		designer.publishSelection();
 		designer.repaint();
+	}
+	
+	private void fireWidgetSelected(CompositeAdapter rootAdapter) {
+		List<Component>components=rootAdapter.getSelection();
+		List<WidgetAdapter>adapters = new ArrayList<WidgetAdapter>();
+		for(Component comp:components){
+			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(comp);
+			adapters.add(adapter);
+		}
+		if(!adapters.isEmpty()){
+			StructuredSelection ss = new StructuredSelection(adapters);
+			List<ISelectionListener> selectionListeners = ExtensionRegistry.getSelectionListeners();
+			for(ISelectionListener listener:selectionListeners){
+				listener.widgetSelected(ss);
+			}
+		}
 	}
 
 	@Override

@@ -16,6 +16,9 @@
    <extension-point id="org.dyno.visual.swing.adapters" name="Adaptable Adapter" schema="schema/adapters.exsd"/>
    <extension-point id="org.dyno.visual.swing.invisibleAdapter" name="Invisible Adapter" schema="schema/invisibleAdapter.exsd"/>
    <extension-point id="org.dyno.visual.swing.renamingListener" name="Renaming Listener" schema="schema/renamingListener.exsd"/>
+   <extension-point id="org.dyno.visual.swing.selectionListener" name="Selection Listener" schema="schema/selectionListener.exsd"/>
+   <extension-point id="org.dyno.visual.swing.widgetListener" name="Widget Listener" schema="schema/widgetListener.exsd"/>
+   <extension-point id="org.dyno.visual.swing.propertyListener" name="Property Listener" schema="schema/propertyListener.exsd"/>
    <extension point="org.eclipse.core.runtime.contentTypes">
 	   <content-type id="visualSwing" name="%content-type.name.0" 
 			base-type="org.eclipse.jdt.core.javaSource"
