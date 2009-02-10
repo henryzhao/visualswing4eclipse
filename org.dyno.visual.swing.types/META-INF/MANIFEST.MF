@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing.types;singleton:=true
-Bundle-Version: 0.9.8.I20090209-1200
+Bundle-Version: 0.9.9.I20090210-1200
 Require-Bundle: org.dyno.visual.swing,
  org.eclipse.swt,
  org.eclipse.core.runtime,
