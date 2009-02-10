@@ -60,9 +60,6 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
@@ -234,14 +231,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (getWidget() instanceof Container)
 			JavaUtil.layoutContainer((Container) getWidget());
 	}
-
-	public List<Component> getSelectedComponents() {
-		if (getDesigner() != null) {
-			return getDesigner().getSelectedComponents();
-		}
-		return null;
-	}
-
 	protected void attach() {
 		if (widget != null) {
 			if (widget instanceof RootPaneContainer) {
@@ -331,28 +320,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			this.name = name;
 		}
 	}
-
-	public void setSelected(boolean b) {
-		selected = b;
-		VisualDesigner designer = getDesigner();
-		if (designer != null) {
-			if (b){
-				designer.addSelectedWidget(this);
-				revealInEditor(designer, designer.getCompilationUnit());
-			}else
-				designer.removeSelectedWidget(this);
-		}
-	}
-	private void revealInEditor(VisualDesigner designer, ICompilationUnit unit) {
-		String methodName = isRoot()?INIT_METHOD_NAME:getGetMethodName(getID());
-		try {
-			String unitname = unit.getElementName();
-			int dot = unitname.indexOf('.');
-			if (dot != -1)
-				unitname = unitname.substring(0, dot);
-			IType type = unit.getType(unitname);
-			final IMethod method = type.getMethod(methodName, new String[0]);
+	public IEditorPart getSourceEditor(){
+		try{
 			IWorkbenchWindow window = JavaUtil.getEclipseWindow();
+			VisualDesigner designer = getDesigner();
 			if(window!=null){
 				IWorkbenchPage[] pages = window.getPages();
 				for(IWorkbenchPage page:pages){
@@ -362,14 +333,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 							IEditorInput input = ref.getEditorInput();
 							IEditorInput thisinput = designer.getEditor().getEditorInput();
 							if(thisinput.equals(input)){
-								final IEditorReference ieref=ref;
-								designer.getEditor().getDisplay().asyncExec(new Runnable(){
-									@Override
-									public void run() {
-										moveToMethod(ieref.getEditor(true), method);
-									}
-								});
-								return;
+								return ref.getEditor(true);
 							}
 						}
 					}
@@ -378,17 +342,23 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);
 		}
+		return null;
+	}
+	public void setSelected(boolean b) {
+		selected = b;
+		VisualDesigner designer = getDesigner();
+		if (designer != null) {
+			if (b){
+				designer.addSelectedWidget(this);
+				List<ISelectionListener> selectionListeners = ExtensionRegistry.getSelectionListeners();
+				for(ISelectionListener listener:selectionListeners){
+					listener.widgetSelected(new StructuredSelection(this));
+				}
+			}else
+				designer.removeSelectedWidget(this);			
+		}
 	}
 
-	private void moveToMethod(IEditorPart editor, IMethod method) {
-		JavaUI.revealInEditor(editor, (IJavaElement)method);
-	}	
-	private String getGetMethodName(String name){
-		String methodName = (String) getProperty("getMethodName");
-		if(methodName!=null)
-			return methodName;
-		return "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-	}
 	public void changeNotify() {
 		VisualDesigner d = getDesigner();
 		if (d != null) {

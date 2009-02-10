@@ -78,7 +78,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			childAdapter.setSelected(true);
+			childAdapter.selected = true;
 			if (childAdapter instanceof CompositeAdapter) {
 				((CompositeAdapter) childAdapter).selectChildren();
 			}

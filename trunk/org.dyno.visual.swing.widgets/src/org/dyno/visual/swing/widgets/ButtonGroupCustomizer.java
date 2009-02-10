@@ -382,7 +382,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 
 	@Override
 	public void paintContext(Graphics g, WidgetAdapter rootAdapter) {
-		List<Component> selected = rootAdapter.getSelectedComponents();
+		List<Component> selected = rootAdapter.getSelection();
 		if (selected != null && !selected.isEmpty()) {
 			List<AbstractButton> buttons = new ArrayList<AbstractButton>();
 			for (Component comp : selected) {
