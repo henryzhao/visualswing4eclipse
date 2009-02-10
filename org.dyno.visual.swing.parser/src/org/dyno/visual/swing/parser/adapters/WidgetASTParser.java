@@ -112,8 +112,18 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 		List statements;
 		if (adapter.isRoot()) {
 			MethodDeclaration initMethod = getMethodDeclaration(type, INIT_METHOD_NAME);
-			Block body = initMethod.getBody();
-			statements = body.statements();
+			if (initMethod != null) {
+				Block body = initMethod.getBody();
+				statements = body.statements();
+			}else{
+				initMethod = getMethodDeclaration(type, type.getName().getFullyQualifiedName());
+				if(initMethod!=null){
+					Block body = initMethod.getBody();
+					statements = body.statements();
+				}else{
+					statements = new ArrayList();
+				}
+			}
 		} else {
 			String getMethodName = NamespaceUtil.getGetMethodName(adapter, adapter.getID());
 			MethodDeclaration getMethod = getMethodDeclaration(type, getMethodName);

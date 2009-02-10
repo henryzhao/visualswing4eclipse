@@ -28,9 +28,9 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 	public String createCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
-		if (!adapter.isRoot())
-			builder.append(adapter.getID() + ".");
 		if (!layoutAdapter.isDefaultLayout()) {
+			if (!adapter.isRoot())
+				builder.append(adapter.getID() + ".");
 			builder.append("setLayout(");
 			builder.append(getNewInstanceCode(imports));
 			builder.append(");\n");

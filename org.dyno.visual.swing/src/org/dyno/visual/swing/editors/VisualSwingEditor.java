@@ -307,10 +307,14 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		this.designer.setCompilationUnit(unit);
 		try {
 			WidgetAdapter adapter = sourceParser.parse(unit, monitor);
-			designer.initRootWidget(adapter);
-			setUpLookAndFeel(adapter.getWidget().getClass());
-			designer.initNamespaceWithUnit(unit);
-			refreshTree();
+			if (adapter != null) {
+				designer.initRootWidget(adapter);
+				setUpLookAndFeel(adapter.getWidget().getClass());
+				designer.initNamespaceWithUnit(unit);
+				refreshTree();
+			} else {
+				throw new Exception("This class is not a valid swing class!");
+			}
 		} catch (Exception e) {
 			throw e;
 		} finally {
@@ -331,6 +335,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				}
 				setLnfClassname(lnf);
 			}
+		} catch(NoSuchFieldException nsfe){
+			String className = UIManager.getCrossPlatformLookAndFeelClassName();
+			setLnfClassname(className);
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);
 			String className = UIManager.getCrossPlatformLookAndFeelClassName();

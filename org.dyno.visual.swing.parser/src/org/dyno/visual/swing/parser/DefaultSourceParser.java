@@ -175,6 +175,8 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					beanAdapter.clearDirty();
 					return beanAdapter;
 				}
+			}else{
+				throw new ParserException("This is not a swing class!");
 			}
 		} catch (ParserException pe) {
 			throw pe;
@@ -327,6 +329,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				}
 				return lnf;
 			}
+		} catch(NoSuchFieldException nsfe){
 		} catch (Exception e) {
 			ParserPlugin.getLogger().warning(e);			
 		}

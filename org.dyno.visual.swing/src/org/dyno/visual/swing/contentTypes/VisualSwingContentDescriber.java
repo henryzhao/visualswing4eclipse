@@ -104,8 +104,11 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 					return VALID;
 				}
 			}
+			if (description != null)
+				description.setProperty(COMPONENT_TYPE, "Unknown");
+			return VALID;
 		}
-		return INVALID;
+		return INDETERMINATE;
 	}
 
 	@Override
