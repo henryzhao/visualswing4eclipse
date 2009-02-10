@@ -167,6 +167,13 @@
             %wizard.description.4
          </description>
       </wizard>
+      <wizard
+            category="org.dyno.visual.swing"
+            class="org.dyno.visual.swing.wizards.NewCustomContainerWizard"
+            icon="icons/beans.png"
+            id="org.dyno.visual.swing.wizards.NewCustomContainerCreationWizard"
+            name="Custom Top Container">
+      </wizard>
 	</extension>
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
@@ -319,6 +326,9 @@
          <newWizardShortcut
                id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
          </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewCustomContainerCreationWizard">
+         </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
@@ -337,6 +347,9 @@
          <newWizardShortcut
                id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
          </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewCustomContainerCreationWizard">
+         </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
             targetID="org.eclipse.pde.ui.PDEPerspective">
@@ -354,6 +367,9 @@
          </newWizardShortcut>
          <newWizardShortcut
                id="org.dyno.visual.swing.wizards.NewPanelCreationWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="org.dyno.visual.swing.wizards.NewCustomContainerCreationWizard">
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>

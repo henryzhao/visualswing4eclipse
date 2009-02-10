@@ -34,12 +34,14 @@ public class NewComponentPage extends NewClassWizardPage implements IConstants{
 		IDialogSettings section = getDialogSettings().getSection(PAGE_NAME);
 		if (section != null) {
 			name = section.get(SETTINGS_SUPERCLASSNAME);
-			super.setSuperClass(name, false);
+			super.setSuperClass(name, isCanBeModified());
 		} else {
-			super.setSuperClass("javax.swing.JPanel", false);
+			super.setSuperClass("javax.swing.JPanel", isCanBeModified());
 		}
 	}
-
+	protected boolean isCanBeModified(){
+		return false;
+	}
 	@Override
 	protected String getFileComment(ICompilationUnit parentCU,
 			String lineDelimiter) throws CoreException {

@@ -136,33 +136,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-	public Component getChild(int index) {
-		if (getWidget() instanceof Container)
-			return ((Container) getWidget()).getComponent(index);
-		else
-			return null;
-	}
-
 	public boolean isIntermediate() {
 		return false;
-	}
-
-	public int getChildCount() {
-		if (getWidget() instanceof Container)
-			return ((Container) getWidget()).getComponentCount();
-		else
-			return 0;
-	}
-
-	public int getIndexOfChild(Component child) {
-		if (getWidget() instanceof Container) {
-			int count = getChildCount();
-			for (int i = 0; i < count; i++) {
-				if (((Container) getWidget()).getComponent(i) == child)
-					return i;
-			}
-		}
-		return -1;
 	}
 
 	public boolean isChildVisible(Component child) {
@@ -185,6 +160,41 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		}
 	}
 
+	public Component getChild(int index) {
+		Container jp = (Container) getWidget();
+		Component[] components = jp.getComponents();
+		int i = 0;
+		for(Component component:components){
+			WidgetAdapter ca=WidgetAdapter.getWidgetAdapter(component);
+			if(ca!=null){
+				if(index==i)
+					return component;
+				i++;
+			}
+		}
+		return null;
+	}
+
+	public int getChildCount() {
+		Container jp = (Container) getWidget();
+		Component[] components = jp.getComponents();
+		int count = 0;
+		for(Component component:components){
+			WidgetAdapter ca=WidgetAdapter.getWidgetAdapter(component);
+			if(ca!=null)
+				count++;
+		}
+		return count;
+	}
+	public int getIndexOfChild(Component child) {
+		int size = getChildCount();
+		for (int i = 0; i < size; i++) {
+			Component comp = getChild(i);
+			if (comp == child)
+				return i;
+		}
+		return -1;
+	}
 	public boolean isChildMoveable(Component child) {
 		return true;
 	}

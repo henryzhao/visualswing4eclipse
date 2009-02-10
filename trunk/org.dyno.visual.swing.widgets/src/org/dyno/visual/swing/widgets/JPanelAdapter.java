@@ -107,9 +107,20 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public Class<?> getDefaultLayout() {
-		if(delegate!=null)
-			return ((CompositeAdapter)delegate).getDefaultLayout();
-		return FlowLayout.class;
+		if (delegate != null)
+			return ((CompositeAdapter) delegate).getDefaultLayout();
+		Component comp = getWidget();
+		if (comp.getClass() == JPanel.class)
+			return FlowLayout.class;
+		else {
+			JPanel jp = (JPanel) comp;
+			LayoutManager lm = jp.getLayout();
+			if (lm == null)
+				return null;
+			else
+				return lm.getClass();
+		}
+
 	}
 
 
@@ -217,11 +228,10 @@ public class JPanelAdapter extends CompositeAdapter {
 		return super.getHotspotPoint();
 	}
 	private int getComponentIndex(Component child) {
-		JPanel jpanel = (JPanel) getWidget();
-		int count = jpanel.getComponentCount();
-		for (int i = 0; i < count; i++) {
-			Component comp = jpanel.getComponent(i);
-			if (comp == child)
+		int count = getChildCount();
+		for(int i=0;i<count;i++){
+			Component comp=getChild(i);
+			if(comp==child)
 				return i;
 		}
 		return -1;
@@ -374,18 +384,6 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	private LayoutAdapter layoutAdapter;
 
-	@Override
-	public Component getChild(int index) {
-		JPanel jp = (JPanel) getWidget();
-		return (Component) jp.getComponent(index);
-	}
-
-	@Override
-	public int getChildCount() {
-		JPanel jp = (JPanel) getWidget();
-		return jp.getComponentCount();
-	}
-
 	public String toString() {
 		if (isRoot()) {
 			return "[" + getWidgetName() + getLayoutName() + "]"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -405,17 +403,6 @@ public class JPanelAdapter extends CompositeAdapter {
 		return default_layout ? "" : "(" + layoutName + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
-	@Override
-	public int getIndexOfChild(Component child) {
-		int size = getChildCount();
-		JPanel jpanel = (JPanel) getWidget();
-		for (int i = 0; i < size; i++) {
-			Component comp = jpanel.getComponent(i);
-			if (comp == child)
-				return i;
-		}
-		return -1;
-	}
 
 	@Override
 	public boolean allowChildResize(Component child) {
