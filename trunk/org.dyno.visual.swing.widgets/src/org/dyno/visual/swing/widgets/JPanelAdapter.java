@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -58,24 +57,27 @@ public class JPanelAdapter extends CompositeAdapter {
 	public JPanelAdapter() {
 		super(null);
 	}
-	public Component getContentArea(){
-		if(delegate!=null)
+
+	public Component getContentArea() {
+		if (delegate != null)
 			return delegate.getContentArea();
 		return getWidget();
-	}	
+	}
+
 	@Override
 	public String getName() {
-		if(delegate!=null)
+		if (delegate != null)
 			return delegate.getName();
 		return name;
 	}
 
 	@Override
 	public String getID() {
-		if(delegate!=null)
+		if (delegate != null)
 			return delegate.getID();
 		return super.getID();
 	}
+
 	void setDelegate(WidgetAdapter delegate) {
 		this.delegate = delegate;
 	}
@@ -88,19 +90,20 @@ public class JPanelAdapter extends CompositeAdapter {
 	@Override
 	public Object getAdapter(Class adapterClass) {
 		Object adaptable = super.getAdapter(adapterClass);
-		if(adaptable==null){
-			LayoutAdapter adapter=getLayoutAdapter();
-			if(adapter!=null)
+		if (adaptable == null) {
+			LayoutAdapter adapter = getLayoutAdapter();
+			if (adapter != null)
 				return adapter.getAdapter(adapterClass);
 			else
 				return null;
-		}else
+		} else
 			return adaptable;
-		
+
 	}
+
 	@Override
 	public Component getRootPane() {
-		if(delegate!=null)
+		if (delegate != null)
 			return delegate.getRootPane();
 		return super.getRootPane();
 	}
@@ -110,9 +113,9 @@ public class JPanelAdapter extends CompositeAdapter {
 		if (delegate != null)
 			return ((CompositeAdapter) delegate).getDefaultLayout();
 		Component comp = getWidget();
-		if (comp.getClass() == JPanel.class)
+		if (comp.getClass() == JPanel.class || isRoot()) {
 			return FlowLayout.class;
-		else {
+		} else {
 			JPanel jp = (JPanel) comp;
 			LayoutManager lm = jp.getLayout();
 			if (lm == null)
@@ -120,9 +123,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			else
 				return lm.getClass();
 		}
-
 	}
-
 
 	@Override
 	public List<WidgetAdapter> getDropWidget() {
@@ -223,15 +224,16 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public Point getHotspotPoint() {
-		if(delegate!=null)
+		if (delegate != null)
 			return delegate.getHotspotPoint();
 		return super.getHotspotPoint();
 	}
+
 	private int getComponentIndex(Component child) {
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
-			Component comp=getChild(i);
-			if(comp==child)
+		for (int i = 0; i < count; i++) {
+			Component comp = getChild(i);
+			if (comp == child)
 				return i;
 		}
 		return -1;
@@ -292,8 +294,7 @@ public class JPanelAdapter extends CompositeAdapter {
 				operation = doSameHeight();
 			if (operation != null) {
 				operation.addContext(getUndoContext());
-				IOperationHistory operationHistory = PlatformUI.getWorkbench()
-						.getOperationSupport().getOperationHistory();
+				IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 				try {
 					operationHistory.execute(operation, null, null);
 					return true;
@@ -365,13 +366,13 @@ public class JPanelAdapter extends CompositeAdapter {
 	private IUndoableOperation doLeft() {
 		return new LeftAlignmentOperation(getSelectedWidgets());
 	}
+
 	@Override
 	public LayoutAdapter getLayoutAdapter() {
 		if (layoutAdapter == null) {
 			LayoutManager layout = ((JPanel) getWidget()).getLayout();
 			if (layout != null) {
-				layoutAdapter = LayoutAdapter
-						.getLayoutAdapter((JPanel) getWidget());
+				layoutAdapter = LayoutAdapter.getLayoutAdapter((JPanel) getWidget());
 				layoutAdapter.setContainer((JPanel) getWidget());
 			}
 		}
@@ -397,12 +398,10 @@ public class JPanelAdapter extends CompositeAdapter {
 		LayoutManager layout = jpanel.getLayout();
 		String layoutName = layout == null ? "null" : layout.getClass() //$NON-NLS-1$
 				.getName();
-		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT
-				.equals(layoutName);
+		boolean default_layout = LayoutAdapter.DEFAULT_LAYOUT.equals(layoutName);
 		layoutName = layout == null ? "null" : getLayoutAdapter().getName(); //$NON-NLS-1$
 		return default_layout ? "" : "(" + layoutName + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
-
 
 	@Override
 	public boolean allowChildResize(Component child) {
@@ -415,12 +414,10 @@ public class JPanelAdapter extends CompositeAdapter {
 		}
 	}
 
-
 	@Override
 	protected WidgetAdapter getDelegateAdapter() {
 		return this.delegate;
 	}
-
 
 	@Override
 	public boolean needGenBoundCode() {
@@ -472,6 +469,7 @@ public class JPanelAdapter extends CompositeAdapter {
 			layoutAdapter.showChild(widget);
 		}
 	}
+
 	@Override
 	public void adjustLayout(Component widget) {
 		JPanel jpanel = (JPanel) getWidget();
@@ -530,12 +528,12 @@ public class JPanelAdapter extends CompositeAdapter {
 	public Class getWidgetClass() {
 		return JPanel.class;
 	}
-	public boolean isFocused() {		
-		WidgetAdapter focused = getFocusedAdapter();
-		if(delegate!=null)
-			return focused==delegate;
-		else
-			return focused==this;
-	}	
-}
 
+	public boolean isFocused() {
+		WidgetAdapter focused = getFocusedAdapter();
+		if (delegate != null)
+			return focused == delegate;
+		else
+			return focused == this;
+	}
+}
