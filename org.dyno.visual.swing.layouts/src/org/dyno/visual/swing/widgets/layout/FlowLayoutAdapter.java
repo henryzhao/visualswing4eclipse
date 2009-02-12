@@ -136,9 +136,10 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 	@Override
 	public boolean cloneLayout(JComponent panel) {
 		panel.setLayout(copyLayout(panel));
-		int count = container.getComponentCount();
+		CompositeAdapter composite = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
+		int count = composite.getChildCount();
 		for (int i = 0; i < count; i++) {
-			JComponent child = (JComponent) container.getComponent(i);
+			JComponent child = (JComponent) composite.getChild(i);
 			WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter(child);
 			panel.add(cAdapter.cloneWidget());
 		}

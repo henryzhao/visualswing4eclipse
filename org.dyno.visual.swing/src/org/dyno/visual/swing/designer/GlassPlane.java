@@ -116,6 +116,9 @@ public class GlassPlane extends JComponent implements MouseListener {
 	}
 
 	public void setHotspotPoint(Point e) {
+		if(hotspotPoint!=null&&e!=null&&e.distance(hotspotPoint)>10){
+			System.out.println();
+		}
 		hotspotPoint = e;
 	}
 

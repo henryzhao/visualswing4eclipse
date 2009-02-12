@@ -43,7 +43,28 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 	public JInternalFrameAdapter() {
 		super(null);
 	}
-
+	public boolean isRoot() {
+		Component me = getWidget();
+		if (me == null)
+			return false;
+		Container container = me.getParent();
+		return container == null || WidgetAdapter.getWidgetAdapter(container)==null;
+	}	
+	public CompositeAdapter getParentAdapter() {
+		if (isRoot())
+			return null;
+		Component parent = getWidget().getParent();
+		while (parent != null) {
+			if (parent instanceof Component) {
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(parent);
+				if (adapter != null) {
+					return (CompositeAdapter) adapter;
+				}
+			}
+			parent = parent.getParent();
+		}
+		return null;
+	}
 	@Override
 	public boolean allowChildResize(Component child) {
 		if (child instanceof JMenuBar)

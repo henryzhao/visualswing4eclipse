@@ -40,6 +40,14 @@ public class JRadioButtonMenuItemAdapter extends WidgetAdapter {
 		jmi.doLayout();
 		return jmi;
 	}
+	@Override
+	public String getBasename() {
+		String className = getWidgetClass().getName();
+		int dot = className.lastIndexOf('.');
+		if (dot != -1)
+			className = className.substring(dot + 1);
+		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
+	}	
 	public boolean isMoveable() {
 		return true;
 	}

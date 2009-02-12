@@ -10,6 +10,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JRootPane;
+import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IPainter;
@@ -30,8 +32,6 @@ public class JInternalFrameDesignOperation extends
 	@Override
 	public boolean dragOver(Point p) {
 		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.DROPPING_FORBIDDEN);
 			return true;
@@ -39,15 +39,19 @@ public class JInternalFrameDesignOperation extends
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.DROPPING_PERMITTED);
 			return true;
-		} else
+		} else{
+			if(hasMenuBar()){
+				JInternalFrame jif = (JInternalFrame) adaptable.getWidget();
+				JRootPane rootPane = jif.getRootPane(); 
+				p=SwingUtilities.convertPoint(rootPane, p, adaptable.getContentPane());
+			}
 			return getContentOperation().dragOver(p);
+		}
 	}
 
 	@Override
 	public boolean dragEnter(Point p) {
 		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.DROPPING_FORBIDDEN);
 			return true;
@@ -55,14 +59,14 @@ public class JInternalFrameDesignOperation extends
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.DROPPING_PERMITTED);
 			return true;
-		} else
+		} else{
+			if(hasMenuBar()){
+				JInternalFrame jif = (JInternalFrame) adaptable.getWidget();
+				JRootPane rootPane = jif.getRootPane(); 
+				p=SwingUtilities.convertPoint(rootPane, p, adaptable.getContentPane());
+			}
 			return getContentOperation().dragEnter(p);
-	}
-
-	private int getJMenuBarHeight() {
-		JInternalFrame jframe = (JInternalFrame) adaptable.getWidget();
-		JMenuBar jmb = jframe.getJMenuBar();
-		return jmb.getHeight();
+		}
 	}
 
 	private boolean isDroppingForbbiden() {
@@ -72,8 +76,6 @@ public class JInternalFrameDesignOperation extends
 	@Override
 	public boolean dragExit(Point p) {
 		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.NOOP);
 			return true;
@@ -81,15 +83,19 @@ public class JInternalFrameDesignOperation extends
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.NOOP);
 			return true;
-		} else
+		} else{
+			if(hasMenuBar()){
+				JInternalFrame jif = (JInternalFrame) adaptable.getWidget();
+				JRootPane rootPane = jif.getRootPane(); 
+				p=SwingUtilities.convertPoint(rootPane, p, adaptable.getContentPane());
+			}
 			return getContentOperation().dragExit(p);
+		}
 	}
 
 	@Override
 	public boolean drop(Point p) {
 		if (isDroppingForbbiden()) {
-			if (hasMenuBar())
-				p.y += getJMenuBarHeight();
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.NOOP);
 			Toolkit.getDefaultToolkit().beep();
@@ -111,8 +117,14 @@ public class JInternalFrameDesignOperation extends
 			adaptable.repaintDesigner();
 			setDropStatus(JInternalFramePainter.NOOP);
 			return true;
-		} else
+		} else{
+			if(hasMenuBar()){
+				JInternalFrame jif = (JInternalFrame) adaptable.getWidget();
+				JRootPane rootPane = jif.getRootPane(); 
+				p=SwingUtilities.convertPoint(rootPane, p, adaptable.getContentPane());
+			}
 			return getContentOperation().drop(p);
+		}
 	}
 
 	private boolean isDroppingMenu() {

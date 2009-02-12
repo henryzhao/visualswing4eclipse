@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true
-Bundle-Version: 0.9.9.I20090210-1200
+Bundle-Version: 0.9.9.I20090212-1600
 Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin
 Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.eclipse.ui,
@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms,
  org.eclipse.ui.navigator,
  org.eclipse.jdt.core,
- org.eclipse.jdt.ui
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.launching
 Bundle-ActivationPolicy: lazy;exclude:="org.dyno.visual.swing.contentTypes"
 Export-Package: org.dyno.visual.swing.base,
  org.dyno.visual.swing.layouts,
