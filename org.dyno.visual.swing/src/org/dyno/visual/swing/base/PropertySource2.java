@@ -98,8 +98,17 @@ public class PropertySource2 implements IPropertySource2 {
 	@Override
 	public void setPropertyValue(Object id, Object value) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
-		if (property != null)
+		if (property != null){
+			if(value!=null&&value instanceof IStructuredSelection){
+				IStructuredSelection iss = (IStructuredSelection)value;
+				if(!iss.isEmpty()){
+					value=iss.getFirstElement();
+				}else{
+					value=null;
+				}
+			}				
 			property.setPropertyValue(bean, value);
+		}
 	}
 }
 
