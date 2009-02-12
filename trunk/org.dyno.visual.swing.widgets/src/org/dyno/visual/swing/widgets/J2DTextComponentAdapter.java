@@ -35,7 +35,14 @@ public abstract class J2DTextComponentAdapter extends ComplexWidgetAdapter {
 		jtc.validate();
 		return jtc;
 	}
-
+	@Override
+	public String getBasename() {
+		String className = getWidgetClass().getName();
+		int dot = className.lastIndexOf('.');
+		if (dot != -1)
+			className = className.substring(dot + 1);
+		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
+	}	
 	@Override
 	protected Dimension getInitialSize() {
 		return new Dimension(100, 80);

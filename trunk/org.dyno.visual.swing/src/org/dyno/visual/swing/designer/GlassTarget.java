@@ -186,8 +186,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 							VisualSwingPlugin.getLogger().error(e);
 						}
 					}
+					designer.fireDirty();
 					adapter.addNotify();
-					adapter.setDirty(true);
 				}
 			} else {
 				glassPlane.setHotspotPoint(null);

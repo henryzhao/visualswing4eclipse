@@ -162,9 +162,7 @@ public class ImageSelectionDialog extends Dialog {
 						}
 					}
 					return false;
-				} else {
-					System.out.println();
-				}
+				} 
 				return children != null && children.length > 0;
 			} catch (Exception e) {
 				VisualSwingPlugin.getLogger().error(e);

@@ -130,7 +130,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	@Override
 	public String getBasename() {
-		String className = getWidgetClass().getName();
+		Component widget = getWidget();
+		String className;
+		if (widget != null)
+			className = widget.getClass().getName();
+		else
+			className = getWidgetClass().getName();
 		int dot = className.lastIndexOf('.');
 		if (dot != -1)
 			className = className.substring(dot + 1);
@@ -194,6 +199,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public void setDirty(boolean d) {
 		if (dirty != d) {
 			dirty = d;
+		}
+		if(getDelegateAdapter()!=null){
+			getDelegateAdapter().setDirty(true);
 		}
 		if (getDesigner() != null)
 			getDesigner().fireDirty();
@@ -261,6 +269,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void setWidget(Component widget) {
 		this.widget = widget;
+		this.hotspotPoint = new Point(widget.getWidth() / 2, widget.getHeight() / 2);
 		attach();
 	}
 
@@ -296,7 +305,11 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public String getWidgetName() {
-		return widgetName;
+		Component widget = getWidget();
+		if (widget != null && widget.getClass() != getWidgetClass())
+			return getBasename();
+		else
+			return widgetName;
 	}
 
 	private Provider getProvider(HashMap<String, Provider> providers, Class<?> class1) {
@@ -752,7 +765,17 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	protected abstract Component newWidget();
 
 	public Component cloneWidget() {
-		Component clone = newWidget();
+		Component widget = getWidget();
+		Component clone;
+		if (widget.getClass() != getWidgetClass()) {
+			try {
+				clone = (Component) widget.getClass().newInstance();
+			} catch (Exception e) {
+				VisualSwingPlugin.getLogger().error(e);
+				clone = newWidget();
+			}
+		} else
+			clone = newWidget();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))) {
@@ -781,6 +804,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public String getWidgetCodeClassName() {
+		Component widget = getWidget();
+		if(widget!=null){
+			return widget.getClass().getName();
+		}
 		return getWidgetClass().getName();
 	}
 

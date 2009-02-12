@@ -1,5 +1,6 @@
 package org.dyno.visual.swing.designer;
 
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,12 @@ public class VSNamespaceManager implements NamespaceManager{
 		String name = names.get(newName);
 		if(name!=null)
 			return true;
-		Class clazz=rootAdapter.getWidgetClass();
+		Component widget = rootAdapter.getWidget();
+		Class clazz;
+		if(widget!=null)
+			clazz=widget.getClass();
+		else
+			clazz=rootAdapter.getWidgetClass();
 		String getMethodName = "get" + Character.toUpperCase(newName.charAt(0)) + newName.substring(1);
 		if(hasMethod(clazz, getMethodName))
 			return true;
@@ -28,7 +34,7 @@ public class VSNamespaceManager implements NamespaceManager{
 	
 	private boolean hasMethod(Class clazz, String getMethodName) {
 		try {
-			clazz.getMethod(getMethodName);
+			clazz.getDeclaredMethod(getMethodName);
 			return true;
 		} catch (Exception e) {
 		}

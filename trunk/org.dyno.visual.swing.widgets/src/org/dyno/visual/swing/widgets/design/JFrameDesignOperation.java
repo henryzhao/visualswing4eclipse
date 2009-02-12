@@ -38,8 +38,9 @@ public class JFrameDesignOperation extends RootPaneContainerDesignOperation {
 			adaptable.setMascotLocation(p);
 			setDropStatus(JFramePainter.DROPPING_PERMITTED);
 			return true;
-		} else
+		} else{
 			return getContentOperation().dragOver(p);
+		}
 	}
 
 	@Override
@@ -54,8 +55,9 @@ public class JFrameDesignOperation extends RootPaneContainerDesignOperation {
 			adaptable.setMascotLocation(p);
 			setDropStatus(JFramePainter.DROPPING_PERMITTED);
 			return true;
-		} else
+		} else{
 			return getContentOperation().dragEnter(p);
+		}
 	}
 
 	private int getJMenuBarHeight() {
@@ -80,8 +82,9 @@ public class JFrameDesignOperation extends RootPaneContainerDesignOperation {
 			adaptable.setMascotLocation(p);
 			setDropStatus(JFramePainter.NOOP);
 			return true;
-		} else
+		} else {
 			return getContentOperation().dragExit(p);
+		}
 	}
 
 	@Override
@@ -110,8 +113,9 @@ public class JFrameDesignOperation extends RootPaneContainerDesignOperation {
 			adaptable.repaintDesigner();
 			setDropStatus(JFramePainter.NOOP);
 			return true;
-		} else
+		}  else{
 			return getContentOperation().drop(p);
+		}
 	}
 
 	private boolean isDroppingMenu() {

@@ -59,8 +59,6 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	public Component getContentArea() {
-		if (delegate != null)
-			return delegate.getContentArea();
 		return getWidget();
 	}
 
@@ -113,9 +111,11 @@ public class JPanelAdapter extends CompositeAdapter {
 		if (delegate != null)
 			return ((CompositeAdapter) delegate).getDefaultLayout();
 		Component comp = getWidget();
-		if (comp.getClass() == JPanel.class || isRoot()) {
+		if (comp.getClass() == JPanel.class) {
 			return FlowLayout.class;
-		} else {
+		} else if(isRoot()&&comp.getClass().getSuperclass()==JPanel.class){
+			return FlowLayout.class;
+		}else{
 			JPanel jp = (JPanel) comp;
 			LayoutManager lm = jp.getLayout();
 			if (lm == null)
