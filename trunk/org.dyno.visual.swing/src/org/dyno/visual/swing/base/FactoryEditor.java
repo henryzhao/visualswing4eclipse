@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.base;
 
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 /**
@@ -44,5 +45,14 @@ public abstract class FactoryEditor implements ICellEditorFactory {
 		return value;
 	}
 
+	@Override
+	public String getInitJavaCode(Object value, ImportRewrite imports) {
+		return null;
+	}
+
+	@Override
+	public String getJavaCode(Object value, ImportRewrite imports) {
+		return null;
+	}
 }
 
