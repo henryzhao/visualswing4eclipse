@@ -315,7 +315,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(adapter.getLnfClassname(), new StructuredSelection(adapter.getWidget())) && (property.isGencode() && property.isEdited(adapter))) {
+			if (property.isPropertySet(adapter.getLnfClassname(), new StructuredSelection(adapter.getWidget())) && (property.isGencode() || property.isEdited(adapter))) {
 				IPropertyCodeGenerator generator = (IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
 				if (generator != null) {
 					String setCode = generator.getJavaCode(adapter.getWidget(), imports);
