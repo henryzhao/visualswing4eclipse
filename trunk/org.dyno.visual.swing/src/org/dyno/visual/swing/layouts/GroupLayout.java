@@ -21,6 +21,10 @@ import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.HashMap;
+
+import javax.swing.JComponent;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
 /**
  * 
  * GroupLayout
@@ -128,6 +132,8 @@ public class GroupLayout implements LayoutManager2, Serializable {
 			if (comp == null)
 				continue;
 			Constraints cons = constraints.get(comp);
+			if(cons==null)
+				cons = createConstraintsFor(parent, comp);
 			Alignment horizontal = cons.getHorizontal();
 			Alignment vertical = cons.getVertical();
 			Rectangle bounds = comp.getBounds();
@@ -167,6 +173,21 @@ public class GroupLayout implements LayoutManager2, Serializable {
 		}
 	}
 
+	private Constraints createConstraintsFor(Container parent, Component comp) {
+		Constraints cons;
+		LayoutStyle style = LayoutStyle.getInstance();
+		int gap = style.getContainerGap((JComponent)comp, SwingConstants.EAST, parent);
+		Rectangle bounds = comp.getBounds();
+		Spring spring = new Spring(gap, gap);
+		Leading horizontal = new Leading(bounds.x, bounds.width, spring);
+		gap = style.getContainerGap((JComponent)comp, SwingConstants.SOUTH, parent);
+		spring = new Spring(gap, gap);
+		Leading vertical = new Leading(bounds.y, bounds.height, spring);
+		cons = new Constraints(horizontal, vertical);
+		constraints.put(comp, cons);
+		return cons;
+	}
+
 	@Override
 	public Dimension minimumLayoutSize(Container parent) {
 		int width = 0;
@@ -179,6 +200,8 @@ public class GroupLayout implements LayoutManager2, Serializable {
 				continue;
 			Dimension prefs = comp.getPreferredSize();
 			Constraints cons = constraints.get(comp);
+			if(cons==null)
+				cons = createConstraintsFor(parent, comp);
 			Alignment horizontal = cons.getHorizontal();
 			Alignment vertical = cons.getVertical();
 			if (horizontal instanceof Bilateral) {
@@ -227,6 +250,8 @@ public class GroupLayout implements LayoutManager2, Serializable {
 				continue;
 			Dimension prefs = comp.getPreferredSize();
 			Constraints cons = constraints.get(comp);
+			if(cons==null)
+				cons = createConstraintsFor(parent, comp);
 			Alignment horizontal = cons.getHorizontal();
 			Alignment vertical = cons.getVertical();
 			if (horizontal instanceof Bilateral) {
