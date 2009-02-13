@@ -30,17 +30,17 @@ public class WidgetPropertyParser implements IPropertyCodeGenerator, IAdaptableC
 					String name = adapter.getID();
 					builder.append(name + ".");
 				}
-				builder.append(property.getSetName() + "(");
+				String code;
 				if (gen != null) {
-					if (value == null) {
-						builder.append("null");
-					} else {
-						builder.append(gen.getJavaCode(value, imports));
-					}
+					code = value == null ? "null" : gen.getJavaCode(value, imports);
 				} else {
-					builder.append(value == null ? "null" : value.toString());
+					code = value == null ? "null" : value.toString();
 				}
-				builder.append(");\n");
+				if (code != null) {
+					builder.append(property.getSetName() + "(");
+					builder.append(code);
+					builder.append(");\n");
+				}
 				return builder.toString();
 			} else
 				return null;
