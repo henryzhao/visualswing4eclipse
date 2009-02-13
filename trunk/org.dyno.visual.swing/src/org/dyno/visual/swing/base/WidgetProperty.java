@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.base;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
@@ -26,6 +27,7 @@ import javax.swing.plaf.UIResource;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
@@ -249,7 +251,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 	
 	@Override
 	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
-		assert !bean.isEmpty();
+ 		assert !bean.isEmpty();
 		Object b = bean.getFirstElement();
 		if (propertyName.equals("preferredSize") && b instanceof Component) {
 			return ((Component) b).isPreferredSizeSet();
@@ -257,6 +259,13 @@ public class WidgetProperty extends AbstractAdaptable implements
 			return ((Component) b).isMinimumSizeSet();
 		else if (propertyName.equals("maximumSize") && b instanceof Component)
 			return ((Component) b).isMaximumSizeSet();
+		else if(propertyName.equals("layout")&&b instanceof Container){
+			CompositeAdapter a=(CompositeAdapter) WidgetAdapter.getWidgetAdapter((Component)b);
+			if(a.getLayoutAdapter().isDefaultLayout()){
+				return false;
+			}else
+				return true;			
+		}
 		Object value = getFieldValue(b);
 		if (value != null && value instanceof UIResource)
 			return false;

@@ -765,21 +765,54 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	protected abstract Component newWidget();
 
 	public Component cloneWidget() {
-		Component widget = getWidget();
-		Component clone;
-		if (widget.getClass() != getWidgetClass()) {
-			try {
-				clone = (Component) widget.getClass().newInstance();
-			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
-				clone = newWidget();
-			}
-		} else
-			clone = newWidget();
+		Component clone = cloneWidgetInstance();
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))) {
 				property.cloneProperty(getWidget(), clone);
+			}
+		}
+		return clone;
+	}
+	private Component cloneWidgetInstance() {
+		Component clone;
+		if(isRoot()){
+			Component widget=getWidget();
+			if(widget!=null){
+				Class clazz=widget.getClass();
+				if(clazz!=getWidgetClass()){
+					if(clazz.getSuperclass()==getWidgetClass())
+						clone = newWidget();
+					else{
+						try {
+							clone = (Component) clazz.getSuperclass().newInstance();
+						} catch (Exception e) {
+							VisualSwingPlugin.getLogger().error(e);
+							clone = newWidget();
+						}
+					}
+				}else{
+					clone = newWidget();
+				}
+			}else{				
+				clone = newWidget();
+			}
+		}else{
+			Component widget=getWidget();
+			if(widget!=null){
+				Class clazz=widget.getClass();
+				if(clazz!=getWidgetClass()){
+					try {
+						clone = (Component) clazz.newInstance();
+					} catch (Exception e) {
+						VisualSwingPlugin.getLogger().error(e);
+						clone = newWidget();
+					}
+				}else{
+					clone = newWidget();
+				}
+			}else{
+				clone = newWidget();
 			}
 		}
 		return clone;
