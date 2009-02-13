@@ -3,14 +3,14 @@
 <repository name='Visual Swing Designer for Eclipse' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1234499966630'/>
+    <property name='p2.timestamp' value='1234503388830'/>
   </properties>
   <mappings size='3'>
     <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
     <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
     <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
   </mappings>
-  <artifacts size='103'>
+  <artifacts size='105'>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing' version='0.9.8.I20090205-1500'>
       <properties size='3'>
         <property name='artifact.size' value='457234'/>
@@ -434,6 +434,13 @@
         <property name='download.contentType' value='application/zip'/>
       </properties>
     </artifact>
+    <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.widgets' version='0.9.9.I20090213-1500'>
+      <properties size='3'>
+        <property name='artifact.size' value='444679'/>
+        <property name='download.size' value='444679'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing' version='0.9.9.I20090212-1700'>
       <properties size='3'>
         <property name='artifact.size' value='468625'/>
@@ -607,6 +614,12 @@
         <property name='artifact.size' value='138207'/>
         <property name='download.size' value='138207'/>
         <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.dyno.visual.swing.feature' version='0.9.9.I20090213-1500'>
+      <properties size='2'>
+        <property name='artifact.size' value='944'/>
+        <property name='download.size' value='944'/>
       </properties>
     </artifact>
     <artifact classifier='osgi.bundle' id='org.dyno.visual.swing.borders' version='0.9.9.I20090210-1200'>

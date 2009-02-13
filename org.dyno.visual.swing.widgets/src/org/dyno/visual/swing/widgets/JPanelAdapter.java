@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 import java.awt.Point;
@@ -113,15 +114,19 @@ public class JPanelAdapter extends CompositeAdapter {
 		Component comp = getWidget();
 		if (comp.getClass() == JPanel.class) {
 			return FlowLayout.class;
-		} else if(isRoot()&&comp.getClass().getSuperclass()==JPanel.class){
+		} else if (isRoot() && comp.getClass().getSuperclass() == JPanel.class) {
 			return FlowLayout.class;
-		}else{
-			JPanel jp = (JPanel) comp;
-			LayoutManager lm = jp.getLayout();
+		}
+		Class superClazz = comp.getClass().getSuperclass();
+		try {
+			Container container = (Container) superClazz.newInstance();
+			LayoutManager lm = container.getLayout();
 			if (lm == null)
 				return null;
 			else
 				return lm.getClass();
+		} catch (Exception e) {
+			return FlowLayout.class;
 		}
 	}
 
