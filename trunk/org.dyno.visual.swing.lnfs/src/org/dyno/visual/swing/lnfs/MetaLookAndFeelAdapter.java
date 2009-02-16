@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -136,19 +135,21 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 
 	@Override
 	public Object getDefaultValue(Class beanClass, String propertyName) {
-		WidgetValue widget = get(beanClass);
-		if (widget == null && beanClass != Component.class) {
-			return getDefaultValue(beanClass.getSuperclass(), propertyName);
-		} else if(widget!=null)
-			return widget.getDefaultValue(propertyName);
-		else
-			return null;
+			WidgetValue widget = get(beanClass);
+			if (widget == null && beanClass != Component.class) {
+				return getDefaultValue(beanClass.getSuperclass(), propertyName);
+			} else if (widget != null)
+				return widget.getDefaultValue(propertyName);
+			else
+				return null;
 	}
+
 	private LookAndFeel metalLnf;
+
 	@Override
 	public LookAndFeel getLookAndFeelInstance() {
-		if(metalLnf==null){
-			metalLnf=new MetalLookAndFeel();
+		if (metalLnf == null) {
+			metalLnf = new MetalLookAndFeel();
 		}
 		return metalLnf;
 	}
@@ -163,4 +164,3 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		return Messages.MetaLookAndFeelAdapter_Meta_Lnf;
 	}
 }
-

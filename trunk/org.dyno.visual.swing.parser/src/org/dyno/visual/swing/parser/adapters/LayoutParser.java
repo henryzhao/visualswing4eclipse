@@ -28,9 +28,13 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 	public String createCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
-		if (!layoutAdapter.isDefaultLayout()) {
+		if (!layoutAdapter.isDefaultLayout()||layoutAdapter.isPropertyChanged()) {
+			String initCode = getInitCode(imports);
+			if(initCode!=null)
+				builder.append(initCode);
 			if (!adapter.isRoot())
 				builder.append(adapter.getID() + ".");
+			if(initCode!=null)
 			builder.append("setLayout(");
 			builder.append(getNewInstanceCode(imports));
 			builder.append(");\n");
@@ -42,6 +46,10 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 			builder.append(getAddChildCode(layoutAdapter, child, imports));
 		}
 		return builder.toString();
+	}
+
+	protected String getInitCode(ImportRewrite imports) {
+		return null;
 	}
 
 	protected LayoutAdapter layoutAdapter;
