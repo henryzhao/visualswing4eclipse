@@ -71,8 +71,8 @@ public class GlassPaneUI extends ComponentUI {
 		paintSelectionRegion(g, c);
 		paintHovered(g, c);
 		paintContextCustomizer(g, c);
-		paintMascot(g, c);
 		paintAnchor(g, c);
+		paintMascot(g, c);
 		paintHint(g, c);
 	}
 

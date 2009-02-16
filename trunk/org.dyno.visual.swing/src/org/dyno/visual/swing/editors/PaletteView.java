@@ -15,9 +15,7 @@ package org.dyno.visual.swing.editors;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +25,8 @@ import javax.swing.JComponent;
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
@@ -36,7 +34,6 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -300,21 +297,19 @@ public class PaletteView extends ViewPart implements SelectionListener {
 							String pkg=packageFragment.getElementName();
 							if(pkg!=null&&pkg.trim().length()>0)
 								className=pkg+"."+className;
-							WhiteBoard.getCurrentProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
-							String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(WhiteBoard.getCurrentProject());
-							URL[] urls = new URL[classPath.length];
-							for (int i = 0; i < classPath.length; i++) {
-								File cp = new File(classPath[i]);
-								if (cp.exists())
-									urls[i] = cp.toURI().toURL();
-							}
-							final Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
+							final Class<?> beanClass = JavaUtil.getProjectClassLoader(WhiteBoard.getCurrentProject()).loadClass(className);
 							if(!JComponent.class.isAssignableFrom(beanClass)){
 								MessageDialog.openError(parent, "Error", "Chosen class must be a javax.swing.JComponent derived class!");
 								item.setSelection(false);
 								return;
 							}
 							Component bean = (Component)beanClass.newInstance();
+							Dimension dim = bean.getSize();
+							if(dim.width<10||dim.height<4)
+								dim = bean.getPreferredSize();
+							if(dim.width<10||dim.height<4)
+								dim = new Dimension(100,22);
+							bean.setSize(dim);
 							if(bean instanceof Container){
 								((Container)bean).doLayout();
 							}

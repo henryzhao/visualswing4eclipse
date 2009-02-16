@@ -33,12 +33,13 @@ public class SetLnfAction extends Action {
 
 	@Override
 	public void run() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				changeLnf();
-			}
-		});
+		if (isChecked())
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					changeLnf();
+				}
+			});
 	}
 
 	private void changeLnf() {
@@ -50,6 +51,6 @@ public class SetLnfAction extends Action {
 			} catch (Exception e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
-		} 
+		}
 	}
 }

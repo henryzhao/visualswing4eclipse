@@ -56,6 +56,9 @@ public class BorderLayoutPlacementOperation extends AbstractOperation {
 			container.doLayout();
 			container.invalidate();
 			container.repaint();
+			WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(container);
+			containerAdapter.setDirty(true);
+			containerAdapter.addNotify();
 			parent.repaintDesigner();
 		}		
 		return Status.OK_STATUS;

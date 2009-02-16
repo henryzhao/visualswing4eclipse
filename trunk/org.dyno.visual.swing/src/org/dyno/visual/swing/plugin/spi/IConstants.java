@@ -14,6 +14,9 @@
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Color;
+import java.util.Locale;
+
+import org.eclipse.core.runtime.QualifiedName;
 
 /**
  * 
@@ -68,5 +71,7 @@ public interface IConstants {
 	
 	Color SELECTION_COLOR = new Color(255, 164, 0);
 	String INIT_METHOD_NAME="initComponents";
+	
+	QualifiedName JAVA_CLASS_LOADER = new QualifiedName("java.class.loader", Locale.getDefault().toString());
 }
 

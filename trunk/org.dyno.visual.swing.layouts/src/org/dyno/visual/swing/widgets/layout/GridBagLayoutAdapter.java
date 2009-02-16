@@ -41,10 +41,10 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		layout.columnWidths = new int[]{7, 7, 7, 7};
+		layout.columnWidths = new int[]{40, 40, 40, 40};
 		layout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
-		layout.rowHeights = new int[]{7, 7, 7, 7};
-		container.setLayout(new GridBagLayout());
+		layout.rowHeights = new int[]{40, 40, 40, 40};
+ 		container.setLayout(layout);
 	}
 
 	@Override
@@ -139,6 +139,10 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			g.drawRect(0, 0, w - 1, h - 1);
 		}
 	}
+	@Override
+	public boolean isChildResizable() {
+		return false;
+	}	
 	@Override
 	public void paintAnchor(Graphics g) {
 		CompositeAdapter parentAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);

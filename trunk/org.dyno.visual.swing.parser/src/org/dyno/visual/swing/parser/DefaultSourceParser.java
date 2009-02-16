@@ -16,13 +16,10 @@ package org.dyno.visual.swing.parser;
 import java.awt.Component;
 import java.awt.Frame;
 import java.beans.EventSetDescriptor;
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +42,6 @@ import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.ParserException;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -64,7 +60,6 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
-import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.ui.CodeStyleConfiguration;
 import org.eclipse.jdt.ui.actions.OrganizeImportsAction;
 import org.eclipse.text.edits.TextEdit;
@@ -141,19 +136,12 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return null;
 	}
+
 	private WidgetAdapter processType(ICompilationUnit unit, IType type) throws ParserException {
 		try {
 			IJavaProject java_project = type.getJavaProject();
 			String className = type.getFullyQualifiedName();
-			java_project.getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, null);
-			String[] classPath = JavaRuntime.computeDefaultRuntimeClassPath(java_project);
-			URL[] urls = new URL[classPath.length];
-			for (int i = 0; i < classPath.length; i++) {
-				File cp = new File(classPath[i]);
-				if (cp.exists())
-					urls[i] = cp.toURI().toURL();
-			}
-			final Class<?> beanClass = new URLClassLoader(urls, getClass().getClassLoader()).loadClass(className);
+			final Class<?> beanClass = JavaUtil.getProjectClassLoader(java_project).loadClass(className);
 			if (Component.class.isAssignableFrom(beanClass)) {
 				String lnf = getBeanClassLnf(beanClass);
 				ILookAndFeelAdapter lnfAdapter = ExtensionRegistry.getLnfAdapter(lnf);
