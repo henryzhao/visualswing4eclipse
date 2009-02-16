@@ -143,10 +143,10 @@ public class GridLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
-		WidgetProperty rowsProperty = new WidgetProperty("rows", GridLayout.class);
-		WidgetProperty columnsProperty = new WidgetProperty("columns", GridLayout.class);
-		WidgetProperty hgapProperty = new WidgetProperty("hgap", GridLayout.class);
-		WidgetProperty vgapProperty = new WidgetProperty("vgap", GridLayout.class);
+		WidgetProperty rowsProperty = new WidgetProperty("rows", GridLayout.class, 1);
+		WidgetProperty columnsProperty = new WidgetProperty("columns", GridLayout.class, 0);
+		WidgetProperty hgapProperty = new WidgetProperty("hgap", GridLayout.class, 0);
+		WidgetProperty vgapProperty = new WidgetProperty("vgap", GridLayout.class, 0);
 		return new IWidgetPropertyDescriptor[]{rowsProperty, columnsProperty, hgapProperty, vgapProperty};
 	}
 

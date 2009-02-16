@@ -313,8 +313,8 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
-		WidgetProperty hgapProperty = new WidgetProperty("hgap", BorderLayout.class);
-		WidgetProperty vgapProperty = new WidgetProperty("vgap", BorderLayout.class);
+		WidgetProperty hgapProperty = new WidgetProperty("hgap", BorderLayout.class, 0);
+		WidgetProperty vgapProperty = new WidgetProperty("vgap", BorderLayout.class, 0);
 		return new IWidgetPropertyDescriptor[] { hgapProperty, vgapProperty };
 	}
 

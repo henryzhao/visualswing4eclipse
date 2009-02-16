@@ -56,8 +56,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @author William Chen
  */
 @SuppressWarnings("unchecked")
-public class WidgetProperty extends AbstractAdaptable implements
-		IWidgetPropertyDescriptor {
+public class WidgetProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
 	protected Object lastValue;
 
 	protected String category;
@@ -71,14 +70,12 @@ public class WidgetProperty extends AbstractAdaptable implements
 	protected String displayName;
 	protected String[] filters;
 
-	
 	protected Class beanClass;
 	protected boolean gencode;
 	protected IValueParser parser;
+	protected Object defaultValue;
 
-	
-	public WidgetProperty(String name, Class beanClass,
-			ILabelProviderFactory label, ICellEditorFactory editor) {
+	public WidgetProperty(String name, Class beanClass, ILabelProviderFactory label, ICellEditorFactory editor, Object defaultValue) {
 		this.beanClass = beanClass;
 		this.propertyName = name;
 		try {
@@ -91,6 +88,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		editable = true;
 		labelFactory = label;
 		editorFactory = editor;
+		this.defaultValue = defaultValue;
 	}
 
 	public WidgetProperty() {
@@ -101,8 +99,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return propertyDescriptor;
 	}
 
-	
-	public WidgetProperty(String name, Class beanClass) {
+	public WidgetProperty(String name, Class beanClass, Object defaultValue) {
 		this.beanClass = beanClass;
 		this.propertyName = name;
 		try {
@@ -119,22 +116,20 @@ public class WidgetProperty extends AbstractAdaptable implements
 			labelFactory = ta.getRenderer();
 			editorFactory = ta.getEditor();
 		}
+		this.defaultValue = defaultValue;
 	}
 
-	
 	public WidgetProperty(IConfigurationElement config, Class beanClass) {
 		init(config, beanClass);
 	}
 
-	
 	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 		this.beanClass = beanClass;
 		propertyName = config.getAttribute("name");
 		if (propertyDescriptor == null) {
 			try {
-				propertyDescriptor = new PropertyDescriptor(propertyName,
-						beanClass);
+				propertyDescriptor = new PropertyDescriptor(propertyName, beanClass);
 			} catch (IntrospectionException e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
@@ -148,8 +143,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		if (displayName == null || displayName.trim().length() == 0)
 			displayName = propertyName;
 		String sEditable = config.getAttribute("editable");
-		editable = sEditable == null || sEditable.trim().length() == 0
-				|| sEditable.toLowerCase().equals("true");
+		editable = sEditable == null || sEditable.trim().length() == 0 || sEditable.toLowerCase().equals("true");
 		String sLabel = config.getAttribute("renderer");
 		Class<?> type = propertyDescriptor.getPropertyType();
 		TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
@@ -167,8 +161,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		String sParser = config.getAttribute("parser");
 		if (sParser != null && sParser.trim().length() > 0) {
 			try {
-				parser = (IValueParser) config
-						.createExecutableExtension("parser");
+				parser = (IValueParser) config.createExecutableExtension("parser");
 			} catch (CoreException e) {
 				VisualSwingPlugin.getLogger().error(e);
 			}
@@ -193,8 +186,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 
 	private void createEditorProviderFactory(IConfigurationElement config) {
 		try {
-			editorFactory = (ICellEditorFactory) config
-					.createExecutableExtension("editor");
+			editorFactory = (ICellEditorFactory) config.createExecutableExtension("editor");
 		} catch (CoreException e) {
 			VisualSwingPlugin.getLogger().error(e);
 		}
@@ -202,8 +194,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 
 	private void createLabelProviderFactory(IConfigurationElement config) {
 		try {
-			labelFactory = (ILabelProviderFactory) config
-					.createExecutableExtension("renderer");
+			labelFactory = (ILabelProviderFactory) config.createExecutableExtension("renderer");
 		} catch (CoreException e) {
 			VisualSwingPlugin.getLogger().error(e);
 		}
@@ -219,7 +210,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 		this.bean = bean;
 	}
 
-	
 	@Override
 	public Object getPropertyValue(IStructuredSelection bean) {
 		assert !bean.isEmpty();
@@ -248,10 +238,9 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return true;
 	}
 
-	
 	@Override
 	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
- 		assert !bean.isEmpty();
+		assert !bean.isEmpty();
 		Object b = bean.getFirstElement();
 		if (propertyName.equals("preferredSize") && b instanceof Component) {
 			return ((Component) b).isPreferredSizeSet();
@@ -259,114 +248,99 @@ public class WidgetProperty extends AbstractAdaptable implements
 			return ((Component) b).isMinimumSizeSet();
 		else if (propertyName.equals("maximumSize") && b instanceof Component)
 			return ((Component) b).isMaximumSizeSet();
-		else if(propertyName.equals("layout")&&b instanceof Container){
-			CompositeAdapter a=(CompositeAdapter) WidgetAdapter.getWidgetAdapter((Component)b);
-			if(a.getLayoutAdapter().isDefaultLayout()){
+		else if (propertyName.equals("layout") && b instanceof Container) {
+			CompositeAdapter a = (CompositeAdapter) WidgetAdapter.getWidgetAdapter((Component) b);
+			if (a.getLayoutAdapter().isDefaultLayout()) {
 				return false;
-			}else
-				return true;			
+			} else
+				return true;
 		}
 		Object value = getFieldValue(b);
 		if (value != null && value instanceof UIResource)
 			return false;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
-
-		ILookAndFeelAdapter adapter = null;
-		if (lnfClassname != null)
-			adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
-		else
-			adapter = ExtensionRegistry.getLnfAdapter(UIManager
-					.getCrossPlatformLookAndFeelClassName());
-		if (adapter == null)
-			return false;
-		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
+		Object default_value;
+		if (Component.class.isAssignableFrom(beanClass)) {
+			ILookAndFeelAdapter adapter = null;
+			if (lnfClassname != null)
+				adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
+			else
+				adapter = ExtensionRegistry.getLnfAdapter(UIManager.getCrossPlatformLookAndFeelClassName());
+			if (adapter == null)
+				return false;
+			default_value = adapter.getDefaultValue(beanClass, propertyName);
+		} else {
+			default_value = this.defaultValue;
+		}
 		if (default_value instanceof ISystemValue)
 			return true;
 		if (propertyType == byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
-			byte dv = default_value == null ? 0 : ((Byte) default_value)
-					.byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
 			return bv != dv;
 		} else if (propertyType == char.class) {
 			char bv = value == null ? 0 : ((Character) value).charValue();
-			char dv = default_value == null ? 0 : ((Character) default_value)
-					.charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
 			return bv != dv;
 		} else if (propertyType == short.class) {
 			short bv = value == null ? 0 : ((Short) value).shortValue();
-			short dv = default_value == null ? 0 : ((Short) default_value)
-					.shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
 			return bv != dv;
 		} else if (propertyType == int.class) {
 			int bv = value == null ? 0 : ((Integer) value).intValue();
-			int dv = default_value == null ? 0 : ((Integer) default_value)
-					.intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
 			return bv != dv;
 		} else if (propertyType == long.class) {
 			long bv = value == null ? 0 : ((Long) value).longValue();
-			long dv = default_value == null ? 0 : ((Long) default_value)
-					.longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
 			return bv != dv;
 		} else if (propertyType == float.class) {
 			float bv = value == null ? 0 : ((Float) value).floatValue();
-			float dv = default_value == null ? 0 : ((Float) default_value)
-					.floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
 			return bv != dv;
 		} else if (propertyType == double.class) {
 			double bv = value == null ? 0 : ((Double) value).doubleValue();
-			double dv = default_value == null ? 0 : ((Double) default_value)
-					.doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
 			return bv != dv;
 		} else if (propertyType == void.class) {
 			return false;
 		} else if (propertyType == boolean.class) {
-			boolean bv = value == null ? false : ((Boolean) value)
-					.booleanValue();
-			boolean dv = default_value == null ? false
-					: ((Boolean) default_value).booleanValue();
+			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
+			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
 			return bv != dv;
 		} else if (propertyType == Byte.class) {
 			byte bv = value == null ? 0 : ((Byte) value).byteValue();
-			byte dv = default_value == null ? 0 : ((Byte) default_value)
-					.byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
 			return bv != dv;
 		} else if (propertyType == Character.class) {
 			char bv = value == null ? 0 : ((Character) value).charValue();
-			char dv = default_value == null ? 0 : ((Character) default_value)
-					.charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
 			return bv != dv;
 		} else if (propertyType == Short.class) {
 			short bv = value == null ? 0 : ((Short) value).shortValue();
-			short dv = default_value == null ? 0 : ((Short) default_value)
-					.shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
 			return bv != dv;
 		} else if (propertyType == Integer.class) {
 			int bv = value == null ? 0 : ((Integer) value).intValue();
-			int dv = default_value == null ? 0 : ((Integer) default_value)
-					.intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
 			return bv != dv;
 		} else if (propertyType == Long.class) {
 			long bv = value == null ? 0 : ((Long) value).longValue();
-			long dv = default_value == null ? 0 : ((Long) default_value)
-					.longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
 			return bv != dv;
 		} else if (propertyType == Float.class) {
 			float bv = value == null ? 0 : ((Float) value).floatValue();
-			float dv = default_value == null ? 0 : ((Float) default_value)
-					.floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
 			return bv != dv;
 		} else if (propertyType == Double.class) {
 			double bv = value == null ? 0 : ((Double) value).doubleValue();
-			double dv = default_value == null ? 0 : ((Double) default_value)
-					.doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
 			return bv != dv;
 		} else if (propertyType == Void.class) {
 			return false;
 		} else if (propertyType == Boolean.class) {
-			boolean bv = value == null ? false : ((Boolean) value)
-					.booleanValue();
-			boolean dv = default_value == null ? false
-					: ((Boolean) default_value).booleanValue();
+			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
+			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
 			return bv != dv;
 		} else if (propertyType == String.class) {
 			if (value == null) {
@@ -398,8 +372,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 			else if (value != null && default_value == null)
 				return true;
 			else {
-				TypeAdapter typeAdapter = ExtensionRegistry
-						.getTypeAdapter(propertyType);
+				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(propertyType);
 				if (typeAdapter != null) {
 					Comparator comparator = typeAdapter.getComparator();
 					if (comparator != null)
@@ -411,8 +384,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname,
-			IStructuredSelection bean) {
+	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
 		assert !bean.isEmpty();
 		Object b = bean.getFirstElement();
 		if (propertyName.equals("preferredSize") && b instanceof Component) {
@@ -425,83 +397,65 @@ public class WidgetProperty extends AbstractAdaptable implements
 		if (value != null && value instanceof UIResource)
 			return;
 		Class<?> propertyType = propertyDescriptor.getPropertyType();
-		ILookAndFeelAdapter adapter = ExtensionRegistry
-				.getLnfAdapter(lnfClassname);
+		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
 		if (adapter == null)
 			return;
 		Object default_value = adapter.getDefaultValue(beanClass, propertyName);
 		if (propertyType == byte.class) {
-			byte dv = default_value == null ? 0 : ((Byte) default_value)
-					.byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == char.class) {
-			char dv = default_value == null ? 0 : ((Character) default_value)
-					.charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == short.class) {
-			short dv = default_value == null ? 0 : ((Short) default_value)
-					.shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == int.class) {
-			int dv = default_value == null ? 0 : ((Integer) default_value)
-					.intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == long.class) {
-			long dv = default_value == null ? 0 : ((Long) default_value)
-					.longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == float.class) {
-			float dv = default_value == null ? 0 : ((Float) default_value)
-					.floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == double.class) {
-			double dv = default_value == null ? 0 : ((Double) default_value)
-					.doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == void.class) {
 		} else if (propertyType == boolean.class) {
-			boolean dv = default_value == null ? false
-					: ((Boolean) default_value).booleanValue();
+			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Byte.class) {
-			byte dv = default_value == null ? 0 : ((Byte) default_value)
-					.byteValue();
+			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Character.class) {
-			char dv = default_value == null ? 0 : ((Character) default_value)
-					.charValue();
+			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Short.class) {
-			short dv = default_value == null ? 0 : ((Short) default_value)
-					.shortValue();
+			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Integer.class) {
-			int dv = default_value == null ? 0 : ((Integer) default_value)
-					.intValue();
+			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Long.class) {
-			long dv = default_value == null ? 0 : ((Long) default_value)
-					.longValue();
+			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Float.class) {
-			float dv = default_value == null ? 0 : ((Float) default_value)
-					.floatValue();
+			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Double.class) {
-			double dv = default_value == null ? 0 : ((Double) default_value)
-					.doubleValue();
+			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
 			setPropertyValue(bean, dv);
 		} else if (propertyType == Void.class) {
 		} else if (propertyType == Boolean.class) {
-			boolean dv = default_value == null ? false
-					: ((Boolean) default_value).booleanValue();
+			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
 			setPropertyValue(bean, dv);
 		} else {
 			setPropertyValue(bean, default_value);
 		}
 	}
 
-	
 	@Override
 	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		assert !bean.isEmpty();
@@ -516,13 +470,10 @@ public class WidgetProperty extends AbstractAdaptable implements
 				}
 				for (Object b : bean.toArray()) {
 					IUndoableOperation operation = new SetValueOperation(b, this, value);
-					IOperationHistory operationHistory = PlatformUI
-							.getWorkbench().getOperationSupport()
-							.getOperationHistory();
+					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					if (b instanceof Component) {
 						Component jcomp = (Component) b;
-						WidgetAdapter adapter = WidgetAdapter
-								.getWidgetAdapter(jcomp);
+						WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(jcomp);
 						if (adapter != null) {
 							operation.addContext(adapter.getUndoContext());
 						}
@@ -535,7 +486,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	
 	private boolean isEditable() {
 		if (editorFactory == null) {
 			if (lastValue == null)
@@ -560,7 +510,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 			return false;
 	}
 
-	
 	@Override
 	public CellEditor createPropertyEditor(Composite parent) {
 		if (isEditable()) {
@@ -624,8 +573,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 	public boolean cloneProperty(Object bean, Component clone) {
 		Object value = getFieldValue(bean);
 		if (value != null) {
-			TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(value
-					.getClass());
+			TypeAdapter adapter = ExtensionRegistry.getTypeAdapter(value.getClass());
 			if (adapter != null && adapter.getCloner() != null) {
 				value = adapter.getCloner().clone(value);
 			}
@@ -633,7 +581,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 		setFieldValue(clone, value);
 		return true;
 	}
-	
+
 	@Override
 	public boolean isGencode() {
 		return gencode;
@@ -641,7 +589,7 @@ public class WidgetProperty extends AbstractAdaptable implements
 
 	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
-		Map<String, Boolean> editedMap=adapter.getEditingMap();
+		Map<String, Boolean> editedMap = adapter.getEditingMap();
 		Boolean bool = editedMap.get(propertyName);
 		return bool == null ? false : bool.booleanValue();
 	}
@@ -651,7 +599,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 		return parser;
 	}
 
-	
 	@Override
 	public void setFieldValue(Object bean, Object newValue) {
 		try {
@@ -669,7 +616,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	
 	@Override
 	public Object getFieldValue(Object bean) {
 		try {
@@ -687,22 +633,20 @@ public class WidgetProperty extends AbstractAdaptable implements
 		}
 	}
 
-	
 	@Override
 	public Class getPropertyType() {
 		return propertyDescriptor.getPropertyType();
 	}
-	
+
 	@Override
-	protected Class getObjectClass(){
+	protected Class getObjectClass() {
 		return getClass();
 	}
 
 	public ICodeGen getCodeGenerator() {
 		Class typeClass = propertyDescriptor.getPropertyType();
 		TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(typeClass);
-		if (editorFactory != null
-				&& editorFactory instanceof ItemProviderCellEditorFactory) {
+		if (editorFactory != null && editorFactory instanceof ItemProviderCellEditorFactory) {
 			return editorFactory;
 		} else if (typeAdapter != null) {
 			return typeAdapter.getCodegen();
@@ -712,6 +656,6 @@ public class WidgetProperty extends AbstractAdaptable implements
 	}
 
 	public String getSetName() {
-		return propertyDescriptor.getWriteMethod().getName();		
+		return propertyDescriptor.getWriteMethod().getName();
 	}
 }

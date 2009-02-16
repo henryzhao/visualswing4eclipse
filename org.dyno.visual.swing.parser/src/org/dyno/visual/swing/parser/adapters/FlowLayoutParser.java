@@ -14,33 +14,63 @@ package org.dyno.visual.swing.parser.adapters;
 
 import java.awt.FlowLayout;
 
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class FlowLayoutParser extends LayoutParser {
+
+	@Override
+	protected String getInitCode(ImportRewrite imports) {
+		FlowLayout layout = (FlowLayout) layoutAdapter.getContainer().getLayout();
+		if (layout.getAlignOnBaseline()) {
+			WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
+			String layoutName = getLayoutVariableName(containerAdapter);
+			String flowLayoutName = imports.addImport("java.awt.FlowLayout");
+			String code = flowLayoutName + " " + layoutName + " = " + getCreationCode(imports) + ";\n";
+			code += layoutName + ".setAlignOnBaseline(true);\n";
+			return code;
+		} else
+			return null;
+	}
+
+	private String getLayoutVariableName(WidgetAdapter adapter) {
+		return (adapter.isRoot() ? "this" : adapter.getID()) + "Layout";
+	}
+
 	@Override
 	protected String getNewInstanceCode(ImportRewrite imports) {
+		FlowLayout layout = (FlowLayout) layoutAdapter.getContainer().getLayout();
+		if (layout.getAlignOnBaseline()) {
+			WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
+			String layoutName = getLayoutVariableName(containerAdapter);
+			return layoutName;
+		} else
+			return getCreationCode(imports);
+	}
+
+	private String getCreationCode(ImportRewrite imports) {
 		FlowLayout layout = (FlowLayout) layoutAdapter.getContainer().getLayout();
 		int hgap = layout.getHgap();
 		int vgap = layout.getVgap();
 		int alignment = layout.getAlignment();
-		String strAlignment = imports.addImport("java.awt.FlowLayout")+".CENTER";
+		String strAlignment = imports.addImport("java.awt.FlowLayout") + ".CENTER";
 		if (alignment == FlowLayout.CENTER)
-			strAlignment = imports.addImport("java.awt.FlowLayout")+".CENTER";
+			strAlignment = imports.addImport("java.awt.FlowLayout") + ".CENTER";
 		else if (alignment == FlowLayout.LEADING)
-			strAlignment = imports.addImport("java.awt.FlowLayout")+".LEADING";
+			strAlignment = imports.addImport("java.awt.FlowLayout") + ".LEADING";
 		else if (alignment == FlowLayout.LEFT)
-			strAlignment = imports.addImport("java.awt.FlowLayout")+".LEFT";
+			strAlignment = imports.addImport("java.awt.FlowLayout") + ".LEFT";
 		else if (alignment == FlowLayout.RIGHT)
-			strAlignment = imports.addImport("java.awt.FlowLayout")+".RIGHT";
+			strAlignment = imports.addImport("java.awt.FlowLayout") + ".RIGHT";
 		else if (alignment == FlowLayout.TRAILING)
-			strAlignment = imports.addImport("java.awt.FlowLayout")+".TRAILING";
+			strAlignment = imports.addImport("java.awt.FlowLayout") + ".TRAILING";
 		if (hgap != 5 || vgap != 5) {
-			return "new "+imports.addImport("java.awt.FlowLayout")+"(" + strAlignment + ", " + hgap + ", " + vgap + ")";
+			return "new " + imports.addImport("java.awt.FlowLayout") + "(" + strAlignment + ", " + hgap + ", " + vgap + ")";
 		} else {
 			if (alignment != FlowLayout.CENTER) {
-				return "new "+imports.addImport("java.awt.FlowLayout")+"(" + strAlignment + ")";
+				return "new " + imports.addImport("java.awt.FlowLayout") + "(" + strAlignment + ")";
 			} else {
-				return "new "+imports.addImport("java.awt.FlowLayout")+"()";
+				return "new " + imports.addImport("java.awt.FlowLayout") + "()";
 			}
 		}
 	}
