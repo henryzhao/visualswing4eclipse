@@ -39,17 +39,19 @@ public class ImageIconValidator implements ICellEditorValidator {
 			String token = tokenizer.nextToken().trim();
 			if (token.length() == 0)
 				return Messages.ImageIconValidator_Incorrect_Icon_Image_Format;
-			char c = token.charAt(0);
-			if (!Character.isJavaIdentifierStart(c)) {
-				return Messages.ImageIconValidator_Incorrect_Icon_Image_Format_Segment_Id;
-			}
-			int i = 0;
-			while (true) {
-				c = token.charAt(i++);
-				if (!Character.isJavaIdentifierPart(c) && c != '.')
+			if (tokenizer.hasMoreTokens()) {
+				char c = token.charAt(0);
+				if (!Character.isJavaIdentifierStart(c)) {
 					return Messages.ImageIconValidator_Incorrect_Icon_Image_Format_Segment_Id;
-				if (i >= token.length())
-					break;
+				}
+				int i = 0;
+				while (true) {
+					c = token.charAt(i++);
+					if (!Character.isJavaIdentifierPart(c) && c != '.')
+						return Messages.ImageIconValidator_Incorrect_Icon_Image_Format_Segment_Id;
+					if (i >= token.length())
+						break;
+				}
 			}
 		} while (tokenizer.hasMoreTokens());
 		IJavaProject prj = WhiteBoard.getCurrentProject();

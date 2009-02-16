@@ -44,7 +44,16 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 				int[] widths = layout.columnWidths;
 				if (widths == null)
 					widths = row_cols[0];
-				widths[index] += (e.getX() - prev)*2;
+				if(index == -1){
+					widths[0] += prev - e.getX();
+					widths[0] += prev - e.getX();
+				} else if (index == widths.length - 1) {
+					widths[index] += e.getX() - prev;
+					widths[index] += e.getX() - prev;
+				} else {
+					widths[index] += e.getX()-prev;
+					widths[index + 1] -= e.getX() - prev;
+				}
 				layout.columnWidths = widths;
 				layout.layoutContainer(container);
 				prev = e.getX();
@@ -54,6 +63,21 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 				int[] heights = layout.rowHeights;
 				if (heights == null)
 					heights = row_cols[1];
+				if(index == -1){
+					heights[0] += prev - e.getY();
+					heights[0] += prev - e.getY();
+				} else if (index == heights.length - 1) {
+					heights[index] += e.getY() - prev;
+					heights[index] += e.getY() - prev;
+				} else {
+					heights[index] += e.getY()-prev;
+					heights[index + 1] -= e.getY() - prev;
+				}
+				layout.rowHeights = heights;
+				layout.layoutContainer(container);
+				prev = e.getY();
+				widgetAdapter.repaintDesigner();
+				e.consume();				
 			}
 		}
 	}
@@ -106,9 +130,12 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 				widths = row_cols[0];
 			if (widths != null) {
 				int x = origin != null ? origin.x : 0;
-				for (int i = 0; i < widths.length; i++) {
-					if (e.getX() > x - DISTANCE_THRESHOLD
-							&& e.getX() < x + DISTANCE_THRESHOLD) {
+				if (e.getX() > x - DISTANCE_THRESHOLD
+						&& e.getX() < x + DISTANCE_THRESHOLD)
+					return Cursor.E_RESIZE_CURSOR;
+				for (int i = 0; i < widths.length; i++) {					
+					if (e.getX() > x + widths[i]- DISTANCE_THRESHOLD
+							&& e.getX() < x+ widths[i] + DISTANCE_THRESHOLD) {
 						return Cursor.E_RESIZE_CURSOR;
 					}
 					x += widths[i];
@@ -123,9 +150,13 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 				heights = row_cols[1];
 			if (heights != null) {
 				int y = origin != null ? origin.y : 0;
+				if (e.getY() > y - DISTANCE_THRESHOLD
+						&& e.getY() < y + DISTANCE_THRESHOLD) {
+					return Cursor.N_RESIZE_CURSOR;
+				}
 				for (int i = 0; i < heights.length; i++) {
-					if (e.getY() > y - DISTANCE_THRESHOLD
-							&& e.getY() < y + DISTANCE_THRESHOLD) {
+					if (e.getY() > y +heights[i]- DISTANCE_THRESHOLD
+							&& e.getY() < y +heights[i]+ DISTANCE_THRESHOLD) {
 						return Cursor.N_RESIZE_CURSOR;
 					}
 					y += heights[i];
@@ -166,30 +197,29 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 				widths = row_cols[0];
 			if (widths != null) {
 				int x = origin != null ? origin.x : 0;
+				if (e.getX() > x - DISTANCE_THRESHOLD
+						&& e.getX() < x + DISTANCE_THRESHOLD
+						&& !isInDropDown(e.getPoint())) {
+					dragging = true;
+					draggingX = true;
+					index = -1;
+					prev = x;
+					e.consume();
+					return;
+				}
 				for (int i = 0; i < widths.length; i++) {
-					if (e.getX() > x - DISTANCE_THRESHOLD
-							&& e.getX() < x + DISTANCE_THRESHOLD
+					if (e.getX() > x +widths[i]- DISTANCE_THRESHOLD
+							&& e.getX() < x + widths[i]+DISTANCE_THRESHOLD
 							&& !isInDropDown(e.getPoint())) {
 						widgetAdapter.setCursorType(Cursor.E_RESIZE_CURSOR);
 						dragging = true;
 						draggingX = true;
 						index = i;
-						prev = x;
+						prev = x+widths[i];
 						e.consume();
 						return;
 					}
 					x += widths[i];
-				}
-				if (e.getX() > x - DISTANCE_THRESHOLD
-						&& e.getX() < x + DISTANCE_THRESHOLD
-						&& !isInDropDown(e.getPoint())) {
-					widgetAdapter.setCursorType(Cursor.E_RESIZE_CURSOR);
-					dragging = true;
-					draggingX = true;
-					index = widths.length - 1;
-					prev = x;
-					e.consume();
-					return;
 				}
 			}
 			int[] heights = layout.rowHeights;
@@ -197,22 +227,29 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 				heights = row_cols[1];
 			if (heights != null) {
 				int y = origin != null ? origin.y : 0;
+				if (e.getY() > y - DISTANCE_THRESHOLD
+						&& e.getY() < y + DISTANCE_THRESHOLD
+						&& !isInDropDown(e.getPoint())) {
+					dragging = true;
+					draggingX = false;
+					index = -1;
+					prev = y;
+					e.consume();
+					return;
+				}
 				for (int i = 0; i < heights.length; i++) {
-					if (e.getY() > y - DISTANCE_THRESHOLD
-							&& e.getY() < y + DISTANCE_THRESHOLD
+					if (e.getY() > y +heights[i]- DISTANCE_THRESHOLD
+							&& e.getY() < y +heights[i]+ DISTANCE_THRESHOLD
 							&& !isInDropDown(e.getPoint())) {
 						widgetAdapter.setCursorType(Cursor.N_RESIZE_CURSOR);
+						dragging = true;
+						draggingX = false;
+						index = i;
+						prev = y+heights[i];
 						e.consume();
 						return;
 					}
 					y += heights[i];
-				}
-				if (e.getY() > y - DISTANCE_THRESHOLD
-						&& e.getY() < y + DISTANCE_THRESHOLD
-						&& !isInDropDown(e.getPoint())) {
-					widgetAdapter.setCursorType(Cursor.N_RESIZE_CURSOR);
-					e.consume();
-					return;
 				}
 			}
 			widgetAdapter.setCursorType(Cursor.DEFAULT_CURSOR);
@@ -226,8 +263,7 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		super.mouseReleased(e);
+		dragging = false;
 	}
 
 	@Override

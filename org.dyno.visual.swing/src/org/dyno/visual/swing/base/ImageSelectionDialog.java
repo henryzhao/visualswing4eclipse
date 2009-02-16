@@ -34,6 +34,8 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -250,6 +252,12 @@ public class ImageSelectionDialog extends Dialog {
 				view_selectionChanged(event);
 			}
 		});
+		view.getTree().addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				treeDoubleClicked(e);
+			}
+		});
 		Group group = new Group(area, SWT.NONE);
 		group.setText("Preview");
 		group.setLayout(new FillLayout());
@@ -261,7 +269,6 @@ public class ImageSelectionDialog extends Dialog {
 		label = new Label(group, SWT.CENTER);
 		return parent;
 	}
-
 	private static final int NULL_ID = IDialogConstants.CLIENT_ID + 1;
 	private static final int IMPORT_ID = IDialogConstants.CLIENT_ID + 2;
 
@@ -360,10 +367,22 @@ public class ImageSelectionDialog extends Dialog {
 		}
 		return ctrl;
 	}
-
+	private void treeDoubleClicked(MouseEvent e) {
+		TreeSelection sel=(TreeSelection) view.getSelection();
+		if(sel!=null&&!sel.isEmpty()){
+			updateButton(sel.getFirstElement());
+			if(getButton(IDialogConstants.OK_ID).isEnabled()){
+				buttonPressed(IDialogConstants.OK_ID);
+			}
+		}
+	}
 	private void view_selectionChanged(SelectionChangedEvent event) {
 		TreeSelection sel = (TreeSelection) event.getSelection();
 		Object selected = sel.getFirstElement();
+		updateButton(selected);
+	}
+
+	private void updateButton(Object selected) {
 		if (selected != null) {
 			if (selected instanceof IFile) {
 				IFile file = (IFile) selected;

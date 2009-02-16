@@ -26,6 +26,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
+import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -88,16 +89,12 @@ public class JPanelAdapter extends CompositeAdapter {
 
 	@Override
 	public Object getAdapter(Class adapterClass) {
-		Object adaptable = super.getAdapter(adapterClass);
-		if (adaptable == null) {
+		if (adapterClass == MouseInputListener.class) {
 			LayoutAdapter adapter = getLayoutAdapter();
 			if (adapter != null)
 				return adapter.getAdapter(adapterClass);
-			else
-				return null;
-		} else
-			return adaptable;
-
+		}
+		return super.getAdapter(adapterClass);
 	}
 
 	@Override

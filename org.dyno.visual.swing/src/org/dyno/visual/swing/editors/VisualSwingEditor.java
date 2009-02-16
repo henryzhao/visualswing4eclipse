@@ -16,6 +16,7 @@ package org.dyno.visual.swing.editors;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.Field;
@@ -455,8 +456,11 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					AwtEnvironment.runWithLnf(newlnf, new ISyncUITask() {
 						@Override
 						public Object doTask() throws Throwable {
-							if (designer != null)
-								SwingUtilities.updateComponentTreeUI(designer);
+							if (designer != null){
+								Window window = SwingUtilities.getWindowAncestor(designer);
+								if (window != null)
+									SwingUtilities.updateComponentTreeUI(window);
+							}
 							return null;
 						}
 					});
@@ -481,7 +485,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			} else {
 				String lnfId1 = lnf1.getID();
 				String lnfId2 = lnf2.getID();
-				return lnfId1.equals(lnfId2);
+				if(!lnfId1.equals(lnfId2)){
+					return false;
+				} else {
+					Class clazz1 = lnf1.getClass();
+					Class clazz2 = lnf2.getClass();
+					return clazz1.equals(clazz2);
+				}
 			}
 		}
 	}
