@@ -296,7 +296,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 								dim = new Dimension(100,22);
 							bean.setSize(dim);
 							if(bean instanceof Container){
-								((Container)bean).doLayout();
+								layoutContainer((Container)bean);
 							}
 							WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
 							List<WidgetAdapter> list = new ArrayList<WidgetAdapter>();
@@ -318,6 +318,16 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 			selectedItem.setSelection(false);
 		}
 		selectedItem = item.getSelection()?item:null;
+	}
+
+	private void layoutContainer(Container container) {
+		container.doLayout();
+		int count = container.getComponentCount();
+		for(int i=0;i<count;i++){
+			Component child = container.getComponent(i);
+			if(child instanceof Container)
+				layoutContainer((Container)child);
+		}
 	}
 
 	private ToolItem selectedItem;
