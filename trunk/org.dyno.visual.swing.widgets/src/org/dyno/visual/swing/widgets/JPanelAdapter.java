@@ -114,9 +114,14 @@ public class JPanelAdapter extends CompositeAdapter {
 		} else if (isRoot() && comp.getClass().getSuperclass() == JPanel.class) {
 			return FlowLayout.class;
 		}
-		Class superClazz = comp.getClass().getSuperclass();
+		Class testClass;
+		if(isRoot()&&comp.getClass().getSuperclass()!=JPanel.class){
+			testClass = comp.getClass().getSuperclass();
+		}else{
+			testClass = comp.getClass();
+		}
 		try {
-			Container container = (Container) superClazz.newInstance();
+			Container container = (Container) testClass.newInstance();
 			LayoutManager lm = container.getLayout();
 			if (lm == null)
 				return null;
