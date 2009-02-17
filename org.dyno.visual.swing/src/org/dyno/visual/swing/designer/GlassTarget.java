@@ -37,10 +37,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.editors.PaletteView;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IEditor;
@@ -173,7 +171,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 						IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 						List<Component> children = new ArrayList<Component>();
 						List<Object> new_constraints = new ArrayList<Object>();
-						for (WidgetAdapter wa : WhiteBoard.getSelectedWidget()) {
+						for (WidgetAdapter wa : designer.getSelectedWidget()) {
 							Component child = wa.getParentContainer();
 							children.add(child);
 							new_constraints.add(compositeAdapter.getChildConstraints(child));
@@ -194,7 +192,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 				if (lastParent != null) {
 					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					List<Component> children = new ArrayList<Component>();
-					for (WidgetAdapter wa : WhiteBoard.getSelectedWidget()) {
+					for (WidgetAdapter wa : designer.getSelectedWidget()) {
 						children.add(wa.getParentContainer());
 					}
 					IUndoableOperation operation = new DragDropOperation(lastParent, children, lastConstraints);
@@ -215,7 +213,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 					IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
 					List<Component> children = new ArrayList<Component>();
 					List<Object> new_constraints = new ArrayList<Object>();
-					for (WidgetAdapter wa : WhiteBoard.getSelectedWidget()) {
+					for (WidgetAdapter wa : designer.getSelectedWidget()) {
 						Component child = wa.getParentContainer();
 						children.add(child);
 						new_constraints.add(((CompositeAdapter) adapter).getChildConstraints(child));
@@ -235,16 +233,16 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		if (!shift) {
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;
-			WhiteBoard.setSelectedWidget(null);
-			PaletteView.clearToolSelection();
+			designer.setSelectedWidget(null);
+			designer.clearToolSelection();
 		} else {
-			List<WidgetAdapter> adapters = WhiteBoard.getSelectedWidget();
+			List<WidgetAdapter> adapters = designer.getSelectedWidget();
 			List<WidgetAdapter> clones = new ArrayList<WidgetAdapter>();
 			for (WidgetAdapter adapter : adapters) {
 				WidgetAdapter clone = (WidgetAdapter) adapter.clone();
 				clones.add(clone);
 			}
-			WhiteBoard.setSelectedWidget(clones);
+			designer.setSelectedWidget(clones);
 		}
 		glassPlane.repaint();
 	}
@@ -697,7 +695,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			if (isTobeDnd() && isDndReady(e)) {
 				TransferHandler handler = glassPlane.getTransferHandler();
 				handler.exportAsDrag(glassPlane, dragging_event, TransferHandler.COPY);
-				WhiteBoard.setSelectedWidget(currentAdapters);
+				designer.setSelectedWidget(currentAdapters);
 				if (state == STATE_BEAN_TOBE_HOVER) {
 					setMascotLocation(e.getPoint());
 					state = STATE_BEAN_HOVER;
@@ -934,7 +932,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 	}
 
 	private boolean isAddingState() {
-		return WhiteBoard.getSelectedWidget() != null;
+		return designer.getSelectedWidget() != null;
 	}
 
 	private void setMascotLocation(Point p) {
