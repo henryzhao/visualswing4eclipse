@@ -13,49 +13,23 @@
 
 package org.dyno.visual.swing.editors;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.swing.JComponent;
-
-import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
-import org.dyno.visual.swing.base.ExtensionRegistry;
-import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IContributor;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.ui.IJavaElementSearchConstants;
-import org.eclipse.jdt.ui.JavaUI;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.dialogs.SelectionDialog;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
-import org.eclipse.ui.forms.events.ExpansionEvent;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
-import org.eclipse.ui.forms.widgets.SharedScrolledComposite;
-import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.Bundle;
+import org.eclipse.core.runtime.PlatformObject;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.IContributedContentsView;
+import org.eclipse.ui.part.IPage;
+import org.eclipse.ui.part.IPageBookViewPage;
+import org.eclipse.ui.part.MessagePage;
+import org.eclipse.ui.part.PageBook;
+import org.eclipse.ui.part.PageBookView;
 
 /**
  * 
@@ -64,275 +38,173 @@ import org.osgi.framework.Bundle;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class PaletteView extends ViewPart implements SelectionListener {
-	private static final String ADAPTER_EXTENSION_POINT = "org.dyno.visual.swing.widgetAdapter";
-	private static final String GROUP_EXTENSION_POINT = "org.dyno.visual.swing.widgetGroup";
-	public static PaletteView singleton;
-	private HashMap<String, ToolBar> toolbars;
-	private HashMap<String, ExpandableComposite> expandItems;
-	private SharedScrolledComposite expandBar;
+@SuppressWarnings("unchecked")
+public class PaletteView extends PageBookView implements ISelectionProvider,
+        ISelectionChangedListener {
 
-	public PaletteView() {
-		singleton = this;
-	}
+    public PaletteView() {
+        super();
+    }
 
-	public static PaletteView getSingleton() {
-		return singleton;
-	}
+    /* (non-Javadoc)
+     * Method declared on ISelectionProvider.
+     */
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+        getSelectionProvider().addSelectionChangedListener(listener);
+    }
 
-	public void createPartControl(Composite parent) {
-		expandBar = new SharedScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL) {
-		};
-		expandBar.setExpandHorizontal(true);
-		expandBar.setExpandVertical(true);
-		Composite container = new Composite(expandBar, SWT.NONE);
-		expandBar.setContent(container);
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		toolbars = new HashMap<String, ToolBar>();
-		expandItems = new HashMap<String, ExpandableComposite>();
-		parseGroupExtensions(container);
-		parseWidgetExtensions();
+    /* (non-Javadoc)
+     * Method declared on PageBookView.
+     */
+    protected IPage createDefaultPage(PageBook book) {
+        MessagePage page = new MessagePage();
+        initPage(page);
+        page.createControl(book);
+        page.setMessage("No components available!");
+        return page;
+    }
+	private static Object getAdapter(Object sourceObject, Class adapter, boolean activatePlugins) {
+    	Assert.isNotNull(adapter);
+        if (sourceObject == null) {
+            return null;
+        }
+        if (adapter.isInstance(sourceObject)) {
+            return sourceObject;
+        }
 
-		ExpandableComposite expandItem = new ExpandableComposite(container, SWT.NONE);
-		expandItem.setExpanded(false);
-		expandItem.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
-		expandItem.setText("Custom Component");
-		expandItem.addExpansionListener(new ExpansionAdapter() {
-			@Override
-			public void expansionStateChanged(ExpansionEvent e) {
-				updateScrolledComposite();
+        if (sourceObject instanceof IAdaptable) {
+            IAdaptable adaptable = (IAdaptable) sourceObject;
+
+            Object result = adaptable.getAdapter(adapter);
+            if (result != null) {
+                // Sanity-check
+                Assert.isTrue(adapter.isInstance(result));
+                return result;
+            }
+        } 
+        
+        if (!(sourceObject instanceof PlatformObject)) {
+        	Object result;
+        	if (activatePlugins) {
+        		result = Platform.getAdapterManager().loadAdapter(sourceObject, adapter.getName());
+        	} else {
+        		result = Platform.getAdapterManager().getAdapter(sourceObject, adapter);
+        	}
+            if (result != null) {
+                return result;
+            }
+        }
+
+        return null;
+    }
+    /* (non-Javadoc)
+     * Method declared on PageBookView.
+     */
+    protected PageRec doCreatePage(IWorkbenchPart part) {
+        // Try to get an outline page.
+        Object obj = getAdapter(part, IPalettePage.class, false);
+        if (obj instanceof IPalettePage) {
+        	IPalettePage page = (IPalettePage) obj;
+            if (page instanceof IPageBookViewPage) {
+				initPage((IPageBookViewPage) page);
 			}
-		});
-		ToolBar toolBar = new ToolBar(expandItem, SWT.VERTICAL | SWT.RIGHT | SWT.FLAT);
-		expandItem.setClient(toolBar);
-		ToolItem toolItem = new ToolItem(toolBar, SWT.CHECK);
-		toolItem.setText("Custom Swing Component");
-		toolItem.setToolTipText("Choose custom component");
-		String iconUrl = "icons/beans.png";
-		Image img = VisualSwingPlugin.getSharedImage(VisualSwingPlugin.PLUGIN_ID, iconUrl);
-		toolItem.setImage(img);
-		toolItem.addSelectionListener(this);
-		new ToolItem(toolBar, SWT.SEPARATOR);
+            page.createControl(getPageBook());
+            return new PageRec(part, page);
+        }
+        // There is no content outline
+        return null;
+    }
 
-		updateScrolledComposite();
-	}
-	public void setFocus() {
-		expandBar.setFocus();
-	}
+    /* (non-Javadoc)
+     * Method declared on PageBookView.
+     */
+    protected void doDestroyPage(IWorkbenchPart part, PageRec rec) {
+    	IPage page = (IPage) rec.page;
+        page.dispose();
+        rec.dispose();
+    }
 
-	private void parseGroupExtensions(Composite bar) {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(GROUP_EXTENSION_POINT);
-		if (extensionPoint != null) {
-			IExtension[] extensions = extensionPoint.getExtensions();
-			if (extensions != null && extensions.length > 0) {
-				for (int i = 0; i < extensions.length; i++) {
-					parseGroupExtension(extensions[i], bar);
-				}
-			}
+    /* (non-Javadoc)
+     * Method declared on IAdaptable.
+     */
+    public Object getAdapter(Class key) {
+        if (key == IContributedContentsView.class) {
+			return new IContributedContentsView() {
+                public IWorkbenchPart getContributingPart() {
+                    return getContributingEditor();
+                }
+            };
 		}
-	}
+        return super.getAdapter(key);
+    }
 
-	private void parseGroupExtension(IExtension extension, Composite bar) {
-		IContributor contributor = extension.getContributor();
-		String pluginId = contributor.getName();
-		Bundle bundle = Platform.getBundle(pluginId);
-		IConfigurationElement[] configs = extension.getConfigurationElements();
-		if (configs != null && configs.length > 0) {
-			for (int i = 0; i < configs.length; i++) {
-				String name = configs[i].getName();
-				if (name.equals("group")) {
-					addGroup(configs[i], bundle, bar);
-				}
-			}
+    /* (non-Javadoc)
+     * Method declared on PageBookView.
+     */
+    protected IWorkbenchPart getBootstrapPart() {
+        IWorkbenchPage page = getSite().getPage();
+        if (page != null) {
+			return page.getActiveEditor();
 		}
-	}
 
-	private void parseWidgetExtensions() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(ADAPTER_EXTENSION_POINT);
-		if (extensionPoint != null) {
-			IExtension[] extensions = extensionPoint.getExtensions();
-			if (extensions != null && extensions.length > 0) {
-				for (int i = 0; i < extensions.length; i++) {
-					parseWidgetExtension(extensions[i]);
-				}
-			}
-		}
-	}
+        return null;
+    }
 
-	private void parseWidgetExtension(IExtension extension) {
-		IContributor contributor = extension.getContributor();
-		String pluginId = contributor.getName();
-		IConfigurationElement[] configs = extension.getConfigurationElements();
-		if (configs != null && configs.length > 0) {
-			for (int i = 0; i < configs.length; i++) {
-				String name = configs[i].getName();
-				if (name.equals("widget")) {
-					addWidget(configs[i], pluginId);
-				}
-			}
-		}
-	}
+    /**
+     * Returns the editor which contributed the current 
+     * page to this view.
+     *
+     * @return the editor which contributed the current page
+     * or <code>null</code> if no editor contributed the current page
+     */
+    private IWorkbenchPart getContributingEditor() {
+        return getCurrentContributingPart();
+    }
 
-	private void addGroup(IConfigurationElement config, Bundle bundle,
-			Composite bar) {
-		String id = config.getAttribute("id");
-		String displayName = config.getAttribute("displayName");
-		if (displayName == null || displayName.equals("")) {
-			displayName = id;
-		}
-		ToolBar toolbar = toolbars.get(id);
-		if (toolbar == null) {
-			ExpandableComposite expandItem = new ExpandableComposite(bar,
-					SWT.NONE);
-			String sExpanded = config.getAttribute("expanded");
-			if (sExpanded == null || sExpanded.trim().length() == 0)
-				sExpanded = "true";
-			expandItem.setExpanded(sExpanded.equals("true"));
-			expandItem.setFont(JFaceResources.getFontRegistry().getBold(
-					JFaceResources.DIALOG_FONT));
-			expandItem.setText(displayName);
-			expandItem.addExpansionListener(new ExpansionAdapter() {
-				@Override
-				public void expansionStateChanged(ExpansionEvent e) {
-					updateScrolledComposite();
-				}
-			});
-			toolbar = new ToolBar(expandItem, SWT.VERTICAL | SWT.RIGHT
-					| SWT.FLAT);
-			expandItem.setClient(toolbar);
-			toolbars.put(id, toolbar);
-			expandItems.put(id, expandItem);
-		}
-	}
+    /* (non-Javadoc)
+     * Method declared on ISelectionProvider.
+     */
+    public ISelection getSelection() {
+        // get the selection from the selection provider
+        return getSelectionProvider().getSelection();
+    }
 
-	private void updateScrolledComposite() {
-		Composite container = (Composite) expandBar.getContent();
-		container.layout();
-		expandBar.layout();
-		expandBar.reflow(true);
-	}
+    /* (non-Javadoc)
+     * Method declared on PageBookView.
+     * We only want to track editors.
+     */
+    protected boolean isImportant(IWorkbenchPart part) {
+        //We only care about editors
+        return (part instanceof IEditorPart);
+    }
 
-	private void addWidget(IConfigurationElement config, String pluginId) {
-		String abs = config.getAttribute("abstract");
-		if (abs != null && abs.equals("true"))
-			return;
-		String sRootPaneContainer = config.getAttribute("rootPaneContainer");
-		if (sRootPaneContainer != null
-				&& sRootPaneContainer.trim().length() > 0
-				&& sRootPaneContainer.equals("true"))
-			return;
-		String sShown = config.getAttribute("shown");
-		if (sShown != null && sShown.trim().equals("false"))
-			return;
-		String groupId = config.getAttribute("groupId");
-		if (groupId != null && groupId.trim().length() > 0) {
-			ToolBar toolbar = toolbars.get(groupId);
-			if (toolbar != null) {
-				String widgetClassname = config.getAttribute("widgetClass");
-				String widgetName = config.getAttribute("widgetName");
-				if (widgetName == null || widgetName.trim().length() == 0)
-					widgetName = widgetClassname;
-				ToolItem toolItem = new ToolItem(toolbar, SWT.CHECK);
-				toolItem.setText(" " + widgetName);
-				toolItem.setToolTipText(widgetClassname);
-				String iconUrl = config.getAttribute("icon");
-				Image img = VisualSwingPlugin.getSharedImage(pluginId, iconUrl);
-				toolItem.setImage(img);
-				toolItem.addSelectionListener(this);
-				toolItem.setData(widgetClassname);
-			}
-		}
-	}
+    /* (non-Javadoc)
+     * Method declared on IViewPart.
+     * Treat this the same as part activation.
+     */
+    public void partBroughtToTop(IWorkbenchPart part) {
+        partActivated(part);
+    }
 
-	public static void clearToolSelection() {
-		singleton.clearSelection();
-	}
+    /* (non-Javadoc)
+     * Method declared on ISelectionProvider.
+     */
+    public void removeSelectionChangedListener(
+            ISelectionChangedListener listener) {
+        getSelectionProvider().removeSelectionChangedListener(listener);
+    }
 
-	private void clearSelection() {
-		expandBar.getDisplay().asyncExec(new ClearRunnable());
-	}
+    /* (non-Javadoc)
+     * Method declared on ISelectionChangedListener.
+     */
+    public void selectionChanged(SelectionChangedEvent event) {
+        getSelectionProvider().selectionChanged(event);
+    }
 
-	class ClearRunnable implements Runnable {
-		@Override
-		public void run() {
-			if (selectedItem != null && selectedItem.getSelection()) {
-				selectedItem.setSelection(false);
-				selectedItem = null;
-			}
-		}
-	}
-
-	@Override
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
-
-	@Override
-	public void widgetSelected(SelectionEvent e) {
-		ToolItem item = (ToolItem) e.getSource();
-		setSelectedItem(item);
-	}
-	
-	private void setSelectedItem(ToolItem item) {
-
-		if (item.getSelection()) {
-			String beanClassname = (String) item.getData();
-			if (beanClassname != null) {
-				WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(beanClassname);
-				List<WidgetAdapter> list = new ArrayList<WidgetAdapter>();
-				list.add(adapter);
-				WhiteBoard.setSelectedWidget(list);
-			}else{
-				Shell parent = getViewSite().getShell();
-				try {
-					SelectionDialog typeDialog = JavaUI.createTypeDialog(parent, new ProgressMonitorDialog(parent), WhiteBoard.getCurrentProject().getProject(), IJavaElementSearchConstants.CONSIDER_CLASSES, false);
-					if(typeDialog.open()==Window.OK){
-						Object[] result = typeDialog.getResult();
-						if(result!=null&&result.length>0){
-							IType type = (IType) result[0];
-							String className = type.getElementName();
-							IPackageFragment packageFragment = type.getPackageFragment();
-							String pkg=packageFragment.getElementName();
-							if(pkg!=null&&pkg.trim().length()>0)
-								className=pkg+"."+className;
-							final Class<?> beanClass = JavaUtil.getProjectClassLoader(WhiteBoard.getCurrentProject()).loadClass(className);
-							if(!JComponent.class.isAssignableFrom(beanClass)){
-								MessageDialog.openError(parent, "Error", "Chosen class must be a javax.swing.JComponent derived class!");
-								item.setSelection(false);
-								return;
-							}
-							Component bean = (Component)beanClass.newInstance();
-							Dimension dim = bean.getSize();
-							if(dim.width<10||dim.height<4)
-								dim = bean.getPreferredSize();
-							if(dim.width<10||dim.height<4)
-								dim = new Dimension(100,22);
-							bean.setSize(dim);
-							if(bean instanceof Container){
-								((Container)bean).doLayout();
-							}
-							WidgetAdapter beanAdapter = ExtensionRegistry.createWidgetAdapter(bean);
-							List<WidgetAdapter> list = new ArrayList<WidgetAdapter>();
-							list.add(beanAdapter);
-							WhiteBoard.setSelectedWidget(list);
-						}
-					}
-				} catch (Exception e) {
-					VisualSwingPlugin.getLogger().error(e);
-				}
-			}
-		} else {
-			WhiteBoard.setSelectedWidget(null);
-		}
-		if (selectedItem != null && selectedItem != item
-				&& selectedItem.getSelection()) {
-			selectedItem.setSelection(false);
-		}
-		selectedItem = item.getSelection()?item:null;
-	}
-
-	private ToolItem selectedItem;
+    /* (non-Javadoc)
+     * Method declared on ISelectionProvider.
+     */
+    public void setSelection(ISelection selection) {
+        getSelectionProvider().setSelection(selection);
+    }
 }
-

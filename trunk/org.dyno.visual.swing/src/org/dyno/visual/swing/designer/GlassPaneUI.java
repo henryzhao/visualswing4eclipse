@@ -31,7 +31,6 @@ import javax.swing.MenuElement;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.ComponentUI;
 
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -319,7 +318,7 @@ public class GlassPaneUI extends ComponentUI {
 		Point e = plane.getHotspotPoint();
 		if (e == null)
 			return;
-		List<WidgetAdapter> adapters = WhiteBoard.getSelectedWidget();
+		List<WidgetAdapter> adapters = designer.getSelectedWidget();
 		if (adapters == null)
 			return;
 		for (WidgetAdapter adapter : adapters) {

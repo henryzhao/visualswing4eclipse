@@ -101,7 +101,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	private ISelection selection;
 	private PropertySheetPage sheetPage;
 	private ScrolledComposite scrollPane;
-
+	private PalettePage palettePage;
 	public VisualSwingEditor() {
 		super();
 		actions = new HashMap<String, EditorAction>();
@@ -135,6 +135,14 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 						.setPropertySourceProvider(new WidgetAdapterContentProvider());
 			}
 			return sheetPage;
+		} else if(adapter == IPalettePage.class){
+			if(palettePage==null){
+				if (designer != null)
+					palettePage = new PalettePage(designer);
+				else
+					palettePage = new PalettePage(this);
+			}
+			return palettePage;
 		} else
 			return super.getAdapter(adapter);
 	}
@@ -705,5 +713,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
 		}
+	}
+
+	public void clearToolSelection() {
+		palettePage.clearToolSelection();
 	}
 }

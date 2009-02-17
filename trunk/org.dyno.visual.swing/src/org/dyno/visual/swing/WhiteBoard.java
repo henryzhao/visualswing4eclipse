@@ -13,13 +13,9 @@
 
 package org.dyno.visual.swing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.editors.VisualSwingEditor;
-import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.IJavaProject;
 
 /**
@@ -31,22 +27,7 @@ import org.eclipse.jdt.core.IJavaProject;
  */
 public class WhiteBoard {
 	private static VisualSwingEditor editor;
-	private static List<WidgetAdapter> selectedWidget;
 
-	public static void setSelectedWidget(List<WidgetAdapter> adapters) {
-		if (adapters == null) {
-			selectedWidget = null;
-		} else {
-			selectedWidget = new ArrayList<WidgetAdapter>();
-			for (WidgetAdapter adapter : adapters) {
-				selectedWidget.add(adapter);
-			}
-		}
-	}
-
-	public static List<WidgetAdapter> getSelectedWidget() {
-		return selectedWidget;
-	}
 	public static IJavaProject getCurrentProject() {
 		return editor==null?null:editor.getHostProject();
 	}

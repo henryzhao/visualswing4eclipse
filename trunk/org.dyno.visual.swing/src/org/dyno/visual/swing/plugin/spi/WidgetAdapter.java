@@ -701,7 +701,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public List<WidgetAdapter> getDropWidget() {
-		return WhiteBoard.getSelectedWidget() == null ? EMPTY_LIST : WhiteBoard.getSelectedWidget();
+		VisualDesigner designer = getDesigner();
+		if (designer == null)
+			designer = WhiteBoard.getCurrentDesigner();
+		return designer == null ? EMPTY_LIST : designer.getSelectedWidget();
 	}
 
 	private static List<WidgetAdapter> EMPTY_LIST = new ArrayList<WidgetAdapter>(0);

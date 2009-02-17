@@ -838,5 +838,24 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		banner.setError(true);
 		banner.setText(e.getMessage());
 	}
+	private List<WidgetAdapter> selectedWidget;
 
+	public void setSelectedWidget(List<WidgetAdapter> adapters) {
+		if (adapters == null) {
+			selectedWidget = null;
+		} else {
+			selectedWidget = new ArrayList<WidgetAdapter>();
+			for (WidgetAdapter adapter : adapters) {
+				selectedWidget.add(adapter);
+			}
+		}
+	}
+
+	public List<WidgetAdapter> getSelectedWidget() {
+		return selectedWidget;
+	}
+
+	public void clearToolSelection() {
+		editor.clearToolSelection();
+	}
 }
