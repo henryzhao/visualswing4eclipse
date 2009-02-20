@@ -99,7 +99,7 @@ public class JInternalFrameDesignOperation extends
 			adaptable.setMascotLocation(p);
 			setDropStatus(JInternalFramePainter.NOOP);
 			Toolkit.getDefaultToolkit().beep();
-			return true;
+			return false;
 		} else if (isDroppingMenuBar()) {
 			adaptable.setMascotLocation(p);
 			WidgetAdapter target = adaptable.getDropWidget().get(0);

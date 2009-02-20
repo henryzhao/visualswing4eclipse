@@ -138,9 +138,10 @@ public class JDesktopPaneDesignOperation extends CompositeDesignOperation {
 				jif.toFront();				
 			}
 			adaptable.getWidget().validate();
+			return true;
 		} else {
 			Toolkit.getDefaultToolkit().beep();
+			return false;
 		}
-		return true;
 	}	
 }

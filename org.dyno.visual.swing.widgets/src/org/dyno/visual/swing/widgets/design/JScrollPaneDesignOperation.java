@@ -62,9 +62,12 @@ public class JScrollPaneDesignOperation extends CompositeDesignOperation {
 			adaptable.getRootAdapter().getWidget().validate();
 			adaptable.clearAllSelected();
 			todrop.setSelected(true);
+			hovered = false;
+			return true;
+		}else{
+			hovered = false;
+			return false;
 		}
-		hovered = false;
-		return true;
 	}
 
 }

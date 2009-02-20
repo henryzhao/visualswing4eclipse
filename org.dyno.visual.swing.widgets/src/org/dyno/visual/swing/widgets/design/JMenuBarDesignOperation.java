@@ -2,6 +2,7 @@ package org.dyno.visual.swing.widgets.design;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.util.List;
 
 import javax.swing.JMenu;
@@ -81,6 +82,8 @@ public class JMenuBarDesignOperation extends CompositeDesignOperation {
 			adaptable.addNotify();
 			adaptable.repaintDesigner();
 		} else {
+			Toolkit.getDefaultToolkit().beep();
+			return false;
 		}
 		return true;
 	}
