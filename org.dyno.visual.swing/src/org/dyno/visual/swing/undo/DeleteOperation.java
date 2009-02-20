@@ -17,8 +17,11 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IWidgetListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -61,6 +64,10 @@ public class DeleteOperation extends AbstractOperation {
 			if (success){
 				parentAdapter.setDirty(true);
 				adapter.deleteNotify();
+				WidgetEvent we = new WidgetEvent(parentAdapter, adapter);
+				for(IWidgetListener listener:ExtensionRegistry.getWidgetListeners()){
+					listener.widgetRemoved(we);
+				}
 			}
 		}
 		rootAdapter.doLayout();

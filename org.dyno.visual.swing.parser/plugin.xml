@@ -190,4 +190,10 @@
             class="org.dyno.visual.swing.parser.listener.SyncEditorListener">
       </listener>
    </extension>
+   <extension
+         point="org.dyno.visual.swing.widgetListener">
+      <listener
+            class="org.dyno.visual.swing.parser.WidgetRemovalListener">
+      </listener>
+   </extension>
  </plugin>
