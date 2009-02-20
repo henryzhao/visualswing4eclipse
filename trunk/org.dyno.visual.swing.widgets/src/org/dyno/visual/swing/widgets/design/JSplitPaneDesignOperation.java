@@ -154,6 +154,8 @@ public class JSplitPaneDesignOperation extends CompositeDesignOperation {
 			if (forbid) {
 				Toolkit.getDefaultToolkit().beep();
 				forbid = false;
+				position = null;
+				return false;
 			} else {
 				WidgetAdapter adapter = adaptable.getDropWidget().get(0);
 				Component child = adapter.getParentContainer();

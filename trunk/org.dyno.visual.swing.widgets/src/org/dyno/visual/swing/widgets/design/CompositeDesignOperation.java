@@ -50,6 +50,6 @@ public class CompositeDesignOperation extends WidgetDesignOperation {
 	@Override
 	public boolean drop(Point p) {
 		adaptable.setMascotLocation(p);
-		return true;
+		return false;
 	}
 }

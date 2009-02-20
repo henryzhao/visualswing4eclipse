@@ -95,7 +95,7 @@ public class JFrameDesignOperation extends RootPaneContainerDesignOperation {
 			adaptable.setMascotLocation(p);
 			setDropStatus(JFramePainter.NOOP);
 			Toolkit.getDefaultToolkit().beep();
-			return true;
+			return false;
 		} else if (isDroppingMenuBar()) {
 			adaptable.setMascotLocation(p);
 			WidgetAdapter target = adaptable.getDropWidget().get(0);

@@ -43,7 +43,9 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IEditor;
 import org.dyno.visual.swing.plugin.spi.IEditorAdapter;
+import org.dyno.visual.swing.plugin.spi.IWidgetListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.plugin.spi.WidgetEvent;
 import org.dyno.visual.swing.undo.SetWidgetValueOperation;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -51,7 +53,6 @@ import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-
 /**
  * 
  * GlassTarget
@@ -156,6 +157,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 	}
 
 	private void drop(Point p, boolean shift) {
+		List<IWidgetListener> widgetListeners = org.dyno.visual.swing.base.ExtensionRegistry.getWidgetListeners();
 		if (state == STATE_BEAN_HOVER) {
 			Component hovered = designer.componentAt(p, 0);
 			if (hovered != null) {
@@ -183,9 +185,31 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 						} catch (ExecutionException e) {
 							VisualSwingPlugin.getLogger().error(e);
 						}
+						for (WidgetAdapter wa : designer.getSelectedWidget()) {
+							WidgetEvent we = new WidgetEvent(lastParent, compositeAdapter, wa);
+							for (IWidgetListener listener : widgetListeners) {
+								listener.widgetMoved(we);
+							}
+						}
+					}else{
+						for (WidgetAdapter wa : designer.getSelectedWidget()) {
+							WidgetEvent we = new WidgetEvent(compositeAdapter, wa);
+							for (IWidgetListener listener : widgetListeners) {
+								listener.widgetAdded(we);
+							}
+						}
 					}
 					designer.fireDirty();
 					adapter.addNotify();
+				}else{
+					if (lastParent != null) {
+						List<WidgetAdapter> selectedWidget = designer.getSelectedWidget();
+						for(int i = 0;i<selectedWidget.size();i++){
+							WidgetAdapter wa = selectedWidget.get(i);
+							Object constraints = lastConstraints.get(i);
+							lastParent.addChildByConstraints(wa.getWidget(), constraints);
+						}
+					}
 				}
 			} else {
 				glassPlane.setHotspotPoint(null);
@@ -201,6 +225,12 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 						operationHistory.execute(operation, null, null);
 					} catch (ExecutionException e) {
 						VisualSwingPlugin.getLogger().error(e);
+					}
+					for (WidgetAdapter wa : designer.getSelectedWidget()) {
+						WidgetEvent we = new WidgetEvent(lastParent, wa);
+						for (IWidgetListener listener : widgetListeners) {
+							listener.widgetRemoved(we);
+						}
 					}
 				}
 			}
@@ -225,9 +255,24 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 					} catch (ExecutionException e) {
 						VisualSwingPlugin.getLogger().error(e);
 					}
+					for (WidgetAdapter wa : designer.getSelectedWidget()) {
+						WidgetEvent we = new WidgetEvent(lastParent, (CompositeAdapter) adapter, wa);
+						for (IWidgetListener listener : widgetListeners) {
+							listener.widgetResized(we);
+						}
+					}
 				}
 				adapter.changeNotify();
 				adapter.setDirty(true);
+			}else{
+				if (lastParent != null) {
+					List<WidgetAdapter> selectedWidget = designer.getSelectedWidget();
+					for(int i = 0;i<selectedWidget.size();i++){
+						WidgetAdapter wa = selectedWidget.get(i);
+						Object constraints = lastConstraints.get(i);
+						lastParent.addChildByConstraints(wa.getWidget(), constraints);
+					}
+				}				
 			}
 		}
 		if (!shift) {
@@ -340,14 +385,14 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 	}
 
 	private void process_bean_move(MouseEvent e) {
-		currentAdapters = designer.getSelectedWidgets();
+		currentAdapters = designer.getSelectedWidgetList();
 		Point point = e.getPoint();
 		for (WidgetAdapter hoveredAdapter : currentAdapters) {
 			Component hovered = hoveredAdapter.getWidget();
 			Point relp = SwingUtilities.convertPoint(designer, point, hovered);
 			hoveredAdapter.setHotspotPoint(relp);
-			dragging_event = e;
 		}
+		dragging_event = e;
 		state = STATE_BEAN_TOBE_HOVER;
 	}
 
@@ -724,20 +769,22 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 						state = STATE_BEAN_RESIZE_RIGHT;
 					}
 				}
-				CompositeAdapter parentAdapter = (CompositeAdapter) currentAdapters.get(0).getParentAdapter();
-				if (parentAdapter.isViewContainer()) {
+				if (!currentAdapters.isEmpty()) {
+					CompositeAdapter parentAdapter = (CompositeAdapter) currentAdapters.get(0).getParentAdapter();
+					if (parentAdapter.isViewContainer()) {
+						currentAdapters = new ArrayList<WidgetAdapter>();
+						currentAdapters.add(parentAdapter);
+						parentAdapter = (CompositeAdapter) parentAdapter.getParentAdapter();
+					}
+					lastConstraints = new ArrayList<Object>();
+					for (WidgetAdapter a : currentAdapters) {
+						lastConstraints.add(parentAdapter.getChildConstraints(a.getWidget()));
+						parentAdapter.removeChild(a.getWidget());
+					}
 					currentAdapters = new ArrayList<WidgetAdapter>();
 					currentAdapters.add(parentAdapter);
-					parentAdapter = (CompositeAdapter) parentAdapter.getParentAdapter();
+					lastParent = parentAdapter;
 				}
-				lastConstraints = new ArrayList<Object>();
-				for (WidgetAdapter a : currentAdapters) {
-					lastConstraints.add(parentAdapter.getChildConstraints(a.getWidget()));
-					parentAdapter.removeChild(a.getWidget());
-				}
-				currentAdapters = new ArrayList<WidgetAdapter>();
-				currentAdapters.add(parentAdapter);
-				lastParent = parentAdapter;
 				dragging_event = null;
 			}
 		} else {
@@ -749,11 +796,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 	private List<Object> lastConstraints;
 
 	private boolean isDndReady(MouseEvent e) {
-		return e.getPoint().distance(dragging_event.getPoint()) > DND_THRESHOLD;
+		return dragging_event!=null&&e.getPoint().distance(dragging_event.getPoint()) > DND_THRESHOLD;
 	}
 
 	private boolean isSameParent() {
-		if (currentAdapters != null) {
+		if (currentAdapters != null&&!currentAdapters.isEmpty()) {
 			WidgetAdapter parent = null;
 			for (WidgetAdapter adapter : currentAdapters) {
 				if (adapter.isRoot()) {

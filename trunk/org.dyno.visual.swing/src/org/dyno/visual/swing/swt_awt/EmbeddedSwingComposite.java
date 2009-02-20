@@ -464,14 +464,16 @@ public abstract class EmbeddedSwingComposite extends Composite {
 	}
 
 	private void handleSettingsChange() {
-		Font newFont = getDisplay().getSystemFont();
-		if (!newFont.equals(currentSystemFont)) {
-			currentSystemFont = newFont;
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					setComponentFont();
-				}
-			});
+		if (!isDisposed()) {
+			Font newFont = getDisplay().getSystemFont();
+			if (!newFont.equals(currentSystemFont)) {
+				currentSystemFont = newFont;
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						setComponentFont();
+					}
+				});
+			}
 		}
 	}
 

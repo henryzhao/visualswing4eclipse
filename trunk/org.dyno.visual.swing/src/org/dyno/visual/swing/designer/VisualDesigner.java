@@ -340,7 +340,15 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public List<WidgetAdapter> getSelectedWidgets() {
 		return selected;
 	}
-
+	public List<WidgetAdapter> getSelectedWidgetList(){
+		List<WidgetAdapter>adapters=new ArrayList<WidgetAdapter>();
+		List<Component>children = getSelectedComponents();
+		for(Component child:children){
+			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(child);
+			adapters.add(adapter);
+		}
+		return adapters;
+	}
 	public List<Component> getSelectedComponents() {
 		return new WidgetSelection(root);
 	}

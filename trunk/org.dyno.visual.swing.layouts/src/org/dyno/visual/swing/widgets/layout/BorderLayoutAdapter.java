@@ -210,11 +210,13 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		drag(p);
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		parent.clearAllSelected();
+		boolean success = true;
 		if (forbid != null) {
 			for (int i = 0; i < forbid.size(); i++) {
 				boolean fb = forbid.get(i).booleanValue();
 				if (fb) {
 					Toolkit.getDefaultToolkit().beep();
+					success=false;
 				} else {
 					WidgetAdapter todrop = parent.getDropWidget().get(i);
 					if (constraints == null || constraints.get(i) == null) {
@@ -236,7 +238,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		placement = null;
 		constraints = null;
 		forbid = null;
-		return true;
+		return success;
 	}
 
 	@Override
