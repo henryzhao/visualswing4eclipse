@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.LookAndFeel;
@@ -90,8 +89,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	private void parseFieldParsers() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry()
-				.getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(FIELD_PARSER_EXTENSION_ID);
 		if (extensionPoint != null) {
 			IExtension[] extensions = extensionPoint.getExtensions();
 			if (extensions != null && extensions.length > 0) {
@@ -109,8 +107,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				String name = configs[i].getName();
 				if (name.equals("parser")) { //$NON-NLS-1$
 					try {
-						fieldParsers.add((IFieldParser) configs[i]
-								.createExecutableExtension("class")); //$NON-NLS-1$
+						fieldParsers.add((IFieldParser) configs[i].createExecutableExtension("class")); //$NON-NLS-1$
 					} catch (CoreException e) {
 						ParserPlugin.getLogger().error(e);
 					}
@@ -163,7 +160,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 					beanAdapter.clearDirty();
 					return beanAdapter;
 				}
-			}else{
+			} else {
 				throw new ParserException("This is not a swing class!");
 			}
 		} catch (ParserException pe) {
@@ -174,20 +171,20 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return null;
 	}
-	private Object createBeanFromClass(Class beanClass)throws Throwable{
+
+	private Object createBeanFromClass(Class beanClass) throws Throwable {
 		try {
-			Constructor cons=beanClass.getConstructor(new Class[0]);
+			Constructor cons = beanClass.getConstructor(new Class[0]);
 			cons.setAccessible(true);
 			return cons.newInstance();
-		}catch (NoSuchMethodException e) {
-			try{
-				Constructor cons=beanClass.getConstructor(new Class[]{Frame.class});
+		} catch (NoSuchMethodException e) {
+			try {
+				Constructor cons = beanClass.getConstructor(new Class[] { Frame.class });
 				cons.setAccessible(true);
 				return cons.newInstance(new Frame());
-			}catch(NoSuchMethodException ex){
+			} catch (NoSuchMethodException ex) {
 				try {
-					Constructor cons = beanClass
-							.getConstructor(new Class[] { String.class });
+					Constructor cons = beanClass.getConstructor(new Class[] { String.class });
 					cons.setAccessible(true);
 					return cons.newInstance(new String());
 				} catch (NoSuchMethodException exx) {
@@ -196,22 +193,22 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
-	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit,
-			WidgetAdapter adapter) {
+
+	private void parsePropertyValue(String lnfClassname, CompilationUnit cunit, WidgetAdapter adapter) {
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
-		IWidgetASTParser widgetParser=(IWidgetASTParser) adapter.getAdapter(IWidgetASTParser.class);
+		IWidgetASTParser widgetParser = (IWidgetASTParser) adapter.getAdapter(IWidgetASTParser.class);
 		widgetParser.parse(lnfClassname, type);
 		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 			int count = compositeAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = compositeAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
+				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				parsePropertyValue(lnfClassname, cunit, childAdapter);
 			}
 		}
 	}
+
 	private void initDesignedWidget(CompilationUnit cunit, Component bean) throws ParserException {
 		Class clazz = bean.getClass();
 		Field[] fields = clazz.getDeclaredFields();
@@ -221,7 +218,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				Object fieldValue = field.get(bean);
 				if (fieldValue != null) {
 					if (Component.class.isAssignableFrom(field.getType())) {
-						parseField(cunit, bean, field, (Component)fieldValue);
+						parseField(cunit, bean, field, (Component) fieldValue);
 					} else {
 						for (IFieldParser parser : fieldParsers) {
 							parser.parseField(cunit, bean, field);
@@ -236,35 +233,35 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			}
 		}
 	}
+
 	private void parseField(CompilationUnit cunit, Component bean, Field field, Component widget) throws ParserException {
 		Class clazz = bean.getClass();
 		String fieldName = field.getName();
 		field.setAccessible(true);
 		Object fieldValue = null;
 		try {
-			fieldValue = field.get(bean);			
+			fieldValue = field.get(bean);
 		} catch (Exception e) {
 			ParserPlugin.getLogger().error(e);
 			throw new ParserException(e);
 		}
-		
+
 		JComponent fieldComponent = (JComponent) fieldValue;
 		WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
-		
+
 		adapter.setName(fieldName);
 		adapter.setLastName(fieldName);
-		
+
 		int flags = field.getModifiers();
 		setAdapterFieldAccess(adapter, flags);
-		
-		
+
 		String getName = NamespaceUtil.getGetMethodName(fieldName);
 		Method getMethod = null;
 		try {
 			getMethod = clazz.getDeclaredMethod(getName);
 		} catch (NoSuchMethodException nsme) {
 			getName = NamespaceUtil.getGetMethodName(cunit, fieldName);
-			if(getName==null)
+			if (getName == null)
 				throw new ParserException("Method " + NamespaceUtil.getGetMethodName(fieldName) + "() is not found!\n" + "Please define it to initialize " + fieldName);
 			try {
 				getMethod = clazz.getDeclaredMethod(getName);
@@ -274,7 +271,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				throw new ParserException("Method " + getName + "() is not found!\n" + "Please define it to initialize " + fieldName);
 			}
 		}
-		
+
 		flags = getMethod.getModifiers();
 		setAdapterGetMethodAccess(adapter, flags);
 		parseEventListener(cunit, adapter);
@@ -310,22 +307,21 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager
-						.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
 				return lnf;
 			}
-		} catch(NoSuchFieldException nsfe){
+		} catch (NoSuchFieldException nsfe) {
 		} catch (Exception e) {
-			ParserPlugin.getLogger().warning(e);			
+			ParserPlugin.getLogger().warning(e);
 		}
 		return UIManager.getCrossPlatformLookAndFeelClassName();
 	}
-	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) throws ParserException{
-		EventSetDescriptor[] esds = adapter.getBeanInfo()
-				.getEventSetDescriptors();
+
+	private void parseEventListener(CompilationUnit cunit, WidgetAdapter adapter) throws ParserException {
+		EventSetDescriptor[] esds = adapter.getBeanInfo().getEventSetDescriptors();
 		TypeDeclaration type = (TypeDeclaration) cunit.types().get(0);
 		if (esds != null && esds.length > 0) {
 			for (EventSetDescriptor esd : esds) {
@@ -334,40 +330,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 	}
 
-	private boolean isDesigningField(IType type, IField field) {
-		try {
-			String sig = field.getTypeSignature();
-			if (isRegisteredWidget(sig)) {
-				return true;
-			}
-			for (IFieldParser parser : fieldParsers) {
-				if (parser.isDesigningField(type, field))
-					return true;
-			}
-		} catch (JavaModelException e) {
-			ParserPlugin.getLogger().error(e);
-		}
-		return false;
-	}
-
-	private boolean isRegisteredWidget(String sig) {
-		if (sig.startsWith("L") || sig.startsWith("Q")) { //$NON-NLS-1$ //$NON-NLS-2$
-			String className = sig.substring(1, sig.length() - 1);
-			Map<String, IConfigurationElement> widgets = ExtensionRegistry
-					.getRegisteredWidgets();
-			int dot = className.lastIndexOf('.');
-			if (dot != -1) {
-				if (widgets.get(className) != null)
-					return true;
-			} else {
-				String cName = "javax.swing." + className; //$NON-NLS-1$
-				if (widgets.get(cName) != null)
-					return true;
-			}
-		}
-		return false;
-	}
-	private IType getUnitMainType(ICompilationUnit unit){
+	private IType getUnitMainType(ICompilationUnit unit) {
 		String unit_name = unit.getElementName();
 		int dot = unit_name.lastIndexOf('.');
 		if (dot != -1)
@@ -375,6 +338,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		IType type = unit.getType(unit_name);
 		return type;
 	}
+
 	public static ImportRewrite createImportRewrite(ICompilationUnit unit) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setSource(unit);
@@ -383,6 +347,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 		return CodeStyleConfiguration.createImportRewrite(cu, true);
 	}
+
 	@Override
 	public ICompilationUnit generate(WidgetAdapter root, IProgressMonitor monitor) {
 		try {
@@ -394,56 +359,19 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			IType type = getUnitMainType(copy);
 			if (type != null) {
 				ImportRewrite imports = createImportRewrite(copy);
-				ArrayList<String> fieldAdapters = listBeanName(root);
 				boolean success = parser.generateCode(type, imports, monitor);
-				if(!success)
+				if (!success)
 					return null;
-				IField[] fields = type.getFields();
-				List<String> declared = new ArrayList<String>();
-				if (fields != null && fields.length > 0) {
-					for (IField field : fields) {
-						if (isDesigningField(type, field)) {
-							String fieldName = field.getElementName();
-							declared.add(fieldName);
-						}
-					}
-				}
-				for (String iadapter : fieldAdapters) {
-					declared.remove(iadapter);
-				}
-				ASTParser astparser = ASTParser.newParser(AST.JLS3);
-				astparser.setSource(unit);
-				CompilationUnit cunit = (CompilationUnit) astparser.createAST(null);
-				List<String> getmethods=new ArrayList<String>();
-				for(int i=0;i<declared.size();i++){
-					String declare = declared.get(i);
-					String getmethod = NamespaceUtil.getGetMethodName(cunit, declare);
-					getmethods.add(getmethod);
-				}
-				for (int i=0;i<declared.size();i++) {
-					String declare = declared.get(i);
-					String getmethod=getmethods.get(i);
-					removeField(type, declare, getmethod, monitor);
-				}
-				IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$
-				if (lnfField.exists()) {
-					lnfField.delete(false, monitor);
-				 }
-				String className = (String) root.getPreferredLookAndFeel();
-				String newfield = "private static final " //$NON-NLS-1$
-						+ imports.addImport("java.lang.String") //$NON-NLS-1$
-						+ " PREFERRED_LOOK_AND_FEEL = " //$NON-NLS-1$
-						+ (className == null ? "null" : "\"" + className + "\"") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						+ ";\n"; //$NON-NLS-1$
-				type.createField(newfield, null, false, monitor);
+				removeRemovedComponent(root, monitor, unit, type);
+				createPreferredLnf(root, monitor, type, imports);
 				if (success) {
 					TextEdit edit = imports.rewriteImports(monitor);
 					JavaUtil.applyEdit(copy, edit, true, monitor);
 				}
-				if(copy.isWorkingCopy()){
+				if (copy.isWorkingCopy()) {
 					copy.commitWorkingCopy(true, monitor);
 					copy.discardWorkingCopy();
-				}				
+				}
 				IWorkbenchPartSite site = getEditorSite();
 				if (site != null) {
 					OrganizeImportsAction action = new OrganizeImportsAction(site);
@@ -451,7 +379,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				}
 				type = getUnitMainType(unit);
 				rename(type, root);
-				if(unit.isWorkingCopy()){
+				if (unit.isWorkingCopy()) {
 					unit.commitWorkingCopy(true, monitor);
 				}
 				return unit;
@@ -462,22 +390,77 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			return null;
 		}
 	}
+
+	private void createPreferredLnf(WidgetAdapter root, IProgressMonitor monitor, IType type, ImportRewrite imports) throws JavaModelException {
+		IField lnfField = type.getField("PREFERRED_LOOK_AND_FEEL"); //$NON-NLS-1$		
+		String className = (String) root.getPreferredLookAndFeel();
+		if (lnfField.exists()) {
+			lnfField.delete(false, monitor);
+			createLnfField(monitor, type, imports, className);
+		} else if (!isCross(className)) {
+			createLnfField(monitor, type, imports, className);
+		}
+	}
+
+	private void createLnfField(IProgressMonitor monitor, IType type, ImportRewrite imports, String className) throws JavaModelException {
+		String newfield = "private static final " //$NON-NLS-1$
+				+ imports.addImport("java.lang.String") //$NON-NLS-1$
+				+ " PREFERRED_LOOK_AND_FEEL = " //$NON-NLS-1$
+				+ (className == null ? "null" : "\"" + className + "\"") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ ";\n"; //$NON-NLS-1$
+		type.createField(newfield, null, false, monitor);
+	}
+
+	private boolean isCross(String className) {
+		String cross = UIManager.getCrossPlatformLookAndFeelClassName();
+		return className == null || className.equals(cross);
+	}
+
+	private void removeRemovedComponent(WidgetAdapter root, IProgressMonitor monitor, ICompilationUnit unit, IType type) {
+		List<String> removedNames = (List<String>) root.getProperty("removed.components");
+		if (removedNames != null) {
+			List<String> nonExistingFields = new ArrayList<String>();
+			for (String name : removedNames) {
+				IField field = type.getField(name);
+				if (field == null || !field.exists())
+					nonExistingFields.add(name);
+			}
+			for (String nonfield : nonExistingFields) {
+				removedNames.remove(nonfield);
+			}
+			ASTParser astparser = ASTParser.newParser(AST.JLS3);
+			astparser.setSource(unit);
+			CompilationUnit cunit = (CompilationUnit) astparser.createAST(null);
+			List<String> getmethods = new ArrayList<String>();
+			for (int i = 0; i < removedNames.size(); i++) {
+				String removed_name = removedNames.get(i);
+				String getmethod = NamespaceUtil.getGetMethodName(cunit, removed_name);
+				getmethods.add(getmethod);
+			}
+			for (int i = 0; i < removedNames.size(); i++) {
+				String removed_name = removedNames.get(i);
+				String getmethod = getmethods.get(i);
+				removeField(type, removed_name, getmethod, monitor);
+			}
+		}
+	}
+
 	private void rename(IType type, WidgetAdapter root) {
-		if(root.getLastName()!=null&&root.getName()!=null&&!root.getLastName().equals(root.getName())){
+		if (root.getLastName() != null && root.getName() != null && !root.getLastName().equals(root.getName())) {
 			IParser parser = (IParser) root.getAdapter(IParser.class);
 			if (parser != null) {
 				parser.renameField(type, null);
 			}
 		}
-		if(root.isRoot()){
-			for(InvisibleAdapter invisible:root.getInvisibles()){
+		if (root.isRoot()) {
+			for (InvisibleAdapter invisible : root.getInvisibles()) {
 				renameInvisible(type, invisible);
 			}
 		}
-		if(root instanceof CompositeAdapter){
+		if (root instanceof CompositeAdapter) {
 			CompositeAdapter container = (CompositeAdapter) root;
 			int count = container.getChildCount();
-			for(int i=0;i<count;i++){
+			for (int i = 0; i < count; i++) {
 				Component child = container.getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 				rename(type, childAdapter);
@@ -486,7 +469,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 	}
 
 	private void renameInvisible(IType type, InvisibleAdapter root) {
-		if(root.getLastName()!=null&&root.getName()!=null&&!root.getLastName().equals(root.getName())){
+		if (root.getLastName() != null && root.getName() != null && !root.getLastName().equals(root.getName())) {
 			IParser parser = (IParser) root.getAdapter(IParser.class);
 			if (parser != null) {
 				parser.renameField(type, null);
@@ -494,15 +477,15 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 	}
 
-	private IWorkbenchPartSite getEditorSite(){
+	private IWorkbenchPartSite getEditorSite() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
-		if(workbench!=null){
+		if (workbench != null) {
 			IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-			if(window!=null){
+			if (window != null) {
 				IWorkbenchPage page = window.getActivePage();
-				if(page!=null){
+				if (page != null) {
 					IEditorPart editor = page.getActiveEditor();
-					if(editor!=null)
+					if (editor != null)
 						return editor.getSite();
 				}
 			}
@@ -532,32 +515,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 			for (IFieldParser parser : fieldParsers) {
 				if (parser.removeField(type, fieldName, monitor))
 					return;
-			}
-		}
-	}
-
-	private ArrayList<String> listBeanName(WidgetAdapter root) {
-		ArrayList<String> list = new ArrayList<String>();
-		_listNames(root, list);
-		return list;
-	}
-
-	private void _listNames(WidgetAdapter root, ArrayList<String> list) {
-		if (!root.isRoot()) {
-			list.add(root.getID());
-		} else {
-			for (InvisibleAdapter adapter : root.getInvisibles()) {
-				list.add(adapter.getID());
-			}
-		}
-		if (root instanceof CompositeAdapter) {
-			CompositeAdapter containerAdapter = (CompositeAdapter) root;
-			int count = containerAdapter.getChildCount();
-			for (int i = 0; i < count; i++) {
-				Component child = containerAdapter.getChild(i);
-				WidgetAdapter childAdapter = WidgetAdapter
-						.getWidgetAdapter(child);
-				_listNames(childAdapter, list);
 			}
 		}
 	}
