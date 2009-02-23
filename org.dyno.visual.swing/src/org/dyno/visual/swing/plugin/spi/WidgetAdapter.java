@@ -21,7 +21,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
+import java.beans.IntrospectionException;
 import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +44,7 @@ import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.adapter.BeanNameProperty;
 import org.dyno.visual.swing.adapter.FieldAccessProperty;
 import org.dyno.visual.swing.adapter.GetAccessProperty;
+import org.dyno.visual.swing.base.BeanDescriptorProperty;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.base.NamespaceManager;
@@ -570,6 +573,31 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 					property.setCategory(category.getName());
 					property.setFilterFlags(category.getFilters());
 					propdesc.add(property);
+				}
+			}
+		}
+		Component widget=getWidget();
+		if (widget != null) {
+			Class aClazz = null;
+			Class widgetClazz = widget.getClass();
+			Class superWidgetClazz = widgetClazz.getSuperclass();
+			boolean isroot = isRoot();
+			if (!isroot && widgetClazz != beanClass) {
+				aClazz = widgetClazz;
+			} else if (isroot && superWidgetClazz != beanClass) {
+				aClazz = superWidgetClazz;
+			}
+			if (aClazz != null) {
+				try {
+					BeanInfo beanInfo = Introspector.getBeanInfo(aClazz, beanClass);
+					PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+					for(PropertyDescriptor propertyDescriptor:propertyDescriptors){
+						BeanDescriptorProperty fp = new BeanDescriptorProperty(propertyDescriptor, aClazz);
+						fp.setCategory("Common");
+						propdesc.add(fp);						
+					}
+				} catch (IntrospectionException e) {
+					VisualSwingPlugin.getLogger().error(e);
 				}
 			}
 		}
