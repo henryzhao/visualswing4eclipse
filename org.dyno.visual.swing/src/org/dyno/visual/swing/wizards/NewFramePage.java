@@ -96,6 +96,7 @@ public class NewFramePage extends NewComponentPage {
 		buf.append("public void run(){\n");
 		cName = type.getTypeQualifiedName('.');
 		buf.append(cName + " frame = new " + cName + "();\n");
+		buf.append("frame.setDefaultCloseOperation("+cName+".EXIT_ON_CLOSE);\n");
 		buf.append("frame.setTitle(\"" + type.getElementName() + "\");\n");
 		buf.append("frame.pack();\n");
 		buf.append("frame.setLocationRelativeTo(null);\n");

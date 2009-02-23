@@ -13,22 +13,52 @@
 
 package org.dyno.visual.swing.editors;
 
+import java.lang.reflect.Field;
+
+import org.dyno.visual.swing.VisualSwingPlugin;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 public class WidgetPropertyPage extends PropertySheetPage {
+	private boolean initialized = false;
+	private Action fAction;
 	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
+		initFilteredAction();
 		final Tree tree = (Tree) getControl();
-		tree.addListener(SWT.MeasureItem, new org.eclipse.swt.widgets.Listener(){
-			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event event) {
-				event.height = 18;
-			}
-		});
+		tree.addListener(SWT.MeasureItem,
+				new org.eclipse.swt.widgets.Listener() {
+					@Override
+					public void handleEvent(org.eclipse.swt.widgets.Event event) {
+						event.height = 18;
+					}
+				});
+	}
+
+	private void initFilteredAction() {
+		try {
+			Field f = getClass().getSuperclass().getDeclaredField(
+					"filterAction");
+			f.setAccessible(true);
+			fAction = (Action) f.get(this);
+			fAction.setChecked(true);
+		} catch (Exception e) {
+			VisualSwingPlugin.getLogger().error(e);
+		}
+	}
+
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (!initialized) {
+			fAction.run();
+			initialized = true;
+		}
+		super.selectionChanged(part, selection);
 	}
 }
-
