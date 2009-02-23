@@ -168,6 +168,10 @@
                class="org.dyno.visual.swing.base.WidgetProperty"
                implementation="org.dyno.visual.swing.parser.adapters.WidgetPropertyParser">
          </adapter>
+         <adapter
+               class="org.dyno.visual.swing.base.BeanDescriptorProperty"
+               implementation="org.dyno.visual.swing.parser.adapters.BeanDescriptorPropertyParser">
+         </adapter>
       </interface>
       <interface
             class="org.dyno.visual.swing.parser.spi.IWidgetASTParser"
