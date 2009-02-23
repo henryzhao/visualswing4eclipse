@@ -226,6 +226,8 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 					} catch (ExecutionException e) {
 						VisualSwingPlugin.getLogger().error(e);
 					}
+					lastParent.setDirty(true);
+					designer.fireDirty();
 					for (WidgetAdapter wa : designer.getSelectedWidget()) {
 						WidgetEvent we = new WidgetEvent(lastParent, wa);
 						for (IWidgetListener listener : widgetListeners) {
