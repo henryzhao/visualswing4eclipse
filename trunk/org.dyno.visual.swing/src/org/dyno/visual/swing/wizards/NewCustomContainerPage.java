@@ -17,6 +17,10 @@ public class NewCustomContainerPage extends NewComponentPage {
 	}
 
 	@Override
+	public void setSuperClass(String name, boolean canBeModified) {
+		delegateSuperClass(name, canBeModified);
+	}
+	@Override
 	protected void createTypeMembers(IType type, ImportsManager imports, IProgressMonitor monitor) throws CoreException {
 		super.createTypeMembers(type, imports, monitor);
 		String lineDelim = "\n";

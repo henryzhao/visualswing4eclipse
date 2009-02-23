@@ -39,6 +39,9 @@ public class NewComponentPage extends NewClassWizardPage implements IConstants{
 			super.setSuperClass("javax.swing.JPanel", isCanBeModified());
 		}
 	}
+	protected void delegateSuperClass(String name, boolean canBeModified){
+		super.setSuperClass(name, canBeModified);
+	}
 	protected boolean isCanBeModified(){
 		return false;
 	}
