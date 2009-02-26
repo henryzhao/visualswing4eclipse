@@ -129,9 +129,9 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	public Rectangle getDesignBounds() {
 		Rectangle bounds = this.rootPane.getBounds();
 		if (bounds.width <= 0)
-			bounds.width = 400;
+			bounds.width = 320;
 		if (bounds.height <= 0)
-			bounds.height = 300;
+			bounds.height = 240;
 		JFrame jframe = (JFrame) getWidget();
 		boolean undec = jframe.isUndecorated();
 		bounds.y = undec ? 24 : 44;

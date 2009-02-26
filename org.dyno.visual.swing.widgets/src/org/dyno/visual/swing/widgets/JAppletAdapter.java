@@ -113,9 +113,9 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 	public Rectangle getDesignBounds() {
 		Rectangle bounds = this.jrootPane.getBounds();
 		if (bounds.width <= 0)
-			bounds.width = 400;
+			bounds.width = 320;
 		if (bounds.height <= 0)
-			bounds.height = 300;
+			bounds.height = 240;
 		bounds.y = 24;
 		bounds.x = 24;
 		return bounds;
