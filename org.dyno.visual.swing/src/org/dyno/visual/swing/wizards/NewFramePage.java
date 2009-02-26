@@ -31,7 +31,7 @@ public class NewFramePage extends NewComponentPage {
 		String verfield = "private static final long serialVersionUID = 1L;";
 		verfield += lineDelim;
 		type.createField(verfield, null, false, monitor);
-		if (isCreateMain()) {
+		if (super.isCreateMain()) {
 			String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
 			type.createField(lnffield, null, false, monitor);
 		}
@@ -56,7 +56,7 @@ public class NewFramePage extends NewComponentPage {
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
 		// Create main
-		if (isCreateMain()) {
+		if (super.isCreateMain()) {
 			createInstallLnF(type, imports, monitor);
 			createMain(type, imports, monitor);
 		}
@@ -99,6 +99,7 @@ public class NewFramePage extends NewComponentPage {
 		buf.append(cName + " frame = new " + cName + "();\n");
 		buf.append("frame.setDefaultCloseOperation(" + cName + ".EXIT_ON_CLOSE);\n");
 		buf.append("frame.setTitle(\"" + type.getElementName() + "\");\n");
+		buf.append("frame.getContentPane().setPreferredSize(frame.getSize());\n");
 		buf.append("frame.pack();\n");
 		buf.append("frame.setLocationRelativeTo(null);\n");
 		buf.append("frame.setVisible(true);\n");

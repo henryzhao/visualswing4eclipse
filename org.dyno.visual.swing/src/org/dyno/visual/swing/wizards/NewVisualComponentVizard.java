@@ -66,7 +66,6 @@ public abstract class NewVisualComponentVizard extends NewElementWizard {
 		}
 		section.put(NewComponentPage.SETTINGS_CREATECONSTR, false);
 		section.put(NewComponentPage.SETTINGS_CREATEUNIMPLEMENTED, true);
-		section.put(NewComponentPage.SETTINGS_CREATEMAIN, true);
 		section.put(NewComponentPage.SETTINGS_SUPERCLASSNAME, superClassName);
 		return settings;
 	}

@@ -47,7 +47,7 @@ public class NewAppletPage extends NewComponentPage {
 		String verfield = "private static final long serialVersionUID = 1L;";
 		verfield += lineDelim;
 		type.createField(verfield, null, false, monitor);
-		if (isCreateMain()) {
+		if (super.isCreateMain()) {
 			String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
 			type.createField(lnffield, null, false, monitor);
 		}
@@ -62,7 +62,7 @@ public class NewAppletPage extends NewComponentPage {
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
 		// Create main
-		if (isCreateMain()) {
+		if (super.isCreateMain()) {
 			createInstallLnF(type, imports, monitor);
 			createMain(type, imports, monitor);
 		}

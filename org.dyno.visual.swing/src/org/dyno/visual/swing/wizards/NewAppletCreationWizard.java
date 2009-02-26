@@ -14,10 +14,13 @@
 package org.dyno.visual.swing.wizards;
 
 import javax.swing.JApplet;
+
+import org.eclipse.jface.dialogs.IDialogSettings;
+
 /**
  * 
  * NewDialogCreationWizard
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -27,8 +30,14 @@ public class NewAppletCreationWizard extends NewVisualComponentVizard {
 	}
 
 	@Override
+	public IDialogSettings getDialogSettings() {
+		IDialogSettings dialogSettings2 = super.getDialogSettings();
+		dialogSettings2.put(NewComponentPage.SETTINGS_CREATEMAIN, false);
+		return dialogSettings2;
+	}
+
+	@Override
 	protected NewComponentPage createPage() {
 		return new NewAppletPage();
 	}
 }
-
