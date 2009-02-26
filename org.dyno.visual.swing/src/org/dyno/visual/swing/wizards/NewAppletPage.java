@@ -57,7 +57,7 @@ public class NewAppletPage extends NewComponentPage {
 		buf.append("private void " + INIT_METHOD_NAME + "(");
 		buf.append(") {");
 		buf.append(lineDelim);
-		buf.append("setSize(400,300);");
+		buf.append("setSize(320, 240);");
 		buf.append(lineDelim);
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);

@@ -609,8 +609,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 
 		public Dimension preferredLayoutSize(Container parent) {
-			int w = root == null ? (rootBounds == null ? 400 : rootBounds.width) : root.getWidth();
-			int h = root == null ? (rootBounds == null ? 300 : rootBounds.height) : root.getHeight();
+			int w = root == null ? (rootBounds == null ? 320 : rootBounds.width) : root.getWidth();
+			int h = root == null ? (rootBounds == null ? 240 : rootBounds.height) : root.getHeight();
 			w += rootBounds == null ? 24 : 2 * rootBounds.x;
 			h += rootBounds == null ? 24 : 2 * rootBounds.y;
 			Dimension prefSize = new Dimension(0, 0);

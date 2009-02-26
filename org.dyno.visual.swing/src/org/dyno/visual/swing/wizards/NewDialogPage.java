@@ -95,7 +95,7 @@ public class NewDialogPage extends NewComponentPage {
 		buf.append(imports.addImport("org.dyno.visual.swing.layouts.GroupLayout"));
 		buf.append("());");
 		buf.append(lineDelim);
-		buf.append("setSize(400,300);");
+		buf.append("setSize(320, 240);");
 		buf.append(lineDelim);
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
