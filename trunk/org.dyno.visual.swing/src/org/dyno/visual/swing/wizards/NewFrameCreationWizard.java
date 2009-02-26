@@ -14,6 +14,8 @@
 package org.dyno.visual.swing.wizards;
 
 import javax.swing.JFrame;
+
+import org.eclipse.jface.dialogs.IDialogSettings;
 /**
  * 
  * NewFrameCreationWizard
@@ -25,7 +27,12 @@ public class NewFrameCreationWizard extends NewVisualComponentVizard {
 	public NewFrameCreationWizard() {
 		super(JFrame.class.getName());
 	}
-
+	@Override
+	public IDialogSettings getDialogSettings() {
+		IDialogSettings dialogSettings2 = super.getDialogSettings();
+		dialogSettings2.put(NewComponentPage.SETTINGS_CREATEMAIN, true);
+		return dialogSettings2;
+	}
 	@Override
 	protected NewComponentPage createPage() {
 		return new NewFramePage();
