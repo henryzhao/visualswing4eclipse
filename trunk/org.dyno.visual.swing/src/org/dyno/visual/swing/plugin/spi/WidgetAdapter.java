@@ -860,10 +860,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public Rectangle getDesignBounds() {
 		int w = getWidget().getWidth();
 		if (w <= 0)
-			w = 400;
+			w = 320;
 		int h = getWidget().getHeight();
 		if (h <= 0)
-			h = 300;
+			h = 240;
 		return new Rectangle(24, 24, w, h);
 	}
 

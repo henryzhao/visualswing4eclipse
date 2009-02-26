@@ -51,7 +51,7 @@ public class NewInternalFramePage extends NewComponentPage {
 		buf.append(imports.addImport("org.dyno.visual.swing.layouts.GroupLayout"));
 		buf.append("());");
 		buf.append(lineDelim);
-		buf.append("setSize(400,300);");
+		buf.append("setSize(320, 240);");
 		buf.append(lineDelim);
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
@@ -101,7 +101,7 @@ public class NewInternalFramePage extends NewComponentPage {
 		buf.append(cName + " frame = new " + cName + "();\n");
 		cName = imports.addImport("javax.swing.JDesktopPane");
 		buf.append(cName + " desktop = new " + cName + "();\n");
-		buf.append("internalFrame.setBounds(10, 10, 400, 300);\n");
+		buf.append("internalFrame.setBounds(10, 10, 320, 240);\n");
 		buf.append("desktop.add(internalFrame);\n");
 		cName = imports.addImport("java.awt.BorderLayout");
 		buf.append("frame.add(desktop, " + cName + ".CENTER);\n");

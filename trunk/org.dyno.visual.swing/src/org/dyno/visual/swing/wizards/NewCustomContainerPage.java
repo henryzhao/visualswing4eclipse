@@ -46,7 +46,7 @@ public class NewCustomContainerPage extends NewComponentPage {
 		buf.append(") {");
 		buf.append(lineDelim);
 		buf.append(lineDelim);
-		buf.append("setSize(400,300);");
+		buf.append("setSize(320, 240);");
 		buf.append(lineDelim);
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
