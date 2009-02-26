@@ -1394,6 +1394,18 @@
                class="javax.swing.JDialog"
                implementation="org.dyno.visual.swing.widgets.editoradapter.JDialogEdtiorAdapter">
          </adapter>
+         <adapter
+               class="javax.swing.JTextArea"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.J2DTextComponentEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JEditorPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.J2DTextComponentEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.J2DTextComponentEditorAdapter">
+         </adapter>
       </interface>
       <interface
           class="org.dyno.visual.swing.plugin.spi.IMenuContext"
