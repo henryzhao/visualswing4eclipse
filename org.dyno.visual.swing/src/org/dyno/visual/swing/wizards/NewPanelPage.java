@@ -31,19 +31,20 @@ public class NewPanelPage extends NewComponentPage {
 		String verfield = "private static final long serialVersionUID = 1L;";
 		verfield += lineDelim;
 		type.createField(verfield, null, false, monitor);
-		String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
-		type.createField(lnffield, null, false, monitor);
-
+		if (isCreateMain()) {
+			String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
+			type.createField(lnffield, null, false, monitor);
+		}
 		StringBuffer buf = new StringBuffer();
 		buf.append("public " + type.getTypeQualifiedName('.') + "(){");
 		buf.append(lineDelim);
-		buf.append(INIT_METHOD_NAME+"();");
+		buf.append(INIT_METHOD_NAME + "();");
 		buf.append(lineDelim);
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
 
 		buf = new StringBuffer();
-		buf.append("private void "+INIT_METHOD_NAME+"(");
+		buf.append("private void " + INIT_METHOD_NAME + "(");
 		buf.append(") {");
 		buf.append(lineDelim);
 		buf.append("setLayout(new ");
@@ -55,7 +56,7 @@ public class NewPanelPage extends NewComponentPage {
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
 		// Create main
-		if (super.isCreateMain()) {
+		if (isCreateMain()) {
 			createInstallLnF(type, imports, monitor);
 			createMain(type, imports, monitor);
 		}
@@ -84,10 +85,10 @@ public class NewPanelPage extends NewComponentPage {
 		String cName = imports.addImport("java.lang.String");
 		buf.append("/**\n");
 		buf.append("* Main entry of the class.\n");
-		buf.append("* Note: This class is only created so that you can easily preview the result at runtime.\n"); 
+		buf.append("* Note: This class is only created so that you can easily preview the result at runtime.\n");
 		buf.append("* It is not expected to be managed by the designer.\n");
 		buf.append("* You can modify it as you like.\n");
-		buf.append("*/\n");		
+		buf.append("*/\n");
 		buf.append("public static void main(" + cName + "[] args){\n");
 		buf.append("installLnF();\n");
 		cName = imports.addImport("javax.swing.SwingUtilities");
@@ -111,4 +112,3 @@ public class NewPanelPage extends NewComponentPage {
 		type.createMethod(buf.toString(), null, false, monitor);
 	}
 }
-
