@@ -37,7 +37,7 @@ public class NewDialogPage extends NewComponentPage {
 		buf.append("){\n");
 		if (args != null)
 			buf.append("super(" + args + ");\n");
-		buf.append(INIT_METHOD_NAME+"();\n");
+		buf.append(INIT_METHOD_NAME + "();\n");
 		buf.append("}\n");
 		type.createMethod(buf.toString(), null, false, monitor);
 	}
@@ -49,9 +49,10 @@ public class NewDialogPage extends NewComponentPage {
 		String verfield = "private static final long serialVersionUID = 1L;";
 		verfield += lineDelim;
 		type.createField(verfield, null, false, monitor);
-		String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
-		type.createField(lnffield, null, false, monitor);
-
+		if (isCreateMain()) {
+			String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
+			type.createField(lnffield, null, false, monitor);
+		}
 		Constructor[] cons = JDialog.class.getConstructors();
 		if (cons != null) {
 			for (Constructor<JDialog> con : cons) {
@@ -87,7 +88,7 @@ public class NewDialogPage extends NewComponentPage {
 		}
 
 		StringBuffer buf = new StringBuffer();
-		buf.append("private void "+INIT_METHOD_NAME+"(");
+		buf.append("private void " + INIT_METHOD_NAME + "(");
 		buf.append(") {");
 		buf.append(lineDelim);
 		buf.append("setLayout(new ");
@@ -99,7 +100,7 @@ public class NewDialogPage extends NewComponentPage {
 		buf.append("}");
 		type.createMethod(buf.toString(), null, false, monitor);
 		// Create main
-		if (super.isCreateMain()) {
+		if (isCreateMain()) {
 			createInstallLnF(type, imports, monitor);
 			createMain(type, imports, monitor);
 		}
@@ -128,10 +129,10 @@ public class NewDialogPage extends NewComponentPage {
 		String cName = imports.addImport("java.lang.String");
 		buf.append("/**\n");
 		buf.append("* Main entry of the class.\n");
-		buf.append("* Note: This class is only created so that you can easily preview the result at runtime.\n"); 
+		buf.append("* Note: This class is only created so that you can easily preview the result at runtime.\n");
 		buf.append("* It is not expected to be managed by the designer.\n");
 		buf.append("* You can modify it as you like.\n");
-		buf.append("*/\n");		
+		buf.append("*/\n");
 		buf.append("public static void main(" + cName + "[] args){\n");
 		buf.append("installLnF();\n");
 		cName = imports.addImport("javax.swing.SwingUtilities");
@@ -140,7 +141,7 @@ public class NewDialogPage extends NewComponentPage {
 		buf.append("public void run(){\n");
 		cName = type.getTypeQualifiedName('.');
 		buf.append(cName + " dialog = new " + cName + "();\n");
-		buf.append("dialog.setDefaultCloseOperation("+cName+".DISPOSE_ON_CLOSE);\n");
+		buf.append("dialog.setDefaultCloseOperation(" + cName + ".DISPOSE_ON_CLOSE);\n");
 		buf.append("dialog.setTitle(\"" + type.getElementName() + "\");\n");
 		buf.append("dialog.setLocationRelativeTo(null);\n");
 		buf.append("dialog.setVisible(true);\n");
@@ -151,4 +152,3 @@ public class NewDialogPage extends NewComponentPage {
 	}
 
 }
-
