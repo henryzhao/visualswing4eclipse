@@ -15,7 +15,6 @@ package org.dyno.visual.swing.wizards;
 
 import org.dyno.visual.swing.contentTypes.VisualSwingContentDescriber;
 import org.dyno.visual.swing.plugin.spi.IConstants;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -46,8 +45,11 @@ public class NewComponentPage extends NewClassWizardPage implements IConstants{
 		return false;
 	}
 	@Override
-	protected String getFileComment(ICompilationUnit parentCU,
-			String lineDelimiter) throws CoreException {
+	protected String getTypeComment(ICompilationUnit parentCU, String lineDelimiter) {
+		return getTypeComment(parentCU);
+	}
+	@Override
+	protected String getTypeComment(ICompilationUnit parentCU) {
 		return VisualSwingContentDescriber.VISUAL_SWING_MAGIC+" -- DO NOT REMOVE THIS LINE!";
 	}
 }
