@@ -15,6 +15,7 @@ package org.dyno.visual.swing.designer;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -690,9 +691,12 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		} else if (state == STATE_ROOT_RESIZE_RIGHT) {
 			Component root = glassPlane.getDesigner().getRootWidget();
 			Rectangle bounds = root.getBounds();
+			Dimension min = root.getMinimumSize();
 			boolean changed = false;
 			int w = e.getX() - bounds.x;
 			if (w > 0) {
+				if(w<min.width)
+					w=min.width;
 				bounds.width = w;
 				changed = true;
 			}
@@ -704,14 +708,19 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		} else if (state == STATE_ROOT_RESIZE_RIGHT_BOTTOM) {
 			Component root = glassPlane.getDesigner().getRootWidget();
 			Rectangle bounds = root.getBounds();
+			Dimension min = root.getMinimumSize();
 			boolean changed = false;
 			int w = e.getX() - bounds.x;
 			if (w > 0) {
+				if(w<min.width)
+					w=min.width;
 				changed = true;
 				bounds.width = w;
 			}
 			int h = e.getY() - bounds.y;
 			if (h > 0) {
+				if(h<min.height)
+					h=min.height;
 				changed = true;
 				bounds.height = h;
 			}
@@ -723,9 +732,12 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		} else if (state == STATE_ROOT_RESIZE_BOTTOM) {
 			Component root = glassPlane.getDesigner().getRootWidget();
 			Rectangle bounds = root.getBounds();
+			Dimension min = root.getMinimumSize();
 			boolean changed = false;
 			int h = e.getY() - bounds.y;
 			if (h > 0) {
+				if(h<min.height)
+					h=min.height;
 				changed = true;
 				bounds.height = h;
 			}
