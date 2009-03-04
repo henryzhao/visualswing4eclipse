@@ -12,21 +12,16 @@ package org.dyno.visual.swing.swt_awt;
 
 import java.awt.EventQueue;
 import java.awt.Frame;
-import java.awt.Toolkit;
 
 import javax.swing.JApplet;
 import javax.swing.JComponent;
 import javax.swing.RootPaneContainer;
-import javax.swing.UIManager;
-import javax.swing.plaf.FontUIResource;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.AwtEnvironment;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -125,15 +120,8 @@ public abstract class EmbeddedSwingComposite extends Composite {
 
 	}
 
-	private Font currentSystemFont;
 	private AwtContext awtContext;
 	private AwtFocusHandler awtHandler;
-
-	private Listener settingsListener = new Listener() {
-		public void handleEvent(Event event) {
-			handleSettingsChange();
-		}
-	};
 
 	// This listener helps ensure that Swing popup menus are properly dismissed
 	// when
@@ -183,9 +171,7 @@ public abstract class EmbeddedSwingComposite extends Composite {
 	 */
 	public EmbeddedSwingComposite(Composite parent, int style) {
 		super(parent, style | SWT.EMBEDDED | SWT.NO_BACKGROUND);
-		getDisplay().addListener(SWT.Settings, settingsListener);
 		setLayout(new FillLayout());
-		currentSystemFont = getFont();
 	}
 
 	/**
@@ -387,7 +373,6 @@ public abstract class EmbeddedSwingComposite extends Composite {
 					swingComponent.putClientProperty("embeded.composite", EmbeddedSwingComposite.this);
 					currentContext.setSwingComponent(swingComponent);
 					container.getRootPane().getContentPane().add(swingComponent);
-					setComponentFont();
 					postComponentCreation();
 				}
 			});
@@ -397,84 +382,6 @@ public abstract class EmbeddedSwingComposite extends Composite {
 	}
 
 	protected void postComponentCreation() {
-	}
-
-	private void setComponentFont() {
-		assert currentSystemFont != null;
-		assert EventQueue.isDispatchThread(); // On AWT event thread
-
-		JComponent swingComponent = (awtContext != null) ? awtContext.getSwingComponent() : null;
-		if ((swingComponent != null) && !currentSystemFont.getDevice().isDisposed()) {
-			FontData fontData = currentSystemFont.getFontData()[0];
-
-			// AWT font sizes assume a 72 dpi resolution, always. The true
-			// screen resolution must be
-			// used to convert the platform font size into an AWT point size
-			// that matches when displayed.
-			int resolution = Toolkit.getDefaultToolkit().getScreenResolution();
-			int awtFontSize = (int) Math.round((double) fontData.getHeight() * resolution / 72.0);
-
-			// The style constants for SWT and AWT map exactly, and since they
-			// are int constants, they should
-			// never change. So, the SWT style is passed through as the AWT
-			// style.
-			java.awt.Font awtFont = new java.awt.Font(fontData.getName(), fontData.getStyle(), awtFontSize);
-
-			// Update the look and feel defaults to use new font.
-			updateLookAndFeel(awtFont);
-
-			// Allow subclasses to react to font change if necessary.
-			updateAwtFont(awtFont);
-		}
-	}
-
-	private void updateLookAndFeel(java.awt.Font awtFont) {
-		assert awtFont != null;
-		assert EventQueue.isDispatchThread(); // On AWT event thread
-
-		// The FontUIResource class marks the font as replaceable by the look
-		// and feel
-		// implementation if font settings are later changed.
-		FontUIResource fontResource = new FontUIResource(awtFont);
-
-		// Assign the new font to the relevant L&F font properties. These are
-		// the properties that are initially assigned to the system font
-		// under the Windows look and feel.
-		// Other fonts may change, and the Swing L&F may not be adjusting.
-
-		UIManager.put("Button.font", fontResource); //$NON-NLS-1$
-		UIManager.put("CheckBox.font", fontResource); //$NON-NLS-1$
-		UIManager.put("ComboBox.font", fontResource); //$NON-NLS-1$
-		UIManager.put("EditorPane.font", fontResource); //$NON-NLS-1$
-		UIManager.put("Label.font", fontResource); //$NON-NLS-1$
-		UIManager.put("List.font", fontResource); //$NON-NLS-1$
-		UIManager.put("Panel.font", fontResource); //$NON-NLS-1$
-		UIManager.put("ProgressBar.font", fontResource); //$NON-NLS-1$
-		UIManager.put("RadioButton.font", fontResource); //$NON-NLS-1$
-		UIManager.put("ScrollPane.font", fontResource); //$NON-NLS-1$
-		UIManager.put("TabbedPane.font", fontResource); //$NON-NLS-1$
-		UIManager.put("Table.font", fontResource); //$NON-NLS-1$
-		UIManager.put("TableHeader.font", fontResource); //$NON-NLS-1$
-		UIManager.put("TextField.font", fontResource); //$NON-NLS-1$
-		UIManager.put("TextPane.font", fontResource); //$NON-NLS-1$
-		UIManager.put("TitledBorder.font", fontResource); //$NON-NLS-1$
-		UIManager.put("ToggleButton.font", fontResource); //$NON-NLS-1$
-		UIManager.put("TreeFont.font", fontResource); //$NON-NLS-1$
-		UIManager.put("ViewportFont.font", fontResource); //$NON-NLS-1$
-	}
-
-	private void handleSettingsChange() {
-		if (!isDisposed()) {
-			Font newFont = getDisplay().getSystemFont();
-			if (!newFont.equals(currentSystemFont)) {
-				currentSystemFont = newFont;
-				EventQueue.invokeLater(new Runnable() {
-					public void run() {
-						setComponentFont();
-					}
-				});
-			}
-		}
 	}
 
 	private boolean isFocusable() {
@@ -520,7 +427,6 @@ public abstract class EmbeddedSwingComposite extends Composite {
 	 */
 	public void dispose() {
 		if (!isDisposed()) {
-			getDisplay().removeListener(SWT.Settings, settingsListener);
 			getDisplay().removeFilter(SWT.Show, menuListener);
 			super.dispose();
 		}
