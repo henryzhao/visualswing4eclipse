@@ -407,8 +407,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void repaintDesigner() {
 		if (getDesigner() != null) {
-			getDesigner().clearCapture();
-			getDesigner().repaint();
+			getDesigner().refreshDesigner();
 		}
 	}
 

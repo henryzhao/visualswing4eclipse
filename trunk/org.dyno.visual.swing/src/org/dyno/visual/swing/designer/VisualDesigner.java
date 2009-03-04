@@ -126,6 +126,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public VisualDesigner(VisualSwingEditor editor, Composite parent) {
 		this.editor = editor;
+		this.undoContext = new ObjectUndoContext(editor);
 		this.parent = parent;
 
 		this.clipboard = new ArrayList<WidgetAdapter>();
@@ -476,7 +477,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			Container parent = root.getParent();
 			if (parent != null)
 				parent.remove(root);
-			undoContext = new ObjectUndoContext(root);
 			IEditorSite site = editor.getEditorSite();
 			undoAction = new UndoActionHandler(site, getUndoContext());
 			redoAction = new RedoActionHandler(site, getUndoContext());
