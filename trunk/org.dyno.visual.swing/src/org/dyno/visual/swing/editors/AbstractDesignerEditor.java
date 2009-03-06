@@ -177,12 +177,10 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 				} catch (Exception e) {
 				}
 			}
-			for (String viewId : RELATED_VIEW_IDS) {
-				try {
-					IViewPart part = page.findView(viewId);
-					page.hideView(part);
-				} catch (Exception e) {
-				}
+			try {
+				IViewPart part = page.findView(PaletteView.ID);
+				page.hideView(part);
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -202,7 +200,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	}
 
 	private static final String[] RELATED_VIEW_IDS = {
-			"org.dyno.visual.swing.editors.PaletteView", //$NON-NLS-1$
+			PaletteView.ID, //$NON-NLS-1$
 			"org.eclipse.ui.views.PropertySheet", //$NON-NLS-1$
 			"org.eclipse.ui.views.ContentOutline" }; //$NON-NLS-1$
 	private static final String JAVA_EDITOR_ID = "org.eclipse.jdt.ui.CompilationUnitEditor"; //$NON-NLS-1$

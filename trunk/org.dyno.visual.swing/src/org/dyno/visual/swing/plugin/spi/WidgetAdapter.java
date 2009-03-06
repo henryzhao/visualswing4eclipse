@@ -583,7 +583,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			boolean isroot = isRoot();
 			if (!isroot && widgetClazz != beanClass) {
 				aClazz = widgetClazz;
-			} else if (isroot && superWidgetClazz != beanClass) {
+			} else if (isroot && superWidgetClazz != beanClass&&beanClass.isAssignableFrom(superWidgetClazz)) {
 				aClazz = superWidgetClazz;
 			}
 			if (aClazz != null) {
@@ -799,6 +799,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))) {
+				if(property.getId().equals("bounds")){
+					Container widgetCon = getWidget().getParent();
+					if(widgetCon==null||widgetCon.getLayout()!=null){
+						continue;
+					}
+				}
 				property.cloneProperty(getWidget(), clone);
 			}
 		}

@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class Constraints implements Serializable {
+public class Constraints implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	private Alignment horizontal;
 	private Alignment vertical;
@@ -34,6 +34,11 @@ public class Constraints implements Serializable {
 
 	public Alignment getHorizontal() {
 		return horizontal;
+	}
+
+	@Override
+	public Object clone() {
+		return new Constraints((Alignment) (horizontal == null ? null : horizontal.clone()), (Alignment) (vertical == null ? null : vertical.clone()));
 	}
 
 	public Alignment getVertical() {
@@ -48,4 +53,3 @@ public class Constraints implements Serializable {
 		this.vertical = vertical;
 	}
 }
-
