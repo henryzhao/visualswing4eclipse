@@ -42,7 +42,9 @@ import org.eclipse.ui.part.PageBookView;
 public class PaletteView extends PageBookView implements ISelectionProvider,
         ISelectionChangedListener {
 
-    public PaletteView() {
+    public static final String ID = "org.dyno.visual.swing.editors.PaletteView";
+
+	public PaletteView() {
         super();
     }
 

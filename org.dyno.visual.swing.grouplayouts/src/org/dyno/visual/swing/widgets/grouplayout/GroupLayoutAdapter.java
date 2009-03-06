@@ -438,7 +438,8 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		for (int i = 0; i < count; i++) {
 			JComponent child = (JComponent) parent.getChild(i);
 			WidgetAdapter cAdapter = WidgetAdapter.getWidgetAdapter(child);
-			panel.add(cAdapter.cloneWidget(), layout.getConstraints(child));
+			Constraints childConstraints = layout.getConstraints(child);
+			panel.add(cAdapter.cloneWidget(), childConstraints==null?null:childConstraints.clone());
 		}
 		return true;
 	}
