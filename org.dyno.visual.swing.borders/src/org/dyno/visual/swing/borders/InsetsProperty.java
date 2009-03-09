@@ -233,7 +233,7 @@ abstract class InsetsProperty extends AbstractAdaptable implements IWidgetProper
 
 	@Override
 	public String getDisplayName() {
-		return "insets";
+		return "insets"+TEXT_TRAILING;
 	}
 
 	@Override

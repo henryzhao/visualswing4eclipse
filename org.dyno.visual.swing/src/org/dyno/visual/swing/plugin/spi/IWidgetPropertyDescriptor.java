@@ -28,6 +28,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  */
 @SuppressWarnings("unchecked")
 public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptable{
+	String TEXT_TRAILING = "     ";
     boolean isPropertyResettable(IStructuredSelection bean);
     boolean isPropertySet(String lnfClassname, IStructuredSelection bean);
 	Object getPropertyValue(IStructuredSelection bean);

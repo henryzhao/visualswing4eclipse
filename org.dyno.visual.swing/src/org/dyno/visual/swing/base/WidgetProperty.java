@@ -57,6 +57,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  */
 @SuppressWarnings("unchecked")
 public class WidgetProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
+	
 	protected Object lastValue;
 
 	protected String category;
@@ -84,7 +85,7 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 			VisualSwingPlugin.getLogger().error(e);
 		}
 		gencode = true;
-		displayName = name;
+		displayName = name + TEXT_TRAILING;
 		editable = true;
 		labelFactory = label;
 		editorFactory = editor;
@@ -108,7 +109,7 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 			VisualSwingPlugin.getLogger().error(e);
 		}
 		gencode = true;
-		displayName = name;
+		displayName = name + TEXT_TRAILING;
 		editable = true;
 		Class<?> type = propertyDescriptor.getPropertyType();
 		TypeAdapter ta = ExtensionRegistry.getTypeAdapter(type);
@@ -142,6 +143,7 @@ public class WidgetProperty extends AbstractAdaptable implements IWidgetProperty
 		displayName = config.getAttribute("displayName");
 		if (displayName == null || displayName.trim().length() == 0)
 			displayName = propertyName;
+		displayName = displayName + TEXT_TRAILING;
 		String sEditable = config.getAttribute("editable");
 		editable = sEditable == null || sEditable.trim().length() == 0 || sEditable.toLowerCase().equals("true");
 		String sLabel = config.getAttribute("renderer");
