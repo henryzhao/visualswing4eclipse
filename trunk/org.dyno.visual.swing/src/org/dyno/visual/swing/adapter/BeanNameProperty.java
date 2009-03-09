@@ -65,7 +65,7 @@ public class BeanNameProperty extends PropertyAdapter {
 
 	@Override
 	public String getDisplayName() {
-		return Messages.BEAN_NAME_PROPERTY_DISPLAY_NAME;
+		return Messages.BEAN_NAME_PROPERTY_DISPLAY_NAME+TEXT_TRAILING;
 	}
 
 	@Override

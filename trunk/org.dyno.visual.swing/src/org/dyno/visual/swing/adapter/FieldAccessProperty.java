@@ -54,7 +54,7 @@ public class FieldAccessProperty extends PropertyAdapter {
 
 	@Override
 	public String getDisplayName() {
-		return Messages.FIELD_ACCESS_PROPERTY_DISPLAY_NAME;
+		return Messages.FIELD_ACCESS_PROPERTY_DISPLAY_NAME+TEXT_TRAILING;
 	}
 
 	@Override

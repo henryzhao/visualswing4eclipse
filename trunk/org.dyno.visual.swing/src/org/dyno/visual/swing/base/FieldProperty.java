@@ -322,7 +322,7 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 
 	@Override
 	public String getDisplayName() {
-		return displayName;
+		return displayName+TEXT_TRAILING;
 	}
 
 	@Override

@@ -360,7 +360,7 @@ public class BeanDescriptorProperty extends PropertyAdapter implements IWidgetPr
 
 	@Override
 	public String getDisplayName() {
-		return property.getName();
+		return property.getName()+TEXT_TRAILING;
 	}
 
 	@Override
