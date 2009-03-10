@@ -3,7 +3,6 @@ package org.dyno.visual.swing.parser.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dyno.visual.swing.base.WidgetProperty;
 import org.dyno.visual.swing.parser.NamespaceUtil;
 import org.dyno.visual.swing.parser.spi.IWidgetASTParser;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
@@ -51,10 +50,10 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 					MethodInvocation mi = (MethodInvocation) expression;
 					Expression optional = mi.getExpression();
 					if (isShouldCheck(optional)) {
-						String mName = mi.getName().getFullyQualifiedName(); 
+						String mName = mi.getName().getFullyQualifiedName();
 						if (mName.startsWith("set")) {
 							parseSetStatement(lnfClassname, mi);
-						}else if(mName.startsWith("add")){
+						} else if (mName.startsWith("add")) {
 							parseAddStatement(lnfClassname, mi);
 						}
 					}
@@ -62,19 +61,20 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 			}
 		}
 	}
-	protected void parseAddStatement(String lnfClassname,  MethodInvocation mi){
-		
+
+	protected void parseAddStatement(String lnfClassname, MethodInvocation mi) {
+
 	}
-	protected void parseSetStatement(String lnfClassname,  MethodInvocation mi) {
+
+	protected void parseSetStatement(String lnfClassname, MethodInvocation mi) {
 		Object bean = adaptable.getWidget();
 		IStructuredSelection sel = new StructuredSelection(bean);
 		ArrayList<IWidgetPropertyDescriptor> properties = adaptable.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(lnfClassname, sel) && property instanceof WidgetProperty) {
+			if (property.isPropertySet(lnfClassname, sel)) {
 				String setMethodName = mi.getName().getFullyQualifiedName();
-				WidgetProperty wp = (WidgetProperty) property;
-				String writeMethodName = wp.getPropertyDescriptor().getWriteMethod().getName();
-				if (setMethodName.equals(writeMethodName)) {
+				String writeMethodName = property.getSetName();
+				if (writeMethodName != null && setMethodName.equals(writeMethodName)) {
 					List args = mi.arguments();
 					IValueParser vp = property.getValueParser();
 					if (vp != null) {
@@ -115,12 +115,12 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 			if (initMethod != null) {
 				Block body = initMethod.getBody();
 				statements = body.statements();
-			}else{
+			} else {
 				initMethod = getMethodDeclaration(type, type.getName().getFullyQualifiedName());
-				if(initMethod!=null){
+				if (initMethod != null) {
 					Block body = initMethod.getBody();
 					statements = body.statements();
-				}else{
+				} else {
 					statements = new ArrayList();
 				}
 			}
@@ -130,8 +130,8 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 			if (getMethod != null) {
 				Block body = getMethod.getBody();
 				statements = body.statements();
-				if(!statements.isEmpty()){
-					Object first=statements.get(0);
+				if (!statements.isEmpty()) {
+					Object first = statements.get(0);
 					if (first instanceof IfStatement) {
 						IfStatement ifs = (IfStatement) statements.get(0);
 						Statement thenstmt = ifs.getThenStatement();

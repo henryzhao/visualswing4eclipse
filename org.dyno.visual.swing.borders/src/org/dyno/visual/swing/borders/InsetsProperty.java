@@ -21,9 +21,8 @@ import java.util.StringTokenizer;
 
 import javax.swing.border.Border;
 
-import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
+import org.dyno.visual.swing.base.PropertyAdapter;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
-import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
@@ -35,7 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 @SuppressWarnings("unchecked")
-abstract class InsetsProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
+abstract class InsetsProperty extends PropertyAdapter{
 	private Field top;
 	private Field left;
 	private Field bottom;

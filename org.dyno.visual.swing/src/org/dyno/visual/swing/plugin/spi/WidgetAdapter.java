@@ -21,6 +21,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.beans.BeanInfo;
 import java.beans.EventSetDescriptor;
+import java.beans.IndexedPropertyDescriptor;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -203,7 +204,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (dirty != d) {
 			dirty = d;
 		}
-		if(getDelegateAdapter()!=null){
+		if (getDelegateAdapter() != null) {
 			getDelegateAdapter().setDirty(true);
 		}
 		if (getDesigner() != null)
@@ -242,6 +243,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (getWidget() instanceof Container)
 			JavaUtil.layoutContainer((Container) getWidget());
 	}
+
 	protected void attach() {
 		if (widget != null) {
 			if (widget instanceof RootPaneContainer) {
@@ -336,19 +338,20 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			this.name = name;
 		}
 	}
-	public IEditorPart getSourceEditor(){
-		try{
+
+	public IEditorPart getSourceEditor() {
+		try {
 			IWorkbenchWindow window = JavaUtil.getEclipseWindow();
 			VisualDesigner designer = getDesigner();
-			if(window!=null){
+			if (window != null) {
 				IWorkbenchPage[] pages = window.getPages();
-				for(IWorkbenchPage page:pages){
+				for (IWorkbenchPage page : pages) {
 					IEditorReference[] refs = page.getEditorReferences();
-					for(IEditorReference ref:refs){
-						if(ref.getId().equals(JavaUI.ID_CU_EDITOR)){
+					for (IEditorReference ref : refs) {
+						if (ref.getId().equals(JavaUI.ID_CU_EDITOR)) {
 							IEditorInput input = ref.getEditorInput();
 							IEditorInput thisinput = designer.getEditor().getEditorInput();
-							if(thisinput.equals(input)){
+							if (thisinput.equals(input)) {
 								return ref.getEditor(true);
 							}
 						}
@@ -360,18 +363,19 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 		return null;
 	}
+
 	public void setSelected(boolean b) {
 		selected = b;
 		VisualDesigner designer = getDesigner();
 		if (designer != null) {
-			if (b){
+			if (b) {
 				designer.addSelectedWidget(this);
 				List<ISelectionListener> selectionListeners = ExtensionRegistry.getSelectionListeners();
-				for(ISelectionListener listener:selectionListeners){
+				for (ISelectionListener listener : selectionListeners) {
 					listener.widgetSelected(new StructuredSelection(this));
 				}
-			}else
-				designer.removeSelectedWidget(this);			
+			} else
+				designer.removeSelectedWidget(this);
 		}
 	}
 
@@ -575,7 +579,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 				}
 			}
 		}
-		Component widget=getWidget();
+		Component widget = getWidget();
 		if (widget != null) {
 			Class aClazz = null;
 			Class widgetClazz = widget.getClass();
@@ -583,17 +587,19 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			boolean isroot = isRoot();
 			if (!isroot && widgetClazz != beanClass) {
 				aClazz = widgetClazz;
-			} else if (isroot && superWidgetClazz != beanClass&&beanClass.isAssignableFrom(superWidgetClazz)) {
+			} else if (isroot && superWidgetClazz != beanClass && beanClass.isAssignableFrom(superWidgetClazz)) {
 				aClazz = superWidgetClazz;
 			}
 			if (aClazz != null) {
 				try {
 					BeanInfo beanInfo = Introspector.getBeanInfo(aClazz, beanClass);
 					PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-					for(PropertyDescriptor propertyDescriptor:propertyDescriptors){
-						BeanDescriptorProperty fp = new BeanDescriptorProperty(propertyDescriptor, aClazz);
-						fp.setCategory("Common");
-						propdesc.add(fp);						
+					for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
+						if (!(propertyDescriptor instanceof IndexedPropertyDescriptor)&&propertyDescriptor.getReadMethod() != null) {
+							BeanDescriptorProperty fp = new BeanDescriptorProperty(propertyDescriptor);
+							fp.setCategory("Common");
+							propdesc.add(fp);
+						}
 					}
 				} catch (IntrospectionException e) {
 					VisualSwingPlugin.getLogger().error(e);
@@ -799,9 +805,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		ArrayList<IWidgetPropertyDescriptor> properties = getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			if (property.isPropertySet(getLnfClassname(), new StructuredSelection(getWidget()))) {
-				if(property.getId().equals("bounds")){
+				if (property.getId().equals("bounds")) {
 					Container widgetCon = getWidget().getParent();
-					if(widgetCon==null||widgetCon.getLayout()!=null){
+					if (widgetCon == null || widgetCon.getLayout() != null) {
 						continue;
 					}
 				}
@@ -810,16 +816,17 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 		return clone;
 	}
+
 	private Component cloneWidgetInstance() {
 		Component clone;
-		if(isRoot()){
-			Component widget=getWidget();
-			if(widget!=null){
-				Class clazz=widget.getClass();
-				if(clazz!=getWidgetClass()){
-					if(clazz.getSuperclass()==getWidgetClass())
+		if (isRoot()) {
+			Component widget = getWidget();
+			if (widget != null) {
+				Class clazz = widget.getClass();
+				if (clazz != getWidgetClass()) {
+					if (clazz.getSuperclass() == getWidgetClass())
 						clone = newWidget();
-					else{
+					else {
 						try {
 							clone = (Component) clazz.getSuperclass().newInstance();
 						} catch (Exception e) {
@@ -827,27 +834,27 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 							clone = newWidget();
 						}
 					}
-				}else{
+				} else {
 					clone = newWidget();
 				}
-			}else{				
+			} else {
 				clone = newWidget();
 			}
-		}else{
-			Component widget=getWidget();
-			if(widget!=null){
-				Class clazz=widget.getClass();
-				if(clazz!=getWidgetClass()){
+		} else {
+			Component widget = getWidget();
+			if (widget != null) {
+				Class clazz = widget.getClass();
+				if (clazz != getWidgetClass()) {
 					try {
 						clone = (Component) clazz.newInstance();
 					} catch (Exception e) {
 						VisualSwingPlugin.getLogger().error(e);
 						clone = newWidget();
 					}
-				}else{
+				} else {
 					clone = newWidget();
 				}
-			}else{
+			} else {
 				clone = newWidget();
 			}
 		}
@@ -874,7 +881,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public String getWidgetCodeClassName() {
 		Component widget = getWidget();
-		if(widget!=null){
+		if (widget != null) {
 			return widget.getClass().getName();
 		}
 		return getWidgetClass().getName();
@@ -982,15 +989,16 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public String getPreferredLookAndFeel() {
 		return (String) getProperty("preferred.lookandfeel");
 	}
-	public WidgetAdapter findWidgetAdapter(String compname){
-		if(compname.equals(getName()))
+
+	public WidgetAdapter findWidgetAdapter(String compname) {
+		if (compname.equals(getName()))
 			return this;
 		return null;
 	}
 
 	public void resetDesignerRoot() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null){
+		if (designer != null) {
 			designer.resetRoot();
 		}
 	}

@@ -14,6 +14,8 @@
 package org.dyno.visual.swing.plugin.spi;
 
 import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -29,6 +31,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 @SuppressWarnings("unchecked")
 public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptable{
 	String TEXT_TRAILING = "     ";
+	Map<Class, Object> DEFAULT_OBJECTS=new HashMap<Class, Object>();
     boolean isPropertyResettable(IStructuredSelection bean);
     boolean isPropertySet(String lnfClassname, IStructuredSelection bean);
 	Object getPropertyValue(IStructuredSelection bean);
@@ -45,5 +48,6 @@ public interface IWidgetPropertyDescriptor extends IPropertyDescriptor, IAdaptab
 	void setFieldValue(Object bean, Object newValue);
 	Object getFieldValue(Object bean);
 	Class getPropertyType();
+	String getSetName();
 }
 
