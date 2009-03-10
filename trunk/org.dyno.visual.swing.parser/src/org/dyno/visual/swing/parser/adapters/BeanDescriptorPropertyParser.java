@@ -19,7 +19,7 @@ public class BeanDescriptorPropertyParser implements IPropertyCodeGenerator, IAd
 		if (bean instanceof Component) {
 			Component comp = (Component) bean;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
-			String setName = property.getSetMethodName();
+			String setName = property.getSetName();
 			if (adapter != null&&setName!=null) {
 				StringBuilder builder = new StringBuilder();
 				Class typeClass = property.getPropertyType();

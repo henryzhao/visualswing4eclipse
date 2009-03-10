@@ -15,14 +15,11 @@ package org.dyno.visual.swing.base;
 
 import java.awt.Component;
 import java.lang.reflect.Field;
-import java.util.Comparator;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.plugin.spi.AbstractAdaptable;
 import org.dyno.visual.swing.plugin.spi.ICellEditorFactory;
 import org.dyno.visual.swing.plugin.spi.ILabelProviderFactory;
 import org.dyno.visual.swing.plugin.spi.IValueParser;
-import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.viewers.CellEditor;
@@ -38,7 +35,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @author William Chen
  */
 @SuppressWarnings("unchecked")
-public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyDescriptor {
+public class FieldProperty extends PropertyAdapter{
 	private Object lastValue;
 	private Object default_value;
 
@@ -141,113 +138,15 @@ public class FieldProperty extends AbstractAdaptable implements IWidgetPropertyD
 	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return true;
 	}
-
-	
 	@Override
-	public boolean isPropertySet(String lnfClass, IStructuredSelection bean) {
-		assert !bean.isEmpty();
-		Object b=bean.getFirstElement();
-		String name = field.getName();
-		if (name.equals("preferredSize") && b instanceof Component) {
-			return ((Component) b).isPreferredSizeSet();
-		} else if (name.equals("minimumSize") && b instanceof Component)
-			return ((Component) b).isMinimumSizeSet();
-		else if (name.equals("maximumSize") && b instanceof Component)
-			return ((Component) b).isMaximumSizeSet();
-		Class<?> propertyType = field.getType();
-		Object value = getFieldValue(b);
-		if (propertyType == byte.class) {
-			byte bv = value == null ? 0 : ((Byte) value).byteValue();
-			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
-			return bv != dv;
-		} else if (propertyType == char.class) {
-			char bv = value == null ? 0 : ((Character) value).charValue();
-			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
-			return bv != dv;
-		} else if (propertyType == short.class) {
-			short bv = value == null ? 0 : ((Short) value).shortValue();
-			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
-			return bv != dv;
-		} else if (propertyType == int.class) {
-			int bv = value == null ? 0 : ((Integer) value).intValue();
-			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
-			return bv != dv;
-		} else if (propertyType == long.class) {
-			long bv = value == null ? 0 : ((Long) value).longValue();
-			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
-			return bv != dv;
-		} else if (propertyType == float.class) {
-			float bv = value == null ? 0 : ((Float) value).floatValue();
-			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
-			return bv != dv;
-		} else if (propertyType == double.class) {
-			double bv = value == null ? 0 : ((Double) value).doubleValue();
-			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
-			return bv != dv;
-		} else if (propertyType == void.class) {
-			return false;
-		} else if (propertyType == boolean.class) {
-			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
-			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
-			return bv != dv;
-		} else if (propertyType == Byte.class) {
-			byte bv = value == null ? 0 : ((Byte) value).byteValue();
-			byte dv = default_value == null ? 0 : ((Byte) default_value).byteValue();
-			return bv != dv;
-		} else if (propertyType == Character.class) {
-			char bv = value == null ? 0 : ((Character) value).charValue();
-			char dv = default_value == null ? 0 : ((Character) default_value).charValue();
-			return bv != dv;
-		} else if (propertyType == Short.class) {
-			short bv = value == null ? 0 : ((Short) value).shortValue();
-			short dv = default_value == null ? 0 : ((Short) default_value).shortValue();
-			return bv != dv;
-		} else if (propertyType == Integer.class) {
-			int bv = value == null ? 0 : ((Integer) value).intValue();
-			int dv = default_value == null ? 0 : ((Integer) default_value).intValue();
-			return bv != dv;
-		} else if (propertyType == Long.class) {
-			long bv = value == null ? 0 : ((Long) value).longValue();
-			long dv = default_value == null ? 0 : ((Long) default_value).longValue();
-			return bv != dv;
-		} else if (propertyType == Float.class) {
-			float bv = value == null ? 0 : ((Float) value).floatValue();
-			float dv = default_value == null ? 0 : ((Float) default_value).floatValue();
-			return bv != dv;
-		} else if (propertyType == Double.class) {
-			double bv = value == null ? 0 : ((Double) value).doubleValue();
-			double dv = default_value == null ? 0 : ((Double) default_value).doubleValue();
-			return bv != dv;
-		} else if (propertyType == Void.class) {
-			return false;
-		} else if (propertyType == Boolean.class) {
-			boolean bv = value == null ? false : ((Boolean) value).booleanValue();
-			boolean dv = default_value == null ? false : ((Boolean) default_value).booleanValue();
-			return bv != dv;
-		} else {
-			if (value == null && default_value == null)
-				return false;
-			else if (value == null && default_value != null)
-				return true;
-			else if (value != null && default_value == null)
-				return true;
-			else {
-				TypeAdapter typeAdapter = ExtensionRegistry.getTypeAdapter(propertyType);
-				if (typeAdapter != null) {
-					Comparator comparator = typeAdapter.getComparator();
-					if (comparator != null)
-						return comparator.compare(value, default_value) != 0;
-				}
-				return !value.equals(default_value);
-			}
-		}
+	protected String getPropertyName(){
+		return field.getName();
 	}
 
 	@Override
-	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
+	protected Object getDefaultValue(Object b, String lnfClassname) {
+		return default_value;
 	}
-
-	
 	@Override
 	public void setPropertyValue(IStructuredSelection bean, Object value) {
 		assert !bean.isEmpty();
