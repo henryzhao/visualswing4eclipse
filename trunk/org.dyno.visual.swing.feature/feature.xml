@@ -2,7 +2,7 @@
 <feature
       id="org.dyno.visual.swing.feature"
       label="Visual Swing Designer for Eclipse"
-      version="0.9.9.I20090309-1800"
+      version="0.9.9.I20090310-1200"
       provider-name="Dynamic Object Organization">
 
    <description url="http://www.example.com/description">
