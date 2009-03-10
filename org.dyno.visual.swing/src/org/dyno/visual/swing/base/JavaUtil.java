@@ -32,7 +32,6 @@ import javax.swing.JMenu;
 import javax.swing.MenuElement;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
@@ -117,7 +116,7 @@ public class JavaUtil {
 		if (icon != null && icon instanceof ResourceIcon) {
 			String text = ((ResourceIcon) icon).toString();
 			if (text != null && text.trim().length() > 0) {
-				IJavaProject javaProject = WhiteBoard.getCurrentProject();
+				IJavaProject javaProject = VisualSwingPlugin.getCurrentProject();
 				if (javaProject != null) {
 					IPackageFragmentRoot src_root = getSourceRoot(javaProject);
 					if (src_root != null) {
@@ -363,7 +362,7 @@ public class JavaUtil {
 	}
 
 	public static boolean setupLayoutLib(IProgressMonitor monitor) {
-		return setupLayoutLib(WhiteBoard.getCurrentProject(), monitor);
+		return setupLayoutLib(VisualSwingPlugin.getCurrentProject(), monitor);
 	}
 
 	public static boolean setupLayoutLib(IJavaProject javaProject, IProgressMonitor monitor) {

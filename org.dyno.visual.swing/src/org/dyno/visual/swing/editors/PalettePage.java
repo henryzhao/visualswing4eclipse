@@ -10,7 +10,6 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -272,7 +271,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 			}else{
 				Shell parent = expandBar.getShell();
 				try {
-					SelectionDialog typeDialog = JavaUI.createTypeDialog(parent, new ProgressMonitorDialog(parent), WhiteBoard.getCurrentProject().getProject(), IJavaElementSearchConstants.CONSIDER_CLASSES, false);
+					SelectionDialog typeDialog = JavaUI.createTypeDialog(parent, new ProgressMonitorDialog(parent), VisualSwingPlugin.getCurrentProject().getProject(), IJavaElementSearchConstants.CONSIDER_CLASSES, false);
 					if(typeDialog.open()==Window.OK){
 						Object[] result = typeDialog.getResult();
 						if(result!=null&&result.length>0){
@@ -282,7 +281,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 							String pkg=packageFragment.getElementName();
 							if(pkg!=null&&pkg.trim().length()>0)
 								className=pkg+"."+className;
-							final Class<?> beanClass = JavaUtil.getProjectClassLoader(WhiteBoard.getCurrentProject()).loadClass(className);
+							final Class<?> beanClass = JavaUtil.getProjectClassLoader(VisualSwingPlugin.getCurrentProject()).loadClass(className);
 							if(!JComponent.class.isAssignableFrom(beanClass)){
 								MessageDialog.openError(parent, "Error", "Chosen class must be a javax.swing.JComponent derived class!");
 								item.setSelection(false);

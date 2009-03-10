@@ -14,7 +14,10 @@
 package org.dyno.visual.swing;
 
 import org.dyno.visual.swing.base.PluginLogger;
+import org.dyno.visual.swing.designer.VisualDesigner;
+import org.dyno.visual.swing.editors.VisualSwingEditor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -33,6 +36,7 @@ import org.osgi.framework.BundleContext;
 public class VisualSwingPlugin extends AbstractUIPlugin {
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.dyno.visual.swing"; //$NON-NLS-1$
+	private static VisualSwingEditor editor;
 
 	public static String getPluginID() {
 		return PLUGIN_ID;
@@ -132,6 +136,16 @@ public class VisualSwingPlugin extends AbstractUIPlugin {
 			registry.put(iconKey, image_descriptor);
 		}
 		return registry.get(iconKey);
+	}
+	
+	public static IJavaProject getCurrentProject() {
+		return editor==null?null:editor.getHostProject();
+	}
+	public static void setCurrentEditor(VisualSwingEditor e) {
+		editor = e;
+	}
+	public static VisualDesigner getCurrentDesigner(){
+		return editor==null?null:editor.getDesigner();
 	}
 }
 

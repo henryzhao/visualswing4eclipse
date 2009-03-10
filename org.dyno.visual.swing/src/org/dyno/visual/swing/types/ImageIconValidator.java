@@ -17,7 +17,6 @@ package org.dyno.visual.swing.types;
 import java.util.StringTokenizer;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
@@ -54,7 +53,7 @@ public class ImageIconValidator implements ICellEditorValidator {
 				}
 			}
 		} while (tokenizer.hasMoreTokens());
-		IJavaProject prj = WhiteBoard.getCurrentProject();
+		IJavaProject prj = VisualSwingPlugin.getCurrentProject();
 		IProject project = prj.getProject();
 		IResource resource = project.findMember(new Path((String) value));
 		if (resource == null) {

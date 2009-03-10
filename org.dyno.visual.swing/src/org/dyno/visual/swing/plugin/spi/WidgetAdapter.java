@@ -41,7 +41,6 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.adapter.BeanNameProperty;
 import org.dyno.visual.swing.adapter.FieldAccessProperty;
 import org.dyno.visual.swing.adapter.GetAccessProperty;
@@ -123,7 +122,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void requestGlobalNewName() {
 		if (getName() == null) {
-			VisualDesigner designer = WhiteBoard.getCurrentDesigner();
+			VisualDesigner designer = VisualSwingPlugin.getCurrentDesigner();
 			if (designer != null) {
 				NamespaceManager namespace = designer.getNamespace();
 				if (namespace != null)
@@ -261,7 +260,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public NamespaceManager getNamespace() {
 		VisualDesigner designer = getDesigner();
 		if (designer == null)
-			designer = WhiteBoard.getCurrentDesigner();
+			designer = VisualSwingPlugin.getCurrentDesigner();
 		return designer == null ? null : designer.getNamespace();
 	}
 
@@ -405,7 +404,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			parent = parent.getParent();
 		}
 		if (parent == null)
-			return WhiteBoard.getCurrentDesigner();
+			return VisualSwingPlugin.getCurrentDesigner();
 		return (VisualDesigner) parent;
 	}
 
@@ -738,7 +737,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public List<WidgetAdapter> getDropWidget() {
 		VisualDesigner designer = getDesigner();
 		if (designer == null)
-			designer = WhiteBoard.getCurrentDesigner();
+			designer = VisualSwingPlugin.getCurrentDesigner();
 		return designer == null ? EMPTY_LIST : designer.getSelectedWidget();
 	}
 

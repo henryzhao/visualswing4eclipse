@@ -16,7 +16,6 @@ package org.dyno.visual.swing.types;
 import java.text.MessageFormat;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ImageSelectionDialog;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -170,7 +169,7 @@ public class IconCellEditor extends DialogCellEditor {
 					cellEditorWindow.getShell());
 			String text = iconText.getText();
 			if (text != null && text.trim().length() > 0) {
-				IJavaProject javaProject = WhiteBoard.getCurrentProject();
+				IJavaProject javaProject = VisualSwingPlugin.getCurrentProject();
 				if (javaProject != null) {
 					IPackageFragmentRoot src_root = getSourceRoot(javaProject);
 					if (src_root != null) {

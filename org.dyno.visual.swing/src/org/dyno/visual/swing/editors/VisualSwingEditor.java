@@ -32,14 +32,11 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.ISyncUITask;
 import org.dyno.visual.swing.base.JavaUtil;
-import org.dyno.visual.swing.designer.Event;
-import org.dyno.visual.swing.designer.Listener;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
@@ -89,7 +86,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  */
 @SuppressWarnings("unchecked")
 public class VisualSwingEditor extends AbstractDesignerEditor implements
-		Listener, IResourceChangeListener, ISelectionProvider, IPartListener {
+		IResourceChangeListener, ISelectionProvider, IPartListener {
 	private List<ISelectionChangedListener> listeners;
 	private EmbeddedSwingComposite embedded;
 	private VisualDesigner designer;
@@ -199,7 +196,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 		if (designer != null)
 			designer.setFocus();
-		WhiteBoard.setCurrentEditor(this);
+		VisualSwingPlugin.setCurrentEditor(this);
 	}
 
 	public void changeToLnf(String className) {
@@ -312,7 +309,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		hostProject = unit.getJavaProject();
 		ISourceParser sourceParser = factory.newParser();
 		isParsing = true;
-		WhiteBoard.setCurrentEditor(this);
+		VisualSwingPlugin.setCurrentEditor(this);
 		this.designer.setCompilationUnit(unit);
 		try {
 			WidgetAdapter adapter = sourceParser.parse(unit, monitor);
@@ -432,25 +429,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			refreshActionState();
 			return backgroundPanel;
 		}
-	}
-
-	@Override
-	public void onEvent(final Event event) {
-		asyncRunnable(new Runnable() {
-			@Override
-			public void run() {
-				int id = event.getId();
-				switch (id) {
-				case Event.EVENT_SELECTION:
-					setSelection((ISelection) event.getParameter());
-					refreshActionState();
-					break;
-				case Event.EVENT_SHOW_POPUP:
-					designer.showPopup(event);
-					break;
-				}
-			}
-		});
 	}
 
 	public void setLnfClassname(String lnfClassname) {
@@ -656,7 +634,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	private void asyncRunnable(Runnable runnable) {
+	public void asyncRunnable(Runnable runnable) {
 		getDisplay().asyncExec(runnable);
 	}
 
