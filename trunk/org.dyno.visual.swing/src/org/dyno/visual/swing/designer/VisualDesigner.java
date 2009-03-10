@@ -37,7 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.MenuSelectionManager;
@@ -83,7 +82,6 @@ import org.eclipse.ui.operations.UndoActionHandler;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-@SuppressWarnings("unchecked")
 public class VisualDesigner extends JComponent implements KeyListener {
 	private static final long serialVersionUID = -8003291919574427325L;
 	private Rectangle rootBounds;
@@ -268,7 +266,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 	}
 
-	private void showPopup(Point dp, List<Component> selected) {
+	public void showPopup(Point dp, List<Component> selected) {
 		MenuManager manager = new MenuManager("#EDIT"); //$NON-NLS-1$
 		MenuManager lnfMenu = new MenuManager(Messages.VisualDesigner_SetLaf, "#LNF"); //$NON-NLS-2$
 		fillLnfAction(lnfMenu);
@@ -450,10 +448,6 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			return null;
 	}
 
-	private Event createEvent(int id, Object param) {
-		return new Event(this, id, param);
-	}
-
 	Component getRootWidget() {
 		return root;
 	}
@@ -522,14 +516,13 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private RedoActionHandler redoAction;
 
 	public void publishSelection() {
-		WhiteBoard.sendEvent(createEvent(Event.EVENT_SELECTION, new StructuredSelection(new Object[] { new WidgetSelection(root) })));
-	}
+		editor.asyncRunnable(new Runnable(){
 
-	public void showPopup(Event event) {
-		Object[] param = (Object[]) event.getParameter();
-		Point p = (Point) param[0];
-		List<Component> hovered = (List<Component>) param[1];
-		showPopup(p, hovered);
+			@Override
+			public void run() {
+				editor.setSelection(new StructuredSelection(new Object[] { new WidgetSelection(root) }));
+				editor.refreshActionState();
+			}});
 	}
 
 	public void validateContent() {

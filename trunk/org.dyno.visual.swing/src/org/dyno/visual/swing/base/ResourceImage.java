@@ -23,7 +23,6 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -43,7 +42,7 @@ public class ResourceImage extends Image {
 	}
 	public ResourceImage(String p) {
 		this.path = p;
-		IJavaProject prj = WhiteBoard.getCurrentProject();
+		IJavaProject prj = VisualSwingPlugin.getCurrentProject();
 		IProject project = prj.getProject();
 		IResource resource = project.findMember(new Path(p));
 		if (resource == null) {

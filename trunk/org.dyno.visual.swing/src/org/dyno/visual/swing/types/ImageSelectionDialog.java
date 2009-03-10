@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Stack;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -243,7 +242,7 @@ public class ImageSelectionDialog extends Dialog {
 		view.setUseHashlookup(true);
 		view.setContentProvider(new ProjectTreeContent());
 		view.setLabelProvider(new ProjectLabelProvider());
-		view.setInput(WhiteBoard.getCurrentProject());
+		view.setInput(VisualSwingPlugin.getCurrentProject());
 		view.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -282,7 +281,7 @@ public class ImageSelectionDialog extends Dialog {
 	protected Control createContents(Composite parent) {
 		Control ctrl = super.createContents(parent);
 		if (imgFile != null) {
-			IJavaProject prj = WhiteBoard.getCurrentProject();
+			IJavaProject prj = VisualSwingPlugin.getCurrentProject();
 			Stack<Object> stack = new Stack<Object>();
 			if (buildPath(imgFile, prj, stack)) {
 				TreePath path = new TreePath(stack.toArray());

@@ -20,7 +20,6 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ResourceIcon;
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.eclipse.core.resources.IFile;
@@ -90,7 +89,7 @@ public class IconWrapper implements ICodeGen {
 			} else {
 				URL location = IconWrapper.getImageIconLocation(imageIcon);
 				if (location != null) {
-					IProject prj = WhiteBoard.getCurrentProject().getProject();
+					IProject prj = VisualSwingPlugin.getCurrentProject().getProject();
 					try {
 						IFile[] files = prj.getWorkspace().getRoot()
 								.findFilesForLocationURI(location.toURI());

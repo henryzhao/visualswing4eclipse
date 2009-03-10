@@ -23,7 +23,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.WhiteBoard;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -41,7 +40,7 @@ public class ResourceIcon implements Icon {
 	}
 	public ResourceIcon(String p) {
 		this.path = p;
-		IJavaProject prj = WhiteBoard.getCurrentProject();
+		IJavaProject prj = VisualSwingPlugin.getCurrentProject();
 		IProject project = prj.getProject();
 		IResource resource = project.findMember(new Path(p));
 		if (resource == null) {

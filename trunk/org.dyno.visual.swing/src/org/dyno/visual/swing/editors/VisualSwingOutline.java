@@ -17,9 +17,7 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dyno.visual.swing.WhiteBoard;
 import org.dyno.visual.swing.base.ExtensionRegistry;
-import org.dyno.visual.swing.designer.Event;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -164,10 +162,9 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		if (items == null || items.length == 0)
 			return;
 		List<Component> selected = getSelectedComponent(items);
-		if (!selected.isEmpty())
-			WhiteBoard.sendEvent(new Event(this, Event.EVENT_SHOW_POPUP,
-					new Object[] { new java.awt.Point(e.x, e.y), selected }));
-		else {
+		if (!selected.isEmpty()){
+			designer.showPopup(new java.awt.Point(e.x, e.y), selected);
+		} else {
 			fillInvisibleMenuItems(e);
 		}
 	}
