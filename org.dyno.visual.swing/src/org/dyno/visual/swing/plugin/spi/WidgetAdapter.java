@@ -595,7 +595,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 					BeanInfo beanInfo = Introspector.getBeanInfo(aClazz, beanClass);
 					PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 					for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-						if (!(propertyDescriptor instanceof IndexedPropertyDescriptor)&&propertyDescriptor.getReadMethod() != null) {
+						if (!(propertyDescriptor instanceof IndexedPropertyDescriptor)&&
+								propertyDescriptor.getReadMethod() != null&&
+								propertyDescriptor.getWriteMethod()!=null) {
 							BeanDescriptorProperty fp = new BeanDescriptorProperty(propertyDescriptor);
 							fp.setCategory("Common");
 							propdesc.add(fp);
