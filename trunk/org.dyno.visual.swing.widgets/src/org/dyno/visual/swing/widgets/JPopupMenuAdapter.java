@@ -14,16 +14,18 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
-import java.awt.Dimension;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 @SuppressWarnings("unchecked")
 public class JPopupMenuAdapter extends CompositeAdapter {
 	public JPopupMenuAdapter(){
+		super(null);
 	}
 	@Override
 	public Component cloneWidget() {
@@ -38,6 +40,10 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 		return copy;
 	}
 
+	@Override
+	public String getBasename() {
+		return "jPopupMenu";
+	}
 	@Override
 	public Component getChild(int index) {
 		JPopupMenu origin = (JPopupMenu) getWidget();
@@ -71,8 +77,30 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 
 	@Override
 	protected Component createWidget() {
-		JPopupMenu menu = new JPopupMenu();
-		menu.setSize(new Dimension(72,100));
+		JPopupMenu menu = new JPopupMenu(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void setVisible(boolean b) {
+				if (!b) {
+					StackTraceElement[] trace = Thread.currentThread()
+							.getStackTrace();
+					for (StackTraceElement stack : trace) {
+						if (stack.getClassName().indexOf("MouseGrabber") != -1 //$NON-NLS-1$
+								&& stack.getMethodName().equals(
+										"cancelPopupMenu")) { //$NON-NLS-1$
+							return;
+						}
+					}
+				}
+				super.setVisible(b);
+			}
+		};
+		WidgetAdapter wa = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
+		JMenuItem jmi = (JMenuItem)wa.getWidget();
+		jmi.setText("menu item");		
+		menu.add(jmi);
+		menu.setSize(menu.getPreferredSize());
+		menu.doLayout();
 		return menu;
 	}
 

@@ -654,7 +654,7 @@
                rootPaneContainer="false"
                widgetClass="javax.swing.JPopupMenu"
                widgetName="%Palette.JPopupMenu"
-               shown="false">
+               shown="true">
          </widget>
          <widget
                abstract="true"
