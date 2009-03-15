@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
@@ -89,6 +92,14 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 					}
 					ed.setEventSets(eventSets);
 					children.add(ed);
+				}
+				if(component instanceof JComponent){
+					JComponent jcomponent = (JComponent) component;
+					JPopupMenu jpm = jcomponent.getComponentPopupMenu();
+					WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+					if(jpmAdapter!=null){
+						children.add(jpm);
+					}
 				}
 				if (adapter instanceof CompositeAdapter) {
 					CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
@@ -172,6 +183,12 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			if (!keys.isEmpty()) {
 				return true;
 			}
+			JComponent jcomponent = (JComponent) child;
+			JPopupMenu jpm = jcomponent.getComponentPopupMenu();
+			WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+			if(jpmAdapter!=null){
+				return true;
+			}			
 			if (adapter instanceof CompositeAdapter) {
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 				int count = compositeAdapter.getChildCount();
