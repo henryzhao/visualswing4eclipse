@@ -339,15 +339,17 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public List<WidgetAdapter> getSelectedWidgets() {
 		return selected;
 	}
-	public List<WidgetAdapter> getSelectedWidgetList(){
-		List<WidgetAdapter>adapters=new ArrayList<WidgetAdapter>();
-		List<Component>children = getSelectedComponents();
-		for(Component child:children){
-			WidgetAdapter adapter=WidgetAdapter.getWidgetAdapter(child);
+
+	public List<WidgetAdapter> getSelectedWidgetList() {
+		List<WidgetAdapter> adapters = new ArrayList<WidgetAdapter>();
+		List<Component> children = getSelectedComponents();
+		for (Component child : children) {
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			adapters.add(adapter);
 		}
 		return adapters;
 	}
+
 	public List<Component> getSelectedComponents() {
 		return new WidgetSelection(root);
 	}
@@ -379,6 +381,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 									}
 								}
 							}
+							if (WidgetAdapter.getWidgetAdapter(jpm) != null)
+								return jpm;
 						}
 					}
 				}
@@ -516,13 +520,14 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private RedoActionHandler redoAction;
 
 	public void publishSelection() {
-		editor.asyncRunnable(new Runnable(){
+		editor.asyncRunnable(new Runnable() {
 
 			@Override
 			public void run() {
 				editor.setSelection(new StructuredSelection(new Object[] { new WidgetSelection(root) }));
 				editor.refreshActionState();
-			}});
+			}
+		});
 	}
 
 	public void validateContent() {
@@ -839,6 +844,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		banner.setError(true);
 		banner.setText(e.getMessage());
 	}
+
 	private List<WidgetAdapter> selectedWidget;
 
 	public void setSelectedWidget(List<WidgetAdapter> adapters) {

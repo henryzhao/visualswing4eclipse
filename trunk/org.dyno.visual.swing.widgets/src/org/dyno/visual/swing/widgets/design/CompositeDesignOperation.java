@@ -11,6 +11,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.JPopupMenuAdapter;
 
 public class CompositeDesignOperation extends WidgetDesignOperation {
 	@Override
@@ -72,7 +73,7 @@ public class CompositeDesignOperation extends WidgetDesignOperation {
 				Point rp = new Point(p.x-hs.x, p.y-hs.y);
 				SwingUtilities.convertPointToScreen(rp, jcomp);
 				popup.setLocation(rp);
-				popup.setVisible(true);
+				((JPopupMenuAdapter)dropAdapter).showPopup();
 				dropAdapter.requestNewName();
 				return true;
 			}

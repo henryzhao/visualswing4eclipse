@@ -14,25 +14,30 @@
 package org.dyno.visual.swing.widgets;
 
 import java.awt.Component;
+import java.util.Stack;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
+import org.dyno.visual.swing.base.MenuSelectionManager;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 @SuppressWarnings("unchecked")
 public class JPopupMenuAdapter extends CompositeAdapter {
-	public JPopupMenuAdapter(){
+	public JPopupMenuAdapter() {
 		super(null);
 	}
+
 	@Override
 	public Component cloneWidget() {
 		JPopupMenu copy = (JPopupMenu) super.cloneWidget();
 		JPopupMenu origin = (JPopupMenu) getWidget();
 		int count = origin.getComponentCount();
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			Component child = origin.getComponent(i);
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
 			copy.add(adapter.cloneWidget());
@@ -40,10 +45,47 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 		return copy;
 	}
 
+	public void showPopup() {
+		JPopupMenu jpm = (JPopupMenu) getWidget();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
+		while (!stack.isEmpty()) {
+			MenuElement ele = stack.peek();
+			if (ele instanceof JMenu) {
+				JMenu jme = (JMenu) ele;
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+				stack.pop();
+			} else {
+				stack.pop();
+			}
+		}
+		stack.add(jpm);
+		jpm.setVisible(true);
+		setSelected(true);
+	}
+
+	public void hidePopup() {
+		JPopupMenu jpm = (JPopupMenu) getWidget();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
+		while (!stack.isEmpty() && stack.peek() != jpm) {
+			MenuElement me = stack.pop();
+			if (me instanceof JMenu) {
+				JMenu jme = (JMenu) me;
+				jme.setPopupMenuVisible(false);
+				jme.setSelected(false);
+			}
+		}
+		if (!stack.isEmpty())
+			stack.pop();
+		jpm.setVisible(false);
+		setSelected(false);
+	}
+
 	@Override
 	public String getBasename() {
 		return "jPopupMenu";
 	}
+
 	@Override
 	public Component getChild(int index) {
 		JPopupMenu origin = (JPopupMenu) getWidget();
@@ -59,8 +101,8 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	@Override
 	public int getIndexOfChild(Component child) {
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
-			if(getChild(i)==child)
+		for (int i = 0; i < count; i++) {
+			if (getChild(i) == child)
 				return i;
 		}
 		return -1;
@@ -77,17 +119,16 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 
 	@Override
 	protected Component createWidget() {
-		JPopupMenu menu = new JPopupMenu(){
+		JPopupMenu menu = new JPopupMenu() {
 			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setVisible(boolean b) {
 				if (!b) {
-					StackTraceElement[] trace = Thread.currentThread()
-							.getStackTrace();
+					StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 					for (StackTraceElement stack : trace) {
 						if (stack.getClassName().indexOf("MouseGrabber") != -1 //$NON-NLS-1$
-								&& stack.getMethodName().equals(
-										"cancelPopupMenu")) { //$NON-NLS-1$
+								&& stack.getMethodName().equals("cancelPopupMenu")) { //$NON-NLS-1$
 							return;
 						}
 					}
@@ -96,8 +137,8 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 			}
 		};
 		WidgetAdapter wa = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
-		JMenuItem jmi = (JMenuItem)wa.getWidget();
-		jmi.setText("menu item");		
+		JMenuItem jmi = (JMenuItem) wa.getWidget();
+		jmi.setText("menu item");
 		menu.add(jmi);
 		menu.setSize(menu.getPreferredSize());
 		menu.doLayout();
@@ -110,8 +151,8 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	}
 
 	public CompositeAdapter getParentAdapter() {
-		JPopupMenu jpopup=(JPopupMenu)getWidget();
-		Component parent=jpopup.getInvoker();
+		JPopupMenu jpopup = (JPopupMenu) getWidget();
+		Component parent = jpopup.getInvoker();
 		return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
 	}
 
@@ -119,6 +160,5 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	public Class getWidgetClass() {
 		return JPopupMenu.class;
 	}
-	
-}
 
+}
