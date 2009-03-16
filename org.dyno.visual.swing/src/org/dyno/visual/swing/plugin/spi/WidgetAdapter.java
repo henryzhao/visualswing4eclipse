@@ -428,6 +428,14 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void clearSelection() {
 		setSelected(false);
+		if(widget instanceof JComponent){
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu componentPopupMenu = jcomp.getComponentPopupMenu();
+			if(WidgetAdapter.getWidgetAdapter(componentPopupMenu)!=null){
+				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(componentPopupMenu);
+				popupAdapter.clearSelection();
+			}
+		}
 	}
 
 	public static WidgetAdapter getWidgetAdapter(Component comp) {
