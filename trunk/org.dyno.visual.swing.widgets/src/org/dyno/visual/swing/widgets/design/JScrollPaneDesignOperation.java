@@ -10,16 +10,16 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JScrollPaneDesignOperation extends CompositeDesignOperation {
 	public boolean isPermitted() {
-		List<WidgetAdapter>adapters=adaptable.getDropWidget();
-		if(adapters.size()!=1)
-			return false;		
+		List<WidgetAdapter> adapters = adaptable.getDropWidget();
+		if (adapters.size() != 1)
+			return false;
 		Component comp = ((JScrollPane) adaptable.getWidget()).getViewport().getView();
 		return comp == null;
 	}
 
 	@Override
 	public boolean dragOver(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingMenuItem() || isDroppingMenuBar())
 			return super.dragOver(p);
 		adaptable.setMascotLocation(p);
 		return true;
@@ -33,7 +33,7 @@ public class JScrollPaneDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean dragEnter(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingMenuItem() || isDroppingMenuBar())
 			return super.dragEnter(p);
 		adaptable.setMascotLocation(p);
 		hovered = true;
@@ -42,7 +42,7 @@ public class JScrollPaneDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean dragExit(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingMenuItem() || isDroppingMenuBar())
 			return super.dragExit(p);
 		adaptable.setMascotLocation(p);
 		hovered = false;
@@ -51,7 +51,7 @@ public class JScrollPaneDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingPopup() || isDroppingMenuItem() || isDroppingMenuBar())
 			return super.drop(p);
 		adaptable.setMascotLocation(p);
 		if (isPermitted()) {
@@ -64,7 +64,7 @@ public class JScrollPaneDesignOperation extends CompositeDesignOperation {
 			todrop.setSelected(true);
 			hovered = false;
 			return true;
-		}else{
+		} else {
 			hovered = false;
 			return false;
 		}

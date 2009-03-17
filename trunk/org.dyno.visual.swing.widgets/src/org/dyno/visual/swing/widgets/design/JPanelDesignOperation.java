@@ -14,13 +14,13 @@ import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class JPanelDesignOperation extends CompositeDesignOperation {
-	
+
 	private void resize_widget(Point p) {
 		int state = adaptable.getState();
 		Dimension min = new Dimension(10, 10);
-		List<WidgetAdapter>dropWidgets=adaptable.getDropWidget();
+		List<WidgetAdapter> dropWidgets = adaptable.getDropWidget();
 		assert !dropWidgets.isEmpty();
-		Component beResized=dropWidgets.get(0).getParentContainer();
+		Component beResized = dropWidgets.get(0).getParentContainer();
 		Dimension size = beResized.getSize();
 		Point hotspot = adaptable.getMascotLocation();
 		int w = min.width;
@@ -76,7 +76,7 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingPopup() || isDroppingMenuItem() || isDroppingMenuBar())
 			return super.drop(p);
 		JPanel jpanel = (JPanel) adaptable.getWidget();
 		LayoutManager layout = jpanel.getLayout();
@@ -97,7 +97,7 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 				}
 				jpanel.add(child);
 				adapter.requestNewName();
-				adapter.setSelected(true);				
+				adapter.setSelected(true);
 			}
 			adaptable.setDirty(true);
 			adaptable.doLayout();
@@ -105,8 +105,8 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 			adaptable.repaintDesigner();
 			return true;
 		} else {
-			LayoutAdapter layoutAdapter = ((CompositeAdapter)adaptable).getLayoutAdapter();
-			WidgetAdapter[]copy=new WidgetAdapter[adaptable.getDropWidget().size()];
+			LayoutAdapter layoutAdapter = ((CompositeAdapter) adaptable).getLayoutAdapter();
+			WidgetAdapter[] copy = new WidgetAdapter[adaptable.getDropWidget().size()];
 			adaptable.getDropWidget().toArray(copy);
 			if (layoutAdapter.drop(p)) {
 				adaptable.clearAllSelected();
@@ -114,7 +114,7 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 					adapter.requestNewName();
 					adapter.setSelected(true);
 				}
-				adaptable.setDirty(true);				
+				adaptable.setDirty(true);
 				layoutAdapter.setContainer(jpanel);
 				adaptable.doLayout();
 				adaptable.getWidget().validate();
@@ -127,12 +127,12 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean dragEnter(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingMenuItem() || isDroppingMenuBar())
 			return super.dragEnter(p);
 		JPanel jpanel = (JPanel) adaptable.getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
-			LayoutAdapter layoutAdapter = ((CompositeAdapter)adaptable).getLayoutAdapter();
+			LayoutAdapter layoutAdapter = ((CompositeAdapter) adaptable).getLayoutAdapter();
 			return layoutAdapter.dragEnter(p);
 		} else
 			return true;
@@ -140,19 +140,20 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean dragExit(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingMenuItem() || isDroppingMenuBar())
 			return super.dragExit(p);
 		JPanel jpanel = (JPanel) adaptable.getWidget();
 		LayoutManager layout = jpanel.getLayout();
 		if (layout != null) {
-			LayoutAdapter layoutAdapter = ((CompositeAdapter)adaptable).getLayoutAdapter();
+			LayoutAdapter layoutAdapter = ((CompositeAdapter) adaptable).getLayoutAdapter();
 			return layoutAdapter.dragExit(p);
 		} else
 			return true;
 	}
+
 	@Override
 	public boolean dragOver(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if (isDroppingMenuItem() || isDroppingMenuBar())
 			return super.dragOver(p);
 		JPanel jpanel = (JPanel) adaptable.getWidget();
 		LayoutManager layout = jpanel.getLayout();
@@ -165,7 +166,7 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 			}
 			return true;
 		} else {
-			LayoutAdapter layoutAdapter = ((CompositeAdapter)adaptable).getLayoutAdapter();
+			LayoutAdapter layoutAdapter = ((CompositeAdapter) adaptable).getLayoutAdapter();
 			return layoutAdapter.dragOver(p);
 		}
 	}

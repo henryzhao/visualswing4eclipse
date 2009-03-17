@@ -90,9 +90,11 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				if (component instanceof JComponent) {
 					JComponent jcomponent = (JComponent) component;
 					JPopupMenu jpm = jcomponent.getComponentPopupMenu();
-					WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
-					if (jpmAdapter != null) {
-						children.add(jpm);
+					if (jpm != null) {
+						WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+						if (jpmAdapter != null) {
+							children.add(jpm);
+						}
 					}
 				}
 				if (adapter instanceof CompositeAdapter) {
@@ -178,9 +180,11 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			if (child instanceof JComponent) {
 				JComponent jcomponent = (JComponent) child;
 				JPopupMenu jpm = jcomponent.getComponentPopupMenu();
-				WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
-				if (jpmAdapter != null) {
-					return true;
+				if (jpm != null) {
+					WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+					if (jpmAdapter != null) {
+						return true;
+					}
 				}
 			}
 			if (adapter instanceof CompositeAdapter) {

@@ -29,6 +29,7 @@ import java.util.Stack;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
@@ -224,6 +225,9 @@ public class JavaUtil {
 				JMenu jme = (JMenu) me;
 				jme.setPopupMenuVisible(false);
 				jme.setSelected(false);
+			}else if (me instanceof JPopupMenu) {
+				JPopupMenu pop = (JPopupMenu) me;
+				pop.setVisible(false);
 			}
 		}
 	}

@@ -228,7 +228,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
 			JPopupMenu popup = jcomp.getComponentPopupMenu();
-			if (WidgetAdapter.getWidgetAdapter(popup) != null) {
+			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				if (popupAdapter.isDirty())
 					return true;
@@ -441,9 +441,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		setSelected(false);
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu componentPopupMenu = jcomp.getComponentPopupMenu();
-			if (WidgetAdapter.getWidgetAdapter(componentPopupMenu) != null) {
-				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(componentPopupMenu);
+			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
+				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(jpm);
 				popupAdapter.clearSelection();
 			}
 		}
@@ -931,7 +931,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
 			JPopupMenu popup = jcomp.getComponentPopupMenu();
-			if (WidgetAdapter.getWidgetAdapter(popup) != null) {
+			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				if (popupAdapter.isRenamed())
 					return true;
@@ -952,7 +952,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
 			JPopupMenu popup = jcomp.getComponentPopupMenu();
-			if (WidgetAdapter.getWidgetAdapter(popup) != null) {
+			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				if (popupAdapter.includeName(another))
 					return true;

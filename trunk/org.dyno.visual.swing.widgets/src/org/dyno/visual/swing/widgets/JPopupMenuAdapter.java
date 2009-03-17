@@ -54,10 +54,11 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 				JMenu jme = (JMenu) ele;
 				jme.setPopupMenuVisible(false);
 				jme.setSelected(false);
-				stack.pop();
-			} else {
-				stack.pop();
+			} else if (ele instanceof JPopupMenu) {
+				JPopupMenu pop = (JPopupMenu) ele;
+				pop.setVisible(false);
 			}
+			stack.pop();
 		}
 		stack.add(jpm);
 		jpm.setVisible(true);
@@ -73,6 +74,9 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 				JMenu jme = (JMenu) me;
 				jme.setPopupMenuVisible(false);
 				jme.setSelected(false);
+			}else if (me instanceof JPopupMenu) {
+				JPopupMenu pop = (JPopupMenu) me;
+				pop.setVisible(false);
 			}
 		}
 		if (!stack.isEmpty())
@@ -152,7 +156,10 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 	public CompositeAdapter getParentAdapter() {
 		JPopupMenu jpopup = (JPopupMenu) getWidget();
 		Component parent = jpopup.getInvoker();
-		return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(parent);
+		if (adapter instanceof CompositeAdapter)
+			return (CompositeAdapter) adapter;
+		return adapter.getParentAdapter();
 	}
 
 	@Override

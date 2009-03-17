@@ -10,7 +10,7 @@ import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.widgets.JPanelAdapter;
 import org.eclipse.jface.action.MenuManager;
 
-public class RootPaneContainerMenuContext extends CompositeMenuContext {
+public class RootPaneContainerMenuContext extends JComponentMenuContext {
 
 	@Override
 	public void fillContextAction(MenuManager menu) {

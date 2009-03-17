@@ -1409,7 +1409,7 @@
       </interface>
       <interface
           class="org.dyno.visual.swing.plugin.spi.IMenuContext"
-          default="org.dyno.visual.swing.base.WidgetMenuContext">
+          default="org.dyno.visual.swing.widgets.menucontext.JComponentMenuContext">
          <adapter
                class="javax.swing.JPanel"
                implementation="org.dyno.visual.swing.widgets.menucontext.JPanelMenuContext">

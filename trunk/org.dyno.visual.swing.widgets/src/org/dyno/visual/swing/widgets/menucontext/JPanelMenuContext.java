@@ -5,7 +5,6 @@ import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
 
-import org.dyno.visual.swing.base.CompositeMenuContext;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.widgets.JPanelAdapter;
@@ -16,7 +15,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 
-public class JPanelMenuContext extends CompositeMenuContext {
+public class JPanelMenuContext extends JComponentMenuContext {
 
 	@Override
 	public void fillContextAction(MenuManager menu) {

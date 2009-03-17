@@ -137,7 +137,10 @@ public class JMenuDesignOperation extends CompositeDesignOperation {
 	}
 	@Override
 	public boolean drop(Point p) {
-		if (isOutOfBounds(p) && isPopupMenuVisible()) {
+		if(isDroppingPopup()){
+			setDropStatus(NOOP);
+			return super.drop(p);
+		}else if (isOutOfBounds(p) && isPopupMenuVisible()) {
 			inside_popup=false;
 			JMenu jmenu = (JMenu) adaptable.getWidget();
 			JPopupMenu popup = jmenu.getPopupMenu();

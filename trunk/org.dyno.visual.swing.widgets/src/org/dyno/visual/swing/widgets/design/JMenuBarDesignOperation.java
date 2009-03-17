@@ -1,9 +1,7 @@
 package org.dyno.visual.swing.widgets.design;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -69,6 +67,8 @@ public class JMenuBarDesignOperation extends CompositeDesignOperation {
 	public boolean drop(Point p) {
 		adaptable.setMascotLocation(p);
 		dropStatus=NOOP;
+		if(isDroppingPopup())
+			return super.drop(p);
 		if (isDroppingMenu()) {
 			WidgetAdapter menuAdapter = adaptable.getDropWidget().get(0);
 			JMenu jmenu = (JMenu) menuAdapter.getWidget();
@@ -86,13 +86,5 @@ public class JMenuBarDesignOperation extends CompositeDesignOperation {
 			return false;
 		}
 		return true;
-	}
-
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = adaptable.getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop instanceof JMenu;
 	}
 }
