@@ -1,15 +1,10 @@
 package org.dyno.visual.swing.widgets.design;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.util.List;
 
 import javax.swing.JApplet;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IPainter;
@@ -19,8 +14,9 @@ import org.dyno.visual.swing.widgets.painter.JAppletPainter;
 
 public class JAppletDesignOperation extends RootPaneContainerDesignOperation {
 	private boolean isDroppingForbbiden() {
-		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
+		return isDroppingMenu()||isDroppingMenuItem()||isDroppingPopup() || isDroppingMenuBar() && hasMenuBar();
 	}
+
 	private int getJMenuBarHeight() {
 		JApplet japplet = (JApplet) adaptable.getWidget();
 		JMenuBar jmb = japplet.getJMenuBar();
@@ -33,18 +29,11 @@ public class JAppletDesignOperation extends RootPaneContainerDesignOperation {
 		return jmb != null;
 	}
 
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = adaptable.getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop != null
-				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
-	}
-	private void setDropStatus(int dropStatus){
-		JAppletPainter jap=(JAppletPainter) adaptable.getAdapter(IPainter.class);
+	private void setDropStatus(int dropStatus) {
+		JAppletPainter jap = (JAppletPainter) adaptable.getAdapter(IPainter.class);
 		jap.setDropStatus(dropStatus);
 	}
+
 	@Override
 	public boolean dragOver(Point p) {
 		if (isDroppingForbbiden()) {
@@ -57,14 +46,16 @@ public class JAppletDesignOperation extends RootPaneContainerDesignOperation {
 			adaptable.setMascotLocation(p);
 			setDropStatus(JAppletPainter.DROPPING_PERMITTED);
 			return true;
-		} else{
+		} else {
 			return getContentOperation().dragOver(p);
 		}
 	}
-	private IDesignOperation getContentOperation(){
-		WidgetAdapter contentAdapter = ((RootPaneContainerAdapter)adaptable).getContentAdapter();
+
+	private IDesignOperation getContentOperation() {
+		WidgetAdapter contentAdapter = ((RootPaneContainerAdapter) adaptable).getContentAdapter();
 		return (IDesignOperation) contentAdapter.getAdapter(IDesignOperation.class);
 	}
+
 	@Override
 	public boolean dragEnter(Point p) {
 		if (isDroppingForbbiden()) {
@@ -126,5 +117,5 @@ public class JAppletDesignOperation extends RootPaneContainerDesignOperation {
 		} else
 			return getContentOperation().drop(p);
 	}
-	
+
 }

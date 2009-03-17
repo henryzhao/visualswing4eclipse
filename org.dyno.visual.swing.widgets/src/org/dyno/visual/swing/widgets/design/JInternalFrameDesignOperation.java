@@ -1,15 +1,10 @@
 package org.dyno.visual.swing.widgets.design;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.util.List;
 
 import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 
@@ -70,7 +65,7 @@ public class JInternalFrameDesignOperation extends
 	}
 
 	private boolean isDroppingForbbiden() {
-		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
+		return isDroppingMenu()||isDroppingMenuItem()||isDroppingPopup() || isDroppingMenuBar() && hasMenuBar();
 	}
 
 	@Override
@@ -125,15 +120,6 @@ public class JInternalFrameDesignOperation extends
 			}
 			return getContentOperation().drop(p);
 		}
-	}
-
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = adaptable.getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop != null
-				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
 	}
 
 	private boolean hasMenuBar() {

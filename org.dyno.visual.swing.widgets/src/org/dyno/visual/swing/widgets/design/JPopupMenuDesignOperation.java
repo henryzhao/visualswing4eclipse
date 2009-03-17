@@ -81,6 +81,8 @@ public class JPopupMenuDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean drop(Point p) {
+		if(isDroppingPopup())
+			return super.drop(p);
 		adaptable.setMascotLocation(p);
 		List<WidgetAdapter> targets = adaptable.getDropWidget();
 		WidgetAdapter target = targets.get(0);

@@ -5,7 +5,6 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
-import org.dyno.visual.swing.base.CompositeMenuContext;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.widgets.Messages;
 import org.eclipse.core.resources.IFile;
@@ -13,7 +12,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.window.Window;
 
-public class JTabbedPaneMenuContext extends CompositeMenuContext {
+public class JTabbedPaneMenuContext extends JComponentMenuContext {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {

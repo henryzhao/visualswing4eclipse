@@ -31,6 +31,7 @@ import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 import javax.swing.event.ChangeEvent;
@@ -112,7 +113,9 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			Component hovered = designer.componentAt(p, 0);
 			if (hovered != null) {
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-				if (adapter != null) {
+				if(isDroppingPopup()){
+					glassPlane.setHotspotPoint(p);
+				}else if (adapter != null) {
 					if (!(adapter instanceof CompositeAdapter)) {
 						adapter = adapter.getParentAdapter();
 					}
@@ -160,58 +163,74 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		drop(dtde.getLocation(), false);
 	}
 
+	private boolean isDroppingPopup() {
+		List<WidgetAdapter> target = designer.getSelectedWidget();
+		if (target == null)
+			return false;
+		if (target.size() != 1)
+			return false;
+		WidgetAdapter dropAdapter = target.get(0);
+		Component drop = dropAdapter.getWidget();
+		return drop instanceof JPopupMenu;
+	}
+
 	private void drop(Point p, boolean shift) {
 		List<IWidgetListener> widgetListeners = org.dyno.visual.swing.base.ExtensionRegistry.getWidgetListeners();
 		if (state == STATE_BEAN_HOVER) {
 			Component hovered = designer.componentAt(p, 0);
 			if (hovered != null) {
 				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(hovered);
-				if (!(adapter instanceof CompositeAdapter)) {
-					adapter = adapter.getParentAdapter();
-				}
-				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
-				hoveredAdapter = compositeAdapter;
-				IDesignOperation design = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
-				if (design != null && design.drop(compositeAdapter.convertToLocal(p))) {
-					if (lastParent != null) {
-						IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
-						List<Component> children = new ArrayList<Component>();
-						List<Object> new_constraints = new ArrayList<Object>();
-						for (WidgetAdapter wa : designer.getSelectedWidget()) {
-							Component child = wa.getParentContainer();
-							children.add(child);
-							new_constraints.add(compositeAdapter.getChildConstraints(child));
-						}
-						IUndoableOperation operation = new MoveResizeOperation(lastParent, compositeAdapter, children, lastConstraints, new_constraints);
-						operation.addContext(designer.getUndoContext());
-						try {
-							operationHistory.execute(operation, null, null);
-						} catch (ExecutionException e) {
-							VisualSwingPlugin.getLogger().error(e);
-						}
-						for (WidgetAdapter wa : designer.getSelectedWidget()) {
-							WidgetEvent we = new WidgetEvent(lastParent, compositeAdapter, wa);
-							for (IWidgetListener listener : widgetListeners) {
-								listener.widgetMoved(we);
-							}
-						}
-					} else {
-						for (WidgetAdapter wa : designer.getSelectedWidget()) {
-							WidgetEvent we = new WidgetEvent(compositeAdapter, wa);
-							for (IWidgetListener listener : widgetListeners) {
-								listener.widgetAdded(we);
-							}
-						}
-					}
-					designer.fireDirty();
-					adapter.addNotify();
+				if (isDroppingPopup()) {
+					IDesignOperation design = (IDesignOperation) adapter.getAdapter(IDesignOperation.class);
+					design.drop(adapter.convertToLocal(p));
 				} else {
-					if (lastParent != null) {
-						List<WidgetAdapter> selectedWidget = designer.getSelectedWidget();
-						for (int i = 0; i < selectedWidget.size(); i++) {
-							WidgetAdapter wa = selectedWidget.get(i);
-							Object constraints = lastConstraints.get(i);
-							lastParent.addChildByConstraints(wa.getWidget(), constraints);
+					if (!(adapter instanceof CompositeAdapter)) {
+						adapter = adapter.getParentAdapter();
+					}
+					CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
+					hoveredAdapter = compositeAdapter;
+					IDesignOperation design = (IDesignOperation) hoveredAdapter.getAdapter(IDesignOperation.class);
+					if (design != null && design.drop(compositeAdapter.convertToLocal(p))) {
+						if (lastParent != null) {
+							IOperationHistory operationHistory = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+							List<Component> children = new ArrayList<Component>();
+							List<Object> new_constraints = new ArrayList<Object>();
+							for (WidgetAdapter wa : designer.getSelectedWidget()) {
+								Component child = wa.getParentContainer();
+								children.add(child);
+								new_constraints.add(compositeAdapter.getChildConstraints(child));
+							}
+							IUndoableOperation operation = new MoveResizeOperation(lastParent, compositeAdapter, children, lastConstraints, new_constraints);
+							operation.addContext(designer.getUndoContext());
+							try {
+								operationHistory.execute(operation, null, null);
+							} catch (ExecutionException e) {
+								VisualSwingPlugin.getLogger().error(e);
+							}
+							for (WidgetAdapter wa : designer.getSelectedWidget()) {
+								WidgetEvent we = new WidgetEvent(lastParent, compositeAdapter, wa);
+								for (IWidgetListener listener : widgetListeners) {
+									listener.widgetMoved(we);
+								}
+							}
+						} else {
+							for (WidgetAdapter wa : designer.getSelectedWidget()) {
+								WidgetEvent we = new WidgetEvent(compositeAdapter, wa);
+								for (IWidgetListener listener : widgetListeners) {
+									listener.widgetAdded(we);
+								}
+							}
+						}
+						designer.fireDirty();
+						adapter.addNotify();
+					} else {
+						if (lastParent != null) {
+							List<WidgetAdapter> selectedWidget = designer.getSelectedWidget();
+							for (int i = 0; i < selectedWidget.size(); i++) {
+								WidgetAdapter wa = selectedWidget.get(i);
+								Object constraints = lastConstraints.get(i);
+								lastParent.addChildByConstraints(wa.getWidget(), constraints);
+							}
 						}
 					}
 				}

@@ -40,7 +40,7 @@ public class JToolBarDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if(isDroppingPopup()||isDroppingMenuItem()||isDroppingMenuBar())
 			return super.drop(p);
 		JToolBar toolbar = (JToolBar) adaptable.getWidget();
 		adaptable.clearAllSelected();

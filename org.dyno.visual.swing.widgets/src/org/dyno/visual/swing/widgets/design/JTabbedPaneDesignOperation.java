@@ -35,7 +35,7 @@ public class JTabbedPaneDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean drop(Point p) {
-		if(isDroppingMenuItem()||isDroppingMenuBar())
+		if(isDroppingPopup()||isDroppingMenuItem()||isDroppingMenuBar())
 			return super.drop(p);
 		adaptable.clearAllSelected();
 		for (WidgetAdapter adapter : adaptable.getDropWidget()) {

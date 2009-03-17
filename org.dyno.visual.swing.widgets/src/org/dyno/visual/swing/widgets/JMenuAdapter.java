@@ -119,7 +119,15 @@ public class JMenuAdapter extends CompositeAdapter {
 				if (parent == thisparent) {
 					break;
 				}
-			} else if (ele == thisparent) {
+			} else if (ele instanceof JPopupMenu&&WidgetAdapter.getWidgetAdapter((Component)ele)!=null) {
+				JPopupMenu pop = (JPopupMenu) ele;
+				Container parent = pop.getParent();
+				pop.setVisible(false);
+				stack.pop();
+				if (parent == thisparent) {
+					break;
+				}
+			}else if (ele == thisparent) {
 				break;
 			} else {
 				stack.pop();
@@ -140,6 +148,9 @@ public class JMenuAdapter extends CompositeAdapter {
 				JMenu jme = (JMenu) me;
 				jme.setPopupMenuVisible(false);
 				jme.setSelected(false);
+			} else if (me instanceof JPopupMenu) {
+				JPopupMenu pop = (JPopupMenu) me;
+				pop.setVisible(false);
 			}
 		}
 		if (!stack.isEmpty())

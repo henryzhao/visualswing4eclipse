@@ -1,15 +1,10 @@
 package org.dyno.visual.swing.widgets.design;
 
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IPainter;
@@ -66,7 +61,7 @@ public class JDialogDesignOperation extends RootPaneContainerDesignOperation {
 	}
 
 	private boolean isDroppingForbbiden() {
-		return isDroppingMenu() || isDroppingMenuBar() && hasMenuBar();
+		return isDroppingMenu()||isDroppingMenuItem()||isDroppingPopup() || isDroppingMenuBar() && hasMenuBar();
 	}
 
 	@Override
@@ -115,15 +110,6 @@ public class JDialogDesignOperation extends RootPaneContainerDesignOperation {
 			return getContentOperation().drop(p);
 	}
 
-
-	private boolean isDroppingMenu() {
-		List<WidgetAdapter> targets = adaptable.getDropWidget();
-		if(targets.size()!=1)
-			return false;
-		Component drop = targets.get(0).getWidget();
-		return drop != null
-				&& (drop instanceof JMenu || drop instanceof JMenuItem || drop instanceof JPopupMenu);
-	}
 
 	private boolean hasMenuBar() {
 		JDialog jdialog = (JDialog) adaptable.getWidget();

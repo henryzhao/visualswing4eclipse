@@ -4,12 +4,11 @@ import java.awt.Component;
 
 import javax.swing.JSplitPane;
 
-import org.dyno.visual.swing.base.CompositeMenuContext;
 import org.dyno.visual.swing.widgets.Messages;
 import org.dyno.visual.swing.widgets.actions.JSplitPanePlacementAction;
 import org.eclipse.jface.action.MenuManager;
 
-public class JSplitPaneMenuContext extends CompositeMenuContext {
+public class JSplitPaneMenuContext extends JComponentMenuContext {
 
 	@Override
 	public void fillConstraintsAction(MenuManager menu, Component child) {

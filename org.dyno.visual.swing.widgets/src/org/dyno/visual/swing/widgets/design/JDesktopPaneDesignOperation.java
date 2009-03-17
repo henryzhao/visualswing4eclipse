@@ -114,6 +114,8 @@ public class JDesktopPaneDesignOperation extends CompositeDesignOperation {
 
 	@Override
 	public boolean drop(Point p) {
+		if(isDroppingPopup())
+			return super.drop(p);
 		if (!isForbid()) {
 			JDesktopPane jtp = (JDesktopPane) adaptable.getWidget();
 			adaptable.clearAllSelected();			
