@@ -51,7 +51,7 @@ http://code.google.com/p/visualswing4eclipse/
 
 *授权方式:*
 
-本工具使用的是LGPL授权方式。照顾商业利用和开源改进而采用此授权。
+本工具使用的是EPL v1.0授权方式。照顾商业利用和开源改进而采用此授权。
 
 目前支持的Eclipse平台是3.4，JDK请使用1.6
 联系方式:
