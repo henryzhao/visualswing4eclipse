@@ -51,7 +51,7 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 		StringBuilder builder = new StringBuilder();
 		builder.append(super.createGetCode(imports));
 		if(getJMenuBar()!=null){
-			builder.append(adapter.getID()+".setJMenuBar(");
+			builder.append(adaptable.getID()+".setJMenuBar(");
 			JMenuBar jmb = getJMenuBar();
 			WidgetAdapter jmbAdapter=WidgetAdapter.getWidgetAdapter(jmb);
 			String getName=NamespaceUtil.getGetMethodName(jmbAdapter, jmbAdapter.getID());
@@ -62,7 +62,7 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 	}	
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		RootPaneContainerAdapter rootPaneContainerAdapter = (RootPaneContainerAdapter) adapter;
+		RootPaneContainerAdapter rootPaneContainerAdapter = (RootPaneContainerAdapter) adaptable;
 		JPanelParser parser=(JPanelParser) rootPaneContainerAdapter.getContentAdapter().getAdapter(IParser.class);
 		if(parser!=null)
 			parser.genAddCode(imports, builder);
@@ -70,7 +70,7 @@ public abstract class RootPaneContainerParser extends CompositeParser implements
 
 	@Override
 	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
-		Dimension size = ((RootPaneContainer)adapter.getWidget()).getRootPane().getSize();
+		Dimension size = ((RootPaneContainer)adaptable.getWidget()).getRootPane().getSize();
 		builder.append("setSize(" + size.width + ", "
 				+ size.height + ");\n");
 	}		

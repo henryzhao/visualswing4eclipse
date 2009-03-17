@@ -18,7 +18,7 @@ import javax.swing.JMenuBar;
 public class JDialogParser extends RootPaneContainerParser {
 	@Override
 	protected JMenuBar getJMenuBar() {
-		JDialog jdialog = (JDialog) adapter.getWidget();
+		JDialog jdialog = (JDialog) adaptable.getWidget();
 		JMenuBar jmb = jdialog.getJMenuBar();
 		return jmb;
 	}

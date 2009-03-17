@@ -22,11 +22,11 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public class JInternalFrameParser extends RootPaneContainerParser {
 	@Override
 	protected JMenuBar getJMenuBar() {
-		return ((JInternalFrame)adapter.getWidget()).getJMenuBar();
+		return ((JInternalFrame)adaptable.getWidget()).getJMenuBar();
 	}
 	@Override
 	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
-		Dimension size = adapter.getWidget().getSize();
+		Dimension size = adaptable.getWidget().getSize();
 		builder.append("setSize(" + size.width + ", "
 				+ size.height + ");\n");
 	}		

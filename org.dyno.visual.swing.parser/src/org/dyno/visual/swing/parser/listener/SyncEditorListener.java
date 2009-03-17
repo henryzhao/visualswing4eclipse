@@ -22,7 +22,7 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 		if (selection.size() == 1) {
 			WidgetAdapter adapter = (WidgetAdapter) selection.getFirstElement();
 			IEditorPart editor = adapter.getSourceEditor();
-			if (editor != null)
+			if (editor != null && adapter.getID() != null)
 				revealInEditor(editor, adapter);
 		} else if (!selection.isEmpty()) {
 			WidgetAdapter parent = (WidgetAdapter) selection.getFirstElement();
@@ -30,7 +30,7 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 				WidgetAdapter adapter = (WidgetAdapter) object;
 				parent = getCommonParent(parent, adapter);
 			}
-			if (parent != null) {
+			if (parent != null && parent.getID() != null) {
 				IEditorPart editor = parent.getSourceEditor();
 				if (editor != null)
 					revealInEditor(editor, parent);

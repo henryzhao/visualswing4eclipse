@@ -35,25 +35,25 @@ public class JPanelParser extends CompositeParser implements IParser,
 		IConstants {
 
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		JPanel panel = (JPanel) adapter.getWidget();
+		JPanel panel = (JPanel) adaptable.getWidget();
 		LayoutManager layout = panel.getLayout();
 		if (layout == null) {
-			if (!adapter.isRoot())
-				builder.append(adapter.getID() + ".");
+			if (!adaptable.isRoot())
+				builder.append(adaptable.getID() + ".");
 			builder.append("setLayout(null);\n");
-			int count = ((CompositeAdapter) adapter).getChildCount();
+			int count = ((CompositeAdapter) adaptable).getChildCount();
 			for (int i = 0; i < count; i++) {
-				Component child = ((CompositeAdapter) adapter).getChild(i);
+				Component child = ((CompositeAdapter) adaptable).getChild(i);
 				WidgetAdapter childAdapter = WidgetAdapter
 						.getWidgetAdapter(child);
 				IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 				String getMethodName = childParser.getCreationMethodName();
-				if (!adapter.isRoot())
-					builder.append(adapter.getID() + ".");
+				if (!adaptable.isRoot())
+					builder.append(adaptable.getID() + ".");
 				builder.append("add(" + getMethodName + "());\n");
 			}
 		} else {
-			LayoutAdapter layoutAdapter = ((CompositeAdapter) adapter)
+			LayoutAdapter layoutAdapter = ((CompositeAdapter) adaptable)
 					.getLayoutAdapter();
 			if (layoutAdapter != null) {
 				ILayoutParser parser = (ILayoutParser) layoutAdapter

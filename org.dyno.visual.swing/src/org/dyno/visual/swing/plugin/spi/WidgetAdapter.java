@@ -212,6 +212,14 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void clearDirty() {
 		dirty = false;
+		if (widget != null && widget instanceof JComponent) {
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
+				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
+				popupAdapter.clearDirty();
+			}
+		}
 	}
 
 	public int getGetAccess() {
@@ -411,6 +419,8 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		while (parent != null && !(parent instanceof VisualDesigner)) {
 			if (parent instanceof JPopupMenu) {
 				parent = ((JPopupMenu) parent).getInvoker();
+				if (parent == null)
+					break;
 			}
 			parent = parent.getParent();
 		}
@@ -678,8 +688,12 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		Component me = getRootPane();
 		if (me == null)
 			return false;
-		Container container = me.getParent();
-		return container == null || container instanceof VisualDesigner;
+		Component parent = null;
+		if (me instanceof JPopupMenu) {
+			parent = ((JPopupMenu) me).getInvoker();
+		} else
+			parent = me.getParent();
+		return parent == null || parent instanceof VisualDesigner;
 	}
 
 	public IAdapter getParent() {
@@ -813,7 +827,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public Object clone() {
-		return ExtensionRegistry.createAdapterFor(cloneWidget());
+		return ExtensionRegistry.createAdapterAndItsChildren(cloneWidget());
 	}
 
 	protected abstract Component newWidget();
@@ -1037,5 +1051,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (designer != null) {
 			designer.resetRoot();
 		}
+	}
+
+	public void attachWidget(Component attached) {
+		setWidget(attached);
 	}
 }

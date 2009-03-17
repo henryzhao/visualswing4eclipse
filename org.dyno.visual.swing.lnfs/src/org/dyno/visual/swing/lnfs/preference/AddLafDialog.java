@@ -292,7 +292,7 @@ public class AddLafDialog extends Dialog {
 	}
 	private void createDefaultXml(JFrame jframe, BeanCreator comp, PrintWriter pw){
 		Component component = comp.createComponent(jframe);
-		WidgetAdapter adapter=ExtensionRegistry.createAdapterFor(component);
+		WidgetAdapter adapter=ExtensionRegistry.createAdapterAndItsChildren(component);
 		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
 			String name = property.getDisplayName();

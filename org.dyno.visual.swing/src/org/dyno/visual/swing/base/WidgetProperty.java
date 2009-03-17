@@ -20,6 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
@@ -49,8 +51,8 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  * @author William Chen
  */
 @SuppressWarnings("unchecked")
-public class WidgetProperty extends PropertyAdapter{
-	
+public class WidgetProperty extends PropertyAdapter {
+
 	protected Object lastValue;
 
 	protected String category;
@@ -234,8 +236,8 @@ public class WidgetProperty extends PropertyAdapter{
 	}
 
 	@Override
-	protected Object getDefaultValue(Object b, String lnfClassname){
-		if (b instanceof Component&&Component.class.isAssignableFrom(beanClass)) {
+	protected Object getDefaultValue(Object b, String lnfClassname) {
+		if (b instanceof Component && Component.class.isAssignableFrom(beanClass)) {
 			WidgetAdapter wa = WidgetAdapter.getWidgetAdapter((Component) b);
 			if (wa.isRoot() && b.getClass().getSuperclass() == beanClass || !wa.isRoot() && b.getClass() == beanClass) {
 				ILookAndFeelAdapter adapter = null;
@@ -244,31 +246,34 @@ public class WidgetProperty extends PropertyAdapter{
 				else
 					adapter = ExtensionRegistry.getLnfAdapter(UIManager.getCrossPlatformLookAndFeelClassName());
 				if (adapter != null)
-				default_value = adapter.getDefaultValue(beanClass, propertyName);
-			} else{ 
+					default_value = adapter.getDefaultValue(beanClass, propertyName);
+			} else {
 				Class compClass;
-				if(wa.isRoot()&&b.getClass().getSuperclass()!=beanClass)
-					compClass=b.getClass().getSuperclass();
-				else if(!wa.isRoot()&&b.getClass()!=beanClass)
-					compClass=b.getClass();
-				else if(wa.isRoot()&&b.getClass()!=beanClass&&b.getClass().getSuperclass()!=beanClass)
-				    compClass=b.getClass().getSuperclass();
-				else if(!wa.isRoot()&&b.getClass()!=beanClass&&b.getClass().getSuperclass()!=beanClass)
-					compClass=b.getClass();
+				if (wa.isRoot() && b.getClass().getSuperclass() != beanClass)
+					compClass = b.getClass().getSuperclass();
+				else if (!wa.isRoot() && b.getClass() != beanClass && b.getClass().getSuperclass() == beanClass) {
+					if (b.getClass().getSuperclass() == JMenu.class || b.getClass().getSuperclass() == JPopupMenu.class) {
+						compClass = b.getClass().getSuperclass();
+					} else
+						compClass = b.getClass();
+				} else if (wa.isRoot() && b.getClass() != beanClass && b.getClass().getSuperclass() != beanClass)
+					compClass = b.getClass().getSuperclass();
+				else if (!wa.isRoot() && b.getClass() != beanClass && b.getClass().getSuperclass() != beanClass)
+					compClass = b.getClass();
 				else
-					compClass=null;
-				if(compClass!=null){
-					Object obj=DEFAULT_OBJECTS.get(compClass);
-					if(obj==null){
-						try{
-						obj=compClass.newInstance();
-						}catch(Exception e){
+					compClass = null;
+				if (compClass != null) {
+					Object obj = DEFAULT_OBJECTS.get(compClass);
+					if (obj == null) {
+						try {
+							obj = compClass.newInstance();
+						} catch (Exception e) {
 							VisualSwingPlugin.getLogger().error(e);
-							obj=null;
+							obj = null;
 						}
 						DEFAULT_OBJECTS.put(compClass, obj);
 					}
-					default_value=getFieldValue(obj);
+					default_value = getFieldValue(obj);
 				}
 			}
 		}
@@ -473,6 +478,7 @@ public class WidgetProperty extends PropertyAdapter{
 			return editorFactory;
 		}
 	}
+
 	@Override
 	public String getSetName() {
 		return propertyDescriptor.getWriteMethod().getName();

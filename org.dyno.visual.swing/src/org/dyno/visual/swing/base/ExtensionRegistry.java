@@ -44,10 +44,11 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
+
 /**
  * 
  * ExtensionRegistry
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -56,14 +57,14 @@ public class ExtensionRegistry {
 	private static final String CATEGORY_EXTENSION_POINT = "org.dyno.visual.swing.propertyCategory";
 	private static final String TYPE_EXTENSION_POINT = "org.dyno.visual.swing.valueType";
 	private static final String LOOKANDFEEL_EXTENSION_POINT = "org.dyno.visual.swing.lnf.lnfAdapter";
-	private static final String CUSTOMIZED_CONTEXT_MENU_EXTENSION_POINT="org.dyno.visual.swing.contextCustomizer";
-	private static final String LIBRARY_EXTENSION_POINT="org.dyno.visual.swing.libraryExtension";
-	private static final String ADAPTABLE_ADAPTER_EXTENSION_POINT="org.dyno.visual.swing.adapters";
-	private static final String INVISIBLE_ADPTER_EXTENSION_POINT="org.dyno.visual.swing.invisibleAdapter";
-	private static final String RENAMING_LISTENER_EXTENSION_POINT="org.dyno.visual.swing.renamingListener";
-	private static final String SELECTION_LISTENER_EXTENSION_POINT="org.dyno.visual.swing.selectionListener";
-	private static final String WIDGET_LISTENER_EXTENSION_POINT="org.dyno.visual.swing.widgetListener";
-	private static final String PROPERTY_LISTENER_EXTENSION_POINT="org.dyno.visual.swing.propertyListener";
+	private static final String CUSTOMIZED_CONTEXT_MENU_EXTENSION_POINT = "org.dyno.visual.swing.contextCustomizer";
+	private static final String LIBRARY_EXTENSION_POINT = "org.dyno.visual.swing.libraryExtension";
+	private static final String ADAPTABLE_ADAPTER_EXTENSION_POINT = "org.dyno.visual.swing.adapters";
+	private static final String INVISIBLE_ADPTER_EXTENSION_POINT = "org.dyno.visual.swing.invisibleAdapter";
+	private static final String RENAMING_LISTENER_EXTENSION_POINT = "org.dyno.visual.swing.renamingListener";
+	private static final String SELECTION_LISTENER_EXTENSION_POINT = "org.dyno.visual.swing.selectionListener";
+	private static final String WIDGET_LISTENER_EXTENSION_POINT = "org.dyno.visual.swing.widgetListener";
+	private static final String PROPERTY_LISTENER_EXTENSION_POINT = "org.dyno.visual.swing.propertyListener";
 	private static String CURRENT_SORTING;
 
 	public static void setCurrentSorting(String currentSorting) {
@@ -74,7 +75,7 @@ public class ExtensionRegistry {
 		return propertySortings.get(CURRENT_SORTING);
 	}
 
-	public static WidgetAdapter createAdapterFor(Component comp) {
+	public static WidgetAdapter createAdapterAndItsChildren(Component comp) {
 		WidgetAdapter adapter = createWidgetAdapter(comp.getClass());
 		adapter.setWidget(comp);
 		if (adapter instanceof CompositeAdapter) {
@@ -82,7 +83,7 @@ public class ExtensionRegistry {
 			int count = compositeAdapter.getChildCount();
 			for (int i = 0; i < count; i++) {
 				Component child = compositeAdapter.getChild(i);
-				createAdapterFor(child);
+				createAdapterAndItsChildren(child);
 			}
 		}
 		return adapter;
@@ -201,30 +202,39 @@ public class ExtensionRegistry {
 	private static List<ISelectionListener> selectionListeners;
 	private static List<IWidgetListener> widgetListeners;
 	private static List<IPropertyListener> propertyListeners;
-	public static IConfigurationElement getInvisibleConfig(String className){
+
+	public static IConfigurationElement getInvisibleConfig(String className) {
 		return invisibles.get(className);
 	}
-	public static List<ILibraryExtension> getLibExtensions(){
+
+	public static List<ILibraryExtension> getLibExtensions() {
 		return libExtensions;
 	}
-	public static List<IContextCustomizer> getContextCustomizers(){
+
+	public static List<IContextCustomizer> getContextCustomizers() {
 		return contextCustomizers;
 	}
+
 	public static Map<String, IConfigurationElement> getRegisteredWidgets() {
 		return widgets;
 	}
-	public static List<IRenamingListener> getRenamingListeners(){
+
+	public static List<IRenamingListener> getRenamingListeners() {
 		return renamingListeners;
 	}
-	public static List<ISelectionListener> getSelectionListeners(){
+
+	public static List<ISelectionListener> getSelectionListeners() {
 		return selectionListeners;
 	}
-	public static List<IWidgetListener> getWidgetListeners(){
+
+	public static List<IWidgetListener> getWidgetListeners() {
 		return widgetListeners;
 	}
-	public static List<IPropertyListener> getPropertyListeners(){
+
+	public static List<IPropertyListener> getPropertyListeners() {
 		return propertyListeners;
 	}
+
 	static {
 		widgets = new HashMap<String, IConfigurationElement>();
 		invisibles = new HashMap<String, IConfigurationElement>();
@@ -232,7 +242,7 @@ public class ExtensionRegistry {
 		typeAdapters = new HashMap<String, TypeAdapter>();
 		lnfAdapters = new HashMap<String, ILookAndFeelAdapter>();
 		contextCustomizers = new ArrayList<IContextCustomizer>();
-		libExtensions= new ArrayList<ILibraryExtension>();
+		libExtensions = new ArrayList<ILibraryExtension>();
 		adapters = new HashMap<String, Map<String, IConfigurationElement>>();
 		renamingListeners = new ArrayList<IRenamingListener>();
 		selectionListeners = new ArrayList<ISelectionListener>();
@@ -251,10 +261,10 @@ public class ExtensionRegistry {
 		parseWidgetListeners();
 		parsePropertyListeners();
 	}
-	public static void registerLnfAdapter(String classname, ILookAndFeelAdapter lnfAdapter){
+
+	public static void registerLnfAdapter(String classname, ILookAndFeelAdapter lnfAdapter) {
 		lnfAdapters.put(classname, lnfAdapter);
 	}
-
 
 	private static void parseInvisibleAdapters() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(INVISIBLE_ADPTER_EXTENSION_POINT);
@@ -265,18 +275,16 @@ public class ExtensionRegistry {
 					parseInvisibleExtension(extensions[i]);
 				}
 			}
-		}		
+		}
 	}
 
-
-
-	public static Collection<ILookAndFeelAdapter> getLnfAdapters(){
+	public static Collection<ILookAndFeelAdapter> getLnfAdapters() {
 		return lnfAdapters.values();
 	}
+
 	public static ILookAndFeelAdapter getLnfAdapter(String lnfClassname) {
 		return lnfAdapters.get(lnfClassname);
 	}
-
 
 	private static void parseLnfExtensions() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(LOOKANDFEEL_EXTENSION_POINT);
@@ -355,6 +363,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void parseSelectionListeners() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(SELECTION_LISTENER_EXTENSION_POINT);
 		if (extensionPoint != null) {
@@ -366,6 +375,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void parsePropertyListeners() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(PROPERTY_LISTENER_EXTENSION_POINT);
 		if (extensionPoint != null) {
@@ -376,7 +386,8 @@ public class ExtensionRegistry {
 				}
 			}
 		}
-	}	
+	}
+
 	private static void parseWidgetListeners() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(WIDGET_LISTENER_EXTENSION_POINT);
 		if (extensionPoint != null) {
@@ -399,7 +410,7 @@ public class ExtensionRegistry {
 				}
 			}
 		}
-	}	
+	}
 
 	private static void parseWidgetExtensions() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(ADAPTER_EXTENSION_POINT);
@@ -412,6 +423,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void parseAdapters() {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(ADAPTABLE_ADAPTER_EXTENSION_POINT);
 		if (extensionPoint != null) {
@@ -423,9 +435,10 @@ public class ExtensionRegistry {
 			}
 		}
 	}
-	public static IConfigurationElement getAdapterConfig(String interfaceClassname, String adapterClassname){
-		Map<String, IConfigurationElement> entry=adapters.get(interfaceClassname);
-		if(entry==null)
+
+	public static IConfigurationElement getAdapterConfig(String interfaceClassname, String adapterClassname) {
+		Map<String, IConfigurationElement> entry = adapters.get(interfaceClassname);
+		if (entry == null)
 			return null;
 		return entry.get(adapterClassname);
 	}
@@ -453,6 +466,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void parseContextExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -484,6 +498,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void parseSelectionListener(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -498,7 +513,8 @@ public class ExtensionRegistry {
 				}
 			}
 		}
-	}	
+	}
+
 	private static void parsePropertyListener(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -513,7 +529,8 @@ public class ExtensionRegistry {
 				}
 			}
 		}
-	}	
+	}
+
 	private static void parseWidgetListener(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -528,7 +545,8 @@ public class ExtensionRegistry {
 				}
 			}
 		}
-	}		
+	}
+
 	private static void parseLibExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -544,7 +562,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
-	
+
 	private static void parseWidgetExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -556,6 +574,7 @@ public class ExtensionRegistry {
 			}
 		}
 	}
+
 	private static void parseInvisibleExtension(IExtension extension) {
 		IConfigurationElement[] configs = extension.getConfigurationElements();
 		if (configs != null && configs.length > 0) {
@@ -570,7 +589,7 @@ public class ExtensionRegistry {
 
 	private static void addInvisibleAdapter(IConfigurationElement config) {
 		String type = config.getAttribute("type");
-		invisibles.put(type, config); 
+		invisibles.put(type, config);
 	}
 
 	private static void parseAdapterExtension(IExtension extension) {
@@ -696,12 +715,12 @@ public class ExtensionRegistry {
 				adapter.setCloner((ICloner) config.createExecutableExtension("cloner"));
 			}
 			sAttribute = config.getAttribute("parser");
-			if(!isNull(sAttribute)){
-				adapter.setParser((IValueParser)config.createExecutableExtension("parser"));
+			if (!isNull(sAttribute)) {
+				adapter.setParser((IValueParser) config.createExecutableExtension("parser"));
 			}
 			sAttribute = config.getAttribute("endec");
-			if(!isNull(sAttribute)){
-				adapter.setEndec((IEndec)config.createExecutableExtension("endec"));
+			if (!isNull(sAttribute)) {
+				adapter.setEndec((IEndec) config.createExecutableExtension("endec"));
 			}
 		} catch (Exception e) {
 			VisualSwingPlugin.getLogger().error(e);
@@ -716,14 +735,15 @@ public class ExtensionRegistry {
 		String widgetClassname = config.getAttribute("widgetClass");
 		widgets.put(widgetClassname, config);
 	}
+
 	private static void addInterface(String interfaceClassname, IConfigurationElement config) {
-		Map<String, IConfigurationElement> interfaceEntry=adapters.get(interfaceClassname);
-		if(interfaceEntry==null){
+		Map<String, IConfigurationElement> interfaceEntry = adapters.get(interfaceClassname);
+		if (interfaceEntry == null) {
 			interfaceEntry = new HashMap<String, IConfigurationElement>();
 			adapters.put(interfaceClassname, interfaceEntry);
 		}
 		String defaultImplClassname = config.getAttribute("default");
-		if(defaultImplClassname!=null&&defaultImplClassname.trim().length()>0){
+		if (defaultImplClassname != null && defaultImplClassname.trim().length() > 0) {
 			interfaceEntry.put("default", config);
 		}
 		IConfigurationElement[] configs = config.getChildren();
@@ -763,10 +783,16 @@ public class ExtensionRegistry {
 			return null;
 		}
 	}
-
 	public static WidgetAdapter createWidgetAdapter(Component widget) {
+		return createWidgetAdapter(widget, false);
+	}
+
+	public static WidgetAdapter createWidgetAdapter(Component widget, boolean parseField) {
 		WidgetAdapter adapter = createWidgetAdapter(widget.getClass());
-		adapter.setWidget(widget);
+		if (parseField)
+			adapter.attachWidget(widget);
+		else
+			adapter.setWidget(widget);
 		return adapter;
 	}
 
@@ -827,4 +853,3 @@ public class ExtensionRegistry {
 		return typeAdapters.get(clazz);
 	}
 }
-

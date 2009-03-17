@@ -12,12 +12,16 @@
  ************************************************************************************/
 package org.dyno.visual.swing.parser.adapters;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.beans.EventSetDescriptor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Set;
+
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.parser.NamespaceUtil;
@@ -47,7 +51,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 
 public class WidgetParser implements IParser, IConstants, IAdaptableContext {
-	protected WidgetAdapter adapter;
+	protected WidgetAdapter adaptable;
 
 	protected IJavaElement getSibling(IType type, IJavaElement element) {
 		try {
@@ -72,9 +76,21 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	public boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
-		if (!adapter.isDirty())
+		if (!adaptable.isDirty())
 			return true;
-		if (adapter.isRoot()) {
+		Component widget = adaptable.getWidget();
+		if (widget instanceof JComponent) {
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
+				WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+				IParser parser = (IParser) jpmAdapter.getAdapter(IParser.class);
+				if (parser != null) {
+					parser.generateCode(type, imports, monitor);
+				}
+			}
+		}
+		if (adaptable.isRoot()) {
 			return createRootCode(type, imports, monitor);
 		} else {
 			return createNonRootCode(type, imports, monitor);
@@ -83,8 +99,8 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	@Override
 	public boolean renameField(IType type, IProgressMonitor monitor) {
-		String lastName = adapter.getLastName();
-		String name = adapter.getName();
+		String lastName = adaptable.getLastName();
+		String name = adaptable.getName();
 		if (lastName != null && !lastName.equals(name)) {
 			IField lastField = type.getField(lastName);
 			try {
@@ -94,7 +110,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 					IWorkbenchWindow window = JavaUtil.getEclipseWindow();
 					Shell parent = JavaUtil.getEclipseShell();
 					rs.perform(parent, window);
-					adapter.setLastName(name);
+					adaptable.setLastName(name);
 					return true;
 				}
 			} catch (JavaModelException jme) {
@@ -113,7 +129,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	private boolean createNonRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
-		String name = adapter.getID();
+		String name = adaptable.getID();
 		IField field = type.getField(name);
 		if (field != null) {
 			if (!field.exists()) {
@@ -123,7 +139,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				try {
 					int flags = field.getFlags();
 					int access_code = getAccessModifier(flags);
-					if (adapter.getFieldAccess() != access_code) {
+					if (adaptable.getFieldAccess() != access_code) {
 						field.delete(true, monitor);
 						if (!createField(type, imports, monitor))
 							return false;
@@ -138,7 +154,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				return false;
 		}
 		IJavaElement sibling = null;
-		String mName = NamespaceUtil.getGetMethodName(adapter, name);
+		String mName = NamespaceUtil.getGetMethodName(adaptable, name);
 		IMethod method = type.getMethod(mName, new String[0]);
 		if (method != null && method.exists()) {
 			try {
@@ -157,12 +173,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	private boolean createGetMethod(IType type, ImportRewrite imports, IProgressMonitor monitor, IJavaElement sibling) {
-		String id = adapter.getID();
-		String getMethodName = NamespaceUtil.getGetMethodName(adapter, id);
+		String id = adaptable.getID();
+		String getMethodName = NamespaceUtil.getGetMethodName(adaptable, id);
 		StringBuilder builder = new StringBuilder();
-		builder.append(getAccessCode(adapter.getGetAccess()));
+		builder.append(getAccessCode(adaptable.getGetAccess()));
 		builder.append(" ");
-		String fqcn = adapter.getWidgetCodeClassName();
+		String fqcn = adaptable.getWidgetCodeClassName();
 		String beanName = imports.addImport(fqcn);
 		builder.append(beanName);
 		builder.append(" ");
@@ -190,13 +206,13 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private boolean createField(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		StringBuilder builder = new StringBuilder();
-		builder.append(getAccessCode(adapter.getFieldAccess()));
+		builder.append(getAccessCode(adaptable.getFieldAccess()));
 		builder.append(" ");
-		String fqcn = adapter.getWidgetCodeClassName();
+		String fqcn = adaptable.getWidgetCodeClassName();
 		String beanName = imports.addImport(fqcn);
 		builder.append(beanName);
 		builder.append(" ");
-		String id = adapter.getID();
+		String id = adaptable.getID();
 		builder.append(id);
 		builder.append(";\n");
 		try {
@@ -224,10 +240,10 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		boolean success = true;
-		Set<EventSetDescriptor> keySet = adapter.getEventDescriptor().keySet();
+		Set<EventSetDescriptor> keySet = adaptable.getEventDescriptor().keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
-				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+				IEventListenerModel model = adaptable.getEventDescriptor().get(eventSet);
 				success = model.createEventMethod(type, imports, monitor);
 			}
 		}
@@ -248,7 +264,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		}
 		if (!createInitMethod(type, imports, monitor, sibling))
 			return false;
-		for (InvisibleAdapter invisible : adapter.getInvisibles()) {
+		for (InvisibleAdapter invisible : adaptable.getInvisibles()) {
 			IParser parser = (IParser) invisible.getAdapter(IParser.class);
 			if (parser != null) {
 				if (!parser.generateCode(type, imports, monitor))
@@ -268,7 +284,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append(INIT_METHOD_NAME);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
-		for (InvisibleAdapter invisible : adapter.getInvisibles()) {
+		for (InvisibleAdapter invisible : adaptable.getInvisibles()) {
 			IParser invisibleParser = (IParser) invisible.getAdapter(IParser.class);
 			builder.append(invisibleParser.getCreationMethodName() + "();\n");
 		}
@@ -284,7 +300,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	protected void createPostInitCode(StringBuilder builder, ImportRewrite imports) {
-		Dimension size = adapter.getWidget().getSize();
+		Dimension size = adaptable.getWidget().getSize();
 		builder.append("setSize(" + size.width + ", " + size.height + ");\n");
 	}
 
@@ -294,12 +310,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	protected String createGetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		String id = adapter.getID();
+		String id = adaptable.getID();
 		builder.append(id + " = " + getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
-		CompositeAdapter conAdapter = adapter.getParentAdapter();
+		CompositeAdapter conAdapter = adaptable.getParentAdapter();
 		if (conAdapter.needGenBoundCode()) {
-			Rectangle bounds = adapter.getWidget().getBounds();
+			Rectangle bounds = adaptable.getWidget().getBounds();
 			String strBounds = id + ".setBounds(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ");\n";
 			builder.append(strBounds);
 		}
@@ -313,14 +329,29 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private String createSetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		ArrayList<IWidgetPropertyDescriptor> properties = adapter.getPropertyDescriptors();
+		ArrayList<IWidgetPropertyDescriptor> properties = adaptable.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(adapter.getLnfClassname(), new StructuredSelection(adapter.getWidget())) && (property.isGencode() || property.isEdited(adapter))) {
+			if (property.isPropertySet(adaptable.getLnfClassname(), new StructuredSelection(adaptable.getWidget())) && (property.isGencode() || property.isEdited(adaptable))) {
 				IPropertyCodeGenerator generator = (IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
 				if (generator != null) {
-					String setCode = generator.getJavaCode(adapter.getWidget(), imports);
+					String setCode = generator.getJavaCode(adaptable.getWidget(), imports);
 					if (setCode != null)
 						builder.append(setCode);
+				}
+			}
+		}
+		Component widget = adaptable.getWidget();
+		if (widget instanceof JComponent) {
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
+				WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+				IParser parser = (IParser) jpmAdapter.getAdapter(IParser.class);
+				if (parser != null) {					
+					String getMethodName = parser.getCreationMethodName();
+					if (!adaptable.isRoot())
+						builder.append(((CompositeAdapter) adaptable).getID() + ".");
+					builder.append("setComponentPopupMenu(" + getMethodName + "());\n");
 				}
 			}
 		}
@@ -329,15 +360,15 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	private String genAddEventCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
-		Set<EventSetDescriptor> keySet = adapter.getEventDescriptor().keySet();
+		Set<EventSetDescriptor> keySet = adaptable.getEventDescriptor().keySet();
 		if (!keySet.isEmpty()) {
 			for (EventSetDescriptor eventSet : keySet) {
-				String id = adapter.getID();
-				if (!adapter.isRoot())
+				String id = adaptable.getID();
+				if (!adaptable.isRoot())
 					builder.append(id + ".");
 				Method mAdd = eventSet.getAddListenerMethod();
 				builder.append(mAdd.getName() + "(");
-				IEventListenerModel model = adapter.getEventDescriptor().get(eventSet);
+				IEventListenerModel model = adaptable.getEventDescriptor().get(eventSet);
 				String newcode = model.createListenerInstance(imports);
 				builder.append(newcode);
 				builder.append(");\n");
@@ -356,7 +387,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	protected String getNewInstanceCode(ImportRewrite imports) {
-		String beanName = imports.addImport(adapter.getWidgetCodeClassName());
+		String beanName = imports.addImport(adaptable.getWidgetCodeClassName());
 		return "new " + beanName + "()";
 	}
 
@@ -374,12 +405,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 
 	@Override
 	public void setAdaptable(IAdaptable adaptable) {
-		this.adapter = (WidgetAdapter) adaptable;
+		this.adaptable = (WidgetAdapter) adaptable;
 	}
 
 	@Override
 	public String getCreationMethodName() {
-		return NamespaceUtil.getGetMethodName(adapter, adapter.getID());
+		return NamespaceUtil.getGetMethodName(adaptable, adaptable.getID());
 	}
 
 }
