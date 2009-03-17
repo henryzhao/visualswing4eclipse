@@ -25,28 +25,28 @@ public class CompositeParser extends WidgetParser {
 
 	@Override
 	public boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
-		int count = ((CompositeAdapter)adapter).getChildCount();
+		int count = ((CompositeAdapter)adaptable).getChildCount();
 		for (int i = 0; i < count; i++) {
-			Component child = ((CompositeAdapter)adapter).getChild(i);
+			Component child = ((CompositeAdapter)adaptable).getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			IParser parser = (IParser) childAdapter.getAdapter(IParser.class);
 			if (parser!=null&&!parser.generateCode(type, imports, monitor))
 				return false;
 		}
-		if (!adapter.isDirty())
+		if (!adaptable.isDirty())
 			return true;
 		return super.generateCode(type, imports, monitor);
 	}
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		int count = ((CompositeAdapter) adapter).getChildCount();
+		int count = ((CompositeAdapter) adaptable).getChildCount();
 		for (int i = 0; i < count; i++) {
-			Component child = ((CompositeAdapter) adapter).getChild(i);
+			Component child = ((CompositeAdapter) adaptable).getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
-			if (!adapter.isRoot())
-				builder.append(((CompositeAdapter) adapter).getID() + ".");
+			if (!adaptable.isRoot())
+				builder.append(((CompositeAdapter) adaptable).getID() + ".");
 			builder.append("add(" + getMethodName + "());\n");
 		}
 	}

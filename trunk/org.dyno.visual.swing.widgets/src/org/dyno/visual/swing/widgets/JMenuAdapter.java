@@ -119,15 +119,18 @@ public class JMenuAdapter extends CompositeAdapter {
 				if (parent == thisparent) {
 					break;
 				}
-			} else if (ele instanceof JPopupMenu&&WidgetAdapter.getWidgetAdapter((Component)ele)!=null) {
+			} else if (ele instanceof JPopupMenu && WidgetAdapter.getWidgetAdapter((Component) ele) != null) {
+				if (ele == thisparent) {
+					break;
+				}
 				JPopupMenu pop = (JPopupMenu) ele;
 				Container parent = pop.getParent();
 				pop.setVisible(false);
 				stack.pop();
-				if (parent == thisparent) {
+				if(parent==thisparent){
 					break;
 				}
-			}else if (ele == thisparent) {
+			} else if (ele == thisparent) {
 				break;
 			} else {
 				stack.pop();
@@ -325,4 +328,5 @@ public class JMenuAdapter extends CompositeAdapter {
 			bg.remove(jb);
 		}
 	}
+
 }

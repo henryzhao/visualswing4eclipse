@@ -1,9 +1,11 @@
 package org.dyno.visual.swing.widgets.menucontext;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.base.CompositeMenuContext;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -13,7 +15,7 @@ import org.eclipse.jface.action.MenuManager;
 
 public class JComponentMenuContext extends CompositeMenuContext {
 	public void fillContextAction(MenuManager menu) {
-		Component widget = adaptable.getWidget();
+		final Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
 			final JPopupMenu jpm = jcomp.getComponentPopupMenu();
@@ -22,10 +24,16 @@ public class JComponentMenuContext extends CompositeMenuContext {
 				Action a = new Action((jpm.isVisible() ? "Hide" : "Show") + " Popup Menu " + wa.getID()) {
 					@Override
 					public void run() {
+						JPopupMenuAdapter jma = (JPopupMenuAdapter) wa;
+						jpm.setInvoker(widget);
 						if (jpm.isVisible())
-							((JPopupMenuAdapter) wa).hidePopup();
-						else
-							((JPopupMenuAdapter) wa).showPopup();
+							jma.hidePopup();
+						else{
+							Point loc = new Point(widget.getWidth()/2, widget.getHeight()/2);
+							SwingUtilities.convertPointToScreen(loc, widget);
+							jpm.setLocation(loc);							
+							jma.showPopup();
+						}
 					}
 				};
 				menu.add(a);

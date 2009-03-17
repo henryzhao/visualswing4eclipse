@@ -122,6 +122,10 @@
                class="javax.swing.JMenu"
                implementation="org.dyno.visual.swing.parser.adapters.CompositeParser">
          </adapter>
+         <adapter
+               class="javax.swing.JPopupMenu"
+               implementation="org.dyno.visual.swing.parser.adapters.JPopupMenuParser">
+         </adapter>
       </interface>
       <interface
             class="org.dyno.visual.swing.parser.spi.ILayoutParser">

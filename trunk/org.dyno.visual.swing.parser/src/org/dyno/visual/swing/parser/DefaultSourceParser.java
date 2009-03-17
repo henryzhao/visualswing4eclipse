@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.parser;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Frame;
 import java.beans.EventSetDescriptor;
 import java.lang.reflect.Constructor;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
@@ -218,7 +220,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				Object fieldValue = field.get(bean);
 				if (fieldValue != null) {
 					if (Component.class.isAssignableFrom(field.getType())) {
-						parseField(cunit, bean, field, (Component) fieldValue);
+						parseField(cunit, bean, field);
 					} else {
 						for (IFieldParser parser : fieldParsers) {
 							parser.parseField(cunit, bean, field);
@@ -234,7 +236,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 	}
 
-	private void parseField(CompilationUnit cunit, Component bean, Field field, Component widget) throws ParserException {
+	private void parseField(CompilationUnit cunit, Component bean, Field field) throws ParserException {
 		Class clazz = bean.getClass();
 		String fieldName = field.getName();
 		field.setAccessible(true);
@@ -247,8 +249,13 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 
 		JComponent fieldComponent = (JComponent) fieldValue;
-		WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent);
-
+		WidgetAdapter adapter = ExtensionRegistry.createWidgetAdapter(fieldComponent, true);
+		if (adapter.getWidget() != fieldComponent && fieldComponent instanceof JPopupMenu && adapter.getWidget() instanceof JPopupMenu) {
+			JComponent jcomp = findPopupInvoker((JPopupMenu) fieldComponent, bean);
+			if (jcomp != null) {
+				jcomp.setComponentPopupMenu((JPopupMenu) adapter.getWidget());
+			}
+		}
 		adapter.setName(fieldName);
 		adapter.setLastName(fieldName);
 
@@ -265,7 +272,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				throw new ParserException("Method " + NamespaceUtil.getGetMethodName(fieldName) + "() is not found!\n" + "Please define it to initialize " + fieldName);
 			try {
 				getMethod = clazz.getDeclaredMethod(getName);
-				WidgetAdapter ba = WidgetAdapter.getWidgetAdapter(widget);
+				WidgetAdapter ba = WidgetAdapter.getWidgetAdapter(fieldComponent);
 				ba.setProperty("getMethodName", getName);
 			} catch (NoSuchMethodException e) {
 				throw new ParserException("Method " + getName + "() is not found!\n" + "Please define it to initialize " + fieldName);
@@ -275,6 +282,25 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		flags = getMethod.getModifiers();
 		setAdapterGetMethodAccess(adapter, flags);
 		parseEventListener(cunit, adapter);
+	}
+
+	private JComponent findPopupInvoker(JPopupMenu popup, Component bean) {
+		if (bean instanceof Container) {
+			if (bean instanceof JComponent) {
+				JComponent jcomp = (JComponent) bean;
+				if (jcomp.getComponentPopupMenu() == popup)
+					return jcomp;
+			}
+			Container container = (Container) bean;
+			int count = container.getComponentCount();
+			for (int i = 0; i < count; i++) {
+				Component child = container.getComponent(i);
+				JComponent p = findPopupInvoker(popup, child);
+				if (p != null)
+					return p;
+			}
+		}
+		return null;
 	}
 
 	private void setAdapterGetMethodAccess(WidgetAdapter adapter, int flags) {

@@ -48,8 +48,7 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
  */
 public class GlassPaneUI extends ComponentUI {
 	static {
-		THUMB_NAIL = new ImageIcon(GlassPaneUI.class.getClassLoader()
-				.getResource("icons/resize_thumb.png"));
+		THUMB_NAIL = new ImageIcon(GlassPaneUI.class.getClassLoader().getResource("icons/resize_thumb.png"));
 	}
 	private VisualDesigner designer;
 
@@ -90,7 +89,7 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		IPainter painter=(IPainter) focused.getAdapter(IPainter.class);
+		IPainter painter = (IPainter) focused.getAdapter(IPainter.class);
 		painter.paintGrid(clipg);
 		clipg.dispose();
 	}
@@ -102,7 +101,7 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		IPainter painter=(IPainter)selected.getAdapter(IPainter.class);
+		IPainter painter = (IPainter) selected.getAdapter(IPainter.class);
 		painter.paintAnchor(clipg);
 		clipg.dispose();
 	}
@@ -112,11 +111,9 @@ public class GlassPaneUI extends ComponentUI {
 		if (root != null) {
 			WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
 			if (rootAdapter != null) {
-				List<IContextCustomizer> contextCustomizers = ExtensionRegistry
-						.getContextCustomizers();
+				List<IContextCustomizer> contextCustomizers = ExtensionRegistry.getContextCustomizers();
 				for (IContextCustomizer customizer : contextCustomizers) {
-					customizer.paintContext(g, WidgetAdapter
-							.getWidgetAdapter(designer.getRoot()));
+					customizer.paintContext(g, WidgetAdapter.getWidgetAdapter(designer.getRoot()));
 				}
 			}
 		}
@@ -128,8 +125,7 @@ public class GlassPaneUI extends ComponentUI {
 		if (region != null) {
 			Color old = g.getColor();
 			g.setColor(new Color(0, 164, 255));
-			((Graphics2D) g).setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT,
-					BasicStroke.JOIN_BEVEL, 0, new float[] { 5 }, 0));
+			((Graphics2D) g).setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 5 }, 0));
 			g.drawRect(region.x, region.y, region.width, region.height);
 			g.setColor(old);
 		}
@@ -160,15 +156,12 @@ public class GlassPaneUI extends ComponentUI {
 
 	private static Icon THUMB_NAIL;
 
-	private void paintTranverse(Graphics g, JComponent c, Tranverse trans,
-			int ad) {
+	private void paintTranverse(Graphics g, JComponent c, Tranverse trans, int ad) {
 		Component root = designer.getRootWidget();
 		if (root != null) {
-			Rectangle rect = new Rectangle(0, 0, root.getWidth(), root
-					.getHeight());
+			Rectangle rect = new Rectangle(0, 0, root.getWidth(), root.getHeight());
 			rect = SwingUtilities.convertRectangle(root, rect, c);
-			Graphics clipg = g.create(rect.x - ad, rect.y - ad, rect.width + 2
-					* ad, rect.height + 2 * ad);
+			Graphics clipg = g.create(rect.x - ad, rect.y - ad, rect.width + 2 * ad, rect.height + 2 * ad);
 			tranverse(clipg, root, trans, ad);
 			clipg.dispose();
 			tranverseMenuElement(g, trans, ad);
@@ -177,30 +170,30 @@ public class GlassPaneUI extends ComponentUI {
 
 	private void tranverseMenuElement(Graphics g, Tranverse trans, int ad) {
 		Point vdl = designer.getLocationOnScreen();
-		MenuElement[] menu_selection = MenuSelectionManager.defaultManager()
-				.getSelectedPath();
+		MenuElement[] menu_selection = MenuSelectionManager.defaultManager().getSelectedPath();
 		if (menu_selection != null && menu_selection.length > 0) {
 			for (int i = menu_selection.length - 1; i >= 0; i--) {
 				if (menu_selection[i] instanceof JPopupMenu) {
 					JPopupMenu jpm = (JPopupMenu) menu_selection[i];
-					if (!jpm.isShowing())
-						continue;
-					MenuElement[] sub = jpm.getSubElements();
-					Rectangle b = jpm.getBounds();
-					Point jpml = jpm.getLocationOnScreen();
-					b.x = jpml.x - vdl.x;
-					b.y = jpml.y - vdl.y;
-					for (MenuElement submenu : sub) {
-						if (submenu instanceof JMenuItem) {
-							JMenuItem jmi = (JMenuItem) submenu;
-							if (isDesigningWidget(jmi)) {
-								Rectangle sb = jmi.getBounds();
-								sb.x += b.x;
-								sb.y += b.y;
-								Graphics clipg = g.create(sb.x - ad, sb.y - ad,
-										sb.width + 2 * ad, sb.height + 2 * ad);
-								trans.paint(clipg, jmi);
-								clipg.dispose();
+					synchronized (jpm.getTreeLock()) {
+						if (!jpm.isShowing())
+							continue;
+						MenuElement[] sub = jpm.getSubElements();
+						Rectangle b = jpm.getBounds();
+						Point jpml = jpm.getLocationOnScreen();
+						b.x = jpml.x - vdl.x;
+						b.y = jpml.y - vdl.y;
+						for (MenuElement submenu : sub) {
+							if (submenu instanceof JMenuItem) {
+								JMenuItem jmi = (JMenuItem) submenu;
+								if (isDesigningWidget(jmi)) {
+									Rectangle sb = jmi.getBounds();
+									sb.x += b.x;
+									sb.y += b.y;
+									Graphics clipg = g.create(sb.x - ad, sb.y - ad, sb.width + 2 * ad, sb.height + 2 * ad);
+									trans.paint(clipg, jmi);
+									clipg.dispose();
+								}
 							}
 						}
 					}
@@ -218,11 +211,9 @@ public class GlassPaneUI extends ComponentUI {
 			int size = parent.getChildCount();
 			for (int i = 0; i < size; i++) {
 				Component child = parent.getChild(i);
-				Rectangle rect = new Rectangle(0, 0, child.getWidth(), child
-						.getHeight());
+				Rectangle rect = new Rectangle(0, 0, child.getWidth(), child.getHeight());
 				rect = SwingUtilities.convertRectangle(child, rect, jc);
-				Graphics clipg = g.create(rect.x, rect.y, rect.width + 2 * ad,
-						rect.height + 2 * ad);
+				Graphics clipg = g.create(rect.x, rect.y, rect.width + 2 * ad, rect.height + 2 * ad);
 				tranverse(clipg, (JComponent) child, trans, ad);
 				clipg.dispose();
 			}
@@ -235,8 +226,7 @@ public class GlassPaneUI extends ComponentUI {
 
 	private boolean isDesigningWidget(Component widget) {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
-		return adapter != null
-				&& (adapter.isRoot() || adapter.getName() != null);
+		return adapter != null && (adapter.isRoot() || adapter.getName() != null);
 	}
 
 	private void paintSelection(Graphics g, JComponent c) {
@@ -290,7 +280,7 @@ public class GlassPaneUI extends ComponentUI {
 		Rectangle local = SwingUtilities.getLocalBounds(jpar);
 		Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
 		Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
-		IPainter painter=(IPainter) hinted.getAdapter(IPainter.class);
+		IPainter painter = (IPainter) hinted.getAdapter(IPainter.class);
 		painter.paintHint(clipg);
 		clipg.dispose();
 	}
@@ -299,15 +289,13 @@ public class GlassPaneUI extends ComponentUI {
 		Component jpar = hovered.getWidget();
 		if (hovered.isRoot())
 			jpar = hovered.getRootPane();
-		IPainter painter=(IPainter) hovered.getAdapter(IPainter.class);
+		IPainter painter = (IPainter) hovered.getAdapter(IPainter.class);
 		if (hovered.needGlobalGraphics()) {
 			painter.paintHovered(g);
 		} else {
 			Rectangle local = SwingUtilities.getLocalBounds(jpar);
-			Rectangle pub = SwingUtilities.convertRectangle(jpar, local,
-					designer);
-			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1,
-					pub.height + 1);
+			Rectangle pub = SwingUtilities.convertRectangle(jpar, local, designer);
+			Graphics clipg = g.create(pub.x, pub.y, pub.width + 1, pub.height + 1);
 			painter.paintHovered(clipg);
 			clipg.dispose();
 		}
@@ -329,7 +317,7 @@ public class GlassPaneUI extends ComponentUI {
 			int x = e.x - hs.x;
 			int y = e.y - hs.y;
 			Graphics clipg = g.create(x - 1, y - 1, w + 2, h + 2);
-			IPainter painter=(IPainter) adapter.getAdapter(IPainter.class);
+			IPainter painter = (IPainter) adapter.getAdapter(IPainter.class);
 			painter.paintMascot(clipg);
 			clipg.dispose();
 		}

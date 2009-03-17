@@ -68,6 +68,8 @@ public class WidgetDesignOperation implements IDesignOperation, IAdaptableContex
 					popup.setLocation(rp);
 					((JPopupMenuAdapter) dropAdapter).showPopup();
 					dropAdapter.requestNewName();
+					adaptable.setDirty(true);
+					dropAdapter.setDirty(true);
 					return true;
 				}
 			}

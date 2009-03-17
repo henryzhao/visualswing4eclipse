@@ -31,44 +31,48 @@ import org.eclipse.core.commands.operations.IUndoableOperation;
 public abstract class CompositeAdapter extends WidgetAdapter {
 	public CompositeAdapter() {
 	}
+
 	public LayoutAdapter getLayoutAdapter() {
 		return null;
 	}
+
 	@Override
 	public boolean includeName(String another) {
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			if(childAdapter.includeName(another))
+			if (childAdapter != null && childAdapter.includeName(another))
 				return true;
 		}
 		return super.includeName(another);
 	}
-	
+
 	@Override
 	public WidgetAdapter findWidgetAdapter(String compname) {
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			WidgetAdapter a = childAdapter.findWidgetAdapter(compname);
-			if(a!=null)
+			if (a != null)
 				return a;
 		}
 		return super.findWidgetAdapter(compname);
 	}
+
 	@Override
 	public void requestNewName() {
 		super.requestNewName();
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
-			WidgetAdapter childAdapter=WidgetAdapter.getWidgetAdapter(child);
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			if (childAdapter.getName() == null)
 				childAdapter.requestNewName();
 		}
 	}
+
 	public CompositeAdapter(String name) {
 		super(name);
 	}
@@ -87,17 +91,18 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	@Override
 	public boolean isRenamed() {
-		if(super.isRenamed())
+		if (super.isRenamed())
 			return true;
 		int count = getChildCount();
-		for(int i=0;i<count;i++){
+		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			if(childAdapter.isRenamed())
+			if (childAdapter != null && childAdapter.isRenamed())
 				return true;
 		}
 		return false;
 	}
+
 	public boolean interceptPoint(Point p, int ad) {
 		return false;
 	}
@@ -109,8 +114,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
-			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);			
-			if (adapter!=null&&adapter.isDirty())
+			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
+			if (adapter != null && adapter.isDirty())
 				return true;
 		}
 		return false;
@@ -118,12 +123,13 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	@Override
 	public void clearDirty() {
-		dirty = false;
+		super.clearDirty();
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
-			childAdapter.clearDirty();
+			if (childAdapter != null)
+				childAdapter.clearDirty();
 		}
 	}
 
@@ -164,10 +170,10 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		Container jp = (Container) getWidget();
 		Component[] components = jp.getComponents();
 		int i = 0;
-		for(Component component:components){
-			WidgetAdapter ca=WidgetAdapter.getWidgetAdapter(component);
-			if(ca!=null){
-				if(index==i)
+		for (Component component : components) {
+			WidgetAdapter ca = WidgetAdapter.getWidgetAdapter(component);
+			if (ca != null) {
+				if (index == i)
 					return component;
 				i++;
 			}
@@ -179,13 +185,14 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		Container jp = (Container) getWidget();
 		Component[] components = jp.getComponents();
 		int count = 0;
-		for(Component component:components){
-			WidgetAdapter ca=WidgetAdapter.getWidgetAdapter(component);
-			if(ca!=null)
+		for (Component component : components) {
+			WidgetAdapter ca = WidgetAdapter.getWidgetAdapter(component);
+			if (ca != null)
 				count++;
 		}
 		return count;
 	}
+
 	public int getIndexOfChild(Component child) {
 		int size = getChildCount();
 		for (int i = 0; i < size; i++) {
@@ -195,6 +202,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		}
 		return -1;
 	}
+
 	public boolean isChildMoveable(Component child) {
 		return true;
 	}
@@ -261,9 +269,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-
 	public Class<?> getDefaultLayout() {
 		return null;
 	}
 }
-

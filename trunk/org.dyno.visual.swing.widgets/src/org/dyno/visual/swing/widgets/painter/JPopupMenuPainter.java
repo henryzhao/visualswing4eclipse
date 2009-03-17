@@ -22,15 +22,12 @@ public class JPopupMenuPainter extends CompositePainter {
 		Point lt = adaptable.convertToGlobal(new Point(0, 0));
 		bounds.x = lt.x;
 		bounds.y = lt.y;
-		Graphics clipg = g.create(bounds.x, bounds.y, bounds.width,
-				bounds.height);
+		Graphics clipg=adaptable.needGlobalGraphics()?g.create(bounds.x, bounds.y, bounds.width, bounds.height):g;
 		Graphics2D g2d = (Graphics2D) clipg;
 		g2d.setStroke(STROKE);
 		g2d.setColor(GREEN_COLOR);
-		JPopupMenuDesignOperation operation = (JPopupMenuDesignOperation) adaptable
-				.getAdapter(IDesignOperation.class);
-		g2d.drawLine(0, operation.getInsert_y(), jpm.getWidth(), operation
-				.getInsert_y());
+		JPopupMenuDesignOperation operation = (JPopupMenuDesignOperation) adaptable.getAdapter(IDesignOperation.class);
+		g2d.drawLine(0, operation.getInsert_y(), jpm.getWidth(), operation.getInsert_y());
 		clipg.dispose();
 	}
 
@@ -38,7 +35,6 @@ public class JPopupMenuPainter extends CompositePainter {
 	protected static Stroke STROKE;
 
 	static {
-		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
+		STROKE = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 4 }, 0);
 	}
 }

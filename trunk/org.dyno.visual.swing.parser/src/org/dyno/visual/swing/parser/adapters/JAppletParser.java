@@ -18,7 +18,7 @@ import javax.swing.JMenuBar;
 public class JAppletParser extends RootPaneContainerParser {
 	@Override
 	protected JMenuBar getJMenuBar() {
-		JApplet japplet = (JApplet) adapter.getWidget();
+		JApplet japplet = (JApplet) adaptable.getWidget();
 		JMenuBar jmb = japplet.getJMenuBar();
 		return jmb;
 	}

@@ -361,29 +361,31 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				for (int i = menu_selection.length - 1; i >= 0; i--) {
 					if (menu_selection[i] instanceof JPopupMenu) {
 						JPopupMenu jpm = (JPopupMenu) menu_selection[i];
-						if (!jpm.isShowing())
-							continue;
-						Rectangle b = jpm.getBounds();
-						Point jpml = jpm.getLocationOnScreen();
-						Point vdl = getLocationOnScreen();
-						b.x = jpml.x - vdl.x;
-						b.y = jpml.y - vdl.y;
-						if (b.contains(p)) {
-							MenuElement[] sub = jpm.getSubElements();
-							for (MenuElement submenu : sub) {
-								if (submenu instanceof JMenuItem) {
-									JMenuItem submenuItem = (JMenuItem) submenu;
-									Rectangle sb = submenuItem.getBounds();
-									sb.x += b.x;
-									sb.y += b.y;
-									if (sb.contains(p)) {
-										return submenuItem;
+				        synchronized (jpm.getTreeLock()) {
+							if (!jpm.isShowing())
+								continue;
+							Rectangle b = jpm.getBounds();
+							Point jpml = jpm.getLocationOnScreen();
+							Point vdl = getLocationOnScreen();
+							b.x = jpml.x - vdl.x;
+							b.y = jpml.y - vdl.y;
+							if (b.contains(p)) {
+								MenuElement[] sub = jpm.getSubElements();
+								for (MenuElement submenu : sub) {
+									if (submenu instanceof JMenuItem) {
+										JMenuItem submenuItem = (JMenuItem) submenu;
+										Rectangle sb = submenuItem.getBounds();
+										sb.x += b.x;
+										sb.y += b.y;
+										if (sb.contains(p)) {
+											return submenuItem;
+										}
 									}
 								}
+								if (WidgetAdapter.getWidgetAdapter(jpm) != null)
+									return jpm;
 							}
-							if (WidgetAdapter.getWidgetAdapter(jpm) != null)
-								return jpm;
-						}
+				        }
 					}
 				}
 			}

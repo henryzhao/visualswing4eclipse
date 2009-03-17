@@ -22,13 +22,13 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public class JScrollPaneParser extends CompositeParser {
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		CompositeAdapter jspa = (CompositeAdapter) adapter;
+		CompositeAdapter jspa = (CompositeAdapter) adaptable;
 		if (jspa.getChildCount() > 0) {
 			Component child = jspa.getChild(0);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
-			if (!adapter.isRoot())
+			if (!adaptable.isRoot())
 				builder.append(jspa.getID() + ".");
 			builder.append("setViewportView(" + getMethodName + "());\n");
 		}

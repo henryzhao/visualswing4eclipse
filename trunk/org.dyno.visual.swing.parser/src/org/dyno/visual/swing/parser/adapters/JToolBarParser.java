@@ -22,14 +22,14 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 public class JToolBarParser extends CompositeParser {
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		CompositeAdapter ca = (CompositeAdapter) adapter;
+		CompositeAdapter ca = (CompositeAdapter) adaptable;
 		int count = ca.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = ca.getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
-			if (!adapter.isRoot())
+			if (!adaptable.isRoot())
 				builder.append(ca.getID() + ".");
 			builder.append("add(");
 			builder.append(getMethodName + "());\n");

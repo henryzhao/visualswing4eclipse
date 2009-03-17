@@ -18,7 +18,7 @@ import javax.swing.JMenuBar;
 public class JFrameParser extends RootPaneContainerParser {
 	@Override
 	protected JMenuBar getJMenuBar() {
-		JFrame jframe = (JFrame) adapter.getWidget();
+		JFrame jframe = (JFrame) adaptable.getWidget();
 		JMenuBar jmb = jframe.getJMenuBar();
 		return jmb;
 	}

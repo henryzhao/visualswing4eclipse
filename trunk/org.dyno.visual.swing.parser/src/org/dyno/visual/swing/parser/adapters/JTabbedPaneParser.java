@@ -28,15 +28,15 @@ public class JTabbedPaneParser extends CompositeParser {
 
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
-		JTabbedPane jtp = (JTabbedPane) adapter.getWidget();
-		CompositeAdapter ca = (CompositeAdapter) adapter;
+		JTabbedPane jtp = (JTabbedPane) adaptable.getWidget();
+		CompositeAdapter ca = (CompositeAdapter) adaptable;
 		int count = ca.getChildCount();
 		for (int i = 0; i < count; i++) {
 			Component child = ca.getChild(i);
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();
-			if (!adapter.isRoot())
+			if (!adaptable.isRoot())
 				builder.append(ca.getID() + ".");
 			builder.append("addTab(");
 			String title = jtp.getTitleAt(i);
