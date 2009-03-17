@@ -249,7 +249,9 @@ public class WidgetProperty extends PropertyAdapter {
 					default_value = adapter.getDefaultValue(beanClass, propertyName);
 			} else {
 				Class compClass;
-				if (wa.isRoot() && b.getClass().getSuperclass() != beanClass)
+				if(wa.isRoot()&&b.getClass()==beanClass){
+					compClass = b.getClass();
+				}else if (wa.isRoot() && b.getClass().getSuperclass() != beanClass)
 					compClass = b.getClass().getSuperclass();
 				else if (!wa.isRoot() && b.getClass() != beanClass && b.getClass().getSuperclass() == beanClass) {
 					if (b.getClass().getSuperclass() == JMenu.class || b.getClass().getSuperclass() == JPopupMenu.class) {
