@@ -104,7 +104,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 
 	@Override
 	public boolean isDirty() {
-		if (dirty)
+		if (super.isDirty())
 			return true;
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {

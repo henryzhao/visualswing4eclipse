@@ -223,7 +223,18 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public boolean isDirty() {
-		return dirty;
+		if (dirty)
+			return true;
+		if (widget != null && widget instanceof JComponent) {
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			if (WidgetAdapter.getWidgetAdapter(popup) != null) {
+				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
+				if (popupAdapter.isDirty())
+					return true;
+			}
+		}
+		return false;
 	}
 
 	public String toString() {
@@ -428,10 +439,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void clearSelection() {
 		setSelected(false);
-		if(widget instanceof JComponent){
+		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
 			JPopupMenu componentPopupMenu = jcomp.getComponentPopupMenu();
-			if(WidgetAdapter.getWidgetAdapter(componentPopupMenu)!=null){
+			if (WidgetAdapter.getWidgetAdapter(componentPopupMenu) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(componentPopupMenu);
 				popupAdapter.clearSelection();
 			}
@@ -602,9 +613,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 					BeanInfo beanInfo = Introspector.getBeanInfo(aClazz, beanClass);
 					PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
 					for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-						if (!(propertyDescriptor instanceof IndexedPropertyDescriptor)&&
-								propertyDescriptor.getReadMethod() != null&&
-								propertyDescriptor.getWriteMethod()!=null) {
+						if (!(propertyDescriptor instanceof IndexedPropertyDescriptor) && propertyDescriptor.getReadMethod() != null && propertyDescriptor.getWriteMethod() != null) {
 							BeanDescriptorProperty fp = new BeanDescriptorProperty(propertyDescriptor);
 							fp.setCategory("Common");
 							propdesc.add(fp);
@@ -919,6 +928,15 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public boolean isRenamed() {
 		if (lastName != null && !lastName.equals(name))
 			return true;
+		if (widget != null && widget instanceof JComponent) {
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			if (WidgetAdapter.getWidgetAdapter(popup) != null) {
+				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
+				if (popupAdapter.isRenamed())
+					return true;
+			}
+		}
 		if (isRoot()) {
 			for (InvisibleAdapter inv : invisibles) {
 				if (inv != null && inv.isRenamed())
@@ -931,6 +949,15 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	public boolean includeName(String another) {
 		if (name != null && name.equals(another))
 			return true;
+		if (widget != null && widget instanceof JComponent) {
+			JComponent jcomp = (JComponent) widget;
+			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			if (WidgetAdapter.getWidgetAdapter(popup) != null) {
+				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
+				if (popupAdapter.includeName(another))
+					return true;
+			}
+		}
 		if (isRoot()) {
 			for (InvisibleAdapter invisible : getInvisibles()) {
 				if (invisible != null && invisible.getName() != null && invisible.getName().equals(another)) {

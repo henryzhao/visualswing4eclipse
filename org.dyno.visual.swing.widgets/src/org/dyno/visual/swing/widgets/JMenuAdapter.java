@@ -83,28 +83,31 @@ public class JMenuAdapter extends CompositeAdapter {
 		} else {
 			jmenu.add(dragged);
 		}
-		if(jmenu.isPopupMenuVisible()){
+		if (jmenu.isPopupMenuVisible()) {
 			refreshPopup();
 		}
 	}
-	private void refreshPopup(){
-		SwingUtilities.invokeLater(new Runnable(){
+
+	private void refreshPopup() {
+		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				widgetPressed();
 				widgetPressed();
-			}});
+			}
+		});
 	}
-	void widgetPressed(){
-		MouseInputListener l=(MouseInputListener) getAdapter(MouseInputListener.class);
-		if(l!=null)
+
+	void widgetPressed() {
+		MouseInputListener l = (MouseInputListener) getAdapter(MouseInputListener.class);
+		if (l != null)
 			l.mousePressed(null);
 	}
+
 	public void showPopup() {
 		JMenu jmenu = (JMenu) getWidget();
 		Container thisparent = jmenu.getParent();
-		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
-				.getSelectionStack();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
 		while (!stack.isEmpty()) {
 			MenuElement ele = stack.peek();
 			if (ele instanceof JMenu) {
@@ -130,8 +133,7 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	public void hidePopup() {
 		JMenu jmenu = (JMenu) getWidget();
-		Stack<MenuElement> stack = MenuSelectionManager.defaultManager()
-				.getSelectionStack();
+		Stack<MenuElement> stack = MenuSelectionManager.defaultManager().getSelectionStack();
 		while (!stack.isEmpty() && stack.peek() != jmenu) {
 			MenuElement me = stack.pop();
 			if (me instanceof JMenu) {
@@ -144,7 +146,8 @@ public class JMenuAdapter extends CompositeAdapter {
 			stack.pop();
 		jmenu.setPopupMenuVisible(false);
 		jmenu.setSelected(false);
-	}		
+	}
+
 	public void addAfter(Component hovering, Component dragged) {
 		JMenu jmenu = (JMenu) getWidget();
 		int index = -1;
@@ -162,7 +165,7 @@ public class JMenuAdapter extends CompositeAdapter {
 		} else {
 			jmenu.add(dragged);
 		}
-		if(jmenu.isPopupMenuVisible()){
+		if (jmenu.isPopupMenuVisible()) {
 			refreshPopup();
 		}
 	}
@@ -170,11 +173,10 @@ public class JMenuAdapter extends CompositeAdapter {
 	public void addChild(Component widget) {
 		JMenu jmenu = (JMenu) getWidget();
 		jmenu.add(widget);
-		if(jmenu.isPopupMenuVisible()){
+		if (jmenu.isPopupMenuVisible()) {
 			refreshPopup();
 		}
 	}
-
 
 	public CompositeAdapter getParentAdapter() {
 		Component me = getWidget();
@@ -183,8 +185,12 @@ public class JMenuAdapter extends CompositeAdapter {
 			return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
 		else if (parent instanceof JPopupMenu) {
 			JPopupMenu jpm = (JPopupMenu) parent;
-			parent = jpm.getInvoker();
-			return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+			if (WidgetAdapter.getWidgetAdapter(jpm) != null)
+				return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(jpm);
+			else {
+				parent = jpm.getInvoker();
+				return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+			}
 		} else
 			return null;
 	}
@@ -228,12 +234,10 @@ public class JMenuAdapter extends CompositeAdapter {
 			@Override
 			public void setPopupMenuVisible(boolean b) {
 				if (!b) {
-					StackTraceElement[] trace = Thread.currentThread()
-							.getStackTrace();
+					StackTraceElement[] trace = Thread.currentThread().getStackTrace();
 					for (StackTraceElement stack : trace) {
 						if (stack.getClassName().indexOf("MouseGrabber") != -1 //$NON-NLS-1$
-								&& stack.getMethodName().equals(
-										"cancelPopupMenu")) { //$NON-NLS-1$
+								&& stack.getMethodName().equals("cancelPopupMenu")) { //$NON-NLS-1$
 							return;
 						}
 					}
@@ -244,14 +248,14 @@ public class JMenuAdapter extends CompositeAdapter {
 		};
 		requestGlobalNewName();
 		menu.setText(getName());
-		WidgetAdapter menuAdapter = ExtensionRegistry
-				.createWidgetAdapter(JMenuItem.class);
+		WidgetAdapter menuAdapter = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
 		JMenuItem jmenu = (JMenuItem) menuAdapter.getWidget();
-		menu.add(jmenu);		
+		menu.add(jmenu);
 		menu.setSize(menu.getPreferredSize());
 		menu.doLayout();
 		return menu;
 	}
+
 	@Override
 	public String getBasename() {
 		String className = getWidgetClass().getName();
@@ -260,6 +264,7 @@ public class JMenuAdapter extends CompositeAdapter {
 			className = className.substring(dot + 1);
 		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 	}
+
 	@Override
 	protected Component newWidget() {
 		return new JMenu();
@@ -271,8 +276,6 @@ public class JMenuAdapter extends CompositeAdapter {
 		return operation.isInside_popup();
 	}
 
-
-
 	@Override
 	public boolean removeChild(Component child) {
 		boolean success = super.removeChild(child);
@@ -280,13 +283,15 @@ public class JMenuAdapter extends CompositeAdapter {
 		widgetPressed();
 		return success;
 	}
+
 	@Override
 	public Class getWidgetClass() {
 		return JMenu.class;
 	}
+
 	@Override
 	public IAdapter getParent() {
-		JMenu jb = (JMenu) getWidget();		
+		JMenu jb = (JMenu) getWidget();
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
 		ButtonGroup bg = dbm.getGroup();
 		if (bg != null) {
@@ -299,14 +304,14 @@ public class JMenuAdapter extends CompositeAdapter {
 		}
 		return super.getParent();
 	}
+
 	@Override
 	public void deleteNotify() {
 		JMenu jb = (JMenu) getWidget();
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
 		ButtonGroup bg = dbm.getGroup();
-		if(bg!=null){
+		if (bg != null) {
 			bg.remove(jb);
 		}
-	}	
+	}
 }
-
