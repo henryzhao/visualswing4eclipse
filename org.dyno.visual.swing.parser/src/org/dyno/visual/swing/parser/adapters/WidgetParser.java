@@ -350,7 +350,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				if (parser != null) {					
 					String getMethodName = parser.getCreationMethodName();
 					if (!adaptable.isRoot())
-						builder.append(((CompositeAdapter) adaptable).getID() + ".");
+						builder.append(adaptable.getID() + ".");
 					builder.append("setComponentPopupMenu(" + getMethodName + "());\n");
 				}
 			}
