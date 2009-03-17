@@ -138,7 +138,6 @@ public class JPopupMenuAdapter extends CompositeAdapter {
 		};
 		WidgetAdapter wa = ExtensionRegistry.createWidgetAdapter(JMenuItem.class);
 		JMenuItem jmi = (JMenuItem) wa.getWidget();
-		jmi.setText("menu item");
 		menu.add(jmi);
 		menu.setSize(menu.getPreferredSize());
 		menu.doLayout();

@@ -41,7 +41,7 @@ import org.eclipse.jface.viewers.Viewer;
  */
 @SuppressWarnings("unchecked")
 public class ComponentTreeContentProvider implements ITreeContentProvider {
-	
+
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		if (root != null) {
@@ -50,11 +50,9 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			} else if (parentElement == root.getDesigner()) {
 				Component rootComp = root.getDesigner().getRoot();
 				if (rootComp != null) {
-					WidgetAdapter adapter = WidgetAdapter
-							.getWidgetAdapter(rootComp);
+					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(rootComp);
 					if (adapter != null)
-						return new Object[] { otherComponents,
-								adapter.getWidget() };
+						return new Object[] { otherComponents, adapter.getWidget() };
 					else
 						return new Object[] { otherComponents };
 				} else {
@@ -62,15 +60,13 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				}
 			} else if (parentElement == otherComponents) {
 				List<InvisibleAdapter> children = root.getInvisibles();
-				Object[] values = new Object[children == null ? 0 : children
-						.size()];
+				Object[] values = new Object[children == null ? 0 : children.size()];
 				if (children != null)
 					children.toArray(values);
 				return values;
 			} else if (parentElement instanceof Component) {
 				Component component = (Component) parentElement;
-				WidgetAdapter adapter = WidgetAdapter
-						.getWidgetAdapter(component);
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(component);
 				Map<EventSetDescriptor, IEventListenerModel> events = adapter.getEventDescriptor();
 				Set<EventSetDescriptor> keys = events.keySet();
 				List<Object> children = new ArrayList<Object>();
@@ -78,14 +74,12 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 					EventDesc ed = new EventDesc(component);
 					List<EventSet> eventSets = new ArrayList<EventSet>();
 					for (EventSetDescriptor key : keys) {
-						EventSet set = new EventSet(key, key.getDisplayName(),
-								ed);
+						EventSet set = new EventSet(key, key.getDisplayName(), ed);
 						eventSets.add(set);
 						IEventListenerModel model = events.get(key);
 						List<EventMethod> mlist = new ArrayList<EventMethod>();
 						for (MethodDescriptor mthd : model.methods()) {
-							EventMethod method = new EventMethod(mthd, model
-									.getDisplayName(mthd), set);
+							EventMethod method = new EventMethod(mthd, model.getDisplayName(mthd), set);
 							mlist.add(method);
 						}
 						set.setMethods(mlist);
@@ -93,11 +87,11 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 					ed.setEventSets(eventSets);
 					children.add(ed);
 				}
-				if(component instanceof JComponent){
+				if (component instanceof JComponent) {
 					JComponent jcomponent = (JComponent) component;
 					JPopupMenu jpm = jcomponent.getComponentPopupMenu();
 					WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
-					if(jpmAdapter!=null){
+					if (jpmAdapter != null) {
 						children.add(jpm);
 					}
 				}
@@ -123,8 +117,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				Object[] children = new Object[list.size()];
 				return list.toArray(children);
 			} else if (parentElement instanceof InvisibleAdapter) {
-				List children = ((InvisibleAdapter) parentElement)
-						.getElements();
+				List children = ((InvisibleAdapter) parentElement).getElements();
 				if (children != null)
 					return children.toArray();
 			}
@@ -168,7 +161,6 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		return null;
 	}
 
-	
 	@Override
 	public boolean hasChildren(Object element) {
 		if (element == root) {
@@ -178,17 +170,19 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		} else if (element instanceof Component) {
 			Component child = (Component) element;
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-			Map<EventSetDescriptor, IEventListenerModel> events=adapter.getEventDescriptor();
+			Map<EventSetDescriptor, IEventListenerModel> events = adapter.getEventDescriptor();
 			Set<EventSetDescriptor> keys = events.keySet();
 			if (!keys.isEmpty()) {
 				return true;
 			}
-			JComponent jcomponent = (JComponent) child;
-			JPopupMenu jpm = jcomponent.getComponentPopupMenu();
-			WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
-			if(jpmAdapter!=null){
-				return true;
-			}			
+			if (child instanceof JComponent) {
+				JComponent jcomponent = (JComponent) child;
+				JPopupMenu jpm = jcomponent.getComponentPopupMenu();
+				WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+				if (jpmAdapter != null) {
+					return true;
+				}
+			}
 			if (adapter instanceof CompositeAdapter) {
 				CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 				int count = compositeAdapter.getChildCount();

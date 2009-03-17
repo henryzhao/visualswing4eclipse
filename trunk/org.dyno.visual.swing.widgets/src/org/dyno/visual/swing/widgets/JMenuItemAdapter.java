@@ -34,12 +34,13 @@ public class JMenuItemAdapter extends WidgetAdapter {
 	@Override
 	protected Component createWidget() {
 		JMenuItem jmi = new JMenuItem();
-		requestGlobalNewName();		
+		requestGlobalNewName();
 		jmi.setText(getName());
 		jmi.setSize(jmi.getPreferredSize());
 		jmi.doLayout();
 		return jmi;
 	}
+
 	@Override
 	public String getBasename() {
 		String className = getWidgetClass().getName();
@@ -48,24 +49,32 @@ public class JMenuItemAdapter extends WidgetAdapter {
 			className = className.substring(dot + 1);
 		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 	}
+
 	public CompositeAdapter getParentAdapter() {
 		Component me = getWidget();
 		JPopupMenu jpm = (JPopupMenu) me.getParent();
-		Component parent = jpm.getInvoker();
-		return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+		if (WidgetAdapter.getWidgetAdapter(jpm) != null) {
+			return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(jpm);
+		} else {
+			Component parent = jpm.getInvoker();
+			return (CompositeAdapter) WidgetAdapter.getWidgetAdapter(parent);
+		}
 	}
 
 	public boolean isMoveable() {
 		return true;
 	}
+
 	public boolean isResizable() {
 		return false;
 	}
+
 	@Override
 	protected Component newWidget() {
 		JMenuItem jmi = new JMenuItem();
 		return jmi;
 	}
+
 	@Override
 	public Component cloneWidget() {
 		JMenuItem jmi = (JMenuItem) super.cloneWidget();
@@ -73,13 +82,15 @@ public class JMenuItemAdapter extends WidgetAdapter {
 		jmi.setText(origin.getText());
 		return jmi;
 	}
+
 	@Override
 	public Class getWidgetClass() {
 		return JMenuItem.class;
 	}
+
 	@Override
 	public IAdapter getParent() {
-		JMenuItem jb = (JMenuItem) getWidget();		
+		JMenuItem jb = (JMenuItem) getWidget();
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
 		ButtonGroup bg = dbm.getGroup();
 		if (bg != null) {
@@ -92,15 +103,15 @@ public class JMenuItemAdapter extends WidgetAdapter {
 		}
 		return super.getParent();
 	}
+
 	@Override
 	public void deleteNotify() {
 		JMenuItem jb = (JMenuItem) getWidget();
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
 		ButtonGroup bg = dbm.getGroup();
-		if(bg!=null){
+		if (bg != null) {
 			bg.remove(jb);
 		}
 	}
-	
-}
 
+}
