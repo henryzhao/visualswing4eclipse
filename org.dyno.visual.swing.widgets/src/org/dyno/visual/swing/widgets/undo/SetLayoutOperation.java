@@ -67,7 +67,7 @@ public class SetLayoutOperation extends AbstractOperation {
 		jpaneladapter.doLayout();
 		jpanel.validate();
 		jpaneladapter.setDirty(true);
-		jpaneladapter.changeNotify();
+		jpaneladapter.addNotify();
 		return Status.OK_STATUS;
 	}
 
@@ -93,7 +93,7 @@ public class SetLayoutOperation extends AbstractOperation {
 		jpaneladapter.setLayoutAdapter(null);
 		jpanel.validate();
 		jpaneladapter.setDirty(true);
-		jpaneladapter.changeNotify();
+		jpaneladapter.addNotify();
 		return Status.OK_STATUS;
 	}
 

@@ -25,7 +25,7 @@ public class JMenuMouseDelegate extends MouseInputAdapter implements
 		if (e != null && !e.isControlDown())
 			adapter.clearAllSelected();
 		adapter.setSelected(true);
-		adapter.changeNotify();
+		adapter.addNotify();
 		if (e != null)
 			e.consume();
 	}

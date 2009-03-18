@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing.widgets; singleton:=true
-Bundle-Version: 0.9.9.I20090226-1830
+Bundle-Version: 0.9.10.M20090318-1400
 Bundle-Activator: org.dyno.visual.swing.widgets.WidgetPlugin
 Require-Bundle: org.dyno.visual.swing,
  org.eclipse.ui,

@@ -49,7 +49,7 @@ public class DelEventAction extends Action {
 				eventDesc.remove(eventSet);
 			}
 			adapter.setDirty(true);
-			adapter.changeNotify();
+			adapter.addNotify();
 		}
 	}
 }

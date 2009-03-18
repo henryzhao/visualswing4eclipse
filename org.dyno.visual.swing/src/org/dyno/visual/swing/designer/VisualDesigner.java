@@ -867,4 +867,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public void clearToolSelection() {
 		editor.clearToolSelection();
 	}
+
+	public void showTooltipText(String string) {
+		this.glass.setToolTipText(string);
+	}
 }

@@ -397,19 +397,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 	}
 
-	public void changeNotify() {
-		VisualDesigner d = getDesigner();
-		if (d != null) {
-			d.publishSelection();
-		}
-	}
-
 	public void addNotify() {
 		VisualDesigner d = getDesigner();
 		if (d != null) {
 			d.publishSelection();
 		}
 	}
+
 
 	public VisualDesigner getDesigner() {
 		Component w = getRootPane();
@@ -1055,5 +1049,11 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 
 	public void attachWidget(Component attached) {
 		setWidget(attached);
+	}
+
+	public void showTooltipText(String string) {
+		if(getDesigner()!=null){
+			getDesigner().showTooltipText(string);
+		}
 	}
 }

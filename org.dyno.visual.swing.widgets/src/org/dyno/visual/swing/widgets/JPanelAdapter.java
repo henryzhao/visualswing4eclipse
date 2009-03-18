@@ -33,6 +33,7 @@ import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.dyno.visual.swing.widgets.delegate.DefaultMouseInputDelegate;
 import org.dyno.visual.swing.widgets.undo.BottomAlignmentOperation;
 import org.dyno.visual.swing.widgets.undo.CenterAlignmentOperation;
 import org.dyno.visual.swing.widgets.undo.KeyDownOperation;
@@ -91,8 +92,12 @@ public class JPanelAdapter extends CompositeAdapter {
 	public Object getAdapter(Class adapterClass) {
 		if (adapterClass == MouseInputListener.class) {
 			LayoutAdapter adapter = getLayoutAdapter();
-			if (adapter != null)
-				return adapter.getAdapter(adapterClass);
+			if (adapter != null) {
+				MouseInputListener l = (MouseInputListener) adapter.getAdapter(adapterClass);
+				if (l.getClass() != DefaultMouseInputDelegate.class) {
+					return l;
+				}
+			}
 		}
 		return super.getAdapter(adapterClass);
 	}
@@ -115,9 +120,9 @@ public class JPanelAdapter extends CompositeAdapter {
 			return FlowLayout.class;
 		}
 		Class testClass;
-		if(isRoot()&&comp.getClass().getSuperclass()!=JPanel.class){
+		if (isRoot() && comp.getClass().getSuperclass() != JPanel.class) {
 			testClass = comp.getClass().getSuperclass();
-		}else{
+		} else {
 			testClass = comp.getClass();
 		}
 		try {

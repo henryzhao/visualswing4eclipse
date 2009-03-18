@@ -47,7 +47,7 @@ public class DuplicateOperation extends AbstractOperation {
 			copyedList.add(adapter.getWidget());
 			parents.add(parentAdapter);
 			parentAdapter.setDirty(true);
-			parentAdapter.changeNotify();
+			parentAdapter.addNotify();
 			parentAdapter.repaintDesigner();
 		}
 		return Status.OK_STATUS;
@@ -66,7 +66,7 @@ public class DuplicateOperation extends AbstractOperation {
 			parentAdapter.removeChild(child);
 			parents.add(parentAdapter);
 			parentAdapter.setDirty(true);
-			parentAdapter.changeNotify();
+			parentAdapter.addNotify();
 			parentAdapter.repaintDesigner();
 		}
 		return Status.OK_STATUS;
