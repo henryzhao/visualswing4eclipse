@@ -67,7 +67,7 @@ public class VarChangeOperation extends AbstractOperation {
 					for(IRenamingListener listener:listeners){
 						listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
 					}
-					adapter.changeNotify();
+					adapter.addNotify();
 					break;
 				}
 			} else
@@ -93,7 +93,7 @@ public class VarChangeOperation extends AbstractOperation {
 		for(IRenamingListener listener:listeners){
 			listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
 		}		
-		adapter.changeNotify();
+		adapter.addNotify();
 		return Status.OK_STATUS;
 	}
 

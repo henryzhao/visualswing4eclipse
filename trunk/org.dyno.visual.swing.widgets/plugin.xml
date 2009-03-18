@@ -1091,6 +1091,9 @@
       <context
             class="org.dyno.visual.swing.widgets.ButtonGroupCustomizer">
       </context>
+      <context
+            class="org.dyno.visual.swing.widgets.JPopupMenuContextCustomizer">
+      </context>
    </extension>
    <extension
          point="org.dyno.visual.swing.invisibleAdapter">
@@ -1103,7 +1106,7 @@
          point="org.dyno.visual.swing.adapters">
       <interface
             class="javax.swing.event.MouseInputListener"
-            default="org.dyno.visual.swing.widgets.delegate.WidgetMouseInputAdapter">
+            default="org.dyno.visual.swing.widgets.delegate.DefaultMouseInputDelegate">
          <adapter
                class="javax.swing.JTabbedPane"
                implementation="org.dyno.visual.swing.widgets.delegate.JTabbedPaneMouseDelegate">
@@ -1135,6 +1138,10 @@
          <adapter
                class="javax.swing.JCheckBox"
                implementation="org.dyno.visual.swing.widgets.delegate.JCheckBoxMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JComponent"
+               implementation="org.dyno.visual.swing.widgets.delegate.WidgetMouseInputAdapter">
          </adapter></interface>
       <interface
             class="org.dyno.visual.swing.plugin.spi.IDesignOperation"

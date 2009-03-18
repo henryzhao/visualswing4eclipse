@@ -287,7 +287,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 						}
 					}
 				}
-				adapter.changeNotify();
+				adapter.addNotify();
 				adapter.setDirty(true);
 			} else {
 				if (lastParent != null) {
@@ -390,7 +390,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 				if (!e.isControlDown())
 					designer.clearSelection();
 				adapter.setSelected(true);
-				adapter.changeNotify();
+				adapter.addNotify();
 				dragging_event = null;
 				currentAdapters = null;
 				state = STATE_MOUSE_DRAGGING;
@@ -483,7 +483,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 			if (!e.isControlDown())
 				glassPlane.getDesigner().clearSelection();
 			adapter.setSelected(true);
-			adapter.changeNotify();
+			adapter.addNotify();
 			state = STATE_SELECTION;
 			break;
 		default:
@@ -690,7 +690,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 				designer.clearSelection();
 			}
 			adapter.setSelected(true);
-			adapter.changeNotify();
+			adapter.addNotify();
 			dragging_event = null;
 			currentAdapters = null;
 			state = STATE_MOUSE_HOVER;

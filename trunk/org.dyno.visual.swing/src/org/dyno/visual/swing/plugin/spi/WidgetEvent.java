@@ -2,22 +2,22 @@ package org.dyno.visual.swing.plugin.spi;
 
 
 public class WidgetEvent {
-	private CompositeAdapter parent;
+	private WidgetAdapter parent;
 	private WidgetAdapter target;
-	private CompositeAdapter destinationParent;
-	public WidgetEvent(CompositeAdapter parent, WidgetAdapter target){
+	private WidgetAdapter destinationParent;
+	public WidgetEvent(WidgetAdapter parent, WidgetAdapter target){
 		this.parent = parent;
 		this.target = target;
 	}
-	public WidgetEvent(CompositeAdapter src, CompositeAdapter dest, WidgetAdapter target){
+	public WidgetEvent(WidgetAdapter src, WidgetAdapter dest, WidgetAdapter target){
 		this.parent = src;
 		this.destinationParent = dest;
 		this.target = target;
 	}
-	public CompositeAdapter getParent(){
+	public WidgetAdapter getParent(){
 		return parent;
 	}
-	public CompositeAdapter getDestinationParent(){
+	public WidgetAdapter getDestinationParent(){
 		return destinationParent;
 	}
 	public WidgetAdapter getTarget(){

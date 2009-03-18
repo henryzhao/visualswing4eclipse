@@ -68,7 +68,7 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 					for(IRenamingListener listener:listeners){
 						listener.adapterRenamed(adapter.getCompilationUnit(), group);
 					}
-					adapter.changeNotify();
+					adapter.addNotify();
 					break;
 				}
 			} else
@@ -88,7 +88,7 @@ public class ButtonGroupRenamingOperation extends AbstractOperation {
 			throws ExecutionException {
 		group.setName(lastName);
 		group.setLastName(lastLastName);
-		adapter.changeNotify();
+		adapter.addNotify();
 		adapter.lockDesigner();
 		List<IRenamingListener> listeners = ExtensionRegistry.getRenamingListeners();
 		for(IRenamingListener listener:listeners){

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.dyno.visual.swing.feature_0.9.9.I20090311-0000.jar" id="org.dyno.visual.swing.feature" version="0.9.9.I20090311-0000"/>
+   <feature url="features/org.dyno.visual.swing.feature_0.9.10.M20090318-1400.jar" id="org.dyno.visual.swing.feature" version="0.9.10.M20090318-1400"/>
 </site>

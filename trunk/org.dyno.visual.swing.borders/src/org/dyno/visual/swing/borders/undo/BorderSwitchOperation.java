@@ -43,7 +43,7 @@ public class BorderSwitchOperation extends AbstractOperation {
 		target.setBorder((Border)factory.newInstance(target));
 		target.repaint();
 		targetAdapter.setDirty(true);
-		targetAdapter.changeNotify();
+		targetAdapter.addNotify();
 		return Status.OK_STATUS;
 	}
 
@@ -57,7 +57,7 @@ public class BorderSwitchOperation extends AbstractOperation {
 		target.setBorder(prevousBorder);
 		target.repaint();
 		targetAdapter.setDirty(true);
-		targetAdapter.changeNotify();
+		targetAdapter.addNotify();
 		return Status.OK_STATUS;
 	}
 }

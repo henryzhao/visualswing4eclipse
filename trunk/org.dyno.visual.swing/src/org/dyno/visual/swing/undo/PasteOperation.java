@@ -58,7 +58,7 @@ public class PasteOperation extends AbstractOperation {
 		}
 		rootAdapter.setDirty(true);
 		rootAdapter.repaintDesigner();
-		rootAdapter.changeNotify();
+		rootAdapter.addNotify();
 		return Status.OK_STATUS;
 	}
 

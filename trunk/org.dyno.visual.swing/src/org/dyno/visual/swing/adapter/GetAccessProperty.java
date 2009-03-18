@@ -39,7 +39,7 @@ public class GetAccessProperty extends PropertyAdapter {
 		adapter.setGetAccess(value == null ? WidgetAdapter.ACCESS_PRIVATE
 				: (Integer) value);
 		adapter.setDirty(true);
-		adapter.changeNotify();
+		adapter.addNotify();
 	}
 
 	@Override

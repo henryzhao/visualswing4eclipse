@@ -48,7 +48,7 @@ public class BeanNameProperty extends PropertyAdapter {
 		for(IRenamingListener listener:listeners){
 			listener.adapterRenamed(adapter.getCompilationUnit(), adapter);
 		}
-		adapter.changeNotify();
+		adapter.addNotify();
 	}
 
 	@Override

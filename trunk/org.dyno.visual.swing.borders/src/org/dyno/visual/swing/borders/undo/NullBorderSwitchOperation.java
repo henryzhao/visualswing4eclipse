@@ -40,7 +40,7 @@ public class NullBorderSwitchOperation extends AbstractOperation {
 		target.setBorder(null);
 		target.repaint();
 		targetAdapter.setDirty(true);
-		targetAdapter.changeNotify();
+		targetAdapter.addNotify();
 		return Status.OK_STATUS;
 	}
 
@@ -54,7 +54,7 @@ public class NullBorderSwitchOperation extends AbstractOperation {
 		target.setBorder(prevousBorder);
 		target.repaint();
 		targetAdapter.setDirty(true);
-		targetAdapter.changeNotify();
+		targetAdapter.addNotify();
 		return Status.OK_STATUS;
 	}
 }

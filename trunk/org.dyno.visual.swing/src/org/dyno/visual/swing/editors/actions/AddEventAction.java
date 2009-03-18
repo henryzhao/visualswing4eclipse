@@ -60,7 +60,7 @@ public class AddEventAction extends Action {
 			model.addMethod(methodDesc);
 		}
 		adapter.setDirty(true);
-		adapter.changeNotify();
+		adapter.addNotify();
 		VisualDesigner designer = adapter.getDesigner();
 		if (designer != null) {
 			VisualSwingEditor editor = designer.getEditor();

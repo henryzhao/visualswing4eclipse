@@ -115,7 +115,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				}
 			}
 			root.setDirty(true);
-			root.changeNotify();
+			root.addNotify();
 		}
 	}
 
@@ -210,7 +210,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				removeButtonFromGroup(button);
 				this.buttonGroup.add(button);
 				this.rootAdapter.setDirty(true);
-				this.rootAdapter.changeNotify();
+				this.rootAdapter.addNotify();
 			}
 		}
 	}
@@ -239,7 +239,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			if (isInGroup(buttonGroup, button))
 				this.buttonGroup.remove(button);
 			this.rootAdapter.setDirty(true);
-			this.rootAdapter.changeNotify();
+			this.rootAdapter.addNotify();
 		}
 	}
 
@@ -319,7 +319,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				}
 			}
 			root.setDirty(true);
-			root.changeNotify();
+			root.addNotify();
 		}
 	}
 
@@ -358,7 +358,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 				}
 			}
 			rootAdapter.setDirty(true);
-			rootAdapter.changeNotify();
+			rootAdapter.addNotify();
 		}
 	}
 

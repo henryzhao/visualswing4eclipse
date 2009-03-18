@@ -63,7 +63,7 @@ public class DeleteOperation extends AbstractOperation {
 			parentAdapter.getWidget().validate();
 			if (success){
 				parentAdapter.setDirty(true);
-				adapter.deleteNotify();
+				adapter.addNotify();
 				WidgetEvent we = new WidgetEvent(parentAdapter, adapter);
 				for(IWidgetListener listener:ExtensionRegistry.getWidgetListeners()){
 					listener.widgetRemoved(we);

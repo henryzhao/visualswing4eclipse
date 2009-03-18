@@ -86,7 +86,7 @@ public class NullLayoutOperation extends AbstractOperation {
 		adapter.setLayoutAdapter(null);
 		jpanel.validate();
 		adapter.setDirty(true);
-		adapter.changeNotify();
+		adapter.addNotify();
 		return Status.OK_STATUS;
 	}
 

@@ -7,24 +7,20 @@ import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JRadioButton;
-import javax.swing.event.MouseInputAdapter;
 
-import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.widgets.JRadioButtonAdapter;
-import org.eclipse.core.runtime.IAdaptable;
 
-public class JRadioButtonMouseDelegate extends MouseInputAdapter implements
-		IAdaptableContext {
-	private JRadioButtonAdapter adapter;
-
+public class JRadioButtonMouseDelegate extends WidgetMouseInputAdapter {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		assert e!=null;
+		super.mousePressed(e);
+		if(e.isConsumed())
+			return;
 		if (e.getButton() == MouseEvent.BUTTON1) {
-			JRadioButton radio = (JRadioButton) adapter.getWidget();
+			JRadioButton radio = (JRadioButton) adaptable.getWidget();
 			radio.setSelected(true);
-			adapter.setDirty(true);
+			adaptable.setDirty(true);
 			DefaultButtonModel bm = (DefaultButtonModel) radio.getModel();
 			ButtonGroup bg = bm.getGroup();
 			if (bg != null) {
@@ -39,13 +35,8 @@ public class JRadioButtonMouseDelegate extends MouseInputAdapter implements
 					}
 				}
 			}
-			adapter.repaintDesigner();
+			adaptable.repaintDesigner();
 		}
 		e.setSource(null);
-	}
-
-	@Override
-	public void setAdaptable(IAdaptable adaptable) {
-		this.adapter = (JRadioButtonAdapter) adaptable;
 	}
 }
