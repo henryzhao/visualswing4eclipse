@@ -17,6 +17,9 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -41,6 +44,13 @@ public class WidgetSelection extends ArrayList<Component> implements IStructured
 			return;
 		if (adapter.isSelected())
 			add(adapter.getWidget());
+		if(comp instanceof JComponent){
+			JComponent jcomp = (JComponent) comp;
+			JPopupMenu jpopup = jcomp.getComponentPopupMenu();
+			if(jpopup!=null&&WidgetAdapter.getWidgetAdapter(jpopup)!=null){
+				addSelection(jpopup);
+			}
+		}
 		if (adapter instanceof CompositeAdapter) {
 			CompositeAdapter compositeAdapter = (CompositeAdapter) adapter;
 			int count = compositeAdapter.getChildCount();
