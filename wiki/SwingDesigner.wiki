@@ -1,9 +1,9 @@
 #labels Featured,Phase-Design,Phase-Implementation
-=SwingDesigner for Eclipse =
+=Visual Swing for Eclipse =
 
  ==简介:==
 
-    SwingDesigner 是用Eclipse开发的 一款免费的、开源的、功能上与Mattise Project相近的界面设计工具插件. 他可以简化您开发应用程序的步骤,缩短开Swing于VE(Eclipse的另一款插件)，每个组件用一个getXXX返回，代码可读性很强，而且开发者可以自由修改代码,保存后保持和界面同步更新.Designer 发周期.它具有很多Mattise 所不具有的功能. 生成的代码也没有NetBeans 生成的代码那样复杂, 这个工具不需要form文件，生成的代码也是类似
+    Visual Swing是用Eclipse开发的 一款免费的、开源的、功能上与Mattise Project相近的界面设计工具插件. 他可以简化您开发应用程序的步骤,缩短开Swing于VE(Eclipse的另一款插件)，每个组件用一个getXXX返回，代码可读性很强，而且开发者可以自由修改代码,保存后保持和界面同步更新.Designer 发周期.它具有很多Mattise 所不具有的功能. 生成的代码也没有NetBeans 生成的代码那样复杂, 这个工具不需要form文件，生成的代码也是类似
 
 
 开发工具 : Eclipse3.4
@@ -11,7 +11,7 @@
 JDK版本 : JDK 1.6 (NimbusLookAndFeel 需要JDK1.6 u10)或更高
 
 开发平台 : Windows XP SP2
-开发动机:(为什么是基于Eclipse的SwingDesigner?)
+开发动机:(为什么是基于Eclipse的Visual Swing?)
 
    一直以来非常喜欢Swing，对Swing的研究也有很长一段时间了，一直希望Swing在Java桌面开发中扮演重要的角色。但是很久以来Java桌面开发始终是个弱项，其中很大一部分原因是缺乏比较好用的界面设计工具。
 
