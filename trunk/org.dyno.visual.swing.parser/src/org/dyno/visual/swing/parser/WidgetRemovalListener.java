@@ -4,6 +4,9 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
+
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IWidgetListener;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -45,6 +48,17 @@ public class WidgetRemovalListener implements IWidgetListener{
 		String ID = targetAdapter.getID();
 		if (!names.contains(ID))
 			names.add(ID);
+		Component targetComponent = targetAdapter.getWidget();
+		if(targetComponent instanceof JComponent){
+			JComponent target = (JComponent) targetComponent;
+			if(target.getComponentPopupMenu()!=null){
+				JPopupMenu jpm = target.getComponentPopupMenu();
+				if(jpm!=null&&WidgetAdapter.getWidgetAdapter(jpm)!=null){
+					WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
+					removeNameRecursively(jpmAdapter, names);
+				}
+			}
+		}
 		if(targetAdapter instanceof CompositeAdapter){
 			CompositeAdapter composite = (CompositeAdapter)targetAdapter;
 			int count = composite.getChildCount();
