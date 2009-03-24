@@ -46,8 +46,8 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 			this.value = value;
 		}
 	}
-	public static final String VISUAL_SWING_MAGIC="//VS4E";
-	private static String VISUAL_SWING_CLASS_TAILER=".*"+VISUAL_SWING_MAGIC+".*";
+	public static final String VISUAL_SWING_MAGIC="VS4E";
+	private static String VISUAL_SWING_CLASS_TAILER=".*//\\s*"+VISUAL_SWING_MAGIC+".*";
 	private static QualifiedName COMPONENT_TYPE = new QualifiedName("component.type", "Component Type");
 	private static QualifiedName[] QUALIFIERS = new QualifiedName[] { COMPONENT_TYPE };
 	private static String CONTENT_TYPE_PATTERN_EXTENSION_POINT = "org.dyno.visual.swing.contentTypePattern";
