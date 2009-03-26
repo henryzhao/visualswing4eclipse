@@ -29,7 +29,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 
-import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.ISyncUITask;
 import org.dyno.visual.swing.base.JavaUtil;
@@ -135,7 +134,11 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		return null;
 	}
-
+	private static synchronized Object runWithLnf(LookAndFeel lnf,
+			ISyncUITask task) throws Throwable {
+		UIManager.setLookAndFeel(lnf);
+		return task.doTask();
+	}
 	private WidgetAdapter processType(ICompilationUnit unit, IType type) throws ParserException {
 		try {
 			IJavaProject java_project = type.getJavaProject();
@@ -146,7 +149,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				ILookAndFeelAdapter lnfAdapter = ExtensionRegistry.getLnfAdapter(lnf);
 				if (lnfAdapter != null) {
 					LookAndFeel newlnf = lnfAdapter.getLookAndFeelInstance();
-					Component bean = (Component) AwtEnvironment.runWithLnf(newlnf, new ISyncUITask() {
+					Component bean = (Component) runWithLnf(newlnf, new ISyncUITask() {
 						@Override
 						public Object doTask() throws Throwable {
 							return createBeanFromClass(beanClass);

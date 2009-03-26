@@ -48,8 +48,8 @@ import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.swt_awt.GTKAWTBridgePopupFix;
-import org.dyno.visual.swing.swt_awt.Platform;
+import org.eclipse.albireo.core.SwtPopupRegistry;
+import org.eclipse.albireo.internal.Platform;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -308,7 +308,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (Platform.isGtk()) {
 			Runnable r = new Runnable() {
 				public void run() {
-					GTKAWTBridgePopupFix.showMenu(menu);
+					SwtPopupRegistry.getInstance().setMenu(glass, false, menu);
 				}
 			};
 			parent.getShell().getDisplay().asyncExec(r);
