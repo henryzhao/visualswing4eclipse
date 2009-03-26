@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name.0
+Bundle-SymbolicName: org.dyno.visual.swing.layouts; singleton:=true
+Bundle-Version: 0.9.10.M20090318-1400
+Require-Bundle: org.dyno.visual.swing,
+ org.eclipse.jdt.core,
+ org.eclipse.ui.views,
+ org.eclipse.swt,
+ org.eclipse.jface,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.workbench
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: %Bundle-Vendor.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Activator: org.dyno.visual.swing.widgets.layout.LayoutPlugin
+Bundle-Localization: plugin

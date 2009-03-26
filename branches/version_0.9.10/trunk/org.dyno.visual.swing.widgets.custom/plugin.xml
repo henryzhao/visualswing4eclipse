@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.dyno.visual.swing.widgetAdapter"
+         id="org.dyno.visual.swing.widgets.beans"
+         name="%SwingBeans">
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.widgetGroup">
+      <group
+            displayName="Custom"
+            expanded="true"
+            id="custom">
+      </group>
+   </extension>
+</plugin>

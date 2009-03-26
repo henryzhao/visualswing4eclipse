@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name.0
+Bundle-SymbolicName: org.dyno.visual.swing.lnfs;singleton:=true
+Bundle-Version: 0.9.10.M20090318-1400
+Require-Bundle: org.dyno.visual.swing,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.core,
+ org.eclipse.ui,
+ org.eclipse.ui.views
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: %Bundle-Vendor.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Activator: org.dyno.visual.swing.lnfs.LnfPlugin
+Bundle-Localization: plugin

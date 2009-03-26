@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.dyno.visual.swing.widgets.layoutAdapter">
+      <layout
+            class="org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter"
+            layoutClass="org.dyno.visual.swing.layouts.GroupLayout" 
+            layoutBean="org.dyno.visual.swing.widgets.grouplayout.GroupLayoutAdapter" 
+            name="%GroupLayout"
+            default="true"/>
+   </extension>
+</plugin>
