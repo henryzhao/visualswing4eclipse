@@ -47,6 +47,7 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 		}
 	}
 	public static final String VISUAL_SWING_MAGIC="VS4E";
+	public static final String VISUAL_SWING_MAGIC_COMMENT="//VS4E";
 	private static String VISUAL_SWING_CLASS_TAILER=".*//\\s*"+VISUAL_SWING_MAGIC+".*";
 	private static QualifiedName COMPONENT_TYPE = new QualifiedName("component.type", "Component Type");
 	private static QualifiedName[] QUALIFIERS = new QualifiedName[] { COMPONENT_TYPE };

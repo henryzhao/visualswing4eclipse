@@ -50,7 +50,7 @@ public class NewComponentPage extends NewClassWizardPage implements IConstants{
 	}
 	@Override
 	protected String getTypeComment(ICompilationUnit parentCU) {
-		return VisualSwingContentDescriber.VISUAL_SWING_MAGIC+" -- DO NOT REMOVE THIS LINE!";
+		return VisualSwingContentDescriber.VISUAL_SWING_MAGIC_COMMENT+" -- DO NOT REMOVE THIS LINE!";
 	}
 }
 
