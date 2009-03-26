@@ -28,7 +28,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
-import org.dyno.visual.swing.swt_awt.Platform;
+import org.eclipse.albireo.internal.Platform;
 
 /**
  * 

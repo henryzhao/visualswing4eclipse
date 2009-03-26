@@ -32,7 +32,6 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
-import org.dyno.visual.swing.base.AwtEnvironment;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.ISyncUITask;
@@ -42,7 +41,8 @@ import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.ISourceParser;
 import org.dyno.visual.swing.plugin.spi.ParserFactory;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.swt_awt.EmbeddedSwingComposite;
+import org.eclipse.albireo.core.AwtEnvironment;
+import org.eclipse.albireo.core.SwingControl;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -88,7 +88,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 public class VisualSwingEditor extends AbstractDesignerEditor implements
 		IResourceChangeListener, ISelectionProvider, IPartListener {
 	private List<ISelectionChangedListener> listeners;
-	private EmbeddedSwingComposite embedded;
+	private SwingControl embedded;
 	private VisualDesigner designer;
 	private VisualSwingOutline outline;
 	private HashMap<String, EditorAction> actions;
@@ -233,11 +233,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					SWT.COLOR_WHITE));
 			designerContainer.setLayout(new FillLayout());
 			embedded = new EmbeddedVisualDesigner(designerContainer);
-			embedded.populate();
-			if (!isCreatingDesignerUI) {
-				isCreatingDesignerUI = true;
-				new CreateDesignerUIJob(false).schedule();
-			}
 		}
 	}
 
@@ -413,7 +408,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		isGeneratingCode = false;
 	}
 
-	class EmbeddedVisualDesigner extends EmbeddedSwingComposite {
+	class EmbeddedVisualDesigner extends SwingControl {
 		public EmbeddedVisualDesigner(Composite parent) {
 			super(parent, SWT.NONE);
 		}
@@ -427,8 +422,18 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			backgroundPanel.add(designer, BorderLayout.CENTER);
 			backgroundPanel.setBackground(java.awt.Color.white);
 			refreshActionState();
+			if (!isCreatingDesignerUI) {
+				isCreatingDesignerUI = true;
+				new CreateDesignerUIJob(false).schedule();
+			}			
 			return backgroundPanel;
 		}
+
+		@Override
+		public Composite getLayoutAncestor() {
+			return getParent();
+		}
+		
 	}
 
 	public void setLnfClassname(String lnfClassname) {
