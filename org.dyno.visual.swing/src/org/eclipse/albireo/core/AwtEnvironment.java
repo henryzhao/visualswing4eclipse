@@ -37,7 +37,6 @@ import org.eclipse.albireo.internal.AwtDialogListener;
 import org.eclipse.albireo.internal.FocusDebugging;
 import org.eclipse.albireo.internal.FocusHandler;
 import org.eclipse.albireo.internal.GlobalFocusHandler;
-import org.eclipse.albireo.internal.Platform;
 import org.eclipse.albireo.internal.SwtInputBlocker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;

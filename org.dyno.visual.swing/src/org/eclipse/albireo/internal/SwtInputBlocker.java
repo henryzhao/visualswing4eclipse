@@ -13,6 +13,7 @@ package org.eclipse.albireo.internal;
 
 import java.util.Stack;
 
+import org.eclipse.albireo.core.Platform;
 import org.eclipse.albireo.core.ThreadingHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;

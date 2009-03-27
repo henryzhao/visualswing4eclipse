@@ -19,6 +19,7 @@ import java.util.WeakHashMap;
 import javax.swing.JComponent;
 
 import org.eclipse.albireo.core.AwtEnvironment;
+import org.eclipse.albireo.core.Platform;
 import org.eclipse.albireo.core.SwingControl;
 import org.eclipse.albireo.core.ThreadingHandler;
 import org.eclipse.swt.SWT;
@@ -146,6 +147,9 @@ public class SwtPopupHandler {
         int x = event.getX();
         int y = event.getY();
         // Climb up until the we find the SwingControl mapped to one of our parents
+        showComponentPopup(component, x, y);
+    }
+    public void showComponentPopup(java.awt.Component component, int x, int  y){
         java.awt.Component parent = component;
         while (parent != null && (getSwtParent(parent) == null)) {
             x += parent.getX();
@@ -156,11 +160,10 @@ public class SwtPopupHandler {
             SwingControl swtParent = getSwtParent(parent);
             int xAbsolute = x;
             int yAbsolute = y;
-            java.awt.Component subcomp = (Component)event.getSource();
-            showPopupMenu(swtParent, subcomp, x, y, xAbsolute, yAbsolute);
+            showPopupMenu(swtParent, component, x, y, xAbsolute, yAbsolute);
         }
     }
-    
+
 
     // Trigger the display of the popup menu.
     protected void showPopupMenu(final SwingControl swtParent, final java.awt.Component component, final int x, final int y, final int xAbsolute, final int yAbsolute) {

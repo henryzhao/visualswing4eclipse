@@ -27,6 +27,7 @@ import java.util.Set;
 import javax.swing.text.Caret;
 import javax.swing.text.JTextComponent;
 
+import org.eclipse.albireo.core.Platform;
 import org.eclipse.albireo.core.SwingControl;
 import org.eclipse.albireo.core.ThreadingHandler;
 import org.eclipse.swt.SWT;

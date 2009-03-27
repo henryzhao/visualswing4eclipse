@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.albireo.core.Platform;
 import org.eclipse.albireo.core.SwingControl;
 import org.eclipse.albireo.core.ThreadingHandler;
 import org.eclipse.swt.widgets.Display;
