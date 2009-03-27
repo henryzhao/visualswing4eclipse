@@ -49,7 +49,7 @@ import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.albireo.core.SwtPopupRegistry;
-import org.eclipse.albireo.internal.Platform;
+import org.eclipse.albireo.core.Platform;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -108,6 +108,10 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	public NamespaceManager getNamespace() {
 		return namespace;
+	}
+
+	public Composite getEditorSite() {
+		return parent;
 	}
 
 	public boolean isLocked() {
@@ -251,7 +255,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 			public void run() {
 				Point dp = new Point(p);
 				SwingUtilities.convertPointToScreen(dp, glass);
-				showPopup(dp, selected);
+				showPopup(dp, selected, true);
 			}
 		});
 	}
@@ -266,7 +270,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 	}
 
-	public void showPopup(Point dp, List<Component> selected) {
+	public void showPopup(Point dp, List<Component> selected, boolean isAWTParent) {
 		MenuManager manager = new MenuManager("#EDIT"); //$NON-NLS-1$
 		MenuManager lnfMenu = new MenuManager(Messages.VisualDesigner_SetLaf, "#LNF"); //$NON-NLS-2$
 		fillLnfAction(lnfMenu);
@@ -305,13 +309,8 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 		final Menu menu = manager.createContextMenu(parent);
 		menu.setLocation(dp.x, dp.y);
-		if (Platform.isGtk()) {
-			Runnable r = new Runnable() {
-				public void run() {
-					SwtPopupRegistry.getInstance().setMenu(glass, false, menu);
-				}
-			};
-			parent.getShell().getDisplay().asyncExec(r);
+		if (Platform.isGtk() && isAWTParent) {
+			SwtPopupRegistry.getInstance().setMenu(glass, false, menu);
 		} else {
 			menu.setVisible(true);
 		}
@@ -361,7 +360,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 				for (int i = menu_selection.length - 1; i >= 0; i--) {
 					if (menu_selection[i] instanceof JPopupMenu) {
 						JPopupMenu jpm = (JPopupMenu) menu_selection[i];
-				        synchronized (jpm.getTreeLock()) {
+						synchronized (jpm.getTreeLock()) {
 							if (!jpm.isShowing())
 								continue;
 							Rectangle b = jpm.getBounds();
@@ -385,7 +384,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 								if (WidgetAdapter.getWidgetAdapter(jpm) != null)
 									return jpm;
 							}
-				        }
+						}
 					}
 				}
 			}
