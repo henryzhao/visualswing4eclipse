@@ -11,7 +11,7 @@
  *     ILOG S.A. - initial API and implementation
  *     IBM Corporation - Java/SWT versioning code (from org.eclipse.swt.internal.Library)
  *******************************************************************************/
-package org.eclipse.albireo.internal;
+package org.eclipse.albireo.core;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.Library;
