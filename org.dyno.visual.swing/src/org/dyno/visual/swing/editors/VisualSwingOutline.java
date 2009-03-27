@@ -163,7 +163,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			return;
 		List<Component> selected = getSelectedComponent(items);
 		if (!selected.isEmpty()){
-			designer.showPopup(new java.awt.Point(e.x, e.y), selected);
+			designer.showPopup(new java.awt.Point(e.x, e.y), selected, false);
 		} else {
 			fillInvisibleMenuItems(e);
 		}
