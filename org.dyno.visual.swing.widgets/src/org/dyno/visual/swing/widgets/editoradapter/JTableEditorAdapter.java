@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
@@ -15,7 +16,7 @@ public class JTableEditorAdapter extends ComplexWidgetEditorAdapter {
 	public IEditor getEditorAt() {
 		CompositeAdapter parent = adaptable.getParentAdapter();
 		if (parent != null && parent.getWidget() instanceof JScrollPane)
-			return new TableModelEditor((JScrollPane) parent.cloneWidget());
+			return new TableModelEditor(adaptable, (JScrollPane) parent.cloneWidget());
 		else
 			return null;
 	}
@@ -27,6 +28,7 @@ public class JTableEditorAdapter extends ComplexWidgetEditorAdapter {
 			Rectangle bounds = parent.getWidget().getBounds();
 			bounds.x = 0;
 			bounds.y = 0;
+			bounds=SwingUtilities.convertRectangle(parent.getWidget(), bounds, adaptable.getWidget());
 			return bounds;
 		}
 		Rectangle bounds = adaptable.getWidget().getBounds();

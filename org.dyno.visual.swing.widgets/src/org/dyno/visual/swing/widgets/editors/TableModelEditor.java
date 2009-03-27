@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -24,20 +23,24 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
 
 import org.dyno.visual.swing.plugin.spi.IEditor;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 public class TableModelEditor implements IEditor {
 	private List<ChangeListener> listeners;
 	private TableModelPanel tmPanel;
-	public TableModelEditor(JScrollPane jsp){
+
+	public TableModelEditor(WidgetAdapter adapter, JScrollPane jsp) {
 		listeners = new ArrayList<ChangeListener>();
-		tmPanel = new TableModelPanel(jsp);
+		tmPanel = new TableModelPanel(adapter, jsp);
 	}
+
 	@Override
 	public void addChangeListener(ChangeListener l) {
-		if(!listeners.contains(l)){
+		if (!listeners.contains(l)) {
 			listeners.add(l);
 		}
 	}
+
 	@Override
 	public Component getComponent() {
 		return tmPanel;
@@ -47,32 +50,38 @@ public class TableModelEditor implements IEditor {
 	public Object getValue() {
 		return tmPanel.getTableModel();
 	}
+
 	@Override
 	public void removeChangeListener(ChangeListener l) {
-		if(listeners.contains(l)){
+		if (listeners.contains(l)) {
 			listeners.remove(l);
 		}
 	}
+
 	@Override
 	public void setFocus() {
 		tmPanel.setFocus();
 	}
+
 	@Override
 	public void setFont(Font f) {
 		tmPanel.setFont(f);
 	}
+
 	private Object old;
+
 	@Override
 	public void setValue(Object v) {
 		old = v;
-		tmPanel.setTableModel((TableModel)v);
+		tmPanel.setTableModel((TableModel) v);
 	}
+
 	@Override
 	public void validateValue() throws Exception {
 	}
+
 	@Override
 	public Object getOldValue() {
 		return old;
 	}
 }
-

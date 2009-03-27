@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -46,6 +45,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.albireo.core.Platform;
+import org.eclipse.albireo.core.SwtPopupRegistry;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
@@ -62,15 +64,19 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	private JTextField textField;
 	private Color designFieldBackground;
 	private Color designFieldBorder;
+	private WidgetAdapter adapter;
 
-	public TableModelPanel(JScrollPane jsp) {
+	public TableModelPanel(WidgetAdapter adapter, JScrollPane jsp) {
+		this.adapter = adapter;
 		setOpaque(false);
 		setLayout(new GlassLayout());
 		setLayer(jsp, 0);
 		add(jsp);
-		jsp.setToolTipText(Messages.TableModelPanel_Adjust_View);		
-		jsp.getHorizontalScrollBar().setToolTipText(Messages.TableModelPanel_Drag_Adjust_View);
-		jsp.getVerticalScrollBar().setToolTipText(Messages.TableModelPanel_Drag_Adjust_View);
+		jsp.setToolTipText(Messages.TableModelPanel_Adjust_View);
+		jsp.getHorizontalScrollBar().setToolTipText(
+				Messages.TableModelPanel_Drag_Adjust_View);
+		jsp.getVerticalScrollBar().setToolTipText(
+				Messages.TableModelPanel_Drag_Adjust_View);
 		TableColumnHeaderGlass columnHeader = new TableColumnHeaderGlass();
 		TableRowHeaderGlass rowHeader = new TableRowHeaderGlass();
 		setLayer(columnHeader, 1);
@@ -93,16 +99,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	}
 
 	private Composite getEmbeddedParent() {
-		Component parent = this;
-		while (parent != null) {
-			if (parent instanceof JComponent) {
-				Object object = ((JComponent) parent).getClientProperty("embeded.composite"); //$NON-NLS-1$
-				if (object != null && object instanceof Composite)
-					return (Composite) object;
-			}
-			parent = parent.getParent();
-		}
-		return null;
+		return adapter.getEditorSite();
 	}
 
 	@Override
@@ -245,7 +242,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		}
 	}
 
-	private TypeAction[] actions = new TypeAction[] { new TypeAction(Object.class, "Object", null), new TypeAction(String.class, "String", null), //$NON-NLS-1$ //$NON-NLS-2$
+	private TypeAction[] actions = new TypeAction[] {
+			new TypeAction(Object.class, "Object", null), new TypeAction(String.class, "String", null), //$NON-NLS-1$ //$NON-NLS-2$
 			new TypeAction(Boolean.class, "Boolean", new Boolean(false)), new TypeAction(Integer.class, "Integer", (int) 0), //$NON-NLS-1$ //$NON-NLS-2$
 			new TypeAction(Byte.class, "Byte", (byte) 0), new TypeAction(Short.class, "Short", (short) 0), new TypeAction(Long.class, "Long", 0l), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			new TypeAction(Float.class, "Float", 0f), new TypeAction(Double.class, "Double", 0d) }; //$NON-NLS-1$ //$NON-NLS-2$
@@ -274,10 +272,16 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			popup.add(action);
 		}
 		Point p = columnHeader.getPopupLocation();
-		Menu menu = popup.createContextMenu(getEmbeddedParent());
+		Composite parent = getEmbeddedParent();
+		final Menu menu = popup.createContextMenu(parent);
 		Point loc = columnHeader.getLocationOnScreen();
 		menu.setLocation(loc.x + p.x, loc.y + p.y);
-		menu.setVisible(true);
+		if (Platform.isGtk()) {
+			SwtPopupRegistry.getInstance().setMenu(columnHeader, false, menu);
+			adapter.showComponentPopup(columnHeader, p.x, p.y);
+		} else{
+			menu.setVisible(true);
+		}
 	}
 
 	class TypeAction extends Action {
@@ -413,18 +417,30 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	private static Icon COLUMN_RIGHT_INSERT_ICON;
 	private static Icon ROW_DOWN_INSERT_ICON;
 	static {
-		COLUMN_LEFT_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
-		ROW_UP_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
-		COLUMN_LEFT_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/left_move.png")); //$NON-NLS-1$
-		ROW_UP_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/up_move.png")); //$NON-NLS-1$
-		COLUMN_RIGHT_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
-		ROW_DOWN_INSERT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/insert.png")); //$NON-NLS-1$
-		COLUMN_RIGHT_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/right_move.png")); //$NON-NLS-1$
-		ROW_DOWN_MOVE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/down_move.png")); //$NON-NLS-1$
-		COLUMN_DELETE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png")); //$NON-NLS-1$
-		ROW_DELETE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/delete.png")); //$NON-NLS-1$
-		COLUMN_EDIT_TEXT_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_text.png")); //$NON-NLS-1$
-		COLUMN_EDIT_TYPE_ICON = new ImageIcon(TableModelPanel.class.getResource("/icons/edit_type.png")); //$NON-NLS-1$
+		COLUMN_LEFT_INSERT_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/insert.png")); //$NON-NLS-1$
+		ROW_UP_INSERT_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/insert.png")); //$NON-NLS-1$
+		COLUMN_LEFT_MOVE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/left_move.png")); //$NON-NLS-1$
+		ROW_UP_MOVE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/up_move.png")); //$NON-NLS-1$
+		COLUMN_RIGHT_INSERT_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/insert.png")); //$NON-NLS-1$
+		ROW_DOWN_INSERT_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/insert.png")); //$NON-NLS-1$
+		COLUMN_RIGHT_MOVE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/right_move.png")); //$NON-NLS-1$
+		ROW_DOWN_MOVE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/down_move.png")); //$NON-NLS-1$
+		COLUMN_DELETE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/delete.png")); //$NON-NLS-1$
+		ROW_DELETE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/delete.png")); //$NON-NLS-1$
+		COLUMN_EDIT_TEXT_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/edit_text.png")); //$NON-NLS-1$
+		COLUMN_EDIT_TYPE_ICON = new ImageIcon(TableModelPanel.class
+				.getResource("/icons/edit_type.png")); //$NON-NLS-1$
 	}
 
 	class ColumnNameAction implements ActionListener {
@@ -444,7 +460,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 	}
 
-	class TableRowHeaderGlass extends JComponent implements MouseInputListener, MouseWheelListener {
+	class TableRowHeaderGlass extends JComponent implements MouseInputListener,
+			MouseWheelListener {
 		private static final long serialVersionUID = 1L;
 		private int status;
 		private int icon = -1;
@@ -512,8 +529,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			if (row != -1) {
 				Rectangle rect = table.getCellRect(row, 0, true);
 				rect.width = 64;
-				rect = SwingUtilities.convertRectangle(table, rect, TableModelPanel.this);
-				rect = SwingUtilities.convertRectangle(TableModelPanel.this, rect, rowHeader);
+				rect = SwingUtilities.convertRectangle(table, rect,
+						TableModelPanel.this);
+				rect = SwingUtilities.convertRectangle(TableModelPanel.this,
+						rect, rowHeader);
 				rect.x = 0;
 				int x = rect.x;
 				int y = rect.y;
@@ -541,13 +560,14 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			int height = getHeight();
 			g.drawLine(0, 0, 0, height - 1);
 			g.drawLine(0, height - 1, width - 1, height - 1);
-			g.drawLine(width-1, 0, width - 1, height - 1);
+			g.drawLine(width - 1, 0, width - 1, height - 1);
 		}
 
 		private void paintBackground(Graphics g) {
 			Graphics2D g2d = (Graphics2D) g;
 			java.awt.Composite old = g2d.getComposite();
-			AlphaComposite pha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+			AlphaComposite pha = AlphaComposite.getInstance(
+					AlphaComposite.SRC_OVER, 0.2f);
 			g2d.setComposite(pha);
 			g2d.setColor(designFieldBackground);
 			int width = getWidth();
@@ -613,8 +633,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			for (int i = 0; i < count; i++) {
 				Rectangle rect = table.getCellRect(i, 0, true);
 				rect.width = 64;
-				rect = SwingUtilities.convertRectangle(table, rect, TableModelPanel.this);
-				rect = SwingUtilities.convertRectangle(TableModelPanel.this, rect, rowHeader);
+				rect = SwingUtilities.convertRectangle(table, rect,
+						TableModelPanel.this);
+				rect = SwingUtilities.convertRectangle(TableModelPanel.this,
+						rect, rowHeader);
 				rect.x = 0;
 				if (p.x >= rect.x && p.x < rect.x + rect.width) {
 					icon = getIconPlace(p, rect);
@@ -623,7 +645,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 						Rectangle iconBounds = getIconBounds();
 						iconBounds.x += rect.x;
 						iconBounds.y += rect.y;
-						if (p.x >= iconBounds.x && p.x < iconBounds.x + iconBounds.width && p.y >= iconBounds.y && p.y < iconBounds.y + iconBounds.height) {
+						if (p.x >= iconBounds.x
+								&& p.x < iconBounds.x + iconBounds.width
+								&& p.y >= iconBounds.y
+								&& p.y < iconBounds.y + iconBounds.height) {
 							row = i;
 							status = PRESSED;
 							repaint();
@@ -644,8 +669,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			for (int i = 0; i < count; i++) {
 				Rectangle rect = table.getCellRect(i, 0, true);
 				rect.width = 64;
-				rect = SwingUtilities.convertRectangle(table, rect, TableModelPanel.this);
-				rect = SwingUtilities.convertRectangle(TableModelPanel.this, rect, rowHeader);
+				rect = SwingUtilities.convertRectangle(table, rect,
+						TableModelPanel.this);
+				rect = SwingUtilities.convertRectangle(TableModelPanel.this,
+						rect, rowHeader);
 				rect.x = 0;
 				if (p.x >= rect.x && p.x < rect.x + rect.width) {
 					icon = getIconPlace(p, rect);
@@ -654,7 +681,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 						Rectangle iconBounds = getIconBounds();
 						iconBounds.x += rect.x;
 						iconBounds.y += rect.y;
-						if (p.x >= iconBounds.x && p.x < iconBounds.x + iconBounds.width && p.y >= iconBounds.y && p.y < iconBounds.y + iconBounds.height) {
+						if (p.x >= iconBounds.x
+								&& p.x < iconBounds.x + iconBounds.width
+								&& p.y >= iconBounds.y
+								&& p.y < iconBounds.y + iconBounds.height) {
 							row = i;
 							status = RELEASED;
 							repaint();
@@ -674,15 +704,20 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		}
 
 		private int getIconPlace(Point p, Rectangle rect) {
-			if (p.x > rect.x && p.x < rect.x + 16 && p.y < rect.y + 8 && p.y > rect.y - 8)
+			if (p.x > rect.x && p.x < rect.x + 16 && p.y < rect.y + 8
+					&& p.y > rect.y - 8)
 				return ROW_UP_INSERT;
-			else if (p.x > rect.x && p.x < rect.x + 16 && p.y > rect.y + 8 && p.y < rect.y + 24)
+			else if (p.x > rect.x && p.x < rect.x + 16 && p.y > rect.y + 8
+					&& p.y < rect.y + 24)
 				return ROW_DOWN_INSERT;
-			else if (p.x > rect.x + 16 && p.x < rect.x + 32 && p.y > rect.y && p.y < rect.y + 16) {
+			else if (p.x > rect.x + 16 && p.x < rect.x + 32 && p.y > rect.y
+					&& p.y < rect.y + 16) {
 				return ROW_DELETE;
-			} else if (p.x > rect.x + 32 && p.x < rect.x + 48 && p.y > rect.y && p.y < rect.y + 16)
+			} else if (p.x > rect.x + 32 && p.x < rect.x + 48 && p.y > rect.y
+					&& p.y < rect.y + 16)
 				return ROW_UP_MOVE;
-			else if (p.x > rect.x + 48 && p.x < rect.x + 64 && p.y > rect.y && p.y < rect.y + 16)
+			else if (p.x > rect.x + 48 && p.x < rect.x + 64 && p.y > rect.y
+					&& p.y < rect.y + 16)
 				return ROW_DOWN_MOVE;
 			else
 				return NO_OP;
@@ -695,8 +730,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			for (int i = 0; i < count; i++) {
 				Rectangle rect = table.getCellRect(i, 0, true);
 				rect.width = 64;
-				rect = SwingUtilities.convertRectangle(table, rect, TableModelPanel.this);
-				rect = SwingUtilities.convertRectangle(TableModelPanel.this, rect, rowHeader);
+				rect = SwingUtilities.convertRectangle(table, rect,
+						TableModelPanel.this);
+				rect = SwingUtilities.convertRectangle(TableModelPanel.this,
+						rect, rowHeader);
 				rect.x = 0;
 				if (p.x >= rect.x && p.x < rect.x + rect.width) {
 					int lastIcon = icon;
@@ -706,7 +743,10 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 						Rectangle iconBounds = getIconBounds();
 						iconBounds.x += rect.x;
 						iconBounds.y += rect.y;
-						if (p.x >= iconBounds.x && p.x < iconBounds.x + iconBounds.width && p.y >= iconBounds.y && p.y < iconBounds.y + iconBounds.height) {
+						if (p.x >= iconBounds.x
+								&& p.x < iconBounds.x + iconBounds.width
+								&& p.y >= iconBounds.y
+								&& p.y < iconBounds.y + iconBounds.height) {
 							if (row != i || lastIcon != icon) {
 								row = i;
 								status = RELEASED;
@@ -747,7 +787,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 	}
 
-	class TableColumnHeaderGlass extends JComponent implements MouseInputListener, MouseWheelListener {
+	class TableColumnHeaderGlass extends JComponent implements
+			MouseInputListener, MouseWheelListener {
 		private static final long serialVersionUID = 1L;
 		private int status;
 		private int icon = -1;
@@ -792,7 +833,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 		Point getPopupLocation() {
 			Rectangle rect = table.getTableHeader().getHeaderRect(column);
-			rect = SwingUtilities.convertRectangle(table, rect, TableModelPanel.this);
+			rect = SwingUtilities.convertRectangle(table, rect,
+					TableModelPanel.this);
 			int x = rect.x;
 			int y = rect.y;
 			if (icon != NO_OP) {
@@ -811,7 +853,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 		public TableColumnHeaderGlass() {
 			setLayout(null);
-			setOpaque(false);			
+			setOpaque(false);
 			addMouseListener(this);
 			addMouseMotionListener(this);
 			addMouseWheelListener(this);
@@ -837,7 +879,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		private void paintBackground(Graphics g) {
 			Graphics2D g2d = (Graphics2D) g;
 			java.awt.Composite old = g2d.getComposite();
-			AlphaComposite pha = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
+			AlphaComposite pha = AlphaComposite.getInstance(
+					AlphaComposite.SRC_OVER, 0.2f);
 			g2d.setComposite(pha);
 			g2d.setColor(designFieldBackground);
 			int width = getWidth();
@@ -851,7 +894,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			paintBackground(g);
 			if (column != -1) {
 				Rectangle rect = table.getTableHeader().getHeaderRect(column);
-				rect = SwingUtilities.convertRectangle(table, rect, TableModelPanel.this);
+				rect = SwingUtilities.convertRectangle(table, rect,
+						TableModelPanel.this);
 				int x = rect.x;
 				int y = 0;
 				int w = 16;
@@ -877,9 +921,9 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			int width = getWidth();
 			int height = getHeight();
 			g.drawLine(0, 0, 0, height - 1);
-			g.drawLine(0, 0, width-1, 0);
-			g.drawLine(width - 1, 0, width-1, height-1);
-			g.drawLine(63, height-1, width-1, height-1);
+			g.drawLine(0, 0, width - 1, 0);
+			g.drawLine(width - 1, 0, width - 1, height - 1);
+			g.drawLine(63, height - 1, width - 1, height - 1);
 		}
 
 		@Override
@@ -898,7 +942,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e.getPoint(), table);
+			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e
+					.getPoint(), table);
 			JTableHeader header = table.getTableHeader();
 			int count = table.getColumnCount();
 			for (int i = 0; i < count; i++) {
@@ -906,7 +951,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 				icon = (p.x - rect.x + 8) / (rect.width / 6);
 				Icon iCon = getIcon();
 				if (iCon != null) {
-					int x = rect.x + icon * rect.width / 6 - iCon.getIconWidth() / 2;
+					int x = rect.x + icon * rect.width / 6
+							- iCon.getIconWidth() / 2;
 					if (p.x >= x && p.x < x + iCon.getIconWidth()) {
 						column = i;
 						status = PRESSED;
@@ -921,7 +967,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e.getPoint(), table);
+			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e
+					.getPoint(), table);
 			JTableHeader header = table.getTableHeader();
 			int count = table.getColumnCount();
 			for (int i = 0; i < count; i++) {
@@ -930,7 +977,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 					icon = (p.x - rect.x) / (rect.width / 6);
 					Icon iCon = getIcon();
 					if (iCon != null) {
-						int x = rect.x + icon * rect.width / 6 - iCon.getIconWidth() / 2;
+						int x = rect.x + icon * rect.width / 6
+								- iCon.getIconWidth() / 2;
 						if (p.x >= x && p.x < x + iCon.getIconWidth()) {
 							column = i;
 							status = RELEASED;
@@ -951,7 +999,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e.getPoint(), table);
+			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e
+					.getPoint(), table);
 			JTableHeader header = table.getTableHeader();
 			int count = table.getColumnCount();
 			for (int i = 0; i < count; i++) {
@@ -961,7 +1010,8 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 					icon = (p.x - rect.x) / (rect.width / 6);
 					Icon iCon = getIcon();
 					if (iCon != null) {
-						int x = rect.x + icon * rect.width / 6 - iCon.getIconWidth() / 2;
+						int x = rect.x + icon * rect.width / 6
+								- iCon.getIconWidth() / 2;
 						if (p.x >= x && p.x < x + iCon.getIconWidth()) {
 							if (column != i || lastIcon != icon) {
 								column = i;
@@ -1118,4 +1168,3 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		this.designFieldBackground = designFieldBackground;
 	}
 }
-
