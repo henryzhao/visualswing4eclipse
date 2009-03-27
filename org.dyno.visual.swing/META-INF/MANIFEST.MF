@@ -20,6 +20,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy;exclude:="org.dyno.visual.swing.contentTypes"
 Export-Package: org.dyno.visual.swing.base,
  org.dyno.visual.swing.layouts,
- org.dyno.visual.swing.plugin.spi
+ org.dyno.visual.swing.plugin.spi,
+ org.eclipse.albireo.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
