@@ -56,6 +56,7 @@ import org.dyno.visual.swing.base.ExtensionRegistry.Sorting;
 import org.dyno.visual.swing.designer.GlassPlane;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
+import org.eclipse.albireo.internal.SwtPopupHandler;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -66,6 +67,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -112,7 +114,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (designer != null)
 			designer.setCursorType(type);
 	}
-
+    public void showComponentPopup(java.awt.Component src, int x, int y){
+    	SwtPopupHandler.getInstance().showComponentPopup(src, x, y);
+    }
 	@Override
 	public void requestNewName() {
 		if (getName() == null) {
@@ -758,7 +762,13 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			return null;
 		}
 	}
-
+	public Composite getEditorSite(){
+		VisualDesigner designer = getDesigner();
+		if(designer!=null){
+			return designer.getEditorSite();
+		}
+		return null;
+	}
 	public List<WidgetAdapter> getDropWidget() {
 		VisualDesigner designer = getDesigner();
 		if (designer == null)
