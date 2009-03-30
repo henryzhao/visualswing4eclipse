@@ -1,0 +1,1482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+   		point="org.dyno.visual.swing.contentTypePattern"
+   		id="org.dyno.visual.swing.widgets.panelpattern"
+   		name="%ContentTypePattern">
+   		<!--JPanel source file-->
+   		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.JPanel;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JPanel.*"/>
+   		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.JPanel;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JPanel.*"/>
+   		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JPanel.*"/>
+   		<pattern type="javax.swing.JPanel" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JPanel.*"/>
+   		<pattern type="javax.swing.JPanel" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JPanel.*"/>
+   		
+   		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.JFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JFrame.*"/>
+   		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.JFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
+   		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JFrame.*"/>
+   		<pattern type="javax.swing.JFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
+   		<pattern type="javax.swing.JFrame" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JFrame.*"/>
+   		
+   		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.JDialog;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JDialog.*"/>
+   		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.JDialog;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
+   		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JDialog.*"/>
+   		<pattern type="javax.swing.JDialog" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
+   		<pattern type="javax.swing.JDialog" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JDialog.*"/>
+   		
+   		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.JApplet;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
+   		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.JApplet;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
+   		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JApplet.*"/>
+   		<pattern type="javax.swing.JApplet" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
+   		<pattern type="javax.swing.JApplet" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JApplet.*"/>
+
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.JInternalFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.JInternalFrame;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*import javax\.swing\.\*;.*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JInternalFrame.*"/>
+   		<pattern type="javax.swing.JInternalFrame" value=".*public\s*class\s*[a-zA-Z]\w*\s*extends\s*javax\.swing\.JInternalFrame.*"/>
+   		
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.widgetAdapter"
+         id="org.dyno.visual.swing.widgets.beans"
+         name="%SwingBeans">
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.ComponentAdapter"
+               icon="icons/widgets.png"
+               widgetClass="java.awt.Component">
+         		<property name="foreground"/>
+         		<property name="background"/>
+        		<property name="font"/>;        
+        		<property name="enabled"/>
+         		<property name="bounds" editable="false" gencode="false"/>
+        		<property name="minimumSize"/>
+        		<property name="maximumSize"/>
+        		<property name="preferredSize"/>
+        		<property name="focusable"/>
+        		<property name="visible"/>         		
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.ContainerAdapter"
+               icon="icons/widgets.png"
+               widgetClass="java.awt.Container">
+        		<property name="focusCycleRoot"/>
+        		<property name="focusTraversalPolicyProvider"/>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.JComponentAdapter"
+               icon="icons/widgets.png"
+               widgetClass="javax.swing.JComponent">
+        		<property name="border"/>
+        		<property name="opaque"/>
+        		<property name="toolTipText"/>
+        		<property name="doubleBuffered"/>
+        		<property name="alignmentX"/>
+        		<property name="alignmentY"/>
+        		<property name="autoscrolls"/>
+        		<property        				
+        				name="debugGraphicsOptions" 
+        				editor="org.dyno.visual.swing.widgets.editors.DebugGraphicsOptionsEditorFactory"
+        				renderer="org.dyno.visual.swing.widgets.renderers.DebugGraphicsOptionsRendererFactory" 
+        				/>
+        		<property name="inheritsPopupMenu"/>
+        		<property name="requestFocusEnabled"/>
+        		<property name="verifyInputWhenFocusTarget"/>         		
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JPanelAdapter"
+         		widgetClass="javax.swing.JPanel"
+         		widgetName="%Palette.JPanel"
+         		groupId="container"
+         		icon="/icons/panel_16.png">
+        		<property name="border" />
+        		<property name="font"/>
+        		<property name="layout" gencode="false"/>
+        		<property name="alignmentX" gencode="false"/>
+        		<property name="alignmentY" gencode="false"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JLabelAdapter"
+         		widgetClass="javax.swing.JLabel"
+         		widgetName="%Palette.JLabel"
+         		groupId="component"         		
+         		icon="/icons/label_16.png">
+        		<property name="text" />
+        		<property
+        			name="horizontalAlignment" 
+                  	editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
+                  	renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"
+                  	/>
+        		<property
+        			name="verticalAlignment"
+                  	editor="org.dyno.visual.swing.widgets.editors.VerticalAlignmentEditor"
+                  	renderer="org.dyno.visual.swing.widgets.renderers.VerticalAlignmentRenderer"
+                  	/>
+        		<property 
+        			name="icon"
+        			/>
+        		<property
+        			name="disabledIcon" 
+        			gencode="false"
+        			/>
+        		<property
+                class="org.dyno.visual.swing.widgets.properties.HorizontalTextPositionProperty"
+                editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
+                name="horizontalTextPosition"
+                renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
+        		<property
+        			name="iconTextGap" 
+        			/>
+        		<property 
+        			name="verticalTextPosition"
+                  	editor="org.dyno.visual.swing.widgets.editors.VerticalAlignmentEditor"
+                  	renderer="org.dyno.visual.swing.widgets.renderers.VerticalAlignmentRenderer"
+                  	/>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.AbstractButtonAdapter"
+               groupId="component"
+               icon="icons/widgets.png"
+               widgetClass="javax.swing.AbstractButton"
+               widgetName="AbstractButton">
+        		<property name="text"/>
+		        <property name="margin"/>
+		        <property name="borderPainted"/>
+		        <property name="contentAreaFilled"/>
+		        <property name="disabledIcon" gencode="false"/>
+		        <property name="disabledSelectedIcon" gencode="false"/>
+		        <property name="focusPainted"/>
+		        <property name="hideActionText"/>
+		        <property name="horizontalAlignment" 
+		                  editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
+		                  renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
+		        <property name="horizontalTextPosition" 
+	           			class="org.dyno.visual.swing.widgets.properties.HorizontalTextPositionProperty"	
+		                  editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
+		                  renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
+		        <property name="icon"/>
+		        <property name="iconTextGap"/>
+		        <property name="multiClickThreshhold"/>
+		        <property name="pressedIcon"/>
+		        <property name="rolloverEnabled"/>
+		        <property name="rolloverIcon"/>
+		        <property name="rolloverSelectedIcon"/>
+		        <property name="selected"/>
+		        <property name="selectedIcon"/>
+		   		<property name="verticalAlignment"
+		                  	editor="org.dyno.visual.swing.widgets.editors.VerticalAlignmentEditor"
+		                  	renderer="org.dyno.visual.swing.widgets.renderers.VerticalAlignmentRenderer"/>
+		   		<property name="verticalTextPosition"
+		                  	editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
+		                  	renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
+		        <property name="mnemonic"
+		        			editor="org.dyno.visual.swing.widgets.editors.CharacterEditor"
+		        			renderer="org.dyno.visual.swing.widgets.renderers.CharacterRenderer"/>
+         </widget>     
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JButtonAdapter"
+         		widgetClass="javax.swing.JButton"
+         		widgetName="%Palette.JButton"
+         		groupId="component"         		
+         		icon="/icons/button_16.png">
+		        <property name="defaultCapable"/>
+		        <property name="border"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JToggleButtonAdapter"
+         		widgetClass="javax.swing.JToggleButton"
+         		widgetName="%Palette.JToggleButton"
+         		groupId="component"         		
+         		icon="/icons/toggle_button_16.png">
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JCheckBoxAdapter"
+         		widgetClass="javax.swing.JCheckBox"
+         		widgetName="%Palette.JCheckBox"
+         		groupId="component"         		
+         		icon="/icons/check_box_16.png">
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JRadioButtonAdapter"
+         		widgetClass="javax.swing.JRadioButton"
+         		widgetName="%Palette.JRadioButton"
+         		groupId="component"         		
+         		icon="/icons/radio_button_16.png">
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JComboBoxAdapter"
+         		widgetClass="javax.swing.JComboBox"
+         		widgetName="%Palette.JComboBox"
+         		groupId="component"         		
+         		icon="/icons/combo_box_16.png">
+		    	<property name="editable"/>
+		    	<property name="maximumRowCount"/>
+		    	<property name="selectedIndex" gencode="false"/>
+		    	<property name="selectedItem" gencode="false"/>
+		        <property name="model"/>
+		        <property name="lightWeightPopupEnabled"/>
+         </widget>
+        <widget 
+         		class="org.dyno.visual.swing.widgets.JScrollPaneAdapter"
+         		widgetClass="javax.swing.JScrollPane"
+         		widgetName="%Palette.JScrollPane"
+         		groupId="container"         		
+         		icon="/icons/scroll_pane_16.png">
+		    	<property name="horizontalScrollBarPolicy"
+		        			editor="org.dyno.visual.swing.widgets.editors.HorizontalScrollBarPolicyEditor"
+		        			renderer="org.dyno.visual.swing.widgets.renderers.HorizontalScrollBarPolicyRenderer"/>
+		    	<property name="verticalScrollBarPolicy"
+		        			editor="org.dyno.visual.swing.widgets.editors.VerticalScrollBarPolicyEditor"
+		        			renderer="org.dyno.visual.swing.widgets.renderers.VerticalScrollBarPolicyRenderer"/>
+		        <property name="viewportBorder"/>                  
+		    	<property name="wheelScrollingEnabled"/>
+		</widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JListAdapter"
+         		widgetClass="javax.swing.JList"
+         		widgetName="%Palette.JList"
+         		groupId="component"         		
+         		icon="/icons/list_16.png">
+		    	<property 
+		    			  name="selectionMode" 
+		                  editor="org.dyno.visual.swing.widgets.editors.ListSelectionModeEditor"
+		                  renderer="org.dyno.visual.swing.widgets.renderers.ListSelectionModeRenderer"/>
+		        <property 
+		        		  name="model"/> 
+		        <property name="dragEnabled"/>
+		        <property name="fixedCellHeight"/>
+		        <property name="fixedCellWidth"/>
+		        <property name="layoutOrientation"
+		                  editor="org.dyno.visual.swing.widgets.editors.LayoutOrientationEditor"
+		                  renderer="org.dyno.visual.swing.widgets.renderers.LayoutOrientationRenderer"/>
+		        <property name="selectedIndex" gencode="false"/>
+		        <property name="selectionBackground"/>
+		        <property name="selectionForeground"/>
+		        <property name="valueIsAdjusting"/>
+		        <property name="visibleRowCount"/>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.JTextComponentAdapter"
+               groupId="component"
+               icon="icons/widgets.png"
+               widgetClass="javax.swing.text.JTextComponent"
+               widgetName="JTextComponent">
+		        <property name="text"/>
+		    	<property name="editable"/>
+		    	<property name="caretColor"/>
+		    	<property name="caretPosition" gencode="false"/>
+		    	<property name="disabledTextColor"/>
+		    	<property name="dragEnabled"/>
+		    	<property name="margin"/>
+		    	<property name="selectedTextColor"/>
+		    	<property name="selectionColor"/>
+		    	<property name="selectionEnd" gencode="false"/>
+		    	<property name="selectionStart" gencode="false"/>         		
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JTextFieldAdapter"
+         		widgetClass="javax.swing.JTextField"
+         		widgetName="%Palette.JTextField"
+         		groupId="component"         		
+         		icon="/icons/text_field_16.png">
+		    	<property name="columns"/>
+        		<property 
+        			name="horizontalAlignment" 
+                  	editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
+                  	renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>
+				<property name="scrollOffset" gencode="false"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JTextAreaAdapter"
+         		widgetClass="javax.swing.JTextArea"
+         		widgetName="%Palette.JTextArea"
+         		groupId="component"         		
+         		icon="/icons/text_area_16.png">
+		    	<property name="columns"/>
+		    	<property name="lineWrap"/>
+		    	<property name="rows"/>
+		    	<property name="tabSize"/>
+		    	<property name="wrapStyleWord"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JScrollBarAdapter"
+         		widgetClass="javax.swing.JScrollBar"
+         		widgetName="%Palette.JScrollBar"
+         		groupId="component"         		
+         		icon="/icons/scroll_bar_16.png">
+         		<property name="orientation" 
+		         		editor="org.dyno.visual.swing.widgets.editors.ScrollBarOrientationEditor"
+		         		renderer="org.dyno.visual.swing.widgets.renderers.ScrollBarOrientationRenderer"/>
+		    	<property name="blockIncrement"/>
+		    	<property name="maximum"/>
+		    	<property name="minimum"/>
+		        <property name="unitIncrement"/>
+		        <property name="visibleAmount"/>
+		        <property name="value"/>
+		        <property name="valueIsAdjusting"/>
+		 </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JSliderAdapter"
+         		widgetClass="javax.swing.JSlider"
+         		widgetName="%Palette.JSlider"
+         		groupId="component"         		
+         		icon="/icons/slider_16.png">
+	         		<property name="orientation" 
+			         		editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
+			         		renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
+			        <property name="value"/>
+			        <property name="majorTickSpacing"/>
+			        <property name="maximum"/>
+			        <property name="minimum"/>
+			        <property name="minorTickSpacing"/>
+			        <property name="paintLabels"/>
+			        <property name="paintTicks"/>
+			        <property name="paintTrack"/>
+			        <property name="snapToTicks"/>
+			        <property name="extent"/>
+			        <property name="inverted"/>
+			        <property name="valueIsAdjusting"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JProgressBarAdapter"
+         		widgetClass="javax.swing.JProgressBar"
+         		widgetName="%Palette.JProgressBar"
+         		groupId="component"         		
+         		icon="/icons/progress_bar_16.png">
+         		<property name="orientation" 
+	         		editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
+	         		renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
+         		<property name="value"/>
+		        <property name="maximum"/>
+		        <property name="minimum"/>
+		        <property name="string"/>
+		        <property name="borderPainted"/>
+		        <property name="stringPainted"/>
+		        <property name="indeterminate"/>
+        </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JFormattedTextFieldAdapter"
+         		widgetClass="javax.swing.JFormattedTextField"
+         		widgetName="%Palette.JFormattedTextField"
+         		groupId="component"         		
+         		icon="/icons/formatted_field_16.png">
+    			<property name="border"/>
+				<property name="focusLostBehavior"
+	         		editor="org.dyno.visual.swing.widgets.editors.FocusLostBehaviorEditor"
+	         		renderer="org.dyno.visual.swing.widgets.renderers.FocusLostBehaviorRenderer"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JPasswordFieldAdapter"
+         		widgetClass="javax.swing.JPasswordField"
+         		widgetName="%Palette.JPasswordField"
+         		groupId="component"         		
+         		icon="/icons/password_field_16.png">
+					<property name="echoChar"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JSpinnerAdapter"
+         		widgetClass="javax.swing.JSpinner"
+         		widgetName="%Palette.JSpinner"
+         		groupId="component"         		
+         		icon="/icons/spinner_16.png">
+		        <property name="model"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JSeparatorAdapter"
+         		widgetClass="javax.swing.JSeparator"
+         		widgetName="%Palette.JSeparator"
+         		groupId="component"         		
+         		icon="/icons/separator_16.png">
+		        <property name="orientation"
+		                  editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
+		                  renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
+         </widget>
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JTextPaneAdapter"
+         		widgetClass="javax.swing.JTextPane"
+         		widgetName="%Palette.JTextPane"
+         		groupId="component"         		
+         		icon="/icons/text_pane_16.png">
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JEditorPaneAdapter"
+         		widgetClass="javax.swing.JEditorPane"
+         		widgetName="%Palette.JEditorPane"
+         		groupId="component"         		
+         		icon="/icons/editor_pane_16.png">
+    	 		<property name="contentType"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JTreeAdapter"
+         		widgetClass="javax.swing.JTree"
+         		widgetName="%Palette.JTree"
+         		groupId="component"         		
+         		icon="/icons/tree_16.png">
+		    	<property name="model"/>
+		        <property name="dragEnabled"/>
+		        <property name="editable"/>
+		        <property name="expandsSelectedPaths"/>
+		        <property name="invokesStopCellEditing"/>
+		        <property name="largeModel"/>
+		        <property name="rootVisible"/>
+		        <property name="rowHeight"/>
+		        <property name="scrollsOnExpand"/>
+		        <property name="showsRootHandles"/>
+		        <property name="toggleClickCount"/>
+		        <property name="visibleRowCount"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JTableAdapter"
+         		widgetClass="javax.swing.JTable"
+         		widgetName="%Palette.JTable"
+         		groupId="component"         		
+         		icon="/icons/table_16.png">
+		    	<property name="autoCreateColumnsFromModel"/>
+		    	<property name="autoCreateRowSorter"/>
+		    	<property name="model"/>
+		        <property name="autoResizeMode"
+		                  editor="org.dyno.visual.swing.widgets.editors.AutoResizeModeEditor"
+		                  renderer="org.dyno.visual.swing.widgets.renderers.AutoResizeModeRenderer"/>		                  
+		    	<property name="cellSelectionEnabled"/>
+		    	<property name="columnSelectionAllowed"/>
+		    	<property name="dragEnabled"/>
+		    	<property name="editingColumn"/>
+		    	<property name="editingRow"/>
+		    	<property name="fillsViewportHeight"/>
+		    	<property name="gridColor"/>
+		    	<property name="intercellSpacing"/>
+		    	<property name="rowHeight"/>
+		    	<property name="rowMargin"/>
+		    	<property name="rowSelectionAllowed"/>
+		    	<property name="selectionBackground"/>
+		    	<property name="selectionForeground"/>
+		    	<property name="showHorizontalLines"/>
+		    	<property name="showVerticalLines"/>
+		    	<property name="surrendersFocusOnKeystroke"/>
+		    	<property name="updateSelectionOnSort"/>         		
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JTabbedPaneAdapter"
+         		widgetClass="javax.swing.JTabbedPane"
+         		widgetName="%Palette.JTabbedPane"
+         		groupId="container"         		
+         		icon="/icons/tabbed_pane_16.png">
+		    	<property name="selectedIndex" gencode="false"/>
+    			<property name="tabLayoutPolicy"
+                  		editor="org.dyno.visual.swing.widgets.editors.TabLayoutPolicyEditor"
+                  		renderer="org.dyno.visual.swing.widgets.renderers.TabLayoutPolicyRenderer"/>
+    			<property name="tabPlacement"
+                  		editor="org.dyno.visual.swing.widgets.editors.TabPlacementEditor"
+                  		renderer="org.dyno.visual.swing.widgets.renderers.TabPlacementRenderer"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JSplitPaneAdapter"
+         		widgetClass="javax.swing.JSplitPane"
+         		widgetName="%Palette.JSplitPane"
+         		groupId="container"         		
+         		icon="/icons/split_pane_16.png">
+		    	<property name="dividerLocation"/>
+		    	<property name="dividerSize"/>
+		        <property name="orientation"
+                  		editor="org.dyno.visual.swing.widgets.editors.SplitPaneOrientationEditor"
+                  		renderer="org.dyno.visual.swing.widgets.renderers.SplitPaneOrientationRenderer"/>
+		    	<property name="resizeWeight"/>
+		    	<property name="continuousLayout"/>
+		    	<property name="lastDividerLocation" gencode="false"/>
+		    	<property name="oneTouchExpandable"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JToolBarAdapter"
+         		widgetClass="javax.swing.JToolBar"
+         		widgetName="%Palette.JToolBar"
+         		groupId="container"         		
+         		icon="/icons/tool_bar_16.png">
+		    	<property name="floatable"/>
+		    	<property name="rollover"/>
+		        <property name="orientation"
+                  		editor="org.dyno.visual.swing.widgets.editors.OrientationEditor"
+                  		renderer="org.dyno.visual.swing.widgets.renderers.OrientationRenderer"/>
+		        <property name="borderPainted"/>
+		        <property name="font"/>
+		        <property name="margin"/>
+		        <property name="alignmentY" gencode="false"/>         		
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JDesktopPaneAdapter"
+         		widgetClass="javax.swing.JDesktopPane"
+         		widgetName="%Palette.JDesktopPane"
+         		groupId="container"         		
+         		icon="/icons/desktop_pane_16.png">
+    			<property name="dragMode"
+                  		editor="org.dyno.visual.swing.widgets.editors.DesktopPaneDragModeEditor"
+                  		renderer="org.dyno.visual.swing.widgets.renderers.DesktopPaneDragModeRenderer"/>
+         </widget>         
+         <widget 
+         		class="org.dyno.visual.swing.widgets.JInternalFrameAdapter"
+         		widgetClass="javax.swing.JInternalFrame"
+         		widgetName="%Palette.JInternalFrame"
+         		groupId="container"         		
+         		icon="/icons/internal_frame_16.png">
+		    	<property name="closable"/>
+		        <property name="defaultCloseOperation"
+                  		editor="org.dyno.visual.swing.widgets.editors.InternalFrameDefaultCloseOperationEditor"
+                  		renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer"/>
+				<property name="iconifiable"/>
+				<property name="maximizable"/>
+				<property name="resizable"/>
+				<property name="title"/>                  
+		        <property name="frameIcon"/>
+		        <property name="icon"/>
+		        <property name="layer"/>
+		        <property name="maximum"/>
+		        <property name="normalBounds" gencode="false"/>
+		        <property name="selected" gencode="false"/>
+		        <property name="visible"/>
+		        <property name="border"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JFrameAdapter"
+               icon="icons/frame_16.png"
+               rootPaneContainer="true"
+               widgetClass="javax.swing.JFrame"
+               widgetName="%Palette.JFrame">
+               <property name="title"/>
+               <property
+                     editable="true"
+                     editor="org.dyno.visual.swing.widgets.editors.FrameDefaultCloseOperationEditor"
+                     name="defaultCloseOperation"
+                     renderer="org.dyno.visual.swing.widgets.renderers.FrameDefaultCloseOperationRenderer">
+               </property>
+               <property name="visible" gencode="false"/>
+               <property name="iconImage"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JDialogAdapter"
+               icon="icons/dialog_16.png"
+               rootPaneContainer="true"
+               widgetClass="javax.swing.JDialog"
+               widgetName="%Palette.JDialog">
+               <property name="title"/>
+               <property
+                     editor="org.dyno.visual.swing.widgets.editors.InternalFrameDefaultCloseOperationEditor"
+                     name="defaultCloseOperation"
+                     renderer="org.dyno.visual.swing.widgets.renderers.InternalFrameDefaultCloseOperationRenderer">
+               </property>
+               <property name="visible" gencode="false"/>
+               <property name="iconImage"
+               			class = "org.dyno.visual.swing.widgets.properties.JDialogIconImageProperty"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JAppletAdapter"
+               icon="icons/applet_16.png"
+               rootPaneContainer="true"
+               widgetClass="javax.swing.JApplet"
+               widgetName="%Palette.JApplet">
+               <property name="visible" gencode="false"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JMenuBarAdapter"
+               groupId="menu"
+               icon="icons/menu_bar_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JMenuBar"
+               widgetName="%Palette.JMenuBar">
+            <property
+                  dislayName="borderPainted"
+                  editable="true"
+                  gencode="true"
+                  name="borderPainted">
+            </property>
+            <property
+                  dislayName="margin"
+                  editable="true"
+                  gencode="true"
+                  name="margin">
+            </property>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JMenuAdapter"
+               groupId="menu"
+               icon="icons/menu_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JMenu"
+               widgetName="%Palette.JMenu">
+               <property name="selected" gencode="false"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JMenuItemAdapter"
+               groupId="menu"
+               icon="icons/menu_item_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JMenuItem"
+               widgetName="%Palette.JMenuItem">
+               <property name="selected" gencode="false"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JCheckBoxMenuItemAdapter"
+               groupId="menu"
+               icon="icons/checkbox_menu_item_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JCheckBoxMenuItem"
+               widgetName="%Palette.JCheckBoxMenuItem">
+               <property
+                     gencode="true"
+                     name="selected"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JRadioButtonMenuItemAdapter"
+               groupId="menu"
+               icon="icons/radio_button_menu_item_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JRadioButtonMenuItem"
+               widgetName="%Palette.JRadioButtonMenuItem">
+               <property gencode="true"
+                     name="selected"/>
+         </widget>
+         <widget
+               abstract="false"
+               class="org.dyno.visual.swing.widgets.JPopupMenuAdapter"
+               groupId="menu"
+               icon="icons/popup_menu_16.png"
+               rootPaneContainer="false"
+               widgetClass="javax.swing.JPopupMenu"
+               widgetName="%Palette.JPopupMenu"
+               shown="true">
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.WindowAdapter"
+               icon="icons/widgets.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="java.awt.Window"
+               widgetName="Window">
+            <property
+                  name="focusableWindowState">
+            </property>
+            <property
+                  name="alwaysOnTop">
+            </property>
+            <property
+                  name="focusCycleRoot">
+            </property>
+            <property
+                  name="locationByPlatform">
+            </property>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.DialogAdapter"
+               icon="icons/widgets.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="java.awt.Dialog"
+               widgetName="Dialog">
+            <property
+                  name="title">
+            </property>
+            <property
+                  name="modal">
+            </property>
+            <property
+                  name="resizable">
+            </property>
+            <property
+                  class="org.dyno.visual.swing.widgets.properties.UndecoratedProperty"
+                  name="undecorated">
+            </property>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.FrameAdapter"
+               icon="icons/widgets.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="java.awt.Frame"
+               widgetName="Frame">
+            <property
+                  editor="org.dyno.visual.swing.widgets.editors.FrameExtendedStateEditor"
+                  name="extendedState"
+                  renderer="org.dyno.visual.swing.widgets.renderers.FrameExtendedStateRenderer">
+            </property>
+            <property
+                  name="iconImage">
+            </property>
+            <property
+                  name="maximizedBounds">
+            </property>
+            <property
+                  editor="org.dyno.visual.swing.widgets.editors.FrameStateEditor"
+                  name="state"
+                  renderer="org.dyno.visual.swing.widgets.renderers.FrameStateRenderer">
+            </property>
+            <property
+                  name="title">
+            </property>
+            <property
+                  class="org.dyno.visual.swing.widgets.properties.UndecoratedProperty"
+                  name="undecorated">
+            </property>
+            <property
+                  name="resizable">
+            </property>
+         </widget>
+         <widget
+               abstract="true"
+               class="org.dyno.visual.swing.widgets.JLayeredPaneAdapter"
+               groupId="container"
+               icon="icons/layered_pane_16.png"
+               rootPaneContainer="false"
+               shown="false"
+               widgetClass="javax.swing.JLayeredPane"
+               widgetName="JLayeredPane">
+         </widget>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.widgetGroup">         
+         <group
+               displayName="%Container"
+               id="container"
+               expanded="false"/>
+         <group 
+         	   id="component" 
+         	   displayName="%Component"/>
+		 <group
+               displayName="%Menus"
+               expanded="false"
+               id="menu">
+         </group>
+   </extension>     
+   <extension
+         point="org.dyno.visual.swing.propertyCategory">
+         <sorting id="nogroup" name="%SortByName">
+         	<category id="default_category" name="%Properties" default="true"/>
+         </sorting>
+         <sorting id="default" name="%SortByCategory" default="true">
+         		<category id="frequent" name="%Common">
+         			<provider class="javax.swing.JPanel">
+	        			<reference id="background"/>
+	        			<reference id="border"/>
+	        			<reference id="foreground"/>
+	        			<reference id="toolTipText"/>
+	        			<reference id="layout"/>
+    		        </provider>
+    		        <provider class="javax.swing.JLabel">
+	                	<reference id="background"/>
+	                	<reference id="font"/>
+	                	<reference id="foreground"/>
+	                	<reference id="horizontalAlignment"/>
+	                	<reference id="icon"/>
+	                	<reference id="text"/>
+	                	<reference id="toolTipText"/>
+	                	<reference id="verticalAlignment"/>
+    		        </provider>
+    		        <provider class="javax.swing.JButton">
+			        	<reference id="background"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="icon"/>
+			        	<reference id="text"/>
+			        	<reference id="toolTipText"/>
+			        	<reference id="mnemonic"/>
+    		        </provider>
+         			<provider class="javax.swing.JToggleButton">
+			        	<reference id="background"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="icon"/>
+			        	<reference id="mnemonic"/>
+			        	<reference id="selected"/>
+			        	<reference id="text"/>
+			        	<reference id="toolTipText"/>
+         			</provider>
+	         		<provider class="javax.swing.JCheckBox">
+			        	<reference id="background"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="mnemonic"/>
+			        	<reference id="selected"/>
+			        	<reference id="text"/>
+			        	<reference id="toolTipText"/>
+	         		</provider>
+	         		<provider class="javax.swing.JRadioButton">
+			        	<reference id="background"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="mnemonic"/>
+			        	<reference id="selected"/>
+			        	<reference id="text"/>
+			        	<reference id="toolTipText"/>
+	         		</provider>
+			        <provider class="javax.swing.JComboBox">
+			        	<reference id="background"/>
+			        	<reference id="editable"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="maximumRowCount"/>
+			        	<reference id="model"/>
+			        	<reference id="selectedIndex"/>
+			        	<reference id="selectedItem"/>
+			        </provider>
+			    	<provider class="javax.swing.JScrollPane">
+			    		<reference id="background"/>
+			    		<reference id="border"/>
+			    		<reference id="foreground"/>
+			    		<reference id="horizontalScrollBarPolicy"/>
+			    		<reference id="toolTipText"/>
+			    		<reference id="verticalScrollBarPolicy"/>
+			    		<reference id="viewportBorder"/>
+			    	</provider>
+			        <provider class="javax.swing.JList">
+			        	<reference id="background"/>
+			        	<reference id="border"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="selectionMode"/>
+			        	<reference id="toolTipText"/>
+			        </provider>
+					<provider class="javax.swing.JTextField">
+						<reference id="background"/>
+						<reference id="columns"/>
+						<reference id="editable"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="horizontalAlignment"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+			    	<provider class="javax.swing.JTextArea">
+			    		<reference id="background"/>
+			    		<reference id="columns"/>
+			    		<reference id="editable"/>
+			    		<reference id="font"/>
+			    		<reference id="foreground"/>
+			    		<reference id="lineWrap"/>
+			    		<reference id="rows"/>
+			    		<reference id="tabSize"/>
+			    		<reference id="text"/>
+			    		<reference id="toolTipText"/>
+			    		<reference id="wrapStyleWord"/>
+			    	</provider>
+			        <provider class="javax.swing.JScrollBar">
+			        	<reference id="background"/>
+			        	<reference id="blockIncrement"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="maximum"/>
+			        	<reference id="minimum"/>
+			        	<reference id="orientation"/>
+			        	<reference id="toolTipText"/>
+			        	<reference id="unitIncrement"/>
+			        	<reference id="value"/>
+			        	<reference id="visibleAmount"/>
+			        </provider>
+			        <provider class="javax.swing.JSlider">
+			        	<reference id="background"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="majorTickSpacing"/>
+			        	<reference id="maximum"/>
+			        	<reference id="minimum"/>
+			        	<reference id="minorTickSpacing"/>
+			        	<reference id="orientation"/>
+			        	<reference id="paintLabels"/>
+			        	<reference id="paintTicks"/>
+			        	<reference id="paintTrack"/>
+			        	<reference id="snapToTicks"/>
+			        	<reference id="toolTipText"/>
+			        	<reference id="value"/>
+			        </provider>
+			        <provider class="javax.swing.JProgressBar">
+			        	<reference id="background"/>
+			        	<reference id="font"/>
+			        	<reference id="foreground"/>
+			        	<reference id="maximum"/>
+			        	<reference id="minimum"/>
+			        	<reference id="orientation"/>
+			        	<reference id="toolTipText"/>
+			        	<reference id="value"/>
+			        </provider>
+		         	<provider class="javax.swing.JFormattedTextField">
+		         		<reference id="background"/>
+		         		<reference id="border"/>
+		         		<reference id="columns"/>
+		         		<reference id="editable"/>
+		         		<reference id="foreground"/>
+		         		<reference id="horizontalAlignment"/>
+		         		<reference id="text"/>
+		         		<reference id="toolTipText"/>
+		         	</provider>
+					<provider class="javax.swing.JPasswordField">
+						<reference id="background"/>
+						<reference id="columns"/>
+						<reference id="editable"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="horizontalAlignment"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JSpinner">
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="model"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JSeparator">
+						<reference id="background"/>
+						<reference id="foreground"/>
+						<reference id="orientation"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JEditorPane">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="contentType"/>
+						<reference id="editable"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JTextPane">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="contentType"/>
+						<reference id="editable"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JTree">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JTable">
+						<reference id="autoCreateColumnsFromModel"/>
+						<reference id="autoCreateRowSorter"/>
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JTabbedPane">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="foreground"/>
+						<reference id="selectedIndex"/>
+						<reference id="tabLayoutPolicy"/>
+						<reference id="tabPlacement"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JSplitPane">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="dividerLocation"/>
+						<reference id="dividerSize"/>
+						<reference id="foreground"/>
+						<reference id="orientation"/>
+						<reference id="resizeWeight"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JToolBar">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="floatable"/>
+						<reference id="foreground"/>
+						<reference id="orientation"/>
+						<reference id="rollover"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JDesktopPane">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="foreground"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JInternalFrame">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="closable"/>
+						<reference id="defaultCloseOperation"/>
+						<reference id="foreground"/>
+						<reference id="iconifiable"/>
+						<reference id="maximizable"/>
+						<reference id="resizable"/>
+						<reference id="title"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JFrame">
+						<reference id="title"/>
+						<reference id="defaultCloseOperation"/>
+						<reference id="iconImage"/>
+					</provider>
+					<provider class="javax.swing.JDialog">
+						<reference id="title"/>
+						<reference id="defaultCloseOperation"/>
+						<reference id="iconImage"/>
+					</provider>
+					<provider class="javax.swing.JMenuBar">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="foreground"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JMenu">
+						<reference id="background"/>
+						<reference id="border"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JMenuItem">
+						<reference id="accelerator"/>
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JCheckBoxMenuItem">
+						<reference id="accelerator"/>
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="selected"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+					<provider class="javax.swing.JRadioButtonMenuItem">
+						<reference id="accelerator"/>
+						<reference id="background"/>
+						<reference id="font"/>
+						<reference id="foreground"/>
+						<reference id="icon"/>
+						<reference id="mnemonic"/>
+						<reference id="selected"/>
+						<reference id="text"/>
+						<reference id="toolTipText"/>
+					</provider>
+         		</category>
+         		<category id="seldom" name="%Expert" filters="org.eclipse.ui.views.properties.expert" default="true"/>
+         </sorting>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.contextCustomizer">
+      <context
+            class="org.dyno.visual.swing.widgets.ButtonGroupCustomizer">
+      </context>
+      <context
+            class="org.dyno.visual.swing.widgets.JPopupMenuContextCustomizer">
+      </context>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.invisibleAdapter">
+      <adapter
+            class="org.dyno.visual.swing.widgets.ButtonGroupAdapter"
+            type="javax.swing.ButtonGroup">
+      </adapter>
+   </extension>
+   <extension
+         point="org.dyno.visual.swing.adapters">
+      <interface
+            class="javax.swing.event.MouseInputListener"
+            default="org.dyno.visual.swing.widgets.delegate.DefaultMouseInputDelegate">
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.delegate.JTabbedPaneMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.delegate.JInternalFrameMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenuItem"
+               implementation="org.dyno.visual.swing.widgets.delegate.JMenuItemMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.widgets.delegate.JMenuMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBoxMenuItem"
+               implementation="org.dyno.visual.swing.widgets.delegate.JCheckBoxMenuItemMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButtonMenuItem"
+               implementation="org.dyno.visual.swing.widgets.delegate.JRadioButtonMenuItemMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.delegate.JRadioButtonMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.delegate.JCheckBoxMouseDelegate">
+         </adapter>
+         <adapter
+               class="javax.swing.JComponent"
+               implementation="org.dyno.visual.swing.widgets.delegate.WidgetMouseInputAdapter">
+         </adapter></interface>
+      <interface
+            class="org.dyno.visual.swing.plugin.spi.IDesignOperation"
+            default="org.dyno.visual.swing.widgets.design.CompositeDesignOperation">
+         <adapter
+               class="javax.swing.JApplet"
+               implementation="org.dyno.visual.swing.widgets.design.JAppletDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JDesktopPane"
+               implementation="org.dyno.visual.swing.widgets.design.JDesktopPaneDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JDialog"
+               implementation="org.dyno.visual.swing.widgets.design.JDialogDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JFrame"
+               implementation="org.dyno.visual.swing.widgets.design.JFrameDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.design.JInternalFrameDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenuBar"
+               implementation="org.dyno.visual.swing.widgets.design.JMenuBarDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.widgets.design.JMenuDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JPanel"
+               implementation="org.dyno.visual.swing.widgets.design.JPanelDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JPopupMenu"
+               implementation="org.dyno.visual.swing.widgets.design.JPopupMenuDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JScrollPane"
+               implementation="org.dyno.visual.swing.widgets.design.JScrollPaneDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JSplitPane"
+               implementation="org.dyno.visual.swing.widgets.design.JSplitPaneDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.design.JTabbedPaneDesignOperation">
+         </adapter>
+         <adapter
+               class="javax.swing.JToolBar"
+               implementation="org.dyno.visual.swing.widgets.design.JToolBarDesignOperation">
+         </adapter>
+      </interface>
+      <interface
+            class="org.dyno.visual.swing.plugin.spi.IPainter"
+            default="org.dyno.visual.swing.widgets.painter.WidgetPainter">
+         <adapter
+               class="javax.swing.JApplet"
+               implementation="org.dyno.visual.swing.widgets.painter.JAppletPainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JDesktopPane"
+               implementation="org.dyno.visual.swing.widgets.painter.JDesktopPanePainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JDialog"
+               implementation="org.dyno.visual.swing.widgets.painter.JDialogPainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JFrame"
+               implementation="org.dyno.visual.swing.widgets.painter.JFramePainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.painter.JInternalFramePainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenuBar"
+               implementation="org.dyno.visual.swing.widgets.painter.JMenuBarPainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.widgets.painter.JMenuPainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JPanel"
+               implementation="org.dyno.visual.swing.widgets.painter.JPanelPainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JPopupMenu"
+               implementation="org.dyno.visual.swing.widgets.painter.JPopupMenuPainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JScrollPane"
+               implementation="org.dyno.visual.swing.widgets.painter.JScrollPanePainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSplitPane"
+               implementation="org.dyno.visual.swing.widgets.painter.JSplitPanePainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.painter.JTabbedPanePainter">
+         </adapter>
+         <adapter
+               class="javax.swing.JToolBar"
+               implementation="org.dyno.visual.swing.widgets.painter.JToolBarPainter">
+         </adapter>
+      </interface>
+      <interface
+            class="org.dyno.visual.swing.plugin.spi.IBaselineAdapter"
+            default="org.dyno.visual.swing.widgets.baseline.WidgetBaseline">
+         <adapter
+               class="javax.swing.JComboBox"
+               implementation="org.dyno.visual.swing.widgets.baseline.JComboBoxBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JButton"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JFormattedTextField"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JLabel"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JPasswordField"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextField"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter>
+         <adapter
+               class="javax.swing.JToggleButton"
+               implementation="org.dyno.visual.swing.widgets.baseline.TextWidgetBaseline">
+         </adapter></interface>
+      <interface
+            class="org.dyno.visual.swing.plugin.spi.IEditorAdapter"
+            default="org.dyno.visual.swing.widgets.editoradapter.WidgetEditorAdapter">
+         <adapter
+               class="javax.swing.JCheckBoxMenuItem"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JCheckBoxMenuItemEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JComboBox"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JComboBoxEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JInternalFrameEdtiorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JList"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JListEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenu"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JMenuEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JMenuItem"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JMenuItemEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JPanel"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JPanelEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JProgressBar"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JProgressBarEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButtonMenuItem"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JRadioButtonMenuItemEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JScrollBar"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JScrollBarEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSlider"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JSliderEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSpinner"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JSpinnerEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JSplitPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JSplitPaneEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTabbedPaneEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTable"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTableEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTree"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTreeEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JCheckBoxEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JFormattedTextField"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JFormattedTextFieldEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JPasswordField"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JPasswordFieldEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JRadioButtonEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextField"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JTextFieldEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JButton"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JToggleButton"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JLabel"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.TextWidgetEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JFrame"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JFrameEdtiorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JDialog"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.JDialogEdtiorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextArea"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.J2DTextComponentEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JEditorPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.J2DTextComponentEditorAdapter">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextPane"
+               implementation="org.dyno.visual.swing.widgets.editoradapter.J2DTextComponentEditorAdapter">
+         </adapter>
+      </interface>
+      <interface
+          class="org.dyno.visual.swing.plugin.spi.IMenuContext"
+          default="org.dyno.visual.swing.widgets.menucontext.JComponentMenuContext">
+         <adapter
+               class="javax.swing.JPanel"
+               implementation="org.dyno.visual.swing.widgets.menucontext.JPanelMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JSplitPane"
+               implementation="org.dyno.visual.swing.widgets.menucontext.JSplitPaneMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JApplet"
+               implementation="org.dyno.visual.swing.widgets.menucontext.RootPaneContainerMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JDialog"
+               implementation="org.dyno.visual.swing.widgets.menucontext.RootPaneContainerMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JFrame"
+               implementation="org.dyno.visual.swing.widgets.menucontext.RootPaneContainerMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JInternalFrame"
+               implementation="org.dyno.visual.swing.widgets.menucontext.RootPaneContainerMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JButton"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JCheckBox"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JFormattedTextField"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JLabel"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JPasswordField"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JRadioButton"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JTextField"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JToggleButton"
+               implementation="org.dyno.visual.swing.widgets.menucontext.TextWidgetMenuContext">
+         </adapter>
+         <adapter
+               class="javax.swing.JTabbedPane"
+               implementation="org.dyno.visual.swing.widgets.menucontext.JTabbedPaneMenuContext">
+         </adapter>
+      </interface>
+    </extension>
+</plugin>

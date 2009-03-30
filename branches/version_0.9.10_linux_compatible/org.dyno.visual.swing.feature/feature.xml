@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.dyno.visual.swing.feature"
+      label="Visual Swing Designer for Eclipse"
+      version="0.9.10.I20090327-1600"
+      provider-name="Dynamic Object Organization">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.eclipse.org/legal/epl-v10.html">
+      William Chen and others 2000, 2008.  All rights reserved.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      [Enter License Description here.]
+   </license>
+
+   <url>
+      <update label="Visual Swing Designer for Eclipse" url="http://visualswing4eclipse.googlecode.com/svn/trunk/org.dyno.visual.swing.site/"/>
+   </url>
+
+   <plugin
+         id="org.dyno.visual.swing"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.borders"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.grouplayouts"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.layouts"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.lnfs"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.parser"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.types"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.dyno.visual.swing.widgets"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
