@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.dyno.visual.swing.feature"
-      label="Visual Swing Designer for Eclipse"
+      label="Visual Swing for Eclipse"
       version="0.9.10.I20090331-1300"
       provider-name="Dynamic Object Organization">
 
