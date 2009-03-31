@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="Visual Swing Designer for Eclipse" url="http://visualswing4eclipse.googlecode.com/svn/trunk/org.dyno.visual.swing.site/"/>
+      <update label="Visual Swing for Eclipse" url="http://visualswing4eclipse.googlecode.com/svn/trunk/org.dyno.visual.swing.site/"/>
    </url>
 
    <plugin
