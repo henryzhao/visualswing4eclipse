@@ -303,7 +303,7 @@ public final class AwtEnvironment {
             Component popup = (Component)iter.next();
             if (popup.isVisible()) {
                 result = true;
-                popup.setVisible(false);
+                //popup.setVisible(false);
             }
         }
         return result;
