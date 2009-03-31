@@ -26,6 +26,7 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.MediaTracker;
 import java.awt.Paint;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.util.List;
@@ -212,8 +213,13 @@ public class DialogBorder implements Border {
 			FontMetrics fm = g.getFontMetrics();
 			gy = y + OUTER_PAD + (TITLE_HEIGHT - fm.getHeight()) / 2
 					+ fm.getAscent();
-			g.setColor(Color.white);
-			g.drawString(title, gx, gy);
+			int w = width - 2 * OUTER_PAD - CONTROL_CLOSE.getWidth(c) - 2 - ICON_PAD - image_width - ICON_TEXT_PAD;
+			Graphics clipg = g.create(gx, 0, w, height);
+			Graphics2D g2d = (Graphics2D) clipg;
+			g2d.setColor(Color.white);
+			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g2d.drawString(title, 0, gy);
+			g2d.dispose();			
 		}
 
 		int w = CONTROL_CLOSE.getWidth(c);
