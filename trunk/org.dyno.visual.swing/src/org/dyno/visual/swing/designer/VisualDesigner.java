@@ -263,10 +263,12 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private void fillLnfAction(MenuManager lnfMenu) {
 		Collection<ILookAndFeelAdapter> lnfAdapters = ExtensionRegistry.getLnfAdapters();
 		for (ILookAndFeelAdapter lnfAdapter : lnfAdapters) {
-			String lnfName = lnfAdapter.getName();
-			String lnfClassname = lnfAdapter.getClassname();
-			IAction lnfAction = new SetLnfAction(this, lnfName, lnfClassname);
-			lnfMenu.add(lnfAction);
+			if (lnfAdapter.getLookAndFeelInstance().isSupportedLookAndFeel()) {
+				String lnfName = lnfAdapter.getName();
+				String lnfClassname = lnfAdapter.getClassname();
+				IAction lnfAction = new SetLnfAction(this, lnfName, lnfClassname);
+				lnfMenu.add(lnfAction);
+			}
 		}
 	}
 
