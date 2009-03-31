@@ -3,7 +3,7 @@
 <repository name='Visual Swing for Eclipse' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1238475585232'/>
+    <property name='p2.timestamp' value='1238476317103'/>
   </properties>
   <references size='2'>
     <repository url='http://visualswing4eclipse.googlecode.com/svn/trunk/org.dyno.visual.swing.site/' type='0' options='0'/>
@@ -142,7 +142,7 @@
     <unit id='org.dyno.visual.swing.feature.feature.group' version='0.9.10.I20090331-1300' singleton='false'>
       <update id='org.dyno.visual.swing.feature.feature.group' range='[0.0.0,0.9.10.I20090331-1300)' severity='0'/>
       <properties size='5'>
-        <property name='org.eclipse.equinox.p2.name' value='Visual Swing Designer for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.name' value='Visual Swing for Eclipse'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
         <property name='org.eclipse.equinox.p2.provider' value='Dynamic Object Organization'/>
@@ -179,7 +179,7 @@
     <unit id='org.dyno.visual.swing.feature.feature.jar' version='0.9.10.I20090331-1300'>
       <update id='org.dyno.visual.swing.feature.feature.jar' range='[0.0.0,0.9.10.I20090331-1300)' severity='0'/>
       <properties size='4'>
-        <property name='org.eclipse.equinox.p2.name' value='Visual Swing Designer for Eclipse'/>
+        <property name='org.eclipse.equinox.p2.name' value='Visual Swing for Eclipse'/>
         <property name='org.eclipse.equinox.p2.description' value='[Enter Feature Description here.]'/>
         <property name='org.eclipse.equinox.p2.description.url' value='http://www.example.com/description'/>
         <property name='org.eclipse.equinox.p2.provider' value='Dynamic Object Organization'/>
