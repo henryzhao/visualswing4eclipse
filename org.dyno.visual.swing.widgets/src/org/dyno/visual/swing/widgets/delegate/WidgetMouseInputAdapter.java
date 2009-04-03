@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.event.MouseInputAdapter;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.menucontext.HideShowPopupAction;
@@ -25,7 +26,7 @@ public class WidgetMouseInputAdapter extends MouseInputAdapter implements IAdapt
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu componentPopupMenu = jcomp.getComponentPopupMenu();
+			JPopupMenu componentPopupMenu = JavaUtil.getComponentPopupMenu(jcomp);
 			if (adaptable.isSelected() && componentPopupMenu != null && WidgetAdapter.getWidgetAdapter(componentPopupMenu) != null) {
 				int w = widget.getWidth();
 				int h = widget.getHeight();
@@ -47,7 +48,7 @@ public class WidgetMouseInputAdapter extends MouseInputAdapter implements IAdapt
 			Component widget = adaptable.getWidget();
 			if (widget instanceof JComponent) {
 				JComponent jcomp = (JComponent) widget;
-				JPopupMenu componentPopupMenu = jcomp.getComponentPopupMenu();
+				JPopupMenu componentPopupMenu = JavaUtil.getComponentPopupMenu(jcomp);
 				if (adaptable.isSelected() && componentPopupMenu != null && WidgetAdapter.getWidgetAdapter(componentPopupMenu) != null) {
 					int w = widget.getWidth();
 					int h = widget.getHeight();
@@ -66,7 +67,7 @@ public class WidgetMouseInputAdapter extends MouseInputAdapter implements IAdapt
 			Component widget = adaptable.getWidget();
 			if (widget instanceof JComponent) {
 				JComponent jcomp = (JComponent) widget;
-				JPopupMenu componentPopupMenu = jcomp.getComponentPopupMenu();
+				JPopupMenu componentPopupMenu = JavaUtil.getComponentPopupMenu(jcomp);
 				if (adaptable.isSelected() && componentPopupMenu != null && WidgetAdapter.getWidgetAdapter(componentPopupMenu) != null) {
 					int w = widget.getWidth();
 					int h = widget.getHeight();

@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.IDesignOperation;
 import org.dyno.visual.swing.plugin.spi.IPainter;
@@ -43,7 +44,7 @@ public class WidgetDesignOperation implements IDesignOperation, IAdaptableContex
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomp);
 			if(jpm!=null&&WidgetAdapter.getWidgetAdapter(jpm)!=null)
 				return true;
 		}

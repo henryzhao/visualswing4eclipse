@@ -20,7 +20,7 @@ public class JComponentMenuContext extends CompositeMenuContext {
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomp);
 			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
 				menu.add(new HideShowPopupAction(widget));
 				menu.add(new DeletePopupAction(widget));
@@ -36,7 +36,7 @@ public class JComponentMenuContext extends CompositeMenuContext {
 		public DeletePopupAction(Component widget) {
 			this.widget = widget;
 			JComponent jcomp = (JComponent) widget;
-			popup = jcomp.getComponentPopupMenu();
+			popup = JavaUtil.getComponentPopupMenu(jcomp);
 			popupAdapter = (JPopupMenuAdapter) WidgetAdapter.getWidgetAdapter(popup);
 			setText("Delete Popup Menu " + popupAdapter.getID());
 		}

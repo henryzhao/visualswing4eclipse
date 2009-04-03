@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IEventListenerModel;
@@ -89,7 +90,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 				}
 				if (component instanceof JComponent) {
 					JComponent jcomponent = (JComponent) component;
-					JPopupMenu jpm = jcomponent.getComponentPopupMenu();
+					JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomponent);
 					if (jpm != null) {
 						WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
 						if (jpmAdapter != null) {
@@ -179,7 +180,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 			}
 			if (child instanceof JComponent) {
 				JComponent jcomponent = (JComponent) child;
-				JPopupMenu jpm = jcomponent.getComponentPopupMenu();
+				JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomponent);
 				if (jpm != null) {
 					WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
 					if (jpmAdapter != null) {

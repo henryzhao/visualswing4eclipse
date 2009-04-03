@@ -81,7 +81,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomp);
 			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
 				WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
 				IParser parser = (IParser) jpmAdapter.getAdapter(IParser.class);
@@ -343,7 +343,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomp);
 			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
 				WidgetAdapter jpmAdapter = WidgetAdapter.getWidgetAdapter(jpm);
 				IParser parser = (IParser) jpmAdapter.getAdapter(IParser.class);

@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -46,7 +47,7 @@ public class WidgetSelection extends ArrayList<Component> implements IStructured
 			add(adapter.getWidget());
 		if(comp instanceof JComponent){
 			JComponent jcomp = (JComponent) comp;
-			JPopupMenu jpopup = jcomp.getComponentPopupMenu();
+			JPopupMenu jpopup = JavaUtil.getComponentPopupMenu(jcomp);
 			if(jpopup!=null&&WidgetAdapter.getWidgetAdapter(jpopup)!=null){
 				addSelection(jpopup);
 			}
