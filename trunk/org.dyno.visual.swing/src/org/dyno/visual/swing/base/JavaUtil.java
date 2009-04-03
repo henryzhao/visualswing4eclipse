@@ -13,8 +13,10 @@
 
 package org.dyno.visual.swing.base;
 
+import java.applet.Applet;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Window;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,6 +30,7 @@ import java.util.Stack;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
@@ -92,6 +95,31 @@ public class JavaUtil {
 			if (child instanceof Container) {
 				layoutContainer((Container) child);
 			}
+		}
+	}
+
+	public static JPopupMenu getComponentPopupMenu(JComponent jcomp) {
+		if (!jcomp.getInheritsPopupMenu())
+			return jcomp.getComponentPopupMenu();
+		else {
+			JPopupMenu jpopup = jcomp.getComponentPopupMenu();
+			if (jpopup == null)
+				return null;
+			// Search parents for its popup
+			Container parent = jcomp.getParent();
+			while (parent != null) {
+				if (parent instanceof JComponent) {
+					JPopupMenu parent_popup = ((JComponent) parent).getComponentPopupMenu();
+					if (jpopup == parent_popup)
+						return null;
+					return jpopup;
+				}
+				if (parent instanceof Window || parent instanceof Applet) {
+					return jpopup;
+				}
+				parent = parent.getParent();
+			}
+			return jpopup;
 		}
 	}
 
@@ -225,7 +253,7 @@ public class JavaUtil {
 				JMenu jme = (JMenu) me;
 				jme.setPopupMenuVisible(false);
 				jme.setSelected(false);
-			}else if (me instanceof JPopupMenu) {
+			} else if (me instanceof JPopupMenu) {
 				JPopupMenu pop = (JPopupMenu) me;
 				pop.setVisible(false);
 			}

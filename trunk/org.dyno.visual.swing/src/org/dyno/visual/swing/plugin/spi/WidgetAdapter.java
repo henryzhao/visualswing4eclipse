@@ -218,7 +218,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		dirty = false;
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			JPopupMenu popup = JavaUtil.getComponentPopupMenu(jcomp);
 			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				popupAdapter.clearDirty();
@@ -239,7 +239,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			return true;
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			JPopupMenu popup = JavaUtil.getComponentPopupMenu(jcomp);
 			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				if (popupAdapter.isDirty())
@@ -449,7 +449,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		setSelected(false);
 		if (widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu jpm = jcomp.getComponentPopupMenu();
+			JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomp);
 			if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(jpm);
 				popupAdapter.clearSelection();
@@ -948,7 +948,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			return true;
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			JPopupMenu popup = JavaUtil.getComponentPopupMenu(jcomp);
 			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				if (popupAdapter.isRenamed())
@@ -969,7 +969,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			return true;
 		if (widget != null && widget instanceof JComponent) {
 			JComponent jcomp = (JComponent) widget;
-			JPopupMenu popup = jcomp.getComponentPopupMenu();
+			JPopupMenu popup = JavaUtil.getComponentPopupMenu(jcomp);
 			if (popup != null && WidgetAdapter.getWidgetAdapter(popup) != null) {
 				WidgetAdapter popupAdapter = WidgetAdapter.getWidgetAdapter(popup);
 				if (popupAdapter.includeName(another))

@@ -15,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import org.dyno.visual.swing.base.ContextCustomizerAdapter;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 
 @SuppressWarnings("serial")
@@ -57,7 +58,7 @@ public class JPopupMenuContextCustomizer extends ContextCustomizerAdapter {
 			for (Component comp : selected) {
 				if (comp instanceof JComponent) {
 					JComponent jcomp = (JComponent) comp;
-					JPopupMenu jpm = jcomp.getComponentPopupMenu();
+					JPopupMenu jpm = JavaUtil.getComponentPopupMenu(jcomp);
 					if (jpm != null && WidgetAdapter.getWidgetAdapter(jpm) != null) {
 						WidgetAdapter bAdapter = WidgetAdapter.getWidgetAdapter(comp);
 						Point p = bAdapter.convertToGlobal(new Point(0, 0));

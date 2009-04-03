@@ -2,7 +2,7 @@
 <feature
       id="org.dyno.visual.swing.feature"
       label="Visual Swing for Eclipse"
-      version="0.9.10.I20090331-1630"
+      version="0.9.10.I20090403-1200"
       provider-name="Dynamic Object Organization">
 
    <description url="http://www.example.com/description">
@@ -14,11 +14,11 @@
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
-Dynamic Object Software User Agreement
+      Dynamic Object Software User Agreement
 1st April, 2009
 Visual Swing
 Visual Swing is licensed under the terms of the Eclipse Public License v1.0.
-IT IS YOUR OBLIGATION TO READ AND ACCEPT ALL SUCH TERMS AND CONDITIONS PRIOR TO USE OF THIS CONTENT.   
+IT IS YOUR OBLIGATION TO READ AND ACCEPT ALL SUCH TERMS AND CONDITIONS PRIOR TO USE OF THIS CONTENT.
    </license>
 
    <url>

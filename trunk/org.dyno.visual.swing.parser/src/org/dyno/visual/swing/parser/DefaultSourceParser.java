@@ -291,7 +291,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		if (bean instanceof Container) {
 			if (bean instanceof JComponent) {
 				JComponent jcomp = (JComponent) bean;
-				if (jcomp.getComponentPopupMenu() == popup)
+				if (JavaUtil.getComponentPopupMenu(jcomp) == popup)
 					return jcomp;
 			}
 			Container container = (Container) bean;

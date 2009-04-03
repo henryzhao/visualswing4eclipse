@@ -7,6 +7,7 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.JPopupMenuAdapter;
 import org.eclipse.jface.action.Action;
@@ -19,7 +20,7 @@ public class HideShowPopupAction extends Action {
 	public HideShowPopupAction(Component widget) {
 		this.widget = widget;
 		JComponent jcomp = (JComponent) widget;
-		popup = jcomp.getComponentPopupMenu();
+		popup = JavaUtil.getComponentPopupMenu(jcomp);
 		popupAdapter = (JPopupMenuAdapter) WidgetAdapter.getWidgetAdapter(popup);
 		setText((popup.isVisible() ? "Hide" : "Show") + " Popup Menu " + popupAdapter.getID());
 	}
