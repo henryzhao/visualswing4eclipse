@@ -29,7 +29,6 @@ public abstract class AbstractAdaptable implements IAdaptable {
 	}
 
 	
-	@Override
 	public Object getAdapter(Class adapterClass) {
 		Object object = adapters.get(adapterClass.getName());
 		if (object == null) {

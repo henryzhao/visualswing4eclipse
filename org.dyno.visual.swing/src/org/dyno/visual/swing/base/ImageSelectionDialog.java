@@ -53,7 +53,6 @@ public class ImageSelectionDialog extends Dialog {
 	private Label label;
 
 	private class ProjectTreeContent implements ITreeContentProvider {
-		@Override
 		public Object[] getChildren(Object parentElement) {
 			try {
 				if (parentElement instanceof IJavaProject) {
@@ -114,13 +113,9 @@ public class ImageSelectionDialog extends Dialog {
 			}
 			return new Object[0];
 		}
-
-		@Override
 		public Object getParent(Object element) {
 			return null;
 		}
-
-		@Override
 		public boolean hasChildren(Object element) {
 			try {
 				IJavaElement[] children = null;
@@ -170,17 +165,12 @@ public class ImageSelectionDialog extends Dialog {
 			}
 			return false;
 		}
-
-		@Override
 		public Object[] getElements(Object inputElement) {
 			return getChildren(inputElement);
 		}
-
-		@Override
 		public void dispose() {
 		}
 
-		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 
@@ -246,7 +236,6 @@ public class ImageSelectionDialog extends Dialog {
 		view.setLabelProvider(new ProjectLabelProvider());
 		view.setInput(VisualSwingPlugin.getCurrentProject());
 		view.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 				view_selectionChanged(event);
 			}

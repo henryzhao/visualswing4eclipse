@@ -16,12 +16,12 @@ import org.eclipse.core.runtime.IAdaptable;
 public class WidgetMouseInputAdapter extends MouseInputAdapter implements IAdaptableContext {
 	protected WidgetAdapter adaptable;
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}
 
-	@Override
+	
 	public void mouseMoved(MouseEvent e) {
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
@@ -42,7 +42,7 @@ public class WidgetMouseInputAdapter extends MouseInputAdapter implements IAdapt
 		}
 	}
 
-	@Override
+	
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			Component widget = adaptable.getWidget();
@@ -61,7 +61,7 @@ public class WidgetMouseInputAdapter extends MouseInputAdapter implements IAdapt
 		}
 	}
 
-	@Override
+	
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			Component widget = adaptable.getWidget();

@@ -80,19 +80,19 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		return state;
 	}
 
-	@Override
+	
 	public synchronized void dragEnter(DropTargetDragEvent dtde) {
 		state = STATE_BEAN_HOVER;
 	}
 
-	@Override
+	
 	public synchronized void dragExit(DropTargetEvent dte) {
 		state = STATE_MOUSE_HOVER;
 		glassPlane.setHotspotPoint(null);
 		glassPlane.repaint();
 	}
 
-	@Override
+	
 	public synchronized void dragOver(DropTargetDragEvent dtde) {
 		dragOver(dtde.getLocation());
 	}
@@ -158,7 +158,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		glassPlane.repaint();
 	}
 
-	@Override
+	
 	public synchronized void drop(DropTargetDropEvent dtde) {
 		drop(dtde.getLocation(), false);
 	}
@@ -639,7 +639,7 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 					final String message = e.getMessage();
 					final Shell shell = JavaUtil.getEclipseShell();
 					shell.getDisplay().syncExec(new Runnable() {
-						@Override
+						
 						public void run() {
 							MessageDialog.openError(shell, Messages.GLASS_TARGET_VALIDATION_ERROR, message);
 						}
@@ -658,10 +658,10 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		return _stopEditing(false);
 	}
 
-	@Override
+	
 	public void stateChanged(ChangeEvent e) {
 		SwingUtilities.invokeLater(new Runnable() {
-			@Override
+			
 			public void run() {
 				stopEditing();
 			}
@@ -1027,11 +1027,11 @@ public class GlassTarget extends DropTarget implements MouseInputListener, Mouse
 		return currentEditor != null;
 	}
 
-	@Override
+	
 	public void focusGained(FocusEvent e) {
 	}
 
-	@Override
+	
 	public void focusLost(FocusEvent e) {
 		if (!stoppingEditing) {
 			if (e.getOppositeComponent() == null) {

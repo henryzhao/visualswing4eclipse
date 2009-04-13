@@ -31,7 +31,7 @@ public class TabLayoutPolicyItems implements ItemProvider {
 	public TabLayoutPolicyItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

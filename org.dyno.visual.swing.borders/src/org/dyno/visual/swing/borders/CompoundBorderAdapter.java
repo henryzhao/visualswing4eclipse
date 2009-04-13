@@ -35,39 +35,39 @@ import org.eclipse.jface.action.IAction;
 @SuppressWarnings("unchecked")
 public class CompoundBorderAdapter extends BorderAdapter {
 
-	@Override
+	
 	public Class getBorderClass() {
 		return CompoundBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "CompoundBorder";
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		FieldProperty outside = new FieldProperty("outsideBorder", "outsideBorder", CompoundBorder.class);
 		FieldProperty inside = new FieldProperty("insideBorder", "insideBorder", CompoundBorder.class);
 		return new IWidgetPropertyDescriptor[] {outside, inside};
 	}
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new CompoundBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return BorderFactory.createCompoundBorder();
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "null";

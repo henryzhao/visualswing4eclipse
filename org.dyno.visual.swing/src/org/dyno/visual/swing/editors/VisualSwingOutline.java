@@ -61,7 +61,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 	}
 	
 
-	@Override
+	
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		TreeViewer treeView = getTreeViewer();
@@ -72,20 +72,20 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		treeView.addSelectionChangedListener(this);
 		Tree tree = (Tree) treeView.getTree();
 		tree.addMenuDetectListener(new MenuDetectListener() {
-			@Override
+			
 			public void menuDetected(MenuDetectEvent e) {
 				_showMenu(e);
 			}
 		});
 		tree.addMouseListener(new MouseAdapter() {
-			@Override
+			
 			public void mouseDoubleClick(MouseEvent e) {
 				_mouseDoubleClicked(e);
 			}
 		});
 		tree.addListener(SWT.MeasureItem,
 				new org.eclipse.swt.widgets.Listener() {
-					@Override
+					
 					public void handleEvent(org.eclipse.swt.widgets.Event event) {
 						event.height = 18;
 					}
@@ -206,7 +206,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		}
 	}
 
-	@Override
+	
 	public void selectionChanged(SelectionChangedEvent event) {
 		if (event.getSource() == getTreeViewer() && !isAdjusting) {
 			IStructuredSelection selection = (IStructuredSelection) event

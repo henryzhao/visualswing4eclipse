@@ -60,42 +60,42 @@ public class PropertySource2 implements IPropertySource2 {
 			property.setBean(bean);
 		}
 	}
-	@Override
+	
 	public boolean isPropertyResettable(Object id) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
 		return property != null && property.isPropertyResettable(bean);
 	}
 
-	@Override
+	
 	public boolean isPropertySet(Object id) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
 		return property != null && property.isPropertySet(lnfClassname, bean);
 	}
 
-	@Override
+	
 	public Object getEditableValue() {
 		return bean;
 	}
 
-	@Override
+	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		return properties;
 	}
 
-	@Override
+	
 	public Object getPropertyValue(Object id) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
 		return property == null ? null : property.getPropertyValue(bean);
 	}
 
-	@Override
+	
 	public void resetPropertyValue(Object id) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
 		if (property != null)
 			property.resetPropertyValue(lnfClassname, bean);
 	}
 
-	@Override
+	
 	public void setPropertyValue(Object id, Object value) {
 		IWidgetPropertyDescriptor property = propertyMap.get(id);
 		if (property != null){

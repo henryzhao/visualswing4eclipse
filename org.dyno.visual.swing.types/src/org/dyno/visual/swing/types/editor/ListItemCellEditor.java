@@ -73,7 +73,7 @@ public class ListItemCellEditor extends DialogCellEditor {
 		super(parent, style);
 	}
 
-	@Override
+	
 	protected void doSetFocus() {
 		lstText.setFocus();
 		lstText.selectAll();
@@ -89,7 +89,7 @@ public class ListItemCellEditor extends DialogCellEditor {
 		lstText.setFont(cell.getFont());
 		lstText.addModifyListener(getModifyListener());
 		lstText.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent e) {
 				itemTextChanged();
 			}
@@ -150,29 +150,29 @@ public class ListItemCellEditor extends DialogCellEditor {
 			return dialog.getListItemModel();
 	}
 
-	@Override
+	
 	protected void doSetValue(Object value) {
 		super.doSetValue(value);
 		if (value == null || value instanceof ComboBoxModel) {
 			adapter = new ListModelAdapter() {
-				@Override
+				
 				public void addElement(ListModel model, Object element) {
 					((DefaultComboBoxModel) model).addElement(element);
 				}
 
-				@Override
+				
 				public ListModel newModel() {
 					return new DefaultComboBoxModel();
 				}
 			};
 		} else if (value instanceof ListModel) {
 			adapter = new ListModelAdapter() {
-				@Override
+				
 				public void addElement(ListModel model, Object element) {
 					((DefaultListModel) model).addElement(element);
 				}
 
-				@Override
+				
 				public ListModel newModel() {
 					return new DefaultListModel();
 				}

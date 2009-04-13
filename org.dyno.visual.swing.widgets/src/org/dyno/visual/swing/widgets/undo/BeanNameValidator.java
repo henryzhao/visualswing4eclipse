@@ -21,7 +21,7 @@ public class BeanNameValidator implements ICellEditorValidator {
 	public BeanNameValidator(WidgetAdapter adapter){
 		this.adapter = adapter;
 	}
-	@Override
+	
 	public String isValid(Object value) {
 		String name = (String) value;
 		try {

@@ -27,7 +27,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 
 public class InnerClassModel extends BaseClassModel {
-	@Override
+	
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
 		Class<?>[] pd = methodDesc.getMethod().getParameterTypes();
 		if (pd.length > 0) {

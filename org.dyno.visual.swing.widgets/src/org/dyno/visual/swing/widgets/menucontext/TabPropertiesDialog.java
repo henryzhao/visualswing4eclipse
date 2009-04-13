@@ -33,7 +33,7 @@ public class TabPropertiesDialog extends Dialog {
 		super(parentShell);
 	}
 
-	@Override
+	
 	public boolean close() {
 		if (this.lblImage != null)
 			this.lblImage.dispose();
@@ -64,7 +64,7 @@ public class TabPropertiesDialog extends Dialog {
 		return imgFile;
 	}
 
-	@Override
+	
 	protected void okPressed() {
 		title = txtTitle.getText();
 		if(title.trim().length()==0)
@@ -75,7 +75,7 @@ public class TabPropertiesDialog extends Dialog {
 		super.okPressed();
 	}
 
-	@Override
+	
 	protected Control createDialogArea(Composite parent) {
 		getShell().setText("Customize Tab Properties");
 		Composite area = new Composite(parent, SWT.NONE);
@@ -118,12 +118,12 @@ public class TabPropertiesDialog extends Dialog {
 		Button button = new Button(area, SWT.PUSH);
 		button.setText("Change ...");
 		button.addSelectionListener(new SelectionListener() {
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent e) {
 				selectIcon();
 			}
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				selectIcon();
 			}

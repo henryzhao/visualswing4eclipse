@@ -13,6 +13,7 @@
 
 package org.dyno.visual.swing.wizards;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IType;
@@ -32,7 +33,8 @@ public class NewAppletPage extends NewComponentPage {
 		String cEventQueue = imports.addImport("java.awt.EventQueue");
 		buf.append(cEventQueue);
 		buf.append(".invokeAndWait(new Runnable() {\n");
-		buf.append("@Override\n");
+		if (JavaUtil.isJava6())
+			buf.append("@Override\n");
 		buf.append("public void run() {\n");
 		buf.append(INIT_METHOD_NAME + "();\n");
 		buf.append("}\n});\n} catch (Exception ex) {\n");
@@ -99,7 +101,8 @@ public class NewAppletPage extends NewComponentPage {
 		buf.append("installLnF();\n");
 		cName = imports.addImport("javax.swing.SwingUtilities");
 		buf.append(cName + ".invokeLater(new Runnable(){\n");
-		buf.append("@Override\n");
+		if (JavaUtil.isJava6())
+			buf.append("@Override\n");
 		buf.append("public void run(){\n");
 		cName = type.getTypeQualifiedName('.');
 		buf.append(cName + " applet = new " + cName + "();\n");

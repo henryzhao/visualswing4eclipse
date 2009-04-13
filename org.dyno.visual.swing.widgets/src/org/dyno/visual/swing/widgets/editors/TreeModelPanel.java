@@ -150,7 +150,7 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			return 0;
 		}
 
-		@Override
+		
 		protected void paintComponent(Graphics g) {
 			paintBackground(g);
 			if (row != -1) {
@@ -201,21 +201,21 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			g2d.setComposite(old);
 		}
 
-		@Override
+		
 		public void mouseClicked(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseEntered(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseExited(MouseEvent e) {
 			row = -1;
 			repaint();
 		}
 
-		@Override
+		
 		public void mousePressed(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint(TreeModelPanel.this, e.getPoint(), tree);
 			TreePath path = tree.getClosestPathForLocation(p.x, p.y);
@@ -240,7 +240,7 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			repaint();
 		}
 
-		@Override
+		
 		public void mouseReleased(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint(TreeModelPanel.this, e.getPoint(), tree);
 			TreePath path = tree.getClosestPathForLocation(p.x, p.y);
@@ -266,11 +266,11 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			repaint();
 		}
 
-		@Override
+		
 		public void mouseDragged(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseMoved(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint(TreeModelPanel.this, e.getPoint(), tree);
 			TreePath path = tree.getClosestPathForLocation(p.x, p.y);
@@ -312,17 +312,17 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			return null;
 		}
 
-		@Override
+		
 		public void mouseWheelMoved(MouseWheelEvent e) {
 		}
 	}
 
 	class GlassLayout implements LayoutManager {
-		@Override
+		
 		public void addLayoutComponent(String name, Component comp) {
 		}
 
-		@Override
+		
 		public void layoutContainer(Container parent) {
 			int w = parent.getWidth();
 			int h = parent.getHeight();
@@ -332,17 +332,17 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 			glass.setBounds(0, 0, rect.width, rect.height);
 		}
 
-		@Override
+		
 		public Dimension minimumLayoutSize(Container parent) {
 			return scrollPane.getMinimumSize();
 		}
 
-		@Override
+		
 		public Dimension preferredLayoutSize(Container parent) {
 			return scrollPane.getPreferredSize();
 		}
 
-		@Override
+		
 		public void removeLayoutComponent(Component comp) {
 		}
 
@@ -397,7 +397,7 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 		return new DefaultTreeModel(node);
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		int action = glass.icon;
 		int row = glass.row;
@@ -417,14 +417,14 @@ public class TreeModelPanel extends JLayeredPane implements ActionListener {
 	}
 
 	class EditingListener implements CellEditorListener {
-		@Override
+		
 		public void editingCanceled(ChangeEvent e) {
 			setLayer(glass, 1);
 			tree.getCellEditor().removeCellEditorListener(this);
 			TreeModelPanel.this.doLayout();
 		}
 
-		@Override
+		
 		public void editingStopped(ChangeEvent e) {
 			setLayer(glass, 1);
 			tree.getCellEditor().removeCellEditorListener(this);

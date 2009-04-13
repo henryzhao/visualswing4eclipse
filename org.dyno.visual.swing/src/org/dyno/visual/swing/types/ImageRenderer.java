@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  */
 public class ImageRenderer implements ILabelProviderFactory {
 	private ImageLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new ImageLabelProvider();

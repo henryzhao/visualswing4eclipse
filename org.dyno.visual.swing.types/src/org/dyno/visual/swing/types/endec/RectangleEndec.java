@@ -7,7 +7,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 
 public class RectangleEndec implements IEndec {
 
-	@Override
+	
 	public Object decode(String string) {
 		return string==null?null:decodeRectangle(string);
 	}
@@ -39,7 +39,7 @@ public class RectangleEndec implements IEndec {
 		}catch(NumberFormatException nfe){}		
 		return new Rectangle(x,y,width,height);
 	}
-	@Override
+	
 	public String encode(Object value) {
 		return value==null?"null":encodeRectangle((Rectangle)value);
 	}

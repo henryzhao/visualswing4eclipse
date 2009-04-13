@@ -32,7 +32,7 @@ public class DesktopPaneDragModeItems implements ItemProvider {
 	public DesktopPaneDragModeItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

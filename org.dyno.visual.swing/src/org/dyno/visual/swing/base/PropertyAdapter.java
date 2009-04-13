@@ -34,27 +34,19 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 @SuppressWarnings("unchecked")
 public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropertyDescriptor {
-
-	@Override
 	public boolean cloneProperty(Object bean, Component clone) {
 		return false;
 	}
-
-	@Override
 	public Object getPropertyValue(IStructuredSelection bean) {
 		return null;
 	}
-
-	@Override
 	public void init(IConfigurationElement config, Class beanClass) {
 	}
 
-	@Override
 	public boolean isEdited(WidgetAdapter adapter) {
 		return false;
 	}
 
-	@Override
 	public boolean isGencode() {
 		return false;
 	}
@@ -64,7 +56,6 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 	protected Object getDefaultValue(Object b, String lnfClassname){
 		return null;
 	}
-	@Override
 	public boolean isPropertySet(String lnfClassname, IStructuredSelection bean) {
 		assert !bean.isEmpty();
 		Object b = bean.getFirstElement();
@@ -197,7 +188,6 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 			}
 		}
 	}
-	@Override
 	public void resetPropertyValue(String lnfClassname, IStructuredSelection bean) {
 		assert !bean.isEmpty();
 		Object b = bean.getFirstElement();
@@ -269,99 +259,99 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 	}
 
 
-	@Override
+	
 	public void setBean(IStructuredSelection bean) {
 	}
 
-	@Override
+	
 	public void setCategory(String categoryName) {
 	}
 
-	@Override
+	
 	public void setFilterFlags(String[] filters) {
 	}
 
-	@Override
+	
 	public void setPropertyValue(IStructuredSelection bean, Object value) {
 	}
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Composite parent) {
 		return null;
 	}
 
-	@Override
+	
 	public String getCategory() {
 		return null;
 	}
 
-	@Override
+	
 	public String getDescription() {
 		return null;
 	}
 
-	@Override
+	
 	public String getDisplayName() {
 		return null;
 	}
 
-	@Override
+	
 	public String[] getFilterFlags() {
 		return null;
 	}
 
-	@Override
+	
 	public Object getHelpContextIds() {
 		return null;
 	}
 
-	@Override
+	
 	public Object getId() {
 		return null;
 	}
 
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		return null;
 	}
 
-	@Override
+	
 	public boolean isCompatibleWith(IPropertyDescriptor anotherProperty) {
 		return false;
 	}
 
-	@Override
+	
 	public IValueParser getValueParser() {
 		return null;
 	}
 
-	@Override
+	
 	public Object getFieldValue(Object bean) {
 		return null;
 	}
 
-	@Override
+	
 	public void setFieldValue(Object bean, Object newValue) {
 	}
 
 	
-	@Override
+	
 	protected Class getObjectClass() {
 		return getClass();
 	}
 
 	
-	@Override
+	
 	public Class getPropertyType() {
 		return getClass();
 	}
 
-	@Override
+	
 	public boolean isPropertyResettable(IStructuredSelection bean) {
 		return false;
 	}
 
-	@Override
+	
 	public String getSetName() {
 		return null;
 	}

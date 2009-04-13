@@ -43,40 +43,40 @@ public class TabIconEditor extends JComponent implements IEditor, ActionListener
 			l.stateChanged(ce);
 		}
 	}
-	@Override
+	
 	public void addChangeListener(ChangeListener l) {
 		if (!listeners.contains(l))
 			listeners.add(l);
 	}
 
-	@Override
+	
 	public Component getComponent() {
 		return this;
 	}
 
-	@Override
+	
 	public Object getOldValue() {
 		return old;
 	}
 
-	@Override
+	
 	public Object getValue() {
 		return button.getIcon();
 	}
 
-	@Override
+	
 	public void removeChangeListener(ChangeListener l) {
 		if (listeners.contains(l))
 			listeners.remove(l);
 	}
 
-	@Override
+	
 	public void setFocus() {
 	}
 
 	private Object old;
 
-	@Override
+	
 	public void setValue(Object v) {
 		if (v == null)
 			button.setIcon(null);
@@ -84,11 +84,11 @@ public class TabIconEditor extends JComponent implements IEditor, ActionListener
 			button.setIcon((Icon) v);
 	}
 
-	@Override
+	
 	public void validateValue() throws Exception {
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent evt) {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if(workbench==null)
@@ -101,7 +101,7 @@ public class TabIconEditor extends JComponent implements IEditor, ActionListener
 			return;
 		final Shell shell = window.getShell();
 		shell.getDisplay().asyncExec(new Runnable() {
-			@Override
+			
 			public void run() {
 				openDialog(shell);
 			}
@@ -121,7 +121,7 @@ public class TabIconEditor extends JComponent implements IEditor, ActionListener
 						.toURI().toURL());
 				final ResourceIcon srcIcon = new ResourceIcon(icon, path);
 				SwingUtilities.invokeLater(new Runnable(){
-					@Override
+					
 					public void run() {
 						setIconAndFire(srcIcon);
 					}});
@@ -129,7 +129,7 @@ public class TabIconEditor extends JComponent implements IEditor, ActionListener
 			}
 		}else{
 			SwingUtilities.invokeLater(new Runnable(){
-				@Override
+				
 				public void run() {
 					fireValueChanged();
 				}});

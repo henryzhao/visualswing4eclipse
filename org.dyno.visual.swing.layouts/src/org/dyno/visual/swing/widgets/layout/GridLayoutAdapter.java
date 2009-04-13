@@ -113,8 +113,6 @@ public class GridLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			g2d.drawRect(placement.x, placement.y, placement.width, placement.height);
 		}
 	}
-
-	@Override
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		GridLayout layout = new GridLayout(2, 2);
 		container.setLayout(layout);

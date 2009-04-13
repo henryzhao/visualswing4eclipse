@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  */
 public class ListItemRenderer implements ILabelProviderFactory {
 	private ListItemLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new ListItemLabelProvider();

@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 
 public class CharCellEditorValidator implements ICellEditorValidator {
 
-	@Override
+	
 	public String isValid(Object value) {
 		if(value==null)
 			return Messages.CharCellEditorValidator_Incorrect_Format;

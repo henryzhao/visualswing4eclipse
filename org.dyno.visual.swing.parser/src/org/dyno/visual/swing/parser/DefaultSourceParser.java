@@ -117,7 +117,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 	}
 
-	@Override
+	
 	public WidgetAdapter parse(ICompilationUnit unit, IProgressMonitor monitor) throws ParserException {
 		try {
 			IType[] types = unit.getPrimary().getAllTypes();
@@ -150,7 +150,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 				if (lnfAdapter != null) {
 					LookAndFeel newlnf = lnfAdapter.getLookAndFeelInstance();
 					Component bean = (Component) runWithLnf(newlnf, new ISyncUITask() {
-						@Override
+						
 						public Object doTask() throws Throwable {
 							return createBeanFromClass(beanClass);
 						}
@@ -377,7 +377,7 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		return CodeStyleConfiguration.createImportRewrite(cu, true);
 	}
 
-	@Override
+	
 	public ICompilationUnit generate(WidgetAdapter root, IProgressMonitor monitor) {
 		try {
 			IParser parser = (IParser) root.getAdapter(IParser.class);

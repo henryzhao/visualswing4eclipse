@@ -21,7 +21,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 
 public class InsetsCellEditorValidator implements ICellEditorValidator {
 
-	@Override
+	
 	public String isValid(Object value) {
 		if(value instanceof Insets)
 			return null;

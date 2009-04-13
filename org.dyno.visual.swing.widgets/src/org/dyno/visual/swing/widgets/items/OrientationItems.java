@@ -31,7 +31,7 @@ public class OrientationItems implements ItemProvider {
 	public OrientationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

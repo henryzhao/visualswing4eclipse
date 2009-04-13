@@ -58,7 +58,7 @@ public class ColorWrapper implements ICodeGen {
 		return "(" + c.getRed() + ", " + c.getGreen() + ", " + c.getBlue() + ")";
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value,ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -71,7 +71,7 @@ public class ColorWrapper implements ICodeGen {
 		}
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

@@ -31,7 +31,7 @@ public class SplitPaneOrientationItems implements ItemProvider {
 	public SplitPaneOrientationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

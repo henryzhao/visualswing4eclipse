@@ -34,7 +34,7 @@ public class DebugGraphicsOptionsItems implements ItemProvider {
 	public DebugGraphicsOptionsItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

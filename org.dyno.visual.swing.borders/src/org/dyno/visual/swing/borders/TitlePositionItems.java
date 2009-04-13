@@ -36,7 +36,7 @@ public class TitlePositionItems implements ItemProvider {
 	public TitlePositionItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

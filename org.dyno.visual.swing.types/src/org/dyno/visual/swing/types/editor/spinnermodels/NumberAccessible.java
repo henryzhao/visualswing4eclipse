@@ -46,7 +46,7 @@ class NumberAccessible implements AccessibleUI {
 	private Label lblInit;
 	private Label lblStep;
 
-	@Override
+	
 	public void setValue(Object value) {
 		SpinnerNumberModel model = (SpinnerNumberModel) value;
 		Comparable max = model.getMaximum();
@@ -74,7 +74,7 @@ class NumberAccessible implements AccessibleUI {
 		}
 	}
 
-	@Override
+	
 	public Object getValue() {
 		if (btnDefault.getSelection())
 			return new SpinnerNumberModel();
@@ -157,7 +157,7 @@ class NumberAccessible implements AccessibleUI {
 		btnDefault.setLayoutData(data);
 		btnDefault.setSelection(true);
 		btnDefault.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnDefaultSelected();
 			}
@@ -173,7 +173,7 @@ class NumberAccessible implements AccessibleUI {
 		viewer.setInput(NumberType.getTypes());
 		cmbType.select(NumberType.getInitialIndex());
 		cmbType.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				cmbTypeSelected();
 			}
@@ -199,7 +199,7 @@ class NumberAccessible implements AccessibleUI {
 		data.horizontalIndent = 25;
 		btnMin.setLayoutData(data);
 		btnMin.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnMinSelected();
 			}
@@ -217,7 +217,7 @@ class NumberAccessible implements AccessibleUI {
 		data.horizontalIndent = 25;
 		btnMax.setLayoutData(data);
 		btnMax.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnMaxSelected();
 			}
@@ -245,12 +245,12 @@ class NumberAccessible implements AccessibleUI {
 		btnDefaultSelected();
 	}
 
-	@Override
+	
 	public Control getAccessibleUI() {
 		return pane;
 	}
 
-	@Override
+	
 	public String isInputValid() {
 		if (!btnDefault.getSelection()) {
 			int init = spInit.getSelection();

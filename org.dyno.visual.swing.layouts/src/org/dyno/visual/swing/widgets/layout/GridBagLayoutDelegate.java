@@ -19,16 +19,12 @@ import org.eclipse.core.runtime.IAdaptable;
 public class GridBagLayoutDelegate extends MouseInputAdapter implements
 		IAdaptableContext {
 	private GridBagLayoutAdapter adapter;
-
-	@Override
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adapter = (GridBagLayoutAdapter) adaptable;
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		super.mouseClicked(e);
 	}
 
 	@Override
@@ -265,11 +261,7 @@ public class GridBagLayoutDelegate extends MouseInputAdapter implements
 	public void mouseReleased(MouseEvent e) {
 		dragging = false;
 	}
-
-	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
-		super.mouseWheelMoved(e);
 	}
 
 }

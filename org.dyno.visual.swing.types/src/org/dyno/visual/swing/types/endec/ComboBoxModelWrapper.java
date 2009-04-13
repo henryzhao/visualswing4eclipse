@@ -30,7 +30,7 @@ public class ComboBoxModelWrapper implements ICodeGen {
 
 	public ComboBoxModelWrapper() {
 	}
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "null";
@@ -56,7 +56,7 @@ public class ComboBoxModelWrapper implements ICodeGen {
 		builder.append("})");
 		return builder.toString();
 	}
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

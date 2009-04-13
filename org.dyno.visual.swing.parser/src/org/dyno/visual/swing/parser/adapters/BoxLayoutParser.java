@@ -14,15 +14,17 @@ package org.dyno.visual.swing.parser.adapters;
 
 import javax.swing.BoxLayout;
 
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class BoxLayoutParser extends LayoutParser {
 
-	@Override
+	
 	protected String getNewInstanceCode(ImportRewrite imports) {
 		BoxLayout layout = (BoxLayout) layoutAdapter.getContainer().getLayout();
-		int axis = layout.getAxis();
+		Object value = JavaUtil.getField(layout, "axis");		
+		int axis = value==null?0:((Integer)value);
 		String name=imports.addImport("javax.swing.BoxLayout");
 		String strAxis = "X_AXIS";
 		switch (axis) {

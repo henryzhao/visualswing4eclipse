@@ -33,7 +33,7 @@ public class HorizontalScrollBarPolicyItems implements ItemProvider {
 	public HorizontalScrollBarPolicyItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

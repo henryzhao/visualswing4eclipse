@@ -48,12 +48,12 @@ class ListAccessible implements AccessibleUI {
 		text.setLayoutData(data);
 	}
 
-	@Override
+	
 	public Control getAccessibleUI() {
 		return pane;
 	}
 
-	@Override
+	
 	public Object getValue() {
 		try {
 			List<String> list = new ArrayList<String>();
@@ -70,12 +70,12 @@ class ListAccessible implements AccessibleUI {
 		}			
 	}
 
-	@Override
+	
 	public String isInputValid() {
 		return null;
 	}
 
-	@Override
+	
 	public void setValue(Object value) {
 		if (value == null) {
 			text.setText("");

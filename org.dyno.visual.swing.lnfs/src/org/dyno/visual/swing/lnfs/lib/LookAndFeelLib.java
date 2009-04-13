@@ -159,8 +159,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 			}
 		}
 	}
-
-	@Override
+	
 	public IClasspathEntry[] getClasspathEntries() {
 		IClasspathEntry[] libs=new IClasspathEntry[libJars.length];
 		for(int i=0;i<libs.length;i++)
@@ -168,22 +167,21 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		return libs;
 	}
 
-	@Override
 	public String getDescription() {
 		return libName;
 	}
 
-	@Override
+	
 	public int getKind() {
 		return IClasspathContainer.K_APPLICATION;
 	}
 
-	@Override
+	
 	public IPath getPath() {
 		return libPath;
 	}
 
-	@Override
+	
 	public boolean equals(Object o) {
 		if (o == null)
 			return false;
@@ -196,7 +194,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 			return false;
 	}
 
-	@Override
+	
 	public Object getDefaultValue(Class widgetClass, String propertyName) {
 		Map<String, Object> map = values.get(widgetClass.getName());
 		if (map != null) {
@@ -205,7 +203,7 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		return null;
 	}
 
-	@Override
+	
 	public LookAndFeel getLookAndFeelInstance() {
 		if (lnfInstance == null) {
 			try {
@@ -223,12 +221,12 @@ public class LookAndFeelLib implements IClasspathContainer, ILookAndFeelAdapter 
 		}
 		return lnfInstance;
 	}
-	@Override
+	
 	public String getClassname() {
 		return lnfClassname;
 	}
 
-	@Override
+	
 	public String getName() {
 		return libName;
 	}

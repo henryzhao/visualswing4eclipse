@@ -34,53 +34,53 @@ public class TableModelEditor implements IEditor {
 		tmPanel = new TableModelPanel(adapter, jsp);
 	}
 
-	@Override
+	
 	public void addChangeListener(ChangeListener l) {
 		if (!listeners.contains(l)) {
 			listeners.add(l);
 		}
 	}
 
-	@Override
+	
 	public Component getComponent() {
 		return tmPanel;
 	}
 
-	@Override
+	
 	public Object getValue() {
 		return tmPanel.getTableModel();
 	}
 
-	@Override
+	
 	public void removeChangeListener(ChangeListener l) {
 		if (listeners.contains(l)) {
 			listeners.remove(l);
 		}
 	}
 
-	@Override
+	
 	public void setFocus() {
 		tmPanel.setFocus();
 	}
 
-	@Override
+	
 	public void setFont(Font f) {
 		tmPanel.setFont(f);
 	}
 
 	private Object old;
 
-	@Override
+	
 	public void setValue(Object v) {
 		old = v;
 		tmPanel.setTableModel((TableModel) v);
 	}
 
-	@Override
+	
 	public void validateValue() throws Exception {
 	}
 
-	@Override
+	
 	public Object getOldValue() {
 		return old;
 	}

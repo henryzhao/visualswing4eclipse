@@ -30,7 +30,7 @@ public class SplitPaneConstraintsItems implements ItemProvider {
 		this.splitPane = jsp;
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT ? HORIZONTAL_ITEMS : VERTICAL_ITEMS;
 	}

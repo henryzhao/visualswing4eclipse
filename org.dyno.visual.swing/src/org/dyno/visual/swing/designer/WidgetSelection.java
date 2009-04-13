@@ -62,12 +62,12 @@ public class WidgetSelection extends ArrayList<Component> implements IStructured
 		}
 	}
 
-	@Override
+	
 	public Object getFirstElement() {
 		return isEmpty()?null:get(0);
 	}
 
-	@Override
+	
 	public List toList() {
 		return this;
 	}

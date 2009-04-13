@@ -102,7 +102,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		return adapter.getEditorSite();
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == columnHeader) {
 			int action = columnHeader.icon;
@@ -258,7 +258,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 
 	private void doEditType(final int column) {
 		getEmbeddedParent().getDisplay().asyncExec(new Runnable() {
-			@Override
+			
 			public void run() {
 				popupMenu(column);
 			}
@@ -304,7 +304,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			return defaultValue;
 		}
 
-		@Override
+		
 		public void run() {
 			Class<?> prevClass = columnClass.get(column);
 			if (prevClass != clazz) {
@@ -357,11 +357,11 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	}
 
 	class GlassLayout implements LayoutManager {
-		@Override
+		
 		public void addLayoutComponent(String name, Component comp) {
 		}
 
-		@Override
+		
 		public void layoutContainer(Container parent) {
 			int w = parent.getWidth();
 			int h = parent.getHeight();
@@ -372,17 +372,17 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			rowHeader.setBounds(0, rect.y, 64, rect.height);
 		}
 
-		@Override
+		
 		public Dimension minimumLayoutSize(Container parent) {
 			return scrollPane.getMinimumSize();
 		}
 
-		@Override
+		
 		public Dimension preferredLayoutSize(Container parent) {
 			return scrollPane.getPreferredSize();
 		}
 
-		@Override
+		
 		public void removeLayoutComponent(Component comp) {
 		}
 	}
@@ -450,7 +450,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			column = c;
 		}
 
-		@Override
+		
 		public void actionPerformed(ActionEvent e) {
 			String title = textField.getText();
 			columnNames.set(column, title);
@@ -523,7 +523,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			return 0;
 		}
 
-		@Override
+		
 		protected void paintComponent(Graphics g) {
 			paintBackground(g);
 			if (row != -1) {
@@ -612,21 +612,21 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			return null;
 		}
 
-		@Override
+		
 		public void mouseClicked(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseEntered(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseExited(MouseEvent e) {
 			row = -1;
 			repaint();
 		}
 
-		@Override
+		
 		public void mousePressed(MouseEvent e) {
 			Point p = e.getPoint();
 			int count = table.getRowCount();
@@ -662,7 +662,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			repaint();
 		}
 
-		@Override
+		
 		public void mouseReleased(MouseEvent e) {
 			Point p = e.getPoint();
 			int count = table.getRowCount();
@@ -699,7 +699,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			repaint();
 		}
 
-		@Override
+		
 		public void mouseDragged(MouseEvent e) {
 		}
 
@@ -723,7 +723,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 				return NO_OP;
 		}
 
-		@Override
+		
 		public void mouseMoved(MouseEvent e) {
 			Point p = e.getPoint();
 			int count = table.getRowCount();
@@ -781,7 +781,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			return null;
 		}
 
-		@Override
+		
 		public void mouseWheelMoved(MouseWheelEvent e) {
 		}
 
@@ -889,7 +889,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			g2d.setComposite(old);
 		}
 
-		@Override
+		
 		protected void paintComponent(Graphics g) {
 			paintBackground(g);
 			if (column != -1) {
@@ -926,21 +926,21 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			g.drawLine(63, height - 1, width - 1, height - 1);
 		}
 
-		@Override
+		
 		public void mouseClicked(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseEntered(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseExited(MouseEvent e) {
 			column = -1;
 			repaint();
 		}
 
-		@Override
+		
 		public void mousePressed(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e
 					.getPoint(), table);
@@ -965,7 +965,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			repaint();
 		}
 
-		@Override
+		
 		public void mouseReleased(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e
 					.getPoint(), table);
@@ -993,11 +993,11 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			repaint();
 		}
 
-		@Override
+		
 		public void mouseDragged(MouseEvent e) {
 		}
 
-		@Override
+		
 		public void mouseMoved(MouseEvent e) {
 			Point p = SwingUtilities.convertPoint(TableModelPanel.this, e
 					.getPoint(), table);
@@ -1051,7 +1051,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 			return null;
 		}
 
-		@Override
+		
 		public void mouseWheelMoved(MouseWheelEvent e) {
 		}
 	}
@@ -1100,7 +1100,7 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 		table.setModel(new InnerTableModel());
 	}
 
-	@Override
+	
 	public void setFont(Font font) {
 		table.setFont(font);
 		super.setFont(font);
@@ -1112,49 +1112,49 @@ public class TableModelPanel extends JLayeredPane implements ActionListener {
 	private List<List<Object>> data;
 
 	class InnerTableModel implements TableModel {
-		@Override
+		
 		public void addTableModelListener(TableModelListener l) {
 			if (!listeners.contains(l))
 				listeners.add(l);
 		}
 
-		@Override
+		
 		public Class<?> getColumnClass(int columnIndex) {
 			return columnClass.get(columnIndex);
 		}
 
-		@Override
+		
 		public int getColumnCount() {
 			return columnNames.size();
 		}
 
-		@Override
+		
 		public String getColumnName(int columnIndex) {
 			return columnNames.get(columnIndex);
 		}
 
-		@Override
+		
 		public int getRowCount() {
 			return data.size();
 		}
 
-		@Override
+		
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			return data.get(rowIndex).get(columnIndex);
 		}
 
-		@Override
+		
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			return true;
 		}
 
-		@Override
+		
 		public void removeTableModelListener(TableModelListener l) {
 			if (listeners.contains(l))
 				listeners.remove(l);
 		}
 
-		@Override
+		
 		public void setValueAt(Object value, int rowIndex, int columnIndex) {
 			data.get(rowIndex).set(columnIndex, value);
 		}

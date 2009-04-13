@@ -127,8 +127,6 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 		thumb = null;
 		return true;
 	}
-
-	@Override
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		container.setLayout(new FlowLayout());
 	}
@@ -151,7 +149,6 @@ public class FlowLayoutAdapter extends LayoutAdapter {
 		FlowLayout layout = (FlowLayout) container.getLayout();
 		FlowLayout copy = new FlowLayout();
 		copy.setAlignment(layout.getAlignment());
-		copy.setAlignOnBaseline(layout.getAlignOnBaseline());
 		copy.setHgap(layout.getHgap());
 		copy.setVgap(layout.getVgap());
 		return copy;

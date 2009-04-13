@@ -13,8 +13,6 @@
 
 package org.dyno.visual.swing.base;
 
-import javax.xml.bind.ValidationException;
-
 import org.dyno.visual.swing.plugin.spi.ICodeGen;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
@@ -61,10 +59,9 @@ public class ItemEndec implements ICodeGen {
 				return;
 			}
 		}
-		throw new ValidationException(Messages.ITEM_ENDEC_NO_SUCH_ELEMENT + txt);
+		throw new Exception(Messages.ITEM_ENDEC_NO_SUCH_ELEMENT + txt);
 	}
 
-	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null"; //$NON-NLS-1$
@@ -76,7 +73,6 @@ public class ItemEndec implements ICodeGen {
 		return value.toString();
 	}
 
-	@Override
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

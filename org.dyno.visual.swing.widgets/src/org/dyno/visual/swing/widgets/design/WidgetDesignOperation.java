@@ -83,7 +83,7 @@ public class WidgetDesignOperation implements IDesignOperation, IAdaptableContex
 		return false;
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}

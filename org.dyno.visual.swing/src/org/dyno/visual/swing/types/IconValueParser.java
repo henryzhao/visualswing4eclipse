@@ -13,8 +13,6 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 
 @SuppressWarnings("unchecked")
 public class IconValueParser implements IValueParser {
-
-	@Override
 	public Object parseValue(Object oldValue, List args) {
 		if (oldValue != null && !(oldValue instanceof ResourceIcon)) {
 			Icon icon = (Icon) oldValue;

@@ -24,7 +24,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 public class FontRenderer implements ILabelProviderFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 	private FontLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null){
 			provider = new FontLabelProvider();

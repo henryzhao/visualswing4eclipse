@@ -21,7 +21,6 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 	private IClasspathContainer[] lnfLibs;
 	public LookAndFeelLibrary(){
 	}
-	@Override
 	public IClasspathContainer createLibExt(IPath containerPath) {
 		int count = containerPath.segmentCount();
 		if (count > 0) {
@@ -45,8 +44,6 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 		}
 		return null;
 	}
-
-	@Override
 	public IClasspathContainer[] listLibPaths(boolean refresh) {
 		if(refresh){
 			initLafLibs();	
@@ -54,7 +51,6 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 		return lnfLibs;
 		
 	}
-	@Override
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) throws CoreException {
 		initLafLibs();		
@@ -64,7 +60,6 @@ public class LookAndFeelLibrary implements ILibraryExtension, IExecutableExtensi
 		File folder = path.toFile();
 		if (folder.exists()) {
 			File[] folders = folder.listFiles(new FileFilter() {
-				@Override
 				public boolean accept(File pathname) {
 					return pathname.isDirectory();
 				}

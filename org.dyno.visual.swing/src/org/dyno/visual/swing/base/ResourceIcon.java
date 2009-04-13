@@ -71,17 +71,17 @@ public class ResourceIcon implements Icon {
 		}
 	}
 
-	@Override
+	
 	public int getIconHeight() {
 		return icon == null ? 0 : icon.getIconHeight();
 	}
 
-	@Override
+	
 	public int getIconWidth() {
 		return icon == null ? 0 : icon.getIconWidth();
 	}
 
-	@Override
+	
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		if (icon == null) {
 		} else {

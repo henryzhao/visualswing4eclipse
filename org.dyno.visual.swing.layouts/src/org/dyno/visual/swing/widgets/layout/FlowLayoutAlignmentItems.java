@@ -34,8 +34,6 @@ public class FlowLayoutAlignmentItems implements ItemProvider {
 
 	public FlowLayoutAlignmentItems() {
 	}
-
-	@Override
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

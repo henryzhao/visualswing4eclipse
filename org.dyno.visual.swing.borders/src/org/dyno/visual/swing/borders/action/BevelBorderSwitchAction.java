@@ -29,7 +29,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class BevelBorderSwitchAction extends BorderSwitchAction {
 	public BevelBorderSwitchAction(JComponent w) {
 		super(w, BevelBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 			}});

@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 
 public class InsetsCellEditorValidator implements ICellEditorValidator {
 
-	@Override
+	
 	public String isValid(Object value) {
 		String string = (String) value;
 		string = string.trim();

@@ -33,7 +33,7 @@ public class FrameStateItems implements ItemProvider {
 	public FrameStateItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

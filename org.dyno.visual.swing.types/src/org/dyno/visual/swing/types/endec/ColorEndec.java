@@ -7,7 +7,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 
 public class ColorEndec implements IEndec {
 
-	@Override
+	
 	public Object decode(String string) {
 		return string==null?null:decodeColor(string);
 	}
@@ -33,7 +33,7 @@ public class ColorEndec implements IEndec {
 		}catch(NumberFormatException nfe){}
 		return new Color(red, green, blue);
 	}
-	@Override
+	
 	public String encode(Object value) {
 		return value==null?"null":encodeColor((Color)value);
 	}

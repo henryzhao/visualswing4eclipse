@@ -29,14 +29,14 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  */
 @SuppressWarnings("unchecked")
 public class TreeModelWrapper implements ICodeGen {
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
 		return "treeModel";
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return null;

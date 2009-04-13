@@ -78,7 +78,7 @@ public class AddLafDialog extends Dialog {
 		}
 	}
 
-	@Override
+	
 	protected Control createDialogArea(Composite parent) {
 		getShell().setText(Messages.AddLafDialog_New_Laf);
 		Composite main = new Composite(parent, SWT.NONE);
@@ -89,7 +89,7 @@ public class AddLafDialog extends Dialog {
 		label.setText(Messages.AddLafDialog_Name);
 		txtName = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtName.addModifyListener(new ModifyListener() {
-			@Override
+			
 			public void modifyText(ModifyEvent e) {
 				updateButtonState();
 			}
@@ -105,7 +105,7 @@ public class AddLafDialog extends Dialog {
 		Button btnAdd = new Button(right, SWT.PUSH);
 		btnAdd.setText(Messages.AddLafDialog_New);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				newJarSrc();
 			}
@@ -114,7 +114,7 @@ public class AddLafDialog extends Dialog {
 		btnDel.setText(Messages.AddLafDialog_Remove);
 		btnDel.addSelectionListener(new SelectionAdapter() {
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				removeSelected();
 			}
@@ -132,7 +132,7 @@ public class AddLafDialog extends Dialog {
 		viewer.setInput(new JarSrcInput());
 		viewer.setLabelProvider(new LabelProvider());
 		viewer.getList().addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				updateButtonState();
 			}
@@ -147,7 +147,7 @@ public class AddLafDialog extends Dialog {
 		data.heightHint = 16;
 		txtClassname.setLayoutData(data);
 		txtClassname.addModifyListener(new ModifyListener() {
-			@Override
+			
 			public void modifyText(ModifyEvent e) {
 				updateButtonState();
 			}
@@ -158,7 +158,7 @@ public class AddLafDialog extends Dialog {
 	private String lafName;
 	private String lafClassname;
 
-	@Override
+	
 	protected void okPressed() {
 		lafName = txtName.getText().trim();
 		lafClassname = txtClassname.getText().trim();
@@ -274,7 +274,7 @@ public class AddLafDialog extends Dialog {
 				pw.print(comp.getBeanClass().getName());
 				pw.print("\">\n"); //$NON-NLS-1$
 				SwingUtilities.invokeAndWait(new Runnable(){
-					@Override
+					
 					public void run() {
 						createDefaultXml(jframe, comp, pw);
 					}});
@@ -376,7 +376,7 @@ public class AddLafDialog extends Dialog {
 			Class lnfClass = urlLoader.loadClass(lafClassname);
 			if (!LookAndFeel.class.isAssignableFrom(lnfClass)) {
 				asyncRun(new Runnable() {
-					@Override
+					
 					public void run() {
 						showNotALafClass(lafClassname);
 					}
@@ -384,7 +384,7 @@ public class AddLafDialog extends Dialog {
 			}
 		} catch (ClassNotFoundException e) {
 			asyncRun(new Runnable() {
-				@Override
+				
 				public void run() {
 					showNoSuchClassError(lafClassname);
 				}
@@ -406,7 +406,7 @@ public class AddLafDialog extends Dialog {
 
 	private void lnfCreationDone(final IProgressMonitor monitor) {
 		getShell().getDisplay().asyncExec(new Runnable() {
-			@Override
+			
 			public void run() {
 				finishCreation(monitor);
 			}
@@ -468,15 +468,15 @@ public class AddLafDialog extends Dialog {
 	}
 
 	private class JarSrcContProv implements IStructuredContentProvider {
-		@Override
+		
 		public void dispose() {
 		}
 
-		@Override
+		
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 
-		@Override
+		
 		public Object[] getElements(Object inputElement) {
 			return jarSrcs == null ? new Object[0] : jarSrcs.toArray();
 		}
@@ -489,7 +489,7 @@ public class AddLafDialog extends Dialog {
 		viewer.refresh();
 	}
 
-	@Override
+	
 	protected Control createContents(Composite parent) {
 		Control control = super.createContents(parent);
 		updateButtonState();

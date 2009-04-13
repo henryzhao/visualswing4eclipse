@@ -1,4 +1,3 @@
-
 /************************************************************************************
  * Copyright (c) 2008 William Chen.                                                 *
  *                                                                                  *
@@ -26,6 +25,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 
 import org.dyno.visual.swing.base.FieldProperty;
+import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
@@ -36,7 +36,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private Thumb thumb;
 
-	@Override
 	public void initConainerLayout(Container parent, IProgressMonitor monitor) {
 		BoxLayout boxLayout = new BoxLayout(parent, BoxLayout.LINE_AXIS);
 		parent.setLayout(boxLayout);
@@ -44,8 +43,13 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 
 	private boolean isHorizontal() {
 		BoxLayout layout = (BoxLayout) container.getLayout();
-		int axis = layout.getAxis();
+		int axis = getAxis(layout);
 		return axis == BoxLayout.LINE_AXIS || axis == BoxLayout.X_AXIS;
+	}
+
+	private int getAxis(BoxLayout layout) {
+		Object value = JavaUtil.getField(layout, "axis");
+		return value==null?0:((Integer)value);
 	}
 
 	private Thumb getClosetThumb(Point hoverPoint) {
@@ -104,34 +108,27 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 	}
 
-	@Override
 	public boolean dragEnter(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
-				.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		parent.setMascotLocation(p);
 		thumb = getClosetThumb(p);
 		return true;
 	}
 
-	@Override
 	public boolean dragExit(Point p) {
 		thumb = null;
 		return true;
 	}
 
-	@Override
 	public boolean dragOver(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
-				.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		parent.setMascotLocation(p);
 		thumb = getClosetThumb(p);
 		return true;
 	}
 
-	@Override
 	public boolean drop(Point p) {
-		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
-				.getWidgetAdapter(container);
+		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		thumb = getClosetThumb(p);
 		parent.clearAllSelected();
 		for (WidgetAdapter todrop : parent.getDropWidget()) {
@@ -147,19 +144,15 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return true;
 	}
 
-	@Override
 	public void paintHovered(Graphics g) {
 		if (thumb != null) {
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setStroke(STROKE);
 			g2d.setColor(RED_COLOR);
-			g2d.drawRect(thumb.x - THUMB_PAD / 2, thumb.y - THUMB_PAD / 2,
-					THUMB_PAD, THUMB_PAD);
+			g2d.drawRect(thumb.x - THUMB_PAD / 2, thumb.y - THUMB_PAD / 2, THUMB_PAD, THUMB_PAD);
 		}
 	}
 
-
-	@Override
 	public boolean cloneLayout(JComponent panel) {
 		panel.setLayout(copyLayout(panel));
 		int count = container.getComponentCount();
@@ -171,28 +164,23 @@ public class BoxLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		return true;
 	}
 
-	@Override
 	protected LayoutManager copyLayout(Container con) {
 		BoxLayout layout = (BoxLayout) container.getLayout();
-		int axis = layout.getAxis();
+		int axis = getAxis(layout);
 		return new BoxLayout(con, axis);
 	}
 
-	@Override
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
 		FieldProperty axisProperty = new FieldProperty("axis", "axis", BoxLayout.class, new BoxLayoutAxisRenderer(), new BoxLayoutAxisEditor());
-		return new IWidgetPropertyDescriptor[]{axisProperty};
+		return new IWidgetPropertyDescriptor[] { axisProperty };
 	}
 
-	@Override
 	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child);
 	}
 
-	@Override
 	public Object getChildConstraints(Component child) {
 		return null;
 	}
-	
-}
 
+}

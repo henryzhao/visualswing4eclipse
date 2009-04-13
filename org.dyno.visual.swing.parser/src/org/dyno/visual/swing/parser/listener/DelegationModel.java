@@ -39,7 +39,7 @@ import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 
 @SuppressWarnings("unchecked")
 public class DelegationModel extends AbstractInnerModel {
-	@Override
+	
 	public void addMethod(MethodDescriptor methodDesc) {
 		String methodName;
 		if (adapter.isRoot())
@@ -50,7 +50,7 @@ public class DelegationModel extends AbstractInnerModel {
 		methods.put(methodDesc, content);
 	}
 
-	@Override
+	
 	protected boolean parse(WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, ClassInstanceCreation instanceExpression) {
 		AnonymousClassDeclaration acd = instanceExpression.getAnonymousClassDeclaration();
 		List bodys = acd.bodyDeclarations();
@@ -116,7 +116,7 @@ public class DelegationModel extends AbstractInnerModel {
 		return false;
 	}
 
-	@Override
+	
 	protected IEventMethod getDelegatingContent(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body, SingleVariableDeclaration var) {
 		List statements = body.statements();
 		if (statements.size() == 1) {

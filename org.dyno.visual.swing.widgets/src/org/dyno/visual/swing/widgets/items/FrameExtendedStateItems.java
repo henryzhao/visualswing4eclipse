@@ -36,7 +36,7 @@ public class FrameExtendedStateItems implements ItemProvider {
 	public FrameExtendedStateItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

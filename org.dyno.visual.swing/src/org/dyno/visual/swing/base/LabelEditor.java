@@ -38,36 +38,25 @@ public class LabelEditor extends TextField implements IEditor, ActionListener {
 		listeners = new ArrayList<ChangeListener>();
 		addActionListener(this);
 	}
-
-	@Override
 	public void addChangeListener(ChangeListener l) {
 		if (!listeners.contains(l))
 			listeners.add(l);
 	}
-
-	@Override
 	public Component getComponent() {
 		return this;
 	}
-
-	@Override
 	public Object getValue() {
 		return getText();
 	}
-
-	@Override
 	public void removeChangeListener(ChangeListener l) {
 		if (listeners.contains(l))
 			listeners.remove(l);
 	}
 	private Object old;
-	@Override
 	public void setValue(Object v) {
 		this.old = v;
 		setText(v == null ? "" : v.toString());
 	}
-
-	@Override
 	public void setFocus() {
 		int count = 0;
 		while (!isFocusOwner() && count < FOCUSE_REQUEST_LIMIT) {
@@ -76,8 +65,6 @@ public class LabelEditor extends TextField implements IEditor, ActionListener {
 		}
 		selectAll();
 	}
-
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		ChangeEvent ce = new ChangeEvent(e.getSource());
 		fireStateChanged(ce);
@@ -91,11 +78,9 @@ public class LabelEditor extends TextField implements IEditor, ActionListener {
 
 	private static final int FOCUSE_REQUEST_LIMIT = 2;
 
-	@Override
 	public void validateValue() throws Exception {
 	}
 
-	@Override
 	public Object getOldValue() {
 		return this.old;
 	}

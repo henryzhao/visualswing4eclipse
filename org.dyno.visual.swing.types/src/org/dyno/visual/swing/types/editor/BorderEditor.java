@@ -25,22 +25,22 @@ public class BorderEditor implements ICellEditorFactory {
 		super();
 	}
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new BorderCellEditor(bean, parent);
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		return value;
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		return value;
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return null;
@@ -49,7 +49,7 @@ public class BorderEditor implements ICellEditorFactory {
 		return adapter.getInitJavaCode(value, imports);
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";

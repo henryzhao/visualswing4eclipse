@@ -68,13 +68,13 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		parseLayoutExtensions();
 	}
 
-	@Override
+	
 	public void requestNewName() {
 	}
 	public String getID(){
 			return name;
 	}
-	@Override
+	
 	public String getBasename() {
 		Class<?> lClass = getLayoutClass();
 		if(lClass!=null){
@@ -331,17 +331,17 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 	public void fillConstraintsAction(MenuManager menu, Component child) {
 	}
 
-	@Override
+	
 	public Image getIconImage() {
 		return null;
 	}
 
-	@Override
+	
 	protected Class getObjectClass() {
 		return getLayoutClass();
 	}
 
-	@Override
+	
 	public IAdapter getParent() {
 		return null;
 	}

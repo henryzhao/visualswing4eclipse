@@ -36,24 +36,24 @@ public class IntegerTextEditor extends JFormattedTextField implements IEditor, A
 		addActionListener(this);
 	}
 
-	@Override
+	
 	public void addChangeListener(ChangeListener l) {
 		if (!listeners.contains(l))
 			listeners.add(l);
 	}
 
-	@Override
+	
 	public Component getComponent() {
 		return this;
 	}
 
-	@Override
+	
 	public void removeChangeListener(ChangeListener l) {
 		if (listeners.contains(l))
 			listeners.remove(l);
 	}
 
-	@Override
+	
 	public void setFocus() {
 		int count = 0;
 		while (!isFocusOwner() && count < FOCUSE_REQUEST_LIMIT) {
@@ -63,13 +63,13 @@ public class IntegerTextEditor extends JFormattedTextField implements IEditor, A
 		selectAll();
 	}
 	private Object old_value;
-	@Override
+	
 	public void setValue(Object value) {
 		this.old_value = value;
 		super.setValue(value);
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		ChangeEvent ce = new ChangeEvent(e.getSource());
 		fireStateChanged(ce);
@@ -83,11 +83,11 @@ public class IntegerTextEditor extends JFormattedTextField implements IEditor, A
 
 	private static final int FOCUSE_REQUEST_LIMIT = 2;
 
-	@Override
+	
 	public void validateValue() throws Exception {
 	}
 
-	@Override
+	
 	public Object getOldValue() {
 		return this.old_value;
 	}

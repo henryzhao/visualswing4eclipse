@@ -38,7 +38,7 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 		return null;
 	}
 
-	@Override
+	
 	public void parse(String lnfClassname, TypeDeclaration type) {
 		List statements = getBeanPropertyInitStatements(adaptable, type);
 		for (Object stmt : statements) {
@@ -150,7 +150,7 @@ public class WidgetASTParser implements IWidgetASTParser, IConstants, IAdaptable
 		return statements;
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}

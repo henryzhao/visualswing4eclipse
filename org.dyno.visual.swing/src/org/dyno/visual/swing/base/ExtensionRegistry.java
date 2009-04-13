@@ -315,8 +315,11 @@ public class ExtensionRegistry {
 			String sClass = config.getAttribute("class");
 			ILookAndFeelAdapter adapter = (ILookAndFeelAdapter) config.createExecutableExtension("adapter");
 			lnfAdapters.put(sClass, adapter);
-		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
+		} catch (CoreException e) {
+			Throwable cause = e.getCause();
+			if (!(cause instanceof ClassNotFoundException)) {
+				VisualSwingPlugin.getLogger().error(e);
+			}
 		}
 	}
 
@@ -783,6 +786,7 @@ public class ExtensionRegistry {
 			return null;
 		}
 	}
+
 	public static WidgetAdapter createWidgetAdapter(Component widget) {
 		return createWidgetAdapter(widget, false);
 	}

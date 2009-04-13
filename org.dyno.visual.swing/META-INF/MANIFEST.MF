@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name.0
 Bundle-SymbolicName: org.dyno.visual.swing; singleton:=true
-Bundle-Version: 0.9.10.I20090403-1200
+Bundle-Version: 0.9.10.I20090414-0000
 Bundle-Activator: org.dyno.visual.swing.VisualSwingPlugin
 Bundle-Vendor: %Bundle-Vendor.0
 Require-Bundle: org.eclipse.ui,
@@ -22,5 +22,5 @@ Export-Package: org.dyno.visual.swing.base,
  org.dyno.visual.swing.layouts,
  org.dyno.visual.swing.plugin.spi,
  org.eclipse.albireo.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Localization: plugin

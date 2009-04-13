@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  * @author William Chen
  */
 public class RectangleWrapper implements ICodeGen {
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -33,7 +33,7 @@ public class RectangleWrapper implements ICodeGen {
 		return "new "+str+"(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ")";
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

@@ -26,7 +26,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 
 public class ImageIconValidator implements ICellEditorValidator {
-	@Override
+	
 	public String isValid(Object value) {
 		if (value == null || value.equals("")) //$NON-NLS-1$
 			return null;

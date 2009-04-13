@@ -23,7 +23,7 @@ import org.dyno.visual.swing.types.editor.spinnermodels.SpinnerNumberModelType;
 
 @SuppressWarnings("unchecked")
 public class SpinnerModelComparator implements Comparator<SpinnerModel> {
-	@Override
+	
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		if (o1 == null) {
 			if (o2 == null) {

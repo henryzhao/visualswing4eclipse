@@ -31,17 +31,17 @@ import org.eclipse.jface.action.IAction;
 
 @SuppressWarnings("unchecked")
 public class SoftBevelBorderAdapter extends BorderAdapter {
-	@Override
+	
 	public Class getBorderClass() {
 		return SoftBevelBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "SoftBevelBorder";
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		FieldProperty bevelTypeProperty = new FieldProperty("bevelType", "bevelType", SoftBevelBorder.class, new ItemProviderLabelProviderFactory(new BevelBorderTypeItems()), new ItemProviderCellEditorFactory(new BevelBorderTypeItems()));
 		FieldProperty highlightOuterProperty = new FieldProperty("highlightOuter", "highlightOuter", SoftBevelBorder.class);
@@ -56,22 +56,22 @@ public class SoftBevelBorderAdapter extends BorderAdapter {
 			};
 	}
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new SoftBevelBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return new SoftBevelBorder(BevelBorder.LOWERED);
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "null";

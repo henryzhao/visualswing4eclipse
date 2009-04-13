@@ -25,12 +25,12 @@ import org.eclipse.swt.widgets.Composite;
 public class ColorEditor extends ColorWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new ColorCellEditor(parent);
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		if (value == null)
 			return null;
@@ -38,7 +38,7 @@ public class ColorEditor extends ColorWrapper implements ICellEditorFactory {
 		return new Color(rgb.red, rgb.green, rgb.blue);
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		if (value == null)
 			return null;

@@ -52,7 +52,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 		repaint();
 	}
 
-	@Override
+	
 	public void requestFocus() {
 	}
 
@@ -141,19 +141,19 @@ public class GlassPlane extends JComponent implements MouseListener {
 		return target.isWidgetEditing();
 	}
 
-	@Override
+	
 	public void mouseClicked(MouseEvent e) {
 	}
 
-	@Override
+	
 	public void mouseEntered(MouseEvent e) {
 	}
 
-	@Override
+	
 	public void mouseExited(MouseEvent e) {
 	}
 
-	@Override
+	
 	public void mousePressed(MouseEvent e) {
 		if (!e.isConsumed()&&Platform.isGtk() && e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
@@ -161,7 +161,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 		super.requestFocus();
 	}
 
-	@Override
+	
 	public void mouseReleased(MouseEvent e) {
 		if (!e.isConsumed()&&!Platform.isGtk()&&e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
@@ -171,7 +171,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 
 	public void setFocus() {
 		SwingUtilities.invokeLater(new Runnable() {
-			@Override
+			
 			public void run() {
 				GlassPlane.super.requestFocus();
 			}

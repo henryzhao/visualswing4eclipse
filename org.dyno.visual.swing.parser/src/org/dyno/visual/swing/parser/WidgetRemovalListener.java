@@ -15,7 +15,7 @@ import org.dyno.visual.swing.plugin.spi.WidgetEvent;
 
 @SuppressWarnings("unchecked")
 public class WidgetRemovalListener implements IWidgetListener{
-	@Override
+	
 	public void widgetAdded(WidgetEvent event) {
 		WidgetAdapter adapter = event.getParent().getRootAdapter();
 		List<String> names = (List<String>) adapter.getProperty("removed.components");
@@ -29,11 +29,11 @@ public class WidgetRemovalListener implements IWidgetListener{
 			names.remove(ID);
 	}
 
-	@Override
+	
 	public void widgetMoved(WidgetEvent event) {
 	}
 
-	@Override
+	
 	public void widgetRemoved(WidgetEvent event) {
 		WidgetAdapter adapter = event.getParent().getRootAdapter();
 		List<String> names = (List<String>) adapter.getProperty("removed.components");
@@ -71,7 +71,7 @@ public class WidgetRemovalListener implements IWidgetListener{
 		}
 	}
 
-	@Override
+	
 	public void widgetResized(WidgetEvent event) {
 	}
 }

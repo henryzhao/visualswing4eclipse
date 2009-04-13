@@ -23,7 +23,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class EtchedBorderSwitchAction extends BorderSwitchAction {
 	public EtchedBorderSwitchAction(JComponent w) {
 		super(w, EtchedBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createEtchedBorder();
 			}});

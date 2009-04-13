@@ -21,7 +21,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class SpinnerModelWrapper implements ICodeGen {
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return null;
@@ -29,7 +29,7 @@ public class SpinnerModelWrapper implements ICodeGen {
 		return type.getInitJavaCode(value, imports);
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";

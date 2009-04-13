@@ -40,12 +40,12 @@ public class EventDelegation implements IEventMethod {
 		this.methodName = methodName;
 	}
 
-	@Override
+	
 	public String getDisplayName() {
 		return methodName;
 	}
 
-	@Override
+	
 	public void editCode(IEditorPart editor) {
 		Class<?>[] pd = methodDesc.getMethod().getParameterTypes();
 		if (pd.length > 0) {
@@ -70,7 +70,7 @@ public class EventDelegation implements IEventMethod {
 		}
 	}
 
-	@Override
+	
 	public String createEventMethod(IType type, ImportRewrite imports) {
 		Method mEvent = methodDesc.getMethod();
 		Class[] pTypes = mEvent.getParameterTypes();
@@ -92,7 +92,7 @@ public class EventDelegation implements IEventMethod {
 		return null;
 	}
 
-	@Override
+	
 	public String createAddListenerCode() {
 		return methodName + "(event);\n";
 	}

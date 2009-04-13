@@ -35,20 +35,20 @@ import org.eclipse.jface.action.IAction;
 @SuppressWarnings("unchecked")
 public class EmptyBorderAdapter extends BorderAdapter {
 
-	@Override
+	
 	public Class getBorderClass() {
 		return EmptyBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "EmptyBorder";
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		InsetsProperty insetsProperty = new InsetsProperty() {
-			@Override
+			
 			protected Class getBorderClass() {
 				return EmptyBorder.class;
 			}
@@ -56,22 +56,22 @@ public class EmptyBorderAdapter extends BorderAdapter {
 		return new IWidgetPropertyDescriptor[] { insetsProperty };
 	}
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new EmptyBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return BorderFactory.createEmptyBorder();
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "null";

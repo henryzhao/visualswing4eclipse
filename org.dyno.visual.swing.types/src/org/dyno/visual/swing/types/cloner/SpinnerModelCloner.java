@@ -19,7 +19,7 @@ import org.dyno.visual.swing.types.editor.spinnermodels.SpinnerModelType;
 
 public class SpinnerModelCloner implements ICloner {
 
-	@Override
+	
 	public Object clone(Object object) {
 		SpinnerModelType type = SpinnerModelType.getSpinnerModelType(object);
 		return type.clone(object);

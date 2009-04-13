@@ -50,7 +50,7 @@ public interface BeanCreator {
 	void dispose();
 	abstract class AbstractScrollPaneCreator implements BeanCreator{
 		private Component content;
-		@Override
+		
 		public Component createComponent(JFrame jframe) {
 			jframe.getContentPane().removeAll();
 			JScrollPane jsp = new JScrollPane();
@@ -65,13 +65,13 @@ public interface BeanCreator {
 			jframe.validate();
 			return content;
 		}
-		@Override
+		
 		public void dispose() {
 		}
 	}	
 	abstract class AbstractBeanCreator implements BeanCreator{
 		private Component content;
-		@Override
+		
 		public Component createComponent(JFrame jframe) {
 			jframe.getContentPane().removeAll();
 			try {
@@ -84,14 +84,14 @@ public interface BeanCreator {
 			}
 			return content;
 		}
-		@Override
+		
 		public void dispose() {
 		}
 	}
 	BeanCreator[]COMPONENTS={
 			new BeanCreator(){
 				private JFrame frame;
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					frame = new JFrame();
 					frame.setSize(100, 100);
@@ -100,18 +100,18 @@ public interface BeanCreator {
 					return frame;
 				}
 
-				@Override
+				
 				public void dispose() {
 				}
 
-				@Override
+				
 				public Class getBeanClass() {
 					return JFrame.class;
 				}
 			},
 			new BeanCreator(){
 				private JDialog jdialog;
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					jdialog = new JDialog(jframe);
 					jdialog.setSize(100, 100);
@@ -120,257 +120,257 @@ public interface BeanCreator {
 					return jdialog;
 				}
 
-				@Override
+				
 				public void dispose() {
 					jdialog.setVisible(false);
 				}
 
-				@Override
+				
 				public Class getBeanClass() {
 					return JDialog.class;
 				}
 				
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JApplet.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JInternalFrame.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JPanel.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JButton.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JCheckBox.class;
 				}
 			},
 			new BeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JCheckBoxMenuItem.class;
 				}
 
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					return new JCheckBoxMenuItem();
 				}
 
-				@Override
+				
 				public void dispose() {
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JComboBox.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JDesktopPane.class;
 				}
 			},
 			new AbstractScrollPaneCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JEditorPane.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JFormattedTextField.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JLabel.class;
 				}
 			},
 			new AbstractScrollPaneCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JList.class;
 				}
 			},
 			new BeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JMenuBar.class;
 				}
 
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					return new JMenuBar();
 				}
 
-				@Override
+				
 				public void dispose() {
 				}
 			},
 			new BeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JMenuItem.class;
 				}
 
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					return new JMenuItem();
 				}
 
-				@Override
+				
 				public void dispose() {
 				}
 			},
 			new BeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JMenu.class;
 				}
 
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					return new JMenu();
 				}
 
-				@Override
+				
 				public void dispose() {
 					
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JPasswordField.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JProgressBar.class;
 				}
 			},
 			new BeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JRadioButtonMenuItem.class;
 				}
 
-				@Override
+				
 				public Component createComponent(JFrame jframe) {
 					return new JRadioButtonMenuItem();
 				}
 
-				@Override
+				
 				public void dispose() {
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JRadioButton.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JScrollBar.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JScrollPane.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JSeparator.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JSlider.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JSpinner.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JSplitPane.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JTabbedPane.class;
 				}
 			},
 			new AbstractScrollPaneCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JTextArea.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JTextField.class;
 				}
 			},
 			new AbstractScrollPaneCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JTextPane.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JToggleButton.class;
 				}
 			},
 			new AbstractBeanCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JToolBar.class;
 				}
 			},
 			new AbstractScrollPaneCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JTable.class;
 				}
 			},
 			new AbstractScrollPaneCreator(){
-				@Override
+				
 				public Class getBeanClass() {
 					return JTree.class;
 				}

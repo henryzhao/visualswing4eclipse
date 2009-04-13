@@ -85,7 +85,7 @@ public class BorderType {
 			this.adapter = adapter;
 		}
 
-		@Override
+		
 		public IPropertySource getPropertySource(Object object) {
 			if (this.object == object)
 				return adapter.getPropertySource(object);

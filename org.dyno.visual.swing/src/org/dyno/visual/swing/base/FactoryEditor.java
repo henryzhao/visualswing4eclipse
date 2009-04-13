@@ -30,27 +30,18 @@ public abstract class FactoryEditor implements ICellEditorFactory {
 	public FactoryEditor(IFactoryProvider provider){
 		this.provider = provider;
 	}
-	@Override
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new FactoryCellEditor(bean, parent, provider);
 	}
-
-	@Override
 	public Object decodeValue(Object value) {
 		return value;
 	}
-
-	@Override
 	public Object encodeValue(Object value) {
 		return value;
 	}
-
-	@Override
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
-
-	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

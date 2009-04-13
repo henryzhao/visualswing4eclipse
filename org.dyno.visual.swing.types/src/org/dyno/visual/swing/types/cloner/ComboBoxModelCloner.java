@@ -23,7 +23,7 @@ import org.dyno.visual.swing.plugin.spi.ICloner;
 
 public class ComboBoxModelCloner implements ICloner {
 
-	@Override
+	
 	public Object clone(Object object) {
 		ComboBoxModel cbm = (ComboBoxModel) object;
 		int count = cbm.getSize();

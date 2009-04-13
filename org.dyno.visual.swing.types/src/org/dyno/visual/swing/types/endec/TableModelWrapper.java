@@ -26,7 +26,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  * @author William Chen
  */
 public class TableModelWrapper implements ICodeGen {
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -85,7 +85,7 @@ public class TableModelWrapper implements ICodeGen {
 		return builder.toString();
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

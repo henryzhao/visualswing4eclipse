@@ -34,7 +34,7 @@ public class FrameDefaultCloseOperationItems implements ItemProvider {
 	public FrameDefaultCloseOperationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

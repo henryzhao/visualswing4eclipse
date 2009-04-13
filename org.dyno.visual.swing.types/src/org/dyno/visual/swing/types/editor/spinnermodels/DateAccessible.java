@@ -45,7 +45,7 @@ class DateAccessible implements AccessibleUI {
 	private Combo spStep;
 	private Label lblInit;
     private Label lblStep;
-	@Override
+	
 	public void setValue(Object value) {
 		SpinnerDateModel model = (SpinnerDateModel) value;
 		Comparable max = model.getEnd();
@@ -86,7 +86,7 @@ class DateAccessible implements AccessibleUI {
 		}
 		return -1;
 	}
-	@Override
+	
 	public Object getValue() {
 		if (btnDefault.getSelection())
 			return new SpinnerDateModel();
@@ -161,7 +161,7 @@ class DateAccessible implements AccessibleUI {
 		btnDefault.setLayoutData(data);
 		btnDefault.setSelection(true);
 		btnDefault.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnDefaultSelected();
 			}
@@ -181,7 +181,7 @@ class DateAccessible implements AccessibleUI {
 		data.horizontalIndent = 25;
 		btnMin.setLayoutData(data);
 		btnMin.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnMinSelected();
 			}
@@ -196,7 +196,7 @@ class DateAccessible implements AccessibleUI {
 		data.horizontalIndent = 25;
 		btnMax.setLayoutData(data);
 		btnMax.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnMaxSelected();
 			}
@@ -221,12 +221,12 @@ class DateAccessible implements AccessibleUI {
 		btnDefaultSelected();
 	}
 
-	@Override
+	
 	public Control getAccessibleUI() {
 		return pane;
 	}
 
-	@Override
+	
 	public String isInputValid() {
 		if (!btnDefault.getSelection()) {
 			Calendar init = spInit.getSelection();

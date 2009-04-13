@@ -133,7 +133,7 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 		put(JRadioButtonMenuItem.class, new JRadioButtonMenuItemValue());		
 	}
 
-	@Override
+	
 	public Object getDefaultValue(Class beanClass, String propertyName) {
 		WidgetValue widget = get(beanClass);
 		if (widget == null && beanClass != Component.class) {
@@ -144,7 +144,7 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 			return null;
 	}
 	private LookAndFeel metalLnf;
-	@Override
+	
 	public LookAndFeel getLookAndFeelInstance() {
 		if(metalLnf==null){
 			try {
@@ -156,12 +156,12 @@ public class MotifLookAndFeelAdapter extends HashMap<Class, WidgetValue> impleme
 		return metalLnf;
 	}
 
-	@Override
+	
 	public String getClassname() {
 		return "com.sun.java.swing.plaf.motif.MotifLookAndFeel"; //$NON-NLS-1$
 	}
 
-	@Override
+	
 	public String getName() {
 		return Messages.MotifLookAndFeelAdapter_Motif_Lnf;
 	}	

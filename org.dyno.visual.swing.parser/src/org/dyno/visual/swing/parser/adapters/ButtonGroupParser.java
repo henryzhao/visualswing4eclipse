@@ -39,7 +39,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 
 @SuppressWarnings("unchecked")
 public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants {
-	@Override
+	
 	public boolean renameField(IType type, IProgressMonitor monitor) {
 		String lastName = adapter.getLastName();
 		String name = adapter.getName();
@@ -71,7 +71,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		} else
 			return true;
 	}
-	@Override
+	
 	public boolean generateCode(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
 		boolean success = true;
@@ -133,7 +133,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		}
 		return success;		
 	}
-	@Override
+	
 	public String getCreationMethodName() {
 		return NamespaceUtil.getInitMethodName(adapter.getID());
 	}	
@@ -159,7 +159,7 @@ public class ButtonGroupParser implements IParser, IAdaptableContext,IConstants 
 		return null;
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adapter = (InvisibleAdapter) adaptable;
 	}

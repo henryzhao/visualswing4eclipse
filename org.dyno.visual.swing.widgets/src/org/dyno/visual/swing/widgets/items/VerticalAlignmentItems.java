@@ -32,7 +32,7 @@ public class VerticalAlignmentItems implements ItemProvider {
 	public VerticalAlignmentItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

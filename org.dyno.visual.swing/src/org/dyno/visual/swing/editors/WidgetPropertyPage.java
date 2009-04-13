@@ -27,14 +27,14 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 public class WidgetPropertyPage extends PropertySheetPage {
 	private boolean initialized = false;
 	private Action fAction;
-	@Override
+	
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		initFilteredAction();
 		final Tree tree = (Tree) getControl();
 		tree.addListener(SWT.MeasureItem,
 				new org.eclipse.swt.widgets.Listener() {
-					@Override
+					
 					public void handleEvent(org.eclipse.swt.widgets.Event event) {
 						event.height = 18;
 					}
@@ -53,7 +53,7 @@ public class WidgetPropertyPage extends PropertySheetPage {
 		}
 	}
 
-	@Override
+	
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (!initialized) {
 			fAction.run();

@@ -40,17 +40,17 @@ import org.eclipse.jface.action.IAction;
 
 @SuppressWarnings("unchecked")
 public class TitledBorderAdapter extends BorderAdapter {
-	@Override
+	
 	public Class getBorderClass() {
 		return TitledBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "TitledBorder";
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		FieldProperty title = new FieldProperty("title", "title",
 				TitledBorder.class);
@@ -75,22 +75,22 @@ public class TitledBorderAdapter extends BorderAdapter {
 				titleJustification, titleFont, titleColor };
 	}
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new TitledBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return BorderFactory.createTitledBorder("Border Title");
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -125,7 +125,7 @@ public class TitledBorderAdapter extends BorderAdapter {
 		return builder.toString();
 	}
 	private IEditor editor;
-	@Override
+	
 	public IEditor getEditorAt(JComponent owner, Point hotspot) {
 		Insets insets = owner.getInsets();
 		int x = hotspot.x;
@@ -145,7 +145,7 @@ public class TitledBorderAdapter extends BorderAdapter {
 		return null;
 	}
 
-	@Override
+	
 	public Rectangle getEditorBounds(JComponent owner, Point hotspot) {
 		Insets insets = owner.getInsets();
 		int x = hotspot.x;
@@ -168,13 +168,13 @@ public class TitledBorderAdapter extends BorderAdapter {
 		return null;
 	}
 
-	@Override
+	
 	public Object getWidgetValue(JComponent owner, Point hotspot) {
 		TitledBorder titledBorder = (TitledBorder) owner.getBorder();
 		return titledBorder.getTitle();
 	}
 
-	@Override
+	
 	public void setWidgetValue(JComponent owner, Object value, Point hotspot) {
 		TitledBorder titledBorder = (TitledBorder) owner.getBorder();
 		titledBorder.setTitle((String)value);

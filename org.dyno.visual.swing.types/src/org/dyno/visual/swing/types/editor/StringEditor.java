@@ -23,12 +23,12 @@ import org.eclipse.swt.widgets.Composite;
 public class StringEditor extends StringWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new TextCellEditor(parent);
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		if (value == null || value != null && value.toString().trim().length() == 0)
 			return null;
@@ -36,7 +36,7 @@ public class StringEditor extends StringWrapper implements ICellEditorFactory {
 			return value;
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		if (value == null)
 			return "";

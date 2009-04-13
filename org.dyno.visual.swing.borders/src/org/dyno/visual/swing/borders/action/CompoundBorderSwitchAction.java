@@ -29,7 +29,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class CompoundBorderSwitchAction extends BorderSwitchAction {
 	public CompoundBorderSwitchAction(JComponent w) {
 		super(w, CompoundBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createCompoundBorder();
 			}});

@@ -37,7 +37,7 @@ class ResizeLeft extends ResizeOperation {
 		super(layout, tracingAdapter,op, container);
 	}
 
-	@Override
+	
 	public boolean dragOver(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		JComponent todrop = (JComponent)tracingAdapter.getWidget();
@@ -65,7 +65,7 @@ class ResizeLeft extends ResizeOperation {
 
 	private QuartetPair pair;
 
-	@Override
+	
 	public boolean drop(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		Insets insets = container.getInsets();
@@ -100,7 +100,7 @@ class ResizeLeft extends ResizeOperation {
 		return true;
 	}
 
-	@Override
+	
 	public boolean dragEnter(Point p) {
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
 		parent.setMascotLocation(p);
@@ -109,7 +109,7 @@ class ResizeLeft extends ResizeOperation {
 		return true;
 	}
 
-	@Override
+	
 	public boolean dragExit(Point p) {
 		adapter.setHovered(false);
 		return true;

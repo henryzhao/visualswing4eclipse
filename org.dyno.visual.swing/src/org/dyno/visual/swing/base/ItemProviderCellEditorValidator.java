@@ -27,8 +27,6 @@ public class ItemProviderCellEditorValidator implements ICellEditorValidator {
 	public ItemProviderCellEditorValidator(ItemProvider provider) {
 		this.provider = provider;
 	}
-
-	@Override
 	public String isValid(Object value) {
 		if (value == null)
 			return null;

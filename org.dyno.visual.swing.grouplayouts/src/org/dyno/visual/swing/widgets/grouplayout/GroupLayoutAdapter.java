@@ -30,9 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.dyno.visual.swing.base.Azimuth;
 import org.dyno.visual.swing.base.JavaUtil;
@@ -40,9 +38,11 @@ import org.dyno.visual.swing.layouts.Alignment;
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
+import org.dyno.visual.swing.layouts.LayoutStyle;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Spring;
 import org.dyno.visual.swing.layouts.Trailing;
+import org.dyno.visual.swing.layouts.LayoutStyle.ComponentPlacement;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
@@ -397,8 +397,6 @@ public class GroupLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		container.validate();
 		return true;
 	}
-
-	@Override
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		int count = container.getComponentCount();
 		HashMap<JComponent, Constraints> comps = new HashMap<JComponent, Constraints>();

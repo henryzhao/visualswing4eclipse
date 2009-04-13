@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 
 public class BorderRenderer implements ILabelProviderFactory {
 	private BorderLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new BorderLabelProvider();

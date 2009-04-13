@@ -35,7 +35,7 @@ public class HorizontalAlignmentItems implements ItemProvider {
 	public HorizontalAlignmentItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

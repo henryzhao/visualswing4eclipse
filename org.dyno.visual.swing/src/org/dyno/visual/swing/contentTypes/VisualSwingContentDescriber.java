@@ -88,7 +88,7 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 		patterns.add(new PatternItem(type, value));
 	}
 
-	@Override
+	
 	public int describe(Reader contents, IContentDescription description) throws IOException {
 		BufferedReader buffer = new BufferedReader(contents);
 		StringBuilder cat = new StringBuilder();
@@ -112,13 +112,13 @@ public class VisualSwingContentDescriber implements ITextContentDescriber {
 		return INDETERMINATE;
 	}
 
-	@Override
+	
 	public int describe(InputStream contents, IContentDescription description) throws IOException {
 		InputStreamReader reader = new InputStreamReader(contents);
 		return describe(reader, description);
 	}
 
-	@Override
+	
 	public QualifiedName[] getSupportedOptions() {
 		return QUALIFIERS;
 	}

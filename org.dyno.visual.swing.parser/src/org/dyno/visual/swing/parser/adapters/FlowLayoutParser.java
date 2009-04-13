@@ -14,38 +14,16 @@ package org.dyno.visual.swing.parser.adapters;
 
 import java.awt.FlowLayout;
 
-import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class FlowLayoutParser extends LayoutParser {
 
-	@Override
 	protected String getInitCode(ImportRewrite imports) {
-		FlowLayout layout = (FlowLayout) layoutAdapter.getContainer().getLayout();
-		if (layout.getAlignOnBaseline()) {
-			WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
-			String layoutName = getLayoutVariableName(containerAdapter);
-			String flowLayoutName = imports.addImport("java.awt.FlowLayout");
-			String code = flowLayoutName + " " + layoutName + " = " + getCreationCode(imports) + ";\n";
-			code += layoutName + ".setAlignOnBaseline(true);\n";
-			return code;
-		} else
-			return null;
+		return null;
 	}
 
-	private String getLayoutVariableName(WidgetAdapter adapter) {
-		return (adapter.isRoot() ? "this" : adapter.getID()) + "Layout";
-	}
-
-	@Override
 	protected String getNewInstanceCode(ImportRewrite imports) {
-		FlowLayout layout = (FlowLayout) layoutAdapter.getContainer().getLayout();
-		if (layout.getAlignOnBaseline()) {
-			WidgetAdapter containerAdapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
-			String layoutName = getLayoutVariableName(containerAdapter);
-			return layoutName;
-		} else
-			return getCreationCode(imports);
+		return getCreationCode(imports);
 	}
 
 	private String getCreationCode(ImportRewrite imports) {

@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  */
 public class RectangleRenderer implements ILabelProviderFactory {
 	private RectangleLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new RectangleLabelProvider();

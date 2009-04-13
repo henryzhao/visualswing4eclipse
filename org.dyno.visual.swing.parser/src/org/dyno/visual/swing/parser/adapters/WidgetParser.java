@@ -97,7 +97,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		}
 	}
 
-	@Override
+	
 	public boolean renameField(IType type, IProgressMonitor monitor) {
 		String lastName = adaptable.getLastName();
 		String name = adaptable.getName();
@@ -403,12 +403,12 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		return "";
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}
 
-	@Override
+	
 	public String getCreationMethodName() {
 		return NamespaceUtil.getGetMethodName(adaptable, adaptable.getID());
 	}

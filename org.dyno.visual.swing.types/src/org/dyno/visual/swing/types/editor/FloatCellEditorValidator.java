@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 
 public class FloatCellEditorValidator implements ICellEditorValidator {
 
-	@Override
+	
 	public String isValid(Object value) {
 		String string = (String) value;
 		try {

@@ -15,7 +15,7 @@ public class VSNamespaceManager implements NamespaceManager{
 		this.rootAdapter = rootAdapter;
 		names = new HashMap<String, String>();
 	}
-	@Override
+	
 	public boolean hasDeclaredName(String newName) {
 		String name = names.get(newName);
 		if(name!=null)
@@ -42,7 +42,7 @@ public class VSNamespaceManager implements NamespaceManager{
 			return false;
 		return hasMethod(clazz.getSuperclass(), getMethodName);
 	}
-	@Override
+	
 	public String nextName(String base) {
 		for(int i=0;i<Integer.MAX_VALUE;i++){
 			if(!hasDeclaredName(base+i))

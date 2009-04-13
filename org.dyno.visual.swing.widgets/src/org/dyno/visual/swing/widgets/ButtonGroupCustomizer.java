@@ -68,7 +68,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		return true;
 	}
 
-	@Override
+	
 	public void fillContextMenu(MenuManager menuManager,
 			WidgetAdapter rootAdapter, List<Component> selected) {
 		if (isAllButton(selected)) {
@@ -154,7 +154,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		}
 	}
 
-	@Override
+	
 	public void fillInvisibleAdapterMenu(MenuManager menuManager,
 			WidgetAdapter rootAdapter, List<InvisibleAdapter> selected) {
 		if (isAllButtonGroupAdapter(selected)) {
@@ -204,7 +204,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			this.rootAdapter = rootAdapter;
 		}
 
-		@Override
+		
 		public void run() {
 			if (!isInGroup(buttonGroup, button)) {
 				removeButtonFromGroup(button);
@@ -234,7 +234,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			this.rootAdapter = rootAdapter;
 		}
 
-		@Override
+		
 		public void run() {
 			if (isInGroup(buttonGroup, button))
 				this.buttonGroup.remove(button);
@@ -243,7 +243,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		}
 	}
 
-	@Override
+	
 	public void fillInvisibleRootMenu(MenuManager menuManager,
 			WidgetAdapter rootAdapter) {
 		menuManager.add(new AddButtonGroup(rootAdapter));
@@ -257,7 +257,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			this.root = root;
 		}
 
-		@Override
+		
 		public void run() {
 			ButtonGroupAdapter btnAdapter = new ButtonGroupAdapter(root);
 			root.getInvisibles().add(btnAdapter);
@@ -276,7 +276,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			this.selectedButtons = selected;
 		}
 
-		@Override
+		
 		public void run() {
 			ButtonGroupAdapter btnAdapter = new ButtonGroupAdapter(root);
 			root.getInvisibles().add(btnAdapter);
@@ -307,7 +307,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			}
 		}
 
-		@Override
+		
 		public void run() {
 			for (InvisibleAdapter adapter : adapters) {
 				root.getInvisibles().remove(adapter);
@@ -323,7 +323,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		}
 	}
 
-	@Override
+	
 	public void fillIAdapterMenu(MenuManager manager,
 			WidgetAdapter rootAdapter, List<IAdapter> iadapters) {
 		if (isAllAbstractButtonAdapter(iadapters)) {
@@ -343,7 +343,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 			this.iadapters = iadapters;
 		}
 
-		@Override
+		
 		public void run() {
 			for (IAdapter iadapter : iadapters) {
 				WidgetAdapter wa = (WidgetAdapter) iadapter;
@@ -380,7 +380,7 @@ public class ButtonGroupCustomizer implements IContextCustomizer {
 		return true;
 	}
 
-	@Override
+	
 	public void paintContext(Graphics g, WidgetAdapter rootAdapter) {
 		List<Component> selected = rootAdapter.getSelection();
 		if (selected != null && !selected.isEmpty()) {

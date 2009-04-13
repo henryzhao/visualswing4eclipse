@@ -24,32 +24,32 @@ import org.eclipse.jface.action.IAction;
 @SuppressWarnings("unchecked")
 public class NullBorderAdapter extends BorderAdapter {
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new NullBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	public Class getBorderClass() {
 		return null;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "null";
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return null;
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		return "null";
 	}

@@ -36,7 +36,7 @@ public class CalendarItems implements ItemProvider {
 			new Item("Hour of Day", Calendar.HOUR_OF_DAY, "java.util.Calendar.HOUR_OF_DAY"), new Item("Minute", Calendar.MINUTE, "java.util.Calendar.MINUTE"),
 			new Item("Second", Calendar.SECOND, "java.util.Calendar.SECOND"), new Item("Millisecond", Calendar.MILLISECOND, "java.util.Calendar.MILLISECOND") };
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

@@ -25,7 +25,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class LineBorderSwitchAction extends BorderSwitchAction {
 	public LineBorderSwitchAction(JComponent w) {
 		super(w, LineBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createLineBorder(Color.black);
 			}});

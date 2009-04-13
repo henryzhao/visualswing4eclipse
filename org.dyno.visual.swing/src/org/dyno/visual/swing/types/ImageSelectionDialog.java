@@ -43,7 +43,7 @@ public class ImageSelectionDialog extends Dialog {
 	private Label label;
 
 	private class ProjectTreeContent implements ITreeContentProvider {
-		@Override
+		
 		public Object[] getChildren(Object parentElement) {
 			try {
 				if (parentElement instanceof IJavaProject) {
@@ -107,12 +107,12 @@ public class ImageSelectionDialog extends Dialog {
 			return new Object[0];
 		}
 
-		@Override
+		
 		public Object getParent(Object element) {
 			return null;
 		}
 
-		@Override
+		
 		public boolean hasChildren(Object element) {
 			try {
 				IJavaElement[] children = null;
@@ -165,23 +165,23 @@ public class ImageSelectionDialog extends Dialog {
 			return false;
 		}
 
-		@Override
+		
 		public Object[] getElements(Object inputElement) {
 			return getChildren(inputElement);
 		}
 
-		@Override
+		
 		public void dispose() {
 		}
 
-		@Override
+		
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 
 	}
 
 	class ProjectLabelProvider extends LabelProvider implements ILabelProvider {
-		@Override
+		
 		public Image getImage(Object element) {
 			if (element == null)
 				return null;
@@ -198,7 +198,7 @@ public class ImageSelectionDialog extends Dialog {
 			return null;
 		}
 
-		@Override
+		
 		public String getText(Object element) {
 			if (element == null)
 				return "";
@@ -219,7 +219,7 @@ public class ImageSelectionDialog extends Dialog {
 			return element.toString();
 		}
 
-		@Override
+		
 		public void dispose() {
 		}
 	}
@@ -228,7 +228,7 @@ public class ImageSelectionDialog extends Dialog {
 		super(parentShell);
 	}
 
-	@Override
+	
 	protected Control createDialogArea(Composite parent) {
 		getShell().setText("Select image");
 		Composite area = new Composite(parent, SWT.NONE);
@@ -244,7 +244,7 @@ public class ImageSelectionDialog extends Dialog {
 		view.setLabelProvider(new ProjectLabelProvider());
 		view.setInput(VisualSwingPlugin.getCurrentProject());
 		view.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
+			
 			public void selectionChanged(SelectionChangedEvent event) {
 				view_selectionChanged(event);
 			}
@@ -277,7 +277,7 @@ public class ImageSelectionDialog extends Dialog {
 		return false;
 	}
 
-	@Override
+	
 	protected Control createContents(Composite parent) {
 		Control ctrl = super.createContents(parent);
 		if (imgFile != null) {
@@ -332,14 +332,14 @@ public class ImageSelectionDialog extends Dialog {
 		}
 	}
 
-	@Override
+	
 	public boolean close() {
 		if (image != null)
 			image.dispose();
 		return super.close();
 	}
 
-	@Override
+	
 	protected void cancelPressed() {
 		imgFile = null;
 		super.cancelPressed();

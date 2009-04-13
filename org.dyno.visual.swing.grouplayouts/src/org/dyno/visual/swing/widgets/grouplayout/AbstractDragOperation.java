@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.dyno.visual.swing.layouts.GroupLayout;
+import org.dyno.visual.swing.layouts.LayoutStyle;
+import org.dyno.visual.swing.layouts.LayoutStyle.ComponentPlacement;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IBaselineAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;

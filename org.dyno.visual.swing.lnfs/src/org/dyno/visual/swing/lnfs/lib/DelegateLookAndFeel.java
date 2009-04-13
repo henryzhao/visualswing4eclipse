@@ -4,7 +4,6 @@ import java.awt.Component;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.LayoutStyle;
 import javax.swing.LookAndFeel;
 import javax.swing.UIDefaults;
 
@@ -30,11 +29,6 @@ public class DelegateLookAndFeel extends LookAndFeel{
 	@Override
 	public Icon getDisabledSelectedIcon(JComponent component, Icon icon) {
 		return instance.getDisabledSelectedIcon(component, icon);
-	}
-
-	@Override
-	public LayoutStyle getLayoutStyle() {
-		return instance.getLayoutStyle();
 	}
 
 	@Override

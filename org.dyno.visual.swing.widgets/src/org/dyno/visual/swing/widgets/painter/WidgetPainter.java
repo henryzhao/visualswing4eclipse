@@ -25,11 +25,11 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 				.getResource("/icons/forbidden.png")); //$NON-NLS-1$
 	}	
 	protected WidgetAdapter adaptable;
-	@Override
+	
 	public void paintAnchor(Graphics g) {
 	}
 
-	@Override
+	
 	public void paintGrid(Graphics clipg) {
 	}
 	protected IDesignOperation getOperation(){
@@ -39,11 +39,11 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 		Point p = adaptable.getMascotLocation();
 		FORBIDDEN_ICON.paintIcon(adaptable.getWidget(), g, p.x - 16, p.y - 16);
 	}
-	@Override
+	
 	public void paintHint(Graphics g) {
 	}
 
-	@Override
+	
 	public void paintHovered(Graphics clipg) {
 	}
 
@@ -89,7 +89,7 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 		}
 	} 
 	
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}

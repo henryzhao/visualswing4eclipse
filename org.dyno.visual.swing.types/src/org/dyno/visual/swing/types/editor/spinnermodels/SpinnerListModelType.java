@@ -31,12 +31,12 @@ public class SpinnerListModelType extends SpinnerModelType {
 		super("list");
 	}
 
-	@Override
+	
 	public AccessibleUI createEditPane(Composite parent) {
 		return new ListAccessible(parent);
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -64,7 +64,7 @@ public class SpinnerListModelType extends SpinnerModelType {
 		return builder.toString();
 	}
 
-	@Override
+	
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		SpinnerListModel slm1 = (SpinnerListModel) o1;
 		SpinnerListModel slm2 = (SpinnerListModel) o2;
@@ -101,12 +101,12 @@ public class SpinnerListModelType extends SpinnerModelType {
 		return 0;
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public Object clone(Object object) {
 		SpinnerListModel slm=(SpinnerListModel)object;		
 		return new SpinnerListModel(slm.getList());

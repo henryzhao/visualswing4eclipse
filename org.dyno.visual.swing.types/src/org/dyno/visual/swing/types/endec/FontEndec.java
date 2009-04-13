@@ -7,7 +7,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 
 public class FontEndec implements IEndec {
 
-	@Override
+	
 	public Object decode(String string) {
 		return string == null ? null : decodeFont(string);
 	}
@@ -33,7 +33,7 @@ public class FontEndec implements IEndec {
 		return new Font(family, style, size);
 	}
 
-	@Override
+	
 	public String encode(Object value) {
 		return value==null?"null":encodeFont((Font)value);
 	}

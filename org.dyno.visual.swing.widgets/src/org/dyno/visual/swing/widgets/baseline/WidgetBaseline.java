@@ -23,7 +23,7 @@ public class WidgetBaseline implements IBaselineAdapter, IAdaptableContext {
 		return 2 * descent;
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}

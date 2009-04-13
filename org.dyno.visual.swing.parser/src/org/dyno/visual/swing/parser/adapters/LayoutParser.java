@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
-	@Override
+	
 	public String createCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(layoutAdapter.getContainer());
@@ -52,7 +52,7 @@ public abstract class LayoutParser implements ILayoutParser, IAdaptableContext{
 	}
 
 	protected LayoutAdapter layoutAdapter;
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.layoutAdapter = (LayoutAdapter)adaptable;
 	}

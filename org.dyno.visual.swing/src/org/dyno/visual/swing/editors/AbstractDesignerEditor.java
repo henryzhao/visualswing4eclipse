@@ -49,7 +49,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 		return true;
 	}
 
-	@Override
+	
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		setSite(site);
@@ -118,7 +118,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	protected void switchToJavaEditor() {
 		getDisplay().asyncExec(new Runnable() {
 
-			@Override
+			
 			public void run() {
 				IEditorInput input = getEditorInput();
 				IWorkbenchPage page = getEditorSite().getWorkbenchWindow()
@@ -154,7 +154,7 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 	protected void closeMe() {
 		getDisplay().asyncExec(new Runnable() {
 
-			@Override
+			
 			public void run() {
 				IWorkbenchPage page = getEditorSite().getWorkbenchWindow()
 						.getActivePage();

@@ -47,7 +47,7 @@ public class CodeSnippet implements IEventMethod, IConstants{
 		this.code = code;
 	}
 
-	@Override
+	
 	public void editCode(IEditorPart editor) {
 		IFileEditorInput file = (IFileEditorInput) editor.getEditorInput();
 		ICompilationUnit unit = JavaCore.createCompilationUnitFrom(file
@@ -117,17 +117,17 @@ public class CodeSnippet implements IEventMethod, IConstants{
 		}
 	}
 
-	@Override
+	
 	public String getDisplayName() {
 		return methodDesc.getDisplayName();
 	}
 
-	@Override
+	
 	public String createEventMethod(IType type, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String createAddListenerCode() {
 		return code;
 	}

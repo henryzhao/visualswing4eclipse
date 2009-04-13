@@ -7,7 +7,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 
 public class DimensionEndec implements IEndec {
 
-	@Override
+	
 	public Object decode(String string) {
 		return string==null?null:decodeDimension(string);
 	}
@@ -27,7 +27,7 @@ public class DimensionEndec implements IEndec {
 		}catch(NumberFormatException nfe){}
 		return new Dimension(width, height);
 	}
-	@Override
+	
 	public String encode(Object value) {
 		return value==null?"null":encodeDimension((Dimension)value);
 	}
