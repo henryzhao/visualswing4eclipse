@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
-import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
 /**
  * 
@@ -47,7 +46,7 @@ public class GroupLayout implements LayoutManager2, Serializable {
 	public void setConstraints(Component comp, Constraints constraint){
 		constraints.put(comp, constraint);
 	}
-	@Override
+	
 	public void addLayoutComponent(Component comp, Object con) {
 		assert con != null && con instanceof Constraints;
 		Constraints constraints = (Constraints) con;
@@ -93,30 +92,30 @@ public class GroupLayout implements LayoutManager2, Serializable {
 		}
 	}
 
-	@Override
+	
 	public float getLayoutAlignmentX(Container target) {
 		return 0;
 	}
 
-	@Override
+	
 	public float getLayoutAlignmentY(Container target) {
 		return 0;
 	}
 
-	@Override
+	
 	public void invalidateLayout(Container target) {
 	}
 
-	@Override
+	
 	public Dimension maximumLayoutSize(Container target) {
 		return new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 	}
 
-	@Override
+	
 	public void addLayoutComponent(String name, Component comp) {
 	}
 
-	@Override
+	
 	public void layoutContainer(Container parent) {
 		int width = parent.getWidth();
 		int height = parent.getHeight();
@@ -188,7 +187,7 @@ public class GroupLayout implements LayoutManager2, Serializable {
 		return cons;
 	}
 
-	@Override
+	
 	public Dimension minimumLayoutSize(Container parent) {
 		int width = 0;
 		int height = 0;
@@ -238,7 +237,7 @@ public class GroupLayout implements LayoutManager2, Serializable {
 		return new Dimension(width, height);
 	}
 
-	@Override
+	
 	public Dimension preferredLayoutSize(Container parent) {
 		int width = 0;
 		int height = 0;
@@ -292,7 +291,7 @@ public class GroupLayout implements LayoutManager2, Serializable {
 		return new Dimension(width, height);
 	}
 
-	@Override
+	
 	public void removeLayoutComponent(Component comp) {
 		constraints.remove(comp);
 	}

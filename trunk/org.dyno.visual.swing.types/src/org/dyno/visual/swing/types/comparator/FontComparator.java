@@ -18,7 +18,7 @@ import java.awt.Font;
 import java.util.Comparator;
 
 public class FontComparator implements Comparator<Font> {
-	@Override
+	
 	public int compare(Font o1, Font o2) {
 		String f1 = o1.getFamily();
 		String f2 = o2.getFamily();

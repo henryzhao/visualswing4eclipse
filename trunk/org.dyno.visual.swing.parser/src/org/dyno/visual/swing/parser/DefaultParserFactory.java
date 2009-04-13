@@ -52,11 +52,11 @@ public class DefaultParserFactory extends ParserFactory {
 		parseListenerModels();
 	}
 	
-	@Override
+	
 	public ISourceParser newParser() {
 		return new DefaultSourceParser(this);
 	}
-	@Override
+	
 	public IEventListenerModel newModel(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		return newModel(currentListenerID, adapter, eventSet);
 	}
@@ -77,14 +77,14 @@ public class DefaultParserFactory extends ParserFactory {
 	}
 	private Iterable<AbstractClassModel> enumerate(final WidgetAdapter adapter, final EventSetDescriptor eventSet) {
 		return new Iterable<AbstractClassModel>() {
-			@Override
+			
 			public Iterator<AbstractClassModel> iterator() {
 				return new ModelIterator(adapter, eventSet);
 			}
 		};
 	}
 	class PriorityComparator implements Comparator<String>{
-		@Override
+		
 		public int compare(String o1, String o2) {
 			IConfigurationElement config1 = listenerModels.get(o1);
 			IConfigurationElement config2 = listenerModels.get(o2);
@@ -111,18 +111,18 @@ public class DefaultParserFactory extends ParserFactory {
 			this.eventSet = eventSet;
 		}
 
-		@Override
+		
 		public boolean hasNext() {
 			return ids.hasNext();
 		}
 
-		@Override
+		
 		public AbstractClassModel next() {
 			String id = ids.next();
 			return newModel(id, adapter, eventSet);
 		}
 
-		@Override
+		
 		public void remove() {
 		}
 	}

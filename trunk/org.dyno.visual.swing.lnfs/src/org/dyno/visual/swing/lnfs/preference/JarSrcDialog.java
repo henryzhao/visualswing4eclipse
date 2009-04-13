@@ -28,7 +28,7 @@ public class JarSrcDialog extends Dialog {
 		super(parentShell);
 	}
 
-	@Override
+	
 	protected Control createDialogArea(Composite parent) {
 		getShell().setText(Messages.JarSrcDialog_Choose_Jar);
 		Composite main = new Composite(parent, SWT.NONE);
@@ -43,14 +43,14 @@ public class JarSrcDialog extends Dialog {
 		txtJar = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtJar.setLayoutData(data);
 		txtJar.addModifyListener(new ModifyListener(){
-			@Override
+			
 			public void modifyText(ModifyEvent e) {
 				updateButtonState();
 			}});
 		Button btnJar = new Button(main, SWT.PUSH);
 		btnJar.setText(Messages.JarSrcDialog_Browse_1);
 		btnJar.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				browseJar();
 			}
@@ -63,14 +63,14 @@ public class JarSrcDialog extends Dialog {
 		txtSrc = new Text(main, SWT.SINGLE | SWT.BORDER);
 		txtSrc.setLayoutData(data);
 		txtSrc.addModifyListener(new ModifyListener(){
-			@Override
+			
 			public void modifyText(ModifyEvent e) {
 				updateButtonState();
 			}});
 		Button btnSrc = new Button(main, SWT.PUSH);
 		btnSrc.setText(Messages.JarSrcDialog_Browse_2);
 		btnSrc.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				browseSrc();
 			}
@@ -100,14 +100,14 @@ public class JarSrcDialog extends Dialog {
 		return src_path;
 	}
 
-	@Override
+	
 	protected Control createContents(Composite parent) {
 		Control control = super.createContents(parent);
 		updateButtonState();
 		return control;
 	}
 
-	@Override
+	
 	protected void okPressed() {
 		String error = checkInput();
 		if (error == null) {

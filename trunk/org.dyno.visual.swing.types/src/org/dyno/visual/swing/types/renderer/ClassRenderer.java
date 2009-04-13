@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 
 public class ClassRenderer implements ILabelProviderFactory {
 	private ClassLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new ClassLabelProvider();

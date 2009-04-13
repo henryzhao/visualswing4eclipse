@@ -29,14 +29,14 @@ public class ListModelWrapper implements ICodeGen {
 	public ListModelWrapper() {
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
 		return "listModel";
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return null;

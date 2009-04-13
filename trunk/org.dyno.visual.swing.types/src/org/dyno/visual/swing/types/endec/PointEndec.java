@@ -7,7 +7,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 
 public class PointEndec implements IEndec {
 
-	@Override
+	
 	public Object decode(String string) {
 		return string==null?null:decodePoint(string);
 	}
@@ -28,7 +28,7 @@ public class PointEndec implements IEndec {
 		return new Point(x, y);
 		
 	}
-	@Override
+	
 	public String encode(Object value) {
 		return value==null?"null":encodePoint((Point)value);
 	}

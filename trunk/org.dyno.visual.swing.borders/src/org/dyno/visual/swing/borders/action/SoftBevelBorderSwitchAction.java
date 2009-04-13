@@ -23,7 +23,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class SoftBevelBorderSwitchAction extends BorderSwitchAction {
 	public SoftBevelBorderSwitchAction(JComponent w) {
 		super(w, SoftBevelBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return new SoftBevelBorder(BevelBorder.LOWERED);
 			}});

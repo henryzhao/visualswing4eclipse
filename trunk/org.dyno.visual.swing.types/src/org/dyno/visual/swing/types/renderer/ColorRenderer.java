@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  */
 public class ColorRenderer implements ILabelProviderFactory {
 	private ColorLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new ColorLabelProvider();

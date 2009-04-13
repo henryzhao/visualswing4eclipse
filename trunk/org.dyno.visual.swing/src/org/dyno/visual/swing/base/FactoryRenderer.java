@@ -29,7 +29,6 @@ public class FactoryRenderer implements ILabelProviderFactory {
 	public FactoryRenderer(IFactoryProvider provider){
 		this.provider = provider;
 	}
-	@Override
 	public ILabelProvider getLabelProvider() {
 		if (labelProvider == null)
 			labelProvider = new FactoryLabelProvider(provider);

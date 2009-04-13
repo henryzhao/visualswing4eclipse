@@ -34,20 +34,20 @@ abstract class BaseClassModel extends AbstractClassModel {
 		methods = new HashMap<MethodDescriptor, MethodDescriptor>();
 	}
 
-	@Override
+	
 	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		super.init(adapter, eventSet);
 		this.className = (adapter.isRoot() ? "This" : NamespaceUtil.getCapitalName(adapter.getID())) + NamespaceUtil.getCapitalName(eventSet.getName()) + "Listener";
 	}
 
-	@Override
+	
 	public void addMethod(MethodDescriptor methodDesc) {
 		methods.put(methodDesc, methodDesc);
 	}
 	protected IType getMeType(IType type){
 		return type.getCompilationUnit().getType(className);
 	}
-	@Override
+	
 	public boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		IType meType = getMeType(type);
 		Class listClass = eventSet.getListenerType();		
@@ -85,7 +85,7 @@ abstract class BaseClassModel extends AbstractClassModel {
 				if (methods.get(mthd) != null) {
 					StringBuilder builder = new StringBuilder();
 					if (override)
-						builder.append("@Override\n");
+						builder.append("\n");
 					builder.append(createEventMethodStub(monitor, meType, m, pcName));
 					return createEventMethod(meType, builder.toString(), monitor);
 				} else {
@@ -116,7 +116,7 @@ abstract class BaseClassModel extends AbstractClassModel {
 		return builder.toString();
 	}
 
-	@Override
+	
 	public String createListenerInstance(ImportRewrite imports) {
 		return "new " + className + "(" + (parameters == null ? "" : parameters) + ")";
 	}
@@ -130,31 +130,31 @@ abstract class BaseClassModel extends AbstractClassModel {
 			return false;
 		}
 	}
-	@Override
+	
 	public void removeMethod(MethodDescriptor methodDesc) {
 		methods.remove(methodDesc);
 	}
 
-	@Override
+	
 	public String getDisplayName(MethodDescriptor methodDesc) {
 		return className + "." + methodDesc.getDisplayName();
 	}
 
-	@Override
+	
 	public boolean hasMethod(MethodDescriptor methodDesc) {
 		return methods.containsKey(methodDesc);
 	}
 
-	@Override
+	
 	public boolean isEmpty() {
 		return methods.isEmpty();
 	}
 
-	@Override
+	
 	public Iterable<MethodDescriptor> methods() {
 		return methods.keySet();
 	}
-	@Override
+	
 	protected boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {

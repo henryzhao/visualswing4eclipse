@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  */
 public class DimensionRenderer implements ILabelProviderFactory {
 	private DimensionLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new DimensionLabelProvider();

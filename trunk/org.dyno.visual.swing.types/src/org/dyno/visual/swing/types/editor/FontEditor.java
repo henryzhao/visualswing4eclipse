@@ -23,12 +23,12 @@ import org.eclipse.swt.widgets.Composite;
 public class FontEditor extends FontWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new FontCellEditor(parent);
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		if (value == null)
 			return null;
@@ -45,7 +45,7 @@ public class FontEditor extends FontWrapper implements ICellEditorFactory {
 		return new java.awt.Font(data.getName(), style, h);
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		if (value == null)
 			return null;

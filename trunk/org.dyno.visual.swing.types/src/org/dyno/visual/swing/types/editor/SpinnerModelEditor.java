@@ -22,17 +22,17 @@ import org.eclipse.swt.widgets.Composite;
 public class SpinnerModelEditor extends SpinnerModelWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new SpinnerModelCellEditor(parent);
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		return value;
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		return value;
 	}

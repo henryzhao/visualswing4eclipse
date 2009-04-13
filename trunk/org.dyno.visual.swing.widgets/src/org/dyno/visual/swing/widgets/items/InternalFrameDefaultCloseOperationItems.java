@@ -33,7 +33,7 @@ public class InternalFrameDefaultCloseOperationItems implements ItemProvider {
 	public InternalFrameDefaultCloseOperationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

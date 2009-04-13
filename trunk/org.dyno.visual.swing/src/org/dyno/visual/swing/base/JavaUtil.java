@@ -18,6 +18,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -97,7 +98,10 @@ public class JavaUtil {
 			}
 		}
 	}
-
+	public static boolean isJava6(){
+		String version = System.getProperty("java.version");
+		return version.startsWith("1.6");		
+	}
 	public static JPopupMenu getComponentPopupMenu(JComponent jcomp) {
 		if (!jcomp.getInheritsPopupMenu())
 			return jcomp.getComponentPopupMenu();
@@ -419,6 +423,22 @@ public class JavaUtil {
 			}
 		}
 		return true;
+	}
+
+	public static Object getField(Object object, String fieldName) {
+		if (object == null)
+			return null;
+		else {
+			try {
+				Class clazz = object.getClass();
+				Field field = clazz.getDeclaredField(fieldName);
+				return field.get(object);
+			} catch (Exception e) {
+				VisualSwingPlugin.getLogger().error(e);
+				return null;
+			}
+		}
+
 	}
 
 	public static final IPath VS_LIBRARY = new Path(VisualSwingPlugin.PLUGIN_ID + ".VS_LIBRARY"); //$NON-NLS-1$

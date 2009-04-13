@@ -34,7 +34,7 @@ public class FocusLostBehaviorItems implements ItemProvider {
 	public FocusLostBehaviorItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

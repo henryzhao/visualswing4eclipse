@@ -36,7 +36,7 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 				Messages.NewVisualSwingExtensionLibraryWizard_Lib, null);
 	}
 
-	@Override
+	
 	public boolean finish() {
 		Object[] sel = viewer.getCheckedElements();
 		if (sel == null || sel.length == 0)
@@ -52,25 +52,25 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 
 	private IClasspathEntry[] selected_containers;
 
-	@Override
+	
 	public void setSelection(IClasspathEntry containerEntry) {
 		this.toBeEdited = containerEntry;
 	}
 
 	class CheckedTableLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
-		@Override
+		
 		public Image getColumnImage(Object element, int columnIndex) {
 			return VisualSwingPlugin.getSharedImage("/icons/library.png"); //$NON-NLS-1$
 		}
 
-		@Override
+		
 		public String getColumnText(Object element, int columnIndex) {
 			return ((IClasspathContainer) element).getDescription();
 		}
 	}
 
-	@Override
+	
 	public void createControl(Composite parent) {
 		viewer = CheckboxTableViewer.newCheckList(parent, SWT.BORDER);
 		viewer.setContentProvider(new LibContProv());
@@ -116,7 +116,7 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 		}
 		updateCheckState();
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
+			
 			public void selectionChanged(SelectionChangedEvent event) {
 				updateCheckState();
 			}
@@ -130,7 +130,7 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 	private class LibInput {};
 
 	private class LibContProv implements IStructuredContentProvider {
-		@Override
+		
 		public Object[] getElements(Object inputElement) {
 			List<IClasspathContainer> paths = new ArrayList<IClasspathContainer>();
 			paths.add(new LayoutExtensionLibrary());
@@ -146,16 +146,16 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 			return paths.toArray();
 		}
 
-		@Override
+		
 		public void dispose() {
 		}
 
-		@Override
+		
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 	}
 
-	@Override
+	
 	public void initialize(IJavaProject project, IClasspathEntry[] currentEntries) {
 		this.currentEntries = currentEntries;
 	}
@@ -163,14 +163,14 @@ public class NewVisualSwingExtensionLibraryWizard extends WizardPage implements
 	private CheckboxTableViewer viewer;
 	private IClasspathEntry toBeEdited;
 
-	@Override
+	
 	public IClasspathEntry getSelection() {
 		return this.selected_containers == null ? null
 				: (this.selected_containers.length == 0 ? null
 						: this.selected_containers[0]);
 	}
 
-	@Override
+	
 	public IClasspathEntry[] getNewContainers() {
 		return selected_containers;
 	}

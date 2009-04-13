@@ -30,7 +30,7 @@ class MouseDelegateHandler implements InvocationHandler {
 		this.designer = designer;
 	}
 
-	@Override
+	
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		MouseEvent e = (MouseEvent) args[0];

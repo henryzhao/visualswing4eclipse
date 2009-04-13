@@ -27,31 +27,31 @@ public class TextAreaEditor extends TextArea implements IEditor {
 	public TextAreaEditor() {
 	}
 
-	@Override
+	
 	public void addChangeListener(ChangeListener l) {
 	}
 
-	@Override
+	
 	public Component getComponent() {
 		return this;
 	}
 
-	@Override
+	
 	public Object getValue() {
 		return getText();
 	}
 
-	@Override
+	
 	public void removeChangeListener(ChangeListener l) {
 	}
 	private Object old_value;
-	@Override
+	
 	public void setValue(Object v) {
 		this.old_value = v;
 		setText(v == null ? "" : v.toString());
 	}
 
-	@Override
+	
 	public void setFocus() {
 		int count = 0;
 		while (!isFocusOwner() && count < FOCUSE_REQUEST_LIMIT) {
@@ -63,11 +63,11 @@ public class TextAreaEditor extends TextArea implements IEditor {
 
 	private static final int FOCUSE_REQUEST_LIMIT = 2;
 
-	@Override
+	
 	public void validateValue() throws Exception {
 	}
 
-	@Override
+	
 	public Object getOldValue() {
 		return old_value;
 	}

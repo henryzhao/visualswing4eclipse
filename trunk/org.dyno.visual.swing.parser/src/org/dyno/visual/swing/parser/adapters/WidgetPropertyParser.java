@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class WidgetPropertyParser implements IPropertyCodeGenerator, IAdaptableContext {
 	private WidgetProperty property;
-	@Override
+	
 	public String getJavaCode(Object bean, ImportRewrite imports) {
 		if (bean instanceof Component) {
 			Component comp = (Component) bean;
@@ -47,7 +47,7 @@ public class WidgetPropertyParser implements IPropertyCodeGenerator, IAdaptableC
 		} else
 			return null;
 	}
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.property = (WidgetProperty) adaptable;
 	}

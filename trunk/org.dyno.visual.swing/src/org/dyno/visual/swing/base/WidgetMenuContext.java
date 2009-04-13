@@ -93,7 +93,7 @@ public class WidgetMenuContext implements IMenuContext, IAdaptableContext {
 		}
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adaptable = (WidgetAdapter) adaptable;
 	}

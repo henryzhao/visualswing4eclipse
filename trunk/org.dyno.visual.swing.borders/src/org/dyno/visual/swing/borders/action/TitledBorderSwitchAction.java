@@ -23,7 +23,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class TitledBorderSwitchAction extends BorderSwitchAction {
 	public TitledBorderSwitchAction(JComponent w) {
 		super(w, TitledBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createTitledBorder(Messages.TitledBorderSwitchAction_Border_Title);
 			}});

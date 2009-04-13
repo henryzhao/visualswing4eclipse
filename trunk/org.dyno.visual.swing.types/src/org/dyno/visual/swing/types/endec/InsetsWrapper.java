@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  * @author William Chen
  */
 public class InsetsWrapper implements ICodeGen {
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -33,7 +33,7 @@ public class InsetsWrapper implements ICodeGen {
 		return "new "+str+"(" + insets.top + ", " + insets.left + ", " + insets.bottom + ", " + insets.right + ")";
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

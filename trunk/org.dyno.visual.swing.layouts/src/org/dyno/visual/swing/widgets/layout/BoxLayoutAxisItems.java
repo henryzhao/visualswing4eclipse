@@ -33,8 +33,6 @@ public class BoxLayoutAxisItems implements ItemProvider {
 
 	public BoxLayoutAxisItems() {
 	}
-
-	@Override
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

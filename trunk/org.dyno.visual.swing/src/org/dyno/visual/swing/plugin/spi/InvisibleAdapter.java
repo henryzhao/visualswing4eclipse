@@ -35,7 +35,7 @@ public abstract class InvisibleAdapter extends AbstractAdaptable implements IAda
 		this.name = name;
 	}
 
-	@Override
+	
 	public String getName() {
 		return name;
 	}

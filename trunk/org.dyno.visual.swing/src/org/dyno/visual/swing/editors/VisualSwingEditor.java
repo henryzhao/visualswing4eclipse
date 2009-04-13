@@ -109,7 +109,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	public IJavaProject getHostProject(){
 		return hostProject;
 	}
-	@Override
+	
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		super.init(site, input);
@@ -117,7 +117,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		site.getWorkbenchWindow().getPartService().addPartListener(this);
 	}
 
-	@Override	
+		
 	public Object getAdapter(Class adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			if (outline == null && designer != null) {
@@ -144,18 +144,18 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			return super.getAdapter(adapter);
 	}
 
-	@Override
+	
 	public boolean isDirty() {
 		return !isGeneratingCode && designer != null
 				&& (designer.isLnfChanged() || designer.isDirty());
 	}
 
-	@Override
+	
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
 
-	@Override
+	
 	public boolean isSaveOnCloseNeeded() {
 		return true;
 	}
@@ -217,7 +217,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	@Override
+	
 	public void createPartControl(Composite parent) {
 		if (!isSwingComponent()) {
 			switchToJavaEditor();
@@ -244,13 +244,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 						| IResourceChangeEvent.PRE_CLOSE
 						| IResourceChangeEvent.PRE_DELETE);
 		invokeLater(new Runnable() {
-			@Override
+			
 			public void run() {
 				validateContent();
 			}
 		});
 		asyncRunnable(new Runnable() {
-			@Override
+			
 			public void run() {
 				openRelatedView();
 			}
@@ -268,7 +268,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			this.isTimerAction = isTimer;
 		}
 
-		@Override
+		
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.setTaskName(Messages.VisualSwingEditor_Generating_Designer);
 			try {
@@ -291,7 +291,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	private void createDesignerUI(IProgressMonitor monitor) throws Exception {
 		final IFileEditorInput file = (IFileEditorInput) getEditorInput();
 		asyncRunnable(new Runnable() {
-			@Override
+			
 			public void run() {
 				setPartName(file.getName());
 				setTitleToolTip(file.getToolTipText());
@@ -347,7 +347,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	}
 	private void refreshTree() {
 		asyncRunnable(new Runnable() {
-			@Override
+			
 			public void run() {
 				if (outline != null)
 					outline.refreshTree();
@@ -356,7 +356,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	}
 	private void safeSave(final IProgressMonitor monitor){
 		getDisplay().syncExec(new Runnable(){
-			@Override
+			
 			public void run() {
 				doSave(monitor);
 			}});
@@ -375,7 +375,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			return;
 		}
 	}
-	@Override
+	
 	public void doSave(IProgressMonitor monitor) {
 		isGeneratingCode = true;
 		try {
@@ -413,7 +413,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			super(parent, SWT.NONE);
 		}
 
-		@Override
+		
 		protected JComponent createSwingComponent() {
 			designer = new VisualDesigner(VisualSwingEditor.this, this);
 			JPanel backgroundPanel = new JPanel();
@@ -429,7 +429,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			return backgroundPanel;
 		}
 
-		@Override
+		
 		public Composite getLayoutAncestor() {
 			return getParent();
 		}
@@ -445,7 +445,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				LookAndFeel newlnf = adapter.getLookAndFeelInstance();
 				if (!isLnfEqual(oldlnf, newlnf)) {
 					AwtEnvironment.runWithLnf(newlnf, new ISyncUITask() {
-						@Override
+						
 						public Object doTask() throws Throwable {
 							if (designer != null){
 								Window window = SwingUtilities.getWindowAncestor(designer);
@@ -493,7 +493,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		return lnfClassname;
 	}
 
-	@Override
+	
 	public void resourceChanged(IResourceChangeEvent event) {
 		switch (event.getType()) {
 		case IResourceChangeEvent.POST_BUILD:
@@ -549,31 +549,31 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	@Override
+	
 	public void doSaveAs() {
 	}
 
 	public void fireDirty() {
 		asyncRunnable(new Runnable() {
-			@Override
+			
 			public void run() {
 				firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
 			}
 		});
 	}
 
-	@Override
+	
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		if (!listeners.contains(listener))
 			listeners.add(listener);
 	}
 
-	@Override
+	
 	public ISelection getSelection() {
 		return selection;
 	}
 
-	@Override
+	
 	public void removeSelectionChangedListener(
 			ISelectionChangedListener listener) {
 		if (listeners.contains(listener))
@@ -587,7 +587,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	@Override
+	
 	public void setSelection(ISelection selection) {
 		if (this.selection == null) {
 			if (selection != null && !selection.isEmpty()) {
@@ -630,7 +630,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (designer != null && scrollPane != null) {
 			final Dimension size = designer.getPreferredSize();
 			asyncRunnable(new Runnable() {
-				@Override
+				
 				public void run() {
 					scrollPane.setMinSize(size.width, size.height);
 				}
@@ -647,7 +647,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		SwingUtilities.invokeLater(runnable);
 	}
 
-	@Override
+	
 	public void partActivated(IWorkbenchPart part) {
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
@@ -657,7 +657,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	private static final int DELAYED_TIME = 250;
 
 	private class ChangeLnfAction implements ActionListener {
-		@Override
+		
 		public void actionPerformed(ActionEvent e) {
 			if(isParsing)
 				return;
@@ -672,18 +672,18 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		timer.start();
 	}
 
-	@Override
+	
 	public void partBroughtToTop(IWorkbenchPart part) {
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
 		}
 	}
 
-	@Override
+	
 	public void partClosed(IWorkbenchPart part) {
 	}
 
-	@Override
+	
 	public void partDeactivated(IWorkbenchPart part) {
 		if (part == this) {
 			if (designer != null)
@@ -691,7 +691,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	@Override
+	
 	public void partOpened(IWorkbenchPart part) {
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());

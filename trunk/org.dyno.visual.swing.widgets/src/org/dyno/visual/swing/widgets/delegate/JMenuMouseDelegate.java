@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.IAdaptable;
 public class JMenuMouseDelegate extends MouseInputAdapter implements IAdaptableContext {
 	private JMenuAdapter adapter;
 
-	@Override
+	
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() != MouseEvent.BUTTON3) {
 			JMenu jmenu = (JMenu) adapter.getWidget();
@@ -31,7 +31,7 @@ public class JMenuMouseDelegate extends MouseInputAdapter implements IAdaptableC
 		}
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adapter = (JMenuAdapter) adaptable;
 	}

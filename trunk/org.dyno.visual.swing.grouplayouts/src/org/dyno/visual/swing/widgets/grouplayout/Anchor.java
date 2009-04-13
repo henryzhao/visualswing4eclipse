@@ -21,17 +21,17 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 
 import javax.swing.JComponent;
-import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.dyno.visual.swing.layouts.Alignment;
 import org.dyno.visual.swing.layouts.Bilateral;
 import org.dyno.visual.swing.layouts.Constraints;
 import org.dyno.visual.swing.layouts.GroupLayout;
+import org.dyno.visual.swing.layouts.LayoutStyle;
 import org.dyno.visual.swing.layouts.Leading;
 import org.dyno.visual.swing.layouts.Spring;
 import org.dyno.visual.swing.layouts.Trailing;
+import org.dyno.visual.swing.layouts.LayoutStyle.ComponentPlacement;
 
 public abstract class Anchor {
 	protected JComponent target;

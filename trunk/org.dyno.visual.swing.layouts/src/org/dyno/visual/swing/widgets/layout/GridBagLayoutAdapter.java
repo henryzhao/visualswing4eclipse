@@ -36,8 +36,6 @@ import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
-
-	@Override
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		GridBagLayout layout = new GridBagLayout();
 		layout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0};
@@ -46,7 +44,6 @@ public class GridBagLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		layout.rowHeights = new int[]{40, 40, 40, 40};
  		container.setLayout(layout);
 	}
-
 	@Override
 	public boolean dragEnter(Point p) {
 		return super.dragEnter(p);

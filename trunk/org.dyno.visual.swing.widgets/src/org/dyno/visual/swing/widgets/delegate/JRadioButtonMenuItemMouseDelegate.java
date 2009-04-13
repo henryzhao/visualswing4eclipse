@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IAdaptable;
 
 public class JRadioButtonMenuItemMouseDelegate extends MouseInputAdapter implements IAdaptableContext{
 	private JRadioButtonMenuItemAdapter adapter;
-	@Override
+	
 	public void mousePressed(MouseEvent e) {
 		if (e == null || e.getButton() == MouseEvent.BUTTON1) {
 			JRadioButtonMenuItem jmenu = (JRadioButtonMenuItem) adapter
@@ -47,7 +47,7 @@ public class JRadioButtonMenuItemMouseDelegate extends MouseInputAdapter impleme
 			e.setSource(null);
 		}
 	}
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.adapter=(JRadioButtonMenuItemAdapter) adaptable;
 	}

@@ -56,12 +56,12 @@ public class ThisClassModel extends AbstractClassModel {
 		methods = new HashMap<MethodDescriptor, MethodDescriptor>();
 	}
 
-	@Override
+	
 	public void addMethod(MethodDescriptor methodDesc) {
 		methods.put(methodDesc, methodDesc);
 	}
 
-	@Override
+	
 	public boolean createEventMethod(IType type, ImportRewrite imports,
 			IProgressMonitor monitor) {
 		String[] inters;
@@ -137,12 +137,12 @@ public class ThisClassModel extends AbstractClassModel {
 		}
 	}
 
-	@Override
+	
 	public String createListenerInstance(ImportRewrite imports) {
 		return "this";
 	}
 
-	@Override
+	
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
 		Class<?>[] pd = methodDesc.getMethod().getParameterTypes();
 		if (pd.length > 0) {
@@ -167,27 +167,27 @@ public class ThisClassModel extends AbstractClassModel {
 		}
 	}
 
-	@Override
+	
 	public String getDisplayName(MethodDescriptor methodDesc) {
 		return methodDesc.getDisplayName();
 	}
 
-	@Override
+	
 	public boolean hasMethod(MethodDescriptor methodDesc) {
 		return methods.containsKey(methodDesc);
 	}
 
-	@Override
+	
 	public boolean isEmpty() {
 		return methods.isEmpty();
 	}
 
-	@Override
+	
 	public Iterable<MethodDescriptor> methods() {
 		return methods.keySet();
 	}
 	
-	@Override
+	
 	protected boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {
@@ -200,7 +200,7 @@ public class ThisClassModel extends AbstractClassModel {
 		}
 		return false;
 	}	
-	@Override
+	
 	public void removeMethod(MethodDescriptor methodDesc) {
 		methods.remove(methodDesc);
 	}

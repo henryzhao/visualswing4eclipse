@@ -37,17 +37,17 @@ import org.eclipse.jface.action.IAction;
  */
 @SuppressWarnings("unchecked")
 public class BevelBorderAdapter extends BorderAdapter {
-	@Override
+	
 	public Class getBorderClass() {
 		return BevelBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "BevelBorder";
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		FieldProperty bevelTypeProperty = new FieldProperty("bevelType", "bevelType", BevelBorder.class, new ItemProviderLabelProviderFactory(
 				new BevelBorderTypeItems()), new ItemProviderCellEditorFactory(new BevelBorderTypeItems()));
@@ -58,22 +58,22 @@ public class BevelBorderAdapter extends BorderAdapter {
 		return new IWidgetPropertyDescriptor[] { bevelTypeProperty, highlightOuterProperty, highlightInnerProperty, shadowInnerProperty, shadowOuterProperty };
 	}
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new BevelBorderSwitchAction((JComponent) widget);
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return BorderFactory.createBevelBorder(BevelBorder.LOWERED);
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";

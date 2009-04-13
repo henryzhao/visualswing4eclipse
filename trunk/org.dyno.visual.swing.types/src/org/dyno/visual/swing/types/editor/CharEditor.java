@@ -23,14 +23,14 @@ import org.eclipse.swt.widgets.Composite;
 public class CharEditor implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		CellEditor editor = new TextCellEditor(parent);
 		editor.setValidator(new CharCellEditorValidator());
 		return editor;
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		if (value == null)
 			return '\0';
@@ -42,7 +42,7 @@ public class CharEditor implements ICellEditorFactory {
 		}
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		if (value == null) {
 			return "\\0";
@@ -56,12 +56,12 @@ public class CharEditor implements ICellEditorFactory {
 		return value.toString();
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "\'\\0\'";

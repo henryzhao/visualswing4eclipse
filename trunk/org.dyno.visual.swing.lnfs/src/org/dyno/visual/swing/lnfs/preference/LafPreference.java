@@ -33,7 +33,7 @@ public class LafPreference extends PreferencePage implements
 	private Button btnDel;
 	private Button btnEdit;
 
-	@Override
+	
 	protected Control createContents(Composite parent) {
 		Composite main = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
@@ -48,7 +48,7 @@ public class LafPreference extends PreferencePage implements
 		viewer.setContentProvider(new LibContProv());
 		viewer.setLabelProvider(new LabelProvider() {
 
-			@Override
+			
 			public String getText(Object element) {
 				if (element == null)
 					return ""; //$NON-NLS-1$
@@ -67,7 +67,7 @@ public class LafPreference extends PreferencePage implements
 		data.verticalIndent = 30;
 		viewer.getControl().setLayoutData(data);
 		viewer.getList().addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				updateButtonState();
 			}
@@ -84,7 +84,7 @@ public class LafPreference extends PreferencePage implements
 		btnAdd = new Button(right, SWT.PUSH);
 		btnAdd.setText(Messages.LafPreference_Add);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				btnAddSelected();
 			}
@@ -120,7 +120,7 @@ public class LafPreference extends PreferencePage implements
 	};
 
 	private class LibContProv implements IStructuredContentProvider {
-		@Override
+		
 		public Object[] getElements(Object inputElement) {
 			List<IClasspathContainer> paths = new ArrayList<IClasspathContainer>();
 			List<ILibraryExtension> libExts = ExtensionRegistry
@@ -135,16 +135,16 @@ public class LafPreference extends PreferencePage implements
 			return paths.toArray();
 		}
 
-		@Override
+		
 		public void dispose() {
 		}
 
-		@Override
+		
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		}
 	}
 
-	@Override
+	
 	public void init(IWorkbench workbench) {
 	}
 }

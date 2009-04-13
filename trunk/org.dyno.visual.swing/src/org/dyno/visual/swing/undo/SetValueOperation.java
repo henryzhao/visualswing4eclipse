@@ -57,7 +57,7 @@ public class SetValueOperation extends AbstractOperation {
 		public SetValueRunnable(WidgetAdapter adapter){
 			this.adapter = adapter;
 		}
-		@Override
+		
 		public void run() {
 			if (!adapter.isRoot()) {
 				CompositeAdapter parent = adapter.getParentAdapter();
@@ -116,19 +116,19 @@ public class SetValueOperation extends AbstractOperation {
 		return Status.OK_STATUS;
 	}
 
-	@Override
+	
 	public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
 		return setValue(monitor, info, new_value);
 	}
 
-	@Override
+	
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
 		return execute(monitor, info);
 	}
 
-	@Override
+	
 	public IStatus undo(IProgressMonitor monitor, IAdaptable info)
 			throws ExecutionException {
 		return setValue(monitor, info, old_value);

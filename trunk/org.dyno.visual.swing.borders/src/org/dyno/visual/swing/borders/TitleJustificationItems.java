@@ -35,7 +35,7 @@ public class TitleJustificationItems implements ItemProvider {
 	public TitleJustificationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

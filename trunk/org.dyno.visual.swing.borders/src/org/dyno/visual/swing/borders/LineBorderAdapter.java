@@ -30,12 +30,12 @@ import org.eclipse.jface.action.IAction;
 
 @SuppressWarnings("unchecked")
 public class LineBorderAdapter extends BorderAdapter{
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new LineBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		FieldProperty thicknessProperty=new FieldProperty("thickness", "thickness", LineBorder.class);
 		FieldProperty lineColorProperty=new FieldProperty("lineColor", "lineColor", LineBorder.class);
@@ -43,27 +43,27 @@ public class LineBorderAdapter extends BorderAdapter{
 		return new IWidgetPropertyDescriptor[]{thicknessProperty, lineColorProperty, roundedCornersProperty};
 	}
 
-	@Override
+	
 	public Class getBorderClass() {
 		return LineBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "LineBorder";
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return BorderFactory.createLineBorder(Color.black);
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "null";

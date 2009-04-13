@@ -29,8 +29,6 @@ public class ItemProviderLabelProviderFactory implements ILabelProviderFactory {
 	public ItemProviderLabelProviderFactory(ItemProvider provider) {
 		this.provider = provider;
 	}
-
-	@Override
 	public ILabelProvider getLabelProvider() {
 		if (label == null) {
 			Item[] items = provider.getItems();

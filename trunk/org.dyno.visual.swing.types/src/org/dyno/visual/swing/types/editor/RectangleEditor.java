@@ -26,14 +26,14 @@ import org.eclipse.swt.widgets.Composite;
 public class RectangleEditor extends RectangleWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		CellEditor editor = new TextCellEditor(parent);
 		editor.setValidator(new RectangleCellEditorValidator());
 		return editor;
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		if (value == null)
 			return null;
@@ -62,7 +62,7 @@ public class RectangleEditor extends RectangleWrapper implements ICellEditorFact
 		}
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		if (value == null)
 			return null;

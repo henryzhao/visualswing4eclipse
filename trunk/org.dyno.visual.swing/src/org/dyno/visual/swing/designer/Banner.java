@@ -25,7 +25,7 @@ class Banner extends JLabel implements ActionListener {
 		timer.setRepeats(false);
 		timer.start();
 	}
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		if (!error)
 			setIcon(new ImageIcon(getClass().getResource("/icons/progress.gif")));

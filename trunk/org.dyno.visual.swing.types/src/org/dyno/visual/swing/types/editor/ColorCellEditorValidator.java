@@ -21,7 +21,7 @@ import org.eclipse.swt.graphics.RGB;
 
 public class ColorCellEditorValidator implements ICellEditorValidator {
 
-	@Override
+	
 	public String isValid(Object value) {
 		if (value == null)
 			return null;

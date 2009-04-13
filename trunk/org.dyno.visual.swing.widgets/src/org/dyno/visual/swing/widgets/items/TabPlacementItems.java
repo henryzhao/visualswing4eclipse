@@ -32,7 +32,7 @@ public class TabPlacementItems implements ItemProvider {
 	public TabPlacementItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

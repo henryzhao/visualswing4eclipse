@@ -23,14 +23,14 @@ import org.eclipse.swt.widgets.Composite;
 public class FloatEditor extends FloatWrapper implements ICellEditorFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		CellEditor editor = new TextCellEditor(parent);
 		editor.setValidator(new FloatCellEditorValidator());
 		return editor;
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		if (value == null)
 			return 0.0f;
@@ -40,7 +40,7 @@ public class FloatEditor extends FloatWrapper implements ICellEditorFactory {
 		}
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		if (value == null)
 			return "0.0";

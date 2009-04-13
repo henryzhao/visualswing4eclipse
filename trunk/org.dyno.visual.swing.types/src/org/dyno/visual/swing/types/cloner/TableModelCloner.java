@@ -22,7 +22,7 @@ import org.dyno.visual.swing.plugin.spi.ICloner;
 @SuppressWarnings("unchecked")
 public class TableModelCloner implements ICloner {
 
-	@Override
+	
 	public Object clone(Object object) {
 		TableModel tableModel = (TableModel) object;
 		int column = tableModel.getColumnCount();
@@ -43,7 +43,7 @@ public class TableModelCloner implements ICloner {
 		}		
 		return new DefaultTableModel(data, names){
 			private static final long serialVersionUID = 1L;
-			@Override
+			
 			public Class<?> getColumnClass(int columnIndex) {
 				return columnClasses[columnIndex];
 			}

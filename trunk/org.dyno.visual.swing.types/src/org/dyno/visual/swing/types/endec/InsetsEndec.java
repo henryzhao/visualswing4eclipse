@@ -7,7 +7,7 @@ import org.dyno.visual.swing.plugin.spi.IEndec;
 
 public class InsetsEndec implements IEndec {
 
-	@Override
+	
 	public Object decode(String string) {
 		return string==null?null:decodeInsets(string);
 	}
@@ -39,7 +39,7 @@ public class InsetsEndec implements IEndec {
 		}catch(NumberFormatException nfe){}		
 		return new Insets(left,top,right,bottom);
 	}
-	@Override
+	
 	public String encode(Object value) {
 		return value==null?"null":encodeInsets((Insets)value);
 	}

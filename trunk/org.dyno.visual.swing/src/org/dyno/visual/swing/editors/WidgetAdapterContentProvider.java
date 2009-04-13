@@ -72,7 +72,7 @@ public class WidgetAdapterContentProvider implements IPropertySourceProvider {
 		else 
 			return getCommonSuperClass(clazz1.getSuperclass(), clazz2.getSuperclass());
 	}
-	@Override
+	
 	public IPropertySource getPropertySource(Object object) {
 		if (object == null)
 			return new PropertySource2(null, new IWidgetPropertyDescriptor[0]);

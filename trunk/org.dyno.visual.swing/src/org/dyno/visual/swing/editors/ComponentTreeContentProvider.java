@@ -43,7 +43,7 @@ import org.eclipse.jface.viewers.Viewer;
 @SuppressWarnings("unchecked")
 public class ComponentTreeContentProvider implements ITreeContentProvider {
 
-	@Override
+	
 	public Object[] getChildren(Object parentElement) {
 		if (root != null) {
 			if (parentElement == root) {
@@ -128,7 +128,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		return new Object[0];
 	}
 
-	@Override
+	
 	public Object getParent(Object element) {
 		if (element == root) {
 			return null;
@@ -164,7 +164,7 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		return null;
 	}
 
-	@Override
+	
 	public boolean hasChildren(Object element) {
 		if (element == root) {
 			return true;
@@ -209,16 +209,16 @@ public class ComponentTreeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 
-	@Override
+	
 	public Object[] getElements(Object inputElement) {
 		return getChildren(inputElement);
 	}
 
-	@Override
+	
 	public void dispose() {
 	}
 
-	@Override
+	
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		if (newInput instanceof ComponentTreeInput) {
 			this.root = (ComponentTreeInput) newInput;

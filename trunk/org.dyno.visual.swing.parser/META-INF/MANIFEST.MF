@@ -17,7 +17,7 @@ Require-Bundle: org.dyno.visual.swing,
  org.eclipse.jface.text,
  org.eclipse.jdt.launching,
  org.eclipse.debug.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.dyno.visual.swing.parser.listener,
  org.dyno.visual.swing.parser.spi
 Bundle-Activator: org.dyno.visual.swing.parser.ParserPlugin

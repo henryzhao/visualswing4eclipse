@@ -28,7 +28,6 @@ import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -170,15 +169,10 @@ public class FrameBorder implements Border {
 			g2d.setColor(CONTROL_COLOR);
 			g2d.drawLine(gx, gy + TITLE_HEIGHT - 1, gx + width - 2 * OUTER_PAD, gy + TITLE_HEIGHT - 1);
 		}
-		List<Image> images = frame.getIconImages();
 		Image icon = null;
-		if (images != null && !images.isEmpty())
-			icon = images.get(0);
-		if (icon == null) {
-			Window win = SwingUtilities.getWindowAncestor(c);
-			if (win instanceof Frame) {
-				icon = ((Frame) win).getIconImage();
-			}
+		Window win = SwingUtilities.getWindowAncestor(c);
+		if (win instanceof Frame) {
+			icon = ((Frame) win).getIconImage();
 		}
 		if (icon == null)
 			icon = JAVA_LOGO;

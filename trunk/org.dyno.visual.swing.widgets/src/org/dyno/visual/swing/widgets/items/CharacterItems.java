@@ -36,7 +36,7 @@ public class CharacterItems implements ItemProvider {
 	public CharacterItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

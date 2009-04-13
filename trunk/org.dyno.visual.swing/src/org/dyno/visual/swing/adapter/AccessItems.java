@@ -28,7 +28,6 @@ public class AccessItems implements ItemProvider {
 	public AccessItems() {
 	}
 
-	@Override
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

@@ -22,7 +22,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class ImageWrapper implements ICodeGen {
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		String rel = null;
 		if (value == null) {
@@ -38,7 +38,7 @@ public class ImageWrapper implements ICodeGen {
 			return null;
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

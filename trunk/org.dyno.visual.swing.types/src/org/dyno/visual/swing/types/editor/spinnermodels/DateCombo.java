@@ -42,12 +42,12 @@ public class DateCombo extends Composite {
 	Button arrow;
 
 	class DateComboLayout extends Layout {
-		@Override
+		
 		protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
 			return DateCombo.this.computeSize(wHint, hHint, flushCache);
 		}
 
-		@Override
+		
 		protected void layout(Composite composite, boolean flushCache) {
 			Point size = composite.getSize();
 			int width = size.x;
@@ -81,11 +81,11 @@ public class DateCombo extends Composite {
 			arrowStyle |= SWT.FLAT;
 		arrow = new Button(this, arrowStyle);
 		arrow.addSelectionListener(new SelectionListener(){
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				popupDialog();
 			}});
@@ -104,7 +104,7 @@ public class DateCombo extends Composite {
 			setSelection(cal);
 		}
 	}
-	@Override
+	
 	public void setEnabled(boolean enabled) {
 		int bg = enabled ? SWT.COLOR_WHITE : SWT.COLOR_WIDGET_BACKGROUND;
 		Color bgc = getDisplay().getSystemColor(bg);
@@ -116,7 +116,7 @@ public class DateCombo extends Composite {
 		super.setEnabled(enabled);
 	}
 
-	@Override
+	
 	public boolean setFocus() {
 		return text.setFocus();		
 	}

@@ -32,7 +32,7 @@ public class LayoutOrientationItems implements ItemProvider {
 	public LayoutOrientationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

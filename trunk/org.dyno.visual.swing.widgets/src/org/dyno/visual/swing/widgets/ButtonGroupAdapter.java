@@ -43,12 +43,12 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 	public ButtonGroup getButtonGroup(){
 		return group;
 	}
-	@Override
+	
 	public Image getIconImage() {
 		return BUTTON_GROUP_SWT_ICON_IMAGE;
 	}
 
-	@Override
+	
 	public List getElements() {
 		Enumeration<AbstractButton> elements = this.group.getElements();
 		List list=new ArrayList();
@@ -58,25 +58,25 @@ public class ButtonGroupAdapter extends InvisibleAdapter {
 		}
 		return list;
 	}
-	@Override
+	
 	public IAdapter getParent() {
 		return root;
 	}
-	@Override
+	
 	protected Class getObjectClass() {
 		return ButtonGroup.class;
 	}
-	@Override
+	
 	public void init(WidgetAdapter rootAdapter, String name, Object object) {
 		super.init(rootAdapter, name, object);
 		this.group = (ButtonGroup) object;
 		this.root = rootAdapter;
 	}
-	@Override
+	
 	public String getBasename() {
 		return "buttonGroup";
 	}
-	@Override
+	
 	public void requestNewName() {
 	}
 }

@@ -38,7 +38,7 @@ public abstract class AbstractClassModel implements IEventListenerModel, IConsta
 	protected EventSetDescriptor eventSet;
 	protected WidgetAdapter adapter;
 
-	@Override
+	
 	public void init(WidgetAdapter adapter, EventSetDescriptor eventSet) {
 		this.adapter = adapter;
 		this.eventSet = eventSet;

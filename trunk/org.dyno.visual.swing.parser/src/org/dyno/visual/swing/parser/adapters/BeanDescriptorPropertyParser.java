@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 @SuppressWarnings("unchecked")
 public class BeanDescriptorPropertyParser implements IPropertyCodeGenerator, IAdaptableContext {
 	private BeanDescriptorProperty property;
-	@Override
+	
 	public String getJavaCode(Object bean, ImportRewrite imports) {
 		if (bean instanceof Component) {
 			Component comp = (Component) bean;
@@ -52,7 +52,7 @@ public class BeanDescriptorPropertyParser implements IPropertyCodeGenerator, IAd
 			return null;
 	}
 
-	@Override
+	
 	public void setAdaptable(IAdaptable adaptable) {
 		this.property = (BeanDescriptorProperty) adaptable;
 	}

@@ -30,13 +30,9 @@ public class ItemProviderCellEditorFactory implements ICellEditorFactory {
 	public ItemProviderCellEditorFactory(ItemProvider provider) {
 		this.provider = provider;
 	}
-
-	@Override
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new ItemProviderCellEditor(parent, provider);
 	}
-
-	@Override
 	public Object decodeValue(Object value) {
 		if (value == null)
 			value = Integer.valueOf(0);
@@ -44,8 +40,6 @@ public class ItemProviderCellEditorFactory implements ICellEditorFactory {
 		Item[] items = provider.getItems();
 		return items[index].getValue();
 	}
-
-	@Override
 	public Object encodeValue(Object value) {
 		if (value == null)
 			value = Integer.valueOf(0);
@@ -56,13 +50,9 @@ public class ItemProviderCellEditorFactory implements ICellEditorFactory {
 		}
 		return 0;
 	}
-
-	@Override
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
-
-	@Override
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			value = Integer.valueOf(0);
@@ -73,6 +63,5 @@ public class ItemProviderCellEditorFactory implements ICellEditorFactory {
 		}
 		return value.toString();
 	}
-
 }
 

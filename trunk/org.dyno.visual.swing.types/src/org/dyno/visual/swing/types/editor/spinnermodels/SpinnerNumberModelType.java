@@ -27,12 +27,12 @@ public class SpinnerNumberModelType extends SpinnerModelType {
 		super("number");
 	}
 
-	@Override
+	
 	public AccessibleUI createEditPane(Composite parent) {
 		return new NumberAccessible(parent);
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		String className = imports.addImport("javax.swing.SpinnerNumberModel");
 		SpinnerNumberModel snm = (SpinnerNumberModel) value;
@@ -61,7 +61,7 @@ public class SpinnerNumberModelType extends SpinnerModelType {
 				+ typeCode + ".valueOf(" + step + "))";
 	}
 
-	@Override
+	
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		SpinnerNumberModel snm1 = (SpinnerNumberModel) o1;
 		SpinnerNumberModel snm2 = (SpinnerNumberModel) o2;
@@ -99,12 +99,12 @@ public class SpinnerNumberModelType extends SpinnerModelType {
 		}
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public Object clone(Object object) {
 		SpinnerNumberModel snm = (SpinnerNumberModel) object;
 		Number number = snm.getNumber();

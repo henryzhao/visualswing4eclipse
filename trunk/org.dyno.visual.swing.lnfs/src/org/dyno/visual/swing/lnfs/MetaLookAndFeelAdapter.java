@@ -133,7 +133,7 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		put(JRadioButtonMenuItem.class, new MetaJRadioButtonMenuItemValue());
 	}
 
-	@Override
+	
 	public Object getDefaultValue(Class beanClass, String propertyName) {
 			WidgetValue widget = get(beanClass);
 			if (widget == null && beanClass != Component.class) {
@@ -146,7 +146,7 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 
 	private LookAndFeel metalLnf;
 
-	@Override
+	
 	public LookAndFeel getLookAndFeelInstance() {
 		if (metalLnf == null) {
 			metalLnf = new MetalLookAndFeel();
@@ -154,12 +154,12 @@ public class MetaLookAndFeelAdapter extends HashMap<Class, WidgetValue> implemen
 		return metalLnf;
 	}
 
-	@Override
+	
 	public String getClassname() {
 		return MetalLookAndFeel.class.getName();
 	}
 
-	@Override
+	
 	public String getName() {
 		return Messages.MetaLookAndFeelAdapter_Meta_Lnf;
 	}

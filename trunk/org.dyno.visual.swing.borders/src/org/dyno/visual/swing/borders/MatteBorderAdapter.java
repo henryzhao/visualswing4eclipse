@@ -32,20 +32,20 @@ import org.eclipse.jface.action.IAction;
 @SuppressWarnings("unchecked")
 public class MatteBorderAdapter extends BorderAdapter {
 
-	@Override
+	
 	public Class getBorderClass() {
 		return MatteBorder.class;
 	}
 
-	@Override
+	
 	public String getBorderName() {
 		return "MatteBorder";
 	}
 
-	@Override
+	
 	protected IWidgetPropertyDescriptor[] getBorderProperties() {
 		InsetsProperty insetsProperty = new InsetsProperty(){
-			@Override
+			
 			protected Class getBorderClass() {
 				return MatteBorder.class;
 			}};
@@ -55,22 +55,22 @@ public class MatteBorderAdapter extends BorderAdapter {
 	}
 
 
-	@Override
+	
 	public IAction getContextAction(JComponent widget) {
 		return new MatteBorderSwitchAction(widget);
 	}
 
-	@Override
+	
 	public Object newInstance(Object bean) {
 		return BorderFactory.createMatteBorder(0, 0, 0, 0, Color.black);
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "null";

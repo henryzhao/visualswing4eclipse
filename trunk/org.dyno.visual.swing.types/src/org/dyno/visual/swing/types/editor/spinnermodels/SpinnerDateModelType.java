@@ -31,12 +31,12 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		super("date");
 	}
 
-	@Override
+	
 	public AccessibleUI createEditPane(Composite parent) {
 		return new DateAccessible(parent);
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -50,7 +50,7 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		return "spinnerDateModel";
 	}
 
-	@Override
+	
 	public int compare(SpinnerModel o1, SpinnerModel o2) {
 		SpinnerDateModel sdm1 = (SpinnerDateModel) o1;
 		SpinnerDateModel sdm2 = (SpinnerDateModel) o2;
@@ -89,7 +89,7 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		}
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return null;
@@ -126,7 +126,7 @@ public class SpinnerDateModelType extends SpinnerModelType {
 		return builder.toString();
 	}
 
-	@Override
+	
 	public Object clone(Object object) {
 		SpinnerDateModel model = (SpinnerDateModel) object;
 		Date date = model.getDate();

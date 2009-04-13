@@ -24,7 +24,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
  */
 public class CharRenderer implements ILabelProviderFactory {
 	private CharLabelProvider provider;
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if(provider==null)
 			provider = new CharLabelProvider();

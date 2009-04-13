@@ -34,7 +34,7 @@ public class ListSelectionModeItems implements ItemProvider {
 	public ListSelectionModeItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

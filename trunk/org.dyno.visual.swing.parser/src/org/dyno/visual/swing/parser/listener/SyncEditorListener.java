@@ -38,10 +38,10 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 		}
 	}
 
-	@Override
+	
 	public void widgetSelected(final IStructuredSelection selection) {
 		JavaUtil.getEclipseDisplay().asyncExec(new Runnable() {
-			@Override
+			
 			public void run() {
 				sync_widget(selection);
 			}

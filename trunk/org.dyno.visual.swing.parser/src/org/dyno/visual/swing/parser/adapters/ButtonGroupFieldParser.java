@@ -31,7 +31,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 
 public class ButtonGroupFieldParser implements IFieldParser {
 
-	@Override
+	
 	public void parseField(CompilationUnit cunit, Component bean, Field field) {
 		if (ButtonGroup.class.isAssignableFrom(field.getType())) {
 			try {
@@ -52,7 +52,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 		return sig.indexOf("ButtonGroup") != -1;
 	}
 
-	@Override
+	
 	public boolean isDesigningField(IType type, IField field) {
 		try {
 			String sig = field.getTypeSignature();
@@ -70,7 +70,7 @@ public class ButtonGroupFieldParser implements IFieldParser {
 		return false;
 	}
 
-	@Override
+	
 	public boolean removeField(IType type, String fieldName,
 			IProgressMonitor monitor) {
 		IMethod method = type.getMethod(NamespaceUtil.getInitMethodName(fieldName), new String[0]);

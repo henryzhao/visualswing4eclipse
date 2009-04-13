@@ -35,8 +35,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private boolean hovered;
-
-	@Override
 	public void initConainerLayout(Container container, IProgressMonitor monitor) {
 		container.setLayout(new CardLayout());
 	}

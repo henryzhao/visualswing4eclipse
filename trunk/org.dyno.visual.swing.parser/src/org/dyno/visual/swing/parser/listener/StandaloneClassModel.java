@@ -32,7 +32,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IEditorPart;
 
 public class StandaloneClassModel extends BaseClassModel {
-	@Override
+	
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
 		Class<?>[] pd = methodDesc.getMethod().getParameterTypes();
 		if (pd.length > 0&&listenerUnit!=null) {
@@ -51,7 +51,7 @@ public class StandaloneClassModel extends BaseClassModel {
 			}
 		}		
 	}
-	@Override
+	
 	protected boolean processAddMethod(TypeDeclaration type, MethodDescriptor mListener) {
 		IType declaringType=findDeclaringType(adapter);
 		if(declaringType==null)
@@ -108,7 +108,7 @@ public class StandaloneClassModel extends BaseClassModel {
 		return null;
 	}
 	private ICompilationUnit listenerUnit;
-	@Override
+	
 	protected IType getMeType(IType type) {
 		return listenerUnit.getType(className);
 	}

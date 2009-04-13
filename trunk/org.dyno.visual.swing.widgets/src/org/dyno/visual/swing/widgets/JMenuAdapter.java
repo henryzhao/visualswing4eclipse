@@ -42,7 +42,7 @@ public class JMenuAdapter extends CompositeAdapter {
 		super(null);
 	}
 
-	@Override
+	
 	public Component cloneWidget() {
 		JMenu copy = (JMenu) super.cloneWidget();
 		JMenu origin = (JMenu) getWidget();
@@ -56,7 +56,7 @@ public class JMenuAdapter extends CompositeAdapter {
 		return copy;
 	}
 
-	@Override
+	
 	public String getWidgetCodeClassName() {
 		return JMenu.class.getName();
 	}
@@ -90,7 +90,7 @@ public class JMenuAdapter extends CompositeAdapter {
 
 	private void refreshPopup() {
 		SwingUtilities.invokeLater(new Runnable() {
-			@Override
+			
 			public void run() {
 				widgetPressed();
 				widgetPressed();
@@ -209,19 +209,19 @@ public class JMenuAdapter extends CompositeAdapter {
 			return null;
 	}
 
-	@Override
+	
 	public Component getChild(int index) {
 		JMenu origin = (JMenu) getWidget();
 		return origin.getMenuComponent(index);
 	}
 
-	@Override
+	
 	public int getChildCount() {
 		JMenu origin = (JMenu) getWidget();
 		return origin.getMenuComponentCount();
 	}
 
-	@Override
+	
 	public int getIndexOfChild(Component child) {
 		int count = getChildCount();
 		for (int i = 0; i < count; i++) {
@@ -231,21 +231,21 @@ public class JMenuAdapter extends CompositeAdapter {
 		return -1;
 	}
 
-	@Override
+	
 	public void addChildByConstraints(Component child, Object constraints) {
 	}
 
-	@Override
+	
 	public Object getChildConstraints(Component child) {
 		return null;
 	}
 
-	@Override
+	
 	protected Component createWidget() {
 		JMenu menu = new JMenu() {
 			private static final long serialVersionUID = 1L;
 
-			@Override
+			
 			public void setPopupMenuVisible(boolean b) {
 				if (!b) {
 					StackTraceElement[] trace = Thread.currentThread().getStackTrace();
@@ -270,7 +270,7 @@ public class JMenuAdapter extends CompositeAdapter {
 		return menu;
 	}
 
-	@Override
+	
 	public String getBasename() {
 		String className = getWidgetClass().getName();
 		int dot = className.lastIndexOf('.');
@@ -279,18 +279,18 @@ public class JMenuAdapter extends CompositeAdapter {
 		return Character.toLowerCase(className.charAt(0)) + className.substring(1);
 	}
 
-	@Override
+	
 	protected Component newWidget() {
 		return new JMenu();
 	}
 
-	@Override
+	
 	public boolean needGlobalGraphics() {
 		JMenuDesignOperation operation = (JMenuDesignOperation) getAdapter(IDesignOperation.class);
 		return operation.isInside_popup();
 	}
 
-	@Override
+	
 	public boolean removeChild(Component child) {
 		boolean success = super.removeChild(child);
 		widgetPressed();
@@ -298,12 +298,12 @@ public class JMenuAdapter extends CompositeAdapter {
 		return success;
 	}
 
-	@Override
+	
 	public Class getWidgetClass() {
 		return JMenu.class;
 	}
 
-	@Override
+	
 	public IAdapter getParent() {
 		JMenu jb = (JMenu) getWidget();
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();
@@ -319,7 +319,7 @@ public class JMenuAdapter extends CompositeAdapter {
 		return super.getParent();
 	}
 
-	@Override
+	
 	public void deleteNotify() {
 		JMenu jb = (JMenu) getWidget();
 		DefaultButtonModel dbm = (DefaultButtonModel) jb.getModel();

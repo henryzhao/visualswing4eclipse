@@ -156,7 +156,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	private class ContainerPane extends JComponent {
 		private static final long serialVersionUID = 1L;
 
-		@Override
+		
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			if (captured != null && root != null && rootBounds != null && designBorder != null) {
@@ -251,7 +251,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 
 	void trigPopup(final Point p, final List<Component> selected) {
 		editor.getDisplay().asyncExec(new Runnable() {
-			@Override
+			
 			public void run() {
 				Point dp = new Point(p);
 				SwingUtilities.convertPointToScreen(dp, glass);
@@ -525,7 +525,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 	public void publishSelection() {
 		editor.asyncRunnable(new Runnable() {
 
-			@Override
+			
 			public void run() {
 				editor.setSelection(new StructuredSelection(new Object[] { new WidgetSelection(root) }));
 				editor.refreshActionState();
@@ -662,7 +662,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 	}
 
-	@Override
+	
 	public void keyPressed(KeyEvent e) {
 		if (isAlignResize(0, null)) {
 			boolean isMoved = false;
@@ -697,11 +697,11 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		}
 	}
 
-	@Override
+	
 	public void keyReleased(KeyEvent e) {
 	}
 
-	@Override
+	
 	public void keyTyped(KeyEvent e) {
 	}
 

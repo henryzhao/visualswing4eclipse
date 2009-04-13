@@ -33,7 +33,7 @@ public class BevelBorderTypeItems implements ItemProvider {
 	public BevelBorderTypeItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

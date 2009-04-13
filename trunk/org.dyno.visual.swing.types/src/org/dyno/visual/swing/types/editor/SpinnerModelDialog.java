@@ -45,7 +45,7 @@ public class SpinnerModelDialog extends Dialog {
 		super(parentShell);
 	}
 
-	@Override
+	
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		getShell().setText(Messages.SpinnerModelDialog_Title);
@@ -66,7 +66,7 @@ public class SpinnerModelDialog extends Dialog {
 		ISelection selection = createModelTypeSelection(model);
 		viewer.setSelection(selection);
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
+			
 			public void selectionChanged(SelectionChangedEvent event) {
 				viewer_selectionChanged(event.getSelection());
 			}
@@ -108,7 +108,7 @@ public class SpinnerModelDialog extends Dialog {
 		}
 	}
 
-	@Override
+	
 	protected void okPressed() {
 		ISelection selection = viewer.getSelection();
 		if (selection.isEmpty()) {

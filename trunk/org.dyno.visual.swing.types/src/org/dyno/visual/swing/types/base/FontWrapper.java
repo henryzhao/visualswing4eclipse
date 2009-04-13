@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  * @author William Chen
  */
 public class FontWrapper implements ICodeGen {
-	@Override
+	
 	public String getJavaCode(Object v, ImportRewrite imports) {
 		if (v == null) {
 			return "null";
@@ -48,7 +48,7 @@ public class FontWrapper implements ICodeGen {
 		return "new "+imports.addImport("java.awt.Font")+"(\"" + f.getFamily() + "\", " + strStyle + ", " + f.getSize() + ")";
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}

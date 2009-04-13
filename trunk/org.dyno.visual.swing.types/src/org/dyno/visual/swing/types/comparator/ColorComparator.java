@@ -18,7 +18,7 @@ import java.awt.Color;
 import java.util.Comparator;
 
 public class ColorComparator implements Comparator<Color> {
-	@Override
+	
 	public int compare(Color c1, Color c2) {
 		int r1 = c1.getRed();
 		int g1 = c1.getGreen();

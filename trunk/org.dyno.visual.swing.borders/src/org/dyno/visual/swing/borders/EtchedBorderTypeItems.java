@@ -27,7 +27,7 @@ public class EtchedBorderTypeItems implements ItemProvider {
 	public EtchedBorderTypeItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

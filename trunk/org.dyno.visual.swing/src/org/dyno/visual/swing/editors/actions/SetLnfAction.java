@@ -31,11 +31,11 @@ public class SetLnfAction extends Action {
 		setChecked(lnf != null && lnf.equals(lnfClassname));
 	}
 
-	@Override
+	
 	public void run() {
 		if (isChecked())
 			SwingUtilities.invokeLater(new Runnable() {
-				@Override
+				
 				public void run() {
 					changeLnf();
 				}

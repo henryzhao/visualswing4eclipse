@@ -150,7 +150,6 @@
 		        <property name="disabledIcon" gencode="false"/>
 		        <property name="disabledSelectedIcon" gencode="false"/>
 		        <property name="focusPainted"/>
-		        <property name="hideActionText"/>
 		        <property name="horizontalAlignment" 
 		                  editor="org.dyno.visual.swing.widgets.editors.HorizontalAlignmentEditor"
 		                  renderer="org.dyno.visual.swing.widgets.renderers.HorizontalAlignmentRenderer"/>

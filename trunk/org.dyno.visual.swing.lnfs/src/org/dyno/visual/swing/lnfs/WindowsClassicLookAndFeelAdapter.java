@@ -215,7 +215,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		return xp != null && xp.booleanValue();
 	}
 
-	@Override
+	
 	public Object getDefaultValue(Class widgetClass, String propertyName) {
 		WidgetValue widgetValue = getWidgetValue(widgetClass);
 		if (widgetValue != null){
@@ -237,7 +237,7 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		}
 	}
 	private LookAndFeel metalLnf;
-	@Override
+	
 	public LookAndFeel getLookAndFeelInstance() {
 		if(metalLnf==null){
 			try {
@@ -249,12 +249,12 @@ public class WindowsClassicLookAndFeelAdapter implements ILookAndFeelAdapter {
 		return metalLnf;
 	}
 
-	@Override
+	
 	public String getClassname() {
 		return "com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel"; //$NON-NLS-1$
 	}
 
-	@Override
+	
 	public String getName() {
 		return Messages.WindowsClassicLookAndFeelAdapter_Classic_Windows_Lnf;
 	}	

@@ -93,38 +93,38 @@ abstract class AbstractInnerModel extends AbstractClassModel {
 	public AbstractInnerModel() {
 		methods = new HashMap<MethodDescriptor, IEventMethod>();
 	}
-	@Override
+	
 	public String getDisplayName(MethodDescriptor method) {
 		IEventMethod content = methods.get(method);
 		return content.getDisplayName();
 	}
 
-	@Override
+	
 	public Iterable<MethodDescriptor> methods() {
 		return methods.keySet();
 	}
 
-	@Override
+	
 	public boolean hasMethod(MethodDescriptor methodDesc) {
 		return methods.containsKey(methodDesc);
 	}
 
-	@Override
+	
 	public void removeMethod(MethodDescriptor methodDesc) {
 		methods.remove(methodDesc);
 	}
 
-	@Override
+	
 	public boolean isEmpty() {
 		return methods.isEmpty();
 	}
-	@Override
+	
 	public void editMethod(IEditorPart editor, MethodDescriptor methodDesc) {
 		IEventMethod content = methods.get(methodDesc);
 		content.editCode(editor);
 	}
 
-	@Override
+	
 	public boolean createEventMethod(IType type, ImportRewrite imports, IProgressMonitor monitor) {
 		for (MethodDescriptor mdesc : methods()) {
 			if (adapter.getLastName() == null || adapter.isRoot() || adapter.getName().equals(adapter.getLastName())) {
@@ -143,7 +143,7 @@ abstract class AbstractInnerModel extends AbstractClassModel {
 		return true;
 	}
 	
-	@Override
+	
 	public String createListenerInstance(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("new ");
@@ -168,7 +168,7 @@ abstract class AbstractInnerModel extends AbstractClassModel {
 			Method mEvent = mdesc.getMethod();
 			boolean genOverride = !hasAdapter || hasMethod(mdesc);
 			if (genOverride) {
-				builder.append("@Override\n");
+				builder.append("\n");
 				builder.append("public void " + mEvent.getName() + "(");
 				Class[] pTypes = mEvent.getParameterTypes();
 				if (pTypes != null && pTypes.length > 0) {
@@ -204,7 +204,7 @@ abstract class AbstractInnerModel extends AbstractClassModel {
 	
 	protected abstract IEventMethod getDelegatingContent(WidgetAdapter adapter, EventSetDescriptor eventSet, MethodDescriptor methodDesc, Block body, SingleVariableDeclaration var);
 
-	@Override
+	
 	protected boolean processAddListenerStatement(TypeDeclaration type, WidgetAdapter adapter, EventSetDescriptor esd, MethodDescriptor mListener, MethodInvocation mi) {
 		List arguments = mi.arguments();
 		for (Object arg : arguments) {

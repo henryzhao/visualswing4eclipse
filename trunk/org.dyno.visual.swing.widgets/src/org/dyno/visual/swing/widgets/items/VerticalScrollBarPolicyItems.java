@@ -33,7 +33,7 @@ public class VerticalScrollBarPolicyItems implements ItemProvider {
 	public VerticalScrollBarPolicyItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

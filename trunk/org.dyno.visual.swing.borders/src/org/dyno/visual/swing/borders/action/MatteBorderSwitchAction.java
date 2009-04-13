@@ -25,7 +25,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class MatteBorderSwitchAction extends BorderSwitchAction {
 	public MatteBorderSwitchAction(JComponent w) {
 		super(w, MatteBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createMatteBorder(0, 0, 0, 0, Color.black);
 			}});

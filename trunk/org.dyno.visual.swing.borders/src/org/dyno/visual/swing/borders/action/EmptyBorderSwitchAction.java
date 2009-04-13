@@ -29,7 +29,7 @@ import org.dyno.visual.swing.base.IFactory;
 public class EmptyBorderSwitchAction extends BorderSwitchAction {
 	public EmptyBorderSwitchAction(JComponent w) {
 		super(w, EmptyBorder.class, new IFactory(){
-			@Override
+			
 			public Object newInstance(Object bean) {
 				return BorderFactory.createEmptyBorder();
 			}});

@@ -43,13 +43,13 @@ public class TransparentSplitter extends JComponent implements
 			listeners.remove(l);
 	}
 
-	@Override
+	
 	public void addNotify() {
 		super.addNotify();
 		timer.start();
 	}
 
-	@Override
+	
 	public void removeNotify() {
 		timer.stop();
 		super.removeNotify();
@@ -59,17 +59,17 @@ public class TransparentSplitter extends JComponent implements
 		return splitPane.getDividerLocation();
 	}
 
-	@Override
+	
 	public void mouseClicked(MouseEvent e) {
 		splitPane.dispatchEvent(e);
 	}
 
-	@Override
+	
 	public void mouseEntered(MouseEvent e) {
 		splitPane.dispatchEvent(e);
 	}
 
-	@Override
+	
 	public void mouseExited(MouseEvent e) {
 		splitPane.dispatchEvent(e);
 	}
@@ -77,7 +77,7 @@ public class TransparentSplitter extends JComponent implements
 	private int pressed_offset;
 	private boolean dragging;
 
-	@Override
+	
 	public void mousePressed(MouseEvent e) {
 		int loc = splitPane.getDividerLocation();
 		int size = splitPane.getDividerSize();
@@ -96,7 +96,7 @@ public class TransparentSplitter extends JComponent implements
 		}
 	}
 
-	@Override
+	
 	public void mouseReleased(MouseEvent e) {
 		if (!dragging) {
 			ChangeEvent ce = new ChangeEvent(e.getSource());
@@ -106,7 +106,7 @@ public class TransparentSplitter extends JComponent implements
 		}
 	}
 
-	@Override
+	
 	public void mouseDragged(MouseEvent e) {
 		if(dragging){
 			if (splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
@@ -125,7 +125,7 @@ public class TransparentSplitter extends JComponent implements
 
 	private boolean shown;
 
-	@Override
+	
 	protected void paintComponent(Graphics g) {
 		if (shown&&!dragging) {
 			int loc = splitPane.getDividerLocation();
@@ -142,7 +142,7 @@ public class TransparentSplitter extends JComponent implements
 		}
 	}
 
-	@Override
+	
 	public void mouseMoved(MouseEvent e) {
 		int loc = splitPane.getDividerLocation();
 		int size = splitPane.getDividerSize();
@@ -175,7 +175,7 @@ public class TransparentSplitter extends JComponent implements
 		}
 	}
 
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
 		shown = !shown;
 		repaint();

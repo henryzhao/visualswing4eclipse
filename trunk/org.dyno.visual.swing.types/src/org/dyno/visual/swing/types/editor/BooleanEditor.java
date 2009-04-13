@@ -26,27 +26,27 @@ public class BooleanEditor implements ICellEditorFactory {
 	public BooleanEditor() {
 	}
 
-	@Override
+	
 	public CellEditor createPropertyEditor(Object bean, Composite parent) {
 		return new CheckboxCellEditor(parent);
 	}
 
-	@Override
+	
 	public Object decodeValue(Object value) {
 		return value;
 	}
 
-	@Override
+	
 	public Object encodeValue(Object value) {
 		return value;
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
 
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if(value==null)
 			return "false";

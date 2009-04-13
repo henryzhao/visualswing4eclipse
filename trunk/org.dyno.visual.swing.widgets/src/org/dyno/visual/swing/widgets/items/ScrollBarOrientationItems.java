@@ -31,7 +31,7 @@ public class ScrollBarOrientationItems implements ItemProvider {
 	public ScrollBarOrientationItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

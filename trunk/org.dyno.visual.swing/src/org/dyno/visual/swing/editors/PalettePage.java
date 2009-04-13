@@ -61,7 +61,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 		assert editor!=null;
 		this.editor = editor;
 	}
-	@Override
+	
 	public void createControl(Composite parent) {
 		expandBar = new SharedScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL) {
 		};
@@ -81,7 +81,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 		expandItem.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
 		expandItem.setText("Custom Component");
 		expandItem.addExpansionListener(new ExpansionAdapter() {
-			@Override
+			
 			public void expansionStateChanged(ExpansionEvent e) {
 				updateScrolledComposite();
 			}
@@ -100,12 +100,12 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 		updateScrolledComposite();
 	}
 
-	@Override
+	
 	public Control getControl() {
 		return expandBar;
 	}
 
-	@Override
+	
 	public void setFocus() {
 		expandBar.setFocus();
 	}
@@ -184,7 +184,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 					JFaceResources.DIALOG_FONT));
 			expandItem.setText(displayName);
 			expandItem.addExpansionListener(new ExpansionAdapter() {
-				@Override
+				
 				public void expansionStateChanged(ExpansionEvent e) {
 					updateScrolledComposite();
 				}
@@ -237,7 +237,7 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 	}
 
 	class ClearRunnable implements Runnable {
-		@Override
+		
 		public void run() {
 			if (selectedItem != null && selectedItem.getSelection()) {
 				selectedItem.setSelection(false);
@@ -246,11 +246,11 @@ public class PalettePage extends Page implements IPalettePage, SelectionListener
 		}
 	}
 
-	@Override
+	
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
-	@Override
+	
 	public void widgetSelected(SelectionEvent e) {
 		ToolItem item = (ToolItem) e.getSource();
 		setSelectedItem(item);

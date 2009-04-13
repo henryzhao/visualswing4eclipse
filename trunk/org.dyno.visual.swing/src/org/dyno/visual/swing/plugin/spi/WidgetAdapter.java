@@ -117,7 +117,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
     public void showComponentPopup(java.awt.Component src, int x, int y){
     	SwtPopupHandler.getInstance().showComponentPopup(src, x, y);
     }
-	@Override
+	
 	public void requestNewName() {
 		if (getName() == null) {
 			setName(getNamespace().nextName(getBasename()));
@@ -135,7 +135,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 	}
 
-	@Override
+	
 	public String getBasename() {
 		Component widget = getWidget();
 		String className;
@@ -472,7 +472,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		return BorderFactory.createLineBorder(new Color(224, 224, 255), 4);
 	}
 
-	@Override
+	
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		widgetName = config.getAttribute("widgetName"); //$NON-NLS-1$
 		String sIcon = config.getAttribute("icon"); //$NON-NLS-1$
@@ -934,7 +934,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		return fieldAccess;
 	}
 
-	@Override
+	
 	protected Class getObjectClass() {
 		return this.getWidgetClass();
 	}

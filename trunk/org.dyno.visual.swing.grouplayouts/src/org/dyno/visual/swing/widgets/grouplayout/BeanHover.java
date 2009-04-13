@@ -33,8 +33,6 @@ class BeanHover extends AbstractDragOperation {
 			JComponent container) {
 		super(adapter, tracingAdapter, layout, container);
 	}
-
-	@Override
 	public boolean dragOver(Point p) {
 		if (last_point == null)
 			return dragEnter(p);
@@ -47,7 +45,7 @@ class BeanHover extends AbstractDragOperation {
 		return oldp != null && !oldp.equals(newp);
 	}
 
-	@Override
+	
 	public boolean dragEnter(Point p) {
 		adapter.setHovered(true);
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter
@@ -57,7 +55,7 @@ class BeanHover extends AbstractDragOperation {
 		return true;
 	}
 
-	@Override
+	
 	public boolean drop(Point p) {
 		Insets insets = container.getInsets();
 		WidgetAdapter dropAdapter = tracingAdapter;
@@ -109,7 +107,7 @@ class BeanHover extends AbstractDragOperation {
 		return true;
 	}
 
-	@Override
+	
 	public boolean dragExit(Point p) {
 		return true;
 	}

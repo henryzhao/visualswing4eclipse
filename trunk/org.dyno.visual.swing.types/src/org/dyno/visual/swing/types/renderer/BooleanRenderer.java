@@ -21,7 +21,7 @@ public class BooleanRenderer implements ILabelProviderFactory {
 	private static final long serialVersionUID = -4403435758517308113L;
 	private BooleanLabelProvider provider;
 
-	@Override
+	
 	public ILabelProvider getLabelProvider() {
 		if (provider == null)
 			provider = new BooleanLabelProvider();

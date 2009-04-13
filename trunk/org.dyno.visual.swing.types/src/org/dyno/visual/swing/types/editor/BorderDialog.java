@@ -47,7 +47,7 @@ public class BorderDialog extends Dialog {
 		borders = new HashMap<BorderType, Border>();
 	}
 
-	@Override
+	
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		getShell().setText(Messages.BorderDialog_Title);
@@ -72,7 +72,7 @@ public class BorderDialog extends Dialog {
 			viewer.setSelection(selection);
 		}
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
+			
 			public void selectionChanged(SelectionChangedEvent event) {
 				viewer_selectionChanged(event.getSelection());
 			}
@@ -113,7 +113,7 @@ public class BorderDialog extends Dialog {
 		}
 	}
 
-	@Override
+	
 	protected void okPressed() {
 		ISelection selection = viewer.getSelection();
 		if (selection.isEmpty()) {

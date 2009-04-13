@@ -35,7 +35,7 @@ public class AutoResizeModeItems implements ItemProvider {
 	public AutoResizeModeItems() {
 	}
 
-	@Override
+	
 	public Item[] getItems() {
 		return VALUE_ITEMS;
 	}

@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
  * @author William Chen
  */
 public class DimensionWrapper implements ICodeGen {
-	@Override
+	
 	public String getJavaCode(Object value, ImportRewrite imports) {
 		if (value == null)
 			return "null";
@@ -35,7 +35,7 @@ public class DimensionWrapper implements ICodeGen {
 		}
 	}
 
-	@Override
+	
 	public String getInitJavaCode(Object value, ImportRewrite imports) {
 		return null;
 	}
