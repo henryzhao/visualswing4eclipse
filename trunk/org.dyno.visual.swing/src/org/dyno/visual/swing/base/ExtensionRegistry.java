@@ -313,6 +313,11 @@ public class ExtensionRegistry {
 	private static void addLnf(IConfigurationElement config) {
 		try {
 			String sClass = config.getAttribute("class");
+			try {
+				Class.forName(sClass);
+			} catch (ClassNotFoundException cnfe) {
+				return;
+			}
 			ILookAndFeelAdapter adapter = (ILookAndFeelAdapter) config.createExecutableExtension("adapter");
 			lnfAdapters.put(sClass, adapter);
 		} catch (CoreException e) {
