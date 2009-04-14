@@ -25,16 +25,22 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 	private static final int MAX_HEIGHT = 100;
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class.getResource("/icons/forbidden.png")); //$NON-NLS-1$
+		initializeDummyDialog();
+	}
+
+	private static synchronized void initializeDummyDialog() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				DUMMY_DIALOG = new JWindow();
 				DUMMY_DIALOG.setLayout(null);
 				DUMMY_DIALOG.setSize(MAX_WIDTH, MAX_HEIGHT);
-				DUMMY_DIALOG.setLocation(-2*MAX_WIDTH, -2*MAX_HEIGHT);
+				DUMMY_DIALOG.setLocation(0, 0);// -2 * MAX_WIDTH, -2 *
+												// MAX_HEIGHT);
 				DUMMY_DIALOG.setVisible(true);
 			}
 		});
 	}
+
 	protected WidgetAdapter adaptable;
 
 	public void paintAnchor(Graphics g) {
@@ -67,23 +73,25 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 	private Image offscreen;
 
 	protected void paintComponent(Graphics g) {
-		Component root = adaptable.getParentContainer();
-		int w = root.getWidth();
-		int h = root.getHeight();
-		if (offscreen == null || last_width != w || last_height != h) {
-			DUMMY_DIALOG.add(root);
-			offscreen = root.createImage(w, h);
-			Graphics clipg = offscreen.getGraphics();
-			root.printAll(clipg);
-			last_width = w;
-			last_height = h;
-			DUMMY_DIALOG.remove(root);
+		if (DUMMY_DIALOG != null && DUMMY_DIALOG.isVisible()) {
+			Component root = adaptable.getParentContainer();
+			int w = root.getWidth();
+			int h = root.getHeight();
+			if (offscreen == null || last_width != w || last_height != h) {
+				DUMMY_DIALOG.add(root);
+				offscreen = root.createImage(w, h);
+				Graphics offg = offscreen.getGraphics();
+				root.print(offg);
+				last_width = w;
+				last_height = h;
+				DUMMY_DIALOG.remove(root);
+			}
+			g.drawImage(offscreen, 1, 1, root);
+			Color old = g.getColor();
+			g.setColor(SELECTION_COLOR);
+			g.drawRect(0, 0, w + 1, h + 1);
+			g.setColor(old);
 		}
-		g.drawImage(offscreen, 1, 1, root);
-		Color old = g.getColor();
-		g.setColor(SELECTION_COLOR);
-		g.drawRect(0, 0, w + 1, h + 1);
-		g.setColor(old);
 	}
 
 	public void setAdaptable(IAdaptable adaptable) {
