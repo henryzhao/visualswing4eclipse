@@ -34,8 +34,7 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 				DUMMY_DIALOG = new JWindow();
 				DUMMY_DIALOG.setLayout(null);
 				DUMMY_DIALOG.setSize(MAX_WIDTH, MAX_HEIGHT);
-				DUMMY_DIALOG.setLocation(0, 0);// -2 * MAX_WIDTH, -2 *
-												// MAX_HEIGHT);
+				DUMMY_DIALOG.setLocation(-2 * MAX_WIDTH, -2 * MAX_HEIGHT);
 				DUMMY_DIALOG.setVisible(true);
 			}
 		});
