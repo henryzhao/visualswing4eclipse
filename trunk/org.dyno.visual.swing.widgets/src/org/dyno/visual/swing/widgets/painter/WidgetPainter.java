@@ -25,11 +25,9 @@ public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class.getResource("/icons/forbidden.png")); //$NON-NLS-1$
 		DUMMY_DIALOG = new JDialog();
-		DUMMY_DIALOG.setModal(false);
 		DUMMY_DIALOG.setLayout(null);
 		DUMMY_DIALOG.setSize(MAX_WIDTH, MAX_HEIGHT);
 		DUMMY_DIALOG.setLocation(Integer.MIN_VALUE, Integer.MIN_VALUE);
-		DUMMY_DIALOG.setVisible(true);
 	}
 	protected WidgetAdapter adaptable;
 
