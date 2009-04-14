@@ -8,7 +8,8 @@ import java.awt.Point;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
 
 import org.dyno.visual.swing.plugin.spi.IAdaptableContext;
 import org.dyno.visual.swing.plugin.spi.IConstants;
@@ -19,15 +20,20 @@ import org.eclipse.core.runtime.IAdaptable;
 
 public class WidgetPainter implements IPainter, IAdaptableContext, IConstants {
 	private static Icon FORBIDDEN_ICON;
-	private static JDialog DUMMY_DIALOG;
-	private static final int MAX_WIDTH = 10240;
-	private static final int MAX_HEIGHT = 10240;
+	private static JWindow DUMMY_DIALOG;
+	private static final int MAX_WIDTH = 100;
+	private static final int MAX_HEIGHT = 100;
 	static {
 		FORBIDDEN_ICON = new ImageIcon(WidgetAdapter.class.getResource("/icons/forbidden.png")); //$NON-NLS-1$
-		DUMMY_DIALOG = new JDialog();
-		DUMMY_DIALOG.setLayout(null);
-		DUMMY_DIALOG.setSize(MAX_WIDTH, MAX_HEIGHT);
-		DUMMY_DIALOG.setLocation(Integer.MIN_VALUE, Integer.MIN_VALUE);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				DUMMY_DIALOG = new JWindow();
+				DUMMY_DIALOG.setLayout(null);
+				DUMMY_DIALOG.setSize(MAX_WIDTH, MAX_HEIGHT);
+				DUMMY_DIALOG.setLocation(-2*MAX_WIDTH, -2*MAX_HEIGHT);
+				DUMMY_DIALOG.setVisible(true);
+			}
+		});
 	}
 	protected WidgetAdapter adaptable;
 
