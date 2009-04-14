@@ -22,6 +22,7 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.ILookAndFeelAdapter;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.eclipse.albireo.core.SwtPopupRegistry;
 import org.eclipse.albireo.core.Platform;
+import org.eclipse.albireo.core.SwtPopupRegistry;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -474,6 +475,7 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		if (root != null)
 			remove(root);
 		if (adapter != null) {
+			hideVisibleWindow(adapter);
 			root = adapter.getRootPane();
 			Container parent = root.getParent();
 			if (parent != null)
@@ -499,6 +501,16 @@ public class VisualDesigner extends JComponent implements KeyListener {
 		validateContent();
 		setLnfChanged(false);
 		setFocus();
+	}
+
+	private void hideVisibleWindow(WidgetAdapter adapter) {
+		Component widget = adapter.getWidget();
+		if(widget instanceof Window){
+			Window window = (Window)widget;
+			if(window.isVisible()){
+				window.setVisible(false);
+			}
+		}
 	}
 
 	private Image captured;
