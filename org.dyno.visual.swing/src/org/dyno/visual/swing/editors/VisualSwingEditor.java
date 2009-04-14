@@ -594,7 +594,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				this.selection = selection;
 				fireSelectionChanged();
 			} else {
-				outline.refreshTree();
+				if (outline != null)
+					outline.refreshTree();
 			}
 		} else {
 			if (selection == null) {
@@ -602,7 +603,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 					this.selection = null;
 					fireSelectionChanged();
 				} else {
-					outline.refreshTree();
+					if (outline != null)
+						outline.refreshTree();
 				}
 			} else {
 				if (selection.isEmpty()) {
@@ -623,7 +625,8 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 				}
 			}
 		}
-		outline.refreshTree();
+		if (outline != null)
+			outline.refreshTree();
 	}
 
 	public void validateContent() {
