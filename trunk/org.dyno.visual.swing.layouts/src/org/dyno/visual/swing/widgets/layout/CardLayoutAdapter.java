@@ -56,6 +56,7 @@ public class CardLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(widget);
 		String name = adapter.getName();
 		cardLayout.show(container, name);
+		container.doLayout();
 	}
 
 	@Override
