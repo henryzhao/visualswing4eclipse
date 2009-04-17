@@ -14,7 +14,7 @@ public class JMenuMouseDelegate extends MouseInputAdapter implements IAdaptableC
 
 	
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() != MouseEvent.BUTTON3) {
+		if (e==null||e.getButton() != MouseEvent.BUTTON3) {
 			JMenu jmenu = (JMenu) adapter.getWidget();
 			boolean v = jmenu.isPopupMenuVisible();
 			if (v) {
