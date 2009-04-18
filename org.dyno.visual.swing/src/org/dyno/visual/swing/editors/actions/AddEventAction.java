@@ -58,8 +58,8 @@ public class AddEventAction extends Action {
 		}
 		if (!model.hasMethod(methodDesc)) {
 			model.addMethod(methodDesc);
+			adapter.setDirty(true);
 		}
-		adapter.setDirty(true);
 		adapter.addNotify();
 		VisualDesigner designer = adapter.getDesigner();
 		if (designer != null) {
@@ -67,7 +67,7 @@ public class AddEventAction extends Action {
 			if (editor != null) {
 				if (editor.isDirty())
 					editor.saveWithProgress();
-				model.editMethod(editor.openSouceEditor(), methodDesc);
+				model.editMethod(editor, methodDesc);
 			}
 		}
 	}

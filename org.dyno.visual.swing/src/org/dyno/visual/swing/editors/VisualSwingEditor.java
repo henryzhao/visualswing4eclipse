@@ -64,6 +64,8 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
@@ -85,8 +87,8 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @author William Chen
  */
 @SuppressWarnings("unchecked")
-public class VisualSwingEditor extends AbstractDesignerEditor implements
-		IResourceChangeListener, ISelectionProvider, IPartListener {
+public class VisualSwingEditor extends AbstractDesignerEditor implements IResourceChangeListener, ISelectionProvider, IPartListener, KeyListener {
+	private static final String EDITOR_IMAGE="/icons/editor.png";
 	private List<ISelectionChangedListener> listeners;
 	private SwingControl embedded;
 	private VisualDesigner designer;
@@ -99,6 +101,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	private PropertySheetPage sheetPage;
 	private ScrolledComposite scrollPane;
 	private PalettePage palettePage;
+
 	public VisualSwingEditor() {
 		super();
 		actions = new HashMap<String, EditorAction>();
@@ -106,18 +109,16 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		listeners = new ArrayList<ISelectionChangedListener>();
 	}
 
-	public IJavaProject getHostProject(){
+	public IJavaProject getHostProject() {
 		return hostProject;
 	}
-	
-	public void init(IEditorSite site, IEditorInput input)
-			throws PartInitException {
+
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		site.setSelectionProvider(this);
 		site.getWorkbenchWindow().getPartService().addPartListener(this);
 	}
 
-		
 	public Object getAdapter(Class adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			if (outline == null && designer != null) {
@@ -128,12 +129,11 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		} else if (adapter == IPropertySheetPage.class) {
 			if (sheetPage == null) {
 				sheetPage = new WidgetPropertyPage();
-				sheetPage
-						.setPropertySourceProvider(new WidgetAdapterContentProvider());
+				sheetPage.setPropertySourceProvider(new WidgetAdapterContentProvider());
 			}
 			return sheetPage;
-		} else if(adapter == IPalettePage.class){
-			if(palettePage==null){
+		} else if (adapter == IPalettePage.class) {
+			if (palettePage == null) {
 				if (designer != null)
 					palettePage = new PalettePage(designer);
 				else
@@ -144,20 +144,18 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			return super.getAdapter(adapter);
 	}
 
-	
 	public boolean isDirty() {
-		return !isGeneratingCode && designer != null
-				&& (designer.isLnfChanged() || designer.isDirty());
+		if (super.isDirty())
+			return true;
+		return !isGeneratingCode && designer != null && (designer.isLnfChanged() || designer.isDirty());
 	}
 
-	
 	public boolean isSaveAsAllowed() {
-		return false;
+		return super.isSaveAsAllowed();
 	}
 
-	
 	public boolean isSaveOnCloseNeeded() {
-		return true;
+		return super.isSaveOnCloseNeeded();
 	}
 
 	public ArrayList<EditorAction> getActions() {
@@ -194,8 +192,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (embedded != null) {
 			embedded.setFocus();
 		}
-		if (designer != null)
-			designer.setFocus();
 		VisualSwingPlugin.setCurrentEditor(this);
 	}
 
@@ -217,40 +213,44 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	
 	public void createPartControl(Composite parent) {
 		if (!isSwingComponent()) {
 			switchToJavaEditor();
 		} else {
 			parent.setLayout(new FillLayout());
-			scrollPane = new ScrolledComposite(parent, SWT.H_SCROLL
-					| SWT.V_SCROLL);
+			Splitter splitter = new Splitter(parent, SWT.VERTICAL);
+			Composite design = new Composite(splitter, SWT.BORDER);
+			splitter.setFirstControl(design);
+			design.setLayout(new FillLayout());
+			scrollPane = new ScrolledComposite(design, SWT.H_SCROLL | SWT.V_SCROLL);
 			scrollPane.setExpandHorizontal(true);
 			scrollPane.setExpandVertical(true);
 			Composite designerContainer = new Composite(scrollPane, SWT.NONE);
 			scrollPane.setContent(designerContainer);
-			designerContainer.setBackground(parent.getDisplay().getSystemColor(
-					SWT.COLOR_WHITE));
+			designerContainer.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			designerContainer.setLayout(new FillLayout());
 			embedded = new EmbeddedVisualDesigner(designerContainer);
+			embedded.addKeyListener(new DesignerKeyListener(this));
+			Composite comps = new Composite(splitter, SWT.BORDER);
+			splitter.setSecondControl(comps);
+
+			comps.setLayout(new FillLayout());
+			super.createPartControl(comps);
+			setTitleImage(VisualSwingPlugin.getSharedImage(EDITOR_IMAGE));
 		}
 	}
 
 	private void onEditorOpen() {
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(
-				this,
-				IResourceChangeEvent.POST_CHANGE
-						| IResourceChangeEvent.POST_BUILD
-						| IResourceChangeEvent.PRE_CLOSE
-						| IResourceChangeEvent.PRE_DELETE);
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
+				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.POST_BUILD | IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE);
 		invokeLater(new Runnable() {
-			
+
 			public void run() {
 				validateContent();
 			}
 		});
 		asyncRunnable(new Runnable() {
-			
+
 			public void run() {
 				openRelatedView();
 			}
@@ -268,14 +268,13 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			this.isTimerAction = isTimer;
 		}
 
-		
 		protected IStatus run(IProgressMonitor monitor) {
 			monitor.setTaskName(Messages.VisualSwingEditor_Generating_Designer);
 			try {
 				createDesignerUI(monitor);
 			} catch (Exception e) {
 				designer.initRootWidget(null);
-				designer.setError(e);				
+				designer.setError(e);
 			}
 			if (isTimerAction)
 				validateContent();
@@ -291,7 +290,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	private void createDesignerUI(IProgressMonitor monitor) throws Exception {
 		final IFileEditorInput file = (IFileEditorInput) getEditorInput();
 		asyncRunnable(new Runnable() {
-			
+
 			public void run() {
 				setPartName(file.getName());
 				setTitleToolTip(file.getToolTipText());
@@ -322,21 +321,22 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			isParsing = false;
 		}
 	}
+
 	private boolean isParsing;
+
 	private void setUpLookAndFeel(Class rootClass) {
 		try {
 			Field field = rootClass.getDeclaredField("PREFERRED_LOOK_AND_FEEL");
 			if (field.getType() == String.class) {
 				field.setAccessible(true);
 				String lnf = (String) field.get(null);
-				String className = UIManager
-						.getCrossPlatformLookAndFeelClassName();
+				String className = UIManager.getCrossPlatformLookAndFeelClassName();
 				if (lnf == null) {
 					lnf = className;
 				}
 				setLnfClassname(lnf);
 			}
-		} catch(NoSuchFieldException nsfe){
+		} catch (NoSuchFieldException nsfe) {
 			String className = UIManager.getCrossPlatformLookAndFeelClassName();
 			setLnfClassname(className);
 		} catch (Exception e) {
@@ -345,22 +345,26 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			setLnfClassname(className);
 		}
 	}
+
 	private void refreshTree() {
 		asyncRunnable(new Runnable() {
-			
+
 			public void run() {
 				if (outline != null)
 					outline.refreshTree();
 			}
 		});
 	}
-	private void safeSave(final IProgressMonitor monitor){
-		getDisplay().syncExec(new Runnable(){
-			
+
+	private void safeSave(final IProgressMonitor monitor) {
+		getDisplay().syncExec(new Runnable() {
+
 			public void run() {
 				doSave(monitor);
-			}});
+			}
+		});
 	}
+
 	public void saveWithProgress() {
 		try {
 			IRunnableWithProgress runnable = new IRunnableWithProgress() {
@@ -375,37 +379,40 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			return;
 		}
 	}
-	
+
 	public void doSave(IProgressMonitor monitor) {
-		isGeneratingCode = true;
-		try {
-			IFileEditorInput file = (IFileEditorInput) getEditorInput();
-			setPartName(file.getName());
-			setTitleToolTip(file.getToolTipText());
-			ParserFactory factory = ParserFactory.getDefaultParserFactory();
-			if (factory != null) {
-				ISourceParser sourceParser = factory.newParser();
-				Component root = designer.getRoot();
-				if (root != null) {
-					WidgetAdapter rootAdapter = WidgetAdapter
-							.getWidgetAdapter(root);
-					JavaUtil.hideMenu();
-					String lnfCN = getLnfClassname();
-					rootAdapter.setPreferredLookAndFeel(lnfCN); //$NON-NLS-1$
-					ICompilationUnit unit = sourceParser.generate(rootAdapter,	monitor);
-					rootAdapter.setPreferredLookAndFeel(null); //$NON-NLS-1$
-					if (unit != null) {
-						designer.initNamespaceWithUnit(unit);
-						designer.setLnfChanged(false);
-						fireDirty();
-						designer.clearDirty();
+		if (super.isDirty()) {
+			super.doSave(monitor);
+		} else {
+			isGeneratingCode = true;
+			try {
+				IFileEditorInput file = (IFileEditorInput) getEditorInput();
+				setPartName(file.getName());
+				setTitleToolTip(file.getToolTipText());
+				ParserFactory factory = ParserFactory.getDefaultParserFactory();
+				if (factory != null) {
+					ISourceParser sourceParser = factory.newParser();
+					Component root = designer.getRoot();
+					if (root != null) {
+						WidgetAdapter rootAdapter = WidgetAdapter.getWidgetAdapter(root);
+						JavaUtil.hideMenu();
+						String lnfCN = getLnfClassname();
+						rootAdapter.setPreferredLookAndFeel(lnfCN); //$NON-NLS-1$
+						ICompilationUnit unit = sourceParser.generate(rootAdapter, monitor);
+						rootAdapter.setPreferredLookAndFeel(null); //$NON-NLS-1$
+						if (unit != null) {
+							designer.initNamespaceWithUnit(unit);
+							designer.setLnfChanged(false);
+							fireDirty();
+							designer.clearDirty();
+						}
 					}
 				}
+			} catch (Exception e) {
+				VisualSwingPlugin.getLogger().error(e);
 			}
-		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
+			isGeneratingCode = false;
 		}
-		isGeneratingCode = false;
 	}
 
 	class EmbeddedVisualDesigner extends SwingControl {
@@ -413,7 +420,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			super(parent, SWT.NONE);
 		}
 
-		
 		protected JComponent createSwingComponent() {
 			designer = new VisualDesigner(VisualSwingEditor.this, this);
 			JPanel backgroundPanel = new JPanel();
@@ -425,29 +431,27 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			if (!isCreatingDesignerUI) {
 				isCreatingDesignerUI = true;
 				new CreateDesignerUIJob(false).schedule();
-			}			
+			}
 			return backgroundPanel;
 		}
 
-		
 		public Composite getLayoutAncestor() {
 			return getParent();
 		}
-		
+
 	}
 
 	public void setLnfClassname(String lnfClassname) {
-		ILookAndFeelAdapter adapter = ExtensionRegistry
-				.getLnfAdapter(lnfClassname);
+		ILookAndFeelAdapter adapter = ExtensionRegistry.getLnfAdapter(lnfClassname);
 		if (adapter != null) {
 			try {
 				LookAndFeel oldlnf = UIManager.getLookAndFeel();
 				LookAndFeel newlnf = adapter.getLookAndFeelInstance();
 				if (!isLnfEqual(oldlnf, newlnf)) {
 					AwtEnvironment.runWithLnf(newlnf, new ISyncUITask() {
-						
+
 						public Object doTask() throws Throwable {
-							if (designer != null){
+							if (designer != null) {
 								Window window = SwingUtilities.getWindowAncestor(designer);
 								if (window != null)
 									SwingUtilities.updateComponentTreeUI(window);
@@ -476,7 +480,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			} else {
 				String lnfId1 = lnf1.getID();
 				String lnfId2 = lnf2.getID();
-				if(!lnfId1.equals(lnfId2)){
+				if (!lnfId1.equals(lnfId2)) {
 					return false;
 				} else {
 					Class clazz1 = lnf1.getClass();
@@ -493,7 +497,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		return lnfClassname;
 	}
 
-	
 	public void resourceChanged(IResourceChangeEvent event) {
 		switch (event.getType()) {
 		case IResourceChangeEvent.POST_BUILD:
@@ -520,8 +523,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		switch (delta.getKind()) {
 		case IResourceDelta.REMOVED:
 			IPath deltaPath = delta.getFullPath();
-			IPath path = ((IFileEditorInput) getEditorInput()).getFile()
-					.getFullPath();
+			IPath path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath();
 			if (deltaPath.equals(path)) {
 				closeRelatedView();
 				closeMe();
@@ -529,17 +531,14 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 			break;
 		case IResourceDelta.CHANGED:
 			deltaPath = delta.getFullPath();
-			path = ((IFileEditorInput) getEditorInput()).getFile()
-					.getFullPath();
+			path = ((IFileEditorInput) getEditorInput()).getFile().getFullPath();
 			if (deltaPath.equals(path)) {
 				if (!isCreatingDesignerUI && !designer.isLocked()) {
 					isCreatingDesignerUI = true;
 					new CreateDesignerUIJob(true).schedule();
 				}
 			} else {
-				IResourceDelta[] children = delta
-						.getAffectedChildren(IResourceDelta.CHANGED
-								| IResourceDelta.REMOVED);
+				IResourceDelta[] children = delta.getAffectedChildren(IResourceDelta.CHANGED | IResourceDelta.REMOVED);
 				if (children != null && children.length > 0) {
 					for (IResourceDelta res : children) {
 						checkChange(res);
@@ -549,33 +548,29 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	
 	public void doSaveAs() {
+		super.doSaveAs();
 	}
 
 	public void fireDirty() {
 		asyncRunnable(new Runnable() {
-			
+
 			public void run() {
 				firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
 			}
 		});
 	}
 
-	
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		if (!listeners.contains(listener))
 			listeners.add(listener);
 	}
 
-	
 	public ISelection getSelection() {
 		return selection;
 	}
 
-	
-	public void removeSelectionChangedListener(
-			ISelectionChangedListener listener) {
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
 		if (listeners.contains(listener))
 			listeners.remove(listener);
 	}
@@ -587,7 +582,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	
 	public void setSelection(ISelection selection) {
 		if (this.selection == null) {
 			if (selection != null && !selection.isEmpty()) {
@@ -633,7 +627,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		if (designer != null && scrollPane != null) {
 			final Dimension size = designer.getPreferredSize();
 			asyncRunnable(new Runnable() {
-				
+
 				public void run() {
 					scrollPane.setMinSize(size.width, size.height);
 				}
@@ -650,7 +644,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		SwingUtilities.invokeLater(runnable);
 	}
 
-	
 	public void partActivated(IWorkbenchPart part) {
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
@@ -660,33 +653,31 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 	private static final int DELAYED_TIME = 250;
 
 	private class ChangeLnfAction implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent e) {
-			if(isParsing)
+			if (isParsing)
 				return;
 			changeToLnf(getLnfClassname());
 			if (designer != null)
 				designer.clearCapture();
 		}
 	}
+
 	private void delaySwingExec(int millies, ActionListener action) {
 		Timer timer = new Timer(millies, action);
 		timer.setRepeats(false);
 		timer.start();
 	}
 
-	
 	public void partBroughtToTop(IWorkbenchPart part) {
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
 		}
 	}
 
-	
 	public void partClosed(IWorkbenchPart part) {
 	}
 
-	
 	public void partDeactivated(IWorkbenchPart part) {
 		if (part == this) {
 			if (designer != null)
@@ -694,7 +685,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 		}
 	}
 
-	
 	public void partOpened(IWorkbenchPart part) {
 		if (part == this) {
 			delaySwingExec(DELAYED_TIME, new ChangeLnfAction());
@@ -703,5 +693,15 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements
 
 	public void clearToolSelection() {
 		palettePage.clearToolSelection();
+	}
+
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
