@@ -22,7 +22,7 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 		if (selection.size() == 1) {
 			WidgetAdapter adapter = (WidgetAdapter) selection.getFirstElement();
 			IEditorPart editor = adapter.getSourceEditor();
-			if (editor != null && adapter.getID() != null)
+			if (editor != null && (adapter.isRoot() || adapter.getID() != null))
 				revealInEditor(editor, adapter);
 		} else if (!selection.isEmpty()) {
 			WidgetAdapter parent = (WidgetAdapter) selection.getFirstElement();
@@ -30,7 +30,7 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 				WidgetAdapter adapter = (WidgetAdapter) object;
 				parent = getCommonParent(parent, adapter);
 			}
-			if (parent != null && parent.getID() != null) {
+			if (parent != null && (parent.isRoot() || parent.getID() != null)) {
 				IEditorPart editor = parent.getSourceEditor();
 				if (editor != null)
 					revealInEditor(editor, parent);
@@ -38,10 +38,9 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 		}
 	}
 
-	
 	public void widgetSelected(final IStructuredSelection selection) {
 		JavaUtil.getEclipseDisplay().asyncExec(new Runnable() {
-			
+
 			public void run() {
 				sync_widget(selection);
 			}
@@ -87,5 +86,6 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 		IType type = unit.getType(unitname);
 		IMethod method = type.getMethod(methodName, new String[0]);
 		JavaUI.revealInEditor(editor, (IJavaElement) method);
+		editor.setFocus();
 	}
 }

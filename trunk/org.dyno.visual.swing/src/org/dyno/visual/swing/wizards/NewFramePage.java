@@ -16,6 +16,7 @@ package org.dyno.visual.swing.wizards;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
@@ -29,9 +30,12 @@ public class NewFramePage extends NewComponentPage {
 	protected void createTypeMembers(IType type, ImportsManager imports, IProgressMonitor monitor) throws CoreException {
 		super.createTypeMembers(type, imports, monitor);
 		String lineDelim = "\n";
-		String verfield = "private static final long serialVersionUID = 1L;";
-		verfield += lineDelim;
-		type.createField(verfield, null, false, monitor);
+		IField field = type.getField("serialVersionUID");
+		if (!field.exists()) {
+			String verfield = "private static final long serialVersionUID = 1L;";
+			verfield += lineDelim;
+			type.createField(verfield, null, false, monitor);
+		}
 		if (super.isCreateMain()) {
 			String lnffield = "private static final " + imports.addImport("java.lang.String") + " PREFERRED_LOOK_AND_FEEL = null;" + lineDelim;
 			type.createField(lnffield, null, false, monitor);

@@ -64,15 +64,10 @@ import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.osgi.framework.Bundle;
@@ -114,10 +109,11 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		if (designer != null)
 			designer.setCursorType(type);
 	}
-    public void showComponentPopup(java.awt.Component src, int x, int y){
-    	SwtPopupHandler.getInstance().showComponentPopup(src, x, y);
-    }
-	
+
+	public void showComponentPopup(java.awt.Component src, int x, int y) {
+		SwtPopupHandler.getInstance().showComponentPopup(src, x, y);
+	}
+
 	public void requestNewName() {
 		if (getName() == null) {
 			setName(getNamespace().nextName(getBasename()));
@@ -135,7 +131,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		}
 	}
 
-	
 	public String getBasename() {
 		Component widget = getWidget();
 		String className;
@@ -362,26 +357,9 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public IEditorPart getSourceEditor() {
-		try {
-			IWorkbenchWindow window = JavaUtil.getEclipseWindow();
-			VisualDesigner designer = getDesigner();
-			if (window != null) {
-				IWorkbenchPage[] pages = window.getPages();
-				for (IWorkbenchPage page : pages) {
-					IEditorReference[] refs = page.getEditorReferences();
-					for (IEditorReference ref : refs) {
-						if (ref.getId().equals(JavaUI.ID_CU_EDITOR)) {
-							IEditorInput input = ref.getEditorInput();
-							IEditorInput thisinput = designer.getEditor().getEditorInput();
-							if (thisinput.equals(input)) {
-								return ref.getEditor(true);
-							}
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-			VisualSwingPlugin.getLogger().error(e);
+		VisualDesigner designer2 = getDesigner();
+		if (designer2 != null) {
+			return designer2.getEditor();
 		}
 		return null;
 	}
@@ -407,7 +385,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			d.publishSelection();
 		}
 	}
-
 
 	public VisualDesigner getDesigner() {
 		Component w = getRootPane();
@@ -472,7 +449,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		return BorderFactory.createLineBorder(new Color(224, 224, 255), 4);
 	}
 
-	
 	public void setInitializationData(IConfigurationElement config, String propertyName, Object data) throws CoreException {
 		widgetName = config.getAttribute("widgetName"); //$NON-NLS-1$
 		String sIcon = config.getAttribute("icon"); //$NON-NLS-1$
@@ -762,13 +738,15 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 			return null;
 		}
 	}
-	public Composite getEditorSite(){
+
+	public Composite getEditorSite() {
 		VisualDesigner designer = getDesigner();
-		if(designer!=null){
+		if (designer != null) {
 			return designer.getEditorSite();
 		}
 		return null;
 	}
+
 	public List<WidgetAdapter> getDropWidget() {
 		VisualDesigner designer = getDesigner();
 		if (designer == null)
@@ -934,7 +912,6 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 		return fieldAccess;
 	}
 
-	
 	protected Class getObjectClass() {
 		return this.getWidgetClass();
 	}
@@ -1062,7 +1039,7 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public void showTooltipText(String string) {
-		if(getDesigner()!=null){
+		if (getDesigner() != null) {
 			getDesigner().showTooltipText(string);
 		}
 	}

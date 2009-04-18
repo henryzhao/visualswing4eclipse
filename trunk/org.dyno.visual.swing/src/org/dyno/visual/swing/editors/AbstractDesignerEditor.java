@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.core.runtime.content.IContentTypeManager;
+import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
@@ -34,7 +35,6 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.EditorPart;
 
 /**
  * 
@@ -43,15 +43,16 @@ import org.eclipse.ui.part.EditorPart;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public abstract class AbstractDesignerEditor extends EditorPart {
+public abstract class AbstractDesignerEditor extends CompilationUnitEditor {
 	@Override
-	public boolean isSaveOnCloseNeeded() {
-		return true;
+	public boolean isSaveOnCloseNeeded() {		
+		return super.isSaveOnCloseNeeded();
 	}
 
 	
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
+		super.init(site, input);
 		setSite(site);
 		setInput(input);
 		if (shouldSwitchToJavaEditor() || !isSwingComponent()) {
@@ -183,20 +184,6 @@ public abstract class AbstractDesignerEditor extends EditorPart {
 			} catch (Exception e) {
 			}
 		}
-	}
-
-	public IEditorPart openSouceEditor() {
-		IEditorInput input = getEditorInput();
-		IWorkbenchPage page = getEditorSite().getPage();
-		if (page != null) {
-			try {
-				return page.openEditor(input, JAVA_EDITOR_ID, true,
-						IWorkbenchPage.MATCH_ID | IWorkbenchPage.MATCH_INPUT);
-			} catch (Exception e) {
-				VisualSwingPlugin.getLogger().error(e);
-			}
-		}
-		return null;
 	}
 
 	private static final String[] RELATED_VIEW_IDS = {

@@ -28,8 +28,8 @@ import org.dyno.visual.swing.editors.actions.RightAlignAction;
 import org.dyno.visual.swing.editors.actions.SameHeightAction;
 import org.dyno.visual.swing.editors.actions.SameWidthAction;
 import org.dyno.visual.swing.editors.actions.SelectAllAction;
-import org.dyno.visual.swing.editors.actions.SourceViewAction;
 import org.dyno.visual.swing.editors.actions.TopAlignAction;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -54,7 +54,6 @@ public class VisualSwingEditorContributor extends EditorActionBarContributor {
 			new DeleteAction(),
 			new SelectAllAction(), 
 			new PreviewAction(),
-			new SourceViewAction(),
 			null, 
 			new LeftAlignAction(), 
 			new RightAlignAction(), 
@@ -69,7 +68,9 @@ public class VisualSwingEditorContributor extends EditorActionBarContributor {
 
 	public VisualSwingEditorContributor() {
 	}
-
+	public IAction getDeleteAction(){
+		return actions[5];
+	}
 	@Override
 	public void init(IActionBars bars) {
 		super.init(bars);

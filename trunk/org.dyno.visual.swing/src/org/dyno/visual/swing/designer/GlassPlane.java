@@ -158,7 +158,7 @@ public class GlassPlane extends JComponent implements MouseListener {
 		if (!e.isConsumed()&&Platform.isGtk() && e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
 		}
-		super.requestFocus();
+		setFocus();
 	}
 
 	
@@ -166,18 +166,22 @@ public class GlassPlane extends JComponent implements MouseListener {
 		if (!e.isConsumed()&&!Platform.isGtk()&&e.isPopupTrigger()) {
 			designer.trigPopup(e.getPoint(), designer.getSelectedComponents());
 		}
-		super.requestFocus();
 	}
 
 	public void setFocus() {
+		designer.getEditor().getDisplay().asyncExec(new Runnable(){
+			public void run() {
+				setSwingFocus();
+			}});
+	}
+	private void setSwingFocus(){
+		designer.getEditor().setFocus();
 		SwingUtilities.invokeLater(new Runnable() {
-			
 			public void run() {
 				GlassPlane.super.requestFocus();
 			}
 		});
 	}
-
 	public void setCursorType(int type) {
 		if(getCursor().getType()!=type)
 			setCursor(Cursor.getPredefinedCursor(type));
