@@ -115,7 +115,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
-		site.setSelectionProvider(this);
 		site.getWorkbenchWindow().getPartService().addPartListener(this);
 	}
 
@@ -219,7 +218,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		} else {
 			parent.setLayout(new FillLayout());
 			Splitter splitter = new Splitter(parent, SWT.VERTICAL);
-			Composite design = new Composite(splitter, SWT.BORDER);
+			Composite design = new Composite(splitter, SWT.NONE);
 			splitter.setFirstControl(design);
 			design.setLayout(new FillLayout());
 			scrollPane = new ScrolledComposite(design, SWT.H_SCROLL | SWT.V_SCROLL);
@@ -231,11 +230,12 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 			designerContainer.setLayout(new FillLayout());
 			embedded = new EmbeddedVisualDesigner(designerContainer);
 			embedded.addKeyListener(new DesignerKeyListener(this));
-			Composite comps = new Composite(splitter, SWT.BORDER);
+			Composite comps = new Composite(splitter, SWT.NONE);
 			splitter.setSecondControl(comps);
 
 			comps.setLayout(new FillLayout());
 			super.createPartControl(comps);
+			getSite().setSelectionProvider(this);
 			setTitleImage(VisualSwingPlugin.getSharedImage(EDITOR_IMAGE));
 		}
 	}
