@@ -88,7 +88,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  */
 @SuppressWarnings("unchecked")
 public class VisualSwingEditor extends AbstractDesignerEditor implements IResourceChangeListener, ISelectionProvider, IPartListener, KeyListener {
-	private static final String EDITOR_IMAGE="/icons/editor.png";
+	private static final String EDITOR_IMAGE = "/icons/editor.png";
 	private List<ISelectionChangedListener> listeners;
 	private SwingControl embedded;
 	private VisualDesigner designer;
@@ -567,7 +567,10 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 	}
 
 	public ISelection getSelection() {
-		return selection;
+		if (embedded.isFocusControl())
+			return selection;
+		else
+			return super.getSelectionProvider().getSelection();
 	}
 
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
@@ -697,11 +700,11 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
