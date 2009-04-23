@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.editors.actions;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.designer.VisualDesigner;
@@ -60,7 +61,11 @@ public class CopyAction extends EditorAction {
 		designer.getClipboard().clear();
 		for (Component child : designer.getSelectedComponents()) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
-			designer.getClipboard().add((WidgetAdapter) adapter.clone());
+			WidgetAdapter cloneAdapter = (WidgetAdapter) adapter.clone();
+			Component comp = cloneAdapter.getWidget();
+			comp.setSize(child.getSize());
+			cloneAdapter.setHotspotPoint(new Point(child.getWidth()/2, child.getHeight()/2));
+			designer.getClipboard().add(cloneAdapter);
 		}
 		designer.publishSelection();
 	}
