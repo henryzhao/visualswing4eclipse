@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.editors.actions;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +22,9 @@ import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
-import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.undo.DuplicateOperation;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.operations.IOperationHistory;
-import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.ITextEditorActionConstants;
 /**
  * 
@@ -65,22 +60,18 @@ public class DuplicateAction extends EditorAction {
 		VisualDesigner designer = getDesigner();
 		if(designer==null)
 			return;
-		CompositeAdapter rootAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(designer.getRoot());
-		List<Component> copyedList = new ArrayList<Component>();
-		copyedList.addAll(designer.getSelectedComponents());
-		IOperationHistory operationHistory = PlatformUI.getWorkbench()
-				.getOperationSupport().getOperationHistory();
-		IUndoableOperation operation = new DuplicateOperation(copyedList);
-		operation.addContext(designer.getUndoContext());
-		try {
-			operationHistory.execute(operation, null, null);
-		} catch (ExecutionException e) {
-			VisualSwingPlugin.getLogger().error(e);
+		WidgetSelection selection = new WidgetSelection(designer.getRoot());
+		List<WidgetAdapter> copyedList = new ArrayList<WidgetAdapter>();
+		for (Component child : selection) {
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(child);
+			WidgetAdapter cloneAdapter = (WidgetAdapter) childAdapter.clone();
+			Component comp = cloneAdapter.getWidget();
+			comp.setSize(child.getSize());
+			cloneAdapter.setHotspotPoint(new Point(child.getWidth()/2, child.getHeight()/2));
+			copyedList.add(cloneAdapter);
 		}
-		rootAdapter.doLayout();
-		designer.getRoot().validate();
-		designer.publishSelection();
-		designer.repaint();
+		System.out.println("copy list size:"+copyedList.size());
+		designer.setSelectedWidget(copyedList);
 	}
 	@Override
 	public void addToMenu(IMenuManager editMenu) {

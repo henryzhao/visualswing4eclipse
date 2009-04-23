@@ -14,6 +14,7 @@
 package org.dyno.visual.swing.editors.actions;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
@@ -66,6 +67,7 @@ public class CutAction extends EditorAction {
 		designer.getClipboard().clear();
 		for (Component child : designer.getSelectedComponents()) {
 			WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(child);
+			adapter.setHotspotPoint(new Point(child.getWidth()/2, child.getHeight()/2));
 			designer.getClipboard().add(adapter);
 		}
 		IOperationHistory operationHistory = PlatformUI.getWorkbench()

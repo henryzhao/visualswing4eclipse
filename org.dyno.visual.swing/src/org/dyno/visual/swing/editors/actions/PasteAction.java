@@ -16,15 +16,9 @@ package org.dyno.visual.swing.editors.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dyno.visual.swing.VisualSwingPlugin;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.designer.VisualDesigner;
-import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
-import org.dyno.visual.swing.undo.PasteOperation;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.operations.IOperationHistory;
-import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -61,24 +55,9 @@ public class PasteAction extends EditorAction {
 		VisualDesigner designer = getDesigner();
 		if(designer==null)
 			return;
-		CompositeAdapter rootAdapter = designer.getFocusedContainer();
 		List<WidgetAdapter> copyedList = new ArrayList<WidgetAdapter>();
 		copyedList.addAll(designer.getClipboard());
-		IOperationHistory operationHistory = PlatformUI.getWorkbench()
-				.getOperationSupport().getOperationHistory();
-		IUndoableOperation operation = new PasteOperation(copyedList,
-				rootAdapter);
-		operation.addContext(designer.getUndoContext());
-		try {
-			operationHistory.execute(operation, null, null);
-		} catch (ExecutionException e) {
-			VisualSwingPlugin.getLogger().error(e);
-		}
-		rootAdapter.doLayout();
-		designer.getClipboard().clear();
-		designer.getRoot().validate();
-		designer.publishSelection();
-		designer.repaint();
+		designer.setSelectedWidget(copyedList);
 	}
 	@Override
 	public ActionFactory getActionFactory() {
