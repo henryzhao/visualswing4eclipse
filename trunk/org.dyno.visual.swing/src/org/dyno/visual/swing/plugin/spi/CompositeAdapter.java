@@ -253,7 +253,7 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 		return false;
 	}
 
-	public boolean needGenBoundCode() {
+	public boolean needGenBoundCode(Component child) {
 		return false;
 	}
 

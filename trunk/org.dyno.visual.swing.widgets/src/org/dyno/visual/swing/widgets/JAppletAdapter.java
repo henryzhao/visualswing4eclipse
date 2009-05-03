@@ -50,6 +50,11 @@ public class JAppletAdapter extends RootPaneContainerAdapter {
 		super.setWidget(widget);
 		createContentAdapter();
 	}
+	public boolean needGenBoundCode(Component child) {
+		if (child instanceof JMenuBar)
+			return false;
+		return contentAdapter.needGenBoundCode(child);
+	}
 
 	private void createContentAdapter() {
 		contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);

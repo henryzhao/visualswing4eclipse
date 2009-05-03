@@ -115,7 +115,9 @@ public class JInternalFrameAdapter extends RootPaneContainerAdapter {
 
 
 	@Override
-	public boolean needGenBoundCode() {
+	public boolean needGenBoundCode(Component child) {
+		if(child instanceof JMenuBar)
+			return false;
 		Container panel = (Container) getContentPane();
 		LayoutManager layout = panel.getLayout();
 		return layout == null;

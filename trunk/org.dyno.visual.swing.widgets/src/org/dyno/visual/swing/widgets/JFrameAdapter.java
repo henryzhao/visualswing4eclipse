@@ -81,6 +81,12 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 			contentAdapter.addChildByConstraints(child, constraints);
 	}
 
+	public boolean needGenBoundCode(Component child) {
+		if (child instanceof JMenuBar)
+			return false;
+		return contentAdapter.needGenBoundCode(child);
+	}
+
 	@Override
 	public void clearSelection() {
 		setSelected(false);
