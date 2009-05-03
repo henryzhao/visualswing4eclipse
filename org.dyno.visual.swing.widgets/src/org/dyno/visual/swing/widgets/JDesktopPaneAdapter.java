@@ -31,7 +31,7 @@ public class JDesktopPaneAdapter extends CompositeAdapter {
 		super(null);
 	}
 
-	public boolean needGenBoundCode() {
+	public boolean needGenBoundCode(Component child) {
 		return true;
 	}
 

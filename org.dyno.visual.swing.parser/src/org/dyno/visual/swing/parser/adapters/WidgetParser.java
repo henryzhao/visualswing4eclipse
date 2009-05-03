@@ -314,7 +314,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		builder.append(id + " = " + getNewInstanceCode(imports) + ";\n");
 		builder.append(createSetCode(imports));
 		CompositeAdapter conAdapter = adaptable.getParentAdapter();
-		if (conAdapter.needGenBoundCode()) {
+		if (conAdapter.needGenBoundCode(adaptable.getWidget())) {
 			Rectangle bounds = adaptable.getWidget().getBounds();
 			String strBounds = id + ".setBounds(" + bounds.x + ", " + bounds.y + ", " + bounds.width + ", " + bounds.height + ");\n";
 			builder.append(strBounds);

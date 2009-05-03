@@ -432,7 +432,7 @@ public class JPanelAdapter extends CompositeAdapter {
 	}
 
 	@Override
-	public boolean needGenBoundCode() {
+	public boolean needGenBoundCode(Component child) {
 		JPanel panel = (JPanel) getWidget();
 		LayoutManager layout = panel.getLayout();
 		return layout == null;
