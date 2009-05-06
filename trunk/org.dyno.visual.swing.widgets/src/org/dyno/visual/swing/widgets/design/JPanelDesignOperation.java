@@ -98,6 +98,7 @@ public class JPanelDesignOperation extends CompositeDesignOperation {
 				jpanel.add(child);
 				adapter.requestNewName();
 				adapter.setSelected(true);
+				adapter.setDirty(true);
 			}
 			adaptable.setDirty(true);
 			adaptable.doLayout();
