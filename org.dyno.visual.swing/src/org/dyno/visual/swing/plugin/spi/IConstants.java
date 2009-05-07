@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.QualifiedName;
 /**
  * 
  * IConstants
- *
+ * 
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
@@ -50,7 +50,7 @@ public interface IConstants {
 	int STATE_ROOT_RESIZE_RIGHT = 21;
 	int STATE_ROOT_RESIZE_RIGHT_BOTTOM = 22;
 	int STATE_ROOT_RESIZE_BOTTOM = 23;
-	
+
 	String ADAPTER_PROPERTY = "widget.adapter";
 	int OUTER = 0;
 	int INNER = 1;
@@ -68,10 +68,9 @@ public interface IConstants {
 	int ACCESS_DEFAULT = 1;
 	int ACCESS_PROTECTED = 2;
 	int ACCESS_PUBLIC = 3;
-	
+
 	Color SELECTION_COLOR = new Color(255, 164, 0);
-	String INIT_METHOD_NAME="initComponents";
-	
+	String INIT_METHOD_NAME = "initComponents";
+	String INITIALIZE_METHOD_NAME = "initialize";
 	QualifiedName JAVA_CLASS_LOADER = new QualifiedName("java.class.loader", Locale.getDefault().toString());
 }
-

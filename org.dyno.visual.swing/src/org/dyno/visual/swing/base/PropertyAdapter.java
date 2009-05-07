@@ -68,7 +68,7 @@ public class PropertyAdapter extends AbstractAdaptable implements IWidgetPropert
 			return ((Component) b).isMaximumSizeSet();
 		else if (name.equals("layout") && b instanceof Container) {
 			CompositeAdapter a = (CompositeAdapter) WidgetAdapter.getWidgetAdapter((Component) b);
-			if (a.getLayoutAdapter().isDefaultLayout()) {
+			if (a.isDefaultLayout()) {
 				return false;
 			} else
 				return true;

@@ -391,6 +391,13 @@ public class JPanelAdapter extends CompositeAdapter {
 		return layoutAdapter;
 	}
 
+	@Override
+	public boolean isDefaultLayout() {
+		if (getLayoutAdapter() == null)
+			return false;
+		return getLayoutAdapter().isDefaultLayout();
+	}
+
 	public void setLayoutAdapter(LayoutAdapter layoutAdapter) {
 		this.layoutAdapter = layoutAdapter;
 	}

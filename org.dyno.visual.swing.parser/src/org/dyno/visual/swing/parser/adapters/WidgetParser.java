@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 
 public class WidgetParser implements IParser, IConstants, IAdaptableContext {
+	
 	protected WidgetAdapter adaptable;
 
 	protected IJavaElement getSibling(IType type, IJavaElement element) {
@@ -76,7 +77,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	public boolean generateCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
-		if (!adaptable.isDirty())
+		if (!adaptable.isCodeDirty())
 			return true;
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
@@ -251,6 +252,7 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	}
 
 	private boolean createRootCode(IType type, ImportRewrite imports, IProgressMonitor monitor) {
+		String init_name = INIT_METHOD_NAME;
 		IMethod method = type.getMethod(INIT_METHOD_NAME, new String[0]);
 		IJavaElement sibling = null;
 		if (method != null && method.exists()) {
@@ -261,8 +263,20 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 				ParserPlugin.getLogger().error(e);
 				return false;
 			}
+		}else{
+			method = type.getMethod(INITIALIZE_METHOD_NAME, new String[0]);
+			if(method!=null&&method.exists()){
+				try {
+					sibling = getSibling(type, method);
+					method.delete(false, monitor);
+				} catch (JavaModelException e) {
+					ParserPlugin.getLogger().error(e);
+					return false;
+				}
+				init_name = INITIALIZE_METHOD_NAME;
+			}
 		}
-		if (!createInitMethod(type, imports, monitor, sibling))
+		if (!createInitMethod(type, imports, monitor, sibling, init_name))
 			return false;
 		for (InvisibleAdapter invisible : adaptable.getInvisibles()) {
 			IParser parser = (IParser) invisible.getAdapter(IParser.class);
@@ -278,10 +292,10 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 		return true;
 	}
 
-	private boolean createInitMethod(IType type, ImportRewrite imports, IProgressMonitor monitor, IJavaElement sibling) {
+	private boolean createInitMethod(IType type, ImportRewrite imports, IProgressMonitor monitor, IJavaElement sibling, String init_name) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("private void ");
-		builder.append(INIT_METHOD_NAME);
+		builder.append(init_name);
 		builder.append("(){\n");
 		builder.append(createInitCode(imports));
 		for (InvisibleAdapter invisible : adaptable.getInvisibles()) {

@@ -30,6 +30,7 @@ import javax.swing.event.MouseInputListener;
 
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
+import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -51,6 +52,31 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 		return contentAdapter;
 	}
 
+	public void selectChildren() {
+		if (isContentDesigned()) {
+			JFrame jframe = (JFrame) getWidget();
+			JMenuBar jmb = jframe.getJMenuBar();
+			if (jmb != null) {
+				WidgetAdapter jmbAdapter = WidgetAdapter.getWidgetAdapter(jmb);
+				if (jmbAdapter != null) {
+					jmbAdapter.setSelected(true);
+					((CompositeAdapter) jmbAdapter).selectChildren();
+				}
+			}
+			CompositeAdapter cAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(jframe.getContentPane());
+			cAdapter.setSelected(false);
+			cAdapter.selectChildren();
+		} else
+			super.selectChildren();
+	}
+
+	public boolean isChildMoveable(Component child) {
+		if (isContentDesigned() && !(child instanceof JMenuBar)) {
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public void setWidget(Component widget) {
 		super.setWidget(widget);
@@ -58,14 +84,19 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	private void createContentAdapter() {
-		contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
-		contentAdapter.setDelegate(this);
 		JFrame me = (JFrame) getWidget();
-		JavaUtil.layoutContainer(me);
-		contentPane = (JComponent) me.getContentPane();
-		rootPane = me.getRootPane();
-		contentAdapter.setWidget(contentPane);
-		contentAdapter.setDelegate(this);
+		Component contentPane = me.getContentPane();
+		if (isContentDesigned()) {
+			contentAdapter = (JPanelAdapter) WidgetAdapter.getWidgetAdapter(contentPane);
+		} else {
+			contentAdapter = (JPanelAdapter) ExtensionRegistry.createWidgetAdapter(JPanel.class);
+			contentAdapter.setDelegate(this);
+			JavaUtil.layoutContainer(me);
+			contentPane = (JComponent) me.getContentPane();
+			rootPane = me.getRootPane();
+			contentAdapter.setWidget(contentPane);
+			contentAdapter.setDelegate(this);
+		}
 	}
 
 	public void doLayout() {
@@ -96,7 +127,11 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 			WidgetAdapter jmbAdapter = WidgetAdapter.getWidgetAdapter(jmb);
 			jmbAdapter.clearSelection();
 		}
-		contentAdapter.clearSelection();
+		if (isContentDesigned()) {
+			WidgetAdapter.getWidgetAdapter(jframe.getContentPane()).clearSelection();
+		} else {
+			contentAdapter.clearSelection();
+		}
 	}
 
 	@Override
@@ -198,20 +233,39 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	public Component getChild(int index) {
 		JFrame jframe = (JFrame) getWidget();
 		JMenuBar jmb = jframe.getJMenuBar();
-		if (jmb == null)
-			return contentAdapter.getChild(index);
-		else if (index == 0)
-			return jmb;
-		else
-			return contentAdapter.getChild(index - 1);
+		if (isContentDesigned()) {
+			if (jmb == null)
+				return jframe.getContentPane();
+			else if (index == 0)
+				return jmb;
+			else
+				return jframe.getContentPane();
+		} else {
+			if (jmb == null)
+				return contentAdapter.getChild(index);
+			else if (index == 0)
+				return jmb;
+			else
+				return contentAdapter.getChild(index - 1);
+		}
 	}
 
 	@Override
 	public int getChildCount() {
 		JFrame jframe = (JFrame) getWidget();
 		JMenuBar jmb = jframe.getJMenuBar();
-		int count = contentAdapter.getChildCount();
-		return jmb == null ? count : (count + 1);
+		if (isContentDesigned()) {
+			return jmb == null ? 1 : 2;
+		} else {
+			int count = contentAdapter.getChildCount();
+			return jmb == null ? count : (count + 1);
+		}
+	}
+
+	private boolean isContentDesigned() {
+		JFrame jframe = (JFrame) getWidget();
+		Component content = jframe.getContentPane();
+		return WidgetAdapter.getWidgetAdapter(content) != null;
 	}
 
 	public String toString() {
@@ -226,19 +280,31 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	public int getIndexOfChild(Component child) {
 		JFrame jframe = (JFrame) getWidget();
 		JMenuBar jmb = jframe.getJMenuBar();
-		if (jmb == null)
-			return contentAdapter.getIndexOfChild(child);
-		else if (jmb == child)
-			return 0;
-		else
-			return contentAdapter.getIndexOfChild(child) + 1;
+		if (isContentDesigned()) {
+			if (jmb == null)
+				return 0;
+			else if (jmb == child)
+				return 0;
+			else
+				return 1;
+		} else {
+			if (jmb == null)
+				return contentAdapter.getIndexOfChild(child);
+			else if (jmb == child)
+				return 0;
+			else
+				return contentAdapter.getIndexOfChild(child) + 1;
+		}
 	}
 
 	@Override
 	public boolean allowChildResize(Component child) {
 		if (child instanceof JMenuBar)
 			return false;
-		return contentAdapter.allowChildResize(child);
+		if (isContentDesigned()) {
+			return false;
+		} else
+			return contentAdapter.allowChildResize(child);
 	}
 
 	public Point convertToGlobal(Point p) {
@@ -273,12 +339,15 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	}
 
 	public boolean removeChild(Component child) {
-		if (child instanceof JMenuBar) {
-			JFrame jframe = (JFrame) getWidget();
-			jframe.setJMenuBar(null);
-			return true;
-		} else
-			return contentAdapter.removeChild(child);
+		JFrame jframe = (JFrame) getWidget();
+		if (!isContentDesigned() || child != jframe.getContentPane()) {
+			if (child instanceof JMenuBar) {
+				jframe.setJMenuBar(null);
+				return true;
+			} else
+				return contentAdapter.removeChild(child);
+		}else
+			return false;
 	}
 
 	@Override
