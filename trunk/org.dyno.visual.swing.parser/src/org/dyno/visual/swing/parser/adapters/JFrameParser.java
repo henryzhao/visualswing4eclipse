@@ -12,8 +12,14 @@
  ************************************************************************************/
 package org.dyno.visual.swing.parser.adapters;
 
+import java.awt.Component;
+
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+
+import org.dyno.visual.swing.parser.spi.IParser;
+import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
+import org.eclipse.jdt.core.dom.rewrite.ImportRewrite;
 
 public class JFrameParser extends RootPaneContainerParser {
 	@Override
@@ -21,5 +27,18 @@ public class JFrameParser extends RootPaneContainerParser {
 		JFrame jframe = (JFrame) adaptable.getWidget();
 		JMenuBar jmb = jframe.getJMenuBar();
 		return jmb;
+	}
+	@Override
+	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
+		JFrame me = (JFrame) adaptable.getWidget();
+		Component cPane = me.getContentPane();
+		if (WidgetAdapter.getWidgetAdapter(cPane) != null) {
+			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(cPane);
+			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
+			String getMethodName = childParser.getCreationMethodName();
+			builder.append("setContentPane(" + getMethodName + "());\n");
+		} else {
+			super.genAddCode(imports, builder);
+		}
 	}
 }

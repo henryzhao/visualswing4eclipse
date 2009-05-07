@@ -230,6 +230,10 @@ public abstract class WidgetAdapter extends AbstractAdaptable implements IExecut
 	}
 
 	public boolean isDirty() {
+		return isCodeDirty();
+	}
+
+	public boolean isCodeDirty() {
 		if (dirty)
 			return true;
 		if (widget != null && widget instanceof JComponent) {

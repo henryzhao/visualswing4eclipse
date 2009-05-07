@@ -272,4 +272,8 @@ public abstract class CompositeAdapter extends WidgetAdapter {
 	public Class<?> getDefaultLayout() {
 		return null;
 	}
+
+	public boolean isDefaultLayout() {
+		return false;
+	}
 }

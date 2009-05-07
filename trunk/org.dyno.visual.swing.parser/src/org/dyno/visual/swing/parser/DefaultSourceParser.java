@@ -261,7 +261,6 @@ class DefaultSourceParser implements ISourceParser, IConstants {
 		}
 		adapter.setName(fieldName);
 		adapter.setLastName(fieldName);
-
 		int flags = field.getModifiers();
 		setAdapterFieldAccess(adapter, flags);
 

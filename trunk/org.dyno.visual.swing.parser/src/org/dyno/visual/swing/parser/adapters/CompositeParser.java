@@ -33,7 +33,7 @@ public class CompositeParser extends WidgetParser {
 			if (parser!=null&&!parser.generateCode(type, imports, monitor))
 				return false;
 		}
-		if (!adaptable.isDirty())
+		if (!adaptable.isCodeDirty())
 			return true;
 		return super.generateCode(type, imports, monitor);
 	}
