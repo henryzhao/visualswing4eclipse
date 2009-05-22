@@ -20,14 +20,13 @@ import java.util.List;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.designer.VisualDesigner;
 import org.dyno.visual.swing.designer.WidgetSelection;
-import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.IAdapter;
 import org.dyno.visual.swing.plugin.spi.IContextCustomizer;
 import org.dyno.visual.swing.plugin.spi.InvisibleAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -41,6 +40,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 /**
@@ -50,7 +52,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
  * @version 1.0.0, 2008-7-3
  * @author William Chen
  */
-public class VisualSwingOutline extends ContentOutlinePage {
+public class VisualSwingOutline extends ContentOutlinePage implements ISelectionListener {
 	private ComponentTreeInput input;
 	private VisualDesigner designer;
 
@@ -59,37 +61,39 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		this.designer = designer;
 		this.input = new ComponentTreeInput(designer);
 	}
-	
 
-	
+	public void init(IPageSite pageSite) {
+		super.init(pageSite);
+		pageSite.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
+	}
+
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		TreeViewer treeView = getTreeViewer();
+		getSite().setSelectionProvider(treeView);
 		treeView.setContentProvider(new ComponentTreeContentProvider());
 		treeView.setLabelProvider(new ComponentTreeLabelProvider());
 		treeView.setInput(input);
 		treeView.expandToLevel(2);
-		treeView.addSelectionChangedListener(this);
 		Tree tree = (Tree) treeView.getTree();
 		tree.addMenuDetectListener(new MenuDetectListener() {
-			
+
 			public void menuDetected(MenuDetectEvent e) {
 				_showMenu(e);
 			}
 		});
 		tree.addMouseListener(new MouseAdapter() {
-			
+
 			public void mouseDoubleClick(MouseEvent e) {
 				_mouseDoubleClicked(e);
 			}
 		});
-		tree.addListener(SWT.MeasureItem,
-				new org.eclipse.swt.widgets.Listener() {
-					
-					public void handleEvent(org.eclipse.swt.widgets.Event event) {
-						event.height = 18;
-					}
-				});
+		tree.addListener(SWT.MeasureItem, new org.eclipse.swt.widgets.Listener() {
+
+			public void handleEvent(org.eclipse.swt.widgets.Event event) {
+				event.height = 18;
+			}
+		});
 		new OutlineViewDnD(designer).attach(treeView);
 	}
 
@@ -114,8 +118,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		for (TreeItem item : items) {
 			Object object = item.getData();
 			if (object instanceof Component) {
-				WidgetAdapter adapter = WidgetAdapter
-						.getWidgetAdapter((Component) object);
+				WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter((Component) object);
 				if (adapter != null) {
 					selected.add((Component) object);
 				}
@@ -123,16 +126,18 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		}
 		return selected;
 	}
+
 	private List<IAdapter> getSelectedAdapters(TreeItem[] items) {
 		List<IAdapter> selected = new ArrayList<IAdapter>();
 		for (TreeItem item : items) {
 			Object object = item.getData();
-			if ((object instanceof IAdapter)&&!(object instanceof InvisibleAdapter)) {
+			if ((object instanceof IAdapter) && !(object instanceof InvisibleAdapter)) {
 				selected.add((IAdapter) object);
 			}
 		}
 		return selected;
 	}
+
 	private List<InvisibleAdapter> getSelectedInvisibles(TreeItem[] items) {
 		List<InvisibleAdapter> selected = new ArrayList<InvisibleAdapter>();
 		for (TreeItem item : items) {
@@ -162,7 +167,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		if (items == null || items.length == 0)
 			return;
 		List<Component> selected = getSelectedComponent(items);
-		if (!selected.isEmpty()){
+		if (!selected.isEmpty()) {
 			designer.showPopup(new java.awt.Point(e.x, e.y), selected, false);
 		} else {
 			fillInvisibleMenuItems(e);
@@ -174,8 +179,7 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		TreeItem[] items = tree.getSelection();
 		MenuManager manager = new MenuManager("#OUTLINE_TREE_POPUP");
 		if (isInvisibleRootSelected(items)) {
-			List<IContextCustomizer> menuCustomizers = ExtensionRegistry
-					.getContextCustomizers();
+			List<IContextCustomizer> menuCustomizers = ExtensionRegistry.getContextCustomizers();
 			for (IContextCustomizer context : menuCustomizers) {
 				context.fillInvisibleRootMenu(manager, input.getRootAdapter());
 			}
@@ -183,17 +187,15 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		List<InvisibleAdapter> invisibles = getSelectedInvisibles(items);
 		if (!invisibles.isEmpty()) {
 			WidgetAdapter rootAdapter = input.getRootAdapter();
-			List<IContextCustomizer> menuCustomizers = ExtensionRegistry
-					.getContextCustomizers();
+			List<IContextCustomizer> menuCustomizers = ExtensionRegistry.getContextCustomizers();
 			for (IContextCustomizer context : menuCustomizers) {
 				context.fillInvisibleAdapterMenu(manager, rootAdapter, invisibles);
 			}
 		}
 		List<IAdapter> iadapters = getSelectedAdapters(items);
-		if(!iadapters.isEmpty()){
+		if (!iadapters.isEmpty()) {
 			WidgetAdapter rootAdapter = input.getRootAdapter();
-			List<IContextCustomizer> menuCustomizers = ExtensionRegistry
-			.getContextCustomizers();
+			List<IContextCustomizer> menuCustomizers = ExtensionRegistry.getContextCustomizers();
 			for (IContextCustomizer context : menuCustomizers) {
 				context.fillIAdapterMenu(manager, rootAdapter, iadapters);
 			}
@@ -206,49 +208,9 @@ public class VisualSwingOutline extends ContentOutlinePage {
 		}
 	}
 
-	
-	public void selectionChanged(SelectionChangedEvent event) {
-		if (event.getSource() == getTreeViewer() && !isAdjusting) {
-			IStructuredSelection selection = (IStructuredSelection) event
-					.getSelection();
-			designer.clearSelection();
-			for (Object object : selection.toArray()) {
-				if (object != null && object instanceof Component) {
-					WidgetAdapter adapter = WidgetAdapter
-							.getWidgetAdapter((Component) object);
-					if (adapter != null) {
-						adapter.setSelected(true);						
-						while (!adapter.isRoot()) {							
-							CompositeAdapter parentAdapter = adapter
-									.getParentAdapter();
-							parentAdapter.showChild(adapter.getWidget());
-							adapter = parentAdapter;
-						}
-						adapter.repaintDesigner();
-					}
-				}
-			}
-			designer.repaint();
-			super.selectionChanged(event);
-		} else if (event.getSelection() instanceof IStructuredSelection) {
-			IStructuredSelection selection = (IStructuredSelection) event
-					.getSelection();
-			Object element = selection.getFirstElement();
-			if (element instanceof WidgetSelection) {
-				getTreeViewer().refresh();
-				TreePath[] paths = getTreePath((WidgetSelection) element);
-				TreeSelection sel = new TreeSelection(paths);
-				isAdjusting = true;
-				setSelection(sel);
-				isAdjusting = false;
-			}
-		}
-	}
-	
-	void refreshTree(){
+	void refreshTree() {
 		getTreeViewer().refresh();
 	}
-	private boolean isAdjusting;
 
 	private TreePath[] getTreePath(List<Component> components) {
 		List<TreePath> paths = new ArrayList<TreePath>();
@@ -280,5 +242,16 @@ public class VisualSwingOutline extends ContentOutlinePage {
 			objects.add(component);
 		}
 	}
-}
 
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (part instanceof VisualSwingEditor && !selection.isEmpty() && selection instanceof IStructuredSelection) {
+			Object element = ((IStructuredSelection) selection).getFirstElement();
+			if (element instanceof WidgetSelection&&!getTreeViewer().getTree().isDisposed()) {
+				getTreeViewer().refresh();
+				TreePath[] paths = getTreePath((WidgetSelection) element);
+				TreeSelection sel = new TreeSelection(paths);
+				setSelection(sel);
+			}
+		}
+	}
+}

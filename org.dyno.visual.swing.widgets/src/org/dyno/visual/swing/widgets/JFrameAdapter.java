@@ -265,7 +265,7 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	private boolean isContentDesigned() {
 		JFrame jframe = (JFrame) getWidget();
 		Component content = jframe.getContentPane();
-		return WidgetAdapter.getWidgetAdapter(content) != null;
+		return WidgetAdapter.getWidgetAdapter(content) != null&&WidgetAdapter.getWidgetAdapter(content).getID()!=null;
 	}
 
 	public String toString() {
