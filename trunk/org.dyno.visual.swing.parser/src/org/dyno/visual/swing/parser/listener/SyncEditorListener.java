@@ -86,6 +86,5 @@ public class SyncEditorListener implements ISelectionListener, IConstants {
 		IType type = unit.getType(unitname);
 		IMethod method = type.getMethod(methodName, new String[0]);
 		JavaUI.revealInEditor(editor, (IJavaElement) method);
-		editor.setFocus();
 	}
 }

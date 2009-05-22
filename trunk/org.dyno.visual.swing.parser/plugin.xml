@@ -126,6 +126,10 @@
                class="javax.swing.JPopupMenu"
                implementation="org.dyno.visual.swing.parser.adapters.JPopupMenuParser">
          </adapter>
+         <adapter
+               class="javax.swing.JButton"
+               implementation="org.dyno.visual.swing.parser.adapters.JButtonParser">
+         </adapter>
       </interface>
       <interface
             class="org.dyno.visual.swing.parser.spi.ILayoutParser">

@@ -341,18 +341,14 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 	}
 
+	
 	private String createSetCode(ImportRewrite imports) {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<IWidgetPropertyDescriptor> properties = adaptable.getPropertyDescriptors();
 		for (IWidgetPropertyDescriptor property : properties) {
-			if (property.isPropertySet(adaptable.getLnfClassname(), new StructuredSelection(adaptable.getWidget())) && (property.isGencode() || property.isEdited(adaptable))) {
-				IPropertyCodeGenerator generator = (IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
-				if (generator != null) {
-					String setCode = generator.getJavaCode(adaptable.getWidget(), imports);
-					if (setCode != null)
-						builder.append(setCode);
-				}
-			}
+			String setCode = generateSetCode(imports, property);
+			if (setCode != null)
+				builder.append(setCode);
 		}
 		Component widget = adaptable.getWidget();
 		if (widget instanceof JComponent) {
@@ -370,6 +366,16 @@ public class WidgetParser implements IParser, IConstants, IAdaptableContext {
 			}
 		}
 		return builder.toString();
+	}
+
+	protected String generateSetCode(ImportRewrite imports, IWidgetPropertyDescriptor property) {
+		if (property.isPropertySet(adaptable.getLnfClassname(), new StructuredSelection(adaptable.getWidget())) && (property.isGencode() || property.isEdited(adaptable))) {
+			IPropertyCodeGenerator generator = (IPropertyCodeGenerator) property.getAdapter(IPropertyCodeGenerator.class);
+			if (generator != null) {
+				return generator.getJavaCode(adaptable.getWidget(), imports);
+			}
+		}
+		return null;
 	}
 
 	private String genAddEventCode(ImportRewrite imports) {

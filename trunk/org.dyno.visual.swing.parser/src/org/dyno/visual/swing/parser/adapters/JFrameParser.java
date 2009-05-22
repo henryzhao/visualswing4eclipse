@@ -28,11 +28,12 @@ public class JFrameParser extends RootPaneContainerParser {
 		JMenuBar jmb = jframe.getJMenuBar();
 		return jmb;
 	}
+
 	@Override
 	protected void genAddCode(ImportRewrite imports, StringBuilder builder) {
 		JFrame me = (JFrame) adaptable.getWidget();
 		Component cPane = me.getContentPane();
-		if (WidgetAdapter.getWidgetAdapter(cPane) != null) {
+		if (WidgetAdapter.getWidgetAdapter(cPane) != null && WidgetAdapter.getWidgetAdapter(cPane).getID() != null) {
 			WidgetAdapter childAdapter = WidgetAdapter.getWidgetAdapter(cPane);
 			IParser childParser = (IParser) childAdapter.getAdapter(IParser.class);
 			String getMethodName = childParser.getCreationMethodName();

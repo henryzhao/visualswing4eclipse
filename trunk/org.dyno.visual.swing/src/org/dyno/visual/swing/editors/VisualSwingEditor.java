@@ -56,25 +56,28 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartConstants;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.texteditor.ITextEditorActionConstants;
+import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheetPage;
@@ -87,8 +90,9 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
  * @author William Chen
  */
 @SuppressWarnings("unchecked")
-public class VisualSwingEditor extends AbstractDesignerEditor implements IResourceChangeListener, ISelectionProvider, IPartListener, KeyListener {
+public class VisualSwingEditor extends AbstractDesignerEditor implements IResourceChangeListener, ISelectionProvider, IPartListener, ISelectionListener {
 	private static final String EDITOR_IMAGE = "/icons/editor.png";
+	private static final int DELAYED_TIME = 250;
 	private List<ISelectionChangedListener> listeners;
 	private SwingControl embedded;
 	private VisualDesigner designer;
@@ -101,6 +105,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 	private PropertySheetPage sheetPage;
 	private ScrolledComposite scrollPane;
 	private PalettePage palettePage;
+	private boolean isParsing;
+	private boolean isCreatingDesignerUI;
+	private String lnfClassname;
 
 	public VisualSwingEditor() {
 		super();
@@ -116,13 +123,14 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
 		site.getWorkbenchWindow().getPartService().addPartListener(this);
+		site.setSelectionProvider(this);
+		site.getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 	}
 
 	public Object getAdapter(Class adapter) {
 		if (adapter == IContentOutlinePage.class) {
 			if (outline == null && designer != null) {
 				outline = new VisualSwingOutline(designer);
-				addSelectionChangedListener(outline);
 			}
 			return outline;
 		} else if (adapter == IPropertySheetPage.class) {
@@ -187,6 +195,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		}
 	}
 
+	public IAction getEditorAction(String id){
+		return actions.get(id);
+	}
 	public void setFocus() {
 		if (embedded != null) {
 			embedded.setFocus();
@@ -229,7 +240,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 			designerContainer.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			designerContainer.setLayout(new FillLayout());
 			embedded = new EmbeddedVisualDesigner(designerContainer);
-			embedded.addKeyListener(new DesignerKeyListener(this));
 			Composite comps = new Composite(splitter, SWT.NONE);
 			splitter.setSecondControl(comps);
 
@@ -240,6 +250,20 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		}
 	}
 
+	@Override
+	protected void createActions() {
+		super.createActions();
+		replaceAction(ITextEditorActionConstants.CUT);
+		replaceAction(ITextEditorActionConstants.COPY);
+		replaceAction(ITextEditorActionConstants.PASTE);
+		replaceAction(ITextEditorActionConstants.SELECT_ALL);
+		replaceAction(ITextEditorActionConstants.DELETE);
+	}
+	private void replaceAction(String id){
+		IAction action = getAction(id);
+		setAction(id, null);
+		setAction(id, new DelegateAction(this, action));
+	}
 	private void onEditorOpen() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this,
 				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.POST_BUILD | IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE);
@@ -256,8 +280,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 			}
 		});
 	}
-
-	private boolean isCreatingDesignerUI;
 
 	class CreateDesignerUIJob extends Job {
 		private boolean isTimerAction;
@@ -321,8 +343,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 			isParsing = false;
 		}
 	}
-
-	private boolean isParsing;
 
 	private void setUpLookAndFeel(Class rootClass) {
 		try {
@@ -403,9 +423,9 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 						if (unit != null) {
 							designer.initNamespaceWithUnit(unit);
 							designer.setLnfChanged(false);
-							fireDirty();
-							designer.clearDirty();
 						}
+						designer.clearDirty();
+						fireDirty();
 					}
 				}
 			} catch (Exception e) {
@@ -491,8 +511,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		}
 	}
 
-	private String lnfClassname;
-
 	public String getLnfClassname() {
 		return lnfClassname;
 	}
@@ -567,7 +585,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 	}
 
 	public ISelection getSelection() {
-		if (embedded.isFocusControl())
+		if (embedded!=null&&embedded.isFocusControl())
 			return selection;
 		else
 			return super.getSelectionProvider().getSelection();
@@ -630,7 +648,6 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		if (designer != null && scrollPane != null) {
 			final Dimension size = designer.getPreferredSize();
 			asyncRunnable(new Runnable() {
-
 				public void run() {
 					scrollPane.setMinSize(size.width, size.height);
 				}
@@ -653,10 +670,7 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		}
 	}
 
-	private static final int DELAYED_TIME = 250;
-
 	private class ChangeLnfAction implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
 			if (isParsing)
 				return;
@@ -698,13 +712,21 @@ public class VisualSwingEditor extends AbstractDesignerEditor implements IResour
 		palettePage.clearToolSelection();
 	}
 
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (part instanceof ContentOutline && !selection.isEmpty() && selection instanceof IStructuredSelection) {
+			designer.clearSelection();
+			for (Object obj : ((IStructuredSelection) selection).toList()) {
+				if (obj instanceof Component) {
+					Component comp = (Component) obj;
+					WidgetAdapter adapter = WidgetAdapter.getWidgetAdapter(comp);
+					adapter.setSelected(true);
+				}
+			}
+			designer.refreshDesigner();
+		}
 	}
 
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+	public boolean isFocusOnDesigner() {
+		return embedded.isFocusControl();
 	}
 }
