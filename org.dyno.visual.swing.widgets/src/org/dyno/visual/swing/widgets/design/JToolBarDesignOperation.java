@@ -51,6 +51,7 @@ public class JToolBarDesignOperation extends CompositeDesignOperation {
 			wa.setSelected(true);
 		}
 		adaptable.getWidget().validate();
+		adaptable.setDirty(true);
 		hovered = false;
 		return true;
 	}
