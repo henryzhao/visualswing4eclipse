@@ -31,6 +31,7 @@ import javax.swing.event.MouseInputListener;
 import org.dyno.visual.swing.base.ExtensionRegistry;
 import org.dyno.visual.swing.base.JavaUtil;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.RootPaneContainerAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
@@ -265,7 +266,7 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	private boolean isContentDesigned() {
 		JFrame jframe = (JFrame) getWidget();
 		Component content = jframe.getContentPane();
-		return WidgetAdapter.getWidgetAdapter(content) != null&&WidgetAdapter.getWidgetAdapter(content).getID()!=null;
+		return WidgetAdapter.getWidgetAdapter(content) != null && WidgetAdapter.getWidgetAdapter(content).getID() != null;
 	}
 
 	public String toString() {
@@ -346,7 +347,7 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 				return true;
 			} else
 				return contentAdapter.removeChild(child);
-		}else
+		} else
 			return false;
 	}
 
@@ -373,5 +374,15 @@ public class JFrameAdapter extends RootPaneContainerAdapter {
 	@Override
 	public Class getWidgetClass() {
 		return JFrame.class;
+	}
+
+	public IWidgetPropertyDescriptor[] getConstraintsProperties(Component widget) {
+		if (isContentDesigned())
+			return null;
+		else if (widget instanceof JMenuBar) {
+			return null;
+		} else {
+			return contentAdapter.getConstraintsProperties(widget);
+		}
 	}
 }

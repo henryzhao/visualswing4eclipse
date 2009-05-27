@@ -39,6 +39,7 @@ import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.layout.actions.BorderLayoutPlacementAction;
+import org.dyno.visual.swing.widgets.layout.constraints.BorderLayoutPlacementProperty;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.MenuManager;
 
@@ -46,6 +47,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 	private List<Boolean> forbid;
 	private List<Rectangle> placement;
 	private List<String> constraints;
+
 	public void initConainerLayout(Container panel, IProgressMonitor monitor) {
 		Container container = panel;
 		CompositeAdapter compositeAdapter = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
@@ -73,9 +75,11 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			container.add(comp, constraintsObject);
 		}
 	}
+
 	public boolean dragOver(Point p) {
 		return drag(p);
 	}
+
 	public void fillConstraintsAction(MenuManager menu, Component child) {
 		MenuManager plcMenu = new MenuManager(Messages.BorderLayoutAdapter_Component_Placement, "#BORDERLAYOUT_CONSTRAINTS"); //$NON-NLS-1$
 		plcMenu.add(new BorderLayoutPlacementAction(container, BorderLayout.CENTER, (JComponent) child));
@@ -85,6 +89,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		plcMenu.add(new BorderLayoutPlacementAction(container, BorderLayout.SOUTH, (JComponent) child));
 		menu.add(plcMenu);
 	}
+
 	public void paintHovered(Graphics g) {
 		if (placement != null && forbid != null) {
 			for (int i = 0; i < placement.size(); i++) {
@@ -107,9 +112,11 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			}
 		}
 	}
+
 	public boolean dragEnter(Point p) {
 		return drag(p);
 	}
+
 	private boolean drag(Point p) {
 		int width = container.getWidth() - 1;
 		int height = container.getHeight() - 1;
@@ -121,30 +128,15 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		Point hsp = parent.getMascotLocation();
 		if (hsp != null) {
 			for (WidgetAdapter todrop : parent.getDropWidget()) {
-				int north = height/4;
-				int south = height/4;
-				int west = width/4;
-				int east = width/4;
-//				Dimension pref = todrop.getWidget().getPreferredSize();
-//				int prefw = pref.width == 0 ? todrop.getWidget().getWidth() : pref.width;
-//				int prefh = pref.height == 0 ? todrop.getWidget().getHeight() : pref.height;
+				int north = height / 4;
+				int south = height / 4;
+				int west = width / 4;
+				int east = width / 4;
 				BorderLayout layout = (BorderLayout) container.getLayout();
 				Component nComp = layout.getLayoutComponent(BorderLayout.NORTH);
-//				int north = prefh + insets.top;
-//				if (nComp != null)
-//					north = nComp.getHeight() + insets.top;
 				Component sComp = layout.getLayoutComponent(BorderLayout.SOUTH);
-//				int south = prefh + insets.bottom;
-//				if (sComp != null)
-//					south = sComp.getHeight() + insets.bottom;
 				Component eComp = layout.getLayoutComponent(BorderLayout.EAST);
-//				int east = prefw + insets.right;
-//				if (eComp != null)
-//					east = eComp.getWidth() + insets.right;
 				Component wComp = layout.getLayoutComponent(BorderLayout.WEST);
-//				int west = prefw + insets.left;
-//				if (wComp != null)
-//					west = wComp.getWidth() + insets.left;
 				Component cComp = layout.getLayoutComponent(BorderLayout.CENTER);
 				Point thsp = todrop.getHotspotPoint();
 				int x = hsp.x - thsp.x + todrop.getWidget().getWidth() / 2;
@@ -189,12 +181,14 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		parent.setMascotLocation(p);
 		return true;
 	}
+
 	public boolean dragExit(Point p) {
 		placement = null;
 		constraints = null;
 		forbid = null;
 		return true;
 	}
+
 	public boolean drop(Point p) {
 		drag(p);
 		CompositeAdapter parent = (CompositeAdapter) WidgetAdapter.getWidgetAdapter(container);
@@ -205,7 +199,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 				boolean fb = forbid.get(i).booleanValue();
 				if (fb) {
 					Toolkit.getDefaultToolkit().beep();
-					success=false;
+					success = false;
 				} else {
 					WidgetAdapter todrop = parent.getDropWidget().get(i);
 					if (constraints == null || constraints.get(i) == null) {
@@ -229,6 +223,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		forbid = null;
 		return success;
 	}
+
 	public boolean cloneLayout(JComponent panel) {
 		panel.setLayout(copyLayout(panel));
 		BorderLayout layout = (BorderLayout) container.getLayout();
@@ -259,6 +254,7 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		}
 		return true;
 	}
+
 	protected LayoutManager copyLayout(Container con) {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		BorderLayout copy = new BorderLayout();
@@ -266,12 +262,15 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 		copy.setVgap(layout.getVgap());
 		return copy;
 	}
+
 	public void addAfter(Component hovering, Component dragged) {
 		addChild(dragged);
 	}
+
 	public void addBefore(Component hovering, Component dragged) {
 		addChild(dragged);
 	}
+
 	public void addChild(Component widget) {
 		String emptyCons = findEmptyConstraints();
 		container.add(widget, emptyCons);
@@ -291,19 +290,27 @@ public class BorderLayoutAdapter extends LayoutAdapter implements ILayoutBean {
 			return BorderLayout.WEST;
 		return null;
 	}
+
 	protected IWidgetPropertyDescriptor[] getLayoutProperties() {
 		WidgetProperty hgapProperty = new WidgetProperty("hgap", BorderLayout.class, 0);
 		WidgetProperty vgapProperty = new WidgetProperty("vgap", BorderLayout.class, 0);
 		return new IWidgetPropertyDescriptor[] { hgapProperty, vgapProperty };
 	}
+
 	public void addChildByConstraints(Component child, Object constraints) {
 		container.add(child, constraints);
 	}
+
 	public Object getChildConstraints(Component child) {
 		BorderLayout layout = (BorderLayout) container.getLayout();
 		String object = (String) layout.getConstraints(child);
 		if (object == null)
 			return BorderLayout.CENTER;
 		return object;
+	}
+
+	@Override
+	public IWidgetPropertyDescriptor[] getConstraintsProperties(Component widget) {
+		return new IWidgetPropertyDescriptor[] { new BorderLayoutPlacementProperty(this, widget) };
 	}
 }
