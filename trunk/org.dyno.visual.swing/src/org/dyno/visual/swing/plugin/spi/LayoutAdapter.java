@@ -360,5 +360,8 @@ public abstract class LayoutAdapter extends AbstractAdaptable implements IProper
 		}
 		return false;
 	}
+	public IWidgetPropertyDescriptor[] getConstraintsProperties(Component widget) {
+		return null;
+	}
 }
 

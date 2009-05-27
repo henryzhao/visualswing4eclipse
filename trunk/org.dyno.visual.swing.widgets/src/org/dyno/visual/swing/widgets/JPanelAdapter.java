@@ -31,6 +31,7 @@ import javax.swing.event.MouseInputListener;
 import org.dyno.visual.swing.base.EditorAction;
 import org.dyno.visual.swing.plugin.spi.CompositeAdapter;
 import org.dyno.visual.swing.plugin.spi.ILayoutBean;
+import org.dyno.visual.swing.plugin.spi.IWidgetPropertyDescriptor;
 import org.dyno.visual.swing.plugin.spi.LayoutAdapter;
 import org.dyno.visual.swing.plugin.spi.WidgetAdapter;
 import org.dyno.visual.swing.widgets.delegate.DefaultMouseInputDelegate;
@@ -555,4 +556,17 @@ public class JPanelAdapter extends CompositeAdapter {
 		else
 			return focused == this;
 	}
+
+	@Override
+	public IWidgetPropertyDescriptor[] getConstraintsProperties(Component widget) {
+		JPanel panel = (JPanel) getWidget();
+		LayoutManager layout = panel.getLayout();
+		if (layout == null){
+			return null;
+		}else{
+			return getLayoutAdapter().getConstraintsProperties(widget);
+		}
+	}
+	
+	
 }
