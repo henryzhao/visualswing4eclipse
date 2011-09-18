@@ -20,7 +20,7 @@ public class NonameContentType implements ITextContentDescriber,
 	private static final String VISUAL_SWING_MAGIC = "VS4E";
 	private static String VISUAL_SWING_CLASS_TAILER = ".*//\\s*"
 			+ VISUAL_SWING_MAGIC + ".*";
-	private static QualifiedName COMPONENT_TYPE = new QualifiedName(
+	public static final QualifiedName COMPONENT_TYPE = new QualifiedName(
 			"org.noname.designer.core", "Component");
 	private static QualifiedName[] QUALIFIERS = new QualifiedName[] { COMPONENT_TYPE };
 
