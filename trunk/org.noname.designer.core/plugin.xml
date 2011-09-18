@@ -67,5 +67,50 @@
          	</enablement>
        </decorator>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.noname.designer.core.internal.editor.DesignerEditor"
+            default="true"
+            extensions="java"
+            icon="icons/thumb.png"
+            id="org.noname.designer.core.DesignerEditor"
+            name="Swing Designer Editor">
+         <contentTypeBinding
+               contentTypeId="org.noname.designer.core.contentTypeBinding1">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.jdt.core.dom.MethodDeclaration"
+            class="org.noname.designer.core.internal.evaluators.MethodEvaluatorFactory">
+         <adapter
+               type="org.noname.designer.core.interfaces.IEvaluator">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.jdt.core.dom.Block"
+            class="org.noname.designer.core.internal.evaluators.BlockEvaluatorFactory">
+         <adapter
+               type="org.noname.designer.core.interfaces.IEvaluator">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.jdt.core.dom.ExpressionStatement"
+            class="org.noname.designer.core.internal.evaluators.ExpressionStatementEvaluatorFactory">
+         <adapter
+               type="org.noname.designer.core.interfaces.IEvaluator">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.eclipse.jdt.core.dom.MethodInvocation"
+            class="org.noname.designer.core.internal.evaluators.MethodInvocationEvaluatorFactory">
+         <adapter
+               type="org.noname.designer.core.interfaces.IEvaluator">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>
